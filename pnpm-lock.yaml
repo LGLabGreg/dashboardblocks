@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      '@changesets/changelog-github':
+        specifier: ^0.5.2
+        version: 0.5.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -15,13 +18,13 @@ importers:
         version: 2.1.1
       fumadocs-core:
         specifier: 16.3.2
-        version: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
+        version: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       fumadocs-mdx:
         specifier: 14.2.2
-        version: 14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
+        version: 14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
       fumadocs-ui:
         specifier: npm:@fumadocs/base-ui@latest
-        version: '@fumadocs/base-ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@4.2.1)'
+        version: '@fumadocs/base-ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@3.25.76)'
       lucide-react:
         specifier: ^0.562.0
         version: 0.562.0(react@19.2.3)
@@ -373,6 +376,12 @@ packages:
         integrity: sha512-x/xEleCFLH28c3bQeQIyeZf8lFXyDFVn1SgcBiR2Tw/r4IAWlk1fzxCEZ6NxQAjF2Nwtczoen3OA2qR+UawQ8Q==,
       }
 
+  '@changesets/changelog-github@0.5.2':
+    resolution:
+      {
+        integrity: sha512-HeGeDl8HaIGj9fQHo/tv5XKQ2SNEi9+9yl1Bss1jttPqeiASRXhfi0A2wv8yFKCp07kR1gpOI5ge6+CWNm1jPw==,
+      }
+
   '@changesets/cli@2.29.8':
     resolution:
       {
@@ -396,6 +405,12 @@ packages:
     resolution:
       {
         integrity: sha512-gphr+v0mv2I3Oxt19VdWRRUxq3sseyUpX9DaHpTUmLj92Y10AGy+XOtV+kbM6L/fDcpx7/ISDFK6T8A/P3lOdQ==,
+      }
+
+  '@changesets/get-github-info@0.7.0':
+    resolution:
+      {
+        integrity: sha512-+i67Bmhfj9V4KfDeS1+Tz3iF32btKZB2AAx+cYMqDSRFP7r3/ZdGbjCo+c6qkyViN9ygDuBjzageuPGJtKGe5A==,
       }
 
   '@changesets/get-release-plan@4.0.14':
@@ -2662,6 +2677,12 @@ packages:
       }
     engines: { node: '>= 0.4' }
 
+  dataloader@1.4.0:
+    resolution:
+      {
+        integrity: sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==,
+      }
+
   debug@3.2.7:
     resolution:
       {
@@ -2811,6 +2832,13 @@ packages:
         integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==,
       }
     engines: { node: '>=12' }
+
+  dotenv@8.6.0:
+    resolution:
+      {
+        integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==,
+      }
+    engines: { node: '>=10' }
 
   dunder-proto@1.0.1:
     resolution:
@@ -5174,6 +5202,18 @@ packages:
     engines: { node: '>=10.5.0' }
     deprecated: Use your platform's native DOMException instead
 
+  node-fetch@2.7.0:
+    resolution:
+      {
+        integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==,
+      }
+    engines: { node: 4.x || >=6.0.0 }
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+
   node-fetch@3.3.2:
     resolution:
       {
@@ -6455,6 +6495,12 @@ packages:
       }
     engines: { node: '>=16' }
 
+  tr46@0.0.3:
+    resolution:
+      {
+        integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==,
+      }
+
   trim-lines@3.0.1:
     resolution:
       {
@@ -6729,6 +6775,18 @@ packages:
         integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==,
       }
     engines: { node: '>= 8' }
+
+  webidl-conversions@3.0.1:
+    resolution:
+      {
+        integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==,
+      }
+
+  whatwg-url@5.0.0:
+    resolution:
+      {
+        integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==,
+      }
 
   which-boxed-primitive@1.1.1:
     resolution:
@@ -7158,6 +7216,14 @@ snapshots:
     dependencies:
       '@changesets/types': 6.1.0
 
+  '@changesets/changelog-github@0.5.2':
+    dependencies:
+      '@changesets/get-github-info': 0.7.0
+      '@changesets/types': 6.1.0
+      dotenv: 8.6.0
+    transitivePeerDependencies:
+      - encoding
+
   '@changesets/cli@2.29.8(@types/node@25.0.3)':
     dependencies:
       '@changesets/apply-release-plan': 7.0.14
@@ -7211,6 +7277,13 @@ snapshots:
       '@manypkg/get-packages': 1.1.3
       picocolors: 1.1.1
       semver: 7.7.3
+
+  '@changesets/get-github-info@0.7.0':
+    dependencies:
+      dataloader: 1.4.0
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
 
   '@changesets/get-release-plan@4.0.14':
     dependencies:
@@ -7450,12 +7523,12 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@fumadocs/base-ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@4.2.1)':
+  '@fumadocs/base-ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@3.25.76)':
     dependencies:
       '@base-ui/react': 1.0.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@fumadocs/ui': 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@4.2.1)
+      '@fumadocs/ui': 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@3.25.76)
       class-variance-authority: 0.7.1
-      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
+      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       next-themes: 0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
@@ -7476,9 +7549,9 @@ snapshots:
       - waku
       - zod
 
-  '@fumadocs/ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@4.2.1)':
+  '@fumadocs/ui@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@4.1.18)(zod@3.25.76)':
     dependencies:
-      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
+      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       lodash.merge: 4.6.2
       next-themes: 0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       postcss-selector-parser: 7.1.1
@@ -8522,6 +8595,8 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
+  dataloader@1.4.0: {}
+
   debug@3.2.7:
     dependencies:
       ms: 2.1.3
@@ -8584,6 +8659,8 @@ snapshots:
       esutils: 2.0.3
 
   dotenv@17.2.3: {}
+
+  dotenv@8.6.0: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -9207,7 +9284,7 @@ snapshots:
       jsonfile: 4.0.0
       universalify: 0.1.2
 
-  fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1):
+  fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76):
     dependencies:
       '@formatjs/intl-localematcher': 0.7.2
       '@orama/orama': 3.1.18
@@ -9233,18 +9310,18 @@ snapshots:
       next: 16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-      zod: 4.2.1
+      zod: 3.25.76
     transitivePeerDependencies:
       - supports-color
 
-  fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3):
+  fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3):
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@standard-schema/spec': 1.1.0
       chokidar: 5.0.0
       esbuild: 0.27.2
       estree-util-value-to-estree: 3.5.0
-      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
+      fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.562.0(react@19.2.3))(next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       js-yaml: 4.1.1
       mdast-util-to-markdown: 2.1.2
       picocolors: 1.1.1
@@ -10424,6 +10501,10 @@ snapshots:
 
   node-domexception@1.0.0: {}
 
+  node-fetch@2.7.0:
+    dependencies:
+      whatwg-url: 5.0.0
+
   node-fetch@3.3.2:
     dependencies:
       data-uri-to-buffer: 4.0.1
@@ -11301,6 +11382,8 @@ snapshots:
     dependencies:
       tldts: 7.0.19
 
+  tr46@0.0.3: {}
+
   trim-lines@3.0.1: {}
 
   trough@2.2.0: {}
@@ -11505,6 +11588,13 @@ snapshots:
       vfile-message: 4.0.3
 
   web-streams-polyfill@3.3.3: {}
+
+  webidl-conversions@3.0.1: {}
+
+  whatwg-url@5.0.0:
+    dependencies:
+      tr46: 0.0.3
+      webidl-conversions: 3.0.1
 
   which-boxed-primitive@1.1.1:
     dependencies:

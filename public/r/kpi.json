@@ -6,8 +6,8 @@
   "registryDependencies": ["card"],
   "files": [
     {
-      "path": "registry/kpi/kpi.tsx",
-      "content": "export const KPI = () => {\n  return <div>KPI</div>;\n};",
+      "path": "registry/dashboardblocks/kpi/kpi.tsx",
+      "content": "export const KPI = () => {\n  return <div>KPI</div>\n}\n",
       "type": "registry:component"
     }
   ],

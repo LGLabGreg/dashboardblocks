@@ -11,7 +11,7 @@
       "registryDependencies": ["card"],
       "files": [
         {
-          "path": "registry/kpi/kpi.tsx",
+          "path": "registry/dashboardblocks/kpi/kpi.tsx",
           "type": "registry:component"
         }
       ]
