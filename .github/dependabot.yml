@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      react:
+        patterns:
+          - 'react*'
+      typescript:
+        patterns:
+          - '@types*'
+          - 'ts*'
+          - 'typescript*'
+      vite|vitest:
+        patterns:
+          - 'vite*'
+          - '@vite*'
+      lint|format:
+        patterns:
+          - 'eslint*'
+          - '@eslint*'
+          - 'prettier'
+      radix:
+        patterns:
+          - '@radix-ui*'
+      tailwind:
+        patterns:
+          - '@tailwindcss*'
+          - 'tailwindcss*'
+
+  - package-ecosystem: 'github-actions'
+    directory: '.github/workflows'
+    schedule:
+      interval: 'daily'

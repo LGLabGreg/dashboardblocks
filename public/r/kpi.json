@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kpi",
+  "title": "KPI",
+  "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+  "registryDependencies": ["card"],
+  "files": [
+    {
+      "path": "registry/kpi/kpi.tsx",
+      "content": "export const KPI = () => {\n  return <div>KPI</div>;\n};",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "dashboardblocks",
+  "homepage": "https://dashboardblocks.com",
+  "items": [
+    {
+      "name": "kpi",
+      "type": "registry:component",
+      "title": "KPI",
+      "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+      "registryDependencies": ["card"],
+      "files": [
+        {
+          "path": "registry/kpi/kpi.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
