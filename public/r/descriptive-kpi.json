@@ -5,7 +5,7 @@
   "files": [
     {
       "path": "registry/dashboardblocks/examples/descriptive-kpi.tsx",
-      "content": "import {\n  KPI,\n  KPIDescription,\n  KPIDivider,\n  KPILabel,\n  KPIRow,\n  KPIStack,\n  KPITrend,\n  KPIValue,\n} from '@/registry/dashboardblocks/kpi'\n\nexport const DescriptiveKPI = ({\n  title,\n  value,\n  change,\n  trend,\n  description,\n}: {\n  title: string\n  value: string\n  change: string\n  trend: 'up' | 'down' | 'neutral'\n  description: string\n}) => {\n  return (\n    <KPI>\n      <KPIStack gap='2'>\n        <KPILabel>{title}</KPILabel>\n        <KPIValue>{value}</KPIValue>\n        <KPIDivider className='my-2' />\n        <KPIRow>\n          <KPIDescription>{description}</KPIDescription>\n          <KPITrend value={change} trend={trend} variant='badge' />\n        </KPIRow>\n      </KPIStack>\n    </KPI>\n  )\n}\n",
+      "content": "import {\n  KPI,\n  KPIDescription,\n  KPIDivider,\n  KPILabel,\n  KPIRow,\n  KPIStack,\n  KPITrend,\n  KPIValue,\n} from '@/registry/dashboardblocks/kpi'\n\nexport const DescriptiveKPI = ({\n  title = 'Conversion Rate',\n  value = '3.24%',\n  change = '-2.1%',\n  trend = 'down',\n  description = 'Compared to last month',\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n  description?: string\n} = {}) => {\n  return (\n    <KPI>\n      <KPIStack gap='2'>\n        <KPILabel>{title}</KPILabel>\n        <KPIValue>{value}</KPIValue>\n        <KPIDivider className='my-2' />\n        <KPIRow>\n          <KPIDescription>{description}</KPIDescription>\n          <KPITrend value={change} trend={trend} variant='badge' />\n        </KPIRow>\n      </KPIStack>\n    </KPI>\n  )\n}\n",
       "type": "registry:example"
     }
   ],
