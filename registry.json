@@ -9,6 +9,7 @@
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
       "registryDependencies": ["card"],
+      "dependencies": ["lucide-react"],
       "files": [
         {
           "path": "registry/dashboardblocks/kpi/kpi.tsx",
