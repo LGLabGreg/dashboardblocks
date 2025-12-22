@@ -8,16 +8,16 @@ import {
 } from '@/registry/dashboardblocks/kpi'
 
 export const CompactKPI = ({
-  title,
-  value,
-  change,
-  trend,
+  title = 'Active Users',
+  value = '2,420',
+  change = '+12.5%',
+  trend = 'up',
 }: {
-  title: string
-  value: string
-  change: string
-  trend: 'up' | 'down' | 'neutral'
-}) => {
+  title?: string
+  value?: string
+  change?: string
+  trend?: 'up' | 'down' | 'neutral'
+} = {}) => {
   return (
     <KPI>
       <KPIRow>

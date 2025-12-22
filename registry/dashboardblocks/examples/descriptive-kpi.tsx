@@ -10,18 +10,18 @@ import {
 } from '@/registry/dashboardblocks/kpi'
 
 export const DescriptiveKPI = ({
-  title,
-  value,
-  change,
-  trend,
-  description,
+  title = 'Conversion Rate',
+  value = '3.24%',
+  change = '-2.1%',
+  trend = 'down',
+  description = 'Compared to last month',
 }: {
-  title: string
-  value: string
-  change: string
-  trend: 'up' | 'down' | 'neutral'
-  description: string
-}) => {
+  title?: string
+  value?: string
+  change?: string
+  trend?: 'up' | 'down' | 'neutral'
+  description?: string
+} = {}) => {
   return (
     <KPI>
       <KPIStack gap='2'>
