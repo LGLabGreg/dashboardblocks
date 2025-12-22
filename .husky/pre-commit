@@ -1,1 +1,2 @@
+pnpm registry:build
 pnpm lint-staged

@@ -3,15 +3,38 @@ title: KPI
 description: A flexible KPI card with trend indicators, sparklines, and progress tracking.
 ---
 
-## Code Block
+## Installation
 
-```ts
-console.log('Hello World')
+```bash tab="pnpm"
+pnpm dlx shadcn@latest add https://dashboardblocks.com/r/kpi.json
 ```
 
-## Cards
+```bash tab="npm"
+npx shadcn@latest add https://dashboardblocks.com/r/kpi.json
+```
 
-<Cards>
-  <Card title='Learn more about Next.js' href='https://nextjs.org/docs' />
-  <Card title='Learn more about Fumadocs' href='https://fumadocs.dev' />
-</Cards>
+```bash tab="yarn"
+yarn dlx shadcn@latest add https://dashboardblocks.com/r/kpi.json
+```
+
+```bash tab="bun"
+bunx --bun  shadcn@latest add https://dashboardblocks.com/r/kpi.json
+```
+
+### Minimal KPI
+
+A simple KPI card with a label, value, and trend indicator.
+
+<ComponentPreview name='minimal-kpi' previewClassName='max-w-sm' />
+
+### Compact KPI
+
+A more compact layout with the trend displayed as a badge.
+
+<ComponentPreview name='compact-kpi' previewClassName='max-w-sm' />
+
+### Descriptive KPI
+
+A KPI card with additional description text and a divider.
+
+<ComponentPreview name='descriptive-kpi' previewClassName='max-w-sm' />
