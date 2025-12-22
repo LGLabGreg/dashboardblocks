@@ -1,4 +1,3 @@
-import { ComposableKPIDemo } from '@/registry/dashboardblocks/kpi/kpi'
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock'
 import * as TabsComponents from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
@@ -15,6 +14,5 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ),
     ...components,
     ...TabsComponents,
-    ComposableKPIDemo,
   }
 }
