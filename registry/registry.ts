@@ -11,7 +11,7 @@ export const components: Registry['items'] = [
     dependencies: ['lucide-react'],
     files: [
       {
-        path: 'registry/dashboardblocks/kpi.tsx',
+        path: 'registry/kpi.tsx',
         type: 'registry:component',
       },
     ],

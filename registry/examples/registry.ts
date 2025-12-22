@@ -7,7 +7,7 @@ export const examples: Registry['items'] = [
     registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/dashboardblocks/examples/minimal-kpi.tsx',
+        path: 'registry/examples/minimal-kpi.tsx',
         type: 'registry:example',
       },
     ],
@@ -18,7 +18,7 @@ export const examples: Registry['items'] = [
     registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/dashboardblocks/examples/descriptive-kpi.tsx',
+        path: 'registry/examples/descriptive-kpi.tsx',
         type: 'registry:example',
       },
     ],
@@ -29,7 +29,7 @@ export const examples: Registry['items'] = [
     registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/dashboardblocks/examples/compact-kpi.tsx',
+        path: 'registry/examples/compact-kpi.tsx',
         type: 'registry:example',
       },
     ],

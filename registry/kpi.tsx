@@ -3,6 +3,8 @@ import { ReactNode } from 'react'
 
 import { Card, CardContent } from '@/components/ui/card'
 
+import { cn } from '@/lib/utils'
+
 export const KPI = ({
   children,
   className = '',
@@ -11,7 +13,7 @@ export const KPI = ({
   className?: string
 }) => {
   return (
-    <Card className={className}>
+    <Card className={cn('w-full', className)}>
       <CardContent>{children}</CardContent>
     </Card>
   )

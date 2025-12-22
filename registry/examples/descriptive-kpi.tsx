@@ -7,7 +7,7 @@ import {
   KPIStack,
   KPITrend,
   KPIValue,
-} from '@/registry/dashboardblocks/kpi'
+} from '@/registry/kpi'
 
 export const DescriptiveKPI = ({
   title = 'Conversion Rate',

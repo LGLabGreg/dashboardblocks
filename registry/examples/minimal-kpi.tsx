@@ -1,11 +1,4 @@
-import {
-  KPI,
-  KPILabel,
-  KPIRow,
-  KPIStack,
-  KPITrend,
-  KPIValue,
-} from '@/registry/dashboardblocks/kpi'
+import { KPI, KPILabel, KPIRow, KPIStack, KPITrend, KPIValue } from '@/registry/kpi'
 
 export const MinimalKPI = ({
   title = 'Total Revenue',
