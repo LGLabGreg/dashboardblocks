@@ -1,15 +1,15 @@
-import { BarChartKPI } from './bar-chart-kpi'
-import { CompactKPI } from './compact-kpi'
-import { DescriptiveKPI } from './descriptive-kpi'
-import { MinimalKPI } from './minimal-kpi'
-import { ProgressKPI } from './progress-kpi'
+import { BarChartKPI1 } from './bar-chart-kpi-01'
+import { KPI1 } from './kpi-01'
+import { KPI2 } from './kpi-02'
+import { KPI3 } from './kpi-03'
+import { ProgressKPI1 } from './progress-kpi-01'
 
 export const exampleComponents = {
-  'minimal-kpi': MinimalKPI,
-  'compact-kpi': CompactKPI,
-  'descriptive-kpi': DescriptiveKPI,
-  'progress-kpi': ProgressKPI,
-  'bar-chart-kpi': BarChartKPI,
+  'kpi-01': KPI1,
+  'kpi-02': KPI2,
+  'kpi-03': KPI3,
+  'progress-kpi-01': ProgressKPI1,
+  'bar-chart-kpi-01': BarChartKPI1,
 }
 
 export function getExampleComponent(name: string) {

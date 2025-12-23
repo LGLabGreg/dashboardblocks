@@ -2,7 +2,7 @@ import { KPIBarChart, type KPIBarChartProps, KPITrend, KPIValue } from '@/regist
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-interface BarChartKPIProps {
+interface BarChartKPI1Props {
   change?: string
   chartProps?: KPIBarChartProps
   title?: string
@@ -10,7 +10,7 @@ interface BarChartKPIProps {
   value?: string
 }
 
-export const BarChartKPI = ({
+export const BarChartKPI1 = ({
   change = '+7.5%',
   chartProps = {
     data: [
@@ -27,7 +27,7 @@ export const BarChartKPI = ({
   title = 'Revenue',
   trend = 'up',
   value = '$87,500',
-}: BarChartKPIProps) => {
+}: BarChartKPI1Props) => {
   return (
     <Card>
       <CardContent>

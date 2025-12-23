@@ -2,7 +2,7 @@ import { KPIProgress, KPITrend, KPIValue } from '@/registry/kpi'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-export const ProgressKPI = ({
+export const ProgressKPI1 = ({
   change = '+7.5%',
   percentage = 55,
   title = 'Revenue',

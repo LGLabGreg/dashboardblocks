@@ -2,56 +2,56 @@ import { type Registry } from 'shadcn/schema'
 
 export const examples: Registry['items'] = [
   {
-    name: 'minimal-kpi',
+    name: 'kpi-01',
     type: 'registry:example',
     registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/examples/minimal-kpi.tsx',
+        path: 'registry/examples/kpi-01.tsx',
         type: 'registry:example',
       },
     ],
   },
   {
-    name: 'descriptive-kpi',
+    name: 'kpi-02',
     type: 'registry:example',
     registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/examples/descriptive-kpi.tsx',
+        path: 'registry/examples/kpi-02.tsx',
         type: 'registry:example',
       },
     ],
   },
   {
-    name: 'compact-kpi',
+    name: 'kpi-03',
     type: 'registry:example',
     registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/examples/compact-kpi.tsx',
+        path: 'registry/examples/kpi-03.tsx',
         type: 'registry:example',
       },
     ],
   },
   {
-    name: 'progress-kpi',
+    name: 'progress-kpi-01',
     type: 'registry:example',
     registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/examples/progress-kpi.tsx',
+        path: 'registry/examples/progress-kpi-01.tsx',
         type: 'registry:example',
       },
     ],
   },
   {
-    name: 'bar-chart-kpi',
+    name: 'bar-chart-kpi-01',
     type: 'registry:example',
     registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
-        path: 'registry/examples/bar-chart-kpi.tsx',
+        path: 'registry/examples/bar-chart-kpi-01.tsx',
         type: 'registry:example',
       },
     ],

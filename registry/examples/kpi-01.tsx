@@ -2,11 +2,11 @@ import { KPITrend, KPIValue } from '@/registry/kpi'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-export const CompactKPI = ({
-  change = '+12.5%',
-  title = 'Active Users',
+export const KPI1 = ({
+  change = '+20.1%',
+  title = 'Total Revenue',
   trend = 'up',
-  value = '2,420',
+  value = '$45,231.89',
 }: {
   change?: string
   title?: string
@@ -16,11 +16,11 @@ export const CompactKPI = ({
   return (
     <Card>
       <CardContent className='space-y-2'>
+        <CardDescription>{title}</CardDescription>
         <div className='flex items-center justify-between'>
-          <CardDescription>{title}</CardDescription>
-          <KPITrend value={change} trend={trend} variant='badge' />
+          <KPIValue>{value}</KPIValue>
+          <KPITrend value={change} trend={trend} />
         </div>
-        <KPIValue>{value}</KPIValue>
       </CardContent>
     </Card>
   )
