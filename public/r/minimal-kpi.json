@@ -4,8 +4,8 @@
   "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
   "files": [
     {
-      "path": "registry/dashboardblocks/examples/minimal-kpi.tsx",
-      "content": "import {\n  KPI,\n  KPILabel,\n  KPIRow,\n  KPIStack,\n  KPITrend,\n  KPIValue,\n} from '@/registry/dashboardblocks/kpi'\n\nexport const MinimalKPI = ({\n  title = 'Total Revenue',\n  value = '$45,231.89',\n  change = '+20.1%',\n  trend = 'up',\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n} = {}) => {\n  return (\n    <KPI>\n      <KPIStack gap='2'>\n        <KPILabel>{title}</KPILabel>\n        <KPIRow>\n          <KPIValue>{value}</KPIValue>\n          <KPITrend value={change} trend={trend} />\n        </KPIRow>\n      </KPIStack>\n    </KPI>\n  )\n}\n",
+      "path": "registry/examples/minimal-kpi.tsx",
+      "content": "import { KPI, KPILabel, KPIRow, KPIStack, KPITrend, KPIValue } from '@/registry/kpi'\n\nexport const MinimalKPI = ({\n  title = 'Total Revenue',\n  value = '$45,231.89',\n  change = '+20.1%',\n  trend = 'up',\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n} = {}) => {\n  return (\n    <KPI>\n      <KPIStack gap='2'>\n        <KPILabel>{title}</KPILabel>\n        <KPIRow>\n          <KPIValue>{value}</KPIValue>\n          <KPITrend value={change} trend={trend} />\n        </KPIRow>\n      </KPIStack>\n    </KPI>\n  )\n}\n",
       "type": "registry:example"
     }
   ],

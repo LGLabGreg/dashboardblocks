@@ -13,7 +13,7 @@ export const CompactKPI = ({
 } = {}) => {
   return (
     <KPI>
-      <KPIRow>
+      <KPIRow className='items-baseline'>
         <KPIStack gap='1'>
           <KPILabel>{title}</KPILabel>
           <KPIValue className='text-2xl'>{value}</KPIValue>

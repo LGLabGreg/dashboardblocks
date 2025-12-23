@@ -19,6 +19,37 @@ export const KPI = ({
   )
 }
 
+export const KPIStack = ({
+  children,
+  className = '',
+  gap = '2',
+}: {
+  children: ReactNode
+  className?: string
+  gap?: '1' | '2' | '3' | '4'
+}) => {
+  const gapClasses = {
+    '1': 'space-y-1',
+    '2': 'space-y-2',
+    '3': 'space-y-3',
+    '4': 'space-y-4',
+  }
+
+  return <div className={`${gapClasses[gap]} ${className}`}>{children}</div>
+}
+
+export const KPIRow = ({
+  children,
+  className = '',
+}: {
+  children: ReactNode
+  className?: string
+}) => {
+  return (
+    <div className={cn('flex items-center justify-between', className)}>{children}</div>
+  )
+}
+
 export const KPILabel = ({
   children,
   className = '',
@@ -76,9 +107,9 @@ export const KPITrend = ({
     const ArrowIcon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Minus
     return (
       <div
-        className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badgeColors[trend]} ${className}`}
+        className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badgeColors[trend]} ${className}`}
       >
-        <ArrowIcon className='mr-1 inline h-3 w-3' />
+        <ArrowIcon className='h-3 w-3' />
         {value}
       </div>
     )
@@ -92,48 +123,6 @@ export const KPITrend = ({
       {value}
     </div>
   )
-}
-
-export const KPIRow = ({
-  children,
-  className = '',
-  align = 'between',
-}: {
-  children: ReactNode
-  className?: string
-  align?: 'between' | 'start' | 'end' | 'center'
-}) => {
-  const alignmentClasses = {
-    between: 'justify-between',
-    start: 'justify-start',
-    end: 'justify-end',
-    center: 'justify-center',
-  }
-
-  return (
-    <div className={`flex items-baseline ${alignmentClasses[align]} ${className}`}>
-      {children}
-    </div>
-  )
-}
-
-export const KPIStack = ({
-  children,
-  className = '',
-  gap = '2',
-}: {
-  children: ReactNode
-  className?: string
-  gap?: '1' | '2' | '3' | '4'
-}) => {
-  const gapClasses = {
-    '1': 'space-y-1',
-    '2': 'space-y-2',
-    '3': 'space-y-3',
-    '4': 'space-y-4',
-  }
-
-  return <div className={`${gapClasses[gap]} ${className}`}>{children}</div>
 }
 
 export const KPIDescription = ({
