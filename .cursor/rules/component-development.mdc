@@ -1,0 +1,227 @@
+---
+description: When creating new registry components
+alwaysApply: false
+---
+
+# DashboardBlocks Component Development Rules
+
+## Component Naming Conventions
+
+### Component Names
+
+- Use numbered suffixes for component variants: `KPI1`, `KPI2`, `KPI3`, `ProgressKPI1`, `BarChartKPI1`
+- Component names should be PascalCase
+- Related components should follow sequential numbering (KPI1, KPI2, KPI3)
+
+### File Names
+
+- Files follow kebab-case with zero-padded numbers: `kpi-01.tsx`, `kpi-02.tsx`, `progress-kpi-01.tsx`
+- Pattern: `{component-type}-{number}.tsx` where number is zero-padded (01, 02, 03, etc.)
+- For compound names, use kebab-case: `bar-chart-kpi-01.tsx`, `progress-kpi-01.tsx`
+
+### Registry Keys
+
+- Registry keys use kebab-case matching file names: `'kpi-01'`, `'progress-kpi-01'`, `'bar-chart-kpi-01'`
+- Keys in `exampleComponents` object must match the file name pattern
+
+## Props Organization
+
+### Alphabetical Ordering
+
+- **ALWAYS** order props alphabetically in:
+  1. Function parameter destructuring
+  2. Type/interface definitions
+  3. Both the parameter list AND the type definition must match
+
+Example:
+
+```typescript
+export const ComponentName = ({
+  barColor = '#0f172a', // 'b' comes before 'c'
+  className = '', // 'c' comes before 'd'
+  data, // 'd' comes before 'h'
+  height = 180, // 'h' comes last
+}: {
+  barColor?: string // Same alphabetical order
+  className?: string
+  data: DataType[]
+  height?: number
+}) => {
+  // ...
+}
+```
+
+### Props Structure
+
+- Provide default values in function parameters when appropriate
+- Use inline type definitions for component props (not separate interfaces unless reused)
+- Optional props should use `?:` syntax
+- Default values should be provided in the parameter list, not in the type definition
+
+## File Structure
+
+### Component Files Location
+
+- All example components go in `/registry/examples/`
+- Base/primitive components go in `/registry/` (e.g., `/registry/kpi.tsx`)
+
+### Component File Template
+
+```typescript
+import { BaseComponent } from '@/registry/base-component'
+import { Card, CardContent, CardDescription } from '@/components/ui/card'
+
+export const ComponentName = ({
+  // Props in alphabetical order
+  prop1 = 'default',
+  prop2 = 0,
+  prop3,
+}: {
+  // Type definition in same alphabetical order
+  prop1?: string
+  prop2?: number
+  prop3: RequiredType
+} = {}) => {
+  return (
+    <Card>
+      <CardContent>
+        {/* Component implementation */}
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Registry Registration
+
+### index.tsx Pattern
+
+- Import components from their files
+- Create `exampleComponents` object mapping registry keys to components
+- Keys must match the file naming pattern (kebab-case with numbers)
+- Export `getExampleComponent` helper function
+
+```typescript
+import { ComponentName } from './component-name-01'
+
+export const exampleComponents = {
+  'component-name-01': ComponentName,
+  // ...
+}
+
+export function getExampleComponent(name: string) {
+  return exampleComponents[name as keyof typeof exampleComponents] || null
+}
+```
+
+### registry.ts Pattern
+
+- Each component needs an entry in the `examples` array
+- Use `type: 'registry:example'`
+- Include `registryDependencies` array
+- File paths must match actual file locations
+
+```typescript
+{
+  name: 'component-name-01',
+  type: 'registry:example',
+  registryDependencies: ['card', 'https://dashboardblocks.com/r/base.json'],
+  files: [
+    {
+      path: 'registry/examples/component-name-01.tsx',
+      type: 'registry:example',
+    },
+  ],
+}
+```
+
+## Documentation
+
+### MDX Documentation
+
+- Use `<ComponentPreview>` component with the registry key name
+- Component names in previews must match registry keys exactly
+- Add descriptions under section headers when appropriate
+
+```mdx
+### Section Title
+
+Description of the component variant.
+
+<ComponentPreview name='component-name-01' previewClassName='max-w-sm' />
+```
+
+## Import Patterns
+
+### Import Order
+
+1. Base components from `@/registry/`
+2. UI components from `@/components/ui/`
+3. Third-party libraries
+4. Local component imports (in `index.tsx`)
+
+### Import Grouping
+
+- Group imports with blank lines between:
+  - Registry imports
+  - UI component imports
+  - Third-party imports
+
+```typescript
+import { BaseComponent } from '@/registry/base-component'
+import { SomeLibrary } from 'some-library'
+
+import { Card, CardContent } from '@/components/ui/card'
+```
+
+## Component Architecture
+
+### Base Components vs Examples
+
+- **Base components** (`/registry/`): Reusable primitives (e.g., `KPIValue`, `KPITrend`, `KPIBarChart`)
+- **Example components** (`/registry/examples/`): Complete, usable examples combining base components
+
+### Client Components
+
+- Add `'use client'` directive at the top when component uses:
+  - React hooks
+  - Browser APIs
+  - Interactive features
+  - Third-party client-side libraries (e.g., recharts)
+
+### Type Definitions
+
+- Use inline types for component props unless the type is reused
+- Interface names for props should match component name: `ComponentNameProps` or `ComponentName1Props`
+- Export interfaces if they might be reused elsewhere
+
+## Best Practices
+
+1. **Consistency**: Always follow the established naming patterns
+2. **Alphabetical Props**: Never skip alphabetical ordering - it's mandatory
+3. **Default Values**: Provide sensible defaults for optional props
+4. **Type Safety**: Use TypeScript types, never use `any`
+5. **Component Composition**: Build examples from base components
+6. **Documentation**: Keep documentation in sync with component changes
+7. **Registry Sync**: Always update both `index.tsx` and `registry.ts` when adding components
+
+## Common Patterns
+
+### Card-Based Components
+
+Most example components wrap content in Card:
+
+```typescript
+<Card>
+  <CardContent className='space-y-2'>
+    {/* Content */}
+  </CardContent>
+</Card>
+```
+
+### Styling
+
+- Use Tailwind CSS classes
+- Prefer semantic spacing utilities (`space-y-2`, `gap-1`)
+- Use `className` prop for custom styling
+- Maintain consistent spacing patterns across similar components
