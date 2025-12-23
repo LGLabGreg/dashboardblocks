@@ -3,15 +3,15 @@ import { KPITrend, KPIValue } from '@/registry/kpi'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 export const CompactKPI = ({
-  title = 'Active Users',
-  value = '2,420',
   change = '+12.5%',
+  title = 'Active Users',
   trend = 'up',
+  value = '2,420',
 }: {
-  title?: string
-  value?: string
   change?: string
+  title?: string
   trend?: 'up' | 'down' | 'neutral'
+  value?: string
 } = {}) => {
   return (
     <Card>

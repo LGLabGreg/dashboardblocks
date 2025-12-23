@@ -3,17 +3,17 @@ import { KPIProgress, KPITrend, KPIValue } from '@/registry/kpi'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 export const ProgressKPI = ({
-  title = 'Revenue',
-  value = '$87,500',
   change = '+7.5%',
-  trend = 'up',
   percentage = 55,
+  title = 'Revenue',
+  trend = 'up',
+  value = '$87,500',
 }: {
-  title?: string
-  value?: string
   change?: string
-  trend?: 'up' | 'down' | 'neutral'
   percentage?: number
+  title?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value?: string
 } = {}) => {
   return (
     <Card>

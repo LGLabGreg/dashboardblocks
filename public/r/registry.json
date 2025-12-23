@@ -8,8 +8,8 @@
       "type": "registry:component",
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
-      "registryDependencies": ["card"],
-      "dependencies": ["lucide-react"],
+      "registryDependencies": ["progress"],
+      "dependencies": ["lucide-react", "recharts"],
       "files": [
         {
           "path": "registry/kpi.tsx",
@@ -20,7 +20,7 @@
     {
       "name": "minimal-kpi",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
           "path": "registry/examples/minimal-kpi.tsx",
@@ -31,7 +31,7 @@
     {
       "name": "descriptive-kpi",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
           "path": "registry/examples/descriptive-kpi.tsx",
@@ -42,7 +42,7 @@
     {
       "name": "compact-kpi",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
           "path": "registry/examples/compact-kpi.tsx",
@@ -53,10 +53,21 @@
     {
       "name": "progress-kpi",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
           "path": "registry/examples/progress-kpi.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "bar-chart-kpi",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/bar-chart-kpi.tsx",
           "type": "registry:example"
         }
       ]

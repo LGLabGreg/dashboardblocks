@@ -3,17 +3,17 @@ import { KPITrend, KPIValue } from '@/registry/kpi'
 import { Card, CardContent, CardDescription, CardFooter } from '@/components/ui/card'
 
 export const DescriptiveKPI = ({
-  title = 'Conversion Rate',
-  value = '3.24%',
   change = '-2.1%',
-  trend = 'down',
   description = 'Compared to last month',
+  title = 'Conversion Rate',
+  trend = 'down',
+  value = '3.24%',
 }: {
-  title?: string
-  value?: string
   change?: string
-  trend?: 'up' | 'down' | 'neutral'
   description?: string
+  title?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value?: string
 } = {}) => {
   return (
     <Card>

@@ -4,7 +4,7 @@ export const examples: Registry['items'] = [
   {
     name: 'minimal-kpi',
     type: 'registry:example',
-    registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
         path: 'registry/examples/minimal-kpi.tsx',
@@ -15,7 +15,7 @@ export const examples: Registry['items'] = [
   {
     name: 'descriptive-kpi',
     type: 'registry:example',
-    registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
         path: 'registry/examples/descriptive-kpi.tsx',
@@ -26,7 +26,7 @@ export const examples: Registry['items'] = [
   {
     name: 'compact-kpi',
     type: 'registry:example',
-    registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
         path: 'registry/examples/compact-kpi.tsx',
@@ -37,10 +37,21 @@ export const examples: Registry['items'] = [
   {
     name: 'progress-kpi',
     type: 'registry:example',
-    registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
     files: [
       {
         path: 'registry/examples/progress-kpi.tsx',
+        type: 'registry:example',
+      },
+    ],
+  },
+  {
+    name: 'bar-chart-kpi',
+    type: 'registry:example',
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
+    files: [
+      {
+        path: 'registry/examples/bar-chart-kpi.tsx',
         type: 'registry:example',
       },
     ],

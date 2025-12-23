@@ -1,5 +1,15 @@
+'use client'
+
 import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import { ReactNode } from 'react'
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  Tooltip,
+  TooltipContentProps,
+} from 'recharts'
+import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { Progress } from '@/components/ui/progress'
 
@@ -14,15 +24,15 @@ export const KPIValue = ({
 }
 
 export const KPITrend = ({
-  value,
-  trend = 'neutral',
-  variant = 'default',
   className = '',
+  trend = 'neutral',
+  value,
+  variant = 'default',
 }: {
-  value: string
-  trend?: 'up' | 'down' | 'neutral'
-  variant?: 'default' | 'icon-only' | 'badge'
   className?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value: string
+  variant?: 'default' | 'icon-only' | 'badge'
 }) => {
   const trendColors = {
     up: 'text-green-600',
@@ -65,17 +75,17 @@ export const KPITrend = ({
 }
 
 export const KPIProgress = ({
-  percentage,
-  label,
-  target,
   className = '',
+  label,
+  percentage,
   progressClassName = '',
+  target,
 }: {
-  percentage: number
-  label?: string
-  target?: string
   className?: string
+  label?: string
+  percentage: number
   progressClassName?: string
+  target?: string
 }) => {
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
@@ -90,6 +100,60 @@ export const KPIProgress = ({
         <span className='text-sm font-semibold text-foreground'>{target}</span>
       </div>
       <Progress value={normalized} className={progressClassName} />
+    </div>
+  )
+}
+
+const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameType>) => {
+  if (!payload || payload.length === 0) return null
+  return (
+    <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl'>
+      <span className='font-medium'>{payload?.[0].payload.label}</span>
+      {payload.map((item) => (
+        <div key={item.dataKey} className='flex items-center gap-1'>
+          <div
+            className='h-2.5 w-2.5 shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)'
+            style={
+              {
+                '--color-bg': item.fill,
+                '--color-border': item.fill,
+              } as React.CSSProperties
+            }
+          />
+          {item.payload.displayValue || item.payload.value}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export interface KPIBarChartProps {
+  barColor?: string
+  className?: string
+  data: {
+    displayValue?: string
+    label: string
+    value: number
+  }[]
+  height?: number
+}
+
+export const KPIBarChart = ({
+  barColor,
+  className = '',
+  data,
+  height = 180,
+}: KPIBarChartProps) => {
+  const safeData = Array.isArray(data) ? data : []
+
+  return (
+    <div className={`w-full ${className}`} style={{ height }}>
+      <ResponsiveContainer width='100%' height='100%'>
+        <BarChart data={safeData}>
+          <Tooltip content={ChartTooltipContent} />
+          <Bar dataKey='value' fill={barColor} radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 }
