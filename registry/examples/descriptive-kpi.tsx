@@ -1,13 +1,6 @@
-import {
-  KPI,
-  KPIDescription,
-  KPIDivider,
-  KPILabel,
-  KPIRow,
-  KPIStack,
-  KPITrend,
-  KPIValue,
-} from '@/registry/kpi'
+import { KPITrend, KPIValue } from '@/registry/kpi'
+
+import { Card, CardContent, CardDescription, CardFooter } from '@/components/ui/card'
 
 export const DescriptiveKPI = ({
   title = 'Conversion Rate',
@@ -23,16 +16,15 @@ export const DescriptiveKPI = ({
   description?: string
 } = {}) => {
   return (
-    <KPI>
-      <KPIStack gap='2'>
-        <KPILabel>{title}</KPILabel>
+    <Card>
+      <CardContent className='space-y-2'>
+        <CardDescription>{title}</CardDescription>
         <KPIValue>{value}</KPIValue>
-        <KPIDivider className='my-2' />
-        <KPIRow>
-          <KPIDescription>{description}</KPIDescription>
+        <div className='flex items-center justify-between border-t pt-2 mt-3'>
+          <CardDescription>{description}</CardDescription>
           <KPITrend value={change} trend={trend} variant='badge' />
-        </KPIRow>
-      </KPIStack>
-    </KPI>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

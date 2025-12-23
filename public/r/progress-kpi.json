@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-kpi",
+  "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+  "files": [
+    {
+      "path": "registry/examples/progress-kpi.tsx",
+      "content": "import { KPIProgress, KPITrend, KPIValue } from '@/registry/kpi'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const ProgressKPI = ({\n  title = 'Active Users',\n  value = '2,420',\n  change = '+12.5%',\n  trend = 'up',\n  percentage = 55,\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n  percentage?: number\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <KPITrend value={change} trend={trend} variant='badge' />\n        </div>\n        <KPIValue>{value}</KPIValue>\n        <KPIProgress percentage={percentage} />\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -26,6 +26,7 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.5.2",
     "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

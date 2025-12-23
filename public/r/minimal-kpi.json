@@ -5,7 +5,7 @@
   "files": [
     {
       "path": "registry/examples/minimal-kpi.tsx",
-      "content": "import { KPI, KPILabel, KPIRow, KPIStack, KPITrend, KPIValue } from '@/registry/kpi'\n\nexport const MinimalKPI = ({\n  title = 'Total Revenue',\n  value = '$45,231.89',\n  change = '+20.1%',\n  trend = 'up',\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n} = {}) => {\n  return (\n    <KPI>\n      <KPIStack gap='2'>\n        <KPILabel>{title}</KPILabel>\n        <KPIRow>\n          <KPIValue>{value}</KPIValue>\n          <KPITrend value={change} trend={trend} />\n        </KPIRow>\n      </KPIStack>\n    </KPI>\n  )\n}\n",
+      "content": "import { KPITrend, KPIValue } from '@/registry/kpi'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const MinimalKPI = ({\n  title = 'Total Revenue',\n  value = '$45,231.89',\n  change = '+20.1%',\n  trend = 'up',\n}: {\n  title?: string\n  value?: string\n  change?: string\n  trend?: 'up' | 'down' | 'neutral'\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex items-center justify-between'>\n          <KPIValue>{value}</KPIValue>\n          <KPITrend value={change} trend={trend} />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
       "type": "registry:example"
     }
   ],

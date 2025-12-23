@@ -34,4 +34,15 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'progress-kpi',
+    type: 'registry:example',
+    registryDependencies: ['https://dashboardblocks.com/r/kpi.json'],
+    files: [
+      {
+        path: 'registry/examples/progress-kpi.tsx',
+        type: 'registry:example',
+      },
+    ],
+  },
 ]

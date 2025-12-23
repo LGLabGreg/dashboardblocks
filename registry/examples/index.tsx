@@ -1,11 +1,13 @@
 import { CompactKPI } from './compact-kpi'
 import { DescriptiveKPI } from './descriptive-kpi'
 import { MinimalKPI } from './minimal-kpi'
+import { ProgressKPI } from './progress-kpi'
 
 export const exampleComponents = {
   'minimal-kpi': MinimalKPI,
   'compact-kpi': CompactKPI,
   'descriptive-kpi': DescriptiveKPI,
+  'progress-kpi': ProgressKPI,
 }
 
 export function getExampleComponent(name: string) {

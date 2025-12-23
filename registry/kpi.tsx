@@ -1,68 +1,7 @@
 import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import { ReactNode } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
-
-export const KPI = ({
-  children,
-  className = '',
-}: {
-  children: ReactNode
-  className?: string
-}) => {
-  return (
-    <Card className={cn('w-full', className)}>
-      <CardContent>{children}</CardContent>
-    </Card>
-  )
-}
-
-export const KPIStack = ({
-  children,
-  className = '',
-  gap = '2',
-}: {
-  children: ReactNode
-  className?: string
-  gap?: '1' | '2' | '3' | '4'
-}) => {
-  const gapClasses = {
-    '1': 'space-y-1',
-    '2': 'space-y-2',
-    '3': 'space-y-3',
-    '4': 'space-y-4',
-  }
-
-  return <div className={`${gapClasses[gap]} ${className}`}>{children}</div>
-}
-
-export const KPIRow = ({
-  children,
-  className = '',
-}: {
-  children: ReactNode
-  className?: string
-}) => {
-  return (
-    <div className={cn('flex items-center justify-between', className)}>{children}</div>
-  )
-}
-
-export const KPILabel = ({
-  children,
-  className = '',
-}: {
-  children: ReactNode
-  className?: string
-}) => {
-  return (
-    <div className={`text-sm font-medium text-muted-foreground ${className}`}>
-      {children}
-    </div>
-  )
-}
+import { Progress } from '@/components/ui/progress'
 
 export const KPIValue = ({
   children,
@@ -125,16 +64,32 @@ export const KPITrend = ({
   )
 }
 
-export const KPIDescription = ({
-  children,
+export const KPIProgress = ({
+  percentage,
+  label,
+  target,
   className = '',
+  progressClassName = '',
 }: {
-  children: ReactNode
+  percentage: number
+  label?: string
+  target?: string
   className?: string
+  progressClassName?: string
 }) => {
-  return <div className={`text-xs text-muted-foreground ${className}`}>{children}</div>
-}
+  const safePercentage = Number.isFinite(percentage) ? percentage : 0
+  const normalized = Math.min(100, Math.max(0, safePercentage))
 
-export const KPIDivider = ({ className = '' }: { className?: string }) => {
-  return <div className={`border-t ${className}`} />
+  return (
+    <div className={`space-y-2 ${className}`}>
+      <div className='flex items-center justify-between text-sm text-muted-foreground'>
+        <span>
+          <span className='font-semibold text-foreground'>{Math.round(normalized)}%</span>
+          {label ? ` ${label}` : null}
+        </span>
+        <span className='text-sm font-semibold text-foreground'>{target}</span>
+      </div>
+      <Progress value={normalized} className={progressClassName} />
+    </div>
+  )
 }
