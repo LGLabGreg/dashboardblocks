@@ -3,13 +3,11 @@
 import { Check, Clipboard } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
-import { OpenInV0Button } from '@/components/open-in-v0-button'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
 interface ComponentPreviewHighlightedProps {
-  name: string
   code: string
   highlightedCode: string
   children: React.ReactNode
@@ -18,7 +16,6 @@ interface ComponentPreviewHighlightedProps {
 }
 
 export function ComponentPreviewHighlighted({
-  name,
   code,
   highlightedCode,
   children,
@@ -78,7 +75,6 @@ export function ComponentPreviewHighlighted({
             {copied ? <Check className='size-4' /> : <Clipboard className='size-4' />}
             <span className='sr-only'>Copy code</span>
           </Button>
-          <OpenInV0Button name={name} />
         </div>
       </div>
 

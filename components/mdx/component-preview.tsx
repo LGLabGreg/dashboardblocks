@@ -80,7 +80,6 @@ export async function ComponentPreview({
 
   return (
     <ComponentPreviewHighlighted
-      name={name}
       code={code}
       highlightedCode={highlightedCode}
       className={className}
