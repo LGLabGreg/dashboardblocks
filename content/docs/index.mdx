@@ -1,13 +1,37 @@
 ---
 title: Introduction
-description: Lorem ipsum dolores
+description: Beautiful, composable dashboard components for shadcn/ui
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+Dashboardblocks is a collection of high-quality dashboard components built on top of [shadcn/ui](https://ui.shadcn.com). Install only what you need, customize everything, and own your code.
 
-## What is Next?
+## Why Dashboardblocks?
+
+Most dashboard UI libraries force you to choose between generic components that don't fit your needs or monolithic templates you can't easily customize. Dashboardblocks takes a different approach:
+
+- **Individual installation** — Install components one at a time via the shadcn CLI. No bloated dependencies.
+- **Composable primitives** — Each component is built from small, reusable pieces you can mix and match.
+- **Dashboard-focused** — Purpose-built for analytics, admin panels, and data-heavy interfaces.
+- **Own your code** — Components are copied into your project. Customize freely without fighting abstractions.
+
+## Quick Start
+
+```bash
+npx shadcn@latest add https://dashboardblocks.com/r/kpi.json
+```
+
+This installs the KPI primitives. Then grab any example:
+
+```bash
+npx shadcn@latest add https://dashboardblocks.com/r/kpi-01.json
+```
+
+## What's Included
 
 <Cards>
-  <Card title='Learn more about Next.js' href='https://nextjs.org/docs' />
-  <Card title='Learn more about Fumadocs' href='https://fumadocs.dev' />
+  <Card title='KPI' href='/docs/components/kpi'>
+    Flexible KPI cards with trend indicators, sparklines, and progress tracking.
+  </Card>
 </Cards>
+
+More components coming soon: Activity Feed, Comparison Card, Usage Meter, and Changelog.

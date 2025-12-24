@@ -13,6 +13,7 @@ export const components: Registry['items'] = [
       {
         path: 'registry/kpi.tsx',
         type: 'registry:component',
+        target: 'components/kpi.tsx',
       },
     ],
   },
