@@ -1,4 +1,4 @@
-import { BarChartKPI2 } from '@/registry/examples/bar-chart-kpi-02'
+import { BarChartKPI2 } from '@/registry/dashboardblocks/examples/bar-chart-kpi-02'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 

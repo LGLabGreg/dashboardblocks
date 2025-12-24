@@ -1,6 +1,11 @@
 'use client'
 
-import { KPIIcon, KPIProgress, KPIProgressProps, KPIValue } from '@/registry/kpi'
+import {
+  KPIIcon,
+  KPIProgress,
+  KPIProgressProps,
+  KPIValue,
+} from '@/registry/dashboardblocks/kpi'
 import { ClipboardList } from 'lucide-react'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'

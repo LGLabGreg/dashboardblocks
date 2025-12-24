@@ -1,5 +1,5 @@
-import { examples } from '@/registry/examples/registry'
-import { components } from '@/registry/registry'
+import { examples } from '@/registry/dashboardblocks/examples/registry'
+import { components } from '@/registry/dashboardblocks/registry'
 import { writeFileSync } from 'fs'
 import { resolve } from 'path'
 

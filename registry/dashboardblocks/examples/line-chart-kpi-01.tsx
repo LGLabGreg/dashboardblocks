@@ -1,4 +1,4 @@
-import { KPILineChart, KPITrend, KPIValue } from '@/registry/kpi'
+import { KPILineChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
 import type { Props as LineProps } from 'recharts/types/cartesian/Line'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'

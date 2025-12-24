@@ -1,4 +1,4 @@
-import { KPITrend, KPIValue } from '@/registry/kpi'
+import { KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
