@@ -1,18 +1,17 @@
-import { KPIProgress, KPIProgressProps, KPITrend, KPIValue } from '@/registry/kpi'
+'use client'
+
+import { KPIIcon, KPIProgress, KPIProgressProps, KPIValue } from '@/registry/kpi'
+import { ClipboardList } from 'lucide-react'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface ProgressKPI2Props {
-  change?: string
   title?: string
-  trend?: 'up' | 'down' | 'neutral'
   value?: string
   progressBars: KPIProgressProps[]
 }
 export const ProgressKPI2 = ({
-  change = '+7.5%',
   title = 'Task Completion',
-  trend = 'up',
   value = '87/100',
   progressBars = [
     {
@@ -40,10 +39,10 @@ export const ProgressKPI2 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <KPITrend value={change} trend={trend} variant='badge' />
+          <KPIIcon icon={ClipboardList} />
         </div>
         <KPIValue>{value}</KPIValue>
-        <div className='space-y-3 mt-4'>
+        <div className='space-y-3 mt-5'>
           {progressBars.map((bar) => (
             <KPIProgress key={bar.label} {...bar} />
           ))}

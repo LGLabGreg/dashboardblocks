@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
+import { LucideIcon } from 'lucide-react'
 import { ReactNode } from 'react'
 import {
   Bar,
@@ -23,6 +24,25 @@ export const KPIValue = ({
   className?: string
 }) => {
   return <div className={`text-3xl font-bold ${className}`}>{children}</div>
+}
+
+export const KPIIcon = ({
+  className = '',
+  icon: Icon,
+}: {
+  className?: string
+  icon: LucideIcon
+}) => {
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-center rounded-md bg-gray-100 p-3 aspect-square',
+        className,
+      )}
+    >
+      <Icon />
+    </div>
+  )
 }
 
 export const KPITrend = ({
