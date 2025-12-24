@@ -20,7 +20,7 @@ export const ProgressKPI1 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <KPITrend value={change} trend={trend} variant='badge' />
+          <KPITrend value={change} trend={trend} />
         </div>
         <KPIValue>{value}</KPIValue>
         <KPIProgress

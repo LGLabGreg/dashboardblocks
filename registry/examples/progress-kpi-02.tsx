@@ -1,0 +1,54 @@
+import { KPIProgress, KPIProgressProps, KPITrend, KPIValue } from '@/registry/kpi'
+
+import { Card, CardContent, CardDescription } from '@/components/ui/card'
+
+interface ProgressKPI2Props {
+  change?: string
+  title?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value?: string
+  progressBars: KPIProgressProps[]
+}
+export const ProgressKPI2 = ({
+  change = '+7.5%',
+  title = 'Task Completion',
+  trend = 'up',
+  value = '87/100',
+  progressBars = [
+    {
+      label: 'completed',
+      target: '51 tasks',
+      percentage: 59,
+      progressClassName: 'bg-gray-200 [&>div]:bg-green-500',
+    },
+    {
+      label: 'in progress',
+      target: '26 tasks',
+      percentage: 30,
+      progressClassName: 'bg-gray-200 [&>div]:bg-blue-500',
+    },
+    {
+      label: 'not started',
+      target: '10 tasks',
+      percentage: 11,
+      progressClassName: 'bg-gray-200 [&>div]:bg-red-500',
+    },
+  ],
+}: ProgressKPI2Props) => {
+  return (
+    <Card>
+      <CardContent className='space-y-1'>
+        <div className='flex items-center justify-between'>
+          <CardDescription>{title}</CardDescription>
+          <KPITrend value={change} trend={trend} variant='badge' />
+        </div>
+        <KPIValue>{value}</KPIValue>
+        <div className='space-y-3 mt-4'>
+          {progressBars.map((bar) => (
+            <KPIProgress key={bar.label} {...bar} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

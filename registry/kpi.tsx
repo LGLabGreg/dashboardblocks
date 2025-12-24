@@ -13,6 +13,8 @@ import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipCont
 
 import { Progress } from '@/components/ui/progress'
 
+import { cn } from '@/lib/utils'
+
 export const KPIValue = ({
   children,
   className = '',
@@ -74,24 +76,25 @@ export const KPITrend = ({
   )
 }
 
-export const KPIProgress = ({
-  className = '',
-  label,
-  percentage,
-  progressClassName = '',
-  target,
-}: {
+export interface KPIProgressProps {
   className?: string
   label?: string
   percentage: number
   progressClassName?: string
   target?: string
-}) => {
+}
+export const KPIProgress = ({
+  className,
+  label,
+  percentage,
+  progressClassName,
+  target,
+}: KPIProgressProps) => {
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={cn('space-y-1', className)}>
       <div className='flex items-center justify-between text-sm text-muted-foreground'>
         <span>
           <span className='font-semibold text-foreground'>{Math.round(normalized)}%</span>
@@ -107,8 +110,9 @@ export const KPIProgress = ({
 const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameType>) => {
   if (!payload || payload.length === 0) return null
   return (
-    <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl'>
+    <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-xl'>
       <span className='font-medium'>{payload?.[0].payload.label}</span>
+
       {payload.map((item) => (
         <div key={item.dataKey} className='flex items-center gap-1'>
           <div
@@ -149,7 +153,7 @@ export const KPIBarChart = ({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
-        <BarChart data={safeData}>
+        <BarChart data={safeData} responsive>
           <Tooltip content={ChartTooltipContent} />
           <Bar dataKey='value' fill={barColor} radius={[4, 4, 0, 0]} />
         </BarChart>

@@ -13,6 +13,7 @@ interface BarChartKPI1Props {
 export const BarChartKPI1 = ({
   change = '+7.5%',
   chartProps = {
+    barColor: 'var(--color-primary)',
     data: [
       { label: 'Monday', value: 32, displayValue: '$12,345' },
       { label: 'Tuesday', value: 45, displayValue: '$10,234' },
