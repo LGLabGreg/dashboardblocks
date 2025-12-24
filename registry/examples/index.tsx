@@ -1,4 +1,5 @@
 import { BarChartKPI1 } from './bar-chart-kpi-01'
+import { BarChartKPI2 } from './bar-chart-kpi-02'
 import { KPI1 } from './kpi-01'
 import { KPI2 } from './kpi-02'
 import { KPI3 } from './kpi-03'
@@ -12,6 +13,7 @@ export const exampleComponents = {
   'progress-kpi-01': ProgressKPI1,
   'progress-kpi-02': ProgressKPI2,
   'bar-chart-kpi-01': BarChartKPI1,
+  'bar-chart-kpi-02': BarChartKPI2,
 }
 
 export function getExampleComponent(name: string) {

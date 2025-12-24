@@ -10,6 +10,7 @@ import {
   Tooltip,
   TooltipContentProps,
 } from 'recharts'
+import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { Progress } from '@/components/ui/progress'
@@ -129,12 +130,52 @@ export const KPIProgress = ({
 
 const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameType>) => {
   if (!payload || payload.length === 0) return null
+
+  const resolveDisplayValue = (entry: NonNullable<typeof payload>[number]) => {
+    const dataKey =
+      typeof entry.dataKey === 'string' || typeof entry.dataKey === 'number'
+        ? entry.dataKey
+        : undefined
+    const row = entry.payload as Record<string, unknown> & {
+      displayValues?: Record<string | number, ReactNode>
+    }
+
+    if (dataKey !== undefined && row) {
+      const displayValues = row.displayValues
+      if (displayValues && displayValues[dataKey] !== undefined) {
+        return displayValues[dataKey]
+      }
+
+      const keyedDisplay = row[`${String(dataKey)}DisplayValue`]
+      if (keyedDisplay !== undefined) {
+        return keyedDisplay as ReactNode
+      }
+
+      if (row[String(dataKey)] !== undefined) {
+        return row[String(dataKey)] as ReactNode
+      }
+    }
+
+    if (row?.displayValue !== undefined) {
+      return row.displayValue as ReactNode
+    }
+
+    return entry.value
+  }
+
   return (
     <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-xl'>
       <span className='font-medium'>{payload?.[0].payload.label}</span>
 
-      {payload.map((item) => (
-        <div key={item.dataKey} className='flex items-center gap-1'>
+      {payload.map((item, index) => (
+        <div
+          key={
+            typeof item.dataKey === 'string' || typeof item.dataKey === 'number'
+              ? item.dataKey
+              : index
+          }
+          className='flex items-center gap-1'
+        >
           <div
             className='h-2.5 w-2.5 shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)'
             style={
@@ -144,7 +185,7 @@ const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameTyp
               } as React.CSSProperties
             }
           />
-          {item.payload.displayValue || item.payload.value}
+          {resolveDisplayValue(item)}
         </div>
       ))}
     </div>
@@ -152,30 +193,40 @@ const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameTyp
 }
 
 export interface KPIBarChartProps {
-  barColor?: string
+  bars: BarProps[]
   className?: string
-  data: {
-    displayValue?: string
-    label: string
-    value: number
-  }[]
+  data: unknown[]
   height?: number
 }
 
 export const KPIBarChart = ({
-  barColor,
+  bars,
   className = '',
   data,
   height = 180,
 }: KPIBarChartProps) => {
   const safeData = Array.isArray(data) ? data : []
+  const resolvedBars = Array.isArray(bars) && bars.length > 0 ? bars : []
 
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
-        <BarChart data={safeData} responsive>
+        <BarChart data={safeData}>
           <Tooltip content={ChartTooltipContent} />
-          <Bar dataKey='value' fill={barColor} radius={[4, 4, 0, 0]} />
+          {resolvedBars.map((barProps, index) => {
+            const dataKey =
+              typeof barProps.dataKey === 'string' || typeof barProps.dataKey === 'number'
+                ? barProps.dataKey
+                : index
+
+            return (
+              <Bar
+                key={String(dataKey)}
+                radius={barProps.radius ?? [4, 4, 0, 0]}
+                {...barProps}
+              />
+            )
+          })}
         </BarChart>
       </ResponsiveContainer>
     </div>
