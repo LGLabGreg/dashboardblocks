@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.0.2
+
+### Patch Changes
+
+- [#9](https://github.com/LGLabGreg/dashboardblocks/pull/9) [`0cf33cd`](https://github.com/LGLabGreg/dashboardblocks/commit/0cf33cdfc2004434b7afa2a10e2fb80233107ed8) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Fix registry
+
 ## 0.0.1
 
 ### Patch Changes

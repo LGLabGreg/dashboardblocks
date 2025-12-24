@@ -1,5 +1,0 @@
----
-'dashboardblocks': patch
----
-
-Fix registry
