@@ -13,7 +13,8 @@
       "files": [
         {
           "path": "registry/kpi.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "components/kpi.tsx"
         }
       ]
     },
