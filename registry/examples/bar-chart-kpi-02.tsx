@@ -4,13 +4,13 @@ import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface BarChartKPIProps {
-  bars: BarProps[]
-  change: string
-  data: any[]
-  height: number
-  title: string
-  trend: 'up' | 'down' | 'neutral'
-  value: string
+  bars?: BarProps[]
+  change?: string
+  data?: any[]
+  height?: number
+  title?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value?: string
 }
 
 export const BarChartKPI2 = ({

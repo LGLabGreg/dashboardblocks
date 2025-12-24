@@ -4,13 +4,13 @@ import type { Props as LineProps } from 'recharts/types/cartesian/Line'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface LineChartKPIProps {
-  change: string
-  data: any[]
-  height: number
-  lines: LineProps[]
-  title: string
-  trend: 'up' | 'down' | 'neutral'
-  value: string
+  change?: string
+  data?: any[]
+  height?: number
+  lines?: LineProps[]
+  title?: string
+  trend?: 'up' | 'down' | 'neutral'
+  value?: string
 }
 
 export const LineChartKPI1 = ({

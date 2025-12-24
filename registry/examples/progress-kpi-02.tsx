@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface ProgressKPI2Props {
   title?: string
   value?: string
-  progressBars: KPIProgressProps[]
+  progressBars?: KPIProgressProps[]
 }
 export const ProgressKPI2 = ({
   title = 'Task Completion',
