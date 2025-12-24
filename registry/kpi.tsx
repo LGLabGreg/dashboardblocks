@@ -1,7 +1,13 @@
 'use client'
 
-import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
-import { LucideIcon } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  type LucideIcon,
+  Minus,
+  TrendingDown,
+  TrendingUp,
+} from 'lucide-react'
 import { ReactNode } from 'react'
 import {
   Bar,

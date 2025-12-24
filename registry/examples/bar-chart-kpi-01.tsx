@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface BarChartKPIProps {
   bars?: BarProps[]
   change?: string
-  data?: any[]
+  data?: unknown[]
   height?: number
   title?: string
   trend?: 'up' | 'down' | 'neutral'

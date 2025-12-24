@@ -1,0 +1,5 @@
+---
+'dashboardblocks': patch
+---
+
+Initial release

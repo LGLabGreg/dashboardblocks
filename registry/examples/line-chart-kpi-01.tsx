@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface LineChartKPIProps {
   change?: string
-  data?: any[]
+  data?: unknown[]
   height?: number
   lines?: LineProps[]
   title?: string
