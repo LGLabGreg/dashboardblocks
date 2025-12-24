@@ -6,11 +6,14 @@ import { ReactNode } from 'react'
 import {
   Bar,
   BarChart,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   TooltipContentProps,
 } from 'recharts'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
+import type { Props as LineProps } from 'recharts/types/cartesian/Line'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { Progress } from '@/components/ui/progress'
@@ -167,27 +170,34 @@ const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameTyp
     <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-xl'>
       <span className='font-medium'>{payload?.[0].payload.label}</span>
 
-      {payload.map((item, index) => (
-        <div
-          key={
-            typeof item.dataKey === 'string' || typeof item.dataKey === 'number'
-              ? item.dataKey
-              : index
-          }
-          className='flex items-center gap-1'
-        >
+      {payload.map((item, index) => {
+        const itemColor =
+          (item.color as string | undefined) ??
+          (item.fill as string | undefined) ??
+          'var(--color-foreground)'
+
+        return (
           <div
-            className='h-2.5 w-2.5 shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)'
-            style={
-              {
-                '--color-bg': item.fill,
-                '--color-border': item.fill,
-              } as React.CSSProperties
+            key={
+              typeof item.dataKey === 'string' || typeof item.dataKey === 'number'
+                ? item.dataKey
+                : index
             }
-          />
-          {resolveDisplayValue(item)}
-        </div>
-      ))}
+            className='flex items-center gap-1'
+          >
+            <div
+              className='h-2.5 w-2.5 shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)'
+              style={
+                {
+                  '--color-bg': itemColor,
+                  '--color-border': itemColor,
+                } as React.CSSProperties
+              }
+            />
+            {resolveDisplayValue(item)}
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -228,6 +238,50 @@ export const KPIBarChart = ({
             )
           })}
         </BarChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+export interface KPILineChartProps {
+  className?: string
+  data: unknown[]
+  height?: number
+  lines: LineProps[]
+}
+
+export const KPILineChart = ({
+  className = '',
+  data,
+  height = 180,
+  lines,
+}: KPILineChartProps) => {
+  const safeData = Array.isArray(data) ? data : []
+  const resolvedLines = Array.isArray(lines) && lines.length > 0 ? lines : []
+
+  return (
+    <div className={`w-full ${className}`} style={{ height }}>
+      <ResponsiveContainer width='100%' height='100%'>
+        <LineChart data={safeData}>
+          <Tooltip content={ChartTooltipContent} />
+          {resolvedLines.map((lineProps, index) => {
+            const dataKey =
+              typeof lineProps.dataKey === 'string' ||
+              typeof lineProps.dataKey === 'number'
+                ? lineProps.dataKey
+                : index
+
+            return (
+              <Line
+                key={String(dataKey)}
+                type={lineProps.type ?? 'monotone'}
+                strokeWidth={lineProps.strokeWidth ?? 2}
+                dot={lineProps.dot ?? { r: 4 }}
+                {...lineProps}
+              />
+            )
+          })}
+        </LineChart>
       </ResponsiveContainer>
     </div>
   )
