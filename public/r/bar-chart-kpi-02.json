@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bar-chart-kpi-02",
+  "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+  "files": [
+    {
+      "path": "registry/examples/bar-chart-kpi-02.tsx",
+      "content": "import { KPIBarChart, KPITrend, KPIValue } from '@/registry/kpi'\nimport type { Props as BarProps } from 'recharts/types/cartesian/Bar'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\ninterface BarChartKPIProps {\n  bars: BarProps[]\n  change: string\n  data: any[]\n  height: number\n  title: string\n  trend: 'up' | 'down' | 'neutral'\n  value: string\n}\n\nexport const BarChartKPI2 = ({\n  bars = [\n    {\n      dataKey: 'value',\n      fill: 'var(--color-chart-1)',\n    },\n    {\n      dataKey: 'goal',\n      fill: 'var(--color-chart-2)',\n    },\n  ],\n  change = '+7.5%',\n  data = [\n    {\n      label: 'Monday',\n      value: 32,\n      goal: 38,\n      displayValues: {\n        value: '$12,345',\n        goal: '$14,620',\n      },\n    },\n    {\n      label: 'Tuesday',\n      value: 45,\n      goal: 42,\n      displayValues: {\n        value: '$10,234',\n        goal: '$9,980',\n      },\n    },\n    {\n      label: 'Wednesday',\n      value: 28,\n      goal: 34,\n      displayValues: {\n        value: '$8,765',\n        goal: '$10,500',\n      },\n    },\n    {\n      label: 'Thursday',\n      value: 52,\n      goal: 48,\n      displayValues: {\n        value: '$6,543',\n        goal: '$6,050',\n      },\n    },\n    {\n      label: 'Friday',\n      value: 61,\n      goal: 64,\n      displayValues: {\n        value: '$4,321',\n        goal: '$4,765',\n      },\n    },\n    {\n      label: 'Saturday',\n      value: 48,\n      goal: 52,\n      displayValues: {\n        value: '$2,109',\n        goal: '$2,356',\n      },\n    },\n    {\n      label: 'Sunday',\n      value: 57,\n      goal: 60,\n      displayValues: {\n        value: '$1,234',\n        goal: '$1,420',\n      },\n    },\n  ],\n  height = 160,\n  title = 'Revenue',\n  trend = 'up',\n  value = '$87,500',\n}: BarChartKPIProps) => {\n  return (\n    <Card>\n      <CardContent>\n        <div className='space-y-1'>\n          <div className='flex items-center justify-between'>\n            <CardDescription>{title}</CardDescription>\n            <KPITrend value={change} trend={trend} variant='badge' />\n          </div>\n          <KPIValue>{value}</KPIValue>\n        </div>\n        <KPIBarChart data={data} bars={bars} height={height} />\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

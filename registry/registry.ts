@@ -7,11 +7,11 @@ export const components: Registry['items'] = [
     title: 'KPI',
     description:
       'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
-    registryDependencies: ['card'],
-    dependencies: ['lucide-react'],
+    registryDependencies: ['progress'],
+    dependencies: ['lucide-react', 'recharts'],
     files: [
       {
-        path: 'registry/dashboardblocks/kpi.tsx',
+        path: 'registry/kpi.tsx',
         type: 'registry:component',
       },
     ],

@@ -8,44 +8,99 @@
       "type": "registry:component",
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
-      "registryDependencies": ["card"],
-      "dependencies": ["lucide-react"],
+      "registryDependencies": ["progress"],
+      "dependencies": ["lucide-react", "recharts"],
       "files": [
         {
-          "path": "registry/dashboardblocks/kpi.tsx",
+          "path": "registry/kpi.tsx",
           "type": "registry:component"
         }
       ]
     },
     {
-      "name": "minimal-kpi",
+      "name": "kpi-01",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/minimal-kpi.tsx",
+          "path": "registry/examples/kpi-01.tsx",
           "type": "registry:example"
         }
       ]
     },
     {
-      "name": "descriptive-kpi",
+      "name": "kpi-02",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/descriptive-kpi.tsx",
+          "path": "registry/examples/kpi-02.tsx",
           "type": "registry:example"
         }
       ]
     },
     {
-      "name": "compact-kpi",
+      "name": "kpi-03",
       "type": "registry:example",
-      "registryDependencies": ["https://dashboardblocks.com/r/kpi.json"],
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/compact-kpi.tsx",
+          "path": "registry/examples/kpi-03.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-kpi-01",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/progress-kpi-01.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-kpi-02",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/progress-kpi-02.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "bar-chart-kpi-01",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/bar-chart-kpi-01.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "bar-chart-kpi-02",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/bar-chart-kpi-02.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "line-chart-kpi-01",
+      "type": "registry:example",
+      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
+      "files": [
+        {
+          "path": "registry/examples/line-chart-kpi-01.tsx",
           "type": "registry:example"
         }
       ]
