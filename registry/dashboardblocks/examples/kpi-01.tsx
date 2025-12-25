@@ -17,7 +17,7 @@ export const KPI1 = ({
     <Card>
       <CardContent className='space-y-2'>
         <CardDescription>{title}</CardDescription>
-        <div className='flex items-center justify-between'>
+        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>
           <KPIValue>{value}</KPIValue>
           <KPITrend value={change} trend={trend} />
         </div>
