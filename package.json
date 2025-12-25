@@ -1,6 +1,6 @@
 {
   "name": "dashboardblocks",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "packageManager": "pnpm@10.26.1",
   "scripts": {
     "build": "next build",

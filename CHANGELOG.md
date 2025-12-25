@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.1.0
+
+### Minor Changes
+
+- [#12](https://github.com/LGLabGreg/dashboardblocks/pull/12) [`323bd4f`](https://github.com/LGLabGreg/dashboardblocks/commit/323bd4f69719f863a3a93334087ac087c8b15a78) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Add KPI components
+
 ## 0.0.2
 
 ### Patch Changes
