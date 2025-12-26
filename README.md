@@ -1,24 +1,9 @@
 Dashboardblocks is a collection of high-quality dashboard components built on top of [shadcn/ui](https://ui.shadcn.com). Install only what you need, customize everything, and own your code.
 
-## Why Dashboardblocks?
+## Documentation
 
-Most dashboard UI libraries force you to choose between generic components that don't fit your needs or monolithic templates you can't easily customize. Dashboardblocks takes a different approach:
+Visit https://dashboardblocks.com/docs to view the documentation.
 
-- **Individual installation** — Install components one at a time via the shadcn CLI. No bloated dependencies.
-- **Composable primitives** — Each component is built from small, reusable pieces you can mix and match.
-- **Dashboard-focused** — Purpose-built for analytics, admin panels, and data-heavy interfaces.
-- **Own your code** — Components are copied into your project. Customize freely without fighting abstractions.
+## License
 
-## Quick Start
-
-```bash
-npx shadcn@latest add https://dashboardblocks.com/r/kpi.json
-```
-
-This installs the KPI primitives. Then grab any example:
-
-```bash
-npx shadcn@latest add https://dashboardblocks.com/r/kpi-01.json
-```
-
-More components coming soon: Activity Feed, Comparison Card, Usage Meter, and Changelog.
+Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
