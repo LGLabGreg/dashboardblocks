@@ -38,6 +38,7 @@ export const ProgressKPI3 = ({
             <KPIRing
               className='h-24 w-24 sm:h-36 sm:w-36 shrink-0'
               percentage={percentage}
+              ringColor='var(--color-chart-1)'
             >
               <span className='text-lg font-bold'>{Math.round(percentage)}%</span>
             </KPIRing>

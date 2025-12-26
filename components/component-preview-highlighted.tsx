@@ -34,7 +34,7 @@ export function ComponentPreviewHighlighted({
   return (
     <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
       {/* Header with tabs and actions */}
-      <div className='flex items-center justify-between border-b bg-muted/30 px-4'>
+      <div className='flex items-center justify-between border-b px-4'>
         <div className='flex'>
           <button
             onClick={() => setActiveTab('preview')}

@@ -1,5 +1,5 @@
 import { KPILineChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
-import type { Props as LineProps } from 'recharts/types/cartesian/Line'
+import { LineProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
@@ -17,49 +17,49 @@ export const LineChartKPI1 = ({
   change = '+4.2%',
   data = [
     {
-      label: 'Mon',
+      label: 'Monday',
       value: 4200,
       displayValues: {
         value: '4.2k visits',
       },
     },
     {
-      label: 'Tue',
+      label: 'Tuesday',
       value: 5100,
       displayValues: {
         value: '5.1k visits',
       },
     },
     {
-      label: 'Wed',
+      label: 'Wednesday',
       value: 2800,
       displayValues: {
         value: '4.8k visits',
       },
     },
     {
-      label: 'Thu',
+      label: 'Thursday',
       value: 5600,
       displayValues: {
         value: '5.6k visits',
       },
     },
     {
-      label: 'Fri',
+      label: 'Friday',
       value: 6300,
       displayValues: {
         value: '6.3k visits',
       },
     },
     {
-      label: 'Sat',
+      label: 'Saturday',
       value: 5400,
       displayValues: {
         value: '5.4k visits',
       },
     },
     {
-      label: 'Sun',
+      label: 'Sunday',
       value: 6900,
       displayValues: {
         value: '4.9k visits',

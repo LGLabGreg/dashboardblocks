@@ -23,19 +23,19 @@ export const ProgressKPI2 = ({
       label: 'completed',
       target: '51 tasks',
       percentage: 59,
-      progressClassName: '[&>div]:bg-green-500',
+      progressClassName: '[&>div]:bg-green-600',
     },
     {
       label: 'in progress',
       target: '26 tasks',
       percentage: 30,
-      progressClassName: '[&>div]:bg-blue-500',
+      progressClassName: '[&>div]:bg-blue-600',
     },
     {
       label: 'not started',
       target: '10 tasks',
       percentage: 11,
-      progressClassName: '[&>div]:bg-red-500',
+      progressClassName: '[&>div]:bg-red-600',
     },
   ],
 }: ProgressKPI2Props) => {

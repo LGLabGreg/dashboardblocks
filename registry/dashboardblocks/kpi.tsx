@@ -10,16 +10,19 @@ import {
 } from 'lucide-react'
 import { ReactNode } from 'react'
 import {
+  Area,
+  AreaChart,
+  AreaProps,
   Bar,
   BarChart,
+  BarProps,
   Line,
   LineChart,
+  LineProps,
   ResponsiveContainer,
   Tooltip,
   TooltipContentProps,
 } from 'recharts'
-import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
-import type { Props as LineProps } from 'recharts/types/cartesian/Line'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { Progress } from '@/components/ui/progress'
@@ -58,11 +61,13 @@ export const KPIIcon = ({
 export const KPITrend = ({
   className = '',
   trend = 'neutral',
+  trendIcon = 'trend',
   value,
   variant = 'default',
 }: {
   className?: string
   trend?: 'up' | 'down' | 'neutral'
+  trendIcon?: 'arrow' | 'trend'
   value: string
   variant?: 'default' | 'icon-only' | 'badge'
 }) => {
@@ -79,18 +84,19 @@ export const KPITrend = ({
   }
 
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus
+  const ArrowIcon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Minus
+  const Icon = trendIcon === 'arrow' ? ArrowIcon : TrendIcon
 
   if (variant === 'icon-only') {
-    return <TrendIcon className={`h-4 w-4 ${trendColors[trend]} ${className}`} />
+    return <Icon className={`h-4 w-4 ${trendColors[trend]} ${className}`} />
   }
 
   if (variant === 'badge') {
-    const ArrowIcon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Minus
     return (
       <div
         className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badgeColors[trend]} ${className}`}
       >
-        <ArrowIcon className='h-3 w-3' />
+        <Icon className='h-3 w-3' />
         {value}
       </div>
     )
@@ -100,7 +106,7 @@ export const KPITrend = ({
     <div
       className={`flex items-center text-sm font-medium ${trendColors[trend]} ${className}`}
     >
-      <TrendIcon className='mr-1 h-4 w-4' />
+      <Icon className='mr-1 h-4 w-4' />
       {value}
     </div>
   )
@@ -156,7 +162,7 @@ export const KPIRing = ({
   radius = 40,
   ringColor = 'var(--color-primary)',
   ringTrackColor = 'var(--color-muted)',
-  strokeWidth = 8,
+  strokeWidth = 12,
 }: KPIRingProps) => {
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
@@ -351,6 +357,48 @@ export const KPILineChart = ({
             )
           })}
         </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+export interface KPIAreaChartProps {
+  areas: AreaProps[]
+  className?: string
+  data: unknown[]
+  height?: number
+}
+
+export const KPIAreaChart = ({
+  areas,
+  className = '',
+  data,
+  height = 180,
+}: KPIAreaChartProps) => {
+  const safeData = Array.isArray(data) ? data : []
+  const resolvedAreas = Array.isArray(areas) && areas.length > 0 ? areas : []
+
+  return (
+    <div className={`w-full ${className}`} style={{ height }}>
+      <ResponsiveContainer width='100%' height='100%'>
+        <AreaChart data={safeData}>
+          <Tooltip content={ChartTooltipContent} />
+          {resolvedAreas.map((areaProps, index) => {
+            const dataKey =
+              typeof areaProps.dataKey === 'string' ||
+              typeof areaProps.dataKey === 'number'
+                ? areaProps.dataKey
+                : index
+
+            return (
+              <Area
+                key={String(dataKey)}
+                type={areaProps.type ?? 'monotone'}
+                {...areaProps}
+              />
+            )
+          })}
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   )

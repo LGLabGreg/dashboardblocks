@@ -100,4 +100,26 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'area-chart-kpi-01',
+    type: 'registry:component',
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
+    files: [
+      {
+        path: 'registry/dashboardblocks/examples/area-chart-kpi-01.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'area-chart-kpi-02',
+    type: 'registry:component',
+    registryDependencies: ['card', 'https://dashboardblocks.com/r/kpi.json'],
+    files: [
+      {
+        path: 'registry/dashboardblocks/examples/area-chart-kpi-02.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]
