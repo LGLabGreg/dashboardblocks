@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.2.0
+
+### Minor Changes
+
+- [#14](https://github.com/LGLabGreg/dashboardblocks/pull/14) [`f2eade4`](https://github.com/LGLabGreg/dashboardblocks/commit/f2eade43cbea4fb2b96ca51c84a8b1744ddf780a) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: KPIAreaChart
+
 ## 0.1.0
 
 ### Minor Changes
