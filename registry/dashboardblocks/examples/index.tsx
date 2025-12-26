@@ -1,3 +1,5 @@
+import { AreaChartKPI1 } from './area-chart-kpi-01'
+import { AreaChartKPI2 } from './area-chart-kpi-02'
 import { BarChartKPI1 } from './bar-chart-kpi-01'
 import { BarChartKPI2 } from './bar-chart-kpi-02'
 import { KPI1 } from './kpi-01'
@@ -18,6 +20,8 @@ export const exampleComponents = {
   'bar-chart-kpi-01': BarChartKPI1,
   'bar-chart-kpi-02': BarChartKPI2,
   'line-chart-kpi-01': LineChartKPI1,
+  'area-chart-kpi-01': AreaChartKPI1,
+  'area-chart-kpi-02': AreaChartKPI2,
 }
 
 export function getExampleComponent(name: string) {
