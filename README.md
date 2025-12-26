@@ -1,45 +1,24 @@
-# .
+Dashboardblocks is a collection of high-quality dashboard components built on top of [shadcn/ui](https://ui.shadcn.com). Install only what you need, customize everything, and own your code.
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+## Why Dashboardblocks?
 
-Run development server:
+Most dashboard UI libraries force you to choose between generic components that don't fit your needs or monolithic templates you can't easily customize. Dashboardblocks takes a different approach:
+
+- **Individual installation** — Install components one at a time via the shadcn CLI. No bloated dependencies.
+- **Composable primitives** — Each component is built from small, reusable pieces you can mix and match.
+- **Dashboard-focused** — Purpose-built for analytics, admin panels, and data-heavy interfaces.
+- **Own your code** — Components are copied into your project. Customize freely without fighting abstractions.
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+npx shadcn@latest add https://dashboardblocks.com/r/kpi.json
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+This installs the KPI primitives. Then grab any example:
 
-## Explore
+```bash
+npx shadcn@latest add https://dashboardblocks.com/r/kpi-01.json
+```
 
-In the project, you can see:
-
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
-
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
-
-### Fumadocs MDX
-
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
-
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
-
-## Learn More
-
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+More components coming soon: Activity Feed, Comparison Card, Usage Meter, and Changelog.
