@@ -1,4 +1,5 @@
-import { KPIBarChart, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
@@ -88,7 +89,7 @@ export const BarChartKPI1 = ({
           </div>
           <KPIValue>{value}</KPIValue>
         </div>
-        <KPIBarChart data={data} bars={bars} height={height} />
+        <TinyBarChart data={data} bars={bars} height={height} />
       </CardContent>
     </Card>
   )

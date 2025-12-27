@@ -1,4 +1,5 @@
-import { KPILineChart, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { TinyLineChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { LineProps } from 'recharts'
 
@@ -88,7 +89,7 @@ export const LineChartKPI1 = ({
           </div>
           <KPIValue>{value}</KPIValue>
         </div>
-        <KPILineChart data={data} lines={lines} height={height} />
+        <TinyLineChart data={data} lines={lines} height={height} />
       </CardContent>
     </Card>
   )

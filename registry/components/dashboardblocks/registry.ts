@@ -9,6 +9,7 @@ export const components: Registry['items'] = [
       'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
     registryDependencies: [
       'card',
+      'https://dashboardblocks.com/r/chart.json',
       'https://dashboardblocks.com/r/progress.json',
       'https://dashboardblocks.com/r/ring.json',
       'https://dashboardblocks.com/r/trend.json',
@@ -17,6 +18,18 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'chart',
+    type: 'registry:component',
+    title: 'Chart',
+    description: 'Chart components.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/chart.tsx',
         type: 'registry:component',
       },
     ],

@@ -1,4 +1,5 @@
-import { KPIAreaChart, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { AreaProps } from 'recharts'
 
@@ -95,7 +96,7 @@ export const AreaChartKPI2 = ({
           </div>
         </div>
         <div className='absolute -bottom-4 -left-4 opacity-75 pointer-events-none w-[calc(100%+2rem)]'>
-          <KPIAreaChart data={data} areas={areas} height={height} />
+          <TinyAreaChart data={data} areas={areas} height={height} />
         </div>
       </CardContent>
     </Card>
