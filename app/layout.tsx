@@ -20,14 +20,14 @@ const fontMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: siteConfig.name,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
+  metadataBase: new URL(siteConfig.url!),
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   creator: 'LGLab',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_APP_URL!,
+    url: siteConfig.url!,
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
@@ -48,7 +48,9 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
+  manifest: `${siteConfig.url}/site.webmanifest`,
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },

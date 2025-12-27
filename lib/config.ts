@@ -2,7 +2,7 @@ export const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
 
 export const siteConfig = {
   name: 'Dashboardblocks',
-  url: 'https://dashboardblocks.com',
+  url: process.env.NEXT_PUBLIC_APP_URL,
   description: 'Beautifully designed dashboard blocks.',
   keywords: [
     'Next.js',
