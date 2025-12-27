@@ -1,4 +1,4 @@
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Progress } from '@/registry/components/dashboardblocks/progress'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 

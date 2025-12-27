@@ -7,14 +7,15 @@
   "registryDependencies": [
     "card",
     "https://dashboardblocks.com/r/chart.json",
+    "https://dashboardblocks.com/r/icon.json",
     "https://dashboardblocks.com/r/progress.json",
     "https://dashboardblocks.com/r/ring.json",
     "https://dashboardblocks.com/r/trend.json"
   ],
   "files": [
     {
-      "path": "registry/components/dashboardblocks/kpi/kpi.tsx",
-      "content": "'use client'\n\nimport { type LucideIcon } from 'lucide-react'\nimport { ReactNode } from 'react'\n\nimport { cn } from '@/lib/utils'\n\nexport const KPIValue = ({\n  children,\n  className = '',\n}: {\n  children: ReactNode\n  className?: string\n}) => {\n  return <div className={`text-3xl font-bold ${className}`}>{children}</div>\n}\n\nexport const KPIIcon = ({\n  className = '',\n  icon: Icon,\n}: {\n  className?: string\n  icon: LucideIcon\n}) => {\n  return (\n    <div\n      className={cn(\n        'flex items-center justify-center rounded-md bg-muted p-3 aspect-square w-12',\n        className,\n      )}\n    >\n      <Icon />\n    </div>\n  )\n}\n\n// Chart components have been moved to @/registry/components/dashboardblocks/chart\n// Exporting for backward compatibility\nexport {\n  TinyBarChart as KPIBarChart,\n  TinyLineChart as KPILineChart,\n  TinyAreaChart as KPIAreaChart,\n  type TinyBarChartProps as KPIBarChartProps,\n  type TinyLineChartProps as KPILineChartProps,\n  type TinyAreaChartProps as KPIAreaChartProps,\n} from '@/registry/components/dashboardblocks/chart'\n",
+      "path": "registry/components/dashboardblocks/kpi.tsx",
+      "content": "import { ReactNode } from 'react'\n\nexport const KPIValue = ({\n  children,\n  className = '',\n}: {\n  children: ReactNode\n  className?: string\n}) => {\n  return <div className={`text-3xl font-bold ${className}`}>{children}</div>\n}\n",
       "type": "registry:component"
     }
   ],

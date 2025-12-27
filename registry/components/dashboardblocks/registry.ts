@@ -10,6 +10,7 @@ export const components: Registry['items'] = [
     registryDependencies: [
       'card',
       'https://dashboardblocks.com/r/chart.json',
+      'https://dashboardblocks.com/r/icon.json',
       'https://dashboardblocks.com/r/progress.json',
       'https://dashboardblocks.com/r/ring.json',
       'https://dashboardblocks.com/r/trend.json',
@@ -17,7 +18,7 @@ export const components: Registry['items'] = [
     dependencies: ['lucide-react', 'recharts'],
     files: [
       {
-        path: 'registry/components/dashboardblocks/kpi/kpi.tsx',
+        path: 'registry/components/dashboardblocks/kpi.tsx',
         type: 'registry:component',
       },
     ],
@@ -30,6 +31,18 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/chart.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'icon',
+    type: 'registry:component',
+    title: 'Icon',
+    description: 'An icon component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/icon.tsx',
         type: 'registry:component',
       },
     ],

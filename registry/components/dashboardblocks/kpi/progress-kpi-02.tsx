@@ -1,6 +1,7 @@
 'use client'
 
-import { KPIIcon, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { Icon } from '@/registry/components/dashboardblocks/icon'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   Progress,
   type ProgressProps,
@@ -44,7 +45,7 @@ export const ProgressKPI2 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <KPIIcon icon={ClipboardList} />
+          <Icon icon={ClipboardList} />
         </div>
         <KPIValue>{value}</KPIValue>
         <div className='space-y-3 mt-5'>
