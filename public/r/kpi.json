@@ -3,15 +3,6 @@
   "name": "kpi",
   "title": "KPI",
   "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
-  "dependencies": ["lucide-react", "recharts"],
-  "registryDependencies": [
-    "card",
-    "https://dashboardblocks.com/r/chart.json",
-    "https://dashboardblocks.com/r/icon.json",
-    "https://dashboardblocks.com/r/progress-bar.json",
-    "https://dashboardblocks.com/r/ring.json",
-    "https://dashboardblocks.com/r/trend.json"
-  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi.tsx",

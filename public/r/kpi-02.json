@@ -1,6 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-02",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/kpi.json",
+    "https://dashboardblocks.com/r/trend.json"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",

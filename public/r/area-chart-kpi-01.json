@@ -1,6 +1,12 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "area-chart-kpi-01",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/chart.json",
+    "https://dashboardblocks.com/r/kpi.json",
+    "https://dashboardblocks.com/r/trend.json"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/area-chart-kpi-01.tsx",
