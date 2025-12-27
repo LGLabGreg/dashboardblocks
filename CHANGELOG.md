@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.3.2
+
+### Patch Changes
+
+- [#20](https://github.com/LGLabGreg/dashboardblocks/pull/20) [`35d3311`](https://github.com/LGLabGreg/dashboardblocks/commit/35d3311ead6bde0c14518653254d07b46d6a3668) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Improve preview toolbar
+
 ## 0.3.1
 
 ### Patch Changes
