@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.3.0
+
+### Minor Changes
+
+- [#16](https://github.com/LGLabGreg/dashboardblocks/pull/16) [`4468665`](https://github.com/LGLabGreg/dashboardblocks/commit/446866513aafb9faeb1d4f691f7a4ce6ef12a23c) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Refactor registry structure
+
 ## 0.2.0
 
 ### Minor Changes
