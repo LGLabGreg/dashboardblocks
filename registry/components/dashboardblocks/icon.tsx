@@ -16,6 +16,7 @@ const iconVariants = cva('flex items-center justify-center bg-muted aspect-squar
     size: {
       default: 'size-12 p-3',
       sm: 'size-8 p-2',
+      md: 'size-10 p-2.5',
     },
   },
   defaultVariants: {
