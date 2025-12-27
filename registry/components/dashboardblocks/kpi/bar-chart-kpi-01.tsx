@@ -1,93 +1,95 @@
-import { KPILineChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
-import { LineProps } from 'recharts'
+import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { Trend } from '@/registry/components/dashboardblocks/trend'
+import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-interface LineChartKPIProps {
+interface BarChartKPIProps {
+  bars?: BarProps[]
   change?: string
   data?: unknown[]
   height?: number
-  lines?: LineProps[]
   title?: string
   trend?: 'up' | 'down' | 'neutral'
   value?: string
 }
 
-export const LineChartKPI1 = ({
-  change = '+4.2%',
+export const BarChartKPI1 = ({
+  bars = [
+    {
+      dataKey: 'value',
+      fill: 'var(--color-primary)',
+    },
+  ],
+  change = '+7.5%',
   data = [
     {
       label: 'Monday',
-      value: 4200,
+      value: 32,
       displayValues: {
-        value: '4.2k visits',
+        value: '$12,345',
       },
     },
     {
       label: 'Tuesday',
-      value: 5100,
+      value: 45,
       displayValues: {
-        value: '5.1k visits',
+        value: '$10,234',
       },
     },
     {
       label: 'Wednesday',
-      value: 2800,
+      value: 28,
       displayValues: {
-        value: '4.8k visits',
+        value: '$8,765',
       },
     },
     {
       label: 'Thursday',
-      value: 5600,
+      value: 52,
       displayValues: {
-        value: '5.6k visits',
+        value: '$6,543',
       },
     },
     {
       label: 'Friday',
-      value: 6300,
+      value: 61,
       displayValues: {
-        value: '6.3k visits',
+        value: '$4,321',
       },
     },
     {
       label: 'Saturday',
-      value: 5400,
+      value: 48,
       displayValues: {
-        value: '5.4k visits',
+        value: '$2,109',
       },
     },
     {
       label: 'Sunday',
-      value: 6900,
+      value: 57,
       displayValues: {
-        value: '4.9k visits',
+        value: '$1,234',
       },
     },
   ],
-  height = 120,
-  lines = [
-    {
-      dataKey: 'value',
-      stroke: 'var(--color-primary)',
-    },
-  ],
-  title = 'Daily visitors',
+  height = 160,
+  title = 'Revenue',
   trend = 'up',
-  value = '48,230',
-}: LineChartKPIProps) => {
+  value = '$87,500',
+}: BarChartKPIProps) => {
   return (
     <Card>
       <CardContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <KPITrend value={change} trend={trend} variant='badge' />
+            <Trend value={change} trend={trend} trendIcon='arrow' variant='badge' />
           </div>
           <KPIValue>{value}</KPIValue>
         </div>
-        <KPILineChart data={data} lines={lines} height={height} />
+        <TinyBarChart data={data} bars={bars} height={height} />
       </CardContent>
     </Card>
   )

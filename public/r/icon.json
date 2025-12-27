@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon",
+  "title": "Icon",
+  "description": "An icon component.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/icon.tsx",
+      "content": "import { type VariantProps, cva } from 'class-variance-authority'\nimport { type LucideIcon } from 'lucide-react'\n\nimport { cn } from '@/lib/utils'\n\nconst iconVariants = cva(\n  'flex items-center justify-center bg-muted p-3 aspect-square w-12',\n  {\n    variants: {\n      shape: {\n        square: 'rounded-md',\n        circle: 'rounded-full',\n      },\n      bordered: {\n        true: 'border',\n        false: '',\n      },\n    },\n    defaultVariants: {\n      shape: 'square',\n      bordered: false,\n    },\n  },\n)\n\ninterface IconProps extends VariantProps<typeof iconVariants> {\n  className?: string\n  icon: LucideIcon\n}\n\nfunction Icon({\n  className,\n  icon: IconComponent,\n  shape = 'square',\n  bordered = false,\n}: IconProps) {\n  return (\n    <div className={cn(iconVariants({ shape, bordered }), className)}>\n      <IconComponent />\n    </div>\n  )\n}\n\nexport { Icon, iconVariants }\nexport type { IconProps }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

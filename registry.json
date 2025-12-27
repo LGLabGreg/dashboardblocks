@@ -8,23 +8,89 @@
       "type": "registry:component",
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
-      "registryDependencies": ["progress"],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart.json",
+        "https://dashboardblocks.com/r/icon.json",
+        "https://dashboardblocks.com/r/progress.json",
+        "https://dashboardblocks.com/r/ring.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
       "dependencies": ["lucide-react", "recharts"],
       "files": [
         {
-          "path": "registry/dashboardblocks/kpi.tsx",
-          "type": "registry:component",
-          "target": "components/kpi.tsx"
+          "path": "registry/components/dashboardblocks/kpi.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:component",
+      "title": "Chart",
+      "description": "Chart components.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/chart.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "icon",
+      "type": "registry:component",
+      "title": "Icon",
+      "description": "An icon component.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/icon.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:component",
+      "title": "Progress",
+      "description": "A progress bar component.",
+      "registryDependencies": ["progress"],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/progress.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ring",
+      "type": "registry:component",
+      "title": "Ring",
+      "description": "A ring component.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ring.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "trend",
+      "type": "registry:component",
+      "title": "Trend",
+      "description": "A trend indicator component.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/trend.tsx",
+          "type": "registry:component"
         }
       ]
     },
     {
       "name": "kpi-01",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/kpi-01.tsx",
+          "path": "registry/components/dashboardblocks/kpi/kpi-01.tsx",
           "type": "registry:component"
         }
       ]
@@ -32,10 +98,9 @@
     {
       "name": "kpi-02",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/kpi-02.tsx",
+          "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
           "type": "registry:component"
         }
       ]
@@ -43,10 +108,9 @@
     {
       "name": "kpi-03",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/kpi-03.tsx",
+          "path": "registry/components/dashboardblocks/kpi/kpi-03.tsx",
           "type": "registry:component"
         }
       ]
@@ -54,10 +118,9 @@
     {
       "name": "progress-kpi-01",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/progress-kpi-01.tsx",
+          "path": "registry/components/dashboardblocks/kpi/progress-kpi-01.tsx",
           "type": "registry:component"
         }
       ]
@@ -65,10 +128,9 @@
     {
       "name": "progress-kpi-02",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/progress-kpi-02.tsx",
+          "path": "registry/components/dashboardblocks/kpi/progress-kpi-02.tsx",
           "type": "registry:component"
         }
       ]
@@ -76,10 +138,9 @@
     {
       "name": "progress-kpi-03",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/progress-kpi-03.tsx",
+          "path": "registry/components/dashboardblocks/kpi/progress-kpi-03.tsx",
           "type": "registry:component"
         }
       ]
@@ -87,10 +148,9 @@
     {
       "name": "bar-chart-kpi-01",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/bar-chart-kpi-01.tsx",
+          "path": "registry/components/dashboardblocks/kpi/bar-chart-kpi-01.tsx",
           "type": "registry:component"
         }
       ]
@@ -98,10 +158,9 @@
     {
       "name": "bar-chart-kpi-02",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/bar-chart-kpi-02.tsx",
+          "path": "registry/components/dashboardblocks/kpi/bar-chart-kpi-02.tsx",
           "type": "registry:component"
         }
       ]
@@ -109,10 +168,9 @@
     {
       "name": "line-chart-kpi-01",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/line-chart-kpi-01.tsx",
+          "path": "registry/components/dashboardblocks/kpi/line-chart-kpi-01.tsx",
           "type": "registry:component"
         }
       ]
@@ -120,10 +178,9 @@
     {
       "name": "area-chart-kpi-01",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/area-chart-kpi-01.tsx",
+          "path": "registry/components/dashboardblocks/kpi/area-chart-kpi-01.tsx",
           "type": "registry:component"
         }
       ]
@@ -131,10 +188,9 @@
     {
       "name": "area-chart-kpi-02",
       "type": "registry:component",
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
       "files": [
         {
-          "path": "registry/dashboardblocks/examples/area-chart-kpi-02.tsx",
+          "path": "registry/components/dashboardblocks/kpi/area-chart-kpi-02.tsx",
           "type": "registry:component"
         }
       ]

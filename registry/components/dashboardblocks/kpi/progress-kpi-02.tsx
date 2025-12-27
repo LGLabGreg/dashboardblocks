@@ -1,11 +1,11 @@
 'use client'
 
+import { Icon } from '@/registry/components/dashboardblocks/icon'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  KPIIcon,
-  KPIProgress,
-  KPIProgressProps,
-  KPIValue,
-} from '@/registry/dashboardblocks/kpi'
+  Progress,
+  type ProgressProps,
+} from '@/registry/components/dashboardblocks/progress'
 import { ClipboardList } from 'lucide-react'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -13,8 +13,9 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface ProgressKPI2Props {
   title?: string
   value?: string
-  progressBars?: KPIProgressProps[]
+  progressBars?: ProgressProps[]
 }
+
 export const ProgressKPI2 = ({
   title = 'Task Completion',
   value = '87/100',
@@ -44,12 +45,12 @@ export const ProgressKPI2 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <KPIIcon icon={ClipboardList} />
+          <Icon icon={ClipboardList} />
         </div>
         <KPIValue>{value}</KPIValue>
         <div className='space-y-3 mt-5'>
           {progressBars.map((bar) => (
-            <KPIProgress key={bar.label} {...bar} />
+            <Progress key={bar.label} {...bar} />
           ))}
         </div>
       </CardContent>

@@ -1,11 +1,10 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progress-kpi-01",
-  "registryDependencies": ["card", "https://dashboardblocks.com/r/kpi.json"],
   "files": [
     {
-      "path": "registry/dashboardblocks/examples/progress-kpi-01.tsx",
-      "content": "import { KPIProgress, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const ProgressKPI1 = ({\n  change = '+7.5%',\n  percentage = 55,\n  title = 'Revenue',\n  trend = 'up',\n  value = '$87,500',\n}: {\n  change?: string\n  percentage?: number\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: string\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-1'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <KPITrend value={change} trend={trend} />\n        </div>\n        <KPIValue>{value}</KPIValue>\n        <KPIProgress\n          className='mt-4'\n          label='of monthly target'\n          target='$100k'\n          percentage={percentage}\n        />\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "path": "registry/components/dashboardblocks/kpi/progress-kpi-01.tsx",
+      "content": "import { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Progress } from '@/registry/components/dashboardblocks/progress'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const ProgressKPI1 = ({\n  change = '+7.5%',\n  percentage = 55,\n  title = 'Revenue',\n  trend = 'up',\n  value = '$87,500',\n}: {\n  change?: string\n  percentage?: number\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: string\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-1'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <Trend value={change} trend={trend} />\n        </div>\n        <KPIValue>{value}</KPIValue>\n        <Progress\n          className='mt-4'\n          label='of monthly target'\n          target='$100k'\n          percentage={percentage}\n        />\n      </CardContent>\n    </Card>\n  )\n}\n",
       "type": "registry:component"
     }
   ],

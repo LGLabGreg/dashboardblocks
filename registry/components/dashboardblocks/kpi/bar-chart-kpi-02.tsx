@@ -1,4 +1,6 @@
-import { KPIBarChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
+import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -101,11 +103,11 @@ export const BarChartKPI2 = ({
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <KPITrend value={change} trend={trend} variant='badge' />
+            <Trend value={change} trend={trend} variant='badge' />
           </div>
           <KPIValue>{value}</KPIValue>
         </div>
-        <KPIBarChart data={data} bars={bars} height={height} />
+        <TinyBarChart data={data} bars={bars} height={height} />
       </CardContent>
     </Card>
   )
