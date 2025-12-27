@@ -1,4 +1,5 @@
-import { KPIRing, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { Ring } from '@/registry/components/dashboardblocks/ring'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
@@ -35,13 +36,13 @@ export const ProgressKPI3 = ({
             </div>
           </div>
           <div className='flex items-center justify-center'>
-            <KPIRing
+            <Ring
               className='h-24 w-24 sm:h-36 sm:w-36 shrink-0'
               percentage={percentage}
               ringColor='var(--color-chart-1)'
             >
               <span className='text-lg font-bold'>{Math.round(percentage)}%</span>
-            </KPIRing>
+            </Ring>
           </div>
         </div>
       </CardContent>

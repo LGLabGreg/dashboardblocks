@@ -10,6 +10,7 @@ export const components: Registry['items'] = [
     registryDependencies: [
       'card',
       'https://dashboardblocks.com/r/progress.json',
+      'https://dashboardblocks.com/r/ring.json',
       'https://dashboardblocks.com/r/trend.json',
     ],
     dependencies: ['lucide-react', 'recharts'],
@@ -29,6 +30,18 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/progress.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'ring',
+    type: 'registry:component',
+    title: 'Ring',
+    description: 'A ring component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ring.tsx',
         type: 'registry:component',
       },
     ],
