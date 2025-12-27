@@ -3,6 +3,7 @@
   "name": "chart",
   "title": "Chart",
   "description": "Chart components.",
+  "dependencies": ["recharts"],
   "files": [
     {
       "path": "registry/components/dashboardblocks/chart.tsx",

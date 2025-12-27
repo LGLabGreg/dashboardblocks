@@ -7,15 +7,6 @@ export const components: Registry['items'] = [
     title: 'KPI',
     description:
       'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/progress-bar.json',
-      'https://dashboardblocks.com/r/ring.json',
-      'https://dashboardblocks.com/r/trend.json',
-    ],
-    dependencies: ['lucide-react', 'recharts'],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi.tsx',
@@ -28,6 +19,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Chart',
     description: 'Chart components.',
+    dependencies: ['recharts'],
     files: [
       {
         path: 'registry/components/dashboardblocks/chart.tsx',
@@ -40,6 +32,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Icon',
     description: 'An icon component.',
+    dependencies: ['class-variance-authority', 'lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/icon.tsx',
@@ -77,6 +70,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Trend',
     description: 'A trend indicator component.',
+    dependencies: ['class-variance-authority', 'lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/trend.tsx',

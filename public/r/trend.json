@@ -3,6 +3,7 @@
   "name": "trend",
   "title": "Trend",
   "description": "A trend indicator component.",
+  "dependencies": ["class-variance-authority", "lucide-react"],
   "files": [
     {
       "path": "registry/components/dashboardblocks/trend.tsx",

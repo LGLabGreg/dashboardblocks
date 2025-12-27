@@ -1,6 +1,12 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progress-kpi-01",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/kpi.json",
+    "https://dashboardblocks.com/r/progress-bar.json",
+    "https://dashboardblocks.com/r/trend.json"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/progress-kpi-01.tsx",
