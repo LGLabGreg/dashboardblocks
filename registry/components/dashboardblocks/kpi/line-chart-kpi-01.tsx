@@ -1,4 +1,8 @@
-import { KPILineChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
+import {
+  KPILineChart,
+  KPITrend,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi/kpi'
 import { LineProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'

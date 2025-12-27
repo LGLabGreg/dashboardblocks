@@ -1,4 +1,8 @@
-import { KPIBarChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
+import {
+  KPIBarChart,
+  KPITrend,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi/kpi'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -13,11 +17,15 @@ interface BarChartKPIProps {
   value?: string
 }
 
-export const BarChartKPI1 = ({
+export const BarChartKPI2 = ({
   bars = [
     {
       dataKey: 'value',
-      fill: 'var(--color-primary)',
+      fill: 'var(--color-chart-1)',
+    },
+    {
+      dataKey: 'goal',
+      fill: 'var(--color-chart-2)',
     },
   ],
   change = '+7.5%',
@@ -25,50 +33,64 @@ export const BarChartKPI1 = ({
     {
       label: 'Monday',
       value: 32,
+      goal: 38,
       displayValues: {
         value: '$12,345',
+        goal: '$14,620',
       },
     },
     {
       label: 'Tuesday',
       value: 45,
+      goal: 42,
       displayValues: {
         value: '$10,234',
+        goal: '$9,980',
       },
     },
     {
       label: 'Wednesday',
       value: 28,
+      goal: 34,
       displayValues: {
         value: '$8,765',
+        goal: '$10,500',
       },
     },
     {
       label: 'Thursday',
       value: 52,
+      goal: 48,
       displayValues: {
         value: '$6,543',
+        goal: '$6,050',
       },
     },
     {
       label: 'Friday',
       value: 61,
+      goal: 64,
       displayValues: {
         value: '$4,321',
+        goal: '$4,765',
       },
     },
     {
       label: 'Saturday',
       value: 48,
+      goal: 52,
       displayValues: {
         value: '$2,109',
+        goal: '$2,356',
       },
     },
     {
       label: 'Sunday',
       value: 57,
+      goal: 60,
       displayValues: {
         value: '$1,234',
+        goal: '$1,420',
       },
     },
   ],

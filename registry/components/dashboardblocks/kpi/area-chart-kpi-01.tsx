@@ -1,4 +1,8 @@
-import { KPIAreaChart, KPITrend, KPIValue } from '@/registry/dashboardblocks/kpi'
+import {
+  KPIAreaChart,
+  KPITrend,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi/kpi'
 import { AreaProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'

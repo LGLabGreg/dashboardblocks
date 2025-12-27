@@ -1,4 +1,4 @@
-import { exampleComponents } from '@/registry/dashboardblocks/examples'
+import { exampleComponents } from '@/registry/components/dashboardblocks/kpi'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { codeToHtml } from 'shiki'
