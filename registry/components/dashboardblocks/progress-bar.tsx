@@ -4,7 +4,7 @@ import { Progress as UIProgress } from '@/components/ui/progress'
 
 import { cn } from '@/lib/utils'
 
-export interface ProgressProps {
+export interface ProgressBarProps {
   className?: string
   label?: string
   percentage: number
@@ -12,13 +12,13 @@ export interface ProgressProps {
   target?: string
 }
 
-export const Progress = ({
+export const ProgressBar = ({
   className,
   label,
   percentage,
   progressClassName,
   target,
-}: ProgressProps) => {
+}: ProgressBarProps) => {
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
 

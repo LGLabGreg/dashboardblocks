@@ -11,7 +11,7 @@ export const components: Registry['items'] = [
       'card',
       'https://dashboardblocks.com/r/chart.json',
       'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/progress.json',
+      'https://dashboardblocks.com/r/progress-bar.json',
       'https://dashboardblocks.com/r/ring.json',
       'https://dashboardblocks.com/r/trend.json',
     ],
@@ -48,14 +48,14 @@ export const components: Registry['items'] = [
     ],
   },
   {
-    name: 'progress',
+    name: 'progress-bar',
     type: 'registry:component',
-    title: 'Progress',
+    title: 'Progress Bar',
     description: 'A progress bar component.',
     registryDependencies: ['progress'],
     files: [
       {
-        path: 'registry/components/dashboardblocks/progress.tsx',
+        path: 'registry/components/dashboardblocks/progress-bar.tsx',
         type: 'registry:component',
       },
     ],

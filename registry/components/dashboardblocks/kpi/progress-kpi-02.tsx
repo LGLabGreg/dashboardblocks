@@ -3,9 +3,9 @@
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Progress,
-  type ProgressProps,
-} from '@/registry/components/dashboardblocks/progress'
+  ProgressBar,
+  type ProgressBarProps,
+} from '@/registry/components/dashboardblocks/progress-bar'
 import { ClipboardList } from 'lucide-react'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface ProgressKPI2Props {
   title?: string
   value?: string
-  progressBars?: ProgressProps[]
+  progressBars?: ProgressBarProps[]
 }
 
 export const ProgressKPI2 = ({
@@ -50,7 +50,7 @@ export const ProgressKPI2 = ({
         <KPIValue>{value}</KPIValue>
         <div className='space-y-3 mt-5'>
           {progressBars.map((bar) => (
-            <Progress key={bar.label} {...bar} />
+            <ProgressBar key={bar.label} {...bar} />
           ))}
         </div>
       </CardContent>
