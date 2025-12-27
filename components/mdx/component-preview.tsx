@@ -52,8 +52,6 @@ export async function ComponentPreview({
 }: ComponentPreviewProps) {
   const registryItem = await getRegistryItem(name)
 
-  console.log('registryItem', registryItem)
-
   if (!registryItem || !registryItem.files?.[0]?.content) {
     return (
       <div className='rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive'>
@@ -85,6 +83,7 @@ export async function ComponentPreview({
 
   return (
     <ComponentPreviewHighlighted
+      name={name}
       code={code}
       highlightedCode={highlightedCode}
       className={className}
