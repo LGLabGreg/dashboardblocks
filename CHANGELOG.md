@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.3.1
+
+### Patch Changes
+
+- [#18](https://github.com/LGLabGreg/dashboardblocks/pull/18) [`f3dbea8`](https://github.com/LGLabGreg/dashboardblocks/commit/f3dbea8a0259ab91053751d470bc6f4f04e920d9) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Fix preview + circular dep
+
 ## 0.3.0
 
 ### Minor Changes
