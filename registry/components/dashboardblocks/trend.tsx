@@ -94,7 +94,7 @@ function Trend({
   if (variant === 'badge') {
     return (
       <div className={cn(trendVariants({ variant, trend }), className)}>
-        <Icon className='h-3 w-3' />
+        <Icon className='h-4 w-4' />
         {value}
       </div>
     )

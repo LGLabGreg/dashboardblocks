@@ -10,7 +10,7 @@ import { ProgressKPI1 } from './progress-kpi-01'
 import { ProgressKPI2 } from './progress-kpi-02'
 import { ProgressKPI3 } from './progress-kpi-03'
 
-export const exampleComponents = {
+export const kpiComponents = {
   'kpi-01': KPI1,
   'kpi-02': KPI2,
   'kpi-03': KPI3,
@@ -22,8 +22,4 @@ export const exampleComponents = {
   'line-chart-kpi-01': LineChartKPI1,
   'area-chart-kpi-01': AreaChartKPI1,
   'area-chart-kpi-02': AreaChartKPI2,
-}
-
-export function getExampleComponent(name: string) {
-  return exampleComponents[name as keyof typeof exampleComponents] || null
 }

@@ -1,3 +1,4 @@
+import { examples as activityFeedExamples } from '@/registry/components/dashboardblocks/activity-feed/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { writeFileSync } from 'fs'
@@ -7,7 +8,7 @@ const registry = {
   $schema: 'https://ui.shadcn.com/schema/registry.json',
   name: 'dashboardblocks',
   homepage: 'https://dashboardblocks.com',
-  items: [...components, ...kpiExamples],
+  items: [...components, ...kpiExamples, ...activityFeedExamples],
 }
 
 writeFileSync(resolve(process.cwd(), 'registry.json'), JSON.stringify(registry, null, 2))

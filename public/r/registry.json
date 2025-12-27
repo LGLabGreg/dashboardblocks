@@ -250,6 +250,17 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "activity-feed-01",
+      "type": "registry:component",
+      "registryDependencies": ["avatar", "badge", "card"],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/activity-feed/activity-feed-01.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

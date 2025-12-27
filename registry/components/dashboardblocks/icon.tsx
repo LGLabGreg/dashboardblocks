@@ -3,25 +3,27 @@ import { type LucideIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-const iconVariants = cva(
-  'flex items-center justify-center bg-muted p-3 aspect-square w-12',
-  {
-    variants: {
-      shape: {
-        square: 'rounded-md',
-        circle: 'rounded-full',
-      },
-      bordered: {
-        true: 'border',
-        false: '',
-      },
+const iconVariants = cva('flex items-center justify-center bg-muted aspect-square', {
+  variants: {
+    shape: {
+      square: 'rounded-md',
+      circle: 'rounded-full',
     },
-    defaultVariants: {
-      shape: 'square',
-      bordered: false,
+    bordered: {
+      true: 'border',
+      false: '',
+    },
+    size: {
+      default: 'size-12 p-3',
+      sm: 'size-8 p-2',
     },
   },
-)
+  defaultVariants: {
+    shape: 'square',
+    bordered: false,
+    size: 'default',
+  },
+})
 
 interface IconProps extends VariantProps<typeof iconVariants> {
   className?: string
@@ -33,9 +35,10 @@ function Icon({
   icon: IconComponent,
   shape = 'square',
   bordered = false,
+  size,
 }: IconProps) {
   return (
-    <div className={cn(iconVariants({ shape, bordered }), className)}>
+    <div className={cn(iconVariants({ shape, bordered, size }), className)}>
       <IconComponent />
     </div>
   )
