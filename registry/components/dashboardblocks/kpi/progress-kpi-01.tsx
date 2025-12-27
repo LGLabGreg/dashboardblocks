@@ -1,5 +1,5 @@
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
-import { Progress } from '@/registry/components/dashboardblocks/progress'
+import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -25,7 +25,7 @@ export const ProgressKPI1 = ({
           <Trend value={change} trend={trend} />
         </div>
         <KPIValue>{value}</KPIValue>
-        <Progress
+        <ProgressBar
           className='mt-4'
           label='of monthly target'
           target='$100k'
