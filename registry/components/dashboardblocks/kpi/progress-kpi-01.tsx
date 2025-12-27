@@ -1,5 +1,6 @@
-import { KPITrend, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
 import { Progress } from '@/registry/components/dashboardblocks/progress'
+import { Trend } from '@/registry/components/dashboardblocks/trend'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
@@ -21,7 +22,7 @@ export const ProgressKPI1 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <KPITrend value={change} trend={trend} />
+          <Trend value={change} trend={trend} />
         </div>
         <KPIValue>{value}</KPIValue>
         <Progress

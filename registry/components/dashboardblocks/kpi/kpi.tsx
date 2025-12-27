@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  ArrowDown,
-  ArrowUp,
-  type LucideIcon,
-  Minus,
-  TrendingDown,
-  TrendingUp,
-} from 'lucide-react'
+import { type LucideIcon } from 'lucide-react'
 import { ReactNode } from 'react'
 import {
   Area,
@@ -52,60 +45,6 @@ export const KPIIcon = ({
       )}
     >
       <Icon />
-    </div>
-  )
-}
-
-export const KPITrend = ({
-  className = '',
-  trend = 'neutral',
-  trendIcon = 'trend',
-  value,
-  variant = 'default',
-}: {
-  className?: string
-  trend?: 'up' | 'down' | 'neutral'
-  trendIcon?: 'arrow' | 'trend'
-  value: string
-  variant?: 'default' | 'icon-only' | 'badge'
-}) => {
-  const trendColors = {
-    up: 'text-green-600',
-    down: 'text-red-600',
-    neutral: 'text-gray-500',
-  }
-
-  const badgeColors = {
-    up: 'bg-green-100 text-green-800 border-green-200',
-    down: 'bg-red-100 text-red-800 border-red-200',
-    neutral: 'bg-gray-100 text-gray-800 border-gray-200',
-  }
-
-  const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus
-  const ArrowIcon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Minus
-  const Icon = trendIcon === 'arrow' ? ArrowIcon : TrendIcon
-
-  if (variant === 'icon-only') {
-    return <Icon className={`h-4 w-4 ${trendColors[trend]} ${className}`} />
-  }
-
-  if (variant === 'badge') {
-    return (
-      <div
-        className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badgeColors[trend]} ${className}`}
-      >
-        <Icon className='h-3 w-3' />
-        {value}
-      </div>
-    )
-  }
-
-  return (
-    <div
-      className={`flex items-center text-sm font-medium ${trendColors[trend]} ${className}`}
-    >
-      <Icon className='mr-1 h-4 w-4' />
-      {value}
     </div>
   )
 }

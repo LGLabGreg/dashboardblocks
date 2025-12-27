@@ -7,7 +7,11 @@ export const components: Registry['items'] = [
     title: 'KPI',
     description:
       'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
-    registryDependencies: ['card', 'https://dashboardblocks.com/r/progress.json'],
+    registryDependencies: [
+      'card',
+      'https://dashboardblocks.com/r/progress.json',
+      'https://dashboardblocks.com/r/trend.json',
+    ],
     dependencies: ['lucide-react', 'recharts'],
     files: [
       {
@@ -25,6 +29,18 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/progress.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'trend',
+    type: 'registry:component',
+    title: 'Trend',
+    description: 'A trend indicator component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/trend.tsx',
         type: 'registry:component',
       },
     ],

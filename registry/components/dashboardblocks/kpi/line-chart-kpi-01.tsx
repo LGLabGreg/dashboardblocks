@@ -1,8 +1,5 @@
-import {
-  KPILineChart,
-  KPITrend,
-  KPIValue,
-} from '@/registry/components/dashboardblocks/kpi/kpi'
+import { KPILineChart, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { LineProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -87,7 +84,7 @@ export const LineChartKPI1 = ({
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <KPITrend value={change} trend={trend} variant='badge' />
+            <Trend value={change} trend={trend} variant='badge' />
           </div>
           <KPIValue>{value}</KPIValue>
         </div>

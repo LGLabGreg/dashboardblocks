@@ -1,8 +1,5 @@
-import {
-  KPIAreaChart,
-  KPITrend,
-  KPIValue,
-} from '@/registry/components/dashboardblocks/kpi/kpi'
+import { KPIAreaChart, KPIValue } from '@/registry/components/dashboardblocks/kpi/kpi'
+import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { AreaProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -107,7 +104,7 @@ export const AreaChartKPI1 = ({
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <KPITrend value={change} trend={trend} variant='badge' />
+            <Trend value={change} trend={trend} variant='badge' />
           </div>
           <KPIValue>{value}</KPIValue>
         </div>
