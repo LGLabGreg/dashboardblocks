@@ -8,7 +8,7 @@ import {
 } from '@/registry/components/dashboardblocks/progress-bar'
 import { ClipboardList } from 'lucide-react'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
 interface ProgressKPI2Props {
   title?: string
@@ -44,8 +44,8 @@ export const ProgressKPI2 = ({
     <Card>
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
-          <CardDescription>{title}</CardDescription>
-          <Icon icon={ClipboardList} />
+          <CardTitle>{title}</CardTitle>
+          <Icon icon={ClipboardList} variant='secondary' />
         </div>
         <KPIValue>{value}</KPIValue>
         <div className='space-y-3 mt-5'>

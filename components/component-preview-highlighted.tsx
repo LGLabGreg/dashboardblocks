@@ -51,7 +51,7 @@ export function ComponentPreviewHighlighted({
         </div>
 
         <TabsContent value='preview'>
-          <div className='flex min-h-[200px] items-center justify-center mt-2'>
+          <div className='flex items-center justify-center pt-4 pb-2'>
             <div className={cn('w-full', previewClassName)}>{children}</div>
           </div>
         </TabsContent>

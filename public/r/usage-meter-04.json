@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "usage-meter-04",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/icon.json",
+    "https://dashboardblocks.com/r/trend.json",
+    "https://dashboardblocks.com/r/usage-meter.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/usage-meter/usage-meter-04.tsx",
+      "content": "import { Icon } from '@/registry/components/dashboardblocks/icon'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\nimport {\n  UsageMeterBar,\n  UsageMeterValue,\n} from '@/registry/components/dashboardblocks/usage-meter'\nimport { Coins } from 'lucide-react'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const UsageMeter4 = ({\n  burnRate = '-1,250',\n  className = '',\n  remaining = 45750,\n  title = 'Credits Remaining',\n  total = 100000,\n  trend = 'down',\n}: {\n  burnRate?: string\n  className?: string\n  remaining?: number\n  title?: string\n  total?: number\n  trend?: 'up' | 'down' | 'neutral'\n} = {}) => {\n  const used = total - remaining\n  const percentage = (used / total) * 100\n  const daysRemaining = Math.round(\n    remaining / Math.abs(parseInt(burnRate.replace(/[^0-9]/g, ''))),\n  )\n\n  return (\n    <Card className={className}>\n      <CardContent className='space-y-3'>\n        <div className='flex items-center justify-between'>\n          <div className='flex items-center gap-2'>\n            <Icon icon={Coins} variant='primary' />\n            <CardDescription>{title}</CardDescription>\n          </div>\n          <Trend value={`${burnRate}/day`} trend={trend} />\n        </div>\n        <div className='space-y-1'>\n          <UsageMeterValue>{remaining.toLocaleString()}</UsageMeterValue>\n          <UsageMeterBar\n            percentage={100 - percentage}\n            showWarning={false}\n            fillClassName='bg-emerald-500'\n          />\n        </div>\n        <div className='flex items-center justify-between text-sm text-muted-foreground'>\n          <span>{used.toLocaleString()} used</span>\n          <span>~{daysRemaining} days remaining</span>\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

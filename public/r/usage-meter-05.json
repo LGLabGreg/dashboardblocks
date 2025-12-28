@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "usage-meter-05",
+  "registryDependencies": ["card", "https://dashboardblocks.com/r/usage-meter.json"],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/usage-meter/usage-meter-05.tsx",
+      "content": "import {\n  UsageMeterSegmentedBar,\n  UsageMeterValue,\n} from '@/registry/components/dashboardblocks/usage-meter'\n\nimport { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'\n\ninterface StorageSegment {\n  color: string\n  label: string\n  value: number\n}\n\nexport const UsageMeter5 = ({\n  className = '',\n  segments = [\n    { label: 'Documents', value: 12.4, color: 'hsl(221 83% 53%)' },\n    { label: 'Images', value: 28.6, color: 'hsl(262 83% 58%)' },\n    { label: 'Videos', value: 18.2, color: 'hsl(330 81% 60%)' },\n    { label: 'Other', value: 8.3, color: 'hsl(35 91% 50%)' },\n  ],\n  title = 'Storage Breakdown',\n  total = 100,\n  unit = 'GB',\n}: {\n  className?: string\n  segments?: StorageSegment[]\n  title?: string\n  total?: number\n  unit?: string\n} = {}) => {\n  const used = segments.reduce((acc, s) => acc + s.value, 0)\n  const free = total - used\n\n  return (\n    <Card className={className}>\n      <CardContent className='space-y-4'>\n        <div className='flex items-center justify-between'>\n          <CardTitle className='text-base font-medium'>{title}</CardTitle>\n          <CardDescription>\n            {free.toFixed(1)} {unit} free\n          </CardDescription>\n        </div>\n        <div className='space-y-1'>\n          <div className='flex items-baseline justify-between'>\n            <UsageMeterValue>\n              {used.toFixed(1)} {unit}\n            </UsageMeterValue>\n            <span className='text-sm text-muted-foreground'>\n              of {total} {unit}\n            </span>\n          </div>\n          <UsageMeterSegmentedBar segments={segments} total={total} />\n        </div>\n        <div className='grid grid-cols-2 gap-2'>\n          {segments.map((segment) => (\n            <div key={segment.label} className='flex items-center gap-2'>\n              <div\n                className='h-2.5 w-2.5 rounded-full'\n                style={{ backgroundColor: segment.color }}\n              />\n              <span className='text-sm text-muted-foreground'>{segment.label}</span>\n              <span className='ml-auto text-sm font-medium'>\n                {segment.value.toFixed(1)} {unit}\n              </span>\n            </div>\n          ))}\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

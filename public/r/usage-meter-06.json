@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "usage-meter-06",
+  "registryDependencies": [
+    "button",
+    "card",
+    "https://dashboardblocks.com/r/icon.json",
+    "https://dashboardblocks.com/r/usage-meter.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/usage-meter/usage-meter-06.tsx",
+      "content": "import { Icon } from '@/registry/components/dashboardblocks/icon'\nimport { UsageMeterBar } from '@/registry/components/dashboardblocks/usage-meter'\nimport { Crown, Database, Mail, Users, Zap } from 'lucide-react'\nimport type { LucideIcon } from 'lucide-react'\n\nimport { Button } from '@/components/ui/button'\nimport { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'\n\ninterface PlanLimit {\n  icon: LucideIcon\n  limit: number\n  name: string\n  used: number\n}\n\nexport const UsageMeter6 = ({\n  className = '',\n  limits = [\n    { name: 'Team members', used: 4, limit: 5, icon: Users },\n    { name: 'API calls', used: 8500, limit: 10000, icon: Zap },\n    { name: 'Storage', used: 4.2, limit: 5, icon: Database },\n    { name: 'Emails sent', used: 450, limit: 1000, icon: Mail },\n  ],\n  plan = 'Pro',\n}: {\n  className?: string\n  limits?: PlanLimit[]\n  plan?: string\n} = {}) => {\n  return (\n    <Card className={className}>\n      <CardContent className='space-y-4'>\n        <div className='flex items-center gap-2'>\n          <Icon icon={Crown} variant='warning' />\n          <CardTitle className='text-base font-medium'>{plan} Plan</CardTitle>\n        </div>\n        <div className='space-y-3'>\n          {limits.map((item) => {\n            const percentage = (item.used / item.limit) * 100\n            const formattedUsed =\n              item.used >= 1000\n                ? `${(item.used / 1000).toFixed(1)}k`\n                : item.used.toString()\n            const formattedLimit =\n              item.limit >= 1000\n                ? `${(item.limit / 1000).toFixed(0)}k`\n                : item.limit.toString()\n\n            return (\n              <div key={item.name} className='space-y-1'>\n                <div className='flex items-center justify-between text-sm'>\n                  <div className='flex items-center gap-2'>\n                    <item.icon className='h-3.5 w-3.5 text-muted-foreground' />\n                    <span>{item.name}</span>\n                  </div>\n                  <span className='text-muted-foreground'>\n                    {formattedUsed} / {formattedLimit}\n                  </span>\n                </div>\n                <UsageMeterBar className='h-1.5' percentage={percentage} />\n              </div>\n            )\n          })}\n        </div>\n      </CardContent>\n      <CardFooter className='border-t pt-4'>\n        <Button variant='outline' className='w-full'>\n          Upgrade Plan\n        </Button>\n      </CardFooter>\n    </Card>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

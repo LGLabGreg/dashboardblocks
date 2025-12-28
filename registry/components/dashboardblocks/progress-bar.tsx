@@ -31,7 +31,10 @@ export const ProgressBar = ({
         </span>
         <span className='text-sm font-semibold text-foreground'>{target}</span>
       </div>
-      <UIProgress value={normalized} className={cn('bg-muted', progressClassName)} />
+      <UIProgress
+        value={normalized}
+        className={cn('bg-muted [&>div]:rounded-full', progressClassName)}
+      />
     </div>
   )
 }
