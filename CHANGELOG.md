@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.4.0
+
+### Minor Changes
+
+- [#22](https://github.com/LGLabGreg/dashboardblocks/pull/22) [`423789d`](https://github.com/LGLabGreg/dashboardblocks/commit/423789d10464cb364f3b2b29534bc070feb05d5d) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Activity Feed
+
 ## 0.3.2
 
 ### Patch Changes
