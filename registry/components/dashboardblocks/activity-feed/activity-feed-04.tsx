@@ -1,7 +1,6 @@
-import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { AlertCircle, CheckCircle2, Clock, Zap } from 'lucide-react'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+import { cn } from '@/lib/utils'
 
 const events = [
   {
@@ -10,7 +9,6 @@ const events = [
     description: 'Production v2.4.1 deployed to all regions',
     time: '10:32 AM',
     status: 'success',
-    icon: CheckCircle2,
   },
   {
     id: 2,
@@ -18,7 +16,6 @@ const events = [
     description: 'Building production bundle...',
     time: '10:30 AM',
     status: 'progress',
-    icon: Clock,
   },
   {
     id: 3,
@@ -26,7 +23,6 @@ const events = [
     description: 'CPU usage exceeded 90% threshold',
     time: '9:15 AM',
     status: 'error',
-    icon: AlertCircle,
   },
   {
     id: 4,
@@ -34,18 +30,17 @@ const events = [
     description: 'Cache hit rate improved by 23%',
     time: '8:45 AM',
     status: 'info',
-    icon: Zap,
   },
 ]
 
 const statusStyles = {
-  success: 'border-green-500 bg-green-100 text-green-500',
-  progress: 'border-blue-500 bg-blue-100 text-blue-500',
-  error: 'border-red-500 bg-red-100 text-red-500',
-  info: 'border-purple-500 bg-purple-100 text-purple-500',
+  success: 'bg-green-200 [&>div]:bg-green-600',
+  progress: 'bg-blue-200 [&>div]:bg-blue-600',
+  error: 'bg-red-200 [&>div]:bg-red-600',
+  info: 'bg-purple-200 [&>div]:bg-purple-600',
 }
 
-export function ActivityFeed02() {
+export function ActivityFeed04() {
   return (
     <Card>
       <CardHeader>
@@ -53,23 +48,29 @@ export function ActivityFeed02() {
       </CardHeader>
       <CardContent>
         <div className='relative space-y-6'>
-          <div className='absolute left-5 h-full w-px bg-border shadow-xs' />
+          <div className='absolute left-20.5 h-full w-px bg-border' />
           {events.map((event) => {
-            const EventIcon = event.icon
             return (
               <div key={event.id} className='relative flex items-start gap-4'>
-                <Icon
-                  icon={EventIcon}
-                  size='md'
-                  className={statusStyles[event.status as keyof typeof statusStyles]}
-                />
+                <div className='flex items-center justify-end text-xs w-14 text-center mt-0.5'>
+                  <div>{event.time}</div>
+                </div>
+                <div
+                  className={cn(
+                    'flex items-center justify-center size-5 rounded-full',
+                    statusStyles[event.status as keyof typeof statusStyles],
+                  )}
+                >
+                  <div
+                    className={cn('flex items-center justify-center size-2 rounded-full')}
+                  ></div>
+                </div>
                 <div className='flex-1'>
                   <div className='flex items-start justify-between gap-2'>
                     <div className='space-y-1'>
                       <p className='font-medium leading-none'>{event.title}</p>
                       <p className='text-sm text-muted-foreground'>{event.description}</p>
                     </div>
-                    <span className='text-xs text-muted-foreground'>{event.time}</span>
                   </div>
                 </div>
               </div>

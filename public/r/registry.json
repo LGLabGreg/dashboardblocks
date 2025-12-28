@@ -279,6 +279,29 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "activity-feed-03",
+      "type": "registry:component",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["avatar", "button", "card"],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "activity-feed-04",
+      "type": "registry:component",
+      "registryDependencies": ["card"],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

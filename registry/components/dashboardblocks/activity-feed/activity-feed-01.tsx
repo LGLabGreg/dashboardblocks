@@ -50,12 +50,12 @@ const activities = [
   },
 ]
 
-export function ActivityFeed1() {
+export function ActivityFeed01() {
   return (
     <Card>
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
-          Classic Feed
+          Recent Activity
           <Badge variant='secondary'>
             <Bell />4 New
           </Badge>

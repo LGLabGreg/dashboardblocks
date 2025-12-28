@@ -128,4 +128,7 @@
   code {
     @apply font-mono text-sm bg-muted!;
   }
+  #nd-page {
+    @apply xl:px-0!;
+  }
 }
