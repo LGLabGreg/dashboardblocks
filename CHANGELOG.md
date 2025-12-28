@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.4.1
+
+### Patch Changes
+
+- [#24](https://github.com/LGLabGreg/dashboardblocks/pull/24) [`d852314`](https://github.com/LGLabGreg/dashboardblocks/commit/d852314fe2b893a5bd5b9733ff4013e8c78047f5) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Remove console.log
+
 ## 0.4.0
 
 ### Minor Changes
