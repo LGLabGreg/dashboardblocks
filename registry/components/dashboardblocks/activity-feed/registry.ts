@@ -71,4 +71,23 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'activity-feed-05',
+    type: 'registry:component',
+    dependencies: ['lucide-react'],
+    registryDependencies: [
+      'avatar',
+      'badge',
+      'button',
+      'card',
+      'https://dashboardblocks.com/r/activity-feed.json',
+      'https://dashboardblocks.com/r/icon.json',
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/activity-feed/activity-feed-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

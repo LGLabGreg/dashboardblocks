@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
+import { cn } from '@/lib/utils'
+
 const activities = [
   {
     id: 1,
@@ -50,7 +52,14 @@ export function ActivityFeed03() {
       <CardContent className='space-y-2'>
         {activities.map((activity, index) => (
           <div key={activity.id}>
-            <ActivityFeedItem align='center' className='pb-2' size='sm'>
+            <ActivityFeedItem
+              align='center'
+              className={cn(
+                'pb-2',
+                index < activities.length - 1 && 'border-b border-border',
+              )}
+              size='sm'
+            >
               <Avatar className='h-8 w-8 shrink-0'>
                 <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
                 <AvatarFallback className='text-xs'>
@@ -65,7 +74,6 @@ export function ActivityFeed03() {
               </ActivityFeedContent>
               <span className='text-xs text-muted-foreground'>{activity.time}</span>
             </ActivityFeedItem>
-            {index < activities.length - 1 && <div className='h-px bg-border' />}
           </div>
         ))}
       </CardContent>

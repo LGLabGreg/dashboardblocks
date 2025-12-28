@@ -76,7 +76,7 @@ export function ActivityFeed02() {
                 />
                 <ActivityFeedContent>
                   <div className='space-y-1'>
-                    <p className='font-medium leading-none'>{event.title}</p>
+                    <p className='font-medium mb-0.5'>{event.title}</p>
                     <p className='text-sm text-muted-foreground'>{event.description}</p>
                   </div>
                 </ActivityFeedContent>

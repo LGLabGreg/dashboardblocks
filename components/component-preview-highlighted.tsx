@@ -36,7 +36,7 @@ export function ComponentPreviewHighlighted({
   }, [code])
 
   return (
-    <div className={cn('not-prose my-6 border rounded-lg p-3 shadow-sm', className)}>
+    <div className={cn('not-prose my-6 border border-dashed p-6', className)}>
       <Tabs defaultValue='preview'>
         <div className='flex flex-wrap items-center gap-2'>
           <TabsList>
@@ -51,13 +51,13 @@ export function ComponentPreviewHighlighted({
         </div>
 
         <TabsContent value='preview'>
-          <div className='flex min-h-[200px] items-center justify-center p-8'>
+          <div className='flex min-h-[200px] items-center justify-center mt-2'>
             <div className={cn('w-full', previewClassName)}>{children}</div>
           </div>
         </TabsContent>
         <TabsContent value='code'>
           <div
-            className='max-h-[500px] overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
+            className='max-h-[500px] mt-2 overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
             dangerouslySetInnerHTML={{ __html: highlightedCode }}
           />
         </TabsContent>
