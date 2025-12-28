@@ -1,5 +1,5 @@
 import { BarChartKPI2 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -31,10 +31,15 @@ export function Hero() {
       </div>
       <div className='flex gap-4 mb-5'>
         <Button size='lg' asChild>
-          <Link href='/docs'>Get Started</Link>
+          <Link href='/docs'>
+            Get Started
+            <ArrowRight />
+          </Link>
         </Button>
         <Button variant='outline' size='lg' asChild>
-          <Link href='/docs/components/kpi'>Components</Link>
+          <Link href='/docs/components/activity-feed'>
+            <LayoutDashboard /> Components
+          </Link>
         </Button>
       </div>
       <div className='w-full max-w-md text-left'>
