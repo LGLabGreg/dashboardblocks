@@ -1,8 +1,30 @@
+import {
+  ActivityFeedContent,
+  ActivityFeedIndicator,
+  ActivityFeedItem,
+  ActivityFeedTimeline,
+} from '@/registry/components/dashboardblocks/activity-feed'
+import { ArrowRight, MoreHorizontalIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-import { cn } from '@/lib/utils'
+type EventStatus = 'error' | 'info' | 'progress' | 'success'
 
-const events = [
+const events: {
+  description: string
+  id: number
+  status: EventStatus
+  time: string
+  title: string
+}[] = [
   {
     id: 1,
     title: 'Deployment Successful',
@@ -33,50 +55,50 @@ const events = [
   },
 ]
 
-const statusStyles = {
-  success: 'bg-green-200 [&>div]:bg-green-600',
-  progress: 'bg-blue-200 [&>div]:bg-blue-600',
-  error: 'bg-red-200 [&>div]:bg-red-600',
-  info: 'bg-purple-200 [&>div]:bg-purple-600',
-}
-
 export function ActivityFeed04() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Timeline Feed</CardTitle>
+        <CardTitle className='flex items-center justify-between'>
+          Recent Deployments
+          <Button variant='outline' size='sm'>
+            View all
+            <ArrowRight />
+          </Button>
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='relative space-y-6'>
-          <div className='absolute left-20.5 h-full w-px bg-border' />
+        <ActivityFeedTimeline linePosition='center'>
           {events.map((event) => {
             return (
-              <div key={event.id} className='relative flex items-start gap-4'>
-                <div className='flex items-center justify-end text-xs w-14 text-center mt-0.5'>
-                  <div>{event.time}</div>
+              <ActivityFeedItem key={event.id}>
+                <div className='mt-0.5 flex w-14 justify-end text-center text-xs text-muted-foreground'>
+                  {event.time}
                 </div>
-                <div
-                  className={cn(
-                    'flex items-center justify-center size-5 rounded-full',
-                    statusStyles[event.status as keyof typeof statusStyles],
-                  )}
-                >
-                  <div
-                    className={cn('flex items-center justify-center size-2 rounded-full')}
-                  ></div>
-                </div>
-                <div className='flex-1'>
-                  <div className='flex items-start justify-between gap-2'>
-                    <div className='space-y-1'>
-                      <p className='font-medium leading-none'>{event.title}</p>
-                      <p className='text-sm text-muted-foreground'>{event.description}</p>
-                    </div>
+                <ActivityFeedIndicator status={event.status} variant='ring' />
+                <ActivityFeedContent>
+                  <div className='space-y-1'>
+                    <p className='font-medium leading-none'>{event.title}</p>
+                    <p className='text-sm text-muted-foreground'>{event.description}</p>
                   </div>
-                </div>
-              </div>
+                </ActivityFeedContent>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant='ghost' size='icon'>
+                      <MoreHorizontalIcon /> <span className='sr-only'>More options</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end'>
+                    <DropdownMenuItem>View deployment</DropdownMenuItem>
+                    <DropdownMenuItem>Download logs</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Contact support</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </ActivityFeedItem>
             )
           })}
-        </div>
+        </ActivityFeedTimeline>
       </CardContent>
     </Card>
   )

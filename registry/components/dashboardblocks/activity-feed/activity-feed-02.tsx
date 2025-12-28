@@ -1,6 +1,12 @@
+import {
+  ActivityFeedContent,
+  ActivityFeedItem,
+  ActivityFeedTimeline,
+} from '@/registry/components/dashboardblocks/activity-feed'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { AlertCircle, CheckCircle2, Clock, Zap } from 'lucide-react'
+import { AlertCircle, ArrowRight, CheckCircle2, Clock, Zap } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const events = [
@@ -49,33 +55,36 @@ export function ActivityFeed02() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Timeline Feed</CardTitle>
+        <CardTitle className='flex items-center justify-between'>
+          Recent Deployments
+          <Button variant='outline' size='sm'>
+            View all
+            <ArrowRight />
+          </Button>
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='relative space-y-6'>
-          <div className='absolute left-5 h-full w-px bg-border shadow-xs' />
+        <ActivityFeedTimeline lineClassName='shadow-xs'>
           {events.map((event) => {
             const EventIcon = event.icon
             return (
-              <div key={event.id} className='relative flex items-start gap-4'>
+              <ActivityFeedItem key={event.id}>
                 <Icon
                   icon={EventIcon}
                   size='md'
                   className={statusStyles[event.status as keyof typeof statusStyles]}
                 />
-                <div className='flex-1'>
-                  <div className='flex items-start justify-between gap-2'>
-                    <div className='space-y-1'>
-                      <p className='font-medium leading-none'>{event.title}</p>
-                      <p className='text-sm text-muted-foreground'>{event.description}</p>
-                    </div>
-                    <span className='text-xs text-muted-foreground'>{event.time}</span>
+                <ActivityFeedContent>
+                  <div className='space-y-1'>
+                    <p className='font-medium leading-none'>{event.title}</p>
+                    <p className='text-sm text-muted-foreground'>{event.description}</p>
                   </div>
-                </div>
-              </div>
+                </ActivityFeedContent>
+                <span className='text-xs text-muted-foreground'>{event.time}</span>
+              </ActivityFeedItem>
             )
           })}
-        </div>
+        </ActivityFeedTimeline>
       </CardContent>
     </Card>
   )

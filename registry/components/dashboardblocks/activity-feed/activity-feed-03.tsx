@@ -1,3 +1,7 @@
+import {
+  ActivityFeedContent,
+  ActivityFeedItem,
+} from '@/registry/components/dashboardblocks/activity-feed'
 import { ArrowRight } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -43,24 +47,24 @@ export function ActivityFeed03() {
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-1'>
+      <CardContent className='space-y-2'>
         {activities.map((activity, index) => (
           <div key={activity.id}>
-            <div className='flex items-center gap-3 py-2'>
+            <ActivityFeedItem align='center' className='pb-2' size='sm'>
               <Avatar className='h-8 w-8 shrink-0'>
                 <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
                 <AvatarFallback className='text-xs'>
                   {activity.user.initials}
                 </AvatarFallback>
               </Avatar>
-              <div className='flex-1 truncate text-sm'>
-                <span className='font-medium'>{activity.user.name}</span>{' '}
-                <span className='text-muted-foreground'>{activity.action}</span>
-              </div>
-              <span className='shrink-0 text-xs text-muted-foreground'>
-                {activity.time}
-              </span>
-            </div>
+              <ActivityFeedContent className='truncate' layout='inline'>
+                <div className='truncate'>
+                  <span className='font-medium'>{activity.user.name}</span>{' '}
+                  <span className='text-muted-foreground'>{activity.action}</span>
+                </div>
+              </ActivityFeedContent>
+              <span className='text-xs text-muted-foreground'>{activity.time}</span>
+            </ActivityFeedItem>
             {index < activities.length - 1 && <div className='h-px bg-border' />}
           </div>
         ))}

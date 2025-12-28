@@ -9,6 +9,7 @@ export const examples: Registry['items'] = [
       'avatar',
       'badge',
       'card',
+      'https://dashboardblocks.com/r/activity-feed.json',
       'https://dashboardblocks.com/r/icon.json',
     ],
     files: [
@@ -22,7 +23,12 @@ export const examples: Registry['items'] = [
     name: 'activity-feed-02',
     type: 'registry:component',
     dependencies: ['lucide-react'],
-    registryDependencies: ['card', 'https://dashboardblocks.com/r/icon.json'],
+    registryDependencies: [
+      'button',
+      'card',
+      'https://dashboardblocks.com/r/activity-feed.json',
+      'https://dashboardblocks.com/r/icon.json',
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-02.tsx',
@@ -34,7 +40,12 @@ export const examples: Registry['items'] = [
     name: 'activity-feed-03',
     type: 'registry:component',
     dependencies: ['lucide-react'],
-    registryDependencies: ['avatar', 'button', 'card'],
+    registryDependencies: [
+      'avatar',
+      'button',
+      'card',
+      'https://dashboardblocks.com/r/activity-feed.json',
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx',
@@ -45,7 +56,14 @@ export const examples: Registry['items'] = [
   {
     name: 'activity-feed-04',
     type: 'registry:component',
-    registryDependencies: ['card'],
+    dependencies: ['lucide-react'],
+    registryDependencies: [
+      'button',
+      'card',
+      'dropdown-menu',
+      'https://dashboardblocks.com/r/activity-feed.json',
+      'https://dashboardblocks.com/r/icon.json',
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx',

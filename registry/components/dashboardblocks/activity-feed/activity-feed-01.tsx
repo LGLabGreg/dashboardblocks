@@ -1,3 +1,7 @@
+import {
+  ActivityFeedContent,
+  ActivityFeedItem,
+} from '@/registry/components/dashboardblocks/activity-feed'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { Bell, DollarSign, FileText, Settings, UserPlus } from 'lucide-react'
 
@@ -56,7 +60,7 @@ export function ActivityFeed01() {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           Recent Activity
-          <Badge variant='secondary'>
+          <Badge variant='secondary' className='bg-blue-600 text-white'>
             <Bell />4 New
           </Badge>
         </CardTitle>
@@ -65,26 +69,26 @@ export function ActivityFeed01() {
         {activities.map((activity) => {
           const ActivityIcon = activity.icon
           return (
-            <div key={activity.id} className='flex items-start gap-4'>
+            <ActivityFeedItem key={activity.id}>
               <Avatar className='h-10 w-10'>
                 <AvatarImage src={activity.avatar} alt={activity.user} />
                 <AvatarFallback>{activity.user.slice(0, 2)}</AvatarFallback>
               </Avatar>
-              <div className='flex-1 space-y-1'>
-                <p className='text-sm'>
+              <ActivityFeedContent className='space-y-0.5'>
+                <p>
                   <span className='font-medium'>{activity.user}</span>{' '}
                   <span className='text-muted-foreground'>{activity.action}</span>{' '}
                   <span className='font-medium'>{activity.target}</span>
                 </p>
-                <p className='text-xs text-muted-foreground'>{activity.time}</p>
-              </div>
+                <span className='text-xs text-muted-foreground'>{activity.time}</span>
+              </ActivityFeedContent>
               <Icon
                 icon={ActivityIcon}
                 shape='circle'
                 size='sm'
                 className={cn('hidden md:flex', activity.iconColor)}
               />
-            </div>
+            </ActivityFeedItem>
           )
         })}
       </CardContent>

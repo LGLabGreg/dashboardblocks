@@ -4,13 +4,14 @@
   "homepage": "https://dashboardblocks.com",
   "items": [
     {
-      "name": "kpi",
+      "name": "activity-feed",
       "type": "registry:component",
-      "title": "KPI",
-      "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+      "title": "Activity Feed",
+      "description": "Primitives for composing activity and timeline feeds.",
+      "dependencies": ["class-variance-authority"],
       "files": [
         {
-          "path": "registry/components/dashboardblocks/kpi.tsx",
+          "path": "registry/components/dashboardblocks/activity-feed.tsx",
           "type": "registry:component"
         }
       ]
@@ -37,6 +38,18 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/icon.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "kpi",
+      "type": "registry:component",
+      "title": "KPI",
+      "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kpi.tsx",
           "type": "registry:component"
         }
       ]
@@ -259,6 +272,7 @@
         "avatar",
         "badge",
         "card",
+        "https://dashboardblocks.com/r/activity-feed.json",
         "https://dashboardblocks.com/r/icon.json"
       ],
       "files": [
@@ -272,7 +286,12 @@
       "name": "activity-feed-02",
       "type": "registry:component",
       "dependencies": ["lucide-react"],
-      "registryDependencies": ["card", "https://dashboardblocks.com/r/icon.json"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/activity-feed.json",
+        "https://dashboardblocks.com/r/icon.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-02.tsx",
@@ -284,7 +303,12 @@
       "name": "activity-feed-03",
       "type": "registry:component",
       "dependencies": ["lucide-react"],
-      "registryDependencies": ["avatar", "button", "card"],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/activity-feed.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx",
@@ -295,7 +319,14 @@
     {
       "name": "activity-feed-04",
       "type": "registry:component",
-      "registryDependencies": ["card"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/activity-feed.json",
+        "https://dashboardblocks.com/r/icon.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx",
