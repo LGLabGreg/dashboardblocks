@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "activity-feed-03",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "card",
+    "https://dashboardblocks.com/r/activity-feed.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx",
+      "content": "import {\n  ActivityFeedContent,\n  ActivityFeedItem,\n} from '@/registry/components/dashboardblocks/activity-feed'\nimport { ArrowRight } from 'lucide-react'\n\nimport { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'\nimport { Button } from '@/components/ui/button'\nimport { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'\n\nimport { cn } from '@/lib/utils'\n\nconst activities = [\n  {\n    id: 1,\n    user: { name: 'Sarah Chen', avatar: '/images/women.jpg', initials: 'SC' },\n    action: 'commented on Design System v2',\n    time: '2m',\n  },\n  {\n    id: 2,\n    user: { name: 'Michael Torres', avatar: '/images/man.jpg', initials: 'MT' },\n    action: 'assigned you a task',\n    time: '15m',\n  },\n  {\n    id: 3,\n    user: { name: 'Emma Wilson', avatar: '/images/women.jpg', initials: 'EW' },\n    action: 'scheduled Q1 Planning Review',\n    time: '1h',\n  },\n  {\n    id: 4,\n    user: { name: 'Alex Kumar', avatar: '/images/man.jpg', initials: 'AK' },\n    action: 'completed Sprint 24',\n    time: '2h',\n  },\n]\n\nexport function ActivityFeed03() {\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle className='flex items-center justify-between'>\n          Recent Activity\n          <Button variant='outline' size='sm'>\n            View all\n            <ArrowRight />\n          </Button>\n        </CardTitle>\n      </CardHeader>\n      <CardContent className='space-y-2'>\n        {activities.map((activity, index) => (\n          <div key={activity.id}>\n            <ActivityFeedItem\n              align='center'\n              className={cn(\n                'pb-2',\n                index < activities.length - 1 && 'border-b border-border',\n              )}\n              size='sm'\n            >\n              <Avatar className='h-8 w-8 shrink-0'>\n                <AvatarImage src={activity.user.avatar} alt={activity.user.name} />\n                <AvatarFallback className='text-xs'>\n                  {activity.user.initials}\n                </AvatarFallback>\n              </Avatar>\n              <ActivityFeedContent className='truncate' layout='inline'>\n                <div className='truncate'>\n                  <span className='font-medium'>{activity.user.name}</span>{' '}\n                  <span className='text-muted-foreground'>{activity.action}</span>\n                </div>\n              </ActivityFeedContent>\n              <span className='text-xs text-muted-foreground'>{activity.time}</span>\n            </ActivityFeedItem>\n          </div>\n        ))}\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -2,14 +2,14 @@ import { type Registry } from 'shadcn/schema'
 
 export const components: Registry['items'] = [
   {
-    name: 'kpi',
+    name: 'activity-feed',
     type: 'registry:component',
-    title: 'KPI',
-    description:
-      'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
+    title: 'Activity Feed',
+    description: 'Primitives for composing activity and timeline feeds.',
+    dependencies: ['class-variance-authority'],
     files: [
       {
-        path: 'registry/components/dashboardblocks/kpi.tsx',
+        path: 'registry/components/dashboardblocks/activity-feed.tsx',
         type: 'registry:component',
       },
     ],
@@ -36,6 +36,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/icon.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'kpi',
+    type: 'registry:component',
+    title: 'KPI',
+    description:
+      'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kpi.tsx',
         type: 'registry:component',
       },
     ],

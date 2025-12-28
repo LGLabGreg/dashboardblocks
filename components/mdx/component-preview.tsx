@@ -1,9 +1,15 @@
-import { exampleComponents } from '@/registry/components/dashboardblocks/kpi/index'
+import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
+import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { codeToHtml } from 'shiki'
 
 import { ComponentPreviewHighlighted } from '@/components/component-preview-highlighted'
+
+const exampleComponents = {
+  ...kpiComponents,
+  ...activityFeedComponents,
+}
 
 interface RegistryItem {
   name: string
