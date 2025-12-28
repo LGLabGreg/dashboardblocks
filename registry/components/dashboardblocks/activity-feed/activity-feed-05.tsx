@@ -101,9 +101,7 @@ export function ActivityFeed05() {
       <CardContent>
         <ActivityFeedTimeline lineClassName='left-4'>
           {events.map((event) => {
-            console.log('event.platform', event.platform)
             const Icon = Icons[event.platform as keyof typeof Icons]
-            console.log('Icon', Icon)
             return (
               <div key={event.id}>
                 <ActivityFeedItem size='sm'>
