@@ -6,7 +6,7 @@
     "avatar",
     "button",
     "card",
-    "http://localhost:3000/r/activity-feed.json"
+    "https://dashboardblocks.com/r/activity-feed.json"
   ],
   "files": [
     {

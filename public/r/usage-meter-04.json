@@ -3,10 +3,10 @@
   "name": "usage-meter-04",
   "registryDependencies": [
     "card",
-    "http://localhost:3000/r/icon.json",
-    "http://localhost:3000/r/progress-bar.json",
-    "http://localhost:3000/r/trend.json",
-    "http://localhost:3000/r/usage-meter.json"
+    "https://dashboardblocks.com/r/icon.json",
+    "https://dashboardblocks.com/r/progress-bar.json",
+    "https://dashboardblocks.com/r/trend.json",
+    "https://dashboardblocks.com/r/usage-meter.json"
   ],
   "files": [
     {
