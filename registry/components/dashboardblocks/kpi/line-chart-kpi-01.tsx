@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyLineChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -6,17 +9,17 @@ import { LineProps } from 'recharts'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface LineChartKPIProps {
-  change?: string
+  change?: number
   data?: unknown[]
   height?: number
   lines?: LineProps[]
   title?: string
   trend?: 'up' | 'down' | 'neutral'
-  value?: string
+  value?: number
 }
 
 export const LineChartKPI1 = ({
-  change = '+4.2%',
+  change = 4.2,
   data = [
     {
       label: 'Monday',
@@ -77,7 +80,7 @@ export const LineChartKPI1 = ({
   ],
   title = 'Daily visitors',
   trend = 'up',
-  value = '48,230',
+  value = 48230,
 }: LineChartKPIProps) => {
   return (
     <Card>
@@ -85,9 +88,20 @@ export const LineChartKPI1 = ({
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend value={change} trend={trend} variant='badge' />
+            <Trend
+              value={
+                <AnimatedNumber
+                  value={change}
+                  formatter={(value) => `${value.toLocaleString()}%`}
+                />
+              }
+              trend={trend}
+              variant='badge'
+            />
           </div>
-          <KPIValue>{value}</KPIValue>
+          <KPIValue>
+            <AnimatedNumber value={value} formatter={(value) => value.toLocaleString()} />
+          </KPIValue>
         </div>
         <TinyLineChart data={data} lines={lines} height={height} />
       </CardContent>

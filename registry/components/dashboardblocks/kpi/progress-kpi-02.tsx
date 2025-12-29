@@ -1,5 +1,6 @@
 'use client'
 
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
@@ -17,13 +18,13 @@ interface ProgressKPIBar {
 
 interface ProgressKPI2Props {
   title?: string
-  value?: string
+  value?: number
   progressBars?: ProgressKPIBar[]
 }
 
 export const ProgressKPI2 = ({
   title = 'Task Completion',
-  value = '87/100',
+  value = 87,
   progressBars = [
     {
       label: 'completed',
@@ -52,7 +53,12 @@ export const ProgressKPI2 = ({
           <CardTitle>{title}</CardTitle>
           <Icon icon={ClipboardList} variant='secondary' />
         </div>
-        <KPIValue>{value}</KPIValue>
+        <KPIValue>
+          <AnimatedNumber
+            value={value}
+            formatter={(value) => `${value.toLocaleString()}/100`}
+          />
+        </KPIValue>
         <div className='mt-5 space-y-3'>
           {progressBars.map((bar) => {
             const safePercentage = Number.isFinite(bar.percentage) ? bar.percentage : 0

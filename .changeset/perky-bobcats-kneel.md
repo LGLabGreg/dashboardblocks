@@ -1,0 +1,5 @@
+---
+'dashboardblocks': minor
+---
+
+Animated Number

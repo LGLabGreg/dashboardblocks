@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -5,17 +8,17 @@ import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 export const ProgressKPI1 = ({
-  change = '+7.5%',
+  change = 7.5,
   percentage = 55,
   title = 'Revenue',
   trend = 'up',
-  value = '$87,500',
+  value = 87500,
 }: {
-  change?: string
+  change?: number
   percentage?: number
   title?: string
   trend?: 'up' | 'down' | 'neutral'
-  value?: string
+  value?: number
 } = {}) => {
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
@@ -25,9 +28,23 @@ export const ProgressKPI1 = ({
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <Trend value={change} trend={trend} />
+          <Trend
+            value={
+              <AnimatedNumber
+                value={change}
+                formatter={(value) => `${value.toLocaleString()}%`}
+              />
+            }
+            trend={trend}
+            variant='badge'
+          />
         </div>
-        <KPIValue>{value}</KPIValue>
+        <KPIValue>
+          <AnimatedNumber
+            value={value}
+            formatter={(value) => `$${value.toLocaleString()}`}
+          />
+        </KPIValue>
         <div className='mt-4 space-y-1 text-sm text-muted-foreground'>
           <div className='flex items-center justify-between'>
             <span>

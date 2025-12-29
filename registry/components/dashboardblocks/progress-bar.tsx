@@ -18,7 +18,7 @@ export const ProgressBar = ({
     <div className={cn('h-2 w-full rounded-full bg-muted', className)}>
       <div
         className={cn(
-          'h-full rounded-full bg-primary transition-all duration-500 ease-out',
+          'w-0 h-full rounded-full bg-primary transition-width! duration-500 ease-out',
           fillClassName,
         )}
         style={{ width: `${normalized}%` }}

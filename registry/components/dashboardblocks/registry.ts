@@ -1,5 +1,7 @@
 import { type Registry } from 'shadcn/schema'
 
+import { registryUrl } from '@/lib/config'
+
 export const components: Registry['items'] = [
   {
     name: 'activity-feed',
@@ -10,6 +12,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'animated-number',
+    type: 'registry:component',
+    title: 'Animated Number',
+    description: 'An animated number component.',
+    registryDependencies: [registryUrl('use-animated-number')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/animated-number.tsx',
         type: 'registry:component',
       },
     ],

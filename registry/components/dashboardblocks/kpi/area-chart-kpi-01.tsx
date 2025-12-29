@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -6,17 +9,17 @@ import { AreaProps } from 'recharts'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
 interface AreaChartKPIProps {
-  change?: string
+  change?: number
   data?: unknown[]
   height?: number
   areas?: AreaProps[]
   title?: string
   trend?: 'up' | 'down' | 'neutral'
-  value?: string
+  value?: number
 }
 
 export const AreaChartKPI1 = ({
-  change = '+3.7%',
+  change = 3.7,
   data = [
     {
       label: 'Monday',
@@ -97,7 +100,7 @@ export const AreaChartKPI1 = ({
   ],
   title = 'Profit Margin',
   trend = 'up',
-  value = '42.3%',
+  value = 42.3,
 }: AreaChartKPIProps) => {
   return (
     <Card>
@@ -105,9 +108,23 @@ export const AreaChartKPI1 = ({
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend value={change} trend={trend} variant='badge' />
+            <Trend
+              value={
+                <AnimatedNumber
+                  value={change}
+                  formatter={(value) => `${value.toLocaleString()}%`}
+                />
+              }
+              trend={trend}
+              variant='badge'
+            />
           </div>
-          <KPIValue>{value}</KPIValue>
+          <KPIValue>
+            <AnimatedNumber
+              value={value}
+              formatter={(value) => `${value.toLocaleString()}%`}
+            />
+          </KPIValue>
         </div>
         <TinyAreaChart data={data} areas={areas} height={height} />
       </CardContent>
