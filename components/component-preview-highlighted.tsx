@@ -36,7 +36,7 @@ export function ComponentPreviewHighlighted({
   }, [code])
 
   return (
-    <div className={cn('not-prose my-6 border border-dashed p-6', className)}>
+    <div className={cn('not-prose my-6 border border-dashed p-4', className)}>
       <Tabs defaultValue='preview'>
         <div className='flex flex-wrap items-center gap-2'>
           <TabsList>
