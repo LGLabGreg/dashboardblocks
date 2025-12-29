@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.6.0
+
+### Minor Changes
+
+- [#28](https://github.com/LGLabGreg/dashboardblocks/pull/28) [`c3a6958`](https://github.com/LGLabGreg/dashboardblocks/commit/c3a69583f15d5cde468e08bab3318d1c77f82ca4) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Animated Number
+
 ## 0.5.0
 
 ### Minor Changes
