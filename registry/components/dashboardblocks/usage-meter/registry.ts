@@ -85,4 +85,38 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'usage-meter-07',
+    type: 'registry:component',
+    dependencies: ['lucide-react'],
+    registryDependencies: [
+      'button',
+      'card',
+      'https://dashboardblocks.com/r/animated-wave.json',
+      'https://dashboardblocks.com/r/icon.json',
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/usage-meter/usage-meter-07.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'usage-meter-08',
+    type: 'registry:component',
+    dependencies: ['lucide-react'],
+    registryDependencies: [
+      'button',
+      'card',
+      'https://dashboardblocks.com/r/animated-wave.json',
+      'https://dashboardblocks.com/r/icon.json',
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/usage-meter/usage-meter-08.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

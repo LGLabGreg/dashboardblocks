@@ -1,4 +1,4 @@
-import { UsageMeterBar } from '@/registry/components/dashboardblocks/usage-meter'
+import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
@@ -10,7 +10,6 @@ interface ResourceUsage {
 }
 
 export const UsageMeter3 = ({
-  className = '',
   resources = [
     { name: 'CPU', used: 45, limit: 100, unit: '%' },
     { name: 'Memory', used: 6.2, limit: 8, unit: 'GB' },
@@ -18,19 +17,26 @@ export const UsageMeter3 = ({
   ],
   title = 'Resource Usage',
 }: {
-  className?: string
   resources?: ResourceUsage[]
   title?: string
 } = {}) => {
   return (
-    <Card className={className}>
+    <Card>
       <CardContent className='space-y-4'>
         <CardTitle className='text-base font-medium'>{title}</CardTitle>
         <div className='space-y-4'>
           {resources.map((resource) => {
             const percentage = (resource.used / resource.limit) * 100
+            const safePercentage = Number.isFinite(percentage) ? percentage : 0
+            const normalized = Math.min(100, Math.max(0, safePercentage))
+            const fillClassName =
+              normalized >= 95
+                ? 'bg-destructive'
+                : normalized >= 80
+                  ? 'bg-amber-500'
+                  : undefined
             return (
-              <div key={resource.name} className='space-y-1.5'>
+              <div key={resource.name} className='space-y-1'>
                 <div className='flex items-center justify-between text-sm'>
                   <span className='font-medium'>{resource.name}</span>
                   <span className='text-muted-foreground'>
@@ -38,12 +44,12 @@ export const UsageMeter3 = ({
                     {resource.unit}
                   </span>
                 </div>
-                <UsageMeterBar percentage={percentage} />
+                <ProgressBar percentage={percentage} fillClassName={fillClassName} />
               </div>
             )
           })}
         </div>
-        <CardDescription>Updated just now</CardDescription>
+        <CardDescription className='text-xs'>Updated just now</CardDescription>
       </CardContent>
     </Card>
   )

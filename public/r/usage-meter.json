@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "usage-meter",
+  "title": "Usage Meter",
+  "description": "A usage meter component.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/usage-meter.tsx",
+      "content": "import { cn } from '@/lib/utils'\n\nexport interface UsageMeterValueProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport const UsageMeterValue = ({ children, className }: UsageMeterValueProps) => {\n  return (\n    <span className={cn('text-2xl font-semibold tracking-tight', className)}>\n      {children}\n    </span>\n  )\n}\n\nexport interface UsageMeterLimitProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport const UsageMeterLimit = ({ children, className }: UsageMeterLimitProps) => {\n  return (\n    <span className={cn('text-sm text-muted-foreground', className)}>{children}</span>\n  )\n}\n\nexport interface UsageMeterStatusProps {\n  children?: React.ReactNode\n  className?: string\n  percentage: number\n  warningThreshold?: number\n}\n\nexport const UsageMeterStatus = ({\n  children,\n  className,\n  percentage,\n  warningThreshold = 80,\n}: UsageMeterStatusProps) => {\n  const safePercentage = Number.isFinite(percentage) ? percentage : 0\n  const normalized = Math.min(100, Math.max(0, safePercentage))\n  const isCritical = normalized >= 95\n  const isWarning = normalized >= warningThreshold\n\n  const defaultMessage = isCritical ? 'Critical' : isWarning ? 'Warning' : 'Normal'\n\n  return (\n    <span\n      className={cn(\n        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',\n        isCritical\n          ? 'bg-destructive/10 text-destructive'\n          : isWarning\n            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-500'\n            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-500',\n        className,\n      )}\n    >\n      {children ?? defaultMessage}\n    </span>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

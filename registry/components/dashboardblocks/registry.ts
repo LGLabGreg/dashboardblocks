@@ -15,6 +15,18 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'animated-wave',
+    type: 'registry:component',
+    title: 'Animated Wave',
+    description: 'An animated wave component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/animated-wave.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'chart',
     type: 'registry:component',
     title: 'Chart',

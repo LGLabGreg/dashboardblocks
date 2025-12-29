@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "animated-wave",
+  "title": "Animated Wave",
+  "description": "An animated wave component.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/animated-wave.tsx",
+      "content": "export const AnimatedWave = ({\n  percentage = 64,\n  waveColor = '#3b82f6',\n  waveColorSecondary = '#3b82f6',\n  waveHeight = 16,\n}: {\n  percentage?: number\n  waveColor?: string\n  waveColorSecondary?: string\n  waveHeight?: number\n}) => {\n  return (\n    <div className='relative size-full'>\n      {/* Wave container */}\n      <div\n        className='absolute inset-0 transition-transform duration-1000 ease-out'\n        style={{\n          transform: `translateY(${100 - percentage}%)`,\n        }}\n      >\n        {/* Primary wave */}\n        <svg\n          className='absolute w-[200%] h-full'\n          style={{\n            animation: 'wave 3s linear infinite',\n            left: 0,\n            top: 0,\n          }}\n          viewBox='0 0 400 200'\n          preserveAspectRatio='none'\n        >\n          <path\n            d={`\n                M 0 ${waveHeight}\n                Q 50 0, 100 ${waveHeight}\n                Q 150 ${waveHeight * 2}, 200 ${waveHeight}\n                Q 250 0, 300 ${waveHeight}\n                Q 350 ${waveHeight * 2}, 400 ${waveHeight}\n                L 400 200\n                L 0 200\n                Z\n              `}\n            fill={waveColor}\n          />\n        </svg>\n\n        {/* Secondary wave (offset) */}\n        <svg\n          className='absolute w-[200%] h-full opacity-60'\n          style={{\n            animation: 'wave 4s linear infinite reverse',\n            left: 0,\n            top: 0,\n          }}\n          viewBox='0 0 400 200'\n          preserveAspectRatio='none'\n        >\n          <path\n            d={`\n                M 0 ${waveHeight}\n                Q 50 ${waveHeight * 2}, 100 ${waveHeight}\n                Q 150 0, 200 ${waveHeight}\n                Q 250 ${waveHeight * 2}, 300 ${waveHeight}\n                Q 350 0, 400 ${waveHeight}\n                L 400 200\n                L 0 200\n                Z\n              `}\n            fill={waveColorSecondary}\n          />\n        </svg>\n      </div>\n\n      {/* Keyframes */}\n      <style>{`\n        @keyframes wave {\n          0% { transform: translateX(0); }\n          100% { transform: translateX(-50%); }\n        }\n      `}</style>\n    </div>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

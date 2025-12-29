@@ -7,13 +7,11 @@ import {
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
 export const UsageMeter2 = ({
-  className = '',
-  limit = 100,
+  limit = 120,
   title = 'Storage',
   unit = 'GB',
-  used = 67.5,
+  used = 78,
 }: {
-  className?: string
   limit?: number
   title?: string
   unit?: string
@@ -30,7 +28,7 @@ export const UsageMeter2 = ({
       : 'var(--color-primary)'
 
   return (
-    <Card className={className}>
+    <Card>
       <CardContent>
         <div className='flex items-center gap-6'>
           <Ring
@@ -43,7 +41,7 @@ export const UsageMeter2 = ({
           </Ring>
           <div className='space-y-1'>
             <CardTitle className='text-base font-medium'>{title}</CardTitle>
-            <div className='space-y-0.5'>
+            <div className='flex items-baseline gap-1'>
               <UsageMeterValue>
                 {used.toLocaleString()} {unit}
               </UsageMeterValue>

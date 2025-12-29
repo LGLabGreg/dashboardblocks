@@ -1,7 +1,5 @@
-import {
-  UsageMeterSegmentedBar,
-  UsageMeterValue,
-} from '@/registry/components/dashboardblocks/usage-meter'
+import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
+import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
@@ -12,7 +10,6 @@ interface StorageSegment {
 }
 
 export const UsageMeter5 = ({
-  className = '',
   segments = [
     { label: 'Documents', value: 12.4, color: 'hsl(221 83% 53%)' },
     { label: 'Images', value: 28.6, color: 'hsl(262 83% 58%)' },
@@ -23,7 +20,6 @@ export const UsageMeter5 = ({
   total = 100,
   unit = 'GB',
 }: {
-  className?: string
   segments?: StorageSegment[]
   title?: string
   total?: number
@@ -33,7 +29,7 @@ export const UsageMeter5 = ({
   const free = total - used
 
   return (
-    <Card className={className}>
+    <Card>
       <CardContent className='space-y-4'>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-base font-medium'>{title}</CardTitle>
@@ -50,7 +46,7 @@ export const UsageMeter5 = ({
               of {total} {unit}
             </span>
           </div>
-          <UsageMeterSegmentedBar segments={segments} total={total} />
+          <SegmentedProgressBar segments={segments} total={total} />
         </div>
         <div className='grid grid-cols-2 gap-x-3 gap-y-2'>
           {segments.map((segment) => (

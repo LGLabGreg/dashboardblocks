@@ -1,23 +1,19 @@
 import { Icon } from '@/registry/components/dashboardblocks/icon'
+import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
-import {
-  UsageMeterBar,
-  UsageMeterValue,
-} from '@/registry/components/dashboardblocks/usage-meter'
+import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
 import { Coins } from 'lucide-react'
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
 export const UsageMeter4 = ({
   burnRate = '-1,250',
-  className = '',
   remaining = 45750,
   title = 'Credits Remaining',
   total = 100000,
   trend = 'down',
 }: {
   burnRate?: string
-  className?: string
   remaining?: number
   title?: string
   total?: number
@@ -30,7 +26,7 @@ export const UsageMeter4 = ({
   )
 
   return (
-    <Card className={className}>
+    <Card>
       <CardContent className='space-y-3'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
@@ -41,11 +37,7 @@ export const UsageMeter4 = ({
         </div>
         <div className='space-y-1'>
           <UsageMeterValue>{remaining.toLocaleString()}</UsageMeterValue>
-          <UsageMeterBar
-            percentage={100 - percentage}
-            showWarning={false}
-            fillClassName='bg-emerald-500'
-          />
+          <ProgressBar percentage={100 - percentage} fillClassName='bg-emerald-500' />
         </div>
         <div className='flex items-center justify-between text-sm text-muted-foreground'>
           <span>{used.toLocaleString()} used</span>

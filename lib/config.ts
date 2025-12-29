@@ -1,8 +1,9 @@
 export const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL
 
 export const siteConfig = {
   name: 'Dashboardblocks',
-  url: process.env.NEXT_PUBLIC_APP_URL,
+  url: APP_URL,
   description: 'Beautifully designed dashboard blocks.',
   keywords: [
     'Next.js',
@@ -22,5 +23,5 @@ export const siteConfig = {
     'Dashboard Blocks Library',
   ],
   creator: 'LGLab',
-  ogImage: `${process.env.NEXT_PUBLIC_APP_URL}/opengraph-image.png`,
+  ogImage: `${APP_URL}/opengraph-image.png`,
 }

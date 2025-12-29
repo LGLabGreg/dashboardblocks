@@ -17,6 +17,9 @@ export const ProgressKPI1 = ({
   trend?: 'up' | 'down' | 'neutral'
   value?: string
 } = {}) => {
+  const safePercentage = Number.isFinite(percentage) ? percentage : 0
+  const normalized = Math.min(100, Math.max(0, safePercentage))
+
   return (
     <Card>
       <CardContent className='space-y-1'>
@@ -25,12 +28,18 @@ export const ProgressKPI1 = ({
           <Trend value={change} trend={trend} />
         </div>
         <KPIValue>{value}</KPIValue>
-        <ProgressBar
-          className='mt-4'
-          label='of monthly target'
-          target='$100k'
-          percentage={percentage}
-        />
+        <div className='mt-4 space-y-1 text-sm text-muted-foreground'>
+          <div className='flex items-center justify-between'>
+            <span>
+              <span className='font-semibold text-foreground'>
+                {Math.round(normalized)}%
+              </span>{' '}
+              of monthly target
+            </span>
+            <span className='font-semibold text-foreground'>$100k</span>
+          </div>
+          <ProgressBar percentage={percentage} />
+        </div>
       </CardContent>
     </Card>
   )
