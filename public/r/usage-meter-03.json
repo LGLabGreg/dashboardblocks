@@ -1,7 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-03",
-  "registryDependencies": ["card", "https://dashboardblocks.com/r/usage-meter.json"],
+  "registryDependencies": [
+    "card",
+    "http://localhost:3000/r/progress-bar.json",
+    "http://localhost:3000/r/usage-meter.json"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/usage-meter/usage-meter-03.tsx",

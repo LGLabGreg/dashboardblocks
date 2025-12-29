@@ -1,0 +1,26 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: npm install -g npm@latest
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install
+      - name: Build Registry
+        run: pnpm registry:build
+        env:
+          REGISTRY_BASE_URL: https://dashboardblocks.com
+      - name: Commit registry.json if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: update registry.json'
+          file_pattern: registry.json public/r/*.json

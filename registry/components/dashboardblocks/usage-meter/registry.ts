@@ -1,13 +1,16 @@
 import { type Registry } from 'shadcn/schema'
 
+import { registryUrl } from '@/lib/config'
+
 export const examples: Registry['items'] = [
   {
     name: 'usage-meter-01',
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/usage-meter.json',
+      registryUrl('icon'),
+      registryUrl('progress-bar'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {
@@ -19,11 +22,7 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-02',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/ring.json',
-      'https://dashboardblocks.com/r/usage-meter.json',
-    ],
+    registryDependencies: ['card', registryUrl('ring'), registryUrl('usage-meter')],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-02.tsx',
@@ -34,7 +33,11 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-03',
     type: 'registry:component',
-    registryDependencies: ['card', 'https://dashboardblocks.com/r/usage-meter.json'],
+    registryDependencies: [
+      'card',
+      registryUrl('progress-bar'),
+      registryUrl('usage-meter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-03.tsx',
@@ -47,9 +50,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/trend.json',
-      'https://dashboardblocks.com/r/usage-meter.json',
+      registryUrl('icon'),
+      registryUrl('progress-bar'),
+      registryUrl('trend'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {
@@ -61,7 +65,11 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-05',
     type: 'registry:component',
-    registryDependencies: ['card', 'https://dashboardblocks.com/r/usage-meter.json'],
+    registryDependencies: [
+      'card',
+      registryUrl('progress-bar'),
+      registryUrl('usage-meter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-05.tsx',
@@ -75,8 +83,9 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'card',
-      'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/usage-meter.json',
+      registryUrl('icon'),
+      registryUrl('progress-bar'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {
@@ -92,8 +101,8 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'card',
-      'https://dashboardblocks.com/r/animated-wave.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('animated-wave'),
+      registryUrl('icon'),
     ],
     files: [
       {
@@ -109,8 +118,8 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'card',
-      'https://dashboardblocks.com/r/animated-wave.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('animated-wave'),
+      registryUrl('icon'),
     ],
     files: [
       {

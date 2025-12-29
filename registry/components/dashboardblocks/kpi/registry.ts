@@ -1,14 +1,12 @@
 import { type Registry } from 'shadcn/schema'
 
+import { registryUrl } from '@/lib/config'
+
 export const examples: Registry['items'] = [
   {
     name: 'kpi-01',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
-    ],
+    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-01.tsx',
@@ -19,11 +17,7 @@ export const examples: Registry['items'] = [
   {
     name: 'kpi-02',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
-    ],
+    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-02.tsx',
@@ -34,11 +28,7 @@ export const examples: Registry['items'] = [
   {
     name: 'kpi-03',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
-    ],
+    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-03.tsx',
@@ -51,9 +41,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/progress-bar.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('kpi'),
+      registryUrl('progress-bar'),
+      registryUrl('trend'),
     ],
     files: [
       {
@@ -67,9 +57,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/icon.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/progress-bar.json',
+      registryUrl('icon'),
+      registryUrl('kpi'),
+      registryUrl('progress-bar'),
     ],
     files: [
       {
@@ -81,11 +71,7 @@ export const examples: Registry['items'] = [
   {
     name: 'progress-kpi-03',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/ring.json',
-    ],
+    registryDependencies: ['card', registryUrl('kpi'), registryUrl('ring')],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/progress-kpi-03.tsx',
@@ -98,9 +84,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
     ],
     files: [
       {
@@ -114,9 +100,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
     ],
     files: [
       {
@@ -130,9 +116,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
     ],
     files: [
       {
@@ -146,9 +132,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
     ],
     files: [
       {
@@ -162,9 +148,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'https://dashboardblocks.com/r/chart.json',
-      'https://dashboardblocks.com/r/kpi.json',
-      'https://dashboardblocks.com/r/trend.json',
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
     ],
     files: [
       {
