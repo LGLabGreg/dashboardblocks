@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.5.0
+
+### Minor Changes
+
+- [#26](https://github.com/LGLabGreg/dashboardblocks/pull/26) [`f40c7f8`](https://github.com/LGLabGreg/dashboardblocks/commit/f40c7f87f7d11e01b9661a714c7369300dc015e9) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Usage Meter
+
 ## 0.4.1
 
 ### Patch Changes

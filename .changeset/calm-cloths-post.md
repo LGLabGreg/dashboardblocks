@@ -1,5 +1,0 @@
----
-'dashboardblocks': minor
----
-
-Usage Meter
