@@ -1,13 +1,12 @@
-import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
+'use client'
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
+import {
+  SegmentedProgressBar,
+  SegmentedProgressBarProps,
+} from '@/registry/components/dashboardblocks/progress-bar'
 import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
-
-interface StorageSegment {
-  color: string
-  label: string
-  value: number
-}
 
 export const UsageMeter5 = ({
   segments = [
@@ -20,7 +19,7 @@ export const UsageMeter5 = ({
   total = 100,
   unit = 'GB',
 }: {
-  segments?: StorageSegment[]
+  segments?: SegmentedProgressBarProps['segments']
   title?: string
   total?: number
   unit?: string
@@ -40,7 +39,8 @@ export const UsageMeter5 = ({
         <div className='space-y-1'>
           <div className='flex items-baseline justify-between'>
             <UsageMeterValue>
-              {used.toFixed(1)} {unit}
+              <AnimatedNumber value={used} formatter={(value) => value.toFixed(1)} />{' '}
+              {unit}
             </UsageMeterValue>
             <span className='text-sm text-muted-foreground'>
               of {total} {unit}
@@ -57,7 +57,11 @@ export const UsageMeter5 = ({
               />
               <span className='text-sm text-muted-foreground'>{segment.label}</span>
               <span className='ml-auto text-sm font-medium'>
-                {segment.value.toFixed(1)} {unit}
+                <AnimatedNumber
+                  value={segment.value}
+                  formatter={(value) => value.toFixed(1)}
+                />{' '}
+                {unit}
               </span>
             </div>
           ))}

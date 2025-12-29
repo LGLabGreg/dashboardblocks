@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -35,12 +38,20 @@ export const UsageMeter4 = ({
           </div>
           <Trend value={`${burnRate}/day`} trend={trend} />
         </div>
-        <div className='space-y-1'>
-          <UsageMeterValue>{remaining.toLocaleString()}</UsageMeterValue>
+        <div>
+          <UsageMeterValue>
+            <AnimatedNumber
+              value={remaining}
+              formatter={(value) => value.toLocaleString()}
+            />
+          </UsageMeterValue>
           <ProgressBar percentage={100 - percentage} fillClassName='bg-emerald-500' />
         </div>
         <div className='flex items-center justify-between text-sm text-muted-foreground'>
-          <span>{used.toLocaleString()} used</span>
+          <span>
+            <AnimatedNumber value={used} formatter={(value) => value.toLocaleString()} />{' '}
+            used
+          </span>
           <span>~{daysRemaining} days remaining</span>
         </div>
       </CardContent>

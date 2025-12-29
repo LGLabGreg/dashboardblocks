@@ -1,3 +1,5 @@
+'use client'
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Crown, Database, Mail, Users, Zap } from 'lucide-react'
@@ -43,10 +45,6 @@ export const UsageMeter6 = ({
                 : normalized >= 80
                   ? 'bg-amber-500'
                   : 'bg-emerald-500'
-            const formattedUsed =
-              item.used >= 1000
-                ? `${(item.used / 1000).toFixed(1)}k`
-                : item.used.toString()
             const formattedLimit =
               item.limit >= 1000
                 ? `${(item.limit / 1000).toFixed(0)}k`
@@ -54,13 +52,17 @@ export const UsageMeter6 = ({
 
             return (
               <div key={item.name} className='space-y-1'>
-                <div className='flex items-center justify-between text-sm'>
+                <div className='flex items-end justify-between text-sm'>
                   <div className='flex items-center gap-2'>
-                    <item.icon className='h-3.5 w-3.5 text-muted-foreground' />
+                    <item.icon className='h-3.5 w-3.5' />
                     <span>{item.name}</span>
                   </div>
-                  <span className='text-muted-foreground'>
-                    {formattedUsed} / {formattedLimit}
+                  <span className='text-xs text-muted-foreground'>
+                    <AnimatedNumber
+                      value={item.used}
+                      formatter={(value) => value.toLocaleString()}
+                    />{' '}
+                    / {formattedLimit}
                   </span>
                 </div>
                 <ProgressBar

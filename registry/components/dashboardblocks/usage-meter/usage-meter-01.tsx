@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import {
@@ -38,7 +41,12 @@ export const UsageMeter1 = ({
         </div>
         <div className='space-y-1'>
           <div className='flex items-baseline justify-between'>
-            <UsageMeterValue>{used.toLocaleString()}</UsageMeterValue>
+            <UsageMeterValue>
+              <AnimatedNumber
+                value={used}
+                formatter={(value) => value.toLocaleString()}
+              />
+            </UsageMeterValue>
             <UsageMeterLimit>
               of {limit.toLocaleString()} {unit}
             </UsageMeterLimit>
@@ -46,7 +54,11 @@ export const UsageMeter1 = ({
           <ProgressBar percentage={percentage} fillClassName={fillClassName} />
         </div>
         <CardDescription>
-          {(limit - used).toLocaleString()} {unit} remaining this month
+          <AnimatedNumber
+            value={limit - used}
+            formatter={(value) => value.toLocaleString()}
+          />{' '}
+          {unit} remaining this month
         </CardDescription>
       </CardContent>
     </Card>

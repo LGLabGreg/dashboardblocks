@@ -1,3 +1,5 @@
+'use client'
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { Database, LucideIcon } from 'lucide-react'
@@ -46,7 +48,10 @@ export const UsageMeter8 = ({
               <div className='space-y-1'>
                 <div className='text-sm font-medium tracking-wider'>REMAINING</div>
                 <div className='flex items-start gap-1 text-4xl font-bold leading-none'>
-                  <span>{remaining}</span>
+                  <AnimatedNumber
+                    value={remaining}
+                    formatter={(value) => value.toLocaleString()}
+                  />
                   <span className='text-sm font-medium'>{unit}</span>
                 </div>
               </div>
@@ -62,20 +67,33 @@ export const UsageMeter8 = ({
           <div className='flex flex-col items-center space-y-1.5'>
             <div className='h-[2px] w-12 bg-purple-500' />
             <div className='text-xs text-muted-foreground'>USED ({unit})</div>
-            <div className='text-2xl font-semibold leading-none'>{used}</div>
+            <div className='text-2xl font-semibold leading-none'>
+              <AnimatedNumber
+                value={used}
+                formatter={(value) => value.toLocaleString()}
+              />
+            </div>
           </div>
           <div className='flex flex-col items-center space-y-1.5'>
             <div className='h-[2px] w-12 bg-blue-500' />
             <div className='text-xs text-muted-foreground'>AVAILABLE</div>
             <div className='text-2xl font-semibold leading-none'>
-              {availablePercentage}%
+              <AnimatedNumber
+                value={availablePercentage}
+                formatter={(value) => `${value}%`}
+              />
             </div>
           </div>
           {daysLeft !== undefined && (
             <div className='flex flex-col items-center space-y-1.5'>
               <div className='h-[2px] w-12 bg-green-500' />
               <div className='text-xs text-muted-foreground'>DAYS LEFT</div>
-              <div className='text-2xl font-semibold leading-none'>{daysLeft}</div>
+              <div className='text-2xl font-semibold leading-none'>
+                <AnimatedNumber
+                  value={daysLeft}
+                  formatter={(value) => value.toLocaleString()}
+                />
+              </div>
             </div>
           )}
         </div>

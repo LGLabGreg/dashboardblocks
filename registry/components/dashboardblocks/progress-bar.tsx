@@ -63,23 +63,36 @@ export const SegmentedProgressBar = ({
   segments,
   total,
 }: SegmentedProgressBarProps) => {
+  const [animatedMultiplier, setAnimatedMultiplier] = useState(0)
+  const { isInView, ref } = useInView()
   const safeTotal = total > 0 ? total : 1
+
+  useEffect(() => {
+    if (isInView) {
+      // Small delay to ensure the initial render happens at 0
+      const timer = requestAnimationFrame(() => {
+        setAnimatedMultiplier(1)
+      })
+      return () => cancelAnimationFrame(timer)
+    }
+  }, [isInView])
 
   return (
     <div
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={cn('flex h-2 w-full overflow-hidden rounded-full bg-muted', className)}
     >
       {segments.map((segment, index) => {
         const percentage = (segment.value / safeTotal) * 100
+        const animatedWidth = Math.max(0, percentage) * animatedMultiplier
         return (
           <div
             key={segment.label || index}
-            className='h-full transition-all duration-500 ease-out first:rounded-l-full last:rounded-r-full'
+            className='h-full transition-width! duration-1000 ease-out-expo first:rounded-l-full last:rounded-r-full'
             style={{
-              width: `${Math.max(0, percentage)}%`,
+              width: `${animatedWidth}%`,
               backgroundColor: segment.color || 'hsl(var(--primary))',
             }}
-            title={segment.label ? `${segment.label}: ${segment.value}` : undefined}
           />
         )
       })}
