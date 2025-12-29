@@ -3,9 +3,9 @@
   "name": "area-chart-kpi-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/chart.json",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/trend.json"
+    "http://localhost:3000/r/chart.json",
+    "http://localhost:3000/r/kpi.json",
+    "http://localhost:3000/r/trend.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "usage-meter-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/ring.json",
-    "https://dashboardblocks.com/r/usage-meter.json"
+    "http://localhost:3000/r/ring.json",
+    "http://localhost:3000/r/usage-meter.json"
   ],
   "files": [
     {

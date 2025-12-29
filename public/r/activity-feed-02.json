@@ -5,8 +5,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/activity-feed.json",
-    "https://dashboardblocks.com/r/icon.json"
+    "http://localhost:3000/r/activity-feed.json",
+    "http://localhost:3000/r/icon.json"
   ],
   "files": [
     {

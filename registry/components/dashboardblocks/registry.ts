@@ -103,4 +103,16 @@ export const components: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'usage-meter',
+    type: 'registry:component',
+    title: 'Usage Meter',
+    description: 'A usage meter component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/usage-meter.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

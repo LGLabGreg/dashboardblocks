@@ -105,12 +105,24 @@
       ]
     },
     {
+      "name": "usage-meter",
+      "type": "registry:component",
+      "title": "Usage Meter",
+      "description": "A usage meter component.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/usage-meter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "kpi-01",
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -124,8 +136,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -139,8 +151,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -154,9 +166,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -170,9 +182,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/progress-bar.json"
       ],
       "files": [
         {
@@ -186,8 +198,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/ring.json"
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/ring.json"
       ],
       "files": [
         {
@@ -201,9 +213,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -217,9 +229,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -233,9 +245,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -249,9 +261,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -265,9 +277,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -284,8 +296,8 @@
         "avatar",
         "badge",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -301,8 +313,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -319,7 +331,7 @@
         "avatar",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json"
+        "http://localhost:3000/r/activity-feed.json"
       ],
       "files": [
         {
@@ -336,8 +348,8 @@
         "button",
         "card",
         "dropdown-menu",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -355,8 +367,8 @@
         "badge",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -370,9 +382,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -386,8 +398,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ring.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/ring.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -401,8 +413,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -416,10 +428,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/trend.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/trend.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -433,8 +445,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -449,9 +461,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -467,8 +479,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/animated-wave.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -484,8 +496,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/animated-wave.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
