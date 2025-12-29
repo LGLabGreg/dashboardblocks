@@ -17,6 +17,19 @@
       ]
     },
     {
+      "name": "animated-number",
+      "type": "registry:component",
+      "title": "Animated Number",
+      "description": "An animated number component.",
+      "registryDependencies": ["https://dashboardblocks.com/r/use-animated-number.json"],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/animated-number.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "animated-wave",
       "type": "registry:component",
       "title": "Animated Wave",
@@ -71,7 +84,7 @@
       "type": "registry:component",
       "title": "Progress Bar",
       "description": "A progress bar component.",
-      "registryDependencies": ["progress"],
+      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/progress-bar.tsx",
@@ -84,6 +97,7 @@
       "type": "registry:component",
       "title": "Ring",
       "description": "A ring component.",
+      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
@@ -121,6 +135,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
       ],
@@ -136,6 +151,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
       ],
@@ -151,6 +167,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
       ],
@@ -166,6 +183,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -182,6 +200,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/progress-bar.json"
@@ -198,6 +217,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/ring.json"
       ],
@@ -213,6 +233,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -229,6 +250,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -245,6 +267,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -261,6 +284,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -277,6 +301,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -382,6 +407,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"
@@ -398,6 +424,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/ring.json",
         "https://dashboardblocks.com/r/usage-meter.json"
       ],
@@ -413,6 +440,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"
       ],
@@ -428,6 +456,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/trend.json",
@@ -445,6 +474,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"
       ],
@@ -461,6 +491,7 @@
       "registryDependencies": [
         "button",
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"
@@ -479,6 +510,7 @@
       "registryDependencies": [
         "button",
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/animated-wave.json",
         "https://dashboardblocks.com/r/icon.json"
       ],
@@ -496,6 +528,7 @@
       "registryDependencies": [
         "button",
         "card",
+        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/animated-wave.json",
         "https://dashboardblocks.com/r/icon.json"
       ],
@@ -503,6 +536,31 @@
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-08.tsx",
           "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "use-animated-number",
+      "type": "registry:hook",
+      "title": "Use Animated Number",
+      "description": "A hook for animating a number.",
+      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "files": [
+        {
+          "path": "registry/hooks/use-animated-number.tsx",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "use-in-view",
+      "type": "registry:hook",
+      "title": "Use In View",
+      "description": "A hook that tracks whether an element is visible in the viewport using IntersectionObserver.",
+      "files": [
+        {
+          "path": "registry/hooks/use-in-view.tsx",
+          "type": "registry:hook"
         }
       ]
     }

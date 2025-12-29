@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -12,7 +15,7 @@ interface BarChartKPIProps {
   height?: number
   title?: string
   trend?: 'up' | 'down' | 'neutral'
-  value?: string
+  value?: number
 }
 
 export const BarChartKPI1 = ({
@@ -77,7 +80,7 @@ export const BarChartKPI1 = ({
   height = 160,
   title = 'Revenue',
   trend = 'up',
-  value = '$87,500',
+  value = 87500,
 }: BarChartKPIProps) => {
   return (
     <Card>
@@ -87,7 +90,12 @@ export const BarChartKPI1 = ({
             <CardDescription>{title}</CardDescription>
             <Trend value={change} trend={trend} trendIcon='arrow' variant='badge' />
           </div>
-          <KPIValue>{value}</KPIValue>
+          <KPIValue>
+            <AnimatedNumber
+              value={value}
+              formatter={(value) => `$${value.toLocaleString()}`}
+            />
+          </KPIValue>
         </div>
         <TinyBarChart data={data} bars={bars} height={height} />
       </CardContent>

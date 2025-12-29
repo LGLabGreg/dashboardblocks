@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 import {
   UsageMeterLimit,
@@ -37,20 +40,31 @@ export const UsageMeter2 = ({
             ringColor={ringColor}
             strokeWidth={10}
           >
-            <span className='text-lg font-bold'>{Math.round(percentage)}%</span>
+            <AnimatedNumber
+              className='text-lg font-bold'
+              value={percentage}
+              formatter={(value) => `${value.toLocaleString()}%`}
+            />
           </Ring>
           <div className='space-y-1'>
             <CardTitle className='text-base font-medium'>{title}</CardTitle>
             <div className='flex items-baseline gap-1'>
               <UsageMeterValue>
-                {used.toLocaleString()} {unit}
+                <AnimatedNumber
+                  value={used}
+                  formatter={(value) => value.toLocaleString()}
+                />
               </UsageMeterValue>
               <UsageMeterLimit className='block'>
                 of {limit.toLocaleString()} {unit} used
               </UsageMeterLimit>
             </div>
             <p className='text-sm text-muted-foreground'>
-              {(limit - used).toLocaleString()} {unit} available
+              <AnimatedNumber
+                value={limit - used}
+                formatter={(value) => value.toLocaleString()}
+              />{' '}
+              {unit} available
             </p>
           </div>
         </div>

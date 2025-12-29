@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 
@@ -28,7 +31,12 @@ export const ProgressKPI3 = ({
             <div className='space-y-4'>
               <CardTitle>{title}</CardTitle>
               <div className='space-y-1'>
-                <KPIValue className='text-2xl'>{current.toLocaleString()}</KPIValue>
+                <KPIValue className='text-2xl'>
+                  <AnimatedNumber
+                    value={current}
+                    formatter={(value) => value.toLocaleString()}
+                  />
+                </KPIValue>
                 <CardDescription>
                   of {goal.toLocaleString()} {unit}
                 </CardDescription>
@@ -41,7 +49,11 @@ export const ProgressKPI3 = ({
               percentage={percentage}
               ringColor='var(--color-chart-1)'
             >
-              <span className='text-lg font-bold'>{Math.round(percentage)}%</span>
+              <AnimatedNumber
+                className='text-lg font-bold'
+                value={percentage}
+                formatter={(value) => `${value.toLocaleString()}%`}
+              />
             </Ring>
           </div>
         </div>

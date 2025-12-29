@@ -1,3 +1,6 @@
+'use client'
+
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
@@ -37,10 +40,14 @@ export const UsageMeter3 = ({
                   : undefined
             return (
               <div key={resource.name} className='space-y-1'>
-                <div className='flex items-center justify-between text-sm'>
+                <div className='flex items-end justify-between text-sm'>
                   <span className='font-medium'>{resource.name}</span>
-                  <span className='text-muted-foreground'>
-                    {resource.used.toLocaleString()} / {resource.limit.toLocaleString()}{' '}
+                  <span className='text-xs text-muted-foreground'>
+                    <AnimatedNumber
+                      value={resource.used}
+                      formatter={(value) => value.toLocaleString()}
+                    />{' '}
+                    / {resource.limit.toLocaleString()}
                     {resource.unit}
                   </span>
                 </div>

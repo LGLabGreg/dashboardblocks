@@ -1,5 +1,6 @@
 import { type VariantProps, cva } from 'class-variance-authority'
 import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
+import { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -73,7 +74,7 @@ const trendVariants = cva('', {
 interface TrendProps extends VariantProps<typeof trendVariants> {
   className?: string
   trendIcon?: 'arrow' | 'trend'
-  value: string
+  value: ReactNode
 }
 
 function Trend({

@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'kpi-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
+    registryDependencies: [
+      'card',
+      registryUrl('animated-number'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-01.tsx',
@@ -17,7 +22,12 @@ export const examples: Registry['items'] = [
   {
     name: 'kpi-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
+    registryDependencies: [
+      'card',
+      registryUrl('animated-number'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-02.tsx',
@@ -28,7 +38,12 @@ export const examples: Registry['items'] = [
   {
     name: 'kpi-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kpi'), registryUrl('trend')],
+    registryDependencies: [
+      'card',
+      registryUrl('animated-number'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/kpi-03.tsx',
@@ -41,6 +56,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('progress-bar'),
       registryUrl('trend'),
@@ -57,6 +73,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('icon'),
       registryUrl('kpi'),
       registryUrl('progress-bar'),
@@ -71,7 +88,12 @@ export const examples: Registry['items'] = [
   {
     name: 'progress-kpi-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kpi'), registryUrl('ring')],
+    registryDependencies: [
+      'card',
+      registryUrl('animated-number'),
+      registryUrl('kpi'),
+      registryUrl('ring'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi/progress-kpi-03.tsx',
@@ -84,6 +106,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -100,6 +123,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -116,6 +140,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -132,6 +157,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -148,6 +174,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
+      registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
       registryUrl('trend'),

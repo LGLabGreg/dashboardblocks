@@ -1,3 +1,5 @@
+'use client'
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { Database, LucideIcon } from 'lucide-react'
@@ -41,12 +43,16 @@ export const UsageMeter7 = ({
           <div className='space-y-1'>
             <div className='text-sm font-medium tracking-wider'>REMAINING</div>
             <div className='flex items-start gap-1 text-4xl font-bold leading-none'>
-              <span>{remaining}</span>
+              <AnimatedNumber
+                value={remaining}
+                formatter={(value) => value.toLocaleString()}
+              />
               <span className='text-sm font-medium'>{unit}</span>
             </div>
           </div>
           <div className='text-sm'>
-            {used} {unit} / {limit} {unit} used
+            <AnimatedNumber value={used} formatter={(value) => value.toLocaleString()} />{' '}
+            {unit} / {limit} {unit} used
           </div>
         </div>
       </div>

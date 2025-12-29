@@ -1,3 +1,8 @@
+'use client'
+
+import { useInView } from '@/registry/hooks/use-in-view'
+import { useEffect, useState } from 'react'
+
 import { cn } from '@/lib/utils'
 
 export interface ProgressBarProps {
@@ -11,17 +16,33 @@ export const ProgressBar = ({
   percentage,
   fillClassName,
 }: ProgressBarProps) => {
+  const [width, setWidth] = useState(0)
+  const { isInView, ref } = useInView()
+
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
+  useEffect(() => {
+    if (isInView) {
+      // Small delay to ensure the initial render happens at 0
+      const timer = requestAnimationFrame(() => {
+        setWidth(normalized)
+      })
+      return () => cancelAnimationFrame(timer)
+    }
+  }, [isInView, normalized])
+
   return (
-    <div className={cn('h-2 w-full rounded-full bg-muted', className)}>
+    <div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      className={cn('h-2 w-full rounded-full bg-muted', className)}
+    >
       <div
         className={cn(
-          'h-full rounded-full bg-primary transition-all duration-500 ease-out',
+          'h-full rounded-full bg-primary transition-width! duration-1000 ease-out-expo',
           fillClassName,
         )}
-        style={{ width: `${normalized}%` }}
+        style={{ width: `${width}%` }}
       />
     </div>
   )
@@ -42,23 +63,36 @@ export const SegmentedProgressBar = ({
   segments,
   total,
 }: SegmentedProgressBarProps) => {
+  const [animatedMultiplier, setAnimatedMultiplier] = useState(0)
+  const { isInView, ref } = useInView()
   const safeTotal = total > 0 ? total : 1
+
+  useEffect(() => {
+    if (isInView) {
+      // Small delay to ensure the initial render happens at 0
+      const timer = requestAnimationFrame(() => {
+        setAnimatedMultiplier(1)
+      })
+      return () => cancelAnimationFrame(timer)
+    }
+  }, [isInView])
 
   return (
     <div
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={cn('flex h-2 w-full overflow-hidden rounded-full bg-muted', className)}
     >
       {segments.map((segment, index) => {
         const percentage = (segment.value / safeTotal) * 100
+        const animatedWidth = Math.max(0, percentage) * animatedMultiplier
         return (
           <div
             key={segment.label || index}
-            className='h-full transition-all duration-500 ease-out first:rounded-l-full last:rounded-r-full'
+            className='h-full transition-width! duration-1000 ease-out-expo first:rounded-l-full last:rounded-r-full'
             style={{
-              width: `${Math.max(0, percentage)}%`,
+              width: `${animatedWidth}%`,
               backgroundColor: segment.color || 'hsl(var(--primary))',
             }}
-            title={segment.label ? `${segment.label}: ${segment.value}` : undefined}
           />
         )
       })}

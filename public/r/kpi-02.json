@@ -3,13 +3,14 @@
   "name": "kpi-02",
   "registryDependencies": [
     "card",
+    "https://dashboardblocks.com/r/animated-number.json",
     "https://dashboardblocks.com/r/kpi.json",
     "https://dashboardblocks.com/r/trend.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
-      "content": "import { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI2 = ({\n  change = '+12.5%',\n  title = 'Active Users',\n  trend = 'up',\n  value = '2,420',\n}: {\n  change?: string\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: string\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <Trend value={change} trend={trend} variant='badge' />\n        </div>\n        <KPIValue>{value}</KPIValue>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\nimport { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI2 = ({\n  change = 12.5,\n  title = 'Active Users',\n  trend = 'up',\n  value = 2420,\n}: {\n  change?: number\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: number\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <Trend\n            value={\n              <AnimatedNumber\n                value={change}\n                formatter={(value) => `+${value.toLocaleString()}%`}\n              />\n            }\n            trend={trend}\n            variant='badge'\n          />\n        </div>\n        <KPIValue>\n          <AnimatedNumber value={value} />\n        </KPIValue>\n      </CardContent>\n    </Card>\n  )\n}\n",
       "type": "registry:component"
     }
   ],
