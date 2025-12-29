@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useInView } from '@/registry/hooks/use-in-view'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 type EasingFunction = (t: number) => number
 
@@ -61,13 +62,13 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
     threshold = 1.0,
   } = options
 
-  const ref = useRef<HTMLElement | null>(null)
   const [value, setValue] = useState(from)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [isInView, setIsInView] = useState(false)
   const hasAnimated = useRef(false)
   const animationRef = useRef<number | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const { isInView, ref } = useInView({ rootMargin, threshold })
 
   const decimals = to.toString().split('.')[1]?.length || 0
 
@@ -127,33 +128,25 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
     }
   }, [animate, delay])
 
-  // Intersection Observer effect
-  useLayoutEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const inView = entry.isIntersecting
-        setIsInView(inView)
-
-        if (inView) {
-          if (!hasAnimated.current || reanimateOnView) {
-            if (reanimateOnView) {
-              setValue(from)
-            }
-            startAnimation()
-            hasAnimated.current = true
+  // Trigger animation when element comes into view
+  useEffect(() => {
+    if (isInView) {
+      if (!hasAnimated.current || reanimateOnView) {
+        // Use requestAnimationFrame to defer state updates and avoid lint errors
+        requestAnimationFrame(() => {
+          if (reanimateOnView) {
+            setValue(from)
           }
-        }
-      },
-      { threshold, rootMargin },
-    )
+          startAnimation()
+          hasAnimated.current = true
+        })
+      }
+    }
+  }, [isInView, reanimateOnView, from, startAnimation])
 
-    observer.observe(element)
-
+  // Cleanup animations and timeouts on unmount
+  useEffect(() => {
     return () => {
-      observer.disconnect()
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
@@ -161,7 +154,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [from, reanimateOnView, rootMargin, startAnimation, threshold])
+  }, [])
 
   return {
     animate,

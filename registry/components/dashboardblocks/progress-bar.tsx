@@ -1,3 +1,8 @@
+'use client'
+
+import { useInView } from '@/registry/hooks/use-in-view'
+import { useEffect, useState } from 'react'
+
 import { cn } from '@/lib/utils'
 
 export interface ProgressBarProps {
@@ -11,17 +16,33 @@ export const ProgressBar = ({
   percentage,
   fillClassName,
 }: ProgressBarProps) => {
+  const [width, setWidth] = useState(0)
+  const { isInView, ref } = useInView()
+
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
+  useEffect(() => {
+    if (isInView) {
+      // Small delay to ensure the initial render happens at 0
+      const timer = requestAnimationFrame(() => {
+        setWidth(normalized)
+      })
+      return () => cancelAnimationFrame(timer)
+    }
+  }, [isInView, normalized])
+
   return (
-    <div className={cn('h-2 w-full rounded-full bg-muted', className)}>
+    <div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      className={cn('h-2 w-full rounded-full bg-muted', className)}
+    >
       <div
         className={cn(
-          'w-0 h-full rounded-full bg-primary transition-width! duration-500 ease-out',
+          'h-full rounded-full bg-primary transition-width! duration-1000 ease-out-expo',
           fillClassName,
         )}
-        style={{ width: `${normalized}%` }}
+        style={{ width: `${width}%` }}
       />
     </div>
   )

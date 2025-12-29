@@ -85,7 +85,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Progress Bar',
     description: 'A progress bar component.',
-    registryDependencies: ['progress'],
+    registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
         path: 'registry/components/dashboardblocks/progress-bar.tsx',
