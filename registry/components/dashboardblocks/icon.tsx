@@ -5,13 +5,19 @@ import { cn } from '@/lib/utils'
 
 const iconVariants = cva('flex items-center justify-center bg-muted aspect-square', {
   variants: {
+    variant: {
+      default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+      destructive:
+        'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+      outline:
+        'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+      ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+      link: 'text-primary underline-offset-4 hover:underline',
+    },
     shape: {
       square: 'rounded-md',
       circle: 'rounded-full',
-    },
-    bordered: {
-      true: 'border',
-      false: '',
     },
     size: {
       default: 'size-12 p-3',
@@ -20,8 +26,8 @@ const iconVariants = cva('flex items-center justify-center bg-muted aspect-squar
     },
   },
   defaultVariants: {
+    variant: 'default',
     shape: 'square',
-    bordered: false,
     size: 'default',
   },
 })
@@ -33,13 +39,13 @@ interface IconProps extends VariantProps<typeof iconVariants> {
 
 function Icon({
   className,
+  variant = 'default',
   icon: IconComponent,
   shape = 'square',
-  bordered = false,
   size,
 }: IconProps) {
   return (
-    <div className={cn(iconVariants({ shape, bordered, size }), className)}>
+    <div className={cn(iconVariants({ variant, shape, size }), className)}>
       <IconComponent />
     </div>
   )

@@ -15,6 +15,18 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'animated-wave',
+    type: 'registry:component',
+    title: 'Animated Wave',
+    description: 'An animated wave component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/animated-wave.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'chart',
     type: 'registry:component',
     title: 'Chart',
@@ -87,6 +99,18 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/trend.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'usage-meter',
+    type: 'registry:component',
+    title: 'Usage Meter',
+    description: 'A usage meter component.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/usage-meter.tsx',
         type: 'registry:component',
       },
     ],

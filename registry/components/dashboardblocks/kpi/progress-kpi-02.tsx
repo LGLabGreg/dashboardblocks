@@ -2,18 +2,23 @@
 
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
-import {
-  ProgressBar,
-  type ProgressBarProps,
-} from '@/registry/components/dashboardblocks/progress-bar'
+import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { ClipboardList } from 'lucide-react'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
+
+interface ProgressKPIBar {
+  label: string
+  target: string
+  percentage: number
+  fillClassName?: string
+  trackClassName?: string
+}
 
 interface ProgressKPI2Props {
   title?: string
   value?: string
-  progressBars?: ProgressBarProps[]
+  progressBars?: ProgressKPIBar[]
 }
 
 export const ProgressKPI2 = ({
@@ -24,19 +29,19 @@ export const ProgressKPI2 = ({
       label: 'completed',
       target: '51 tasks',
       percentage: 59,
-      progressClassName: '[&>div]:bg-green-600',
+      fillClassName: 'bg-green-600',
     },
     {
       label: 'in progress',
       target: '26 tasks',
       percentage: 30,
-      progressClassName: '[&>div]:bg-blue-600',
+      fillClassName: 'bg-blue-600',
     },
     {
       label: 'not started',
       target: '10 tasks',
       percentage: 11,
-      progressClassName: '[&>div]:bg-red-600',
+      fillClassName: 'bg-red-600',
     },
   ],
 }: ProgressKPI2Props) => {
@@ -44,14 +49,34 @@ export const ProgressKPI2 = ({
     <Card>
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
-          <CardDescription>{title}</CardDescription>
-          <Icon icon={ClipboardList} />
+          <CardTitle>{title}</CardTitle>
+          <Icon icon={ClipboardList} variant='secondary' />
         </div>
         <KPIValue>{value}</KPIValue>
-        <div className='space-y-3 mt-5'>
-          {progressBars.map((bar) => (
-            <ProgressBar key={bar.label} {...bar} />
-          ))}
+        <div className='mt-5 space-y-3'>
+          {progressBars.map((bar) => {
+            const safePercentage = Number.isFinite(bar.percentage) ? bar.percentage : 0
+            const normalized = Math.min(100, Math.max(0, safePercentage))
+
+            return (
+              <div key={bar.label} className='space-y-1.5 text-sm text-muted-foreground'>
+                <div className='flex items-center justify-between'>
+                  <span>
+                    <span className='font-semibold text-foreground'>
+                      {Math.round(normalized)}%
+                    </span>{' '}
+                    {bar.label}
+                  </span>
+                  <span className='font-semibold text-foreground'>{bar.target}</span>
+                </div>
+                <ProgressBar
+                  className={bar.trackClassName}
+                  fillClassName={bar.fillClassName}
+                  percentage={bar.percentage}
+                />
+              </div>
+            )
+          })}
         </div>
       </CardContent>
     </Card>

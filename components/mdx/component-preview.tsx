@@ -1,5 +1,6 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
+import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { codeToHtml } from 'shiki'
@@ -9,6 +10,7 @@ import { ComponentPreviewHighlighted } from '@/components/component-preview-high
 const exampleComponents = {
   ...kpiComponents,
   ...activityFeedComponents,
+  ...usageMeterComponents,
 }
 
 interface RegistryItem {

@@ -1,5 +1,7 @@
 import { type Registry } from 'shadcn/schema'
 
+import { registryUrl } from '@/lib/config'
+
 export const examples: Registry['items'] = [
   {
     name: 'activity-feed-01',
@@ -9,8 +11,8 @@ export const examples: Registry['items'] = [
       'avatar',
       'badge',
       'card',
-      'https://dashboardblocks.com/r/activity-feed.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('activity-feed'),
+      registryUrl('icon'),
     ],
     files: [
       {
@@ -26,8 +28,8 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'card',
-      'https://dashboardblocks.com/r/activity-feed.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('activity-feed'),
+      registryUrl('icon'),
     ],
     files: [
       {
@@ -40,12 +42,7 @@ export const examples: Registry['items'] = [
     name: 'activity-feed-03',
     type: 'registry:component',
     dependencies: ['lucide-react'],
-    registryDependencies: [
-      'avatar',
-      'button',
-      'card',
-      'https://dashboardblocks.com/r/activity-feed.json',
-    ],
+    registryDependencies: ['avatar', 'button', 'card', registryUrl('activity-feed')],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx',
@@ -61,8 +58,8 @@ export const examples: Registry['items'] = [
       'button',
       'card',
       'dropdown-menu',
-      'https://dashboardblocks.com/r/activity-feed.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('activity-feed'),
+      registryUrl('icon'),
     ],
     files: [
       {
@@ -80,8 +77,8 @@ export const examples: Registry['items'] = [
       'badge',
       'button',
       'card',
-      'https://dashboardblocks.com/r/activity-feed.json',
-      'https://dashboardblocks.com/r/icon.json',
+      registryUrl('activity-feed'),
+      registryUrl('icon'),
     ],
     files: [
       {
