@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-in-view",
+  "title": "Use In View",
+  "description": "A hook that tracks whether an element is visible in the viewport using IntersectionObserver.",
+  "files": [
+    {
+      "path": "registry/hooks/use-in-view.tsx",
+      "content": "'use client'\n\nimport { useLayoutEffect, useRef, useState } from 'react'\n\ninterface UseInViewOptions {\n  /**\n   * Intersection Observer threshold (0-1)\n   * @default 1.0\n   */\n  threshold?: number\n  /**\n   * Intersection Observer root margin\n   * @default '0px'\n   */\n  rootMargin?: string\n}\n\n/**\n * A hook that tracks whether an element is visible in the viewport using IntersectionObserver.\n * @returns An object containing a ref to attach to the element and an isInView boolean state.\n */\nexport function useInView(options: UseInViewOptions = {}) {\n  const { rootMargin = '0px', threshold = 1.0 } = options\n\n  const ref = useRef<HTMLElement | null>(null)\n  const [isInView, setIsInView] = useState(false)\n\n  useLayoutEffect(() => {\n    const element = ref.current\n    if (!element) return\n\n    const observer = new IntersectionObserver(\n      ([entry]) => {\n        setIsInView(entry.isIntersecting)\n      },\n      { threshold, rootMargin },\n    )\n\n    observer.observe(element)\n\n    return () => {\n      observer.disconnect()\n    }\n  }, [rootMargin, threshold])\n\n  return {\n    isInView,\n    ref,\n  }\n}\n",
+      "type": "registry:hook"
+    }
+  ],
+  "type": "registry:hook"
+}

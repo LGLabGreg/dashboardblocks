@@ -3,13 +3,14 @@
   "name": "kpi-01",
   "registryDependencies": [
     "card",
+    "https://dashboardblocks.com/r/animated-number.json",
     "https://dashboardblocks.com/r/kpi.json",
     "https://dashboardblocks.com/r/trend.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-01.tsx",
-      "content": "import { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI1 = ({\n  change = '+20.1%',\n  title = 'Total Revenue',\n  trend = 'up',\n  value = '$45,231.89',\n}: {\n  change?: string\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: string\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>\n          <KPIValue>{value}</KPIValue>\n          <Trend value={change} trend={trend} />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\nimport { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI1 = ({\n  change = 20.1,\n  title = 'Total Revenue',\n  trend = 'up',\n  value = 45231,\n}: {\n  change?: number\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: number\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>\n          <KPIValue>\n            <AnimatedNumber\n              value={value}\n              formatter={(value) => `$${value.toLocaleString()}`}\n            />\n          </KPIValue>\n          <Trend\n            value={\n              <AnimatedNumber\n                value={change}\n                formatter={(value) => `+${value.toLocaleString()}%`}\n              />\n            }\n            trend={trend}\n          />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
       "type": "registry:component"
     }
   ],

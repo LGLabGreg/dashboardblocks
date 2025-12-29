@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "animated-number",
+  "title": "Animated Number",
+  "description": "An animated number component.",
+  "registryDependencies": ["https://dashboardblocks.com/r/use-animated-number.json"],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/animated-number.tsx",
+      "content": "'use client'\n\nimport { useAnimatedNumber } from '@/registry/hooks/use-animated-number'\nimport { ReactNode } from 'react'\n\ninterface AnimatedNumberProps {\n  /**\n   * The target value to animate to\n   */\n  value: number\n  /**\n   * Duration of the animation in milliseconds\n   * @default 1000\n   */\n  duration?: number\n  /**\n   * Easing function for the animation\n   * @default 'easeOut'\n   */\n  easing?: 'linear' | 'easeOut' | 'easeIn' | 'easeInOut' | 'spring'\n  /**\n   * Starting value for the animation\n   * @default 0\n   */\n  from?: number\n  /**\n   * Delay before starting animation in milliseconds\n   * @default 0\n   */\n  delay?: number\n  /**\n   * Custom formatter function\n   */\n  formatter?: (value: number) => ReactNode\n  /**\n   * Additional className for the wrapper span\n   */\n  className?: string\n}\n\n/**\n * A component that animates a number from a start value to an end value,\n * with viewport detection to only animate when visible.\n */\nexport function AnimatedNumber({\n  className,\n  delay = 0,\n  duration = 1000,\n  easing = 'easeOut',\n  formatter,\n  from = 0,\n  value: targetValue,\n}: AnimatedNumberProps) {\n  const { ref, value } = useAnimatedNumber(targetValue, {\n    delay,\n    duration,\n    easing,\n    from,\n  })\n\n  const displayValue = formatter ? formatter(value) : value.toLocaleString()\n\n  return (\n    <span ref={ref as React.RefObject<HTMLSpanElement>} className={className}>\n      {displayValue}\n    </span>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}
