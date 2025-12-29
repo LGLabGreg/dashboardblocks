@@ -5,8 +5,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "http://localhost:3000/r/animated-wave.json",
-    "http://localhost:3000/r/icon.json"
+    "https://dashboardblocks.com/r/animated-wave.json",
+    "https://dashboardblocks.com/r/icon.json"
   ],
   "files": [
     {
