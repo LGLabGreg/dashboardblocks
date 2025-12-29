@@ -42,3 +42,4 @@ jobs:
         with:
           commit_message: 'chore: update registry.json'
           file_pattern: registry.json public/r/*.json
+          commit_options: '--allow-empty'
