@@ -98,6 +98,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Ring',
     description: 'A ring component.',
+    registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
         path: 'registry/components/dashboardblocks/ring.tsx',

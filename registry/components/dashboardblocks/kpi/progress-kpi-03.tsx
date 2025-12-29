@@ -49,7 +49,11 @@ export const ProgressKPI3 = ({
               percentage={percentage}
               ringColor='var(--color-chart-1)'
             >
-              <span className='text-lg font-bold'>{Math.round(percentage)}%</span>
+              <AnimatedNumber
+                className='text-lg font-bold'
+                value={percentage}
+                formatter={(value) => `${value.toLocaleString()}%`}
+              />
             </Ring>
           </div>
         </div>

@@ -69,7 +69,10 @@ export const ProgressKPI2 = ({
                 <div className='flex items-center justify-between'>
                   <span>
                     <span className='font-semibold text-foreground'>
-                      {Math.round(normalized)}%
+                      <AnimatedNumber
+                        value={normalized}
+                        formatter={(value) => `${value.toLocaleString()}%`}
+                      />
                     </span>{' '}
                     {bar.label}
                   </span>

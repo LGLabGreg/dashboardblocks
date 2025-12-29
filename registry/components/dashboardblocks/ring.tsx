@@ -1,4 +1,7 @@
-import { ReactNode } from 'react'
+'use client'
+
+import { useInView } from '@/registry/hooks/use-in-view'
+import { type ReactNode, type RefObject, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -23,13 +26,24 @@ export const Ring = ({
   ringTrackColor = 'var(--color-muted)',
   strokeWidth = 12,
 }: RingProps) => {
-  const safePercentage = Number.isFinite(percentage) ? percentage : 0
-  const normalized = Math.min(100, Math.max(0, safePercentage))
+  const [value, setValue] = useState(0)
+  const { isInView, ref } = useInView()
   const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (normalized / 100) * circumference
+  const strokeDashoffset = circumference - (value / 100) * circumference
+
+  useEffect(() => {
+    if (isInView) {
+      // Small delay to ensure the initial render happens at 0
+      const timer = requestAnimationFrame(() => {
+        setValue(percentage)
+      })
+      return () => cancelAnimationFrame(timer)
+    }
+  }, [isInView, percentage])
 
   return (
     <div
+      ref={ref as RefObject<HTMLDivElement>}
       className={cn('relative shrink-0', className)}
       aria-label={ariaLabel}
       role={ariaLabel ? 'img' : undefined}
@@ -53,14 +67,10 @@ export const Ring = ({
           strokeLinecap='round'
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
-          className='transition-all duration-500 ease-out'
+          className='transition-all duration-1000 ease-out-expo'
         />
       </svg>
-      <div className='absolute inset-0 flex items-center justify-center'>
-        {children ?? (
-          <span className='text-sm font-semibold'>{Math.round(normalized)}%</span>
-        )}
-      </div>
+      <div className='absolute inset-0 flex items-center justify-center'>{children}</div>
     </div>
   )
 }
