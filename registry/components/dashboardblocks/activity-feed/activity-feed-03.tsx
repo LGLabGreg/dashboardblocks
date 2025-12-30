@@ -10,39 +10,59 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
-const activities = [
-  {
-    id: 1,
-    user: { name: 'Sarah Chen', avatar: '/images/women.jpg', initials: 'SC' },
-    action: 'commented on Design System v2',
-    time: '2m',
-  },
-  {
-    id: 2,
-    user: { name: 'Michael Torres', avatar: '/images/man.jpg', initials: 'MT' },
-    action: 'assigned you a task',
-    time: '15m',
-  },
-  {
-    id: 3,
-    user: { name: 'Emma Wilson', avatar: '/images/women.jpg', initials: 'EW' },
-    action: 'scheduled Q1 Planning Review',
-    time: '1h',
-  },
-  {
-    id: 4,
-    user: { name: 'Alex Kumar', avatar: '/images/man.jpg', initials: 'AK' },
-    action: 'completed Sprint 24',
-    time: '2h',
-  },
-]
+interface UserActivity {
+  id: number
+  user: {
+    name: string
+    avatar: string
+    initials: string
+  }
+  action: string
+  time: string
+}
 
-export function ActivityFeed03() {
+interface ActivityFeed03Props {
+  title: string
+  activities: UserActivity[]
+}
+
+const exampleProps: ActivityFeed03Props = {
+  title: 'Recent Activity',
+  activities: [
+    {
+      id: 1,
+      user: { name: 'Sarah Chen', avatar: '/images/women.jpg', initials: 'SC' },
+      action: 'commented on Design System v2',
+      time: '2m',
+    },
+    {
+      id: 2,
+      user: { name: 'Michael Torres', avatar: '/images/man.jpg', initials: 'MT' },
+      action: 'assigned you a task',
+      time: '15m',
+    },
+    {
+      id: 3,
+      user: { name: 'Emma Wilson', avatar: '/images/women.jpg', initials: 'EW' },
+      action: 'scheduled Q1 Planning Review',
+      time: '1h',
+    },
+    {
+      id: 4,
+      user: { name: 'Alex Kumar', avatar: '/images/man.jpg', initials: 'AK' },
+      action: 'completed Sprint 24',
+      time: '2h',
+    },
+  ],
+}
+
+const ActivityFeed03 = (props: ActivityFeed03Props) => {
+  const { title, activities } = props
   return (
     <Card>
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
-          Recent Activity
+          {title}
           <Button variant='outline' size='sm'>
             View all
             <ArrowRight />
@@ -79,4 +99,11 @@ export function ActivityFeed03() {
       </CardContent>
     </Card>
   )
+}
+
+export {
+  ActivityFeed03,
+  exampleProps as activityFeed03ExampleProps,
+  type ActivityFeed03Props,
+  type UserActivity,
 }

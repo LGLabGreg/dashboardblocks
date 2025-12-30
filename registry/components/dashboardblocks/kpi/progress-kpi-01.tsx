@@ -7,41 +7,34 @@ import { Trend } from '@/registry/components/dashboardblocks/trend'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-export const ProgressKPI1 = ({
-  change = 7.5,
-  percentage = 55,
-  title = 'Revenue',
-  trend = 'up',
-  value = 87500,
-}: {
-  change?: number
-  percentage?: number
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
-} = {}) => {
+interface ProgressKPI1Props {
+  trend: number
+  percentage: number
+  title: string
+  value: number
+}
+
+const exampleProps: ProgressKPI1Props = {
+  trend: 7.5,
+  percentage: 55,
+  title: 'Revenue',
+  value: 87500,
+}
+
+const ProgressKPI1 = (props: ProgressKPI1Props) => {
+  const { trend, percentage, title, value } = props
   return (
     <Card>
       <CardContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
-          <Trend
-            value={
-              <AnimatedNumber
-                value={change}
-                formatter={(value) => `${value.toLocaleString()}%`}
-              />
-            }
-            trend={trend}
-            variant='badge'
-          />
+          <Trend trend={trend} variant='badge' />
         </div>
-        <KPIValue>
-          <AnimatedNumber
-            value={value}
-            formatter={(value) => `$${value.toLocaleString()}`}
-          />
-        </KPIValue>
+        <KPIValue
+          value={value}
+          formatter={(value) => `$${value.toLocaleString()}`}
+          animated
+        />
         <div className='mt-4 space-y-1 text-sm text-muted-foreground'>
           <div className='flex items-center justify-between'>
             <span>
@@ -61,3 +54,5 @@ export const ProgressKPI1 = ({
     </Card>
   )
 }
+
+export { ProgressKPI1, exampleProps as progressKpi1ExampleProps, type ProgressKPI1Props }

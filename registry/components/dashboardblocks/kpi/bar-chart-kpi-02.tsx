@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -8,18 +7,17 @@ import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-interface BarChartKPIProps {
-  bars?: BarProps[]
-  change?: number
-  data?: unknown[]
-  height?: number
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface BarChartKPI2Props {
+  bars: BarProps[]
+  trend: number
+  data: unknown[]
+  height: number
+  title: string
+  value: number
 }
 
-export const BarChartKPI2 = ({
-  bars = [
+const exampleProps: BarChartKPI2Props = {
+  bars: [
     {
       dataKey: 'value',
       fill: 'var(--color-chart-1)',
@@ -29,8 +27,8 @@ export const BarChartKPI2 = ({
       fill: 'var(--color-chart-2)',
     },
   ],
-  change = 7.5,
-  data = [
+  trend: 7.5,
+  data: [
     {
       label: 'Monday',
       value: 32,
@@ -95,37 +93,31 @@ export const BarChartKPI2 = ({
       },
     },
   ],
-  height = 160,
-  title = 'Revenue',
-  trend = 'up',
-  value = 87500,
-}: BarChartKPIProps) => {
+  height: 160,
+  title: 'Revenue',
+  value: 87500,
+}
+
+const BarChartKPI2 = (props: BarChartKPI2Props) => {
+  const { bars, trend, data, height, title, value } = props
   return (
     <Card>
       <CardContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `$${value.toLocaleString()}`}
-            />
-          </KPIValue>
+          <KPIValue
+            value={value}
+            formatter={(value) => `$${value.toLocaleString()}`}
+            animated
+          />
         </div>
         <TinyBarChart data={data} bars={bars} height={height} />
       </CardContent>
     </Card>
   )
 }
+
+export { BarChartKPI2, exampleProps as barChartKPI2ExampleProps, type BarChartKPI2Props }

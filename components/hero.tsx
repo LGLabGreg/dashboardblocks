@@ -1,4 +1,7 @@
-import { BarChartKPI2 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
+import {
+  BarChartKPI2,
+  barChartKPI2ExampleProps,
+} from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
 import { ArrowRight, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 
@@ -43,7 +46,7 @@ export function Hero() {
         </Button>
       </div>
       <div className='w-full max-w-md text-left'>
-        <BarChartKPI2 />
+        <BarChartKPI2 {...barChartKPI2ExampleProps} />
       </div>
     </section>
   )

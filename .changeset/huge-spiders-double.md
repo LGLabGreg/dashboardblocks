@@ -1,0 +1,5 @@
+---
+'dashboardblocks': minor
+---
+
+Improve KPIs

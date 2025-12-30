@@ -1,8 +1,10 @@
+import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
-import { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
+
+type TrendDirection = 'up' | 'down' | 'neutral'
 
 const trendVariants = cva('', {
   variants: {
@@ -12,7 +14,7 @@ const trendVariants = cva('', {
       badge:
         'flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold',
     },
-    trend: {
+    direction: {
       up: '',
       down: '',
       neutral: '',
@@ -21,93 +23,116 @@ const trendVariants = cva('', {
   compoundVariants: [
     {
       variant: 'default',
-      trend: 'up',
+      direction: 'up',
       class: 'text-green-600',
     },
     {
       variant: 'default',
-      trend: 'down',
+      direction: 'down',
       class: 'text-red-600',
     },
     {
       variant: 'default',
-      trend: 'neutral',
+      direction: 'neutral',
       class: 'text-gray-500',
     },
     {
       variant: 'icon-only',
-      trend: 'up',
+      direction: 'up',
       class: 'text-green-600',
     },
     {
       variant: 'icon-only',
-      trend: 'down',
+      direction: 'down',
       class: 'text-red-600',
     },
     {
       variant: 'icon-only',
-      trend: 'neutral',
+      direction: 'neutral',
       class: 'text-gray-500',
     },
     {
       variant: 'badge',
-      trend: 'up',
+      direction: 'up',
       class: 'bg-green-100 text-green-800 border-green-200',
     },
     {
       variant: 'badge',
-      trend: 'down',
+      direction: 'down',
       class: 'bg-red-100 text-red-800 border-red-200',
     },
     {
       variant: 'badge',
-      trend: 'neutral',
+      direction: 'neutral',
       class: 'bg-gray-100 text-gray-800 border-gray-200',
     },
   ],
   defaultVariants: {
     variant: 'default',
-    trend: 'neutral',
+    direction: 'neutral',
   },
 })
 
-interface TrendProps extends VariantProps<typeof trendVariants> {
+interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction'> {
+  animated?: boolean
   className?: string
+  formatter?: (value: number) => string
+  trend: number
   trendIcon?: 'arrow' | 'trend'
-  value: ReactNode
+}
+
+const defaultFormatter = (value: number): string => {
+  const prefix = value > 0 ? '+' : ''
+  return `${prefix}${value.toLocaleString()}%`
+}
+
+function getTrendDirection(value: number): TrendDirection {
+  if (value > 0) return 'up'
+  if (value < 0) return 'down'
+  return 'neutral'
 }
 
 function Trend({
+  animated = false,
   className,
-  trend = 'neutral',
+  formatter = defaultFormatter,
+  trend,
   trendIcon = 'trend',
-  value,
   variant = 'default',
 }: TrendProps) {
-  const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus
-  const ArrowIcon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Minus
+  const direction = getTrendDirection(trend)
+  const TrendIcon =
+    direction === 'up' ? TrendingUp : direction === 'down' ? TrendingDown : Minus
+  const ArrowIcon =
+    direction === 'up' ? ArrowUp : direction === 'down' ? ArrowDown : Minus
   const Icon = trendIcon === 'arrow' ? ArrowIcon : TrendIcon
 
+  const displayValue = animated ? (
+    <AnimatedNumber value={trend} formatter={formatter} />
+  ) : (
+    formatter(trend)
+  )
+
   if (variant === 'icon-only') {
-    return <Icon className={cn(trendVariants({ variant, trend }), className)} />
+    return <Icon className={cn(trendVariants({ variant, direction }), className)} />
   }
 
   if (variant === 'badge') {
     return (
-      <div className={cn(trendVariants({ variant, trend }), className)}>
+      <div className={cn(trendVariants({ variant, direction }), className)}>
         <Icon className='h-4 w-4' />
-        {value}
+        {displayValue}
       </div>
     )
   }
 
   return (
-    <div className={cn(trendVariants({ variant, trend }), className)}>
+    <div className={cn(trendVariants({ variant, direction }), className)}>
       <Icon className='mr-1 h-4 w-4' />
-      {value}
+      {displayValue}
     </div>
   )
 }
 
-export { Trend, trendVariants }
-export type { TrendProps }
+export { Trend, trendVariants, getTrendDirection }
+export type { TrendProps, TrendDirection }

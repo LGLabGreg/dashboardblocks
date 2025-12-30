@@ -18,49 +18,60 @@ import {
 
 type EventStatus = 'error' | 'info' | 'progress' | 'success'
 
-const events: {
-  description: string
+interface TimelineEvent {
   id: number
-  status: EventStatus
-  time: string
   title: string
-}[] = [
-  {
-    id: 1,
-    title: 'Deployment Successful',
-    description: 'Production v2.4.1 deployed to all regions',
-    time: '10:32 AM',
-    status: 'success',
-  },
-  {
-    id: 2,
-    title: 'Build Started',
-    description: 'Building production bundle...',
-    time: '10:30 AM',
-    status: 'progress',
-  },
-  {
-    id: 3,
-    title: 'Critical Alert',
-    description: 'CPU usage exceeded 90% threshold',
-    time: '9:15 AM',
-    status: 'error',
-  },
-  {
-    id: 4,
-    title: 'Performance Optimized',
-    description: 'Cache hit rate improved by 23%',
-    time: '8:45 AM',
-    status: 'info',
-  },
-]
+  description: string
+  time: string
+  status: EventStatus
+}
 
-export function ActivityFeed04() {
+interface ActivityFeed04Props {
+  title: string
+  events: TimelineEvent[]
+}
+
+const exampleProps: ActivityFeed04Props = {
+  title: 'Recent Deployments',
+  events: [
+    {
+      id: 1,
+      title: 'Deployment Successful',
+      description: 'Production v2.4.1 deployed to all regions',
+      time: '10:32 AM',
+      status: 'success',
+    },
+    {
+      id: 2,
+      title: 'Build Started',
+      description: 'Building production bundle...',
+      time: '10:30 AM',
+      status: 'progress',
+    },
+    {
+      id: 3,
+      title: 'Critical Alert',
+      description: 'CPU usage exceeded 90% threshold',
+      time: '9:15 AM',
+      status: 'error',
+    },
+    {
+      id: 4,
+      title: 'Performance Optimized',
+      description: 'Cache hit rate improved by 23%',
+      time: '8:45 AM',
+      status: 'info',
+    },
+  ],
+}
+
+const ActivityFeed04 = (props: ActivityFeed04Props) => {
+  const { title, events } = props
   return (
     <Card>
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
-          Recent Deployments
+          {title}
           <Button variant='outline' size='sm'>
             View all
             <ArrowRight />
@@ -102,4 +113,11 @@ export function ActivityFeed04() {
       </CardContent>
     </Card>
   )
+}
+
+export {
+  ActivityFeed04,
+  exampleProps as activityFeed04ExampleProps,
+  type ActivityFeed04Props,
+  type TimelineEvent,
 }

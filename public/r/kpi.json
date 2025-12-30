@@ -6,7 +6,7 @@
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi.tsx",
-      "content": "import { ReactNode } from 'react'\n\nexport const KPIValue = ({\n  children,\n  className = '',\n}: {\n  children: ReactNode\n  className?: string\n}) => {\n  return <div className={`text-3xl font-bold ${className}`}>{children}</div>\n}\n",
+      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\n\ninterface KPIValueProps {\n  animated?: boolean\n  className?: string\n  formatter?: (value: number) => string\n  value: number\n}\n\nconst defaultFormatter = (value: number): string => value.toLocaleString()\n\nexport const KPIValue = ({\n  animated = false,\n  className = '',\n  formatter = defaultFormatter,\n  value,\n}: KPIValueProps) => {\n  const displayValue = animated ? (\n    <AnimatedNumber value={value} formatter={formatter} />\n  ) : (\n    formatter(value)\n  )\n\n  return <div className={`text-3xl font-bold ${className}`}>{displayValue}</div>\n}\n\nexport type { KPIValueProps }\n",
       "type": "registry:component"
     }
   ],

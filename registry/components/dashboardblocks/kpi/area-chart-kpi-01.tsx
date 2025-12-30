@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -8,19 +7,18 @@ import { AreaProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-interface AreaChartKPIProps {
-  change?: number
-  data?: unknown[]
-  height?: number
-  areas?: AreaProps[]
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface AreaChartKPI1Props {
+  trend: number
+  data: unknown[]
+  height: number
+  areas: AreaProps[]
+  title: string
+  value: number
 }
 
-export const AreaChartKPI1 = ({
-  change = 3.7,
-  data = [
+const exampleProps: AreaChartKPI1Props = {
+  trend: 3.7,
+  data: [
     {
       label: 'Monday',
       revenue: 4200,
@@ -85,8 +83,8 @@ export const AreaChartKPI1 = ({
       },
     },
   ],
-  height = 120,
-  areas = [
+  height: 120,
+  areas: [
     {
       dataKey: 'revenue',
       fill: 'var(--color-chart-1)',
@@ -98,36 +96,34 @@ export const AreaChartKPI1 = ({
       stroke: 'var(--color-chart-2)',
     },
   ],
-  title = 'Profit Margin',
-  trend = 'up',
-  value = 42.3,
-}: AreaChartKPIProps) => {
+  title: 'Profit Margin',
+  value: 42.3,
+}
+
+const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
+  const { trend, data, height, areas, title, value } = props
   return (
     <Card>
       <CardContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `${value.toLocaleString()}%`}
-            />
-          </KPIValue>
+          <KPIValue
+            value={value}
+            formatter={(value) => `${value.toLocaleString()}%`}
+            animated
+          />
         </div>
         <TinyAreaChart data={data} areas={areas} height={height} />
       </CardContent>
     </Card>
   )
+}
+
+export {
+  AreaChartKPI1,
+  exampleProps as areaChartKpi1ExampleProps,
+  type AreaChartKPI1Props,
 }

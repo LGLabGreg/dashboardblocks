@@ -12,17 +12,22 @@ import { Activity } from 'lucide-react'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter1 = ({
-  limit = 10000,
-  title = 'API Requests',
-  unit = 'requests',
-  used = 7234,
-}: {
-  limit?: number
-  title?: string
-  unit?: string
-  used?: number
-} = {}) => {
+interface UsageMeter1Props {
+  limit: number
+  title: string
+  unit: string
+  used: number
+}
+
+const exampleProps: UsageMeter1Props = {
+  limit: 10000,
+  title: 'API Requests',
+  unit: 'requests',
+  used: 7234,
+}
+
+const UsageMeter1 = (props: UsageMeter1Props) => {
+  const { limit, title, unit, used } = props
   const percentage = (used / limit) * 100
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
@@ -64,3 +69,5 @@ export const UsageMeter1 = ({
     </Card>
   )
 }
+
+export { UsageMeter1, exampleProps as usageMeter1ExampleProps, type UsageMeter1Props }

@@ -7,21 +7,25 @@ import { Database, LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter7 = ({
-  icon: IconComponent = Database,
-  limit = 1500,
-  onUpgrade,
-  title = 'Storage',
-  unit = 'MB',
-  used = 430,
-}: {
-  icon?: LucideIcon
-  limit?: number
+interface UsageMeter7Props {
+  icon: LucideIcon
+  limit: number
   onUpgrade?: () => void
-  title?: string
-  unit?: string
-  used?: number
-} = {}) => {
+  title: string
+  unit: string
+  used: number
+}
+
+const exampleProps: UsageMeter7Props = {
+  icon: Database,
+  limit: 1500,
+  title: 'Storage',
+  unit: 'MB',
+  used: 430,
+}
+
+const UsageMeter7 = (props: UsageMeter7Props) => {
+  const { icon: IconComponent, limit, onUpgrade, title, unit, used } = props
   const remaining = limit - used
 
   return (
@@ -59,3 +63,5 @@ export const UsageMeter7 = ({
     </Card>
   )
 }
+
+export { UsageMeter7, exampleProps as usageMeter7ExampleProps, type UsageMeter7Props }

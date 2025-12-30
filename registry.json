@@ -21,7 +21,7 @@
       "type": "registry:component",
       "title": "Animated Number",
       "description": "An animated number component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-animated-number.json"],
+      "registryDependencies": ["http://localhost:3000/r/use-animated-number.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/animated-number.tsx",
@@ -84,7 +84,7 @@
       "type": "registry:component",
       "title": "Progress Bar",
       "description": "A progress bar component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": ["http://localhost:3000/r/use-in-view.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/progress-bar.tsx",
@@ -97,7 +97,7 @@
       "type": "registry:component",
       "title": "Ring",
       "description": "A ring component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": ["http://localhost:3000/r/use-in-view.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
@@ -111,6 +111,7 @@
       "title": "Trend",
       "description": "A trend indicator component.",
       "dependencies": ["class-variance-authority", "lucide-react"],
+      "registryDependencies": ["http://localhost:3000/r/animated-number.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/trend.tsx",
@@ -135,9 +136,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -151,9 +152,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -167,9 +168,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -183,10 +184,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -200,10 +201,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/progress-bar.json"
       ],
       "files": [
         {
@@ -217,9 +218,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/ring.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/ring.json"
       ],
       "files": [
         {
@@ -233,10 +234,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -250,10 +251,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -267,10 +268,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -284,10 +285,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -301,10 +302,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/chart.json",
+        "http://localhost:3000/r/kpi.json",
+        "http://localhost:3000/r/trend.json"
       ],
       "files": [
         {
@@ -321,8 +322,8 @@
         "avatar",
         "badge",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -338,8 +339,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -356,7 +357,7 @@
         "avatar",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json"
+        "http://localhost:3000/r/activity-feed.json"
       ],
       "files": [
         {
@@ -373,8 +374,8 @@
         "button",
         "card",
         "dropdown-menu",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -392,8 +393,8 @@
         "badge",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/activity-feed.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -407,10 +408,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -424,9 +425,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/ring.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/ring.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -440,9 +441,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -456,11 +457,11 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/trend.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/trend.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -474,9 +475,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -491,10 +492,10 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/icon.json",
+        "http://localhost:3000/r/progress-bar.json",
+        "http://localhost:3000/r/usage-meter.json"
       ],
       "files": [
         {
@@ -510,9 +511,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/animated-wave.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -528,9 +529,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json"
+        "http://localhost:3000/r/animated-number.json",
+        "http://localhost:3000/r/animated-wave.json",
+        "http://localhost:3000/r/icon.json"
       ],
       "files": [
         {
@@ -544,7 +545,7 @@
       "type": "registry:hook",
       "title": "Use Animated Number",
       "description": "A hook for animating a number.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": ["http://localhost:3000/r/use-in-view.json"],
       "files": [
         {
           "path": "registry/hooks/use-animated-number.tsx",

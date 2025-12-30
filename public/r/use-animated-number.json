@@ -3,7 +3,7 @@
   "name": "use-animated-number",
   "title": "Use Animated Number",
   "description": "A hook for animating a number.",
-  "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+  "registryDependencies": ["http://localhost:3000/r/use-in-view.json"],
   "files": [
     {
       "path": "registry/hooks/use-animated-number.tsx",

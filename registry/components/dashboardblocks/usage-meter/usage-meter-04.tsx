@@ -9,24 +9,25 @@ import { Coins } from 'lucide-react'
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter4 = ({
-  burnRate = '-1,250',
-  remaining = 45750,
-  title = 'Credits Remaining',
-  total = 100000,
-  trend = 'down',
-}: {
-  burnRate?: string
-  remaining?: number
-  title?: string
-  total?: number
-  trend?: 'up' | 'down' | 'neutral'
-} = {}) => {
+interface UsageMeter4Props {
+  remaining: number
+  title: string
+  total: number
+  trend: number
+}
+
+const exampleProps: UsageMeter4Props = {
+  remaining: 45750,
+  title: 'Credits Remaining',
+  total: 100000,
+  trend: -1250,
+}
+
+const UsageMeter4 = (props: UsageMeter4Props) => {
+  const { remaining, title, total, trend } = props
   const used = total - remaining
   const percentage = (used / total) * 100
-  const daysRemaining = Math.round(
-    remaining / Math.abs(parseInt(burnRate.replace(/[^0-9]/g, ''))),
-  )
+  const daysRemaining = Math.round(remaining / Math.abs(trend))
 
   return (
     <Card>
@@ -36,7 +37,10 @@ export const UsageMeter4 = ({
             <Icon icon={Coins} size='sm' />
             <CardTitle>{title}</CardTitle>
           </div>
-          <Trend value={`${burnRate}/day`} trend={trend} />
+          <Trend
+            trend={trend}
+            formatter={(value) => `${value > 0 ? '+' : ''}${value.toLocaleString()}/day`}
+          />
         </div>
         <div>
           <UsageMeterValue>
@@ -58,3 +62,5 @@ export const UsageMeter4 = ({
     </Card>
   )
 }
+
+export { UsageMeter4, exampleProps as usageMeter4ExampleProps, type UsageMeter4Props }

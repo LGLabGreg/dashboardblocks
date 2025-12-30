@@ -1,17 +1,10 @@
-import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
-import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
-import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { codeToHtml } from 'shiki'
 
 import { ComponentPreviewHighlighted } from '@/components/component-preview-highlighted'
 
-const exampleComponents = {
-  ...kpiComponents,
-  ...activityFeedComponents,
-  ...usageMeterComponents,
-}
+import { type ComponentName, ExampleRenderer } from './example-renderer'
 
 interface RegistryItem {
   name: string
@@ -26,7 +19,7 @@ interface ComponentPreviewProps {
   /**
    * The name of the example in the registry (e.g., 'compact-kpi')
    */
-  name: keyof typeof exampleComponents
+  name: ComponentName
   /**
    * Optional className for the preview container
    */
@@ -47,12 +40,6 @@ async function getRegistryItem(name: string): Promise<RegistryItem | null> {
   }
 }
 
-function ExampleRenderer({ name }: { name: keyof typeof exampleComponents }) {
-  const Component = exampleComponents[name]
-  if (!Component) return null
-  return <Component />
-}
-
 export async function ComponentPreview({
   name,
   className,
@@ -64,14 +51,6 @@ export async function ComponentPreview({
     return (
       <div className='rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive'>
         Could not load registry item: {name}
-      </div>
-    )
-  }
-
-  if (!exampleComponents[name]) {
-    return (
-      <div className='rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive'>
-        Could not find example component: {name}
       </div>
     )
   }

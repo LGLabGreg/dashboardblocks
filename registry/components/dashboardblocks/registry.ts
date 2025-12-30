@@ -112,6 +112,7 @@ export const components: Registry['items'] = [
     title: 'Trend',
     description: 'A trend indicator component.',
     dependencies: ['class-variance-authority', 'lucide-react'],
+    registryDependencies: [registryUrl('animated-number')],
     files: [
       {
         path: 'registry/components/dashboardblocks/trend.tsx',

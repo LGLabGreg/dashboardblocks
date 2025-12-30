@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -9,19 +8,18 @@ import { AreaProps } from 'recharts'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
 interface AreaChartKPI2Props {
-  change?: number
-  data?: unknown[]
-  description?: string
-  height?: number
-  areas?: AreaProps[]
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+  trend: number
+  data: unknown[]
+  description: string
+  height: number
+  areas: AreaProps[]
+  title: string
+  value: number
 }
 
-export const AreaChartKPI2 = ({
-  change = 18.4,
-  data = [
+const exampleProps: AreaChartKPI2Props = {
+  trend: 18.4,
+  data: [
     {
       label: 'Monday',
       value: 4200,
@@ -72,43 +70,31 @@ export const AreaChartKPI2 = ({
       },
     },
   ],
-  description = '+23.8K this week',
-  height = 160,
-  areas = [
+  description: '+23.8K this week',
+  height: 160,
+  areas: [
     {
       dataKey: 'value',
       fill: 'var(--color-chart-2)',
       stroke: 'var(--color-chart-2)',
     },
   ],
-  title = 'Total Transactions',
-  trend = 'up',
-  value = 128400,
-}: AreaChartKPI2Props) => {
+  title: 'Total Transactions',
+  value: 128400,
+}
+
+const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
+  const { trend, data, description, height, areas, title, value } = props
   return (
     <Card className='relative overflow-hidden'>
       <CardContent>
         <div className='relative z-10 space-y-12'>
           <div className='flex items-center justify-between'>
             <CardTitle>{title}</CardTitle>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
           <div className='space-y-1'>
-            <KPIValue>
-              <AnimatedNumber
-                value={value}
-                formatter={(value) => value.toLocaleString()}
-              />
-            </KPIValue>
+            <KPIValue value={value} animated />
             <CardDescription className='text-foreground'>{description}</CardDescription>
           </div>
         </div>
@@ -118,4 +104,10 @@ export const AreaChartKPI2 = ({
       </CardContent>
     </Card>
   )
+}
+
+export {
+  AreaChartKPI2,
+  exampleProps as areaChartKpi2ExampleProps,
+  type AreaChartKPI2Props,
 }

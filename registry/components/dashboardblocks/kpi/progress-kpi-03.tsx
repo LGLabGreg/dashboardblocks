@@ -7,20 +7,23 @@ import { Ring } from '@/registry/components/dashboardblocks/ring'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
 interface ProgressKPI3Props {
-  className?: string
-  current?: number
-  goal?: number
-  title?: string
-  unit?: string
+  className: string
+  current: number
+  goal: number
+  title: string
+  unit: string
 }
 
-export const ProgressKPI3 = ({
-  className = '',
-  current = 7500,
-  goal = 10000,
-  title = 'Monthly Goal',
-  unit = 'sales',
-}: ProgressKPI3Props) => {
+const exampleProps: ProgressKPI3Props = {
+  className: '',
+  current: 7500,
+  goal: 10000,
+  title: 'Monthly Goal',
+  unit: 'sales',
+}
+
+const ProgressKPI3 = (props: ProgressKPI3Props) => {
+  const { className, current, goal, title, unit } = props
   const percentage = Math.min(100, Math.max(0, (current / goal) * 100))
 
   return (
@@ -31,12 +34,7 @@ export const ProgressKPI3 = ({
             <div className='space-y-4'>
               <CardTitle>{title}</CardTitle>
               <div className='space-y-1'>
-                <KPIValue className='text-2xl'>
-                  <AnimatedNumber
-                    value={current}
-                    formatter={(value) => value.toLocaleString()}
-                  />
-                </KPIValue>
+                <KPIValue className='text-2xl' value={current} animated />
                 <CardDescription>
                   of {goal.toLocaleString()} {unit}
                 </CardDescription>
@@ -61,3 +59,5 @@ export const ProgressKPI3 = ({
     </Card>
   )
 }
+
+export { ProgressKPI3, exampleProps as progressKpi3ExampleProps, type ProgressKPI3Props }

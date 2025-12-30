@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { TinyLineChart } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -8,19 +7,18 @@ import { LineProps } from 'recharts'
 
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
-interface LineChartKPIProps {
-  change?: number
-  data?: unknown[]
-  height?: number
-  lines?: LineProps[]
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface LineChartKPI1Props {
+  trend: number
+  data: unknown[]
+  height: number
+  lines: LineProps[]
+  title: string
+  value: number
 }
 
-export const LineChartKPI1 = ({
-  change = 4.2,
-  data = [
+const exampleProps: LineChartKPI1Props = {
+  trend: 4.2,
+  data: [
     {
       label: 'Monday',
       value: 4200,
@@ -71,40 +69,37 @@ export const LineChartKPI1 = ({
       },
     },
   ],
-  height = 120,
-  lines = [
+  height: 120,
+  lines: [
     {
       dataKey: 'value',
       stroke: 'var(--color-primary)',
     },
   ],
-  title = 'Daily visitors',
-  trend = 'up',
-  value = 48230,
-}: LineChartKPIProps) => {
+  title: 'Daily visitors',
+  value: 48230,
+}
+
+const LineChartKPI1 = (props: LineChartKPI1Props) => {
+  const { trend, data, height, lines, title, value } = props
   return (
     <Card>
       <CardContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber value={value} formatter={(value) => value.toLocaleString()} />
-          </KPIValue>
+          <KPIValue value={value} animated />
         </div>
         <TinyLineChart data={data} lines={lines} height={height} />
       </CardContent>
     </Card>
   )
+}
+
+export {
+  LineChartKPI1,
+  exampleProps as lineChartKpi1ExampleProps,
+  type LineChartKPI1Props,
 }

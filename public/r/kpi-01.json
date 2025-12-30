@@ -3,14 +3,14 @@
   "name": "kpi-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/animated-number.json",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/trend.json"
+    "http://localhost:3000/r/animated-number.json",
+    "http://localhost:3000/r/kpi.json",
+    "http://localhost:3000/r/trend.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-01.tsx",
-      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\nimport { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI1 = ({\n  change = 20.1,\n  title = 'Total Revenue',\n  trend = 'up',\n  value = 45231,\n}: {\n  change?: number\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: number\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>\n          <KPIValue>\n            <AnimatedNumber\n              value={value}\n              formatter={(value) => `$${value.toLocaleString()}`}\n            />\n          </KPIValue>\n          <Trend\n            value={\n              <AnimatedNumber\n                value={change}\n                formatter={(value) => `+${value.toLocaleString()}%`}\n              />\n            }\n            trend={trend}\n          />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "content": "'use client'\n\nimport { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\ninterface KPI1Props {\n  trend: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI1Props = {\n  trend: 20.1,\n  title: 'Total Revenue',\n  value: 45231,\n}\n\nconst KPI1 = (props: Partial<KPI1Props> = {}) => {\n  const { trend, title, value } = { ...exampleProps, ...props }\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>\n          <KPIValue\n            value={value}\n            formatter={(value) => `$${value.toLocaleString()}`}\n            animated\n          />\n          <Trend trend={trend} />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { KPI1, type KPI1Props }\n",
       "type": "registry:component"
     }
   ],
