@@ -2,11 +2,11 @@
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { ClipboardList } from 'lucide-react'
 
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { CardTitle } from '@/components/ui/card'
 
 interface ProgressKPIBar {
   label: string
@@ -50,8 +50,8 @@ const exampleProps: ProgressKPI2Props = {
 const ProgressKPI2 = (props: ProgressKPI2Props) => {
   const { title, value, progressBars } = props
   return (
-    <Card>
-      <CardContent className='space-y-1'>
+    <KPI>
+      <KPIContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardTitle>{title}</CardTitle>
           <Icon icon={ClipboardList} variant='secondary' />
@@ -89,8 +89,8 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
             )
           })}
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

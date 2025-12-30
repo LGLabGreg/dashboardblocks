@@ -4,11 +4,11 @@ import {
   TinyAreaChart,
   ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { AreaProps } from 'recharts'
 
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import { CardDescription, CardTitle } from '@/components/ui/card'
 
 interface AreaChartKPI2Props {
   trend: number
@@ -70,8 +70,8 @@ const exampleProps: AreaChartKPI2Props = {
 const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
   const { trend, data, description, formatter, height, areas, title, value } = props
   return (
-    <Card className='relative overflow-hidden'>
-      <CardContent>
+    <KPI className='relative overflow-hidden'>
+      <KPIContent>
         <div className='relative z-10 space-y-12'>
           <div className='flex items-center justify-between'>
             <CardTitle>{title}</CardTitle>
@@ -90,8 +90,8 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
             height={height}
           />
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

@@ -1,10 +1,10 @@
 'use client'
 
 import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
 interface KPI3Props {
   trend: number
@@ -25,16 +25,16 @@ const exampleProps: KPI3Props = {
 const KPI3 = (props: KPI3Props) => {
   const { trend, description, title, value, formatter } = props
   return (
-    <Card>
-      <CardContent className='space-y-2'>
+    <KPI>
+      <KPIContent className='space-y-2'>
         <CardDescription>{title}</CardDescription>
         <KPIValue value={value} formatter={formatter} animated />
         <div className='flex items-center justify-between border-t pt-2 mt-3'>
           <CardDescription>{description}</CardDescription>
           <Trend trend={trend} variant='badge' />
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

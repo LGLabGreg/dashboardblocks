@@ -1,13 +1,12 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import { CardDescription, CardTitle } from '@/components/ui/card'
 
 interface ProgressKPI3Props {
-  className: string
   current: number
   goal: number
   title: string
@@ -15,7 +14,6 @@ interface ProgressKPI3Props {
 }
 
 const exampleProps: ProgressKPI3Props = {
-  className: '',
   current: 7500,
   goal: 10000,
   title: 'Monthly Goal',
@@ -23,12 +21,12 @@ const exampleProps: ProgressKPI3Props = {
 }
 
 const ProgressKPI3 = (props: ProgressKPI3Props) => {
-  const { className, current, goal, title, unit } = props
+  const { current, goal, title, unit } = props
   const percentage = Math.min(100, Math.max(0, (current / goal) * 100))
 
   return (
-    <Card className={className}>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='grid grid-cols-2 gap-4'>
           <div className='flex items-center justify-between'>
             <div className='space-y-4'>
@@ -55,8 +53,8 @@ const ProgressKPI3 = (props: ProgressKPI3Props) => {
             </Ring>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

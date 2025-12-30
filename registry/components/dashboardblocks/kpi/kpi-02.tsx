@@ -1,9 +1,9 @@
 'use client'
 
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
 interface KPI2Props {
   trend: number
@@ -20,15 +20,15 @@ const exampleProps: KPI2Props = {
 const KPI2 = (props: KPI2Props) => {
   const { trend, title, value } = props
   return (
-    <Card>
-      <CardContent className='space-y-2'>
+    <KPI>
+      <KPIContent className='space-y-2'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
           <Trend trend={trend} variant='badge' />
         </div>
         <KPIValue value={value} animated />
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

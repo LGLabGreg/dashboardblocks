@@ -73,6 +73,7 @@ export const components: Registry['items'] = [
     title: 'KPI',
     description:
       'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
+    registryDependencies: ['card'],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi.tsx',

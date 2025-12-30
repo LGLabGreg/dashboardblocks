@@ -1,11 +1,11 @@
 'use client'
 
 import { TinyBarChart, ValueFormatter } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
 interface BarChartKPI1Props {
   bars: BarProps[]
@@ -64,8 +64,8 @@ const exampleProps: BarChartKPI1Props = {
 const BarChartKPI1 = (props: BarChartKPI1Props) => {
   const { bars, trend, data, formatter, height, title, value } = props
   return (
-    <Card>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
@@ -74,8 +74,8 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
           <KPIValue value={value} formatter={formatter} animated />
         </div>
         <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

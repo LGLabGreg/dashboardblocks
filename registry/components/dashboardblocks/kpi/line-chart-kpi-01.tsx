@@ -4,11 +4,11 @@ import {
   TinyLineChart,
   ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { LineProps } from 'recharts'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
 interface LineChartKPI1Props {
   trend: number
@@ -70,8 +70,8 @@ const exampleProps: LineChartKPI1Props = {
 const LineChartKPI1 = (props: LineChartKPI1Props) => {
   const { trend, data, formatter, height, lines, title, value } = props
   return (
-    <Card>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
@@ -80,8 +80,8 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
           <KPIValue value={value} formatter={formatter} animated />
         </div>
         <TinyLineChart data={data} lines={lines} formatter={formatter} height={height} />
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 

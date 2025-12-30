@@ -2,11 +2,11 @@
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
 interface ProgressKPI1Props {
   trend: number
@@ -27,8 +27,8 @@ const exampleProps: ProgressKPI1Props = {
 const ProgressKPI1 = (props: ProgressKPI1Props) => {
   const { trend, percentage, title, value, formatter } = props
   return (
-    <Card>
-      <CardContent className='space-y-1'>
+    <KPI>
+      <KPIContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
           <Trend trend={trend} variant='badge' />
@@ -49,8 +49,8 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
           </div>
           <ProgressBar percentage={percentage} />
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
 
