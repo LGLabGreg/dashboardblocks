@@ -9,17 +9,22 @@ import {
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter2 = ({
-  limit = 120,
-  title = 'Storage',
-  unit = 'GB',
-  used = 78,
-}: {
-  limit?: number
-  title?: string
-  unit?: string
-  used?: number
-} = {}) => {
+interface UsageMeter2Props {
+  limit: number
+  title: string
+  unit: string
+  used: number
+}
+
+const exampleProps: UsageMeter2Props = {
+  limit: 120,
+  title: 'Storage',
+  unit: 'GB',
+  used: 78,
+}
+
+const UsageMeter2 = (props: UsageMeter2Props) => {
+  const { limit, title, unit, used } = props
   const percentage = (used / limit) * 100
   const isCritical = percentage >= 95
   const isWarning = percentage >= 80
@@ -72,3 +77,5 @@ export const UsageMeter2 = ({
     </Card>
   )
 }
+
+export { UsageMeter2, exampleProps as usageMeter2ExampleProps, type UsageMeter2Props }

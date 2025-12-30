@@ -12,17 +12,22 @@ interface ResourceUsage {
   used: number
 }
 
-export const UsageMeter3 = ({
-  resources = [
+interface UsageMeter3Props {
+  resources: ResourceUsage[]
+  title: string
+}
+
+const exampleProps: UsageMeter3Props = {
+  resources: [
     { name: 'CPU', used: 45, limit: 100, unit: '%' },
     { name: 'Memory', used: 6.2, limit: 8, unit: 'GB' },
     { name: 'Bandwidth', used: 847, limit: 1000, unit: 'GB' },
   ],
-  title = 'Resource Usage',
-}: {
-  resources?: ResourceUsage[]
-  title?: string
-} = {}) => {
+  title: 'Resource Usage',
+}
+
+const UsageMeter3 = (props: UsageMeter3Props) => {
+  const { resources, title } = props
   return (
     <Card>
       <CardContent className='space-y-4'>
@@ -60,4 +65,11 @@ export const UsageMeter3 = ({
       </CardContent>
     </Card>
   )
+}
+
+export {
+  UsageMeter3,
+  exampleProps as usageMeter3ExampleProps,
+  type UsageMeter3Props,
+  type ResourceUsage,
 }

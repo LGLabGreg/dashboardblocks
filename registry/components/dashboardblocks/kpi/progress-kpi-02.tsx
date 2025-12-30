@@ -2,11 +2,11 @@
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { ClipboardList } from 'lucide-react'
 
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { CardTitle } from '@/components/ui/card'
 
 interface ProgressKPIBar {
   label: string
@@ -17,15 +17,15 @@ interface ProgressKPIBar {
 }
 
 interface ProgressKPI2Props {
-  title?: string
-  value?: number
-  progressBars?: ProgressKPIBar[]
+  title: string
+  value: number
+  progressBars: ProgressKPIBar[]
 }
 
-export const ProgressKPI2 = ({
-  title = 'Task Completion',
-  value = 87,
-  progressBars = [
+const exampleProps: ProgressKPI2Props = {
+  title: 'Task Completion',
+  value: 87,
+  progressBars: [
     {
       label: 'completed',
       target: '51 tasks',
@@ -45,20 +45,22 @@ export const ProgressKPI2 = ({
       fillClassName: 'bg-red-600',
     },
   ],
-}: ProgressKPI2Props) => {
+}
+
+const ProgressKPI2 = (props: ProgressKPI2Props) => {
+  const { title, value, progressBars } = props
   return (
-    <Card>
-      <CardContent className='space-y-1'>
+    <KPI>
+      <KPIContent className='space-y-1'>
         <div className='flex items-center justify-between'>
           <CardTitle>{title}</CardTitle>
           <Icon icon={ClipboardList} variant='secondary' />
         </div>
-        <KPIValue>
-          <AnimatedNumber
-            value={value}
-            formatter={(value) => `${value.toLocaleString()}/100`}
-          />
-        </KPIValue>
+        <KPIValue
+          value={value}
+          formatter={(value) => `${value.toLocaleString()}/100`}
+          animated
+        />
         <div className='mt-5 space-y-3'>
           {progressBars.map((bar) => {
             const safePercentage = Number.isFinite(bar.percentage) ? bar.percentage : 0
@@ -87,7 +89,14 @@ export const ProgressKPI2 = ({
             )
           })}
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
+}
+
+export {
+  ProgressKPI2,
+  exampleProps as progressKpi2ExampleProps,
+  type ProgressKPI2Props,
+  type ProgressKPIBar,
 }

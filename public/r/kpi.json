@@ -3,10 +3,11 @@
   "name": "kpi",
   "title": "KPI",
   "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+  "registryDependencies": ["card"],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi.tsx",
-      "content": "import { ReactNode } from 'react'\n\nexport const KPIValue = ({\n  children,\n  className = '',\n}: {\n  children: ReactNode\n  className?: string\n}) => {\n  return <div className={`text-3xl font-bold ${className}`}>{children}</div>\n}\n",
+      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\nimport { ComponentProps } from 'react'\n\nimport { Card, CardContent } from '@/components/ui/card'\n\nimport { cn } from '@/lib/utils'\n\nexport const KPI = (props: ComponentProps<typeof Card>) => {\n  return <Card {...props} />\n}\n\nexport const KPIContent = (props: ComponentProps<typeof CardContent>) => {\n  return (\n    <CardContent\n      {...props}\n      className={cn('flex flex-col flex-1 justify-between', props.className)}\n    />\n  )\n}\n\ninterface KPIValueProps {\n  animated?: boolean\n  className?: string\n  formatter?: (value: number) => string\n  value: number\n}\n\nconst defaultFormatter = (value: number): string => value.toLocaleString()\n\nexport const KPIValue = ({\n  animated = false,\n  className = '',\n  formatter = defaultFormatter,\n  value,\n}: KPIValueProps) => {\n  const displayValue = animated ? (\n    <AnimatedNumber value={value} formatter={formatter} />\n  ) : (\n    formatter(value)\n  )\n\n  return <div className={`text-3xl font-bold ${className}`}>{displayValue}</div>\n}\n\nexport type { KPIValueProps }\n",
       "type": "registry:component"
     }
   ],

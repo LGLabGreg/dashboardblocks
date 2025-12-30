@@ -8,22 +8,27 @@ import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-met
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter5 = ({
-  segments = [
+interface UsageMeter5Props {
+  segments: SegmentedProgressBarProps['segments']
+  title: string
+  total: number
+  unit: string
+}
+
+const exampleProps: UsageMeter5Props = {
+  segments: [
     { label: 'Documents', value: 12.4, color: 'hsl(221 83% 53%)' },
     { label: 'Images', value: 28.6, color: 'hsl(262 83% 58%)' },
     { label: 'Videos', value: 18.2, color: 'hsl(330 81% 60%)' },
     { label: 'Other', value: 8.3, color: 'hsl(35 91% 50%)' },
   ],
-  title = 'Storage Breakdown',
-  total = 100,
-  unit = 'GB',
-}: {
-  segments?: SegmentedProgressBarProps['segments']
-  title?: string
-  total?: number
-  unit?: string
-} = {}) => {
+  title: 'Storage Breakdown',
+  total: 100,
+  unit: 'GB',
+}
+
+const UsageMeter5 = (props: UsageMeter5Props) => {
+  const { segments, title, total, unit } = props
   const used = segments.reduce((acc, s) => acc + s.value, 0)
   const free = total - used
 
@@ -70,3 +75,5 @@ export const UsageMeter5 = ({
     </Card>
   )
 }
+
+export { UsageMeter5, exampleProps as usageMeter5ExampleProps, type UsageMeter5Props }

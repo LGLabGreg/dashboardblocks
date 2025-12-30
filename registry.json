@@ -72,6 +72,7 @@
       "type": "registry:component",
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
+      "registryDependencies": ["card"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi.tsx",
@@ -111,6 +112,7 @@
       "title": "Trend",
       "description": "A trend indicator component.",
       "dependencies": ["class-variance-authority", "lucide-react"],
+      "registryDependencies": ["https://dashboardblocks.com/r/animated-number.json"],
       "files": [
         {
           "path": "registry/components/dashboardblocks/trend.tsx",
@@ -134,7 +136,6 @@
       "name": "kpi-01",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -150,7 +151,6 @@
       "name": "kpi-02",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -166,7 +166,6 @@
       "name": "kpi-03",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -182,7 +181,6 @@
       "name": "progress-kpi-01",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/progress-bar.json",
@@ -199,7 +197,6 @@
       "name": "progress-kpi-02",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/kpi.json",
@@ -216,7 +213,6 @@
       "name": "progress-kpi-03",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/ring.json"
@@ -232,7 +228,6 @@
       "name": "bar-chart-kpi-01",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
@@ -249,7 +244,6 @@
       "name": "bar-chart-kpi-02",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
@@ -266,7 +260,6 @@
       "name": "line-chart-kpi-01",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",
@@ -300,7 +293,6 @@
       "name": "area-chart-kpi-02",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/chart.json",
         "https://dashboardblocks.com/r/kpi.json",

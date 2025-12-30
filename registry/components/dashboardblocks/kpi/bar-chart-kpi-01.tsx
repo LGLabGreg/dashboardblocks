@@ -1,104 +1,82 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { TinyBarChart, ValueFormatter } from '@/registry/components/dashboardblocks/chart'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
-interface BarChartKPIProps {
-  bars?: BarProps[]
-  change?: string
-  data?: unknown[]
-  height?: number
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface BarChartKPI1Props {
+  bars: BarProps[]
+  trend: number
+  data: unknown[]
+  formatter?: ValueFormatter
+  height: number
+  title: string
+  value: number
 }
 
-export const BarChartKPI1 = ({
-  bars = [
+const exampleProps: BarChartKPI1Props = {
+  bars: [
     {
       dataKey: 'value',
       fill: 'var(--color-primary)',
     },
   ],
-  change = '+7.5%',
-  data = [
+  trend: 7.5,
+  data: [
     {
       label: 'Monday',
-      value: 32,
-      displayValues: {
-        value: '$12,345',
-      },
+      value: 3200,
     },
     {
       label: 'Tuesday',
-      value: 45,
-      displayValues: {
-        value: '$10,234',
-      },
+      value: 4500,
     },
     {
       label: 'Wednesday',
-      value: 28,
-      displayValues: {
-        value: '$8,765',
-      },
+      value: 2800,
     },
     {
       label: 'Thursday',
-      value: 52,
-      displayValues: {
-        value: '$6,543',
-      },
+      value: 5200,
     },
     {
       label: 'Friday',
-      value: 61,
-      displayValues: {
-        value: '$4,321',
-      },
+      value: 6100,
     },
     {
       label: 'Saturday',
-      value: 48,
-      displayValues: {
-        value: '$2,109',
-      },
+      value: 4800,
     },
     {
       label: 'Sunday',
-      value: 57,
-      displayValues: {
-        value: '$1,234',
-      },
+      value: 5700,
     },
   ],
-  height = 160,
-  title = 'Revenue',
-  trend = 'up',
-  value = 87500,
-}: BarChartKPIProps) => {
+  formatter: (value) => `$${value.toLocaleString()}`,
+  height: 160,
+  title: 'Revenue',
+  value: 87500,
+}
+
+const BarChartKPI1 = (props: BarChartKPI1Props) => {
+  const { bars, trend, data, formatter, height, title, value } = props
   return (
-    <Card>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend value={change} trend={trend} trendIcon='arrow' variant='badge' />
+            <Trend trend={trend} trendIcon='arrow' variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `$${value.toLocaleString()}`}
-            />
-          </KPIValue>
+          <KPIValue value={value} formatter={formatter} animated />
         </div>
-        <TinyBarChart data={data} bars={bars} height={height} />
-      </CardContent>
-    </Card>
+        <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
+      </KPIContent>
+    </KPI>
   )
 }
+
+export { BarChartKPI1, exampleProps as barChartKpi1ExampleProps, type BarChartKPI1Props }

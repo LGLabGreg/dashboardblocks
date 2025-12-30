@@ -2,7 +2,6 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-03",
   "registryDependencies": [
-    "card",
     "https://dashboardblocks.com/r/animated-number.json",
     "https://dashboardblocks.com/r/kpi.json",
     "https://dashboardblocks.com/r/trend.json"
@@ -10,7 +9,7 @@
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-03.tsx",
-      "content": "'use client'\n\nimport { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'\nimport { KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { Card, CardContent, CardDescription } from '@/components/ui/card'\n\nexport const KPI3 = ({\n  change = -2.1,\n  description = 'Compared to last month',\n  title = 'Conversion Rate',\n  trend = 'down',\n  value = 3.24,\n}: {\n  change?: number\n  description?: string\n  title?: string\n  trend?: 'up' | 'down' | 'neutral'\n  value?: number\n} = {}) => {\n  return (\n    <Card>\n      <CardContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue>\n          <AnimatedNumber\n            value={value}\n            formatter={(value) => `${value.toLocaleString()}%`}\n          />\n        </KPIValue>\n        <div className='flex items-center justify-between border-t pt-2 mt-3'>\n          <CardDescription>{description}</CardDescription>\n          <Trend\n            value={\n              <AnimatedNumber\n                value={change}\n                formatter={(value) => `${value.toLocaleString()}%`}\n              />\n            }\n            trend={trend}\n            variant='badge'\n          />\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "content": "'use client'\n\nimport { ValueFormatter } from '@/registry/components/dashboardblocks/chart'\nimport { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI3Props {\n  trend: number\n  description: string\n  title: string\n  value: number\n  formatter?: ValueFormatter\n}\n\nconst exampleProps: KPI3Props = {\n  trend: -2.1,\n  description: 'Compared to last month',\n  title: 'Conversion Rate',\n  value: 3.24,\n  formatter: (value) => `${value.toLocaleString()}%`,\n}\n\nconst KPI3 = (props: KPI3Props) => {\n  const { trend, description, title, value, formatter } = props\n  return (\n    <KPI>\n      <KPIContent className='space-y-2'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue value={value} formatter={formatter} animated />\n        <div className='flex items-center justify-between border-t pt-2 mt-3'>\n          <CardDescription>{description}</CardDescription>\n          <Trend trend={trend} variant='badge' />\n        </div>\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI3, exampleProps as kpi3ExampleProps, type KPI3Props }\n",
       "type": "registry:component"
     }
   ],

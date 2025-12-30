@@ -1,44 +1,39 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
-export const KPI1 = ({
-  change = 20.1,
-  title = 'Total Revenue',
-  trend = 'up',
-  value = 45231,
-}: {
-  change?: number
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
-} = {}) => {
+interface KPI1Props {
+  trend: number
+  title: string
+  value: number
+  formatter?: ValueFormatter
+}
+
+const exampleProps: KPI1Props = {
+  trend: 20.1,
+  title: 'Total Revenue',
+  value: 45231,
+  formatter: (value) => `$${value.toLocaleString()}`,
+}
+
+const KPI1 = (props: KPI1Props) => {
+  const { trend, title, value, formatter } = props
+
   return (
-    <Card>
-      <CardContent className='space-y-2'>
+    <KPI>
+      <KPIContent className='space-y-2'>
         <CardDescription>{title}</CardDescription>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1'>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `$${value.toLocaleString()}`}
-            />
-          </KPIValue>
-          <Trend
-            value={
-              <AnimatedNumber
-                value={change}
-                formatter={(value) => `+${value.toLocaleString()}%`}
-              />
-            }
-            trend={trend}
-          />
+          <KPIValue value={value} formatter={formatter} animated />
+          <Trend trend={trend} />
         </div>
-      </CardContent>
-    </Card>
+      </KPIContent>
+    </KPI>
   )
 }
+
+export { KPI1, exampleProps as kpi1ExampleProps, type KPI1Props }

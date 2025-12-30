@@ -1,92 +1,67 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  TinyAreaChart,
+  ValueFormatter,
+} from '@/registry/components/dashboardblocks/chart'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { AreaProps } from 'recharts'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
-interface AreaChartKPIProps {
-  change?: number
-  data?: unknown[]
-  height?: number
-  areas?: AreaProps[]
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface AreaChartKPI1Props {
+  trend: number
+  data: unknown[]
+  formatter?: ValueFormatter
+  height: number
+  areas: AreaProps[]
+  title: string
+  value: number
 }
 
-export const AreaChartKPI1 = ({
-  change = 3.7,
-  data = [
+const exampleProps: AreaChartKPI1Props = {
+  trend: 3.7,
+  data: [
     {
       label: 'Monday',
       revenue: 4200,
       profit: 1200,
-      displayValues: {
-        revenue: '$4,200',
-        profit: '$1,200',
-      },
     },
     {
       label: 'Tuesday',
       revenue: 5100,
       profit: 1500,
-      displayValues: {
-        revenue: '$5,100',
-        profit: '$1,500',
-      },
     },
     {
       label: 'Wednesday',
       revenue: 2800,
       profit: 800,
-      displayValues: {
-        revenue: '$4,800',
-        profit: '$800',
-      },
     },
     {
       label: 'Thursday',
       revenue: 5600,
       profit: 1600,
-      displayValues: {
-        revenue: '$5,600',
-        profit: '$1,600',
-      },
     },
     {
       label: 'Friday',
       revenue: 6300,
       profit: 1800,
-      displayValues: {
-        revenue: '$6,300',
-        profit: '$1,800',
-      },
     },
     {
       label: 'Saturday',
       revenue: 5400,
       profit: 1400,
-      displayValues: {
-        revenue: '$5,400',
-        profit: '$1,400',
-      },
     },
     {
       label: 'Sunday',
       revenue: 6900,
       profit: 2000,
-      displayValues: {
-        revenue: '$4,900',
-        profit: '$2,000',
-      },
     },
   ],
-  height = 120,
-  areas = [
+  formatter: (value) => `$${value.toLocaleString()}`,
+  height: 120,
+  areas: [
     {
       dataKey: 'revenue',
       fill: 'var(--color-chart-1)',
@@ -98,36 +73,30 @@ export const AreaChartKPI1 = ({
       stroke: 'var(--color-chart-2)',
     },
   ],
-  title = 'Profit Margin',
-  trend = 'up',
-  value = 42.3,
-}: AreaChartKPIProps) => {
+  title: 'Profit Margin',
+  value: 42.3,
+}
+
+const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
+  const { trend, data, formatter, height, areas, title, value } = props
   return (
-    <Card>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `${value.toLocaleString()}%`}
-            />
-          </KPIValue>
+          <KPIValue value={value} formatter={formatter} animated />
         </div>
-        <TinyAreaChart data={data} areas={areas} height={height} />
-      </CardContent>
-    </Card>
+        <TinyAreaChart data={data} areas={areas} formatter={formatter} height={height} />
+      </KPIContent>
+    </KPI>
   )
+}
+
+export {
+  AreaChartKPI1,
+  exampleProps as areaChartKpi1ExampleProps,
+  type AreaChartKPI1Props,
 }

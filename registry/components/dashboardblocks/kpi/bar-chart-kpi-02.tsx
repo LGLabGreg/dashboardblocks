@@ -1,25 +1,24 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
-import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { TinyBarChart, ValueFormatter } from '@/registry/components/dashboardblocks/chart'
+import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
 
-import { Card, CardContent, CardDescription } from '@/components/ui/card'
+import { CardDescription } from '@/components/ui/card'
 
-interface BarChartKPIProps {
-  bars?: BarProps[]
-  change?: number
-  data?: unknown[]
-  height?: number
-  title?: string
-  trend?: 'up' | 'down' | 'neutral'
-  value?: number
+interface BarChartKPI2Props {
+  bars: BarProps[]
+  trend: number
+  data: unknown[]
+  formatter?: ValueFormatter
+  height: number
+  title: string
+  value: number
 }
 
-export const BarChartKPI2 = ({
-  bars = [
+const exampleProps: BarChartKPI2Props = {
+  bars: [
     {
       dataKey: 'value',
       fill: 'var(--color-chart-1)',
@@ -29,103 +28,66 @@ export const BarChartKPI2 = ({
       fill: 'var(--color-chart-2)',
     },
   ],
-  change = 7.5,
-  data = [
+  trend: 7.5,
+  data: [
     {
       label: 'Monday',
-      value: 32,
-      goal: 38,
-      displayValues: {
-        value: '$12,345',
-        goal: '$14,620',
-      },
+      value: 3200,
+      goal: 3800,
     },
     {
       label: 'Tuesday',
-      value: 45,
-      goal: 42,
-      displayValues: {
-        value: '$10,234',
-        goal: '$9,980',
-      },
+      value: 4500,
+      goal: 4200,
     },
     {
       label: 'Wednesday',
-      value: 28,
-      goal: 34,
-      displayValues: {
-        value: '$8,765',
-        goal: '$10,500',
-      },
+      value: 2800,
+      goal: 3400,
     },
     {
       label: 'Thursday',
-      value: 52,
-      goal: 48,
-      displayValues: {
-        value: '$6,543',
-        goal: '$6,050',
-      },
+      value: 5200,
+      goal: 4800,
     },
     {
       label: 'Friday',
-      value: 61,
-      goal: 64,
-      displayValues: {
-        value: '$4,321',
-        goal: '$4,765',
-      },
+      value: 6100,
+      goal: 6400,
     },
     {
       label: 'Saturday',
-      value: 48,
-      goal: 52,
-      displayValues: {
-        value: '$2,109',
-        goal: '$2,356',
-      },
+      value: 4800,
+      goal: 5200,
     },
     {
       label: 'Sunday',
-      value: 57,
-      goal: 60,
-      displayValues: {
-        value: '$1,234',
-        goal: '$1,420',
-      },
+      value: 5700,
+      goal: 6000,
     },
   ],
-  height = 160,
-  title = 'Revenue',
-  trend = 'up',
-  value = 87500,
-}: BarChartKPIProps) => {
+  formatter: (value) => `$${value.toLocaleString()}`,
+  height: 160,
+  title: 'Revenue',
+  value: 87500,
+}
+
+const BarChartKPI2 = (props: BarChartKPI2Props) => {
+  const { bars, trend, data, formatter, height, title, value } = props
   return (
-    <Card>
-      <CardContent>
+    <KPI>
+      <KPIContent>
         <div className='space-y-1'>
           <div className='flex items-center justify-between'>
             <CardDescription>{title}</CardDescription>
-            <Trend
-              value={
-                <AnimatedNumber
-                  value={change}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
-              }
-              trend={trend}
-              variant='badge'
-            />
+            <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue>
-            <AnimatedNumber
-              value={value}
-              formatter={(value) => `$${value.toLocaleString()}`}
-            />
-          </KPIValue>
+          <KPIValue value={value} formatter={formatter} animated />
         </div>
-        <TinyBarChart data={data} bars={bars} height={height} />
-      </CardContent>
-    </Card>
+        <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
+      </KPIContent>
+    </KPI>
   )
 }
+
+export { BarChartKPI2, exampleProps as barChartKPI2ExampleProps, type BarChartKPI2Props }

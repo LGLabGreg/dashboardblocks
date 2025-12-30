@@ -7,23 +7,27 @@ import { Database, LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
-export const UsageMeter8 = ({
-  daysLeft = 27,
-  icon: IconComponent = Database,
-  limit = 1500,
-  onUpgrade,
-  title = 'Storage',
-  unit = 'MB',
-  used = 430,
-}: {
+interface UsageMeter8Props {
   daysLeft?: number
-  icon?: LucideIcon
-  limit?: number
+  icon: LucideIcon
+  limit: number
   onUpgrade?: () => void
-  title?: string
-  unit?: string
-  used?: number
-} = {}) => {
+  title: string
+  unit: string
+  used: number
+}
+
+const exampleProps: UsageMeter8Props = {
+  daysLeft: 27,
+  icon: Database,
+  limit: 1500,
+  title: 'Storage',
+  unit: 'MB',
+  used: 430,
+}
+
+const UsageMeter8 = (props: UsageMeter8Props) => {
+  const { daysLeft, icon: IconComponent, limit, onUpgrade, title, unit, used } = props
   const remaining = limit - used
   const availablePercentage = Math.round((remaining / limit) * 100)
 
@@ -101,3 +105,5 @@ export const UsageMeter8 = ({
     </Card>
   )
 }
+
+export { UsageMeter8, exampleProps as usageMeter8ExampleProps, type UsageMeter8Props }

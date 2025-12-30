@@ -7,7 +7,6 @@ export const examples: Registry['items'] = [
     name: 'kpi-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -23,7 +22,6 @@ export const examples: Registry['items'] = [
     name: 'kpi-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -39,7 +37,6 @@ export const examples: Registry['items'] = [
     name: 'kpi-03',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('trend'),
@@ -55,7 +52,6 @@ export const examples: Registry['items'] = [
     name: 'progress-kpi-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('progress-bar'),
@@ -72,7 +68,6 @@ export const examples: Registry['items'] = [
     name: 'progress-kpi-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('icon'),
       registryUrl('kpi'),
@@ -89,7 +84,6 @@ export const examples: Registry['items'] = [
     name: 'progress-kpi-03',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('ring'),
@@ -105,7 +99,6 @@ export const examples: Registry['items'] = [
     name: 'bar-chart-kpi-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
@@ -122,7 +115,6 @@ export const examples: Registry['items'] = [
     name: 'bar-chart-kpi-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
@@ -139,7 +131,6 @@ export const examples: Registry['items'] = [
     name: 'line-chart-kpi-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),
@@ -173,7 +164,6 @@ export const examples: Registry['items'] = [
     name: 'area-chart-kpi-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
       registryUrl('chart'),
       registryUrl('kpi'),

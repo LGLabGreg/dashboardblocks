@@ -15,18 +15,23 @@ interface PlanLimit {
   used: number
 }
 
-export const UsageMeter6 = ({
-  limits = [
+interface UsageMeter6Props {
+  limits: PlanLimit[]
+  plan: string
+}
+
+const exampleProps: UsageMeter6Props = {
+  limits: [
     { name: 'Team members', used: 4, limit: 5, icon: Users },
     { name: 'API calls', used: 8500, limit: 10000, icon: Zap },
     { name: 'Storage', used: 4.9, limit: 5, icon: Database },
     { name: 'Emails sent', used: 450, limit: 1000, icon: Mail },
   ],
-  plan = 'Pro',
-}: {
-  limits?: PlanLimit[]
-  plan?: string
-} = {}) => {
+  plan: 'Pro',
+}
+
+const UsageMeter6 = (props: UsageMeter6Props) => {
+  const { limits, plan } = props
   return (
     <Card>
       <CardContent className='space-y-6'>
@@ -82,4 +87,11 @@ export const UsageMeter6 = ({
       </CardFooter>
     </Card>
   )
+}
+
+export {
+  UsageMeter6,
+  exampleProps as usageMeter6ExampleProps,
+  type UsageMeter6Props,
+  type PlanLimit,
 }
