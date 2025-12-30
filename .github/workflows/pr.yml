@@ -38,7 +38,7 @@ jobs:
           REGISTRY_BASE_URL: https://dashboardblocks.com
 
       - name: Commit registry.json if changed
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: 'chore: update registry.json'
           file_pattern: registry.json public/r/*.json
