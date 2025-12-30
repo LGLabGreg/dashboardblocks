@@ -4,7 +4,7 @@
   "title": "Trend",
   "description": "A trend indicator component.",
   "dependencies": ["class-variance-authority", "lucide-react"],
-  "registryDependencies": ["http://localhost:3000/r/animated-number.json"],
+  "registryDependencies": ["https://dashboardblocks.com/r/animated-number.json"],
   "files": [
     {
       "path": "registry/components/dashboardblocks/trend.tsx",

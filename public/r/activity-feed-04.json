@@ -6,8 +6,8 @@
     "button",
     "card",
     "dropdown-menu",
-    "http://localhost:3000/r/activity-feed.json",
-    "http://localhost:3000/r/icon.json"
+    "https://dashboardblocks.com/r/activity-feed.json",
+    "https://dashboardblocks.com/r/icon.json"
   ],
   "files": [
     {
