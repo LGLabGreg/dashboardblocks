@@ -16,10 +16,13 @@ import {
 } from 'recharts'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
+export type ValueFormatter = (value: number) => string
+
 const ChartTooltipContent = ({
   payload,
   formatter,
-}: TooltipContentProps<ValueType, NameType>) => {
+  valueFormatter,
+}: TooltipContentProps<ValueType, NameType> & { valueFormatter?: ValueFormatter }) => {
   if (!payload || payload.length === 0) return null
 
   return (
@@ -50,9 +53,11 @@ const ChartTooltipContent = ({
                 } as React.CSSProperties
               }
             />
-            {formatter
-              ? formatter(item.value, item.name, item, index, payload)
-              : item.value}
+            {valueFormatter
+              ? valueFormatter(Number(item.value))
+              : formatter
+                ? formatter(item.value, item.name, item, index, payload)
+                : item.value}
           </div>
         )
       })}
@@ -64,7 +69,7 @@ export interface TinyBarChartProps {
   bars: BarProps[]
   className?: string
   data: unknown[]
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height?: number
 }
 
@@ -83,7 +88,9 @@ export const TinyBarChart = ({
       <ResponsiveContainer width='100%' height='100%'>
         <BarChart data={safeData}>
           <Tooltip
-            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+            content={(props) => (
+              <ChartTooltipContent {...props} valueFormatter={formatter} />
+            )}
           />
           {resolvedBars.map((barProps, index) => {
             const dataKey =
@@ -108,7 +115,7 @@ export const TinyBarChart = ({
 export interface TinyLineChartProps {
   className?: string
   data: unknown[]
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height?: number
   lines: LineProps[]
 }
@@ -128,7 +135,9 @@ export const TinyLineChart = ({
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart data={safeData}>
           <Tooltip
-            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+            content={(props) => (
+              <ChartTooltipContent {...props} valueFormatter={formatter} />
+            )}
           />
           {resolvedLines.map((lineProps, index) => {
             const dataKey =
@@ -157,7 +166,7 @@ export interface TinyAreaChartProps {
   areas: AreaProps[]
   className?: string
   data: unknown[]
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height?: number
 }
 
@@ -176,7 +185,9 @@ export const TinyAreaChart = ({
       <ResponsiveContainer width='100%' height='100%'>
         <AreaChart data={safeData}>
           <Tooltip
-            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+            content={(props) => (
+              <ChartTooltipContent {...props} valueFormatter={formatter} />
+            )}
           />
           {resolvedAreas.map((areaProps, index) => {
             const dataKey =

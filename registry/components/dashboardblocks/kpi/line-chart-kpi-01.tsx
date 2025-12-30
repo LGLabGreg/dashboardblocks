@@ -1,8 +1,8 @@
 'use client'
 
 import {
-  RechartsTooltipFormatter,
   TinyLineChart,
+  ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface LineChartKPI1Props {
   trend: number
   data: unknown[]
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height: number
   lines: LineProps[]
   title: string
@@ -53,8 +53,7 @@ const exampleProps: LineChartKPI1Props = {
     },
   ],
   formatter: (value) => {
-    const num = Number(value)
-    const k = num / 1000
+    const k = value / 1000
     return `${k.toFixed(1)}k visits`
   },
   height: 120,
@@ -78,7 +77,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
             <CardDescription>{title}</CardDescription>
             <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue value={value} animated />
+          <KPIValue value={value} formatter={formatter} animated />
         </div>
         <TinyLineChart data={data} lines={lines} formatter={formatter} height={height} />
       </CardContent>

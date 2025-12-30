@@ -1,8 +1,8 @@
 'use client'
 
 import {
-  RechartsTooltipFormatter,
   TinyAreaChart,
+  ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -14,7 +14,7 @@ interface AreaChartKPI2Props {
   trend: number
   data: unknown[]
   description: string
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height: number
   areas: AreaProps[]
   title: string
@@ -54,7 +54,7 @@ const exampleProps: AreaChartKPI2Props = {
     },
   ],
   description: '+23.8K this week',
-  formatter: (value) => `$${Number(value).toLocaleString()}`,
+  formatter: (value) => `$${value.toLocaleString()}`,
   height: 160,
   areas: [
     {
@@ -78,7 +78,7 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
             <Trend trend={trend} variant='badge' />
           </div>
           <div className='space-y-1'>
-            <KPIValue value={value} animated />
+            <KPIValue value={value} formatter={formatter} animated />
             <CardDescription className='text-foreground'>{description}</CardDescription>
           </div>
         </div>

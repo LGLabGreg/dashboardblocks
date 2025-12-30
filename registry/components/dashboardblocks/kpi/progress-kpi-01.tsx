@@ -1,6 +1,7 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
+import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -12,6 +13,7 @@ interface ProgressKPI1Props {
   percentage: number
   title: string
   value: number
+  formatter?: ValueFormatter
 }
 
 const exampleProps: ProgressKPI1Props = {
@@ -19,10 +21,11 @@ const exampleProps: ProgressKPI1Props = {
   percentage: 55,
   title: 'Revenue',
   value: 87500,
+  formatter: (value) => `$${value.toLocaleString()}`,
 }
 
 const ProgressKPI1 = (props: ProgressKPI1Props) => {
-  const { trend, percentage, title, value } = props
+  const { trend, percentage, title, value, formatter } = props
   return (
     <Card>
       <CardContent className='space-y-1'>
@@ -30,11 +33,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
           <CardDescription>{title}</CardDescription>
           <Trend trend={trend} variant='badge' />
         </div>
-        <KPIValue
-          value={value}
-          formatter={(value) => `$${value.toLocaleString()}`}
-          animated
-        />
+        <KPIValue value={value} formatter={formatter} animated />
         <div className='mt-4 space-y-1 text-sm text-muted-foreground'>
           <div className='flex items-center justify-between'>
             <span>

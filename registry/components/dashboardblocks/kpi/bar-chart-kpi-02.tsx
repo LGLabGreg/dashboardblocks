@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  RechartsTooltipFormatter,
-  TinyBarChart,
-} from '@/registry/components/dashboardblocks/chart'
+import { TinyBarChart, ValueFormatter } from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
@@ -14,7 +11,7 @@ interface BarChartKPI2Props {
   bars: BarProps[]
   trend: number
   data: unknown[]
-  formatter?: RechartsTooltipFormatter
+  formatter?: ValueFormatter
   height: number
   title: string
   value: number
@@ -69,7 +66,7 @@ const exampleProps: BarChartKPI2Props = {
       goal: 6000,
     },
   ],
-  formatter: (value) => `$${Number(value).toLocaleString()}`,
+  formatter: (value) => `$${value.toLocaleString()}`,
   height: 160,
   title: 'Revenue',
   value: 87500,
@@ -85,11 +82,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
             <CardDescription>{title}</CardDescription>
             <Trend trend={trend} variant='badge' />
           </div>
-          <KPIValue
-            value={value}
-            formatter={(value) => `$${value.toLocaleString()}`}
-            animated
-          />
+          <KPIValue value={value} formatter={formatter} animated />
         </div>
         <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
       </CardContent>
