@@ -1,6 +1,9 @@
 'use client'
 
-import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  RechartsTooltipFormatter,
+  TinyBarChart,
+} from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
@@ -11,6 +14,7 @@ interface BarChartKPI1Props {
   bars: BarProps[]
   trend: number
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height: number
   title: string
   value: number
@@ -27,61 +31,41 @@ const exampleProps: BarChartKPI1Props = {
   data: [
     {
       label: 'Monday',
-      value: 32,
-      displayValues: {
-        value: '$12,345',
-      },
+      value: 3200,
     },
     {
       label: 'Tuesday',
-      value: 45,
-      displayValues: {
-        value: '$10,234',
-      },
+      value: 4500,
     },
     {
       label: 'Wednesday',
-      value: 28,
-      displayValues: {
-        value: '$8,765',
-      },
+      value: 2800,
     },
     {
       label: 'Thursday',
-      value: 52,
-      displayValues: {
-        value: '$6,543',
-      },
+      value: 5200,
     },
     {
       label: 'Friday',
-      value: 61,
-      displayValues: {
-        value: '$4,321',
-      },
+      value: 6100,
     },
     {
       label: 'Saturday',
-      value: 48,
-      displayValues: {
-        value: '$2,109',
-      },
+      value: 4800,
     },
     {
       label: 'Sunday',
-      value: 57,
-      displayValues: {
-        value: '$1,234',
-      },
+      value: 5700,
     },
   ],
+  formatter: (value) => `$${Number(value).toLocaleString()}`,
   height: 160,
   title: 'Revenue',
   value: 87500,
 }
 
 const BarChartKPI1 = (props: BarChartKPI1Props) => {
-  const { bars, trend, data, height, title, value } = props
+  const { bars, trend, data, formatter, height, title, value } = props
   return (
     <Card>
       <CardContent>
@@ -96,7 +80,7 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
             animated
           />
         </div>
-        <TinyBarChart data={data} bars={bars} height={height} />
+        <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
       </CardContent>
     </Card>
   )

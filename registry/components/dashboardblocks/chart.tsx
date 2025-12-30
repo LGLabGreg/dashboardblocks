@@ -1,6 +1,5 @@
 'use client'
 
-import { ReactNode } from 'react'
 import {
   Area,
   AreaChart,
@@ -17,40 +16,11 @@ import {
 } from 'recharts'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
-const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameType>) => {
+const ChartTooltipContent = ({
+  payload,
+  formatter,
+}: TooltipContentProps<ValueType, NameType>) => {
   if (!payload || payload.length === 0) return null
-
-  const resolveDisplayValue = (entry: NonNullable<typeof payload>[number]) => {
-    const dataKey =
-      typeof entry.dataKey === 'string' || typeof entry.dataKey === 'number'
-        ? entry.dataKey
-        : undefined
-    const row = entry.payload as Record<string, unknown> & {
-      displayValues?: Record<string | number, ReactNode>
-    }
-
-    if (dataKey !== undefined && row) {
-      const displayValues = row.displayValues
-      if (displayValues && displayValues[dataKey] !== undefined) {
-        return displayValues[dataKey]
-      }
-
-      const keyedDisplay = row[`${String(dataKey)}DisplayValue`]
-      if (keyedDisplay !== undefined) {
-        return keyedDisplay as ReactNode
-      }
-
-      if (row[String(dataKey)] !== undefined) {
-        return row[String(dataKey)] as ReactNode
-      }
-    }
-
-    if (row?.displayValue !== undefined) {
-      return row.displayValue as ReactNode
-    }
-
-    return entry.value
-  }
 
   return (
     <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-xl'>
@@ -80,7 +50,9 @@ const ChartTooltipContent = ({ payload }: TooltipContentProps<ValueType, NameTyp
                 } as React.CSSProperties
               }
             />
-            {resolveDisplayValue(item)}
+            {formatter
+              ? formatter(item.value, item.name, item, index, payload)
+              : item.value}
           </div>
         )
       })}
@@ -92,6 +64,7 @@ export interface TinyBarChartProps {
   bars: BarProps[]
   className?: string
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height?: number
 }
 
@@ -99,6 +72,7 @@ export const TinyBarChart = ({
   bars,
   className = '',
   data,
+  formatter,
   height = 180,
 }: TinyBarChartProps) => {
   const safeData = Array.isArray(data) ? data : []
@@ -108,7 +82,9 @@ export const TinyBarChart = ({
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
         <BarChart data={safeData}>
-          <Tooltip content={ChartTooltipContent} />
+          <Tooltip
+            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+          />
           {resolvedBars.map((barProps, index) => {
             const dataKey =
               typeof barProps.dataKey === 'string' || typeof barProps.dataKey === 'number'
@@ -132,6 +108,7 @@ export const TinyBarChart = ({
 export interface TinyLineChartProps {
   className?: string
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height?: number
   lines: LineProps[]
 }
@@ -139,6 +116,7 @@ export interface TinyLineChartProps {
 export const TinyLineChart = ({
   className = '',
   data,
+  formatter,
   height = 180,
   lines,
 }: TinyLineChartProps) => {
@@ -149,7 +127,9 @@ export const TinyLineChart = ({
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart data={safeData}>
-          <Tooltip content={ChartTooltipContent} />
+          <Tooltip
+            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+          />
           {resolvedLines.map((lineProps, index) => {
             const dataKey =
               typeof lineProps.dataKey === 'string' ||
@@ -177,6 +157,7 @@ export interface TinyAreaChartProps {
   areas: AreaProps[]
   className?: string
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height?: number
 }
 
@@ -184,6 +165,7 @@ export const TinyAreaChart = ({
   areas,
   className = '',
   data,
+  formatter,
   height = 180,
 }: TinyAreaChartProps) => {
   const safeData = Array.isArray(data) ? data : []
@@ -193,7 +175,9 @@ export const TinyAreaChart = ({
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
         <AreaChart data={safeData}>
-          <Tooltip content={ChartTooltipContent} />
+          <Tooltip
+            content={(props) => <ChartTooltipContent {...props} formatter={formatter} />}
+          />
           {resolvedAreas.map((areaProps, index) => {
             const dataKey =
               typeof areaProps.dataKey === 'string' ||
@@ -214,3 +198,8 @@ export const TinyAreaChart = ({
     </div>
   )
 }
+
+export type RechartsTooltipFormatter = TooltipContentProps<
+  ValueType,
+  NameType
+>['formatter']

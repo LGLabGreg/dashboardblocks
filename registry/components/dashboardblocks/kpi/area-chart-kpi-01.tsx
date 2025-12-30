@@ -1,6 +1,9 @@
 'use client'
 
-import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  RechartsTooltipFormatter,
+  TinyAreaChart,
+} from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { AreaProps } from 'recharts'
@@ -10,6 +13,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface AreaChartKPI1Props {
   trend: number
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height: number
   areas: AreaProps[]
   title: string
@@ -23,66 +27,39 @@ const exampleProps: AreaChartKPI1Props = {
       label: 'Monday',
       revenue: 4200,
       profit: 1200,
-      displayValues: {
-        revenue: '$4,200',
-        profit: '$1,200',
-      },
     },
     {
       label: 'Tuesday',
       revenue: 5100,
       profit: 1500,
-      displayValues: {
-        revenue: '$5,100',
-        profit: '$1,500',
-      },
     },
     {
       label: 'Wednesday',
       revenue: 2800,
       profit: 800,
-      displayValues: {
-        revenue: '$4,800',
-        profit: '$800',
-      },
     },
     {
       label: 'Thursday',
       revenue: 5600,
       profit: 1600,
-      displayValues: {
-        revenue: '$5,600',
-        profit: '$1,600',
-      },
     },
     {
       label: 'Friday',
       revenue: 6300,
       profit: 1800,
-      displayValues: {
-        revenue: '$6,300',
-        profit: '$1,800',
-      },
     },
     {
       label: 'Saturday',
       revenue: 5400,
       profit: 1400,
-      displayValues: {
-        revenue: '$5,400',
-        profit: '$1,400',
-      },
     },
     {
       label: 'Sunday',
       revenue: 6900,
       profit: 2000,
-      displayValues: {
-        revenue: '$4,900',
-        profit: '$2,000',
-      },
     },
   ],
+  formatter: (value) => `$${Number(value).toLocaleString()}`,
   height: 120,
   areas: [
     {
@@ -101,7 +78,7 @@ const exampleProps: AreaChartKPI1Props = {
 }
 
 const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
-  const { trend, data, height, areas, title, value } = props
+  const { trend, data, formatter, height, areas, title, value } = props
   return (
     <Card>
       <CardContent>
@@ -116,7 +93,7 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
             animated
           />
         </div>
-        <TinyAreaChart data={data} areas={areas} height={height} />
+        <TinyAreaChart data={data} areas={areas} formatter={formatter} height={height} />
       </CardContent>
     </Card>
   )

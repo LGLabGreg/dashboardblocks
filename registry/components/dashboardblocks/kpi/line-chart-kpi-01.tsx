@@ -1,6 +1,9 @@
 'use client'
 
-import { TinyLineChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  RechartsTooltipFormatter,
+  TinyLineChart,
+} from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { LineProps } from 'recharts'
@@ -10,6 +13,7 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 interface LineChartKPI1Props {
   trend: number
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height: number
   lines: LineProps[]
   title: string
@@ -22,53 +26,37 @@ const exampleProps: LineChartKPI1Props = {
     {
       label: 'Monday',
       value: 4200,
-      displayValues: {
-        value: '4.2k visits',
-      },
     },
     {
       label: 'Tuesday',
       value: 5100,
-      displayValues: {
-        value: '5.1k visits',
-      },
     },
     {
       label: 'Wednesday',
       value: 2800,
-      displayValues: {
-        value: '4.8k visits',
-      },
     },
     {
       label: 'Thursday',
       value: 5600,
-      displayValues: {
-        value: '5.6k visits',
-      },
     },
     {
       label: 'Friday',
       value: 6300,
-      displayValues: {
-        value: '6.3k visits',
-      },
     },
     {
       label: 'Saturday',
       value: 5400,
-      displayValues: {
-        value: '5.4k visits',
-      },
     },
     {
       label: 'Sunday',
       value: 6900,
-      displayValues: {
-        value: '4.9k visits',
-      },
     },
   ],
+  formatter: (value) => {
+    const num = Number(value)
+    const k = num / 1000
+    return `${k.toFixed(1)}k visits`
+  },
   height: 120,
   lines: [
     {
@@ -81,7 +69,7 @@ const exampleProps: LineChartKPI1Props = {
 }
 
 const LineChartKPI1 = (props: LineChartKPI1Props) => {
-  const { trend, data, height, lines, title, value } = props
+  const { trend, data, formatter, height, lines, title, value } = props
   return (
     <Card>
       <CardContent>
@@ -92,7 +80,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
           </div>
           <KPIValue value={value} animated />
         </div>
-        <TinyLineChart data={data} lines={lines} height={height} />
+        <TinyLineChart data={data} lines={lines} formatter={formatter} height={height} />
       </CardContent>
     </Card>
   )

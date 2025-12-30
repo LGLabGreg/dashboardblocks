@@ -1,6 +1,9 @@
 'use client'
 
-import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  RechartsTooltipFormatter,
+  TinyBarChart,
+} from '@/registry/components/dashboardblocks/chart'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'
@@ -11,6 +14,7 @@ interface BarChartKPI2Props {
   bars: BarProps[]
   trend: number
   data: unknown[]
+  formatter?: RechartsTooltipFormatter
   height: number
   title: string
   value: number
@@ -31,75 +35,48 @@ const exampleProps: BarChartKPI2Props = {
   data: [
     {
       label: 'Monday',
-      value: 32,
-      goal: 38,
-      displayValues: {
-        value: '$12,345',
-        goal: '$14,620',
-      },
+      value: 3200,
+      goal: 3800,
     },
     {
       label: 'Tuesday',
-      value: 45,
-      goal: 42,
-      displayValues: {
-        value: '$10,234',
-        goal: '$9,980',
-      },
+      value: 4500,
+      goal: 4200,
     },
     {
       label: 'Wednesday',
-      value: 28,
-      goal: 34,
-      displayValues: {
-        value: '$8,765',
-        goal: '$10,500',
-      },
+      value: 2800,
+      goal: 3400,
     },
     {
       label: 'Thursday',
-      value: 52,
-      goal: 48,
-      displayValues: {
-        value: '$6,543',
-        goal: '$6,050',
-      },
+      value: 5200,
+      goal: 4800,
     },
     {
       label: 'Friday',
-      value: 61,
-      goal: 64,
-      displayValues: {
-        value: '$4,321',
-        goal: '$4,765',
-      },
+      value: 6100,
+      goal: 6400,
     },
     {
       label: 'Saturday',
-      value: 48,
-      goal: 52,
-      displayValues: {
-        value: '$2,109',
-        goal: '$2,356',
-      },
+      value: 4800,
+      goal: 5200,
     },
     {
       label: 'Sunday',
-      value: 57,
-      goal: 60,
-      displayValues: {
-        value: '$1,234',
-        goal: '$1,420',
-      },
+      value: 5700,
+      goal: 6000,
     },
   ],
+  formatter: (value) => `$${Number(value).toLocaleString()}`,
   height: 160,
   title: 'Revenue',
   value: 87500,
 }
 
 const BarChartKPI2 = (props: BarChartKPI2Props) => {
-  const { bars, trend, data, height, title, value } = props
+  const { bars, trend, data, formatter, height, title, value } = props
   return (
     <Card>
       <CardContent>
@@ -114,7 +91,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
             animated
           />
         </div>
-        <TinyBarChart data={data} bars={bars} height={height} />
+        <TinyBarChart data={data} bars={bars} formatter={formatter} height={height} />
       </CardContent>
     </Card>
   )
