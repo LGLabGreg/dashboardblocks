@@ -1,3 +1,5 @@
+'use client'
+
 import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
