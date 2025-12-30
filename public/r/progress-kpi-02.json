@@ -2,7 +2,6 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progress-kpi-02",
   "registryDependencies": [
-    "card",
     "https://dashboardblocks.com/r/animated-number.json",
     "https://dashboardblocks.com/r/icon.json",
     "https://dashboardblocks.com/r/kpi.json",
