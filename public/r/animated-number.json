@@ -3,7 +3,7 @@
   "name": "animated-number",
   "title": "Animated Number",
   "description": "An animated number component.",
-  "registryDependencies": ["http://localhost:3000/r/use-animated-number.json"],
+  "registryDependencies": ["https://dashboardblocks.com/r/use-animated-number.json"],
   "files": [
     {
       "path": "registry/components/dashboardblocks/animated-number.tsx",

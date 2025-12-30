@@ -3,9 +3,9 @@
   "name": "usage-meter-02",
   "registryDependencies": [
     "card",
-    "http://localhost:3000/r/animated-number.json",
-    "http://localhost:3000/r/ring.json",
-    "http://localhost:3000/r/usage-meter.json"
+    "https://dashboardblocks.com/r/animated-number.json",
+    "https://dashboardblocks.com/r/ring.json",
+    "https://dashboardblocks.com/r/usage-meter.json"
   ],
   "files": [
     {
