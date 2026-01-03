@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next'
 import { RootProvider } from 'fumadocs-ui/provider/next'
 import { type Metadata } from 'next'
 import { Geist_Mono, Inter } from 'next/font/google'
@@ -69,6 +70,7 @@ export default function Layout({ children }: LayoutProps<'/'>) {
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
           />
         )}
+        <Analytics />
       </body>
     </html>
   )
