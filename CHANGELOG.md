@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.7.0
+
+### Minor Changes
+
+- [#31](https://github.com/LGLabGreg/dashboardblocks/pull/31) [`1cf07ac`](https://github.com/LGLabGreg/dashboardblocks/commit/1cf07ac961e91c5fd2562f6dc79b7f0fa430cb9a) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Improve KPIs
+
 ## 0.6.0
 
 ### Minor Changes
