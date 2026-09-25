@@ -125,6 +125,21 @@
       ]
     },
     {
+      "name": "comparison",
+      "type": "registry:component",
+      "title": "Comparison",
+      "description": "Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "dashboard-header",
       "type": "registry:component",
       "title": "Dashboard Header",
@@ -1593,6 +1608,68 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals/goals-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-04.tsx",
           "type": "registry:component"
         }
       ]

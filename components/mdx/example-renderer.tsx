@@ -13,6 +13,10 @@ import {
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
 import {
+  comparisonComponents,
+  comparisonExampleProps,
+} from '@/registry/components/dashboardblocks/comparison/index'
+import {
   dashboardHeaderComponents,
   dashboardHeaderExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/index'
@@ -72,6 +76,7 @@ const exampleComponents = {
   ...heatmapComponents,
   ...statesComponents,
   ...goalsComponents,
+  ...comparisonComponents,
 }
 
 const examplePropsMap = {
@@ -89,6 +94,7 @@ const examplePropsMap = {
   ...heatmapExampleProps,
   ...statesExampleProps,
   ...goalsExampleProps,
+  ...comparisonExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

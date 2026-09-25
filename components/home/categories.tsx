@@ -17,6 +17,10 @@ import {
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
 import {
+  Comparison2,
+  comparison2ExampleProps,
+} from '@/registry/components/dashboardblocks/comparison/comparison-02'
+import {
   DashboardHeader1,
   dashboardHeader1ExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/dashboard-header-01'
@@ -94,6 +98,7 @@ export interface CategoryCounts {
   heatmap: number
   states: number
   goals: number
+  comparison: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -244,6 +249,14 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.states}
         >
           <States3 {...states3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/comparison'
+          title='Comparison'
+          description='Period over period, A/B tests, what changed and before and after.'
+          count={counts.comparison}
+        >
+          <Comparison2 {...comparison2ExampleProps} />
         </CategoryCard>
       </div>
     </section>

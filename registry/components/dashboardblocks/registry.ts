@@ -112,6 +112,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'comparison',
+    type: 'registry:component',
+    title: 'Comparison',
+    description:
+      'Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/comparison.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'dashboard-header',
     type: 'registry:component',
     title: 'Dashboard Header',
