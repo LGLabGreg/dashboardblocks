@@ -6,7 +6,7 @@ import {
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { ArrowRight, MoreHorizontalIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   DropdownMenu,
@@ -72,9 +72,9 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
+          <Button variant='outline' size='sm'>
             View all
-            <ArrowRight />
+            <ArrowRight data-icon='inline-end' />
           </Button>
         </CardTitle>
       </CardHeader>
@@ -94,10 +94,11 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
                   </div>
                 </ActivityFeedContent>
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' size='icon'>
-                      <MoreHorizontalIcon /> <span className='sr-only'>More options</span>
-                    </Button>
+                  <DropdownMenuTrigger
+                    className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                  >
+                    <MoreHorizontalIcon />
+                    <span className='sr-only'>More options</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end'>
                     <DropdownMenuItem>View deployment</DropdownMenuItem>

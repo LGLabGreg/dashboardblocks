@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
@@ -51,7 +50,7 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
   const { title, value, progressBars } = props
   return (
     <KPI>
-      <KPIContent className='space-y-1'>
+      <KPIContent className='gap-1'>
         <div className='flex items-center justify-between'>
           <CardTitle>{title}</CardTitle>
           <Icon icon={ClipboardList} variant='secondary' />
@@ -71,10 +70,7 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
                 <div className='flex items-center justify-between'>
                   <span>
                     <span className='font-semibold text-foreground'>
-                      <AnimatedNumber
-                        value={normalized}
-                        formatter={(value) => `${value.toLocaleString()}%`}
-                      />
+                      {normalized.toLocaleString()}%
                     </span>{' '}
                     {bar.label}
                   </span>

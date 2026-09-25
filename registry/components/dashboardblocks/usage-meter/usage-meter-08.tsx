@@ -47,8 +47,11 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
       <div className='space-y-6 pb-6'>
         <div className='flex justify-center'>
           <div className='relative size-[200px] overflow-hidden rounded-full bg-muted shadow-md'>
-            <AnimatedWave percentage={85} />
-            <div className='absolute inset-0 z-10 flex flex-col items-center justify-center space-y-2 text-center text-primary-foreground'>
+            <AnimatedWave
+              percentage={availablePercentage}
+              className='text-blue-300 dark:text-blue-800'
+            />
+            <div className='absolute inset-0 z-10 flex flex-col items-center justify-center space-y-2 text-center text-foreground'>
               <div className='space-y-1'>
                 <div className='text-sm font-medium tracking-wider'>REMAINING</div>
                 <div className='flex items-start gap-1 text-4xl font-bold leading-none'>
@@ -60,7 +63,7 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
                 </div>
               </div>
               <div className='text-xs'>
-                {used} {unit} / {limit} {unit} used
+                {used.toLocaleString()} {unit} / {limit.toLocaleString()} {unit} used
               </div>
             </div>
           </div>
@@ -72,20 +75,14 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
             <div className='h-[2px] w-12 bg-purple-500' />
             <div className='text-xs text-muted-foreground'>USED ({unit})</div>
             <div className='text-2xl font-semibold leading-none'>
-              <AnimatedNumber
-                value={used}
-                formatter={(value) => value.toLocaleString()}
-              />
+              {used.toLocaleString()}
             </div>
           </div>
           <div className='flex flex-col items-center space-y-1.5'>
             <div className='h-[2px] w-12 bg-blue-500' />
             <div className='text-xs text-muted-foreground'>AVAILABLE</div>
             <div className='text-2xl font-semibold leading-none'>
-              <AnimatedNumber
-                value={availablePercentage}
-                formatter={(value) => `${value}%`}
-              />
+              {availablePercentage}%
             </div>
           </div>
           {daysLeft !== undefined && (
@@ -93,10 +90,7 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
               <div className='h-[2px] w-12 bg-green-500' />
               <div className='text-xs text-muted-foreground'>DAYS LEFT</div>
               <div className='text-2xl font-semibold leading-none'>
-                <AnimatedNumber
-                  value={daysLeft}
-                  formatter={(value) => value.toLocaleString()}
-                />
+                {daysLeft.toLocaleString()}
               </div>
             </div>
           )}

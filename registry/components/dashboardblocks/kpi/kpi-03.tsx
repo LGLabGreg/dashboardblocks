@@ -26,7 +26,7 @@ const KPI3 = (props: KPI3Props) => {
   const { trend, description, title, value, formatter } = props
   return (
     <KPI>
-      <KPIContent className='space-y-2'>
+      <KPIContent className='gap-2'>
         <CardDescription>{title}</CardDescription>
         <KPIValue value={value} formatter={formatter} animated />
         <div className='flex items-center justify-between border-t pt-2 mt-3'>

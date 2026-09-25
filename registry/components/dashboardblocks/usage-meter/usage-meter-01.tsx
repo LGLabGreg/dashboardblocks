@@ -36,7 +36,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
 
   return (
     <Card>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <Icon icon={Activity} variant='secondary' size='sm' />
@@ -59,11 +59,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
           <ProgressBar percentage={percentage} fillClassName={fillClassName} />
         </div>
         <CardDescription>
-          <AnimatedNumber
-            value={limit - used}
-            formatter={(value) => value.toLocaleString()}
-          />{' '}
-          {unit} remaining this month
+          {(limit - used).toLocaleString()} {unit} remaining this month
         </CardDescription>
       </CardContent>
     </Card>

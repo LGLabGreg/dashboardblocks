@@ -39,7 +39,7 @@ export const ProgressBar = ({
     >
       <div
         className={cn(
-          'h-full rounded-full bg-primary transition-[width] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'h-full rounded-full bg-primary transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)]',
           fillClassName,
         )}
         style={{ width: `${width}%` }}
@@ -88,7 +88,7 @@ export const SegmentedProgressBar = ({
         return (
           <div
             key={segment.label || index}
-            className='h-full transition-[width] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] first:rounded-l-full last:rounded-r-full'
+            className='h-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] first:rounded-l-full last:rounded-r-full'
             style={{
               width: `${animatedWidth}%`,
               backgroundColor: segment.color || 'var(--primary)',

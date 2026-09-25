@@ -28,7 +28,7 @@ const ChartTooltipContent = ({
   if (!payload || payload.length === 0) return null
 
   return (
-    <div className='border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow-xl'>
+    <div className='bg-popover text-popover-foreground grid min-w-32 items-start gap-1.5 rounded-md px-2.5 py-1.5 text-xs shadow-md ring-1 ring-foreground/10'>
       <span className='font-medium'>{payload?.[0].payload.label}</span>
 
       {payload.map((item, index) => {
@@ -47,13 +47,8 @@ const ChartTooltipContent = ({
             className='flex items-center gap-1'
           >
             <div
-              className='h-2.5 w-2.5 shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)'
-              style={
-                {
-                  '--color-bg': itemColor,
-                  '--color-border': itemColor,
-                } as React.CSSProperties
-              }
+              className='size-2.5 shrink-0 rounded-[2px]'
+              style={{ backgroundColor: itemColor }}
             />
             {valueFormatter
               ? valueFormatter(Number(item.value))
@@ -93,6 +88,8 @@ export const TinyBarChart = ({
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />
             )}
+            cursor={{ fill: 'var(--color-muted)' }}
+            isAnimationActive={false}
           />
           {resolvedBars.map((barProps, index) => {
             const dataKey =
@@ -140,6 +137,8 @@ export const TinyLineChart = ({
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />
             )}
+            cursor={{ stroke: 'var(--color-border)' }}
+            isAnimationActive={false}
           />
           {resolvedLines.map((lineProps, index) => {
             const dataKey =
@@ -190,6 +189,8 @@ export const TinyAreaChart = ({
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />
             )}
+            cursor={{ stroke: 'var(--color-border)' }}
+            isAnimationActive={false}
           />
           {resolvedAreas.map((areaProps, index) => {
             const dataKey =

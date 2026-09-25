@@ -35,16 +35,17 @@ export function Hero() {
         </p>
       </div>
       <div className='flex gap-4 mb-5'>
-        <Button size='lg' asChild>
-          <Link href='/docs'>
-            Get Started
-            <ArrowRight />
-          </Link>
+        <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
+          Get Started
+          <ArrowRight data-icon='inline-end' />
         </Button>
-        <Button variant='outline' size='lg' asChild>
-          <Link href='/docs/components/activity-feed'>
-            <LayoutDashboard /> Components
-          </Link>
+        <Button
+          variant='outline'
+          size='lg'
+          nativeButton={false}
+          render={<Link href='/docs/components/activity-feed' />}
+        >
+          <LayoutDashboard data-icon='inline-start' /> Components
         </Button>
       </div>
       <div className='w-full max-w-md text-left'>

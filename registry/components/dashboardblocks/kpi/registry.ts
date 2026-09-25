@@ -52,7 +52,6 @@ export const examples: Registry['items'] = [
     name: 'progress-kpi-01',
     type: 'registry:component',
     registryDependencies: [
-      registryUrl('animated-number'),
       registryUrl('kpi'),
       registryUrl('progress-bar'),
       registryUrl('trend'),
@@ -68,7 +67,6 @@ export const examples: Registry['items'] = [
     name: 'progress-kpi-02',
     type: 'registry:component',
     registryDependencies: [
-      registryUrl('animated-number'),
       registryUrl('icon'),
       registryUrl('kpi'),
       registryUrl('progress-bar'),

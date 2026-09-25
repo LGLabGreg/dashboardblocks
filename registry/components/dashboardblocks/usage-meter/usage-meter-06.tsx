@@ -1,5 +1,4 @@
 'use client'
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Crown, Database, Mail, Users, Zap } from 'lucide-react'
@@ -34,7 +33,7 @@ const UsageMeter6 = (props: UsageMeter6Props) => {
   const { limits, plan } = props
   return (
     <Card>
-      <CardContent className='space-y-6'>
+      <CardContent className='flex flex-col gap-6'>
         <div className='flex items-center gap-2'>
           <Icon icon={Crown} size='md' />
           <CardTitle className='text-base font-medium'>{plan} Plan</CardTitle>
@@ -59,15 +58,11 @@ const UsageMeter6 = (props: UsageMeter6Props) => {
               <div key={item.name} className='space-y-1'>
                 <div className='flex items-end justify-between text-sm'>
                   <div className='flex items-center gap-2'>
-                    <item.icon className='h-3.5 w-3.5' />
+                    <item.icon className='size-3.5' strokeWidth={1.5} />
                     <span>{item.name}</span>
                   </div>
                   <span className='text-xs text-muted-foreground'>
-                    <AnimatedNumber
-                      value={item.used}
-                      formatter={(value) => value.toLocaleString()}
-                    />{' '}
-                    / {formattedLimit}
+                    {item.used.toLocaleString()} / {formattedLimit}
                   </span>
                 </div>
                 <ProgressBar
