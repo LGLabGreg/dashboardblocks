@@ -5,6 +5,10 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  Alerts1,
+  alerts1ExampleProps,
+} from '@/registry/components/dashboardblocks/alerts/alerts-01'
+import {
   Breakdown1,
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
@@ -99,6 +103,7 @@ export interface CategoryCounts {
   states: number
   goals: number
   comparison: number
+  alerts: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -257,6 +262,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.comparison}
         >
           <Comparison2 {...comparison2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/alerts'
+          title='Alerts'
+          description='Alert inboxes, threshold breaches, alert rules and severity summaries.'
+          count={counts.alerts}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
+        >
+          <Alerts1 {...alerts1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

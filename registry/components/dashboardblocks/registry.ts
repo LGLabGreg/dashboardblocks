@@ -17,6 +17,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'alerts',
+    type: 'registry:component',
+    title: 'Alerts',
+    description:
+      'Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/alerts.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'animated-number',
     type: 'registry:component',
     title: 'Animated Number',

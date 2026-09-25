@@ -5,6 +5,10 @@ import {
   activityFeedExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/index'
 import {
+  alertsComponents,
+  alertsExampleProps,
+} from '@/registry/components/dashboardblocks/alerts/index'
+import {
   breakdownComponents,
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -77,6 +81,7 @@ const exampleComponents = {
   ...statesComponents,
   ...goalsComponents,
   ...comparisonComponents,
+  ...alertsComponents,
 }
 
 const examplePropsMap = {
@@ -95,6 +100,7 @@ const examplePropsMap = {
   ...statesExampleProps,
   ...goalsExampleProps,
   ...comparisonExampleProps,
+  ...alertsExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
