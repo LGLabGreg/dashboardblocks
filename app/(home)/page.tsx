@@ -1,9 +1,12 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
+import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
+import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
+import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
@@ -31,6 +34,9 @@ const counts = {
   dataTable: Object.keys(dataTableComponents).length,
   heatmap: Object.keys(heatmapComponents).length,
   states: Object.keys(statesComponents).length,
+  goals: Object.keys(goalsComponents).length,
+  comparison: Object.keys(comparisonComponents).length,
+  alerts: Object.keys(alertsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

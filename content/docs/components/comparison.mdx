@@ -1,0 +1,28 @@
+---
+title: Comparison
+description: Compare periods, variants and segments, and show what changed.
+---
+
+### Period over Period
+
+Each metric this period and last, with the difference and the change. Metrics where a decrease is good are coloured the other way round.
+
+<ComponentPreview name='comparison-01' />
+
+### A/B Test
+
+Lift for a variant over the control, with a 95% confidence interval drawn against zero. The interval uses a normal approximation, which is fine for a dashboard summary; use a stats library when deciding a test.
+
+<ComponentPreview name='comparison-02' previewClassName='max-w-md' />
+
+### What Changed
+
+The change in each segment, as bars either side of zero, sorted from the biggest gain to the biggest drop.
+
+<ComponentPreview name='comparison-03' previewClassName='max-w-2xl' />
+
+### Before and After
+
+Two values per row on a shared scale: a hollow dot for before and a filled dot for after.
+
+<ComponentPreview name='comparison-04' previewClassName='max-w-2xl' />

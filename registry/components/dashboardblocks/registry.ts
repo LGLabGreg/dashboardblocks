@@ -17,6 +17,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'alerts',
+    type: 'registry:component',
+    title: 'Alerts',
+    description:
+      'Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/alerts.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'animated-number',
     type: 'registry:component',
     title: 'Animated Number',
@@ -112,6 +126,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'comparison',
+    type: 'registry:component',
+    title: 'Comparison',
+    description:
+      'Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/comparison.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'dashboard-header',
     type: 'registry:component',
     title: 'Dashboard Header',
@@ -136,6 +164,21 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'goals',
+    type: 'registry:component',
+    title: 'Goals',
+    description:
+      'Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/goals.tsx',
         type: 'registry:component',
       },
     ],

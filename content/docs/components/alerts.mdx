@@ -1,0 +1,30 @@
+---
+title: Alerts
+description: Alert inboxes, threshold breaches, alert rules and severity summaries.
+---
+
+Severity colours are reserved for alerts, and every severity comes with an icon and a label, so colour never carries it alone. Relative times take a fixed `now`, so they render the same on the server and in the browser.
+
+### Inbox
+
+Open alerts, most recent first, each with an acknowledge action.
+
+<ComponentPreview name='alerts-01' previewClassName='max-w-2xl' />
+
+### Threshold Breach
+
+The metric over the last hour against its threshold, with the current value, the peak and actions.
+
+<ComponentPreview name='alerts-02' previewClassName='max-w-xl' />
+
+### Rules
+
+Alert rules with their conditions, severities and channels. Pause or resume each one with its switch.
+
+<ComponentPreview name='alerts-03' />
+
+### Summary
+
+A compact strip with open alerts by severity and the latest one, for the top of a dashboard.
+
+<ComponentPreview name='alerts-04' />

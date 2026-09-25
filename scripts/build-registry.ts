@@ -1,10 +1,13 @@
 import { examples as activityFeedExamples } from '@/registry/components/dashboardblocks/activity-feed/registry'
+import { examples as alertsExamples } from '@/registry/components/dashboardblocks/alerts/registry'
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
+import { examples as comparisonExamples } from '@/registry/components/dashboardblocks/comparison/registry'
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
+import { examples as goalsExamples } from '@/registry/components/dashboardblocks/goals/registry'
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
@@ -37,6 +40,9 @@ const registry = {
     ...heatmapExamples,
     ...statesExamples,
     ...dashboardExamples,
+    ...goalsExamples,
+    ...comparisonExamples,
+    ...alertsExamples,
     ...hooks,
   ],
 }

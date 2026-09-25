@@ -19,6 +19,21 @@
       ]
     },
     {
+      "name": "alerts",
+      "type": "registry:component",
+      "title": "Alerts",
+      "description": "Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/alerts.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "animated-number",
       "type": "registry:component",
       "title": "Animated Number",
@@ -125,6 +140,21 @@
       ]
     },
     {
+      "name": "comparison",
+      "type": "registry:component",
+      "title": "Comparison",
+      "description": "Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "dashboard-header",
       "type": "registry:component",
       "title": "Dashboard Header",
@@ -155,6 +185,24 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "goals",
+      "type": "registry:component",
+      "title": "Goals",
+      "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/goals.tsx",
           "type": "registry:component"
         }
       ]
@@ -1512,6 +1560,203 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "goals-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/goals.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/goals/goals-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "goals-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/goals.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/goals/goals-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "goals-03",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/goals.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/goals/goals-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "goals-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/ring.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/goals/goals-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comparison-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comparison/comparison-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "alerts-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/alerts.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/alerts/alerts-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "alerts-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/alerts.json",
+        "https://dashboardblocks.com/r/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/alerts/alerts-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "alerts-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "switch",
+        "https://dashboardblocks.com/r/alerts.json",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/alerts/alerts-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "alerts-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/alerts.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/alerts/alerts-04.tsx",
           "type": "registry:component"
         }
       ]

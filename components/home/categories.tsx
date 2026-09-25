@@ -5,6 +5,10 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  Alerts1,
+  alerts1ExampleProps,
+} from '@/registry/components/dashboardblocks/alerts/alerts-01'
+import {
   Breakdown1,
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
@@ -16,6 +20,10 @@ import {
   ChartPanel5,
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
+import {
+  Comparison2,
+  comparison2ExampleProps,
+} from '@/registry/components/dashboardblocks/comparison/comparison-02'
 import {
   DashboardHeader1,
   dashboardHeader1ExampleProps,
@@ -32,6 +40,10 @@ import {
   Funnel2,
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
+import {
+  Goals1,
+  goals1ExampleProps,
+} from '@/registry/components/dashboardblocks/goals/goals-01'
 import {
   Heatmap1,
   heatmap1ExampleProps,
@@ -89,6 +101,9 @@ export interface CategoryCounts {
   dataTable: number
   heatmap: number
   states: number
+  goals: number
+  comparison: number
+  alerts: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -209,10 +224,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Heatmap'
           description='Activity by hour, cohort retention, calendars and latency hot spots.'
           count={counts.heatmap}
-          className='md:col-span-3'
-          previewClassName='*:w-80 sm:*:w-[40rem]'
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Heatmap1 {...heatmap1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/goals'
+          title='Goals'
+          description='Targets with pace, projections and daily goal rings.'
+          count={counts.goals}
+        >
+          <Goals1 {...goals1ExampleProps} />
         </CategoryCard>
         <CategoryCard
           href='/docs/components/status'
@@ -231,6 +254,24 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.states}
         >
           <States3 {...states3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/comparison'
+          title='Comparison'
+          description='Period over period, A/B tests, what changed and before and after.'
+          count={counts.comparison}
+        >
+          <Comparison2 {...comparison2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/alerts'
+          title='Alerts'
+          description='Alert inboxes, threshold breaches, alert rules and severity summaries.'
+          count={counts.alerts}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
+        >
+          <Alerts1 {...alerts1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

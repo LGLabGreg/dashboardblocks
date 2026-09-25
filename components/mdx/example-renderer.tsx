@@ -5,6 +5,10 @@ import {
   activityFeedExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/index'
 import {
+  alertsComponents,
+  alertsExampleProps,
+} from '@/registry/components/dashboardblocks/alerts/index'
+import {
   breakdownComponents,
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -12,6 +16,10 @@ import {
   chartPanelComponents,
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
+import {
+  comparisonComponents,
+  comparisonExampleProps,
+} from '@/registry/components/dashboardblocks/comparison/index'
 import {
   dashboardHeaderComponents,
   dashboardHeaderExampleProps,
@@ -24,6 +32,10 @@ import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
+import {
+  goalsComponents,
+  goalsExampleProps,
+} from '@/registry/components/dashboardblocks/goals/index'
 import {
   heatmapComponents,
   heatmapExampleProps,
@@ -67,6 +79,9 @@ const exampleComponents = {
   ...dataTableComponents,
   ...heatmapComponents,
   ...statesComponents,
+  ...goalsComponents,
+  ...comparisonComponents,
+  ...alertsComponents,
 }
 
 const examplePropsMap = {
@@ -83,6 +98,9 @@ const examplePropsMap = {
   ...dataTableExampleProps,
   ...heatmapExampleProps,
   ...statesExampleProps,
+  ...goalsExampleProps,
+  ...comparisonExampleProps,
+  ...alertsExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
