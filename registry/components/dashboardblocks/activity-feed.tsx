@@ -69,22 +69,26 @@ const indicatorVariants = cva('inline-flex items-center justify-center rounded-f
     {
       status: 'success',
       variant: 'ring',
-      class: 'bg-green-200 text-green-600',
+      class:
+        'bg-[color-mix(in_oklab,var(--color-green-600)_15%,var(--card))] text-green-600 dark:text-green-500',
     },
     {
       status: 'progress',
       variant: 'ring',
-      class: 'bg-blue-200 text-blue-600',
+      class:
+        'bg-[color-mix(in_oklab,var(--color-blue-600)_15%,var(--card))] text-blue-600 dark:text-blue-500',
     },
     {
       status: 'error',
       variant: 'ring',
-      class: 'bg-red-200 text-red-600',
+      class:
+        'bg-[color-mix(in_oklab,var(--color-red-600)_15%,var(--card))] text-red-600 dark:text-red-500',
     },
     {
       status: 'info',
       variant: 'ring',
-      class: 'bg-purple-200 text-purple-600',
+      class:
+        'bg-[color-mix(in_oklab,var(--color-purple-600)_15%,var(--card))] text-purple-600 dark:text-purple-500',
     },
   ],
   defaultVariants: {

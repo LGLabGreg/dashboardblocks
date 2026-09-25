@@ -72,7 +72,7 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
             View all
             <ArrowRight />
           </Button>

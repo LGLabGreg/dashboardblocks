@@ -33,10 +33,13 @@ interface ActivityFeed02Props {
 }
 
 const statusStyles: Record<EventStatus, string> = {
-  success: 'border-green-500 bg-green-100 text-green-500',
-  progress: 'border-blue-500 bg-blue-100 text-blue-500',
-  error: 'border-red-500 bg-red-100 text-red-500',
-  info: 'border-purple-500 bg-purple-100 text-purple-500',
+  success:
+    'bg-[color-mix(in_oklab,var(--color-green-500)_10%,var(--card))] text-green-600 dark:text-green-500',
+  progress:
+    'bg-[color-mix(in_oklab,var(--color-blue-500)_10%,var(--card))] text-blue-600 dark:text-blue-500',
+  error:
+    'bg-[color-mix(in_oklab,var(--color-red-500)_10%,var(--card))] text-red-600 dark:text-red-500',
+  info: 'bg-[color-mix(in_oklab,var(--color-purple-500)_10%,var(--card))] text-purple-600 dark:text-purple-500',
 }
 
 const exampleProps: ActivityFeed02Props = {
@@ -84,14 +87,14 @@ const ActivityFeed02 = (props: ActivityFeed02Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
             View all
             <ArrowRight />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ActivityFeedTimeline lineClassName='shadow-xs'>
+        <ActivityFeedTimeline>
           {events.map((event) => {
             const EventIcon = event.icon
             return (
