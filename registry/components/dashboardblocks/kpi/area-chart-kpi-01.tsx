@@ -2,11 +2,11 @@
 
 import {
   TinyAreaChart,
+  TinyAreaChartProps,
   ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
-import { AreaProps } from 'recharts'
 
 import { CardDescription } from '@/components/ui/card'
 
@@ -15,7 +15,7 @@ interface AreaChartKPI1Props {
   data: unknown[]
   formatter?: ValueFormatter
   height: number
-  areas: AreaProps[]
+  areas: TinyAreaChartProps['areas']
   title: string
   value: number
 }

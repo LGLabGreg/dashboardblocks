@@ -1,9 +1,9 @@
 'use client'
 
+import { ComponentProps } from 'react'
 import {
   Area,
   AreaChart,
-  AreaProps,
   Bar,
   BarChart,
   BarProps,
@@ -15,6 +15,8 @@ import {
   TooltipContentProps,
 } from 'recharts'
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
+
+type AreaProps = ComponentProps<typeof Area>
 
 export type ValueFormatter = (value: number) => string
 
