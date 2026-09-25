@@ -1,4 +1,4 @@
-import { ArrowRight, LayoutDashboard } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -8,62 +8,70 @@ import { Showcase } from './showcase'
 
 export function Hero({ blockCount }: { blockCount: number }) {
   return (
-    <section className='relative w-full overflow-hidden'>
-      <div aria-hidden className='pointer-events-none absolute inset-0 -z-10'>
-        <div className='home-grid absolute inset-0' />
-        <div className='bg-chart-1/20 absolute -top-40 left-1/2 size-[36rem] -translate-x-[85%] rounded-full blur-3xl' />
-        <div className='bg-chart-2/20 absolute -top-24 left-1/2 size-[32rem] -translate-x-[10%] rounded-full blur-3xl' />
-      </div>
+    <section className='w-full'>
+      <div className='border-b md:px-6'>
+        <div className='relative mx-auto max-w-6xl px-6 md:border-x pt-16 pb-14 md:px-10 md:pt-24 md:pb-20'>
+          <Corner className='-bottom-[5px] -left-[5px]' />
+          <Corner className='-right-[5px] -bottom-[5px]' />
 
-      <div className='mx-auto flex max-w-6xl flex-col items-center px-4 pt-14 text-center md:pt-20'>
-        <Link
-          href='/docs'
-          className='bg-background/70 hover:bg-background animate-in fade-in slide-in-from-bottom-2 mb-8 inline-flex items-center gap-2 rounded-full border py-1 pr-1 pl-3 text-sm backdrop-blur transition-colors duration-700'
-        >
-          <span className='relative flex size-2'>
-            <span className='bg-chart-2 absolute inline-flex size-full animate-ping rounded-full opacity-75' />
-            <span className='bg-chart-2 relative inline-flex size-2 rounded-full' />
-          </span>
-          <span className='font-medium'>{blockCount} blocks and counting</span>
-          <span className='bg-muted flex size-6 items-center justify-center rounded-full'>
-            <ArrowRight className='size-3.5' />
-          </span>
-        </Link>
+          <div className='text-muted-foreground animate-in fade-in flex items-center justify-between gap-4 font-mono text-xs tracking-wider uppercase duration-700'>
+            <Link
+              href='/docs'
+              className='hover:text-foreground inline-flex items-center gap-2 transition-colors'
+            >
+              <span className='bg-foreground size-1.5 rounded-full' />
+              {blockCount} blocks for shadcn/ui
+              <ArrowRight className='size-3' />
+            </Link>
+            <span className='hidden sm:inline'>Open source · MIT</span>
+          </div>
 
-        <h1 className='animate-in fade-in slide-in-from-bottom-4 max-w-4xl text-4xl font-semibold tracking-tighter text-balance duration-700 sm:text-6xl md:text-7xl'>
-          Ship dashboards,{' '}
-          <span className='from-chart-1 to-chart-2 bg-gradient-to-r bg-clip-text text-transparent'>
-            one block
-          </span>{' '}
-          at a time.
-        </h1>
+          <div className='mt-10 grid gap-10 md:mt-14 lg:grid-cols-12 lg:items-end lg:gap-12'>
+            <h1 className='animate-in fade-in slide-in-from-bottom-3 text-5xl leading-[0.95] font-medium tracking-[-0.045em] text-balance duration-700 sm:text-6xl lg:col-span-8 lg:text-7xl'>
+              Ship dashboards,
+              <br />
+              <span className='text-muted-foreground'>one block at a time.</span>
+            </h1>
 
-        <p className='text-muted-foreground animate-in fade-in slide-in-from-bottom-4 mt-6 max-w-2xl text-base text-balance duration-1000 sm:text-lg'>
-          KPI cards, usage meters, activity feeds and leaderboards — composable blocks
-          built with Tailwind CSS and shadcn/ui. Copy one, or all of them. The code is
-          yours.
-        </p>
-
-        <div className='animate-in fade-in slide-in-from-bottom-4 mt-8 flex flex-col items-center gap-4 duration-1000 sm:flex-row'>
-          <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
-            Get Started
-            <ArrowRight data-icon='inline-end' />
-          </Button>
-          <Button
-            variant='outline'
-            size='lg'
-            className='bg-background/70'
-            nativeButton={false}
-            render={<Link href='/docs/components/kpi' />}
-          >
-            <LayoutDashboard data-icon='inline-start' /> Browse blocks
-          </Button>
+            <div className='animate-in fade-in slide-in-from-bottom-3 flex flex-col gap-6 duration-1000 lg:col-span-4'>
+              <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
+                KPI cards, usage meters, activity feeds and leaderboards. Composable
+                blocks built with Tailwind CSS and shadcn/ui — copy one or all of them,
+                and own the code.
+              </p>
+              <div className='flex flex-wrap items-center gap-3'>
+                <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
+                  Get Started
+                  <ArrowRight data-icon='inline-end' />
+                </Button>
+                <Button
+                  variant='ghost'
+                  size='lg'
+                  nativeButton={false}
+                  render={<Link href='/docs/components/kpi' />}
+                >
+                  Browse blocks
+                </Button>
+              </div>
+              <InstallCommand className='self-start' />
+            </div>
+          </div>
         </div>
-
-        <InstallCommand className='animate-in fade-in mt-6 duration-1000' />
       </div>
 
       <Showcase />
     </section>
+  )
+}
+
+function Corner({ className }: { className: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox='0 0 11 11'
+      className={`text-foreground/40 absolute hidden size-[11px] md:block ${className}`}
+    >
+      <path d='M5.5 0v11M0 5.5h11' stroke='currentColor' strokeWidth='1' />
+    </svg>
   )
 }

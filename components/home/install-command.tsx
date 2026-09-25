@@ -31,7 +31,7 @@ export function InstallCommand({
         className,
       )}
     >
-      <span className='text-chart-1 select-none'>$</span>
+      <span className='text-muted-foreground select-none'>$</span>
       <span className='truncate'>
         npx shadcn add <span className='text-muted-foreground'>{name}</span>
       </span>
