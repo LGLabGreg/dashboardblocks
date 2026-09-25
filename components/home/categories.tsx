@@ -17,6 +17,10 @@ import {
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
 import {
+  DashboardHeader1,
+  dashboardHeader1ExampleProps,
+} from '@/registry/components/dashboardblocks/dashboard-header/dashboard-header-01'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -41,6 +45,10 @@ import {
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
 import {
+  StatGroup2,
+  statGroup2ExampleProps,
+} from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
+import {
   Status1,
   status1ExampleProps,
 } from '@/registry/components/dashboardblocks/status/status-01'
@@ -61,6 +69,8 @@ import { SectionHeading } from './section-heading'
 
 export interface CategoryCounts {
   kpi: number
+  statGroup: number
+  dashboardHeader: number
   chartPanel: number
   breakdown: number
   funnel: number
@@ -98,6 +108,26 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.usageMeter}
         >
           <UsageMeter8 {...usageMeter8ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/stat-group'
+          title='Stat Group'
+          description='A row of related metrics in one card, with changes, sparklines and tabs.'
+          count={counts.statGroup}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
+        >
+          <StatGroup2 {...statGroup2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/dashboard-header'
+          title='Dashboard Header'
+          description='Date range presets, compare, filters and export above your dashboard.'
+          count={counts.dashboardHeader}
+        >
+          <div className='bg-background rounded-xl p-4 shadow-xs ring-1 ring-foreground/10'>
+            <DashboardHeader1 {...dashboardHeader1ExampleProps} />
+          </div>
         </CategoryCard>
         <CategoryCard
           href='/docs/components/activity-feed'

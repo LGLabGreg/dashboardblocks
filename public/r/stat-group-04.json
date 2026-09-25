@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-group-04",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/stat-group.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/stat-group/stat-group-04.tsx",
+      "content": "'use client'\n\nimport {\n  Stat,\n  StatChange,\n  StatGroup,\n  StatLabel,\n  type StatMetric,\n  StatValue,\n  formatStatValue,\n} from '@/registry/components/dashboardblocks/stat-group'\n\nimport { Card } from '@/components/ui/card'\n\ninterface StatGroup4Props {\n  metrics: StatMetric[]\n}\n\nconst compactCurrency = (value: number) =>\n  `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, notation: 'compact' }).format(value)}`\n\nconst exampleProps: StatGroup4Props = {\n  metrics: [\n    {\n      formatter: compactCurrency,\n      key: 'mrr',\n      label: 'MRR',\n      previous: 80_800,\n      value: 84_200,\n    },\n    { key: 'customers', label: 'Customers', previous: 1_186, value: 1_241 },\n    {\n      formatter: (value) => `$${value.toFixed(2)}`,\n      key: 'arpu',\n      label: 'ARPU',\n      previous: 68.13,\n      value: 67.85,\n    },\n    {\n      changeType: 'points',\n      formatter: (value) => `${value}%`,\n      goodDirection: 'down',\n      key: 'churn',\n      label: 'Churn',\n      previous: 2.4,\n      value: 2.1,\n    },\n    {\n      changeType: 'points',\n      key: 'nps',\n      label: 'NPS',\n      previous: 44,\n      value: 48,\n    },\n  ],\n}\n\nconst StatGroup4 = (props: StatGroup4Props) => {\n  const { metrics } = props\n\n  return (\n    <Card className='@container gap-0 py-0'>\n      <StatGroup className='grid-cols-2 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none [&>:last-child:nth-child(odd)]:col-span-2 @2xl:[&>:last-child:nth-child(odd)]:col-span-1'>\n        {metrics.map((metric) => (\n          <Stat key={metric.key} className='gap-0.5 px-4 py-3'>\n            <StatLabel className='text-xs'>{metric.label}</StatLabel>\n            <StatValue className='text-lg'>{formatStatValue(metric)}</StatValue>\n            <StatChange metric={metric} showPrevious={false} />\n          </Stat>\n        ))}\n      </StatGroup>\n    </Card>\n  )\n}\n\nexport { StatGroup4, exampleProps as statGroup4ExampleProps, type StatGroup4Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -144,45 +144,50 @@ interface ChartPanelTableProps<T extends object> {
   rows: T[]
 }
 
-/** The chart's data as a table for assistive technology. */
+/**
+ * The chart's data as a table for assistive technology. The wrapper, not the
+ * table, is visually hidden: a table can't shrink below its content width.
+ */
 function ChartPanelTable<T extends object>({
   caption,
   columns,
   rows,
 }: ChartPanelTableProps<T>) {
   return (
-    <table className='sr-only'>
-      <caption>{caption}</caption>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <th key={column.key} scope='col'>
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {columns.map((column, columnIndex) => {
-              const value = (row as Record<string, unknown>)[column.key]
-              const content =
-                column.format && typeof value === 'number'
-                  ? column.format(value)
-                  : String(value)
-              return columnIndex === 0 ? (
-                <th key={column.key} scope='row'>
-                  {content}
-                </th>
-              ) : (
-                <td key={column.key}>{content}</td>
-              )
-            })}
+    <div className='sr-only'>
+      <table>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.key} scope='col'>
+                {column.label}
+              </th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column, columnIndex) => {
+                const value = (row as Record<string, unknown>)[column.key]
+                const content =
+                  column.format && typeof value === 'number'
+                    ? column.format(value)
+                    : String(value)
+                return columnIndex === 0 ? (
+                  <th key={column.key} scope='row'>
+                    {content}
+                  </th>
+                ) : (
+                  <td key={column.key}>{content}</td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

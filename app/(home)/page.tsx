@@ -1,9 +1,11 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
+import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
+import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 
@@ -14,6 +16,8 @@ import { Steps } from '@/components/home/steps'
 
 const counts = {
   kpi: Object.keys(kpiComponents).length,
+  statGroup: Object.keys(statGroupComponents).length,
+  dashboardHeader: Object.keys(dashboardHeaderComponents).length,
   chartPanel: Object.keys(chartPanelComponents).length,
   breakdown: Object.keys(breakdownComponents).length,
   funnel: Object.keys(funnelComponents).length,

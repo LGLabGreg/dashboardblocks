@@ -13,6 +13,10 @@ import {
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
 import {
+  dashboardHeaderComponents,
+  dashboardHeaderExampleProps,
+} from '@/registry/components/dashboardblocks/dashboard-header/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
@@ -24,6 +28,10 @@ import {
   leaderboardComponents,
   leaderboardExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/index'
+import {
+  statGroupComponents,
+  statGroupExampleProps,
+} from '@/registry/components/dashboardblocks/stat-group/index'
 import {
   statusComponents,
   statusExampleProps,
@@ -42,6 +50,8 @@ const exampleComponents = {
   ...breakdownComponents,
   ...funnelComponents,
   ...statusComponents,
+  ...statGroupComponents,
+  ...dashboardHeaderComponents,
 }
 
 const examplePropsMap = {
@@ -53,6 +63,8 @@ const examplePropsMap = {
   ...breakdownExampleProps,
   ...funnelExampleProps,
   ...statusExampleProps,
+  ...statGroupExampleProps,
+  ...dashboardHeaderExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

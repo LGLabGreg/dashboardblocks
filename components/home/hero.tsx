@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
+import { VersionBadge } from '@/components/version-badge'
 
 import { Corner } from './corner'
 import { InstallCommand } from './install-command'
@@ -24,7 +25,10 @@ export function Hero({ blockCount }: { blockCount: number }) {
               {blockCount} blocks for shadcn/ui
               <ArrowRight className='size-3' />
             </Link>
-            <span className='hidden sm:inline'>Open source · MIT</span>
+            <span className='hidden items-center gap-3 sm:inline-flex'>
+              <VersionBadge />
+              Open source · MIT
+            </span>
           </div>
 
           <div className='mt-10 grid gap-10 md:mt-14 lg:grid-cols-12 lg:items-end lg:gap-12'>

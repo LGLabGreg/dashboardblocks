@@ -36,9 +36,9 @@ export function ComponentPreviewHighlighted({
   }, [code])
 
   return (
-    <div className={cn('not-prose my-6 border border-dashed p-4', className)}>
-      <Tabs defaultValue='preview'>
-        <div className='flex flex-wrap items-center gap-2'>
+    <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
+      <Tabs defaultValue='preview' className='gap-0'>
+        <div className='bg-background flex flex-wrap items-center gap-2 border-b p-3'>
           <TabsList>
             <TabsTrigger value='preview'>Preview</TabsTrigger>
             <TabsTrigger value='code'>Code</TabsTrigger>
@@ -50,14 +50,14 @@ export function ComponentPreviewHighlighted({
           <ShadcnCliButton name={name} />
         </div>
 
-        <TabsContent value='preview'>
-          <div className='flex items-center justify-center pt-4 pb-2'>
+        <TabsContent value='preview' className='bg-muted/40 dark:bg-black/30'>
+          <div className='flex items-center justify-center px-4 py-8 sm:px-6'>
             <div className={cn('w-full', previewClassName)}>{children}</div>
           </div>
         </TabsContent>
         <TabsContent value='code'>
           <div
-            className='max-h-[500px] mt-2 overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
+            className='max-h-[500px] overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
             dangerouslySetInnerHTML={{ __html: highlightedCode }}
           />
         </TabsContent>
