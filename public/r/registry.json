@@ -92,6 +92,25 @@
       ]
     },
     {
+      "name": "leaderboard",
+      "type": "registry:component",
+      "title": "Leaderboard",
+      "description": "Primitives for composing ranked lists and leaderboards.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "progress-bar",
       "type": "registry:component",
       "title": "Progress Bar",
@@ -561,6 +580,92 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-08.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/leaderboard.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard/leaderboard-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "card",
+        "https://dashboardblocks.com/r/leaderboard.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard/leaderboard-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "card",
+        "https://dashboardblocks.com/r/leaderboard.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard/leaderboard-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/icon.json",
+        "https://dashboardblocks.com/r/leaderboard.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard/leaderboard-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-05",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/leaderboard.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/leaderboard/leaderboard-05.tsx",
           "type": "registry:component"
         }
       ]

@@ -9,6 +9,10 @@ import {
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
 import {
+  leaderboardComponents,
+  leaderboardExampleProps,
+} from '@/registry/components/dashboardblocks/leaderboard/index'
+import {
   usageMeterComponents,
   usageMeterExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/index'
@@ -17,12 +21,14 @@ const exampleComponents = {
   ...kpiComponents,
   ...activityFeedComponents,
   ...usageMeterComponents,
+  ...leaderboardComponents,
 }
 
 const examplePropsMap = {
   ...kpiExampleProps,
   ...activityFeedExampleProps,
   ...usageMeterExampleProps,
+  ...leaderboardExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
