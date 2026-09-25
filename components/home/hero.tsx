@@ -53,7 +53,7 @@ export function Hero({ blockCount }: { blockCount: number }) {
                   variant='ghost'
                   size='lg'
                   nativeButton={false}
-                  render={<Link href='/docs/components/kpi' />}
+                  render={<Link href='/docs/components/activity-feed' />}
                 >
                   Browse blocks
                 </Button>
