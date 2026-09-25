@@ -5,6 +5,10 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  Breakdown1,
+  breakdown1ExampleProps,
+} from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
+import {
   ChartPanel1,
   chartPanel1ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-01'
@@ -12,6 +16,14 @@ import {
   ChartPanel5,
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
+import {
+  Funnel1,
+  funnel1ExampleProps,
+} from '@/registry/components/dashboardblocks/funnel/funnel-01'
+import {
+  Funnel2,
+  funnel2ExampleProps,
+} from '@/registry/components/dashboardblocks/funnel/funnel-02'
 import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
@@ -42,6 +54,8 @@ import { SectionHeading } from './section-heading'
 export interface CategoryCounts {
   kpi: number
   chartPanel: number
+  breakdown: number
+  funnel: number
   usageMeter: number
   activityFeed: number
   leaderboard: number
@@ -107,6 +121,27 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <ChartPanel1 {...chartPanel1ExampleProps} />
           <div className='hidden lg:block'>
             <ChartPanel5 {...chartPanel5ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/breakdown'
+          title='Breakdown'
+          description='How a total splits into parts: segmented bars, waffles and share shifts.'
+          count={counts.breakdown}
+        >
+          <Breakdown1 {...breakdown1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/funnel'
+          title='Funnel'
+          description='Conversion steps with drop-off, from signups to checkout.'
+          count={counts.funnel}
+          className='md:col-span-2'
+          previewClassName='*:w-80 lg:*:w-[21rem]'
+        >
+          <Funnel2 {...funnel2ExampleProps} />
+          <div className='hidden lg:block'>
+            <Funnel1 {...funnel1ExampleProps} />
           </div>
         </CategoryCard>
       </div>

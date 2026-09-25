@@ -55,6 +55,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'breakdown',
+    type: 'registry:component',
+    title: 'Breakdown',
+    description:
+      'Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/breakdown.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'chart-panel',
     type: 'registry:component',
     title: 'Chart Panel',
@@ -64,6 +78,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'funnel',
+    type: 'registry:component',
+    title: 'Funnel',
+    description:
+      'Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/funnel.tsx',
         type: 'registry:component',
       },
     ],

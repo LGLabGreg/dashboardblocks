@@ -61,6 +61,21 @@
       ]
     },
     {
+      "name": "breakdown",
+      "type": "registry:component",
+      "title": "Breakdown",
+      "description": "Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/breakdown.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "chart-panel",
       "type": "registry:component",
       "title": "Chart Panel",
@@ -71,6 +86,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "funnel",
+      "type": "registry:component",
+      "title": "Funnel",
+      "description": "Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/funnel.tsx",
           "type": "registry:component"
         }
       ]
@@ -785,6 +815,125 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-06.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "breakdown-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/breakdown/breakdown-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "breakdown-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/breakdown/breakdown-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "breakdown-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/breakdown/breakdown-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "breakdown-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/breakdown/breakdown-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "funnel-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/funnel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/funnel/funnel-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "funnel-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/funnel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/funnel/funnel-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "funnel-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "card",
+        "https://dashboardblocks.com/r/funnel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/funnel/funnel-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "funnel-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/funnel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/funnel/funnel-04.tsx",
           "type": "registry:component"
         }
       ]

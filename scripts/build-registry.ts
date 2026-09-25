@@ -1,5 +1,7 @@
 import { examples as activityFeedExamples } from '@/registry/components/dashboardblocks/activity-feed/registry'
+import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
+import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
@@ -19,6 +21,8 @@ const registry = {
     ...usageMeterExamples,
     ...leaderboardExamples,
     ...chartPanelExamples,
+    ...breakdownExamples,
+    ...funnelExamples,
     ...hooks,
   ],
 }
