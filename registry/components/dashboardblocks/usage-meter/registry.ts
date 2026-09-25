@@ -41,7 +41,6 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      registryUrl('animated-number'),
       registryUrl('progress-bar'),
       registryUrl('usage-meter'),
     ],
@@ -92,7 +91,6 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'card',
-      registryUrl('animated-number'),
       registryUrl('icon'),
       registryUrl('progress-bar'),
       registryUrl('usage-meter'),

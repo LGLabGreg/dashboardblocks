@@ -21,7 +21,7 @@ const KPI2 = (props: KPI2Props) => {
   const { trend, title, value } = props
   return (
     <KPI>
-      <KPIContent className='space-y-2'>
+      <KPIContent className='gap-2'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
           <Trend trend={trend} variant='badge' />

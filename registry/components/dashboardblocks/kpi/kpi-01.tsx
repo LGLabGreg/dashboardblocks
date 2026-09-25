@@ -25,7 +25,7 @@ const KPI1 = (props: KPI1Props) => {
 
   return (
     <KPI>
-      <KPIContent className='space-y-2'>
+      <KPIContent className='gap-2'>
         <CardDescription>{title}</CardDescription>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1'>
           <KPIValue value={value} formatter={formatter} animated />

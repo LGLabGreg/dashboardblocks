@@ -1,31 +1,48 @@
+import { cn } from '@/lib/utils'
+
+const waveStyles = `
+  @keyframes dashboardblocks-wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .dashboardblocks-wave { animation: dashboardblocks-wave 3s linear infinite; }
+  .dashboardblocks-wave-secondary { animation: dashboardblocks-wave 4s linear infinite reverse; }
+  @media (prefers-reduced-motion: reduce) {
+    .dashboardblocks-wave, .dashboardblocks-wave-secondary { animation: none; }
+  }
+`
+
 export const AnimatedWave = ({
+  className,
   percentage = 64,
-  waveColor = '#3b82f6',
-  waveColorSecondary = '#3b82f6',
+  waveColor = 'currentColor',
+  waveColorSecondary = 'currentColor',
   waveHeight = 16,
 }: {
+  /**
+   * Sets the wave color through `currentColor`, e.g. `text-blue-300`
+   */
+  className?: string
   percentage?: number
   waveColor?: string
   waveColorSecondary?: string
   waveHeight?: number
 }) => {
+  const safePercentage = Number.isFinite(percentage) ? percentage : 0
+  const normalized = Math.min(100, Math.max(0, safePercentage))
+
   return (
-    <div className='relative size-full'>
+    <div className={cn('relative size-full text-blue-500', className)}>
       {/* Wave container */}
       <div
-        className='absolute inset-0 transition-transform duration-1000 ease-out'
+        className='absolute inset-0 transition-[transform] duration-1000 ease-out'
         style={{
-          transform: `translateY(${100 - percentage}%)`,
+          transform: `translateY(${100 - normalized}%)`,
         }}
       >
         {/* Primary wave */}
         <svg
-          className='absolute w-[200%] h-full'
-          style={{
-            animation: 'wave 3s linear infinite',
-            left: 0,
-            top: 0,
-          }}
+          className='dashboardblocks-wave absolute top-0 left-0 w-[200%] h-full'
           viewBox='0 0 400 200'
           preserveAspectRatio='none'
         >
@@ -46,12 +63,7 @@ export const AnimatedWave = ({
 
         {/* Secondary wave (offset) */}
         <svg
-          className='absolute w-[200%] h-full opacity-60'
-          style={{
-            animation: 'wave 4s linear infinite reverse',
-            left: 0,
-            top: 0,
-          }}
+          className='dashboardblocks-wave-secondary absolute top-0 left-0 w-[200%] h-full opacity-60'
           viewBox='0 0 400 200'
           preserveAspectRatio='none'
         >
@@ -71,13 +83,10 @@ export const AnimatedWave = ({
         </svg>
       </div>
 
-      {/* Keyframes */}
-      <style>{`
-        @keyframes wave {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+      {/* Keyframes, hoisted and deduped by React 19 across instances */}
+      <style href='dashboardblocks-wave' precedence='default'>
+        {waveStyles}
+      </style>
     </div>
   )
 }

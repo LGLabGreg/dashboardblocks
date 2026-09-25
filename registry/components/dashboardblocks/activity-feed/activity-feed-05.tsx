@@ -74,26 +74,24 @@ const exampleProps: ActivityFeed05Props = {
       platform: 'slack',
       avatar: '/images/women.jpg',
       extra: (
-        <Card className='py-4 rounded-md'>
-          <CardContent className='px-4 space-y-4'>
-            <div className='flex items-center gap-2'>
-              <Badge variant='outline'># marketing</Badge>
-              <Badge variant='outline'># design</Badge>
+        <div className='flex flex-col gap-4 rounded-lg bg-muted/50 p-4'>
+          <div className='flex items-center gap-2'>
+            <Badge variant='outline'># marketing</Badge>
+            <Badge variant='outline'># design</Badge>
+          </div>
+          <p className='text-sm'>
+            Hello everyone, just shipped the new onboarding flow! Would love feedback on
+            the empty states before we roll out to everyone.
+          </p>
+          <div className='flex items-center gap-2 text-xs text-muted-foreground font-medium'>
+            <div className='flex items-center gap-1'>
+              <Smile className='size-4' />2 reactions
             </div>
-            <p className='text-sm'>
-              Hello everyone, just shipped the new onboarding flow! Would love feedback on
-              the empty states before we roll out to everyone.
-            </p>
-            <div className='flex items-center gap-2 text-xs text-muted-foreground font-medium'>
-              <div className='flex items-center gap-1'>
-                <Smile className='size-4' />2 reactions
-              </div>
-              <div className='flex items-center gap-1'>
-                <MessageSquare className='size-4' />3 replies
-              </div>
+            <div className='flex items-center gap-1'>
+              <MessageSquare className='size-4' />3 replies
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ),
     },
     {
@@ -115,9 +113,9 @@ const ActivityFeed05 = (props: ActivityFeed05Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
+          <Button variant='outline' size='sm'>
             View all
-            <ArrowRight />
+            <ArrowRight data-icon='inline-end' />
           </Button>
         </CardTitle>
       </CardHeader>

@@ -65,11 +65,7 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
               </UsageMeterLimit>
             </div>
             <p className='text-sm text-muted-foreground'>
-              <AnimatedNumber
-                value={limit - used}
-                formatter={(value) => value.toLocaleString()}
-              />{' '}
-              {unit} available
+              {(limit - used).toLocaleString()} {unit} available
             </p>
           </div>
         </div>

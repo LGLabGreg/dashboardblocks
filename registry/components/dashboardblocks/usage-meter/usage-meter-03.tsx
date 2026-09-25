@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
@@ -30,7 +29,7 @@ const UsageMeter3 = (props: UsageMeter3Props) => {
   const { resources, title } = props
   return (
     <Card>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         <CardTitle className='text-base font-medium'>{title}</CardTitle>
         <div className='space-y-4'>
           {resources.map((resource) => {
@@ -48,11 +47,7 @@ const UsageMeter3 = (props: UsageMeter3Props) => {
                 <div className='flex items-end justify-between text-sm'>
                   <span className='font-medium'>{resource.name}</span>
                   <span className='text-xs text-muted-foreground'>
-                    <AnimatedNumber
-                      value={resource.used}
-                      formatter={(value) => value.toLocaleString()}
-                    />{' '}
-                    / {resource.limit.toLocaleString()}
+                    {resource.used.toLocaleString()} / {resource.limit.toLocaleString()}
                     {resource.unit}
                   </span>
                 </div>

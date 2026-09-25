@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
@@ -28,7 +27,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
   const { trend, percentage, title, value, formatter } = props
   return (
     <KPI>
-      <KPIContent className='space-y-1'>
+      <KPIContent className='gap-1'>
         <div className='flex items-center justify-between'>
           <CardDescription>{title}</CardDescription>
           <Trend trend={trend} variant='badge' />
@@ -38,10 +37,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
           <div className='flex items-center justify-between'>
             <span>
               <span className='font-semibold text-foreground'>
-                <AnimatedNumber
-                  value={percentage}
-                  formatter={(value) => `${value.toLocaleString()}%`}
-                />
+                {percentage.toLocaleString()}%
               </span>{' '}
               of monthly target
             </span>
