@@ -21,6 +21,10 @@ import {
   dashboardHeader1ExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/dashboard-header-01'
 import {
+  DataTable1,
+  dataTable1ExampleProps,
+} from '@/registry/components/dashboardblocks/data-table/data-table-01'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -78,6 +82,7 @@ export interface CategoryCounts {
   usageMeter: number
   activityFeed: number
   leaderboard: number
+  dataTable: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -148,6 +153,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <div className='hidden sm:block'>
             <Leaderboard01 {...leaderboard01ExampleProps} />
           </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/data-table'
+          title='Data Table'
+          description='Sortable tables with inline bars, trends, sparklines and status.'
+          count={counts.dataTable}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <DataTable1 {...dataTable1ExampleProps} />
         </CategoryCard>
         <CategoryCard
           href='/docs/components/chart-panel'

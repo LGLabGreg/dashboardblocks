@@ -2,6 +2,7 @@ import { examples as activityFeedExamples } from '@/registry/components/dashboar
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
+import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
@@ -29,6 +30,7 @@ const registry = {
     ...statusExamples,
     ...statGroupExamples,
     ...dashboardHeaderExamples,
+    ...dataTableExamples,
     ...hooks,
   ],
 }

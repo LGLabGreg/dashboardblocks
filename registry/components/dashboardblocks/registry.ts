@@ -83,6 +83,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'data-table',
+    type: 'registry:component',
+    title: 'Data Table',
+    description:
+      'Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.',
+    dependencies: ['lucide-react'],
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/data-table.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'dashboard-header',
     type: 'registry:component',
     title: 'Dashboard Header',

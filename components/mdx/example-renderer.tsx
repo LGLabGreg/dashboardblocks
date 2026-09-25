@@ -17,6 +17,10 @@ import {
   dashboardHeaderExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import {
+  dataTableComponents,
+  dataTableExampleProps,
+} from '@/registry/components/dashboardblocks/data-table/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
@@ -52,6 +56,7 @@ const exampleComponents = {
   ...statusComponents,
   ...statGroupComponents,
   ...dashboardHeaderComponents,
+  ...dataTableComponents,
 }
 
 const examplePropsMap = {
@@ -65,6 +70,7 @@ const examplePropsMap = {
   ...statusExampleProps,
   ...statGroupExampleProps,
   ...dashboardHeaderExampleProps,
+  ...dataTableExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

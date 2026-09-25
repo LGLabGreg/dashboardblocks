@@ -91,6 +91,25 @@
       ]
     },
     {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "dashboard-header",
       "type": "registry:component",
       "title": "Dashboard Header",
@@ -1197,6 +1216,88 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/stat-group.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-05",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-05.tsx",
           "type": "registry:component"
         }
       ]

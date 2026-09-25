@@ -2,6 +2,7 @@ import { activityFeedComponents } from '@/registry/components/dashboardblocks/ac
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
+import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
@@ -25,6 +26,7 @@ const counts = {
   usageMeter: Object.keys(usageMeterComponents).length,
   activityFeed: Object.keys(activityFeedComponents).length,
   leaderboard: Object.keys(leaderboardComponents).length,
+  dataTable: Object.keys(dataTableComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
