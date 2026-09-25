@@ -1,5 +1,6 @@
 import { examples as activityFeedExamples } from '@/registry/components/dashboardblocks/activity-feed/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
+import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as usageMeterExamples } from '@/registry/components/dashboardblocks/usage-meter/registry'
 import { hooks } from '@/registry/hooks/registry'
@@ -15,6 +16,7 @@ const registry = {
     ...kpiExamples,
     ...activityFeedExamples,
     ...usageMeterExamples,
+    ...leaderboardExamples,
     ...hooks,
   ],
 }

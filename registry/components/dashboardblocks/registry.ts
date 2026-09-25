@@ -82,6 +82,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'leaderboard',
+    type: 'registry:component',
+    title: 'Leaderboard',
+    description: 'Primitives for composing ranked lists and leaderboards.',
+    dependencies: ['class-variance-authority', 'lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/leaderboard.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'progress-bar',
     type: 'registry:component',
     title: 'Progress Bar',

@@ -30,8 +30,8 @@ export function Hero() {
         </h1>
         <p className='text-foreground max-w-3xl text-base sm:text-lg'>
           A growing collection of composable dashboard components—KPI cards, activity
-          feeds, usage meters—each installable on its own. Open source and built to work
-          with your existing shadcn setup.
+          feeds, usage meters, leaderboards—each installable on its own. Open source and
+          built to work with your existing shadcn setup.
         </p>
       </div>
       <div className='flex gap-4 mb-5'>
