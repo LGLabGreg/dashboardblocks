@@ -1465,6 +1465,58 @@
       ]
     },
     {
+      "name": "dashboard-01",
+      "type": "registry:block",
+      "title": "Store dashboard",
+      "description": "A store dashboard: header filters scope stats, revenue, channels, products and a checkout funnel.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/breakdown-01.json",
+        "https://dashboardblocks.com/r/chart-panel-01.json",
+        "https://dashboardblocks.com/r/dashboard-header.json",
+        "https://dashboardblocks.com/r/data-table-02.json",
+        "https://dashboardblocks.com/r/funnel-01.json",
+        "https://dashboardblocks.com/r/stat-group-02.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboards/dashboard-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-02",
+      "type": "registry:block",
+      "title": "SaaS dashboard",
+      "description": "A SaaS dashboard: metric tabs, an activity heatmap, accounts by region and service status, filtered by plan.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/breakdown-01.json",
+        "https://dashboardblocks.com/r/dashboard-header.json",
+        "https://dashboardblocks.com/r/data-table-04.json",
+        "https://dashboardblocks.com/r/heatmap-01.json",
+        "https://dashboardblocks.com/r/stat-group-03.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboards/dashboard-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "use-animated-number",
       "type": "registry:hook",
       "title": "Use Animated Number",

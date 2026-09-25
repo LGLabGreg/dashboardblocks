@@ -5,6 +5,7 @@ import { Logo } from '@/components/logo'
 export function baseOptions(): BaseLayoutProps {
   return {
     githubUrl: 'https://github.com/LGLabGreg/dashboardblocks',
+    links: [{ text: 'Examples', url: '/examples', active: 'nested-url' }],
     nav: {
       title: <Logo />,
     },

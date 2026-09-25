@@ -42,6 +42,11 @@ interface ChartPanel1Props {
   description: string
   formatter?: ChartValueFormatter
   previousLabel?: string
+  /**
+   * Draws the previous period and compares the total with it.
+   * @default true
+   */
+  showPrevious?: boolean
   title: string
 }
 
@@ -72,6 +77,7 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
     description,
     formatter = (value) => value.toLocaleString(),
     previousLabel = 'Previous period',
+    showPrevious = true,
     title,
   } = props
 
@@ -85,9 +91,11 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <Trend trend={Number(change.toFixed(1))} variant='badge' />
-        </CardAction>
+        {showPrevious && (
+          <CardAction>
+            <Trend trend={Number(change.toFixed(1))} variant='badge' />
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent className='flex flex-col gap-5'>
         <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3'>
@@ -95,16 +103,20 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
             <span className='text-3xl font-semibold tracking-tight'>
               {formatter(currentTotal)}
             </span>
-            <span className='text-muted-foreground text-xs'>
-              vs {formatter(previousTotal)} previous period
-            </span>
+            {showPrevious && (
+              <span className='text-muted-foreground text-xs'>
+                vs {formatter(previousTotal)} previous period
+              </span>
+            )}
           </div>
-          <ChartPanelLegend
-            items={[
-              { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
-              { color: PREVIOUS_COLOR, label: previousLabel, shape: 'line' },
-            ]}
-          />
+          {showPrevious && (
+            <ChartPanelLegend
+              items={[
+                { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
+                { color: PREVIOUS_COLOR, label: previousLabel, shape: 'line' },
+              ]}
+            />
+          )}
         </div>
         <ChartPanelFigure className='h-60'>
           <ResponsiveContainer width='100%' height='100%'>
@@ -128,17 +140,19 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
                 cursor={{ stroke: 'var(--color-border)' }}
                 itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
               />
-              <Line
-                activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                dataKey='previous'
-                dot={false}
-                name={previousLabel}
-                stroke={PREVIOUS_COLOR}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                type='monotone'
-              />
+              {showPrevious && (
+                <Line
+                  activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
+                  dataKey='previous'
+                  dot={false}
+                  name={previousLabel}
+                  stroke={PREVIOUS_COLOR}
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  type='monotone'
+                />
+              )}
               <Line
                 activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
                 dataKey='current'
@@ -158,7 +172,9 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
           columns={[
             { key: 'label', label: 'Day' },
             { format: formatter, key: 'current', label: currentLabel },
-            { format: formatter, key: 'previous', label: previousLabel },
+            ...(showPrevious
+              ? [{ format: formatter, key: 'previous', label: previousLabel }]
+              : []),
           ]}
           rows={data}
         />
