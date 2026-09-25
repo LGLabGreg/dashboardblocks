@@ -133,3 +133,58 @@
     @apply xl:px-0!;
   }
 }
+
+@layer components {
+  .home-grid {
+    background-image:
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, #000 40%, transparent 100%);
+  }
+  .home-grid-invert {
+    background-image:
+      linear-gradient(
+        to right,
+        oklch(from var(--background) l c h / 8%) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        oklch(from var(--background) l c h / 8%) 1px,
+        transparent 1px
+      );
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  }
+  .home-dots {
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .home-tilt {
+    transform-origin: top center;
+    animation: home-tilt 1.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (min-width: 768px) {
+    .home-tilt {
+      transform: rotateX(12deg);
+    }
+    .home-tilt:hover {
+      transform: rotateX(0deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-tilt {
+      animation: none;
+      transform: none !important;
+    }
+  }
+}
+
+@keyframes home-tilt {
+  from {
+    opacity: 0;
+    transform: translateY(60px) rotateX(28deg);
+  }
+}
