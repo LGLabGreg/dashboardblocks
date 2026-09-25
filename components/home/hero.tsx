@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 
+import { Corner } from './corner'
 import { InstallCommand } from './install-command'
 import { Showcase } from './showcase'
 
@@ -11,8 +12,8 @@ export function Hero({ blockCount }: { blockCount: number }) {
     <section className='w-full'>
       <div className='border-b md:px-6'>
         <div className='relative mx-auto max-w-6xl px-6 md:border-x pt-16 pb-14 md:px-10 md:pt-24 md:pb-20'>
-          <Corner className='-bottom-[5px] -left-[5px]' />
-          <Corner className='-right-[5px] -bottom-[5px]' />
+          <Corner className='-bottom-[6px] -left-[5px]' />
+          <Corner className='-right-[5px] -bottom-[6px]' />
 
           <div className='text-muted-foreground animate-in fade-in flex items-center justify-between gap-4 font-mono text-xs tracking-wider uppercase duration-700'>
             <Link
@@ -61,17 +62,5 @@ export function Hero({ blockCount }: { blockCount: number }) {
 
       <Showcase />
     </section>
-  )
-}
-
-function Corner({ className }: { className: string }) {
-  return (
-    <svg
-      aria-hidden
-      viewBox='0 0 11 11'
-      className={`text-foreground/40 absolute hidden size-[11px] md:block ${className}`}
-    >
-      <path d='M5.5 0v11M0 5.5h11' stroke='currentColor' strokeWidth='1' />
-    </svg>
   )
 }

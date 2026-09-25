@@ -135,21 +135,6 @@
 }
 
 @layer components {
-  .home-grid-invert {
-    background-image:
-      linear-gradient(
-        to right,
-        oklch(from var(--background) l c h / 8%) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to bottom,
-        oklch(from var(--background) l c h / 8%) 1px,
-        transparent 1px
-      );
-    background-size: 40px 40px;
-    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
-  }
   .home-dots {
     background-image: radial-gradient(var(--border) 1px, transparent 1px);
     background-size: 16px 16px;
