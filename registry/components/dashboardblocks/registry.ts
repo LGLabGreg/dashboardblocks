@@ -83,6 +83,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'dashboard-header',
+    type: 'registry:component',
+    title: 'Dashboard Header',
+    description:
+      'Primitives for dashboard headers: a date range preset menu, a compare switch, filter chips and an export menu.',
+    dependencies: ['lucide-react'],
+    registryDependencies: ['button', 'dropdown-menu', 'switch'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/dashboard-header.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'funnel',
     type: 'registry:component',
     title: 'Funnel',
@@ -159,6 +174,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/ring.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'stat-group',
+    type: 'registry:component',
+    title: 'Stat Group',
+    description:
+      'Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.',
+    registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/stat-group.tsx',
         type: 'registry:component',
       },
     ],

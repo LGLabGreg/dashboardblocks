@@ -91,6 +91,26 @@
       ]
     },
     {
+      "name": "dashboard-header",
+      "type": "registry:component",
+      "title": "Dashboard Header",
+      "description": "Primitives for dashboard headers: a date range preset menu, a compare switch, filter chips and an export menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboard-header.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "funnel",
       "type": "registry:component",
       "title": "Funnel",
@@ -181,6 +201,22 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group",
+      "type": "registry:component",
+      "title": "Stat Group",
+      "description": "Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/trend.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group.tsx",
           "type": "registry:component"
         }
       ]
@@ -1023,6 +1059,144 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group/stat-group-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group/stat-group-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group-03",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "tabs",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group/stat-group-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group/stat-group-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stat-group-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/stat-group/stat-group-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-header-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/dashboard-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-header-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/dashboard-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-header-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "https://dashboardblocks.com/r/dashboard-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-header-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/dashboard-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-04.tsx",
           "type": "registry:component"
         }
       ]
