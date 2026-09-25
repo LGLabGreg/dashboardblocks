@@ -102,7 +102,7 @@ const Leaderboard03 = (props: Leaderboard03Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         <ol
           ref={ref as React.RefObject<HTMLOListElement>}
           className='grid grid-cols-3 items-end gap-2'
@@ -145,7 +145,7 @@ const Leaderboard03 = (props: Leaderboard03Props) => {
                 <div className='w-full overflow-hidden rounded-t-lg'>
                   <div
                     className={cn(
-                      'flex items-start justify-center pt-2 text-lg font-semibold tabular-nums transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
+                      'flex items-start justify-center pt-2 text-lg font-semibold tabular-nums transition-transform duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none',
                       step.block,
                       revealed ? 'translate-y-0' : 'translate-y-full',
                     )}

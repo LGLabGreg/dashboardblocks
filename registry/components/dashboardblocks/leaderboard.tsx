@@ -132,7 +132,7 @@ function LeaderboardBar({
     >
       <div
         className={cn(
-          'h-full rounded-[inherit] bg-muted transition-[width] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
+          'h-full rounded-[inherit] bg-muted transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none',
           className,
         )}
         style={{

@@ -60,7 +60,7 @@ const exampleProps: Leaderboard05Props = {
 }
 
 const pressScale =
-  'transition-[color,background-color,box-shadow,scale] duration-150 ease-out active:scale-[0.96]'
+  'transition-[color,background-color,border-color,box-shadow,scale,translate] duration-150 ease-out active:scale-[0.96]'
 
 const swapTransition =
   'transition-[opacity,filter,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none'
@@ -69,14 +69,18 @@ const swapTransition =
 function IconSwap({
   active,
   activeIcon: ActiveIcon,
+  className,
   inactiveIcon: InactiveIcon,
+  ...props
 }: {
   active: boolean
   activeIcon: LucideIcon
+  className?: string
+  'data-icon'?: 'inline-end' | 'inline-start'
   inactiveIcon: LucideIcon
 }) {
   return (
-    <span aria-hidden='true' className='relative inline-flex'>
+    <span aria-hidden='true' className={cn('relative inline-flex', className)} {...props}>
       <span
         className={cn(
           'absolute inset-0 flex items-center justify-center',
@@ -181,12 +185,16 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
               setInteracted(true)
               setExpanded((value) => !value)
             }}
-            className={cn('w-full text-muted-foreground', pressScale)}
+            className={cn(
+              'w-full text-muted-foreground aria-expanded:bg-transparent aria-expanded:text-muted-foreground aria-expanded:hover:bg-muted aria-expanded:hover:text-foreground',
+              pressScale,
+            )}
           >
             {expanded ? 'Show less' : `Show all ${countries.length}`}
             <IconSwap
               active={expanded}
               activeIcon={ChevronUp}
+              data-icon='inline-end'
               inactiveIcon={ChevronDown}
             />
           </Button>

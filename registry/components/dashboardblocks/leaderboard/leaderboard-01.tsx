@@ -56,14 +56,14 @@ const Leaderboard01 = (props: Leaderboard01Props) => {
             variant='outline'
             size='sm'
             onClick={onViewAll}
-            className='transition-[color,background-color,box-shadow,scale] duration-150 ease-out active:scale-[0.96] has-[>svg]:ps-3'
+            className='transition-[color,background-color,border-color,box-shadow,scale,translate] duration-150 ease-out active:scale-[0.96]'
           >
             View all
-            <ArrowRight />
+            <ArrowRight data-icon='inline-end' />
           </Button>
         </CardAction>
       </CardHeader>
-      <CardContent className='space-y-2'>
+      <CardContent className='flex flex-col gap-2'>
         <div className='flex justify-between px-2 text-xs font-medium text-muted-foreground'>
           <span>Page</span>
           <span>Visitors</span>
