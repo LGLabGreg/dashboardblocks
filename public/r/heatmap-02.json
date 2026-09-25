@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "heatmap-02",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/heatmap.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/heatmap/heatmap-02.tsx",
+      "content": "'use client'\n\nimport {\n  HeatmapGrid,\n  HeatmapLegend,\n  type HeatmapValue,\n} from '@/registry/components/dashboardblocks/heatmap'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface Cohort {\n  label: string\n  /** Share of the cohort still active in each week after signup, in percent. */\n  retention: number[]\n  size: number\n}\n\ninterface Heatmap2Props {\n  cohorts: Cohort[]\n  description: string\n  title: string\n  weeks: number\n}\n\nconst WEEKS = 7\n\nconst exampleProps: Heatmap2Props = {\n  cohorts: ['Aug 3', 'Aug 10', 'Aug 17', 'Aug 24', 'Aug 31', 'Sep 7', 'Sep 14'].map(\n    (label, index) => ({\n      label,\n      retention: Array.from({ length: WEEKS - index }, (_, week) =>\n        Math.round((58 + index * 1.5) * Math.exp(-week * 0.24) + 14 - week * 0.6),\n      ),\n      size: [1_204, 1_318, 1_156, 1_402, 1_377, 1_511, 1_463][index],\n    }),\n  ),\n  description: 'Share of each weekly signup cohort still active, by week since signup',\n  title: 'Retention by cohort',\n  weeks: WEEKS,\n}\n\nconst Heatmap2 = (props: Heatmap2Props) => {\n  const { cohorts, description, title, weeks } = props\n  const columns = Array.from({ length: weeks }, (_, week) => `W${week + 1}`)\n  const rows = cohorts.map((cohort) => cohort.label)\n  const values: HeatmapValue[][] = cohorts.map((cohort) =>\n    columns.map((_, week) => cohort.retention[week] ?? null),\n  )\n  const firstWeek = cohorts.map((cohort) => cohort.retention[0]).filter(Boolean)\n  const average =\n    firstWeek.reduce((sum, value) => sum + value, 0) / (firstWeek.length || 1)\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent>\n        <HeatmapGrid\n          cellClassName='h-8'\n          cellLabels\n          columns={columns}\n          describe={({ column, row }, value) => {\n            const cohort = cohorts[row]\n            return value === null\n              ? `${cohort.label} cohort: week ${column + 1} not reached yet`\n              : `${cohort.label} cohort (${cohort.size.toLocaleString()} signups): ${value}% active in week ${column + 1}`\n          }}\n          footer={<HeatmapLegend low='Lower' high='Higher' />}\n          format={(value) => `${value}%`}\n          label={`${title}: ${description}`}\n          rowHeader='Cohort'\n          rowLabelClassName='tabular-nums'\n          rows={rows}\n          values={values}\n        >\n          {`Week 1 retention averages ${average.toFixed(0)}%`}\n        </HeatmapGrid>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { Heatmap2, exampleProps as heatmap2ExampleProps, type Heatmap2Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

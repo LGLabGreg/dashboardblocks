@@ -145,6 +145,18 @@
       ]
     },
     {
+      "name": "heatmap",
+      "type": "registry:component",
+      "title": "Heatmap",
+      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/heatmap.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "icon",
       "type": "registry:component",
       "title": "Icon",
@@ -1298,6 +1310,62 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "heatmap-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/heatmap/heatmap-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "heatmap-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/heatmap/heatmap-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "heatmap-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/heatmap/heatmap-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "heatmap-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/heatmap/heatmap-04.tsx",
           "type": "registry:component"
         }
       ]

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "heatmap-01",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/heatmap.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/heatmap/heatmap-01.tsx",
+      "content": "'use client'\n\nimport {\n  HeatmapGrid,\n  HeatmapLegend,\n  getPeak,\n} from '@/registry/components/dashboardblocks/heatmap'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface Heatmap1Props {\n  description: string\n  /** Seven rows, Monday first, of 24 hourly values. */\n  values: number[][]\n  title: string\n  /** Unit for the readout, e.g. \"sessions\". */\n  unit: string\n}\n\nconst DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nconst HOURS = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))\n\nconst exampleProps: Heatmap1Props = {\n  description: 'Average sessions by weekday and hour, last 4 weeks',\n  title: 'When people visit',\n  unit: 'sessions',\n  values: DAYS.map((_, day) =>\n    HOURS.map((_, hour) => {\n      const weekend = day >= 5\n      const workday = Math.exp(-((hour - 14) ** 2) / 18) * (weekend ? 0.45 : 1)\n      const evening = Math.exp(-((hour - 21) ** 2) / 6) * (weekend ? 0.8 : 0.5)\n      const night = hour < 6 ? 0.04 : 0\n      return Math.round(40 + 1_240 * (workday + evening + night) * (1 - day * 0.03))\n    }),\n  ),\n}\n\nconst Heatmap1 = (props: Heatmap1Props) => {\n  const { description, title, unit, values } = props\n  const peak = getPeak(values)\n  const hourRange = (hour: number) =>\n    `${HOURS[hour]}:00–${String((hour + 1) % 24).padStart(2, '0')}:00`\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent>\n        <HeatmapGrid\n          cellClassName='h-5'\n          columnLabelEvery={3}\n          columns={HOURS}\n          footer={<HeatmapLegend />}\n          describe={({ column, row }, value) =>\n            `${DAYS[row]}, ${hourRange(column)}: ${value?.toLocaleString() ?? 'no data'} ${unit}`\n          }\n          label={`${title}: ${description}`}\n          rowHeader='Day'\n          rows={DAYS}\n          values={values}\n        >\n          {peak &&\n            `Busiest: ${DAYS[peak.row]}, ${hourRange(peak.column)}, with ${peak.value.toLocaleString()} ${unit}`}\n        </HeatmapGrid>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { Heatmap1, exampleProps as heatmap1ExampleProps, type Heatmap1Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

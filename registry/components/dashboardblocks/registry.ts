@@ -127,6 +127,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'heatmap',
+    type: 'registry:component',
+    title: 'Heatmap',
+    description:
+      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/heatmap.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'icon',
     type: 'registry:component',
     title: 'Icon',

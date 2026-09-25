@@ -33,6 +33,10 @@ import {
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
 import {
+  Heatmap1,
+  heatmap1ExampleProps,
+} from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
+import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -83,6 +87,7 @@ export interface CategoryCounts {
   activityFeed: number
   leaderboard: number
   dataTable: number
+  heatmap: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -197,6 +202,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <div className='hidden lg:block'>
             <Funnel1 {...funnel1ExampleProps} />
           </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/heatmap'
+          title='Heatmap'
+          description='Activity by hour, cohort retention, calendars and latency hot spots.'
+          count={counts.heatmap}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Heatmap1 {...heatmap1ExampleProps} />
         </CategoryCard>
         <CategoryCard
           href='/docs/components/status'
