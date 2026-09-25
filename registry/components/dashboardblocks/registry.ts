@@ -164,6 +164,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'status',
+    type: 'registry:component',
+    title: 'Status',
+    description:
+      'Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/status.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'trend',
     type: 'registry:component',
     title: 'Trend',

@@ -186,6 +186,21 @@
       ]
     },
     {
+      "name": "status",
+      "type": "registry:component",
+      "title": "Status",
+      "description": "Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "trend",
       "type": "registry:component",
       "title": "Trend",
@@ -934,6 +949,80 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel/funnel-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "status-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status/status-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "status-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status/status-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "status-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status/status-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "status-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status/status-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "status-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/status.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/status/status-05.tsx",
           "type": "registry:component"
         }
       ]

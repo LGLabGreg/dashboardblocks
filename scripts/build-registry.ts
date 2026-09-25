@@ -5,6 +5,7 @@ import { examples as funnelExamples } from '@/registry/components/dashboardblock
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
+import { examples as statusExamples } from '@/registry/components/dashboardblocks/status/registry'
 import { examples as usageMeterExamples } from '@/registry/components/dashboardblocks/usage-meter/registry'
 import { hooks } from '@/registry/hooks/registry'
 import { writeFileSync } from 'fs'
@@ -23,6 +24,7 @@ const registry = {
     ...chartPanelExamples,
     ...breakdownExamples,
     ...funnelExamples,
+    ...statusExamples,
     ...hooks,
   ],
 }
