@@ -1,7 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-03",
-  "dependencies": ["lucide-react"],
+  "dependencies": [
+    "lucide-react"
+  ],
   "registryDependencies": [
     "avatar",
     "button",
