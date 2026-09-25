@@ -141,6 +141,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'goals',
+    type: 'registry:component',
+    title: 'Goals',
+    description:
+      'Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/goals.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'heatmap',
     type: 'registry:component',
     title: 'Heatmap',

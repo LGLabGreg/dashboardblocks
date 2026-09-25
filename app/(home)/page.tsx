@@ -4,6 +4,7 @@ import { chartPanelComponents } from '@/registry/components/dashboardblocks/char
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
+import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
@@ -31,6 +32,7 @@ const counts = {
   dataTable: Object.keys(dataTableComponents).length,
   heatmap: Object.keys(heatmapComponents).length,
   states: Object.keys(statesComponents).length,
+  goals: Object.keys(goalsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

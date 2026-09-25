@@ -33,6 +33,10 @@ import {
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
 import {
+  Goals1,
+  goals1ExampleProps,
+} from '@/registry/components/dashboardblocks/goals/goals-01'
+import {
   Heatmap1,
   heatmap1ExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
@@ -89,6 +93,7 @@ export interface CategoryCounts {
   dataTable: number
   heatmap: number
   states: number
+  goals: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -209,10 +214,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Heatmap'
           description='Activity by hour, cohort retention, calendars and latency hot spots.'
           count={counts.heatmap}
-          className='md:col-span-3'
-          previewClassName='*:w-80 sm:*:w-[40rem]'
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Heatmap1 {...heatmap1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/goals'
+          title='Goals'
+          description='Targets with pace, projections and daily goal rings.'
+          count={counts.goals}
+        >
+          <Goals1 {...goals1ExampleProps} />
         </CategoryCard>
         <CategoryCard
           href='/docs/components/status'

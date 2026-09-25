@@ -5,6 +5,7 @@ import { examples as dashboardHeaderExamples } from '@/registry/components/dashb
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
+import { examples as goalsExamples } from '@/registry/components/dashboardblocks/goals/registry'
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
@@ -37,6 +38,7 @@ const registry = {
     ...heatmapExamples,
     ...statesExamples,
     ...dashboardExamples,
+    ...goalsExamples,
     ...hooks,
   ],
 }
