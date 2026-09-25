@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 0.8.0
+
+### Minor Changes
+
+- [#73](https://github.com/LGLabGreg/dashboardblocks/pull/73) [`c97c901`](https://github.com/LGLabGreg/dashboardblocks/commit/c97c9016ce0b74da7fef9033d72fab3a402e6a8b) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Leaderboard
+
+### Patch Changes
+
+- [#72](https://github.com/LGLabGreg/dashboardblocks/pull/72) [`f5f8339`](https://github.com/LGLabGreg/dashboardblocks/commit/f5f8339ca5af1541c277229cd48b89594f81662f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Polish dashboard components: animated numbers retarget from the current value when data changes, usage-meter-08 gauge reflects real usage, liquid gauges use theme-aware colors, bars and rings share the count-up easing, chart tooltips no longer slide and use theme-aware cursors, trend badges drop their border, and secondary numbers render statically
+
+- [#72](https://github.com/LGLabGreg/dashboardblocks/pull/72) [`f5f8339`](https://github.com/LGLabGreg/dashboardblocks/commit/f5f8339ca5af1541c277229cd48b89594f81662f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Migrate docs site to shadcn Base UI (base-vega) and make blocks work with both Radix and Base UI shadcn setups: drop `asChild` from activity-feed-04, use `gap` instead of `space-y` on card content, and mark trailing button icons with `data-icon`
+
 ## 0.7.1
 
 ### Patch Changes
