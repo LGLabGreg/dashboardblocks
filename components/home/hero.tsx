@@ -15,10 +15,10 @@ export function Hero({ blockCount }: { blockCount: number }) {
           <Corner className='-bottom-[6px] -left-[5px]' />
           <Corner className='-right-[5px] -bottom-[6px]' />
 
-          <div className='text-muted-foreground animate-in fade-in flex items-center justify-between gap-4 font-mono text-xs tracking-wider uppercase duration-700'>
+          <div className='text-muted-foreground home-enter flex items-center justify-between gap-4 font-mono text-xs tracking-wider uppercase'>
             <Link
               href='/docs'
-              className='hover:text-foreground inline-flex items-center gap-2 transition-colors'
+              className='hover:text-foreground inline-flex min-h-6 items-center gap-2 transition-colors'
             >
               <span className='bg-foreground size-1.5 rounded-full' />
               {blockCount} blocks for shadcn/ui
@@ -28,13 +28,13 @@ export function Hero({ blockCount }: { blockCount: number }) {
           </div>
 
           <div className='mt-10 grid gap-10 md:mt-14 lg:grid-cols-12 lg:items-end lg:gap-12'>
-            <h1 className='animate-in fade-in slide-in-from-bottom-3 text-5xl leading-[0.95] font-medium tracking-[-0.045em] text-balance duration-700 sm:text-6xl lg:col-span-8 lg:text-7xl'>
+            <h1 className='home-enter text-5xl leading-[1.1] font-medium tracking-[-0.045em] text-balance [--home-delay:100ms] sm:text-6xl lg:col-span-8 lg:text-7xl'>
               Ship dashboards,
               <br />
               <span className='text-muted-foreground'>one block at a time.</span>
             </h1>
 
-            <div className='animate-in fade-in slide-in-from-bottom-3 flex flex-col gap-6 duration-1000 lg:col-span-4'>
+            <div className='home-enter flex flex-col gap-6 [--home-delay:200ms] lg:col-span-4'>
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 KPI cards, usage meters, activity feeds and leaderboards. Composable
                 blocks built with Tailwind CSS and shadcn/ui — copy one or all of them,
@@ -42,7 +42,7 @@ export function Hero({ blockCount }: { blockCount: number }) {
               </p>
               <div className='flex flex-wrap items-center gap-3'>
                 <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
-                  Get Started
+                  Get started
                   <ArrowRight data-icon='inline-end' />
                 </Button>
                 <Button

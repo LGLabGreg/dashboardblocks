@@ -1,6 +1,6 @@
 import { Blocks, Paintbrush, Terminal } from 'lucide-react'
 
-import { SectionHeading } from './categories'
+import { SectionHeading } from './section-heading'
 
 const steps = [
   {
@@ -23,10 +23,10 @@ const steps = [
     description: 'One command drops the source and its dependencies into your project.',
     code: (
       <>
-        <span className='text-chart-1'>$</span> npx shadcn add \{'\n'}
+        <span className='text-muted-foreground'>$</span> npx shadcn add \{'\n'}
         {'  '}dashboardblocks.com/r/{'\n'}
         {'  '}area-chart-kpi-01.json{'\n'}
-        <span className='text-chart-2'>✔</span> Done.
+        <span className='text-muted-foreground'>✔</span> Done.
       </>
     ),
   },
@@ -37,9 +37,9 @@ const steps = [
     code: (
       <>
         {'<'}
-        <span className='text-chart-1'>AreaChartKPI1</span>
+        <span className='font-medium'>AreaChartKPI1</span>
         {'\n'}
-        {'  '}title=<span className='text-chart-2'>&quot;MRR&quot;</span>
+        {'  '}title=<span className='text-muted-foreground'>&quot;MRR&quot;</span>
         {'\n'}
         {'  '}value={'{'}48200{'}'}
         {'\n'}
@@ -77,7 +77,9 @@ export function Steps() {
               </span>
               <div className='relative'>
                 <h3 className='text-lg font-semibold'>{step.title}</h3>
-                <p className='text-muted-foreground mt-1 text-sm'>{step.description}</p>
+                <p className='text-muted-foreground mt-1 text-sm text-pretty'>
+                  {step.description}
+                </p>
               </div>
               <pre className='mt-auto overflow-x-auto rounded-xl border p-4 font-mono text-xs leading-relaxed'>
                 {step.code}

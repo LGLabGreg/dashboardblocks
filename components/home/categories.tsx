@@ -29,6 +29,8 @@ import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
+import { SectionHeading } from './section-heading'
+
 export interface CategoryCounts {
   kpi: number
   usageMeter: number
@@ -109,54 +111,29 @@ function CategoryCard({
     <Link
       href={href}
       className={cn(
-        'group bg-muted/40 hover:border-foreground/20 relative flex flex-col overflow-hidden rounded-3xl border transition-colors',
+        'group bg-muted/40 hover:border-foreground/20 flex flex-col overflow-hidden rounded-3xl border transition-colors',
         className,
       )}
     >
-      <div
-        aria-hidden
-        inert
-        className='home-dots relative flex h-80 justify-center gap-4 overflow-hidden px-6 pt-8 text-left select-none *:w-80 *:shrink-0 *:transition-transform *:duration-500 group-hover:*:-translate-y-2'
-      >
-        {children}
-        <div className='from-muted pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t' />
+      <div inert className='home-dots h-80 overflow-hidden select-none'>
+        <div className='home-fade flex h-full justify-center gap-4 px-6 pt-8 text-left *:w-80 *:shrink-0 *:transition-transform *:duration-500 *:ease-out motion-safe:group-hover:*:-translate-y-2'>
+          {children}
+        </div>
       </div>
-      <div className='bg-muted flex items-end justify-between gap-4 p-6'>
+      <div className='flex items-end justify-between gap-4 px-6 pb-6'>
         <div>
           <h3 className='flex items-center gap-2 text-lg font-semibold'>
             {title}
-            <span className='bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-xs font-medium'>
+            <span className='bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums'>
               {count} blocks
             </span>
           </h3>
-          <p className='text-muted-foreground mt-1 text-sm'>{description}</p>
+          <p className='text-muted-foreground mt-1 text-sm text-pretty'>{description}</p>
         </div>
         <span className='bg-background group-hover:bg-foreground group-hover:text-background flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors'>
-          <ArrowUpRight className='size-4 transition-transform group-hover:rotate-45' />
+          <ArrowUpRight className='size-4 transition-transform motion-safe:group-hover:rotate-45' />
         </span>
       </div>
     </Link>
-  )
-}
-
-export function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string
-  title: string
-  description: string
-}) {
-  return (
-    <div className='mx-auto flex max-w-2xl flex-col items-center text-center'>
-      <span className='text-chart-1 font-mono text-xs font-medium tracking-widest uppercase'>
-        {eyebrow}
-      </span>
-      <h2 className='mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl'>
-        {title}
-      </h2>
-      <p className='text-muted-foreground mt-4 text-balance'>{description}</p>
-    </div>
   )
 }

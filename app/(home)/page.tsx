@@ -18,11 +18,11 @@ const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
 export default function HomePage() {
   return (
-    <main className='flex flex-1 flex-col items-center'>
+    <div className='flex flex-1 flex-col items-center'>
       <Hero blockCount={blockCount} />
       <Categories counts={counts} />
       <Steps />
       <CTA blockCount={blockCount} />
-    </main>
+    </div>
   )
 }

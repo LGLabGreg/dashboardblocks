@@ -30,8 +30,15 @@ import {
 export function Showcase() {
   return (
     <div className='relative mx-auto mt-16 max-w-6xl px-4 [perspective:2400px] md:mt-20'>
-      <div className='home-tilt group bg-muted/60 relative rounded-2xl border p-2 shadow-2xl shadow-black/10 backdrop-blur md:rounded-3xl md:p-3 dark:shadow-black/50'>
-        <div className='bg-background overflow-hidden rounded-xl border md:rounded-2xl'>
+      <div
+        role='img'
+        aria-label='A sample dashboard assembled from Dashboardblocks components'
+        className='home-tilt bg-muted/60 relative rounded-2xl border p-2 shadow-2xl shadow-black/10 backdrop-blur md:rounded-3xl md:p-3 dark:shadow-black/50'
+      >
+        <div
+          inert
+          className='bg-background overflow-hidden rounded-lg border select-none'
+        >
           <div className='flex items-center gap-3 border-b px-4 py-3'>
             <div className='flex gap-1.5'>
               <span className='size-3 rounded-full bg-red-400/80' />

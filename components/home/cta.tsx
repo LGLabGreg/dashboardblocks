@@ -37,7 +37,7 @@ export function CTA({ blockCount }: { blockCount: number }) {
               </p>
               <div className='flex flex-wrap items-center gap-3'>
                 <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
-                  Get Started
+                  Get started
                   <ArrowRight data-icon='inline-end' />
                 </Button>
                 <Button

@@ -5,6 +5,9 @@ import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
+const iconTransition =
+  'transition-[opacity,filter,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)]'
+
 export function InstallCommand({
   name = 'kpi-01',
   className,
@@ -22,22 +25,50 @@ export function InstallCommand({
   }
 
   return (
-    <button
-      type='button'
-      onClick={copy}
-      aria-label='Copy install command'
-      className={cn(
-        'group bg-card/80 hover:border-foreground/20 flex max-w-full items-center gap-3 rounded-full border py-2 pr-2 pl-4 font-mono text-xs backdrop-blur transition-colors sm:text-sm',
-        className,
-      )}
-    >
-      <span className='text-muted-foreground select-none'>$</span>
-      <span className='truncate'>
-        npx shadcn add <span className='text-muted-foreground'>{name}</span>
+    <>
+      <button
+        type='button'
+        onClick={copy}
+        title={command}
+        className={cn(
+          'group bg-card/80 hover:border-foreground/20 flex max-w-full items-center gap-3 rounded-full border py-2 pr-2 pl-4 font-mono text-xs backdrop-blur transition-[border-color,scale] duration-150 ease-out active:scale-[0.96] sm:text-sm',
+          className,
+        )}
+      >
+        <span aria-hidden className='text-muted-foreground select-none'>
+          $
+        </span>
+        <span className='truncate'>
+          npx shadcn add <span className='text-muted-foreground'>{name}</span>
+        </span>
+        <span className='sr-only'>, copy install command</span>
+        <span
+          aria-hidden
+          className='bg-muted text-muted-foreground group-hover:text-foreground relative flex size-7 shrink-0 items-center justify-center rounded-full transition-colors'
+        >
+          <Check
+            className={cn(
+              'absolute size-3.5',
+              iconTransition,
+              copied
+                ? 'blur-0 scale-100 opacity-100'
+                : 'scale-[0.25] opacity-0 blur-[4px]',
+            )}
+          />
+          <Copy
+            className={cn(
+              'size-3.5',
+              iconTransition,
+              copied
+                ? 'scale-[0.25] opacity-0 blur-[4px]'
+                : 'blur-0 scale-100 opacity-100',
+            )}
+          />
+        </span>
+      </button>
+      <span role='status' className='sr-only'>
+        {copied ? 'Copied to clipboard' : ''}
       </span>
-      <span className='bg-muted text-muted-foreground group-hover:text-foreground flex size-7 shrink-0 items-center justify-center rounded-full transition-colors'>
-        {copied ? <Check className='size-3.5' /> : <Copy className='size-3.5' />}
-      </span>
-    </button>
+    </>
   )
 }
