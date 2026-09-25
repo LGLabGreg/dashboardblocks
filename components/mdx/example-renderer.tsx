@@ -17,9 +17,17 @@ import {
   dashboardHeaderExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import {
+  dataTableComponents,
+  dataTableExampleProps,
+} from '@/registry/components/dashboardblocks/data-table/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
+import {
+  heatmapComponents,
+  heatmapExampleProps,
+} from '@/registry/components/dashboardblocks/heatmap/index'
 import {
   kpiComponents,
   kpiExampleProps,
@@ -32,6 +40,10 @@ import {
   statGroupComponents,
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
+import {
+  statesComponents,
+  statesExampleProps,
+} from '@/registry/components/dashboardblocks/states/index'
 import {
   statusComponents,
   statusExampleProps,
@@ -52,6 +64,9 @@ const exampleComponents = {
   ...statusComponents,
   ...statGroupComponents,
   ...dashboardHeaderComponents,
+  ...dataTableComponents,
+  ...heatmapComponents,
+  ...statesComponents,
 }
 
 const examplePropsMap = {
@@ -65,6 +80,9 @@ const examplePropsMap = {
   ...statusExampleProps,
   ...statGroupExampleProps,
   ...dashboardHeaderExampleProps,
+  ...dataTableExampleProps,
+  ...heatmapExampleProps,
+  ...statesExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

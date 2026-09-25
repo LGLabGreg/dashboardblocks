@@ -36,7 +36,7 @@ const rankVariants = cva(
 )
 
 const medalStyles: Record<number, string> = {
-  1: 'bg-[color-mix(in_oklab,var(--color-amber-500)_20%,var(--card))] text-amber-700 dark:text-amber-400',
+  1: 'bg-[color-mix(in_oklab,var(--color-amber-500)_20%,var(--card))] text-amber-800 dark:text-amber-400',
   2: 'bg-[color-mix(in_oklab,var(--color-zinc-500)_20%,var(--card))] text-zinc-700 dark:text-zinc-300',
   3: 'bg-[color-mix(in_oklab,var(--color-orange-700)_20%,var(--card))] text-orange-800 dark:text-orange-400',
 }
@@ -191,7 +191,7 @@ function LeaderboardRankChange({ change, className = '' }: LeaderboardRankChange
     <span
       className={cn(
         'inline-flex items-center gap-0.5 text-xs font-medium tabular-nums',
-        isUp ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500',
+        isUp ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400',
         className,
       )}
     >

@@ -55,6 +55,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'block-state',
+    type: 'registry:component',
+    title: 'Block State',
+    description:
+      'Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/block-state.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'breakdown',
     type: 'registry:component',
     title: 'Breakdown',
@@ -78,6 +92,21 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'data-table',
+    type: 'registry:component',
+    title: 'Data Table',
+    description:
+      'Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.',
+    dependencies: ['lucide-react'],
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/data-table.tsx',
         type: 'registry:component',
       },
     ],
@@ -107,6 +136,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'heatmap',
+    type: 'registry:component',
+    title: 'Heatmap',
+    description:
+      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/heatmap.tsx',
         type: 'registry:component',
       },
     ],

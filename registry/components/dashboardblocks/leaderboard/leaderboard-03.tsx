@@ -54,7 +54,7 @@ const podium = [
   {
     avatar: 'size-12',
     block:
-      'h-24 bg-[color-mix(in_oklab,var(--color-amber-500)_20%,var(--card))] text-amber-700 dark:text-amber-400',
+      'h-24 bg-[color-mix(in_oklab,var(--color-amber-500)_20%,var(--card))] text-amber-800 dark:text-amber-400',
     order: 'order-2',
   },
   {

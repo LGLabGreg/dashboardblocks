@@ -2,10 +2,13 @@ import { activityFeedComponents } from '@/registry/components/dashboardblocks/ac
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
+import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
+import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
+import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 
@@ -25,6 +28,9 @@ const counts = {
   usageMeter: Object.keys(usageMeterComponents).length,
   activityFeed: Object.keys(activityFeedComponents).length,
   leaderboard: Object.keys(leaderboardComponents).length,
+  dataTable: Object.keys(dataTableComponents).length,
+  heatmap: Object.keys(heatmapComponents).length,
+  states: Object.keys(statesComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

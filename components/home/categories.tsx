@@ -21,6 +21,10 @@ import {
   dashboardHeader1ExampleProps,
 } from '@/registry/components/dashboardblocks/dashboard-header/dashboard-header-01'
 import {
+  DataTable1,
+  dataTable1ExampleProps,
+} from '@/registry/components/dashboardblocks/data-table/data-table-01'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -28,6 +32,10 @@ import {
   Funnel2,
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
+import {
+  Heatmap1,
+  heatmap1ExampleProps,
+} from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
 import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
@@ -49,9 +57,9 @@ import {
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
 import {
-  Status1,
-  status1ExampleProps,
-} from '@/registry/components/dashboardblocks/status/status-01'
+  States3,
+  states3ExampleProps,
+} from '@/registry/components/dashboardblocks/states/states-03'
 import {
   Status2,
   status2ExampleProps,
@@ -78,6 +86,9 @@ export interface CategoryCounts {
   usageMeter: number
   activityFeed: number
   leaderboard: number
+  dataTable: number
+  heatmap: number
+  states: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -150,6 +161,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           </div>
         </CategoryCard>
         <CategoryCard
+          href='/docs/components/data-table'
+          title='Data Table'
+          description='Sortable tables with inline bars, trends, sparklines and status.'
+          count={counts.dataTable}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <DataTable1 {...dataTable1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
           href='/docs/components/chart-panel'
           title='Chart Panel'
           description='Full-size line, area, bar and donut charts with legends and tooltips.'
@@ -184,17 +205,32 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           </div>
         </CategoryCard>
         <CategoryCard
+          href='/docs/components/heatmap'
+          title='Heatmap'
+          description='Activity by hour, cohort retention, calendars and latency hot spots.'
+          count={counts.heatmap}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Heatmap1 {...heatmap1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
           href='/docs/components/status'
           title='Status'
           description='Service status, 90-day uptime, incidents and regional health.'
           count={counts.status}
-          className='md:col-span-3'
+          className='md:col-span-2'
           previewClassName='*:w-80 sm:*:w-[30rem]'
         >
           <Status2 {...status2ExampleProps} />
-          <div className='hidden lg:block'>
-            <Status1 {...status1ExampleProps} />
-          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/states'
+          title='States'
+          description='Loading, refreshing, empty and error states that keep their layout.'
+          count={counts.states}
+        >
+          <States3 {...states3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

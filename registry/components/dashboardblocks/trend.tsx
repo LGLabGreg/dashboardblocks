@@ -23,37 +23,37 @@ const trendVariants = cva('', {
     {
       variant: 'default',
       direction: 'up',
-      class: 'text-green-600',
+      class: 'text-green-700 dark:text-green-400',
     },
     {
       variant: 'default',
       direction: 'down',
-      class: 'text-red-600',
+      class: 'text-red-700 dark:text-red-400',
     },
     {
       variant: 'default',
       direction: 'neutral',
-      class: 'text-gray-500',
+      class: 'text-muted-foreground',
     },
     {
       variant: 'icon-only',
       direction: 'up',
-      class: 'text-green-600',
+      class: 'text-green-700 dark:text-green-400',
     },
     {
       variant: 'icon-only',
       direction: 'down',
-      class: 'text-red-600',
+      class: 'text-red-700 dark:text-red-400',
     },
     {
       variant: 'icon-only',
       direction: 'neutral',
-      class: 'text-gray-500',
+      class: 'text-muted-foreground',
     },
     {
       variant: 'badge',
       direction: 'up',
-      class: 'bg-green-500/10 text-green-700 dark:text-green-400',
+      class: 'bg-green-500/10 text-green-800 dark:text-green-400',
     },
     {
       variant: 'badge',
