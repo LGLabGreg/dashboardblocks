@@ -9,7 +9,7 @@ type TrendDirection = 'up' | 'down' | 'neutral'
 const trendVariants = cva('', {
   variants: {
     variant: {
-      default: 'flex items-center text-sm font-medium',
+      default: 'flex items-center gap-1 text-sm font-medium',
       'icon-only': 'h-4 w-4',
       badge:
         'flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold',
@@ -54,17 +54,17 @@ const trendVariants = cva('', {
     {
       variant: 'badge',
       direction: 'up',
-      class: 'bg-green-100 text-green-800 border-green-200',
+      class: 'bg-green-500/10 text-green-700 border-green-600/20 dark:text-green-400',
     },
     {
       variant: 'badge',
       direction: 'down',
-      class: 'bg-red-100 text-red-800 border-red-200',
+      class: 'bg-red-500/10 text-red-700 border-red-600/20 dark:text-red-400',
     },
     {
       variant: 'badge',
       direction: 'neutral',
-      class: 'bg-gray-100 text-gray-800 border-gray-200',
+      class: 'bg-muted text-muted-foreground border-border',
     },
   ],
   defaultVariants: {
@@ -120,7 +120,7 @@ function Trend({
   if (variant === 'badge') {
     return (
       <div className={cn(trendVariants({ variant, direction }), className)}>
-        <Icon className='h-4 w-4' />
+        <Icon className='size-3.5' />
         {displayValue}
       </div>
     )
@@ -128,7 +128,7 @@ function Trend({
 
   return (
     <div className={cn(trendVariants({ variant, direction }), className)}>
-      <Icon className='mr-1 h-4 w-4' />
+      <Icon className='h-4 w-4' />
       {displayValue}
     </div>
   )

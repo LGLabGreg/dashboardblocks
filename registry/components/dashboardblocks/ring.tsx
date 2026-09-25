@@ -67,7 +67,7 @@ export const Ring = ({
           strokeLinecap='round'
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
-          className='transition-all duration-1000 ease-out-expo'
+          className='transition-[stroke-dashoffset] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]'
         />
       </svg>
       <div className='absolute inset-0 flex items-center justify-center'>{children}</div>

@@ -93,7 +93,7 @@ const ActivityFeed01 = (props: ActivityFeed01Props) => {
           const ActivityIcon = activity.icon
           return (
             <ActivityFeedItem key={activity.id}>
-              <Avatar className='h-10 w-10'>
+              <Avatar className='h-10 w-10 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
                 <AvatarImage src={activity.avatar} alt={activity.user} />
                 <AvatarFallback>{activity.user.slice(0, 2)}</AvatarFallback>
               </Avatar>

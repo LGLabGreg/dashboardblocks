@@ -63,7 +63,7 @@ const ActivityFeed03 = (props: ActivityFeed03Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
             View all
             <ArrowRight />
           </Button>
@@ -80,7 +80,7 @@ const ActivityFeed03 = (props: ActivityFeed03Props) => {
               )}
               size='sm'
             >
-              <Avatar className='h-8 w-8 shrink-0'>
+              <Avatar className='h-8 w-8 shrink-0 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
                 <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
                 <AvatarFallback className='text-xs'>
                   {activity.user.initials}

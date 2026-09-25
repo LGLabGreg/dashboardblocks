@@ -30,9 +30,9 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
   const isWarning = percentage >= 80
 
   const ringColor = isCritical
-    ? 'hsl(var(--destructive))'
+    ? 'var(--destructive)'
     : isWarning
-      ? 'hsl(38 92% 50%)'
+      ? 'var(--color-amber-500)'
       : 'var(--color-primary)'
 
   return (

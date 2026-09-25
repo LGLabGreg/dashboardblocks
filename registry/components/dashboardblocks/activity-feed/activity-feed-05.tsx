@@ -115,7 +115,7 @@ const ActivityFeed05 = (props: ActivityFeed05Props) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           {title}
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' className='has-[>svg]:ps-3'>
             View all
             <ArrowRight />
           </Button>
@@ -128,7 +128,7 @@ const ActivityFeed05 = (props: ActivityFeed05Props) => {
             return (
               <div key={event.id}>
                 <ActivityFeedItem size='sm'>
-                  <Avatar className='size-8'>
+                  <Avatar className='size-8 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
                     <AvatarImage src={event.avatar} alt={event.author} />
                     <AvatarFallback>{event.author.slice(0, 2)}</AvatarFallback>
                   </Avatar>

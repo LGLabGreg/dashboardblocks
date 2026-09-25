@@ -41,7 +41,7 @@ export const KPIValue = ({
     formatter(value)
   )
 
-  return <div className={`text-3xl font-bold ${className}`}>{displayValue}</div>
+  return <div className={cn('text-3xl font-bold', className)}>{displayValue}</div>
 }
 
 export type { KPIValueProps }
