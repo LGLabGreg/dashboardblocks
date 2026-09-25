@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.7.1
+
+### Patch Changes
+
+- [#69](https://github.com/LGLabGreg/dashboardblocks/pull/69) [`dc77c5f`](https://github.com/LGLabGreg/dashboardblocks/commit/dc77c5f66100308bd68ba1d28464fe843c440463) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Polish dashboard components: fix invalid ring/segment colors, dark mode status tints, progress easing, and icon sizing
+
 ## 0.7.0
 
 ### Minor Changes
