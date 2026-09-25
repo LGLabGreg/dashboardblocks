@@ -41,6 +41,14 @@ import {
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
 import {
+  Status1,
+  status1ExampleProps,
+} from '@/registry/components/dashboardblocks/status/status-01'
+import {
+  Status2,
+  status2ExampleProps,
+} from '@/registry/components/dashboardblocks/status/status-02'
+import {
   UsageMeter8,
   usageMeter8ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-08'
@@ -56,6 +64,7 @@ export interface CategoryCounts {
   chartPanel: number
   breakdown: number
   funnel: number
+  status: number
   usageMeter: number
   activityFeed: number
   leaderboard: number
@@ -142,6 +151,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <Funnel2 {...funnel2ExampleProps} />
           <div className='hidden lg:block'>
             <Funnel1 {...funnel1ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/status'
+          title='Status'
+          description='Service status, 90-day uptime, incidents and regional health.'
+          count={counts.status}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Status2 {...status2ExampleProps} />
+          <div className='hidden lg:block'>
+            <Status1 {...status1ExampleProps} />
           </div>
         </CategoryCard>
       </div>
