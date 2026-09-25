@@ -1,4 +1,5 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
+import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
@@ -10,6 +11,7 @@ import { Steps } from '@/components/home/steps'
 
 const counts = {
   kpi: Object.keys(kpiComponents).length,
+  chartPanel: Object.keys(chartPanelComponents).length,
   usageMeter: Object.keys(usageMeterComponents).length,
   activityFeed: Object.keys(activityFeedComponents).length,
   leaderboard: Object.keys(leaderboardComponents).length,

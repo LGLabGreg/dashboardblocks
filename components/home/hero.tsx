@@ -36,9 +36,9 @@ export function Hero({ blockCount }: { blockCount: number }) {
 
             <div className='home-enter flex flex-col gap-6 [--home-delay:200ms] lg:col-span-4'>
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
-                KPI cards, usage meters, activity feeds and leaderboards. Composable
-                blocks built with Tailwind CSS and shadcn/ui — copy one or all of them,
-                and own the code.
+                KPI cards, charts, usage meters, activity feeds and leaderboards.
+                Composable blocks built with Tailwind CSS and shadcn/ui — copy one or all
+                of them, and own the code.
               </p>
               <div className='flex flex-wrap items-center gap-3'>
                 <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>

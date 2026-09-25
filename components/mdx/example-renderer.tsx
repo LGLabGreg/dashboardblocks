@@ -5,6 +5,10 @@ import {
   activityFeedExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/index'
 import {
+  chartPanelComponents,
+  chartPanelExampleProps,
+} from '@/registry/components/dashboardblocks/chart-panel/index'
+import {
   kpiComponents,
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
@@ -22,6 +26,7 @@ const exampleComponents = {
   ...activityFeedComponents,
   ...usageMeterComponents,
   ...leaderboardComponents,
+  ...chartPanelComponents,
 }
 
 const examplePropsMap = {
@@ -29,6 +34,7 @@ const examplePropsMap = {
   ...activityFeedExampleProps,
   ...usageMeterExampleProps,
   ...leaderboardExampleProps,
+  ...chartPanelExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

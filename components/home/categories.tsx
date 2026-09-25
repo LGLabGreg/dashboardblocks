@@ -5,6 +5,14 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  ChartPanel1,
+  chartPanel1ExampleProps,
+} from '@/registry/components/dashboardblocks/chart-panel/chart-panel-01'
+import {
+  ChartPanel5,
+  chartPanel5ExampleProps,
+} from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
+import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -33,6 +41,7 @@ import { SectionHeading } from './section-heading'
 
 export interface CategoryCounts {
   kpi: number
+  chartPanel: number
   usageMeter: number
   activityFeed: number
   leaderboard: number
@@ -43,7 +52,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
     <section className='mx-auto w-full max-w-6xl px-4 py-24'>
       <SectionHeading
         eyebrow='The collection'
-        title='Four families. Endless dashboards.'
+        title='Pick a family. Build a dashboard.'
         description='Every block is a standalone component with sensible defaults and typed props. Mix them, match them, restyle them.'
       />
       <div className='mt-12 grid gap-4 md:grid-cols-3'>
@@ -87,6 +96,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
             <Leaderboard01 {...leaderboard01ExampleProps} />
           </div>
         </CategoryCard>
+        <CategoryCard
+          href='/docs/components/chart-panel'
+          title='Chart Panel'
+          description='Full-size line, area, bar and donut charts with legends and tooltips.'
+          count={counts.chartPanel}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <ChartPanel1 {...chartPanel1ExampleProps} />
+          <div className='hidden lg:block'>
+            <ChartPanel5 {...chartPanel5ExampleProps} />
+          </div>
+        </CategoryCard>
       </div>
     </section>
   )
@@ -98,6 +120,7 @@ function CategoryCard({
   description,
   count,
   className,
+  previewClassName = '*:w-80',
   children,
 }: {
   href: string
@@ -105,6 +128,7 @@ function CategoryCard({
   description: string
   count: number
   className?: string
+  previewClassName?: string
   children: React.ReactNode
 }) {
   return (
@@ -116,7 +140,12 @@ function CategoryCard({
       )}
     >
       <div inert className='home-dots h-80 overflow-hidden select-none'>
-        <div className='home-fade flex h-full justify-center gap-4 px-6 pt-8 text-left *:w-80 *:shrink-0 *:transition-transform *:duration-500 *:ease-out motion-safe:group-hover:*:-translate-y-2'>
+        <div
+          className={cn(
+            'home-fade flex h-full justify-center gap-4 px-6 pt-8 text-left *:shrink-0 *:transition-transform *:duration-500 *:ease-out motion-safe:group-hover:*:-translate-y-2',
+            previewClassName,
+          )}
+        >
           {children}
         </div>
       </div>
