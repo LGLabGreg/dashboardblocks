@@ -201,7 +201,6 @@
       "name": "progress-kpi-01",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/trend.json"
@@ -217,7 +216,6 @@
       "name": "progress-kpi-02",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/kpi.json",
         "https://dashboardblocks.com/r/progress-bar.json"
@@ -462,7 +460,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"
       ],
@@ -513,7 +510,6 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
         "https://dashboardblocks.com/r/icon.json",
         "https://dashboardblocks.com/r/progress-bar.json",
         "https://dashboardblocks.com/r/usage-meter.json"

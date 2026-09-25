@@ -54,10 +54,10 @@ export function ShadcnCliButton({ name }: { name: string }) {
         {shortCommands[packageManager]}
       </Button>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant='outline' className='pl-2!' size='sm'>
-            <ChevronDownIcon />
-          </Button>
+        <DropdownMenuTrigger
+          render={<Button variant='outline' className='pl-2!' size='sm' />}
+        >
+          <ChevronDownIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='[--radius:1rem]'>
           <DropdownMenuGroup>

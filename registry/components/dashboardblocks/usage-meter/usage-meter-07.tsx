@@ -42,8 +42,8 @@ const UsageMeter7 = (props: UsageMeter7Props) => {
         )}
       </CardHeader>
       <div className='relative h-[150px]'>
-        <AnimatedWave percentage={100} />
-        <div className='absolute inset-0 z-10 flex flex-col items-center justify-center space-y-3 text-center text-primary-foreground'>
+        <AnimatedWave percentage={100} className='text-blue-300 dark:text-blue-800' />
+        <div className='absolute inset-0 z-10 flex flex-col items-center justify-center space-y-3 text-center text-foreground'>
           <div className='space-y-1'>
             <div className='text-sm font-medium tracking-wider'>REMAINING</div>
             <div className='flex items-start gap-1 text-4xl font-bold leading-none'>
@@ -55,8 +55,7 @@ const UsageMeter7 = (props: UsageMeter7Props) => {
             </div>
           </div>
           <div className='text-sm'>
-            <AnimatedNumber value={used} formatter={(value) => value.toLocaleString()} />{' '}
-            {unit} / {limit} {unit} used
+            {used.toLocaleString()} {unit} / {limit.toLocaleString()} {unit} used
           </div>
         </div>
       </div>

@@ -34,7 +34,7 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
 
   return (
     <Card>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-base font-medium'>{title}</CardTitle>
           <CardDescription>
@@ -62,11 +62,7 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
               />
               <span className='text-sm text-muted-foreground'>{segment.label}</span>
               <span className='ml-auto text-sm font-medium'>
-                <AnimatedNumber
-                  value={segment.value}
-                  formatter={(value) => value.toFixed(1)}
-                />{' '}
-                {unit}
+                {segment.value.toFixed(1)} {unit}
               </span>
             </div>
           ))}

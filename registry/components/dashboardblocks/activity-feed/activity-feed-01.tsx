@@ -88,7 +88,7 @@ const ActivityFeed01 = (props: ActivityFeed01Props) => {
           </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         {activities.map((activity) => {
           const ActivityIcon = activity.icon
           return (
