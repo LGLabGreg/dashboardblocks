@@ -51,8 +51,8 @@ export const UsageMeterStatus = ({
         isCritical
           ? 'bg-destructive/10 text-destructive'
           : isWarning
-            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-500'
-            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-500',
+            ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
+            : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
         className,
       )}
     >
