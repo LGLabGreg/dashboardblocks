@@ -3,8 +3,13 @@
   "name": "trend",
   "title": "Trend",
   "description": "A trend indicator component.",
-  "dependencies": ["class-variance-authority", "lucide-react"],
-  "registryDependencies": ["https://dashboardblocks.com/r/animated-number.json"],
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://dashboardblocks.com/r/animated-number.json"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/trend.tsx",

@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 90,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "semi": false,
+  "sortPackageJson": false,
+  "sortImports": {
+    "ignoreCase": false,
+    "customGroups": [
+      { "groupName": "types", "elementNamePattern": ["@/types/**"] },
+      { "groupName": "server", "elementNamePattern": ["@/server/**"] },
+      { "groupName": "constants", "elementNamePattern": ["@/constants/**"] },
+      { "groupName": "schemas", "elementNamePattern": ["@/schemas/**"] },
+      { "groupName": "config", "elementNamePattern": ["@/config/**"] },
+      { "groupName": "components", "elementNamePattern": ["@/components/**"] },
+      { "groupName": "hooks", "elementNamePattern": ["@/hooks/**"] },
+      { "groupName": "lib", "elementNamePattern": ["@/lib/**"] },
+      { "groupName": "images", "elementNamePattern": ["@/images/**"] }
+    ],
+    "groups": [
+      ["builtin", "external", "internal", "subpath", "unknown"],
+      "types",
+      "server",
+      "constants",
+      "schemas",
+      "config",
+      "components",
+      "hooks",
+      "lib",
+      "images",
+      ["parent", "sibling", "index", "style", "side_effect_style", "side_effect"]
+    ]
+  },
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "CHANGELOG.md",
+    "public/r/**",
+    "registry.json",
+    ".source/**"
+  ]
+}

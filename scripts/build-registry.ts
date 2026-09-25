@@ -21,5 +21,5 @@ const registry = {
 
 writeFileSync(resolve(process.cwd(), 'registry.json'), JSON.stringify(registry, null, 2))
 
-// eslint-disable-next-line no-console
+// oxlint-disable-next-line no-console
 console.log(`✓ Built registry with ${registry.items.length} items`)

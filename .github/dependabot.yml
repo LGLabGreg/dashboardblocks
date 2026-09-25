@@ -19,9 +19,8 @@ updates:
           - '@vite*'
       lint|format:
         patterns:
-          - 'eslint*'
-          - '@eslint*'
-          - 'prettier'
+          - 'oxlint*'
+          - 'oxfmt'
       radix:
         patterns:
           - '@radix-ui*'

@@ -31,6 +31,6 @@ export function ExampleRenderer({ name }: { name: ComponentName }) {
   const Component = exampleComponents[name]
   const props = examplePropsMap[name as keyof typeof examplePropsMap]
   if (!Component) return null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   return <Component {...(props as any)} />
 }

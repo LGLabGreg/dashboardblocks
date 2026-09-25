@@ -3,7 +3,9 @@
   "name": "activity-feed",
   "title": "Activity Feed",
   "description": "Primitives for composing activity and timeline feeds.",
-  "dependencies": ["class-variance-authority"],
+  "dependencies": [
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/activity-feed.tsx",

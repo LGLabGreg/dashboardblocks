@@ -8,7 +8,9 @@
       "type": "registry:component",
       "title": "Activity Feed",
       "description": "Primitives for composing activity and timeline feeds.",
-      "dependencies": ["class-variance-authority"],
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed.tsx",
@@ -21,7 +23,9 @@
       "type": "registry:component",
       "title": "Animated Number",
       "description": "An animated number component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-animated-number.json"],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-animated-number.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/animated-number.tsx",
@@ -46,7 +50,9 @@
       "type": "registry:component",
       "title": "Chart",
       "description": "Chart components.",
-      "dependencies": ["recharts"],
+      "dependencies": [
+        "recharts"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart.tsx",
@@ -59,7 +65,10 @@
       "type": "registry:component",
       "title": "Icon",
       "description": "An icon component.",
-      "dependencies": ["class-variance-authority", "lucide-react"],
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/icon.tsx",
@@ -72,7 +81,9 @@
       "type": "registry:component",
       "title": "KPI",
       "description": "A flexible KPI card with trend indicators, sparklines, and progress tracking.",
-      "registryDependencies": ["card"],
+      "registryDependencies": [
+        "card"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi.tsx",
@@ -85,7 +96,9 @@
       "type": "registry:component",
       "title": "Progress Bar",
       "description": "A progress bar component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/progress-bar.tsx",
@@ -98,7 +111,9 @@
       "type": "registry:component",
       "title": "Ring",
       "description": "A ring component.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
@@ -111,8 +126,13 @@
       "type": "registry:component",
       "title": "Trend",
       "description": "A trend indicator component.",
-      "dependencies": ["class-variance-authority", "lucide-react"],
-      "registryDependencies": ["https://dashboardblocks.com/r/animated-number.json"],
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/animated-number.json"
+      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/trend.tsx",
@@ -308,7 +328,9 @@
     {
       "name": "activity-feed-01",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -326,7 +348,9 @@
     {
       "name": "activity-feed-02",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -343,7 +367,9 @@
     {
       "name": "activity-feed-03",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "avatar",
         "button",
@@ -360,7 +386,9 @@
     {
       "name": "activity-feed-04",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -378,7 +406,9 @@
     {
       "name": "activity-feed-05",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -498,7 +528,9 @@
     {
       "name": "usage-meter-07",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -516,7 +548,9 @@
     {
       "name": "usage-meter-08",
       "type": "registry:component",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -536,7 +570,9 @@
       "type": "registry:hook",
       "title": "Use Animated Number",
       "description": "A hook for animating a number.",
-      "registryDependencies": ["https://dashboardblocks.com/r/use-in-view.json"],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
       "files": [
         {
           "path": "registry/hooks/use-animated-number.tsx",

@@ -42,7 +42,7 @@ export function ShadcnCliButton({ name }: { name: string }) {
   )
 
   const copyToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(commands[packageManager])
+    void navigator.clipboard.writeText(commands[packageManager])
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }, [commands, packageManager])
