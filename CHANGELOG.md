@@ -1,5 +1,41 @@
 # dashboardblocks
 
+## 0.9.0
+
+### Minor Changes
+
+- [#82](https://github.com/LGLabGreg/dashboardblocks/pull/82) [`a19c7e9`](https://github.com/LGLabGreg/dashboardblocks/commit/a19c7e9cd5296f21c6e3b5dd801c15ef911f1a5e) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Alerts
+
+- [#78](https://github.com/LGLabGreg/dashboardblocks/pull/78) [`4555081`](https://github.com/LGLabGreg/dashboardblocks/commit/4555081f9c9ec973c1526d04e2f9815a3bedee87) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New components: Breakdown and Funnel
+
+- [#76](https://github.com/LGLabGreg/dashboardblocks/pull/76) [`c887402`](https://github.com/LGLabGreg/dashboardblocks/commit/c8874021f45cd87ca3d8fa75ff02d3d6dc07e202) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Chart Panel
+
+- [#82](https://github.com/LGLabGreg/dashboardblocks/pull/82) [`c1c170a`](https://github.com/LGLabGreg/dashboardblocks/commit/c1c170ada31fc7a7a093095295e3001eef1e36df) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Comparison
+
+- [#81](https://github.com/LGLabGreg/dashboardblocks/pull/81) [`f79eab8`](https://github.com/LGLabGreg/dashboardblocks/commit/f79eab80878e0284592fd40383244521382b0b68) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New dashboard examples (store and SaaS) built from the blocks, and a `showPrevious` option for Chart Panel 01
+
+- [#81](https://github.com/LGLabGreg/dashboardblocks/pull/81) [`288b7f9`](https://github.com/LGLabGreg/dashboardblocks/commit/288b7f968462d0d9659066249d0da5f26a943919) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Data Table
+
+- [#82](https://github.com/LGLabGreg/dashboardblocks/pull/82) [`a67f25e`](https://github.com/LGLabGreg/dashboardblocks/commit/a67f25e2f247149d42a7d9bad93ab8b3cad22bfa) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Goals
+
+- [#81](https://github.com/LGLabGreg/dashboardblocks/pull/81) [`aec422c`](https://github.com/LGLabGreg/dashboardblocks/commit/aec422ce1dab89dac6954c992f08d136b76b9d71) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Heatmap
+
+- [#80](https://github.com/LGLabGreg/dashboardblocks/pull/80) [`0273faa`](https://github.com/LGLabGreg/dashboardblocks/commit/0273faa08193dab0847aa1b0fc58261950bf0a33) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New components: Stat Group and Dashboard Header
+
+- [#81](https://github.com/LGLabGreg/dashboardblocks/pull/81) [`f774aee`](https://github.com/LGLabGreg/dashboardblocks/commit/f774aee6f96e37337456d00de931aabef1efd0d2) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: States (loading, refreshing, empty and error)
+
+- [#79](https://github.com/LGLabGreg/dashboardblocks/pull/79) [`dac90b0`](https://github.com/LGLabGreg/dashboardblocks/commit/dac90b03febec67020436b3f1328e181fb0710a3) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Status
+
+### Patch Changes
+
+- [#80](https://github.com/LGLabGreg/dashboardblocks/pull/80) [`4546e59`](https://github.com/LGLabGreg/dashboardblocks/commit/4546e597bf2350ec832be7c45a05f847c8e4cd23) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Chart Panel: the screen-reader data table no longer widens the page on narrow screens
+
+- [#82](https://github.com/LGLabGreg/dashboardblocks/pull/82) [`a19c7e9`](https://github.com/LGLabGreg/dashboardblocks/commit/a19c7e9cd5296f21c6e3b5dd801c15ef911f1a5e) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Data Table: vertical padding for cells that wrap onto several lines
+
+- [#82](https://github.com/LGLabGreg/dashboardblocks/pull/82) [`a67f25e`](https://github.com/LGLabGreg/dashboardblocks/commit/a67f25e2f247149d42a7d9bad93ab8b3cad22bfa) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Ring: respect reduced motion when the ring fills
+
+- [#81](https://github.com/LGLabGreg/dashboardblocks/pull/81) [`da0f458`](https://github.com/LGLabGreg/dashboardblocks/commit/da0f4583679f778537e4838c42a08e46d6d21b28) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Trend, Leaderboard and Usage Meter: darker change and status text so small figures meet WCAG AA contrast
+
 ## 0.8.0
 
 ### Minor Changes
