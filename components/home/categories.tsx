@@ -57,9 +57,9 @@ import {
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
 import {
-  Status1,
-  status1ExampleProps,
-} from '@/registry/components/dashboardblocks/status/status-01'
+  States3,
+  states3ExampleProps,
+} from '@/registry/components/dashboardblocks/states/states-03'
 import {
   Status2,
   status2ExampleProps,
@@ -88,6 +88,7 @@ export interface CategoryCounts {
   leaderboard: number
   dataTable: number
   heatmap: number
+  states: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -218,13 +219,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Status'
           description='Service status, 90-day uptime, incidents and regional health.'
           count={counts.status}
-          className='md:col-span-3'
+          className='md:col-span-2'
           previewClassName='*:w-80 sm:*:w-[30rem]'
         >
           <Status2 {...status2ExampleProps} />
-          <div className='hidden lg:block'>
-            <Status1 {...status1ExampleProps} />
-          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/states'
+          title='States'
+          description='Loading, refreshing, empty and error states that keep their layout.'
+          count={counts.states}
+        >
+          <States3 {...states3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

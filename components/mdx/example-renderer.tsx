@@ -41,6 +41,10 @@ import {
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
 import {
+  statesComponents,
+  statesExampleProps,
+} from '@/registry/components/dashboardblocks/states/index'
+import {
   statusComponents,
   statusExampleProps,
 } from '@/registry/components/dashboardblocks/status/index'
@@ -62,6 +66,7 @@ const exampleComponents = {
   ...dashboardHeaderComponents,
   ...dataTableComponents,
   ...heatmapComponents,
+  ...statesComponents,
 }
 
 const examplePropsMap = {
@@ -77,6 +82,7 @@ const examplePropsMap = {
   ...dashboardHeaderExampleProps,
   ...dataTableExampleProps,
   ...heatmapExampleProps,
+  ...statesExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

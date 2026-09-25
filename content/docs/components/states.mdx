@@ -1,0 +1,30 @@
+---
+title: States
+description: Loading, refreshing, empty and error states that keep the block's layout.
+---
+
+Each block takes a `load` function that returns a promise, and the `useBlockData` hook tracks its status. Use a skeleton only for the first load. When data is already on screen, keep it in place while it refreshes, dimmed, so the layout doesn't jump.
+
+### Skeleton
+
+Placeholders sized to match the loaded stats, so nothing shifts when the data arrives. Select Reload to see them again.
+
+<ComponentPreview name='states-01' />
+
+### Refresh
+
+The chart stays in place at reduced opacity while it refreshes, with an updating indicator in the header.
+
+<ComponentPreview name='states-02' />
+
+### Empty
+
+A filtered table with no matching rows explains why it's empty and offers a way out.
+
+<ComponentPreview name='states-03' />
+
+### Error
+
+When loading fails, the card says what went wrong and offers to try again. This example fails on every other attempt.
+
+<ComponentPreview name='states-04' />

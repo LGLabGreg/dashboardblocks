@@ -61,6 +61,21 @@
       ]
     },
     {
+      "name": "block-state",
+      "type": "registry:component",
+      "title": "Block State",
+      "description": "Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/block-state.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "breakdown",
       "type": "registry:component",
       "title": "Breakdown",
@@ -1366,6 +1381,85 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap/heatmap-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "states-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/states/states-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "states-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/states/states-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "states-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/dashboard-header.json",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/states/states-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "states-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/states/states-04.tsx",
           "type": "registry:component"
         }
       ]

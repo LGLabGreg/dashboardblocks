@@ -55,6 +55,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'block-state',
+    type: 'registry:component',
+    title: 'Block State',
+    description:
+      'Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/block-state.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'breakdown',
     type: 'registry:component',
     title: 'Breakdown',

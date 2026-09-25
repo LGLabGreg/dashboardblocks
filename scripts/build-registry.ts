@@ -9,6 +9,7 @@ import { examples as kpiExamples } from '@/registry/components/dashboardblocks/k
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
+import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
 import { examples as statusExamples } from '@/registry/components/dashboardblocks/status/registry'
 import { examples as usageMeterExamples } from '@/registry/components/dashboardblocks/usage-meter/registry'
 import { hooks } from '@/registry/hooks/registry'
@@ -33,6 +34,7 @@ const registry = {
     ...dashboardHeaderExamples,
     ...dataTableExamples,
     ...heatmapExamples,
+    ...statesExamples,
     ...hooks,
   ],
 }
