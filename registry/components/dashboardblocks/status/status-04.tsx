@@ -86,8 +86,8 @@ const Status4 = (props: Status4Props) => {
           {healthy} of {regions.length} regions healthy
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ul className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+      <CardContent className='@container'>
+        <ul className='grid grid-cols-2 gap-3 @2xl:grid-cols-3'>
           {regions.map((region) => (
             <li
               key={region.code}

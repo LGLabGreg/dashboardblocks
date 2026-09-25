@@ -94,9 +94,9 @@ const Status5 = (props: Status5Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
-        <dl className='grid grid-cols-3 gap-4'>
-          <div className='flex flex-col gap-0.5'>
+      <CardContent className='@container flex flex-col gap-6'>
+        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
+          <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
             <dt className='text-muted-foreground text-xs'>Uptime</dt>
             <dd className='text-3xl font-semibold tracking-tight'>
               {formatUptime(getUptime(days))}
@@ -104,11 +104,15 @@ const Status5 = (props: Status5Props) => {
           </div>
           <div className='flex flex-col gap-0.5'>
             <dt className='text-muted-foreground text-xs'>Incidents</dt>
-            <dd className='text-3xl font-semibold tracking-tight'>{incidents.length}</dd>
+            <dd className='text-2xl font-semibold tracking-tight @md:text-3xl'>
+              {incidents.length}
+            </dd>
           </div>
           <div className='flex flex-col gap-0.5'>
             <dt className='text-muted-foreground text-xs'>Downtime</dt>
-            <dd className='text-3xl font-semibold tracking-tight'>{downtime}</dd>
+            <dd className='text-2xl font-semibold tracking-tight whitespace-nowrap @md:text-3xl'>
+              {downtime}
+            </dd>
           </div>
         </dl>
         <div className='flex flex-col gap-2'>
@@ -124,7 +128,7 @@ const Status5 = (props: Status5Props) => {
             {incidents.map((incident) => (
               <li
                 key={`${incident.date}-${incident.title}`}
-                className='flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b py-2.5 last:border-b-0'
+                className='flex flex-col items-start gap-x-4 gap-y-1.5 border-b py-2.5 last:border-b-0 @md:flex-row @md:items-center @md:justify-between'
               >
                 <div className='flex min-w-0 flex-col'>
                   <span className='text-sm font-medium'>{incident.title}</span>

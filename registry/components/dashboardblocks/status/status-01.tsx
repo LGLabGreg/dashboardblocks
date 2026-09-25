@@ -9,7 +9,6 @@ import {
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -59,12 +58,10 @@ const Status1 = (props: Status1Props) => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className='gap-2'>
+        <StatusBadge className='w-fit' label={summaryLabel[overall]} status={overall} />
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <StatusBadge label={summaryLabel[overall]} status={overall} />
-        </CardAction>
       </CardHeader>
       <CardContent>
         <ul className='flex flex-col'>
@@ -76,7 +73,7 @@ const Status1 = (props: Status1Props) => {
               <div className='flex min-w-0 flex-col'>
                 <span className='text-sm font-medium'>{service.name}</span>
                 {service.description && (
-                  <span className='text-muted-foreground truncate text-xs'>
+                  <span className='text-muted-foreground text-xs'>
                     {service.description}
                   </span>
                 )}
