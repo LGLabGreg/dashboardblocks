@@ -55,6 +55,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'chart-panel',
+    type: 'registry:component',
+    title: 'Chart Panel',
+    description:
+      'Primitives for full-size chart panels: tooltip, legend, axis defaults and an accessible data table.',
+    dependencies: ['recharts'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/chart-panel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'icon',
     type: 'registry:component',
     title: 'Icon',

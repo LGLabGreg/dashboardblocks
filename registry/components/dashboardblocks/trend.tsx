@@ -76,6 +76,12 @@ interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction
   animated?: boolean
   className?: string
   formatter?: (value: number) => string
+  /**
+   * Which direction is good. Use `down` for metrics like latency or churn,
+   * so a decrease is colored as positive.
+   * @default 'up'
+   */
+  goodDirection?: 'up' | 'down'
   trend: number
   trendIcon?: 'arrow' | 'trend'
 }
@@ -95,11 +101,18 @@ function Trend({
   animated = false,
   className,
   formatter = defaultFormatter,
+  goodDirection = 'up',
   trend,
   trendIcon = 'trend',
   variant = 'default',
 }: TrendProps) {
   const direction = getTrendDirection(trend)
+  const tone =
+    goodDirection === 'down' && direction !== 'neutral'
+      ? direction === 'up'
+        ? 'down'
+        : 'up'
+      : direction
   const TrendIcon =
     direction === 'up' ? TrendingUp : direction === 'down' ? TrendingDown : Minus
   const ArrowIcon =
@@ -113,12 +126,12 @@ function Trend({
   )
 
   if (variant === 'icon-only') {
-    return <Icon className={cn(trendVariants({ variant, direction }), className)} />
+    return <Icon className={cn(trendVariants({ variant, direction: tone }), className)} />
   }
 
   if (variant === 'badge') {
     return (
-      <div className={cn(trendVariants({ variant, direction }), className)}>
+      <div className={cn(trendVariants({ variant, direction: tone }), className)}>
         <Icon className='size-3.5' />
         {displayValue}
       </div>
@@ -126,7 +139,7 @@ function Trend({
   }
 
   return (
-    <div className={cn(trendVariants({ variant, direction }), className)}>
+    <div className={cn(trendVariants({ variant, direction: tone }), className)}>
       <Icon className='h-4 w-4' />
       {displayValue}
     </div>
