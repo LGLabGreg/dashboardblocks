@@ -33,9 +33,9 @@ import {
   dataTable1ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-01'
 import {
-  Forecast1,
-  forecast1ExampleProps,
-} from '@/registry/components/dashboardblocks/forecast/forecast-01'
+  Forecast3,
+  forecast3ExampleProps,
+} from '@/registry/components/dashboardblocks/forecast/forecast-03'
 import {
   Funnel1,
   funnel1ExampleProps,
@@ -309,10 +309,8 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Forecast'
           description='Actuals running into forecasts, dates to target, run-rates and scenarios.'
           count={counts.forecast}
-          className='md:col-span-3'
-          previewClassName='*:w-80 sm:*:w-[40rem]'
         >
-          <Forecast1 {...forecast1ExampleProps} />
+          <Forecast3 {...forecast3ExampleProps} />
         </CategoryCard>
       </div>
     </section>
