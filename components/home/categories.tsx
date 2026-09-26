@@ -110,6 +110,10 @@ import {
   schedule2ExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/schedule-02'
 import {
+  Spend1,
+  spend1ExampleProps,
+} from '@/registry/components/dashboardblocks/spend/spend-01'
+import {
   StatGroup2,
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
@@ -165,6 +169,7 @@ export interface CategoryCounts {
   forecast: number
   retention: number
   distribution: number
+  spend: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -441,10 +446,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Distribution'
           description='Histograms with percentiles, box plots by group, spread summaries and before and after comparisons.'
           count={counts.distribution}
-          className='md:col-span-3'
+          className='md:col-span-2'
           previewClassName='*:w-80 sm:*:w-[40rem]'
         >
           <Distribution1 {...distribution1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/spend'
+          title='Spend'
+          description='Budget against actual, spend by service, monthly variance, and burn and runway.'
+          count={counts.spend}
+        >
+          <Spend1 {...spend1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

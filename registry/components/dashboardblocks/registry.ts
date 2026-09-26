@@ -410,6 +410,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'spend',
+    type: 'registry:component',
+    title: 'Spend',
+    description:
+      'Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/spend.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'stat-group',
     type: 'registry:component',
     title: 'Stat Group',
