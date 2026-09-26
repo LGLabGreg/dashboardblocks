@@ -23,9 +23,9 @@ const config = {
   },
   async redirects() {
     return [
-      { source: '/examples', destination: '/docs#examples', permanent: true },
+      { source: '/examples', destination: '/docs#dashboards', permanent: true },
       { source: '/examples/:slug', destination: '/docs/examples/:slug', permanent: true },
-      { source: '/docs/examples', destination: '/docs#examples', permanent: true },
+      { source: '/docs/examples', destination: '/docs#dashboards', permanent: true },
     ]
   },
 }

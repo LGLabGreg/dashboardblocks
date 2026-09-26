@@ -16,11 +16,11 @@ Most dashboard UI libraries force you to choose between generic components that 
 
 More blocks are on the way, including dashboard headers, stat groups, heatmaps and goal trackers.
 
-## Examples
+## Dashboards
 
 Full dashboards composed from the blocks, with header filters that scope every block below them.
 
-Each example is a single component you can install and adapt. Its header controls one query: the date range, comparison and filters. Every block below re-renders from that query, so the numbers always agree. While new data loads, the blocks stay in place, dimmed, instead of flashing skeletons.
+Each dashboard is a single component you can install and adapt. Its header controls one query: the date range, comparison and filters. Every block below re-renders from that query, so the numbers always agree. While new data loads, the blocks stay in place, dimmed, instead of flashing skeletons.
 
 The data comes from one function in each file (`buildStoreData` and `buildSaasData`). Replace it with your own queries; the blocks only need their props.
 

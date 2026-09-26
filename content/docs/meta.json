@@ -1,3 +1,10 @@
 {
-  "pages": ["index", "examples", "...", "---", "external:[Sparkles][llms.txt](/llms.txt)"]
+  "pages": [
+    "index",
+    "compatibility",
+    "examples",
+    "...",
+    "---",
+    "external:[Sparkles][llms.txt](/llms.txt)"
+  ]
 }
