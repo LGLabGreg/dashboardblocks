@@ -19,6 +19,18 @@
       ]
     },
     {
+      "name": "ai-usage",
+      "type": "registry:component",
+      "title": "AI Usage",
+      "description": "Primitives for LLM usage: token cost at per-million prices with cached input billed separately, cache savings and hit rate, compact token and dollar formatting, model colours in a fixed order and an input, cached and output token bar.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-usage.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "alerts",
       "type": "registry:component",
       "title": "Alerts",
@@ -3232,6 +3244,67 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory/inventory-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-usage-01",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/ai-usage.json",
+        "https://dashboardblocks.com/r/base/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-usage/ai-usage-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-usage-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/ai-usage.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-usage/ai-usage-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-usage-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/ai-usage.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-usage/ai-usage-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-usage-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/ai-usage.json",
+        "https://dashboardblocks.com/r/base/ring.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-usage/ai-usage-04.tsx",
           "type": "registry:component"
         }
       ]

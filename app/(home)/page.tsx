@@ -1,4 +1,5 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
+import { aiUsageComponents } from '@/registry/components/dashboardblocks/ai-usage/index'
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
 import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -79,6 +80,7 @@ const counts = {
   scatter: Object.keys(scatterComponents).length,
   security: Object.keys(securityComponents).length,
   inventory: Object.keys(inventoryComponents).length,
+  aiUsage: Object.keys(aiUsageComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

@@ -1,0 +1,30 @@
+---
+title: AI Usage
+description: Tokens by model, cost by feature, model latency and errors, and prompt caching savings.
+---
+
+AI usage blocks track what language models cost and how they perform. Costs come from token counts at per-million prices, with cached input tokens billed at their own, lower rate. Models keep their colour in a fixed order across blocks. Prices and model names in the examples are placeholders; pass your own.
+
+### Token Usage
+
+Tokens per day stacked by model, with the total cost and the cost per million tokens.
+
+<ComponentPreview name='ai-usage-01' previewClassName='max-w-2xl' />
+
+### Cost by Feature
+
+Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.
+
+<ComponentPreview name='ai-usage-02' previewClassName='max-w-lg' />
+
+### Model Performance
+
+Requests, time to first token at the median and 95th percentile, output speed and error rate for each model.
+
+<ComponentPreview name='ai-usage-03' previewClassName='max-w-2xl' />
+
+### Prompt Caching
+
+The share of input tokens served from the cache, what it saved and what tokens would have cost without it.
+
+<ComponentPreview name='ai-usage-04' previewClassName='max-w-md' />
