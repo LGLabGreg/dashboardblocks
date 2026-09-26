@@ -9,6 +9,10 @@ import {
   alertsExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/index'
 import {
+  billingComponents,
+  billingExampleProps,
+} from '@/registry/components/dashboardblocks/billing/index'
+import {
   breakdownComponents,
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -33,6 +37,10 @@ import {
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
 import {
+  geoComponents,
+  geoExampleProps,
+} from '@/registry/components/dashboardblocks/geo/index'
+import {
   goalsComponents,
   goalsExampleProps,
 } from '@/registry/components/dashboardblocks/goals/index'
@@ -40,6 +48,10 @@ import {
   heatmapComponents,
   heatmapExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/index'
+import {
+  insightsComponents,
+  insightsExampleProps,
+} from '@/registry/components/dashboardblocks/insights/index'
 import {
   kpiComponents,
   kpiExampleProps,
@@ -82,6 +94,9 @@ const exampleComponents = {
   ...goalsComponents,
   ...comparisonComponents,
   ...alertsComponents,
+  ...geoComponents,
+  ...billingComponents,
+  ...insightsComponents,
 }
 
 const examplePropsMap = {
@@ -101,6 +116,9 @@ const examplePropsMap = {
   ...goalsExampleProps,
   ...comparisonExampleProps,
   ...alertsExampleProps,
+  ...geoExampleProps,
+  ...billingExampleProps,
+  ...insightsExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

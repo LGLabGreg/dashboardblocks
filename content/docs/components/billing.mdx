@@ -1,0 +1,30 @@
+---
+title: Billing
+description: MRR movement, the current plan, invoices and revenue metrics for subscription businesses.
+---
+
+MRR movement always adds up: starting MRR plus new and expansion, minus contraction and churn, gives ending MRR. Movements are small next to the totals, so the waterfall's axis starts below the lowest running total, the total bars show a break, and the axis says where it starts. Amounts go through one currency formatter, and dates are formatted in UTC so they render the same on the server and in the browser. Increases, decreases and invoice statuses each come with a sign, an icon or a label, so colour never carries them alone.
+
+### MRR Movement
+
+Starting to ending MRR as a waterfall, with net new MRR and net revenue retention for the month.
+
+<ComponentPreview name='billing-01' previewClassName='max-w-2xl' />
+
+### Current Plan
+
+The plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.
+
+<ComponentPreview name='billing-02' previewClassName='max-w-xl' />
+
+### Invoices
+
+Recent invoices with their status and amount, what's outstanding, and a PDF download for each.
+
+<ComponentPreview name='billing-03' />
+
+### Revenue Summary
+
+MRR, ARR, ARPU and net revenue retention, each with its change from the previous month.
+
+<ComponentPreview name='billing-04' />
