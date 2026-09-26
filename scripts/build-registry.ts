@@ -17,6 +17,7 @@ import { examples as scheduleExamples } from '@/registry/components/dashboardblo
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
 import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
 import { examples as statusExamples } from '@/registry/components/dashboardblocks/status/registry'
+import { examples as teamExamples } from '@/registry/components/dashboardblocks/team/registry'
 import { examples as usageMeterExamples } from '@/registry/components/dashboardblocks/usage-meter/registry'
 import { hooks } from '@/registry/hooks/registry'
 import { writeFileSync } from 'fs'
@@ -47,6 +48,7 @@ const registry = {
     ...alertsExamples,
     ...pipelineExamples,
     ...scheduleExamples,
+    ...teamExamples,
     ...hooks,
   ],
 }

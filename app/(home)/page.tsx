@@ -15,6 +15,7 @@ import { scheduleComponents } from '@/registry/components/dashboardblocks/schedu
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
+import { teamComponents } from '@/registry/components/dashboardblocks/team/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 
 import { Categories } from '@/components/home/categories'
@@ -41,6 +42,7 @@ const counts = {
   alerts: Object.keys(alertsComponents).length,
   pipeline: Object.keys(pipelineComponents).length,
   schedule: Object.keys(scheduleComponents).length,
+  team: Object.keys(teamComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

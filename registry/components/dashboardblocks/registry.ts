@@ -320,6 +320,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'team',
+    type: 'registry:component',
+    title: 'Team',
+    description:
+      'Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a "+N" overflow.',
+    registryDependencies: ['avatar'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/team.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'trend',
     type: 'registry:component',
     title: 'Trend',

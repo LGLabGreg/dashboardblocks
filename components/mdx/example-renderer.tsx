@@ -69,6 +69,10 @@ import {
   statusExampleProps,
 } from '@/registry/components/dashboardblocks/status/index'
 import {
+  teamComponents,
+  teamExampleProps,
+} from '@/registry/components/dashboardblocks/team/index'
+import {
   usageMeterComponents,
   usageMeterExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/index'
@@ -92,6 +96,7 @@ const exampleComponents = {
   ...alertsComponents,
   ...pipelineComponents,
   ...scheduleComponents,
+  ...teamComponents,
 }
 
 const examplePropsMap = {
@@ -113,6 +118,7 @@ const examplePropsMap = {
   ...alertsExampleProps,
   ...pipelineExampleProps,
   ...scheduleExampleProps,
+  ...teamExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

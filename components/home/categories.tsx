@@ -85,6 +85,10 @@ import {
   status2ExampleProps,
 } from '@/registry/components/dashboardblocks/status/status-02'
 import {
+  Team3,
+  team3ExampleProps,
+} from '@/registry/components/dashboardblocks/team/team-03'
+import {
   UsageMeter8,
   usageMeter8ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-08'
@@ -114,6 +118,7 @@ export interface CategoryCounts {
   alerts: number
   pipeline: number
   schedule: number
+  team: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -302,6 +307,15 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[40rem]'
         >
           <Schedule2 {...schedule2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/team'
+          title='Team'
+          description='Member lists with presence, workload against capacity, who is online and on-call rotas.'
+          count={counts.team}
+          previewClassName='*:w-80'
+        >
+          <Team3 {...team3ExampleProps} />
         </CategoryCard>
       </div>
     </section>
