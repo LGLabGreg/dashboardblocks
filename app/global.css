@@ -146,10 +146,6 @@
   .home-fade {
     mask-image: linear-gradient(to bottom, #000 55%, transparent);
   }
-  .home-enter {
-    animation: home-fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    animation-delay: var(--home-delay, 0ms);
-  }
   @media (min-width: 768px) {
     .home-tilt {
       transform-origin: top center;
@@ -157,9 +153,6 @@
     }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .home-enter {
-      animation-name: home-rise;
-    }
     .home-tilt {
       animation: home-tilt 1.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
       transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -172,19 +165,6 @@
     .home-tilt:hover {
       transform: rotateX(0deg);
     }
-  }
-}
-
-@keyframes home-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes home-rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
   }
 }
 
