@@ -33,6 +33,10 @@ import {
   dataTable1ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-01'
 import {
+  Forecast1,
+  forecast1ExampleProps,
+} from '@/registry/components/dashboardblocks/forecast/forecast-01'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -114,6 +118,7 @@ export interface CategoryCounts {
   alerts: number
   gauge: number
   metricList: number
+  forecast: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -298,6 +303,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.metricList}
         >
           <MetricList1 {...metricList1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/forecast'
+          title='Forecast'
+          description='Actuals running into forecasts, dates to target, run-rates and scenarios.'
+          count={counts.forecast}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Forecast1 {...forecast1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

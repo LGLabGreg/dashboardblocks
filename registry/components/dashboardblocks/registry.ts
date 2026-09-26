@@ -155,6 +155,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'forecast',
+    type: 'registry:component',
+    title: 'Forecast',
+    description:
+      'Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.',
+    dependencies: ['lucide-react', 'recharts'],
+    registryDependencies: [registryUrl('chart-panel'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forecast.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'funnel',
     type: 'registry:component',
     title: 'Funnel',

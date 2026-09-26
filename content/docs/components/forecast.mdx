@@ -1,0 +1,30 @@
+---
+title: Forecast
+description: Actuals running into forecasts, dates to target, run-rates and scenarios.
+---
+
+Forecasts are a straight-line fit through the actuals, with a prediction interval that widens the further ahead it looks. It's a normal approximation, good enough to show uncertainty on a dashboard but not to plan on. Actuals are solid and forecasts dashed in the same hue, with a shaded range and a label, so a forecast never relies on colour to stand apart. Pass fixed dates, so the blocks render the same on the server and in the browser.
+
+### Actual and Forecast
+
+Weekly actuals continuing into a dashed forecast with a shaded 80% range and a today marker.
+
+<ComponentPreview name='forecast-01' previewClassName='max-w-2xl' />
+
+### Date to Target
+
+When the trend reaches a target, with an 80% range of dates, against the deadline.
+
+<ComponentPreview name='forecast-02' previewClassName='max-w-md' />
+
+### Run-Rate
+
+Month to date, projected to the end of the month at the daily run-rate, with what's needed per day to hit the target.
+
+<ComponentPreview name='forecast-03' previewClassName='max-w-xl' />
+
+### Scenarios
+
+Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.
+
+<ComponentPreview name='forecast-04' previewClassName='max-w-2xl' />

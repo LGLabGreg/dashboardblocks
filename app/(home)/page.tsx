@@ -5,6 +5,7 @@ import { chartPanelComponents } from '@/registry/components/dashboardblocks/char
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
+import { forecastComponents } from '@/registry/components/dashboardblocks/forecast/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
 import { gaugeComponents } from '@/registry/components/dashboardblocks/gauge/index'
 import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
@@ -41,6 +42,7 @@ const counts = {
   alerts: Object.keys(alertsComponents).length,
   gauge: Object.keys(gaugeComponents).length,
   metricList: Object.keys(metricListComponents).length,
+  forecast: Object.keys(forecastComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

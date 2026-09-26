@@ -29,6 +29,10 @@ import {
   dataTableExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/index'
 import {
+  forecastComponents,
+  forecastExampleProps,
+} from '@/registry/components/dashboardblocks/forecast/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
@@ -92,6 +96,7 @@ const exampleComponents = {
   ...alertsComponents,
   ...gaugeComponents,
   ...metricListComponents,
+  ...forecastComponents,
 }
 
 const examplePropsMap = {
@@ -113,6 +118,7 @@ const examplePropsMap = {
   ...alertsExampleProps,
   ...gaugeExampleProps,
   ...metricListExampleProps,
+  ...forecastExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
