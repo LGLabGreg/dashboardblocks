@@ -1,5 +1,35 @@
 # dashboardblocks
 
+## 0.11.0
+
+### Minor Changes
+
+- [#103](https://github.com/LGLabGreg/dashboardblocks/pull/103) [`27980df`](https://github.com/LGLabGreg/dashboardblocks/commit/27980dfa96ce2e3f31071766e21f5fb1b246935a) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: AI Usage
+
+- [#99](https://github.com/LGLabGreg/dashboardblocks/pull/99) [`600e1c3`](https://github.com/LGLabGreg/dashboardblocks/commit/600e1c36a19dd294768cb7a8877b5fa024a92c8d) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Deployments
+
+- [#93](https://github.com/LGLabGreg/dashboardblocks/pull/93) [`2d769c5`](https://github.com/LGLabGreg/dashboardblocks/commit/2d769c5b9c4e91a0d91230e91866dd1e9b3346aa) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Distribution
+
+- [#89](https://github.com/LGLabGreg/dashboardblocks/pull/89) [`9edf71b`](https://github.com/LGLabGreg/dashboardblocks/commit/9edf71be64f4240f9dd5b083f272787365ba9bf4) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Blocks now install into any shadcn/ui project: every style, Base UI, Radix UI or React Aria, and Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. Add a customizer to preview blocks with your setup.
+
+- [#98](https://github.com/LGLabGreg/dashboardblocks/pull/98) [`74aeac0`](https://github.com/LGLabGreg/dashboardblocks/commit/74aeac0625239773d08e813898d04b34129a82b0) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Feedback
+
+- [#95](https://github.com/LGLabGreg/dashboardblocks/pull/95) [`e13c555`](https://github.com/LGLabGreg/dashboardblocks/commit/e13c555918e8683adf6eba89745b56cf02cd2edf) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Flow
+
+- [#102](https://github.com/LGLabGreg/dashboardblocks/pull/102) [`ec8caad`](https://github.com/LGLabGreg/dashboardblocks/commit/ec8caadf58183c947bf1b0ed67dacd55742d3361) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Inventory
+
+- [#97](https://github.com/LGLabGreg/dashboardblocks/pull/97) [`33783c2`](https://github.com/LGLabGreg/dashboardblocks/commit/33783c21d18b226c3c85c5df05f7e516ddad8008) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Realtime
+
+- [#92](https://github.com/LGLabGreg/dashboardblocks/pull/92) [`500936c`](https://github.com/LGLabGreg/dashboardblocks/commit/500936cecaaa9c076c4fac9bab336371f22728d4) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Retention
+
+- [#100](https://github.com/LGLabGreg/dashboardblocks/pull/100) [`5a8fa15`](https://github.com/LGLabGreg/dashboardblocks/commit/5a8fa15552e913ab25f88110f726cfd5e658c09b) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Scatter
+
+- [#101](https://github.com/LGLabGreg/dashboardblocks/pull/101) [`8a3f27e`](https://github.com/LGLabGreg/dashboardblocks/commit/8a3f27e32ac0e7f167c6ce527eeb4f28c39de0fd) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Security
+
+- [#94](https://github.com/LGLabGreg/dashboardblocks/pull/94) [`a08c1f6`](https://github.com/LGLabGreg/dashboardblocks/commit/a08c1f6dce31a2b2708326cd409c301958364d0a) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Spend
+
+- [#96](https://github.com/LGLabGreg/dashboardblocks/pull/96) [`12f8e87`](https://github.com/LGLabGreg/dashboardblocks/commit/12f8e876e8c84d62594e598da27140ac4a72c59f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Timeline
+
 ## 0.10.0
 
 ### Minor Changes
