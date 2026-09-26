@@ -133,6 +133,9 @@
   #nd-page {
     @apply xl:max-w-[964px]!;
   }
+  #nd-page[data-full='true'] {
+    @apply max-w-[1344px]!;
+  }
 }
 
 @layer components {

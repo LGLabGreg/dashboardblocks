@@ -4,6 +4,7 @@ import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
 
 import { ComponentPreview } from '@/components/mdx/component-preview'
+import { ExampleDashboard } from '@/components/mdx/example-dashboard'
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -15,6 +16,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       </CodeBlock>
     ),
     ComponentPreview,
+    ExampleDashboard,
     ...components,
     ...TabsComponents,
   }

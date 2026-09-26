@@ -12,6 +12,9 @@ import { getMDXComponents } from '@/components/mdx/mdx-components'
 
 import { getPageImage, source } from '@/lib/source'
 
+// Rebuild daily so the example dashboards' date ranges end on the current day.
+export const revalidate = 86_400
+
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params
   const page = source.getPage(params.slug)
