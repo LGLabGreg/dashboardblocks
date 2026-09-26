@@ -1,5 +1,6 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
+import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
@@ -39,6 +40,7 @@ const counts = {
   comparison: Object.keys(comparisonComponents).length,
   alerts: Object.keys(alertsComponents).length,
   geo: Object.keys(geoComponents).length,
+  billing: Object.keys(billingComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

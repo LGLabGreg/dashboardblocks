@@ -9,6 +9,10 @@ import {
   alertsExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/index'
 import {
+  billingComponents,
+  billingExampleProps,
+} from '@/registry/components/dashboardblocks/billing/index'
+import {
   breakdownComponents,
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -87,6 +91,7 @@ const exampleComponents = {
   ...comparisonComponents,
   ...alertsComponents,
   ...geoComponents,
+  ...billingComponents,
 }
 
 const examplePropsMap = {
@@ -107,6 +112,7 @@ const examplePropsMap = {
   ...comparisonExampleProps,
   ...alertsExampleProps,
   ...geoExampleProps,
+  ...billingExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

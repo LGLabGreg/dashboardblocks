@@ -9,6 +9,14 @@ import {
   alerts1ExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
 import {
+  Billing1,
+  billing1ExampleProps,
+} from '@/registry/components/dashboardblocks/billing/billing-01'
+import {
+  Billing2,
+  billing2ExampleProps,
+} from '@/registry/components/dashboardblocks/billing/billing-02'
+import {
   Breakdown1,
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
@@ -106,6 +114,7 @@ export interface CategoryCounts {
   comparison: number
   alerts: number
   geo: number
+  billing: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -284,6 +293,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[32rem]'
         >
           <Geo3 {...geo3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/billing'
+          title='Billing'
+          description='MRR movement, the current plan, invoices and revenue metrics.'
+          count={counts.billing}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Billing1 {...billing1ExampleProps} />
+          <div className='hidden lg:block'>
+            <Billing2 {...billing2ExampleProps} />
+          </div>
         </CategoryCard>
       </div>
     </section>

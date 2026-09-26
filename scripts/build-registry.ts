@@ -1,5 +1,6 @@
 import { examples as activityFeedExamples } from '@/registry/components/dashboardblocks/activity-feed/registry'
 import { examples as alertsExamples } from '@/registry/components/dashboardblocks/alerts/registry'
+import { examples as billingExamples } from '@/registry/components/dashboardblocks/billing/registry'
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
 import { examples as comparisonExamples } from '@/registry/components/dashboardblocks/comparison/registry'
@@ -45,6 +46,7 @@ const registry = {
     ...comparisonExamples,
     ...alertsExamples,
     ...geoExamples,
+    ...billingExamples,
     ...hooks,
   ],
 }

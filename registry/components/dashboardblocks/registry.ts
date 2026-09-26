@@ -69,6 +69,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'billing',
+    type: 'registry:component',
+    title: 'Billing',
+    description:
+      'Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/billing.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'block-state',
     type: 'registry:component',
     title: 'Block State',
