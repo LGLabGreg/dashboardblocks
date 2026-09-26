@@ -17,7 +17,6 @@ export const examples: Registry['items'] = [
   {
     name: 'schedule-02',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['button', 'card', registryUrl('schedule')],
     files: [
       {

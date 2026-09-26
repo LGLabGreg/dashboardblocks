@@ -4,6 +4,16 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+/* Component styles from shadcn/ui, picked with the customizer. */
+@import './styles/style-vega.css' layer(components);
+@import './styles/style-nova.css' layer(components);
+@import './styles/style-maia.css' layer(components);
+@import './styles/style-lyra.css' layer(components);
+@import './styles/style-mira.css' layer(components);
+@import './styles/style-luma.css' layer(components);
+@import './styles/style-sera.css' layer(components);
+@import './styles/style-rhea.css' layer(components);
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

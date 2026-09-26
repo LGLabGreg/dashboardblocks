@@ -1,6 +1,6 @@
 'use client'
 
-import { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
+import type { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'

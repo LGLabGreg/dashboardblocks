@@ -2,11 +2,11 @@
 
 import {
   TinyLineChart,
-  ValueFormatter,
+  type ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
-import { LineProps } from 'recharts'
+import type { LineProps } from 'recharts'
 
 import { CardDescription } from '@/components/ui/card'
 

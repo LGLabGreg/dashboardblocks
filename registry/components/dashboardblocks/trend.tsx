@@ -1,6 +1,6 @@
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type VariantProps, cva } from 'class-variance-authority'
-import { ArrowDown, ArrowUp, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -97,6 +97,68 @@ function getTrendDirection(value: number): TrendDirection {
   return 'neutral'
 }
 
+function TrendIcon({
+  className,
+  direction,
+  kind,
+}: {
+  className?: string
+  direction: TrendDirection
+  kind: 'arrow' | 'trend'
+}) {
+  if (direction === 'neutral')
+    return (
+      <IconPlaceholder
+        lucide='MinusIcon'
+        tabler='IconMinus'
+        hugeicons='MinusSignIcon'
+        phosphor='MinusIcon'
+        remixicon='RiSubtractLine'
+        className={className}
+      />
+    )
+  if (kind === 'arrow') {
+    return direction === 'up' ? (
+      <IconPlaceholder
+        lucide='ArrowUpIcon'
+        tabler='IconArrowUp'
+        hugeicons='ArrowUpIcon'
+        phosphor='ArrowUpIcon'
+        remixicon='RiArrowUpLine'
+        className={className}
+      />
+    ) : (
+      <IconPlaceholder
+        lucide='ArrowDownIcon'
+        tabler='IconArrowDown'
+        hugeicons='ArrowDown01Icon'
+        phosphor='ArrowDownIcon'
+        remixicon='RiArrowDownLine'
+        className={className}
+      />
+    )
+  }
+  return direction === 'up' ? (
+    <IconPlaceholder
+      lucide='TrendingUpIcon'
+      tabler='IconTrendingUp'
+      hugeicons='ChartUpIcon'
+      phosphor='TrendUpIcon'
+      remixicon='RiLineChartLine'
+      className={className}
+    />
+  ) : (
+    <IconPlaceholder
+      lucide='TrendingDownIcon'
+      tabler='IconTrendingDown'
+      hugeicons='ChartDownIcon'
+      phosphor='TrendDownIcon'
+      remixicon='RiArrowDownLine'
+      className={className}
+    />
+  )
+}
+
 function Trend({
   animated = false,
   className,
@@ -113,11 +175,6 @@ function Trend({
         ? 'down'
         : 'up'
       : direction
-  const TrendIcon =
-    direction === 'up' ? TrendingUp : direction === 'down' ? TrendingDown : Minus
-  const ArrowIcon =
-    direction === 'up' ? ArrowUp : direction === 'down' ? ArrowDown : Minus
-  const Icon = trendIcon === 'arrow' ? ArrowIcon : TrendIcon
 
   const displayValue = animated ? (
     <AnimatedNumber value={trend} formatter={formatter} />
@@ -126,13 +183,19 @@ function Trend({
   )
 
   if (variant === 'icon-only') {
-    return <Icon className={cn(trendVariants({ variant, direction: tone }), className)} />
+    return (
+      <TrendIcon
+        className={cn(trendVariants({ variant, direction: tone }), className)}
+        direction={direction}
+        kind={trendIcon}
+      />
+    )
   }
 
   if (variant === 'badge') {
     return (
       <div className={cn(trendVariants({ variant, direction: tone }), className)}>
-        <Icon className='size-3.5' />
+        <TrendIcon className='size-3.5' direction={direction} kind={trendIcon} />
         {displayValue}
       </div>
     )
@@ -140,7 +203,7 @@ function Trend({
 
   return (
     <div className={cn(trendVariants({ variant, direction: tone }), className)}>
-      <Icon className='h-4 w-4' />
+      <TrendIcon className='h-4 w-4' direction={direction} kind={trendIcon} />
       {displayValue}
     </div>
   )

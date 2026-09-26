@@ -2,7 +2,7 @@
 
 /* oxlint-disable jsx-a11y/no-redundant-roles, jsx-a11y/no-interactive-element-to-noninteractive-role -- the explicit roles keep table semantics when the stacked layout changes the display */
 
-import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, ListFilterIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ComponentProps, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -157,11 +157,7 @@ function DataTableSortHead<K extends string>({
   ...props
 }: DataTableSortHeadProps<K>) {
   const active = sort.key === sortKey
-  const Icon = !active
-    ? ArrowUpDownIcon
-    : sort.direction === 'ascending'
-      ? ArrowUpIcon
-      : ArrowDownIcon
+  const iconClassName = cn('size-3.5', !active && 'opacity-50')
 
   return (
     <DataTableHead align={align} aria-sort={active ? sort.direction : 'none'} {...props}>
@@ -175,7 +171,37 @@ function DataTableSortHead<K extends string>({
         )}
       >
         {label}
-        <Icon aria-hidden className={cn('size-3.5', !active && 'opacity-50')} />
+        {!active ? (
+          <IconPlaceholder
+            lucide='ArrowUpDownIcon'
+            tabler='IconArrowsUpDown'
+            hugeicons='ArrowUpDownIcon'
+            phosphor='ArrowsDownUpIcon'
+            remixicon='RiArrowUpDownLine'
+            aria-hidden
+            className={iconClassName}
+          />
+        ) : sort.direction === 'ascending' ? (
+          <IconPlaceholder
+            lucide='ArrowUpIcon'
+            tabler='IconArrowUp'
+            hugeicons='ArrowUpIcon'
+            phosphor='ArrowUpIcon'
+            remixicon='RiArrowUpLine'
+            aria-hidden
+            className={iconClassName}
+          />
+        ) : (
+          <IconPlaceholder
+            lucide='ArrowDownIcon'
+            tabler='IconArrowDown'
+            hugeicons='ArrowDown01Icon'
+            phosphor='ArrowDownIcon'
+            remixicon='RiArrowDownLine'
+            aria-hidden
+            className={iconClassName}
+          />
+        )}
       </button>
     </DataTableHead>
   )
@@ -270,7 +296,14 @@ function DataTableSortMenu<K extends string>({
       <DropdownMenuTrigger
         render={<Button variant='outline' size='sm' className={className} />}
       >
-        <ListFilterIcon className='text-muted-foreground' />
+        <IconPlaceholder
+          lucide='ListFilterIcon'
+          tabler='IconFilter'
+          hugeicons='FilterHorizontalIcon'
+          phosphor='FunnelSimpleIcon'
+          remixicon='RiFilter3Line'
+          className='text-muted-foreground'
+        />
         Sort: {current?.label}
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-auto min-w-44'>

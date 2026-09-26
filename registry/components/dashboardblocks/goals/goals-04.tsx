@@ -1,7 +1,7 @@
 'use client'
 
 import { Ring } from '@/registry/components/dashboardblocks/ring'
-import { CircleCheckIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import {
   Card,
@@ -71,7 +71,12 @@ const Goals4 = (props: Goals4Props) => {
                   <span className='flex items-center gap-1 text-sm font-medium'>
                     {goal.label}
                     {done && (
-                      <CircleCheckIcon
+                      <IconPlaceholder
+                        lucide='CircleCheckIcon'
+                        tabler='IconCircleCheck'
+                        hugeicons='CheckmarkCircle02Icon'
+                        phosphor='CheckCircleIcon'
+                        remixicon='RiCheckboxCircleLine'
                         aria-label='Goal met'
                         className='size-4 text-emerald-700 dark:text-emerald-400'
                       />

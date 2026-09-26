@@ -22,7 +22,6 @@ export const components: Registry['items'] = [
     title: 'Alerts',
     description:
       'Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/alerts.tsx',
@@ -74,7 +73,6 @@ export const components: Registry['items'] = [
     title: 'Billing',
     description:
       'Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.',
-    dependencies: ['lucide-react'],
     registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
@@ -89,7 +87,6 @@ export const components: Registry['items'] = [
     title: 'Block State',
     description:
       'Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/block-state.tsx',
@@ -131,7 +128,6 @@ export const components: Registry['items'] = [
     title: 'Checklist',
     description:
       'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/checklist.tsx',
@@ -145,7 +141,6 @@ export const components: Registry['items'] = [
     title: 'Data Table',
     description:
       'Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.',
-    dependencies: ['lucide-react'],
     registryDependencies: ['button', 'dropdown-menu'],
     files: [
       {
@@ -173,8 +168,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Dashboard Header',
     description:
-      'Primitives for dashboard headers: a date range preset menu, a compare switch, filter chips and an export menu.',
-    dependencies: ['lucide-react'],
+      'Primitives for dashboard headers: a date range preset menu, a compare switch, filter menus, filter chips and an export menu.',
     registryDependencies: ['button', 'dropdown-menu', 'switch'],
     files: [
       {
@@ -189,7 +183,7 @@ export const components: Registry['items'] = [
     title: 'Forecast',
     description:
       'Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.',
-    dependencies: ['lucide-react', 'recharts'],
+    dependencies: ['recharts'],
     registryDependencies: [registryUrl('chart-panel'), registryUrl('use-in-view')],
     files: [
       {
@@ -218,7 +212,6 @@ export const components: Registry['items'] = [
     title: 'Gauge',
     description:
       'Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.',
-    dependencies: ['lucide-react'],
     registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
@@ -233,7 +226,6 @@ export const components: Registry['items'] = [
     title: 'Geo',
     description:
       'Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.',
-    dependencies: ['lucide-react'],
     registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
     files: [
       {
@@ -248,7 +240,6 @@ export const components: Registry['items'] = [
     title: 'Goals',
     description:
       'Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.',
-    dependencies: ['lucide-react'],
     registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
@@ -275,7 +266,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Icon',
     description: 'An icon component.',
-    dependencies: ['class-variance-authority', 'lucide-react'],
+    dependencies: ['class-variance-authority'],
     files: [
       {
         path: 'registry/components/dashboardblocks/icon.tsx',
@@ -289,7 +280,6 @@ export const components: Registry['items'] = [
     title: 'Insights',
     description:
       'Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a "why" line of drivers.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights.tsx',
@@ -316,7 +306,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Leaderboard',
     description: 'Primitives for composing ranked lists and leaderboards.',
-    dependencies: ['class-variance-authority', 'lucide-react'],
+    dependencies: ['class-variance-authority'],
     registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
@@ -331,7 +321,6 @@ export const components: Registry['items'] = [
     title: 'Metric List',
     description:
       'Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.',
-    dependencies: ['lucide-react'],
     registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
     files: [
       {
@@ -346,7 +335,6 @@ export const components: Registry['items'] = [
     title: 'Pipeline',
     description:
       'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline.tsx',
@@ -386,7 +374,6 @@ export const components: Registry['items'] = [
     title: 'Schedule',
     description:
       'Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/schedule.tsx',
@@ -414,7 +401,6 @@ export const components: Registry['items'] = [
     title: 'Status',
     description:
       'Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.',
-    dependencies: ['lucide-react'],
     files: [
       {
         path: 'registry/components/dashboardblocks/status.tsx',
@@ -441,7 +427,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Trend',
     description: 'A trend indicator component.',
-    dependencies: ['class-variance-authority', 'lucide-react'],
+    dependencies: ['class-variance-authority'],
     registryDependencies: [registryUrl('animated-number')],
     files: [
       {

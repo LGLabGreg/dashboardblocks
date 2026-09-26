@@ -1,6 +1,9 @@
 'use client'
 
-import { TinyBarChart, ValueFormatter } from '@/registry/components/dashboardblocks/chart'
+import {
+  TinyBarChart,
+  type ValueFormatter,
+} from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import type { Props as BarProps } from 'recharts/types/cartesian/Bar'

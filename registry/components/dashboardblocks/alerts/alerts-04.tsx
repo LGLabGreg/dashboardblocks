@@ -6,7 +6,7 @@ import {
   formatRelativeTime,
   severityConfig,
 } from '@/registry/components/dashboardblocks/alerts'
-import { ArrowRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -87,7 +87,14 @@ const Alerts4 = (props: Alerts4Props) => {
           onClick={onViewAll}
         >
           View alerts
-          <ArrowRightIcon data-icon='inline-end' />
+          <IconPlaceholder
+            lucide='ArrowRightIcon'
+            tabler='IconArrowRight'
+            hugeicons='ArrowRight01Icon'
+            phosphor='ArrowRightIcon'
+            remixicon='RiArrowRightLine'
+            data-icon='inline-end'
+          />
         </Button>
       </CardContent>
     </Card>

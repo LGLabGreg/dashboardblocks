@@ -7,7 +7,7 @@ import {
   stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import { ArrowRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -37,7 +37,6 @@ const Checklist3 = (props: Checklist3Props) => {
   const { continueLabel = 'Continue', onContinue, steps, title } = props
   const progress = getChecklistProgress(steps)
   const next = getNextStep(steps)
-  const DoneIcon = stepStateConfig.done.icon
 
   return (
     <Card className='@container py-4'>
@@ -91,12 +90,21 @@ const Checklist3 = (props: Checklist3Props) => {
               onClick={onContinue}
             >
               {continueLabel}
-              <ArrowRightIcon data-icon='inline-end' />
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
             </Button>
           </div>
         ) : (
           <p className='flex items-center gap-1.5 border-t pt-4 text-sm font-medium'>
-            <DoneIcon aria-hidden className={cn('size-4', stepStateConfig.done.text)} />
+            <span className={cn('flex [&_svg]:size-4', stepStateConfig.done.text)}>
+              {stepStateConfig.done.icon}
+            </span>
             All steps done
           </p>
         )}

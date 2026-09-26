@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dashboard-header-02",
+  "registryDependencies": [
+    "https://dashboardblocks.com/r/base/dashboard-header.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-02.tsx",
+      "content": "'use client'\n\nimport {\n  DashboardHeaderTitle,\n  type DateRangePreset,\n  DateRangePicker,\n  ExportMenu,\n} from '@/registry/components/dashboardblocks/dashboard-header'\nimport { useState } from 'react'\n\ninterface DashboardHeader2Props {\n  defaultPreset?: DateRangePreset\n  onExport?: (format: string) => void\n  title: string\n  /** The last day of every date range preset. */\n  today: Date\n}\n\nconst exampleProps: DashboardHeader2Props = {\n  defaultPreset: '7d',\n  title: 'Revenue',\n  today: new Date(Date.UTC(2026, 8, 25)),\n}\n\nconst DashboardHeader2 = (props: DashboardHeader2Props) => {\n  const { defaultPreset = '7d', onExport = () => {}, title, today } = props\n  const [preset, setPreset] = useState<DateRangePreset>(defaultPreset)\n\n  return (\n    <header className='@container'>\n      <div className='flex flex-col gap-3 @lg:flex-row @lg:items-center @lg:justify-between'>\n        <DashboardHeaderTitle title={title} />\n        <div className='flex items-center gap-2'>\n          <DateRangePicker\n            className='flex-1 @lg:flex-none'\n            onValueChange={setPreset}\n            today={today}\n            value={preset}\n          />\n          <ExportMenu onExport={onExport} />\n        </div>\n      </div>\n    </header>\n  )\n}\n\nexport {\n  DashboardHeader2,\n  exampleProps as dashboardHeader2ExampleProps,\n  type DashboardHeader2Props,\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -9,7 +9,7 @@ import {
   stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
-import { ChevronDownIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -194,7 +194,12 @@ const Checklist1 = (props: Checklist1Props) => {
                       {step.optional && ' · Optional'}
                     </span>
                   </span>
-                  <ChevronDownIcon
+                  <IconPlaceholder
+                    lucide='ChevronDownIcon'
+                    tabler='IconChevronDown'
+                    hugeicons='ArrowDownIcon'
+                    phosphor='CaretDownIcon'
+                    remixicon='RiArrowDownSLine'
                     aria-hidden
                     className={cn(
                       'text-muted-foreground size-4 shrink-0 transition-transform motion-reduce:transition-none',

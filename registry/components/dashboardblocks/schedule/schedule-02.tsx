@@ -9,7 +9,7 @@ import {
   getDay,
   getDayKey,
 } from '@/registry/components/dashboardblocks/schedule'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -182,7 +182,13 @@ const Schedule2 = (props: Schedule2Props) => {
                 aria-label='Previous month'
                 onClick={() => showMonth(-1)}
               >
-                <ChevronLeftIcon />
+                <IconPlaceholder
+                  lucide='ChevronLeftIcon'
+                  tabler='IconChevronLeft'
+                  hugeicons='ArrowLeft01Icon'
+                  phosphor='CaretLeftIcon'
+                  remixicon='RiArrowLeftSLine'
+                />
               </Button>
               <Button
                 variant='ghost'
@@ -190,7 +196,13 @@ const Schedule2 = (props: Schedule2Props) => {
                 aria-label='Next month'
                 onClick={() => showMonth(1)}
               >
-                <ChevronRightIcon />
+                <IconPlaceholder
+                  lucide='ChevronRightIcon'
+                  tabler='IconChevronRight'
+                  hugeicons='ArrowRight01Icon'
+                  phosphor='CaretRightIcon'
+                  remixicon='RiArrowRightSLine'
+                />
               </Button>
             </div>
           </div>

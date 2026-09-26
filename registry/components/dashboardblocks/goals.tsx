@@ -1,7 +1,7 @@
 'use client'
 
 import { useInView } from '@/registry/hooks/use-in-view'
-import { CircleCheckIcon, TrendingUpIcon, TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type RefObject, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -50,26 +50,62 @@ function getElapsed(start: Date, end: Date, now: Date) {
 
 const paceConfig: Record<
   PaceStatus,
-  { className: string; icon: typeof CircleCheckIcon; label: string }
+  { className: string; icon: React.ReactNode; label: string }
 > = {
   ahead: {
     className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: TrendingUpIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TrendingUpIcon'
+        tabler='IconTrendingUp'
+        hugeicons='ChartUpIcon'
+        phosphor='TrendUpIcon'
+        remixicon='RiLineChartLine'
+        aria-hidden
+      />
+    ),
     label: 'Ahead',
   },
   behind: {
     className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: TriangleAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Behind',
   },
   met: {
     className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Goal met',
   },
   'on-track': {
     className: 'bg-muted text-muted-foreground',
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'On track',
   },
 }
@@ -77,16 +113,15 @@ const paceConfig: Record<
 /** The pace status with its icon and label. Colour never carries it alone. */
 function PaceBadge({ className, status }: { className?: string; status: PaceStatus }) {
   const config = paceConfig[status]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.className,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {config.label}
     </span>
   )

@@ -6,7 +6,6 @@ export const examples: Registry['items'] = [
   {
     name: 'states-01',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',
@@ -23,7 +22,7 @@ export const examples: Registry['items'] = [
   {
     name: 'states-02',
     type: 'registry:component',
-    dependencies: ['lucide-react', 'recharts'],
+    dependencies: ['recharts'],
     registryDependencies: [
       'button',
       'card',
@@ -40,7 +39,6 @@ export const examples: Registry['items'] = [
   {
     name: 'states-03',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',
@@ -58,7 +56,7 @@ export const examples: Registry['items'] = [
   {
     name: 'states-04',
     type: 'registry:component',
-    dependencies: ['lucide-react', 'recharts'],
+    dependencies: ['recharts'],
     registryDependencies: [
       'button',
       'card',

@@ -1,14 +1,7 @@
 'use client'
 
-import {
-  CheckIcon,
-  CircleCheckIcon,
-  CircleDashedIcon,
-  CircleDotIcon,
-  CircleIcon,
-  MinusIcon,
-} from 'lucide-react'
-import { type ComponentProps } from 'react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -16,7 +9,7 @@ type StepState = 'done' | 'current' | 'todo' | 'skipped'
 
 interface StepStateConfig {
   /** A standalone icon, for inline use next to the label. */
-  icon: typeof CircleIcon
+  icon: React.ReactNode
   label: string
   /** Text colour for the label. */
   text: string
@@ -25,22 +18,58 @@ interface StepStateConfig {
 /** Every state has its own icon shape and a label, so colour never carries it alone. */
 const stepStateConfig: Record<StepState, StepStateConfig> = {
   current: {
-    icon: CircleDotIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleDotIcon'
+        tabler='IconCircleDot'
+        hugeicons='RecordIcon'
+        phosphor='RecordIcon'
+        remixicon='RiRecordCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'In progress',
     text: 'text-foreground font-medium',
   },
   done: {
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Done',
     text: 'text-emerald-700 dark:text-emerald-400',
   },
   skipped: {
-    icon: CircleDashedIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleDashedIcon'
+        tabler='IconCircleDashed'
+        hugeicons='DashedLineCircleIcon'
+        phosphor='CircleDashedIcon'
+        remixicon='RiLoaderLine'
+        aria-hidden
+      />
+    ),
     label: 'Skipped',
     text: 'text-muted-foreground',
   },
   todo: {
-    icon: CircleIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleIcon'
+        tabler='IconCircle'
+        hugeicons='CircleIcon'
+        phosphor='CircleIcon'
+        remixicon='RiCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'To do',
     text: 'text-muted-foreground',
   },
@@ -123,8 +152,25 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
         className,
       )}
     >
-      {state === 'done' && <CheckIcon strokeWidth={3} />}
-      {state === 'skipped' && <MinusIcon />}
+      {state === 'done' && (
+        <IconPlaceholder
+          lucide='CheckIcon'
+          tabler='IconCheck'
+          hugeicons='Tick02Icon'
+          phosphor='CheckIcon'
+          remixicon='RiCheckLine'
+          strokeWidth={3}
+        />
+      )}
+      {state === 'skipped' && (
+        <IconPlaceholder
+          lucide='MinusIcon'
+          tabler='IconMinus'
+          hugeicons='MinusSignIcon'
+          phosphor='MinusIcon'
+          remixicon='RiSubtractLine'
+        />
+      )}
       {(state === 'current' || state === 'todo') &&
         (index === undefined
           ? state === 'current' && <span className='bg-primary size-2 rounded-full' />
@@ -145,7 +191,12 @@ function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'ty
         className='peer border-muted-foreground/80 focus-visible:border-ring focus-visible:ring-ring/50 checked:border-primary checked:bg-primary dark:bg-input/30 dark:checked:bg-primary size-4 shrink-0 cursor-pointer appearance-none rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50'
         {...props}
       />
-      <CheckIcon
+      <IconPlaceholder
+        lucide='CheckIcon'
+        tabler='IconCheck'
+        hugeicons='Tick02Icon'
+        phosphor='CheckIcon'
+        remixicon='RiCheckLine'
         aria-hidden
         strokeWidth={3}
         className='text-primary-foreground pointer-events-none absolute inset-0 m-auto hidden size-3 peer-checked:block'

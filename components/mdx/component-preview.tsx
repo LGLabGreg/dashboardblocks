@@ -4,6 +4,9 @@ import { codeToHtml } from 'shiki'
 
 import { ComponentPreviewHighlighted } from '@/components/component-preview-highlighted'
 
+import { DEFAULT_CONFIG } from '@/lib/customizer'
+import { toProjectCode } from '@/lib/registry-code'
+
 import { type ComponentName, ExampleRenderer } from './example-renderer'
 
 interface RegistryItem {
@@ -55,10 +58,7 @@ export async function ComponentPreview({
     )
   }
 
-  const code = registryItem.files[0].content.replaceAll(
-    'registry/components/',
-    'components/',
-  )
+  const code = toProjectCode(registryItem.files[0].content, DEFAULT_CONFIG.iconLibrary)
 
   const highlightedCode = await codeToHtml(code, {
     lang: 'tsx',

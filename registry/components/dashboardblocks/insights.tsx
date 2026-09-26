@@ -1,12 +1,7 @@
 'use client'
 
-import {
-  ActivityIcon,
-  LightbulbIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from 'lucide-react'
-import { type ReactNode } from 'react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -20,7 +15,7 @@ type InsightKind = 'positive' | 'negative' | 'neutral' | 'anomaly'
 type InsightTone = 'positive' | 'negative' | 'neutral'
 
 interface InsightKindConfig {
-  icon: typeof ActivityIcon
+  icon: React.ReactNode
   label: string
   /** Tinted background with readable text, for badges. */
   soft: string
@@ -34,28 +29,64 @@ interface InsightKindConfig {
 const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
   anomaly: {
     fill: 'var(--color-fuchsia-600)',
-    icon: ActivityIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='ActivityIcon'
+        tabler='IconActivity'
+        hugeicons='ActivityIcon'
+        phosphor='ActivityIcon'
+        remixicon='RiPulseLine'
+        aria-hidden
+      />
+    ),
     label: 'Anomaly',
     soft: 'bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400',
     text: 'text-fuchsia-700 dark:text-fuchsia-400',
   },
   negative: {
     fill: 'var(--color-red-600)',
-    icon: TrendingDownIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TrendingDownIcon'
+        tabler='IconTrendingDown'
+        hugeicons='ChartDownIcon'
+        phosphor='TrendDownIcon'
+        remixicon='RiArrowDownLine'
+        aria-hidden
+      />
+    ),
     label: 'Negative',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     text: 'text-red-700 dark:text-red-400',
   },
   neutral: {
     fill: 'var(--color-muted-foreground)',
-    icon: LightbulbIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='LightbulbIcon'
+        tabler='IconBulb'
+        hugeicons='BulbIcon'
+        phosphor='LightbulbIcon'
+        remixicon='RiLightbulbLine'
+        aria-hidden
+      />
+    ),
     label: 'Neutral',
     soft: 'bg-muted text-muted-foreground',
     text: 'text-muted-foreground',
   },
   positive: {
     fill: 'var(--color-emerald-600)',
-    icon: TrendingUpIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TrendingUpIcon'
+        tabler='IconTrendingUp'
+        hugeicons='ChartUpIcon'
+        phosphor='TrendUpIcon'
+        remixicon='RiLineChartLine'
+        aria-hidden
+      />
+    ),
     label: 'Positive',
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     text: 'text-emerald-700 dark:text-emerald-400',
@@ -78,16 +109,15 @@ function InsightBadge({
   label?: string
 }) {
   const config = insightKindConfig[kind]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.soft,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label ?? config.label}
     </span>
   )
@@ -96,7 +126,6 @@ function InsightBadge({
 /** The kind's icon in a tinted circle. Pair it with the kind in text nearby. */
 function InsightIcon({ className, kind }: { className?: string; kind: InsightKind }) {
   const config = insightKindConfig[kind]
-  const Icon = config.icon
   return (
     <span
       aria-hidden
@@ -106,7 +135,7 @@ function InsightIcon({ className, kind }: { className?: string; kind: InsightKin
         className,
       )}
     >
-      <Icon />
+      {config.icon}
     </span>
   )
 }

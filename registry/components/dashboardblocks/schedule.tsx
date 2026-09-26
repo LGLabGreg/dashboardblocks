@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarClockIcon, ClockIcon, OctagonAlertIcon, TimerIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type KeyboardEvent, type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -281,28 +281,64 @@ type Urgency = 'overdue' | 'today' | 'soon' | 'later'
 /** Urgency colours always come with an icon and a label. */
 const urgencyConfig: Record<
   Urgency,
-  { icon: typeof ClockIcon; label: string; soft: string; text: string }
+  { icon: React.ReactNode; label: string; soft: string; text: string }
 > = {
   later: {
-    icon: CalendarClockIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CalendarClockIcon'
+        tabler='IconCalendarTime'
+        hugeicons='Calendar03Icon'
+        phosphor='CalendarDotsIcon'
+        remixicon='RiCalendarScheduleLine'
+        aria-hidden
+      />
+    ),
     label: 'Upcoming',
     soft: 'bg-muted text-muted-foreground',
     text: 'text-muted-foreground',
   },
   overdue: {
-    icon: OctagonAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='OctagonAlertIcon'
+        tabler='IconAlertOctagon'
+        hugeicons='AlertDiamondIcon'
+        phosphor='WarningOctagonIcon'
+        remixicon='RiAlarmWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Overdue',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     text: 'text-red-700 dark:text-red-400',
   },
   soon: {
-    icon: ClockIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='ClockIcon'
+        tabler='IconClock'
+        hugeicons='Clock01Icon'
+        phosphor='ClockIcon'
+        remixicon='RiTimeLine'
+        aria-hidden
+      />
+    ),
     label: 'Due soon',
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     text: 'text-amber-800 dark:text-amber-400',
   },
   today: {
-    icon: TimerIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TimerIcon'
+        tabler='IconStopwatch'
+        hugeicons='Timer02Icon'
+        phosphor='TimerIcon'
+        remixicon='RiTimerLine'
+        aria-hidden
+      />
+    ),
     label: 'Today',
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     text: 'text-amber-800 dark:text-amber-400',
@@ -330,16 +366,15 @@ function UrgencyBadge({
   urgency: Urgency
 }) {
   const config = urgencyConfig[urgency]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.soft,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label ?? config.label}
     </span>
   )

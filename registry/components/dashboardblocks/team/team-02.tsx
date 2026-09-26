@@ -1,7 +1,7 @@
 'use client'
 
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
-import { TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import {
   Card,
@@ -155,7 +155,15 @@ const Team2 = (props: Team2Props) => {
                   </div>
                   {over > 0 && (
                     <span className='inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium whitespace-nowrap text-amber-800 dark:text-amber-400'>
-                      <TriangleAlertIcon aria-hidden className='size-3.5' />
+                      <IconPlaceholder
+                        lucide='TriangleAlertIcon'
+                        tabler='IconAlertTriangle'
+                        hugeicons='Alert02Icon'
+                        phosphor='WarningIcon'
+                        remixicon='RiErrorWarningLine'
+                        aria-hidden
+                        className='size-3.5'
+                      />
                       Over by {over} {unit}
                     </span>
                   )}

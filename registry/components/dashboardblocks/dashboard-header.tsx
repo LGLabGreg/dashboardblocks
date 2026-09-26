@@ -1,17 +1,19 @@
 'use client'
 
-import { CalendarIcon, ChevronDownIcon, DownloadIcon, XIcon } from 'lucide-react'
-import { type ReactNode } from 'react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Switch } from '@/components/ui/switch'
@@ -88,9 +90,23 @@ function DateRangePicker({
           />
         }
       >
-        <CalendarIcon className='text-muted-foreground' />
+        <IconPlaceholder
+          lucide='CalendarIcon'
+          tabler='IconCalendar'
+          hugeicons='CalendarIcon'
+          phosphor='CalendarBlankIcon'
+          remixicon='RiCalendarLine'
+          className='text-muted-foreground'
+        />
         {getPreset(value).label}
-        <ChevronDownIcon className='text-muted-foreground ml-auto' />
+        <IconPlaceholder
+          lucide='ChevronDownIcon'
+          tabler='IconChevronDown'
+          hugeicons='ArrowDownIcon'
+          phosphor='CaretDownIcon'
+          remixicon='RiArrowDownSLine'
+          className='text-muted-foreground ml-auto'
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='w-auto min-w-56'>
         <DropdownMenuGroup>
@@ -168,9 +184,136 @@ function FilterChip({ className, field, onRemove, value }: FilterChipProps) {
         aria-label={`Remove filter ${field}: ${value}`}
         className='text-muted-foreground hover:bg-background hover:text-foreground focus-visible:ring-ring/50 flex size-6 items-center justify-center rounded-full outline-none focus-visible:ring-3'
       >
-        <XIcon className='size-3.5' />
+        <IconPlaceholder
+          lucide='XIcon'
+          tabler='IconX'
+          hugeicons='Cancel01Icon'
+          phosphor='XIcon'
+          remixicon='RiCloseLine'
+          className='size-3.5'
+        />
       </button>
     </span>
+  )
+}
+
+interface Filter {
+  field: string
+  value: string
+}
+
+interface FilterField {
+  field: string
+  values: string[]
+}
+
+/** The value of the option that clears a `FilterMenu`. */
+const ALL_OPTIONS = '__all__'
+
+interface FilterMenuProps {
+  /** The option that clears the filter, such as "All regions". */
+  allLabel: string
+  /** The trigger's content. */
+  children: ReactNode
+  className?: string
+  /** The heading above the options. */
+  label: string
+  onValueChange: (value: string | null) => void
+  options: string[]
+  /** The selected option, or `null` for all. */
+  value: string | null
+}
+
+/** A menu that filters by one field, with an option to clear it. */
+function FilterMenu({
+  allLabel,
+  children,
+  className,
+  label,
+  onValueChange,
+  options,
+  value,
+}: FilterMenuProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant='ghost' size='sm' className={className} />}
+      >
+        {children}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='start' className='w-auto min-w-48'>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{label}</DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={value ?? ALL_OPTIONS}
+            onValueChange={(next) =>
+              onValueChange(next === ALL_OPTIONS ? null : String(next))
+            }
+          >
+            <DropdownMenuRadioItem value={ALL_OPTIONS} closeOnClick>
+              {allLabel}
+            </DropdownMenuRadioItem>
+            {options.map((option) => (
+              <DropdownMenuRadioItem key={option} value={option} closeOnClick>
+                {option}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+interface AddFilterMenuProps {
+  /** The trigger's content. */
+  children: ReactNode
+  className?: string
+  fields: FilterField[]
+  onFilterChange: (filter: Filter, active: boolean) => void
+  /** The active filters. */
+  value: Filter[]
+}
+
+const isSameFilter = (a: Filter, b: Filter) => a.field === b.field && a.value === b.value
+
+/** A menu of every field and its values. Each value toggles a filter. */
+function AddFilterMenu({
+  children,
+  className,
+  fields,
+  onFilterChange,
+  value,
+}: AddFilterMenuProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant='ghost' size='sm' className={className} />}
+      >
+        {children}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='start' className='w-auto min-w-48'>
+        {fields.map(({ field, values }, index) => (
+          <DropdownMenuGroup key={field}>
+            {index > 0 && <DropdownMenuSeparator />}
+            <DropdownMenuLabel>{field}</DropdownMenuLabel>
+            {values.map((option) => (
+              <DropdownMenuCheckboxItem
+                key={option}
+                checked={value.some((item) =>
+                  isSameFilter(item, { field, value: option }),
+                )}
+                onCheckedChange={(checked) =>
+                  onFilterChange({ field, value: option }, checked)
+                }
+              >
+                {option}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuGroup>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -199,9 +342,23 @@ function ExportMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant='outline' className={className} />}>
-        <DownloadIcon className='text-muted-foreground' />
+        <IconPlaceholder
+          lucide='DownloadIcon'
+          tabler='IconDownload'
+          hugeicons='Download01Icon'
+          phosphor='DownloadIcon'
+          remixicon='RiDownloadLine'
+          className='text-muted-foreground'
+        />
         Export
-        <ChevronDownIcon className='text-muted-foreground' />
+        <IconPlaceholder
+          lucide='ChevronDownIcon'
+          tabler='IconChevronDown'
+          hugeicons='ArrowDownIcon'
+          phosphor='CaretDownIcon'
+          remixicon='RiArrowDownSLine'
+          className='text-muted-foreground'
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-auto min-w-40'>
         {formats.map((format) => (
@@ -234,24 +391,31 @@ function DashboardHeaderTitle({
 }
 
 export {
+  AddFilterMenu,
   CompareToggle,
   DATE_RANGE_PRESETS,
   DashboardHeaderTitle,
   DateRangePicker,
   ExportMenu,
   FilterChip,
+  FilterMenu,
   formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,
+  isSameFilter,
 }
 
 export type {
+  AddFilterMenuProps,
   CompareToggleProps,
   DateRange,
   DateRangePickerProps,
   DateRangePreset,
   ExportFormat,
   ExportMenuProps,
+  Filter,
   FilterChipProps,
+  FilterField,
+  FilterMenuProps,
 }

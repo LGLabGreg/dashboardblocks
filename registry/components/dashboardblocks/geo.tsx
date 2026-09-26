@@ -2,7 +2,7 @@
 
 import { getHeatColor } from '@/registry/components/dashboardblocks/heatmap'
 import { useInView } from '@/registry/hooks/use-in-view'
-import { GlobeIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FocusEvent,
   type KeyboardEvent,
@@ -40,7 +40,16 @@ function CountryFlag({ className, code }: { className?: string; code?: string })
         className,
       )}
     >
-      {flag || <GlobeIcon className='text-muted-foreground size-4' />}
+      {flag || (
+        <IconPlaceholder
+          lucide='GlobeIcon'
+          tabler='IconGlobe'
+          hugeicons='Globe02Icon'
+          phosphor='GlobeIcon'
+          remixicon='RiGlobeLine'
+          className='text-muted-foreground size-4'
+        />
+      )}
     </span>
   )
 }

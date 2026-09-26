@@ -6,7 +6,6 @@ export const examples: Registry['items'] = [
   {
     name: 'team-01',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['button', 'card', registryUrl('team')],
     files: [
       {
@@ -18,7 +17,6 @@ export const examples: Registry['items'] = [
   {
     name: 'team-02',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['card', registryUrl('team')],
     files: [
       {
@@ -41,7 +39,6 @@ export const examples: Registry['items'] = [
   {
     name: 'team-04',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',

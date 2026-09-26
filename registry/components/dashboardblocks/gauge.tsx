@@ -1,12 +1,7 @@
 'use client'
 
 import { useInView } from '@/registry/hooks/use-in-view'
-import {
-  CircleCheckIcon,
-  CircleDotIcon,
-  OctagonAlertIcon,
-  TriangleAlertIcon,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, type RefObject, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -14,7 +9,7 @@ import { cn } from '@/lib/utils'
 type GaugeTone = 'positive' | 'caution' | 'critical' | 'neutral'
 
 interface GaugeToneConfig {
-  icon: typeof CircleCheckIcon
+  icon: React.ReactNode
   /** Tinted background with readable text, for badges. */
   soft: string
   /** Stroke colour for arcs. */
@@ -28,28 +23,64 @@ interface GaugeToneConfig {
 /** Band colours always come with an icon and a label, never colour alone. */
 const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
   caution: {
-    icon: TriangleAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     stroke: 'stroke-amber-500',
     swatch: 'bg-amber-500',
     text: 'text-amber-800 dark:text-amber-400',
   },
   critical: {
-    icon: OctagonAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='OctagonAlertIcon'
+        tabler='IconAlertOctagon'
+        hugeicons='AlertDiamondIcon'
+        phosphor='WarningOctagonIcon'
+        remixicon='RiAlarmWarningLine'
+        aria-hidden
+      />
+    ),
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     stroke: 'stroke-red-600',
     swatch: 'bg-red-600',
     text: 'text-red-700 dark:text-red-400',
   },
   neutral: {
-    icon: CircleDotIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleDotIcon'
+        tabler='IconCircleDot'
+        hugeicons='RecordIcon'
+        phosphor='RecordIcon'
+        remixicon='RiRecordCircleLine'
+        aria-hidden
+      />
+    ),
     soft: 'bg-muted text-muted-foreground',
     stroke: 'stroke-muted-foreground',
     swatch: 'bg-muted-foreground',
     text: 'text-muted-foreground',
   },
   positive: {
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     stroke: 'stroke-emerald-600',
     swatch: 'bg-emerald-600',
@@ -408,16 +439,15 @@ function GaugeToneBadge({
   tone: GaugeTone
 }) {
   const config = gaugeToneConfig[tone]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.soft,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label}
     </span>
   )

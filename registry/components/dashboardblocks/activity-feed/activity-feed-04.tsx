@@ -4,7 +4,7 @@ import {
   ActivityFeedItem,
   ActivityFeedTimeline,
 } from '@/registry/components/dashboardblocks/activity-feed'
-import { ArrowRight, MoreHorizontalIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -74,7 +74,14 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
           {title}
           <Button variant='outline' size='sm'>
             View all
-            <ArrowRight data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         </CardTitle>
       </CardHeader>
@@ -97,7 +104,13 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
                   <DropdownMenuTrigger
                     className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                   >
-                    <MoreHorizontalIcon />
+                    <IconPlaceholder
+                      lucide='EllipsisIcon'
+                      tabler='IconDots'
+                      hugeicons='MoreHorizontalCircle01Icon'
+                      phosphor='DotsThreeOutlineIcon'
+                      remixicon='RiMoreLine'
+                    />
                     <span className='sr-only'>More options</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end'>

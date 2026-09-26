@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "metric-list-01",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/base/metric-list.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/metric-list/metric-list-01.tsx",
+      "content": "'use client'\n\nimport {\n  type Metric,\n  MetricList,\n  MetricRow,\n} from '@/registry/components/dashboardblocks/metric-list'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface MetricList1Props {\n  description: string\n  metrics: Metric[]\n  /** Names the sparklines' period for screen readers. */\n  period: string\n  title: string\n}\n\n/** Fourteen days of example values that end on `end`. */\nconst exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =>\n  Array.from({ length: 14 }, (_, day) =>\n    Number((end - (13 - day) * slope + Math.sin(day / 1.4 + phase) * wobble).toFixed(2)),\n  )\n\nconst exampleProps: MetricList1Props = {\n  description: 'Last 14 days, compared with the previous 14 days',\n  metrics: [\n    {\n      format: 'compact',\n      history: exampleHistory(1_910, 22, 140),\n      key: 'visitors',\n      label: 'Visitors',\n      previous: 21_640,\n      value: 24_318,\n    },\n    {\n      format: 'compact',\n      history: exampleHistory(1_240, 6, 90, 1),\n      key: 'signups',\n      label: 'Sign-ups',\n      previous: 16_820,\n      value: 17_402,\n    },\n    {\n      changeType: 'points',\n      format: 'percent',\n      history: exampleHistory(3.4, 0.03, 0.12, 2),\n      key: 'conversion',\n      label: 'Conversion rate',\n      previous: 3.1,\n      value: 3.4,\n    },\n    {\n      format: 'duration',\n      history: exampleHistory(188, -1.1, 8, 3),\n      key: 'session',\n      label: 'Avg session',\n      previous: 201,\n      value: 188,\n    },\n    {\n      format: 'currency',\n      history: exampleHistory(37.6, 0.18, 0.7, 4),\n      key: 'aov',\n      label: 'Avg order value',\n      previous: 35.45,\n      value: 37.55,\n    },\n    {\n      changeType: 'points',\n      format: 'percent',\n      goodDirection: 'down',\n      history: exampleHistory(40.5, -0.25, 1, 1),\n      key: 'bounce',\n      label: 'Bounce rate',\n      previous: 44,\n      value: 41,\n    },\n    {\n      format: 'milliseconds',\n      goodDirection: 'down',\n      history: exampleHistory(412, 3, 14, 5),\n      key: 'latency',\n      label: 'p95 page load',\n      previous: 384,\n      value: 412,\n    },\n  ],\n  period: 'last 14 days',\n  title: 'Key metrics',\n}\n\nconst MetricList1 = (props: MetricList1Props) => {\n  const { description, metrics, period, title } = props\n\n  return (\n    <Card className='@container'>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent>\n        <MetricList className='-my-3'>\n          {metrics.map((metric) => (\n            <MetricRow key={metric.key} metric={metric} period={period} />\n          ))}\n        </MetricList>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { MetricList1, exampleProps as metricList1ExampleProps, type MetricList1Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -12,7 +12,7 @@ import {
   chartAxisProps,
   chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   Bar,
   BarChart,
@@ -103,7 +103,15 @@ const States4 = (props: States4Props) => {
         ) : status === 'error' || !data ? (
           <BlockMessage
             className='h-60 py-0'
-            icon={<TriangleAlertIcon />}
+            icon={
+              <IconPlaceholder
+                lucide='TriangleAlertIcon'
+                tabler='IconAlertTriangle'
+                hugeicons='Alert02Icon'
+                phosphor='WarningIcon'
+                remixicon='RiErrorWarningLine'
+              />
+            }
             tone='error'
             title={`Couldn't load ${title.toLowerCase()}`}
             description={

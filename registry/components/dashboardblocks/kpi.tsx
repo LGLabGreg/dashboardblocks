@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 
 import { Card, CardContent } from '@/components/ui/card'
 

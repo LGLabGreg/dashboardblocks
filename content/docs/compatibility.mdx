@@ -1,0 +1,56 @@
+---
+title: Compatibility
+description: Blocks install into any shadcn/ui project, whichever style, component library and icon library it was created with.
+---
+
+[shadcn/create](https://ui.shadcn.com/create) lets you pick a style, a component library and an icon library for your project. Every block works with all of them, and installs without edits.
+
+Use **Customize** in the sidebar to preview blocks with your setup. The preview, the code and the install command all follow your choice.
+
+## Styles
+
+Vega, Nova, Maia, Lyra, Mira, Luma, Sera and Rhea all work. Blocks are built from your own `card`, `button`, `badge` and other components, so they pick up your style's spacing, radius and density. Blocks only set the layout and colours that belong to them.
+
+## Component libraries
+
+Base UI, Radix UI and React Aria are all supported. Where the libraries differ, for example Base UI's `render` prop and Radix's `asChild`, each block is published once per library:
+
+| Library    | Registry URL                                      |
+| ---------- | ------------------------------------------------- |
+| Base UI    | `https://dashboardblocks.com/r/base/{name}.json`  |
+| Radix UI   | `https://dashboardblocks.com/r/radix/{name}.json` |
+| React Aria | `https://dashboardblocks.com/r/aria/{name}.json`  |
+
+URLs without a library, such as `https://dashboardblocks.com/r/kpi-01.json`, are Base UI.
+
+### Pick the library automatically
+
+Add the registry to your `components.json` with the `{style}` placeholder. The shadcn CLI fills it in from your project, so each block comes in for your component library:
+
+```json title="components.json"
+{
+  "registries": {
+    "@dashboardblocks": "https://dashboardblocks.com/r/{style}/{name}.json"
+  }
+}
+```
+
+Then install blocks by name:
+
+```bash
+npx shadcn@latest add @dashboardblocks/kpi-01
+```
+
+## Icon libraries
+
+Lucide, Tabler Icons, HugeIcons, Phosphor Icons and Remix Icon all work. Blocks name each icon in every library, and the shadcn CLI keeps the one in your `components.json`. Blocks don't add an icon package: they use the one your project already has.
+
+Blocks that take an icon as a prop, such as `Icon` or the usage meters, take an element, so pass one from any library:
+
+```tsx
+<Icon icon={<DatabaseIcon />} size='sm' />
+```
+
+## Tested
+
+On every pull request, every block is installed with the shadcn CLI into a new project for each component library, each with a different style and icon library. The projects must type-check and build.

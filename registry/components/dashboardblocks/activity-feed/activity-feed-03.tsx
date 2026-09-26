@@ -2,7 +2,7 @@ import {
   ActivityFeedContent,
   ActivityFeedItem,
 } from '@/registry/components/dashboardblocks/activity-feed'
-import { ArrowRight } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -65,7 +65,14 @@ const ActivityFeed03 = (props: ActivityFeed03Props) => {
           {title}
           <Button variant='outline' size='sm'>
             View all
-            <ArrowRight data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         </CardTitle>
       </CardHeader>

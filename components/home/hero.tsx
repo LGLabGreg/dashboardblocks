@@ -42,7 +42,14 @@ export function Hero({ blockCount }: { blockCount: number }) {
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 KPI cards, charts, usage meters, activity feeds and leaderboards.
                 Composable blocks built with Tailwind CSS and shadcn/ui — copy one or all
-                of them, and own the code.
+                of them, and own the code. Works with every{' '}
+                <Link
+                  href='/docs/compatibility'
+                  className='text-foreground underline underline-offset-4'
+                >
+                  style, component library and icon set
+                </Link>
+                .
               </p>
               <div className='flex flex-wrap items-center gap-3'>
                 <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>

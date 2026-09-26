@@ -5,7 +5,7 @@ import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
 import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
-import { Coins } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
@@ -34,7 +34,18 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
       <CardContent className='flex flex-col gap-3'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <Icon icon={Coins} size='sm' />
+            <Icon
+              icon={
+                <IconPlaceholder
+                  lucide='CoinsIcon'
+                  tabler='IconCoins'
+                  hugeicons='Coins01Icon'
+                  phosphor='CoinsIcon'
+                  remixicon='RiCoinsLine'
+                />
+              }
+              size='sm'
+            />
             <CardTitle>{title}</CardTitle>
           </div>
           <Trend

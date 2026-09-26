@@ -13,6 +13,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import { registryItemUrl } from '@/lib/customizer'
+
+import { useCustomizerConfig } from './customizer/customizer-provider'
 import { Icons } from './icons'
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun'
@@ -21,7 +24,8 @@ export function ShadcnCliButton({ name }: { name: string }) {
   const [packageManager, setPackageManager] = useState<PackageManager>('npm')
   const [copied, setCopied] = useState(false)
 
-  const url = `https://dashboardblocks.com/r/${name}.json`
+  const { base } = useCustomizerConfig()
+  const url = registryItemUrl(name, base)
   const commands = useMemo(
     () => ({
       npm: `npx shadcn@latest add ${url}`,

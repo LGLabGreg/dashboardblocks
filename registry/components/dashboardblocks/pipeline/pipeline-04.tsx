@@ -6,7 +6,7 @@ import {
   formatCurrency,
 } from '@/registry/components/dashboardblocks/pipeline'
 import { useInView } from '@/registry/hooks/use-in-view'
-import { CircleCheckIcon, TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type RefObject, useEffect, useState } from 'react'
 
 import {
@@ -164,7 +164,6 @@ const Pipeline4 = (props: Pipeline4Props) => {
           {rows.map((row) => {
             const gap = row.quota - row.forecast
             const covered = gap <= 0
-            const StatusIcon = covered ? CircleCheckIcon : TriangleAlertIcon
             return (
               <li
                 key={row.name}
@@ -215,7 +214,27 @@ const Pipeline4 = (props: Pipeline4Props) => {
                         : 'text-amber-800 dark:text-amber-400',
                     )}
                   >
-                    <StatusIcon aria-hidden className='size-3.5' />
+                    {covered ? (
+                      <IconPlaceholder
+                        lucide='CircleCheckIcon'
+                        tabler='IconCircleCheck'
+                        hugeicons='CheckmarkCircle02Icon'
+                        phosphor='CheckCircleIcon'
+                        remixicon='RiCheckboxCircleLine'
+                        aria-hidden
+                        className='size-3.5'
+                      />
+                    ) : (
+                      <IconPlaceholder
+                        lucide='TriangleAlertIcon'
+                        tabler='IconAlertTriangle'
+                        hugeicons='Alert02Icon'
+                        phosphor='WarningIcon'
+                        remixicon='RiErrorWarningLine'
+                        aria-hidden
+                        className='size-3.5'
+                      />
+                    )}
                     {covered
                       ? `Covers quota by ${formatCurrency(-gap)}`
                       : `Short ${formatCurrency(gap)}`}

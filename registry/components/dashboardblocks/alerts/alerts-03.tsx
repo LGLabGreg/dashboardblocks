@@ -140,19 +140,19 @@ const Alerts3 = (props: Alerts3Props) => {
                   )}
                 </DataTableCell>
                 <DataTableCell label='Status'>
-                  <label className='inline-flex min-h-6 cursor-pointer items-center gap-2 text-sm whitespace-nowrap'>
+                  <div className='inline-flex min-h-6 items-center gap-2 text-sm whitespace-nowrap'>
                     <Switch
+                      aria-label={rule.name}
                       checked={isEnabled}
                       onCheckedChange={(checked) => {
                         setEnabled((current) => new Map(current).set(rule.id, checked))
                         onEnabledChange?.(rule.id, checked)
                       }}
                     />
-                    <span className='w-12'>
+                    <span aria-hidden className='w-12'>
                       {isEnabled ? 'Active' : 'Paused'}
-                      <span className='sr-only'>: {rule.name}</span>
                     </span>
-                  </label>
+                  </div>
                 </DataTableCell>
               </DataTableRow>
             )

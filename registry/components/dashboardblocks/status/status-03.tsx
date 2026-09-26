@@ -4,7 +4,7 @@ import {
   StatusBadge,
   type StatusLevel,
 } from '@/registry/components/dashboardblocks/status'
-import { Bell } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -117,7 +117,14 @@ const Status3 = (props: Status3Props) => {
       </CardContent>
       <CardFooter className='border-t'>
         <Button variant='outline' size='sm' onClick={onSubscribe}>
-          <Bell data-icon='inline-start' />
+          <IconPlaceholder
+            lucide='BellIcon'
+            tabler='IconBell'
+            hugeicons='NotificationIcon'
+            phosphor='BellIcon'
+            remixicon='RiNotificationLine'
+            data-icon='inline-start'
+          />
           Subscribe to updates
         </Button>
       </CardFooter>

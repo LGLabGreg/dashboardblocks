@@ -7,7 +7,7 @@ import {
   InsightText,
   insightKindConfig,
 } from '@/registry/components/dashboardblocks/insights'
-import { ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -75,8 +75,8 @@ const exampleProps: Insights4Props = {
 }
 
 const feedbackOptions = [
-  { icon: ThumbsUpIcon, label: 'Helpful', value: 'helpful' },
-  { icon: ThumbsDownIcon, label: 'Not helpful', value: 'not-helpful' },
+  { label: 'Helpful', value: 'helpful' },
+  { label: 'Not helpful', value: 'not-helpful' },
 ] as const
 
 const Insights4 = (props: Insights4Props) => {
@@ -121,7 +121,6 @@ const Insights4 = (props: Insights4Props) => {
         <div role='group' aria-labelledby={promptId} className='flex gap-2'>
           {feedbackOptions.map((option) => {
             const pressed = feedback === option.value
-            const Icon = option.icon
             return (
               <Button
                 key={option.value}
@@ -131,10 +130,27 @@ const Insights4 = (props: Insights4Props) => {
                 onClick={() => choose(option.value)}
                 className='aria-pressed:border-foreground/30 aria-pressed:bg-muted'
               >
-                <Icon
-                  data-icon='inline-start'
-                  className={cn(pressed && 'fill-current')}
-                />
+                {option.value === 'helpful' ? (
+                  <IconPlaceholder
+                    lucide='ThumbsUpIcon'
+                    tabler='IconThumbUp'
+                    hugeicons='ThumbsUpIcon'
+                    phosphor='ThumbsUpIcon'
+                    remixicon='RiThumbUpLine'
+                    data-icon='inline-start'
+                    className={cn(pressed && 'fill-current')}
+                  />
+                ) : (
+                  <IconPlaceholder
+                    lucide='ThumbsDownIcon'
+                    tabler='IconThumbDown'
+                    hugeicons='ThumbsDownIcon'
+                    phosphor='ThumbsDownIcon'
+                    remixicon='RiThumbDownLine'
+                    data-icon='inline-start'
+                    className={cn(pressed && 'fill-current')}
+                  />
+                )}
                 {option.label}
               </Button>
             )

@@ -14,7 +14,7 @@ import {
   chartGridProps,
   formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { RefreshCwIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   Area,
   AreaChart,
@@ -96,7 +96,13 @@ const States2 = (props: States2Props) => {
             disabled={status === 'loading' || refreshing}
             onClick={() => void reload()}
           >
-            <RefreshCwIcon />
+            <IconPlaceholder
+              lucide='RefreshCwIcon'
+              tabler='IconRefresh'
+              hugeicons='RefreshIcon'
+              phosphor='ArrowClockwiseIcon'
+              remixicon='RiRefreshLine'
+            />
             Refresh
           </Button>
         </CardAction>

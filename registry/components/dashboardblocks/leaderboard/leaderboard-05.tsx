@@ -8,13 +8,7 @@ import {
   LeaderboardRank,
   LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
-import {
-  ArrowDownWideNarrow,
-  ArrowUpNarrowWide,
-  ChevronDown,
-  ChevronUp,
-  type LucideIcon,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -68,16 +62,16 @@ const swapTransition =
 // Keeps both icons mounted and cross-fades them so the swap animates in both directions
 function IconSwap({
   active,
-  activeIcon: ActiveIcon,
+  activeIcon,
   className,
-  inactiveIcon: InactiveIcon,
+  inactiveIcon,
   ...props
 }: {
   active: boolean
-  activeIcon: LucideIcon
+  activeIcon: React.ReactNode
   className?: string
   'data-icon'?: 'inline-end' | 'inline-start'
-  inactiveIcon: LucideIcon
+  inactiveIcon: React.ReactNode
 }) {
   return (
     <span aria-hidden='true' className={cn('relative inline-flex', className)} {...props}>
@@ -90,7 +84,7 @@ function IconSwap({
             : 'scale-[0.25] opacity-0 blur-[4px]',
         )}
       >
-        <ActiveIcon />
+        {activeIcon}
       </span>
       <span
         className={cn(
@@ -101,7 +95,7 @@ function IconSwap({
             : 'scale-100 opacity-100 blur-[0px]',
         )}
       >
-        <InactiveIcon />
+        {inactiveIcon}
       </span>
     </span>
   )
@@ -139,8 +133,24 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
           >
             <IconSwap
               active={ascending}
-              activeIcon={ArrowUpNarrowWide}
-              inactiveIcon={ArrowDownWideNarrow}
+              activeIcon={
+                <IconPlaceholder
+                  lucide='ArrowUpNarrowWideIcon'
+                  tabler='IconSortAscending'
+                  hugeicons='SortByUp01Icon'
+                  phosphor='SortAscendingIcon'
+                  remixicon='RiSortAsc'
+                />
+              }
+              inactiveIcon={
+                <IconPlaceholder
+                  lucide='ArrowDownWideNarrowIcon'
+                  tabler='IconSortDescending'
+                  hugeicons='SortByDown01Icon'
+                  phosphor='SortDescendingIcon'
+                  remixicon='RiSortDesc'
+                />
+              }
             />
           </Button>
         </CardAction>
@@ -193,9 +203,25 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
             {expanded ? 'Show less' : `Show all ${countries.length}`}
             <IconSwap
               active={expanded}
-              activeIcon={ChevronUp}
+              activeIcon={
+                <IconPlaceholder
+                  lucide='ChevronUpIcon'
+                  tabler='IconChevronUp'
+                  hugeicons='ArrowUp01Icon'
+                  phosphor='CaretUpIcon'
+                  remixicon='RiArrowUpSLine'
+                />
+              }
               data-icon='inline-end'
-              inactiveIcon={ChevronDown}
+              inactiveIcon={
+                <IconPlaceholder
+                  lucide='ChevronDownIcon'
+                  tabler='IconChevronDown'
+                  hugeicons='ArrowDownIcon'
+                  phosphor='CaretDownIcon'
+                  remixicon='RiArrowDownSLine'
+                />
+              }
             />
           </Button>
         </CardFooter>

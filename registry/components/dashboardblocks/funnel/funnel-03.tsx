@@ -6,7 +6,7 @@ import {
   getBiggestDropIndex,
   getFunnelSteps,
 } from '@/registry/components/dashboardblocks/funnel'
-import { TrendingDown } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -97,7 +97,14 @@ const Funnel3 = (props: Funnel3Props) => {
                       </span>
                       {isBiggestDrop && (
                         <Badge variant='outline' className='text-foreground'>
-                          <TrendingDown data-icon='inline-start' />
+                          <IconPlaceholder
+                            lucide='TrendingDownIcon'
+                            tabler='IconTrendingDown'
+                            hugeicons='ChartDownIcon'
+                            phosphor='TrendDownIcon'
+                            remixicon='RiArrowDownLine'
+                            data-icon='inline-start'
+                          />
                           Biggest drop-off
                         </Badge>
                       )}

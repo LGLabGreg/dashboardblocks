@@ -5,7 +5,7 @@ import {
   formatCurrency,
   getDaysUntil,
 } from '@/registry/components/dashboardblocks/billing'
-import { CircleCheckIcon, CreditCardIcon, TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -79,7 +79,6 @@ const Billing2 = (props: Billing2Props) => {
     title,
   } = props
   const days = getDaysUntil(renewsAt, now)
-  const StatusIcon = cancelsAtPeriodEnd ? TriangleAlertIcon : CircleCheckIcon
 
   return (
     <Card className='@container'>
@@ -97,7 +96,27 @@ const Billing2 = (props: Billing2Props) => {
                 : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
             )}
           >
-            <StatusIcon aria-hidden className='size-3.5' />
+            {cancelsAtPeriodEnd ? (
+              <IconPlaceholder
+                lucide='TriangleAlertIcon'
+                tabler='IconAlertTriangle'
+                hugeicons='Alert02Icon'
+                phosphor='WarningIcon'
+                remixicon='RiErrorWarningLine'
+                aria-hidden
+                className='size-3.5'
+              />
+            ) : (
+              <IconPlaceholder
+                lucide='CircleCheckIcon'
+                tabler='IconCircleCheck'
+                hugeicons='CheckmarkCircle02Icon'
+                phosphor='CheckCircleIcon'
+                remixicon='RiCheckboxCircleLine'
+                aria-hidden
+                className='size-3.5'
+              />
+            )}
             {cancelsAtPeriodEnd ? 'Cancels at period end' : 'Active'}
           </span>
         </CardAction>
@@ -144,7 +163,15 @@ const Billing2 = (props: Billing2Props) => {
             {paymentMethod ? (
               <>
                 <dd className='flex items-center gap-1.5 text-sm font-medium'>
-                  <CreditCardIcon aria-hidden className='text-muted-foreground size-4' />
+                  <IconPlaceholder
+                    lucide='CreditCardIcon'
+                    tabler='IconCreditCard'
+                    hugeicons='CreditCardIcon'
+                    phosphor='CreditCardIcon'
+                    remixicon='RiBankCardLine'
+                    aria-hidden
+                    className='text-muted-foreground size-4'
+                  />
                   {paymentMethod.brand}{' '}
                   <span className='tabular-nums'>
                     <span aria-hidden>•••• </span>

@@ -22,7 +22,6 @@ export const examples: Registry['items'] = [
   {
     name: 'comparison-02',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['card', registryUrl('comparison')],
     files: [
       {

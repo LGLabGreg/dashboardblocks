@@ -6,7 +6,7 @@ import {
   PersonAvatar,
   PresenceIndicator,
 } from '@/registry/components/dashboardblocks/team'
-import { BellRingIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -144,7 +144,14 @@ const Team4 = (props: Team4Props) => {
                   size='sm'
                   onClick={() => onPage?.(current.person)}
                 >
-                  <BellRingIcon data-icon='inline-start' />
+                  <IconPlaceholder
+                    lucide='BellRingIcon'
+                    tabler='IconBellRinging'
+                    hugeicons='NotificationSquareIcon'
+                    phosphor='BellRingingIcon'
+                    remixicon='RiNotification3Line'
+                    data-icon='inline-start'
+                  />
                   Page<span className='sr-only'> {current.person.name}</span>
                 </Button>
               </div>

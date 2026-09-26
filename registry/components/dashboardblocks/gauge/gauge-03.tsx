@@ -70,7 +70,6 @@ const Gauge3 = (props: Gauge3Props) => {
           {resources.map((resource) => {
             const band = getGaugeBand(resource.value, bands)
             const config = band ? gaugeToneConfig[band.tone] : undefined
-            const Icon = config?.icon
             return (
               <li
                 key={resource.label}
@@ -91,14 +90,14 @@ const Gauge3 = (props: Gauge3Props) => {
                   </span>
                 </Gauge>
                 <span className='text-sm font-medium'>{resource.label}</span>
-                {band && config && Icon && (
+                {band && config && (
                   <span
                     className={cn(
-                      'flex items-center gap-1 text-xs font-medium',
+                      'flex items-center gap-1 text-xs font-medium [&_svg]:size-3.5 [&_svg]:shrink-0',
                       config.text,
                     )}
                   >
-                    <Icon aria-hidden className='size-3.5 shrink-0' />
+                    {config.icon}
                     {band.label}
                   </span>
                 )}

@@ -7,7 +7,7 @@ import {
   getNextStep,
   stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
-import { ArrowRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -124,7 +124,14 @@ const Checklist2 = (props: Checklist2Props) => {
         {progress.remaining > 0 && (
           <Button size='sm' onClick={onContinue}>
             {continueLabel}
-            <ArrowRightIcon data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         )}
       </CardFooter>

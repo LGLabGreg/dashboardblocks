@@ -4,7 +4,10 @@ import { type Metadata } from 'next'
 import { Geist_Mono, Inter } from 'next/font/google'
 import Script from 'next/script'
 
+import { CustomizerProvider } from '@/components/customizer/customizer-provider'
+
 import { IS_PRODUCTION, siteConfig } from '@/lib/config'
+import { customizerBootScript, DEFAULT_CONFIG } from '@/lib/customizer'
 
 import './global.css'
 
@@ -59,11 +62,17 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' className={`style-${DEFAULT_CONFIG.style}`} suppressHydrationWarning>
+      <head>
+        {/* oxlint-disable-next-line react/no-danger -- a static, trusted boot script */}
+        <script dangerouslySetInnerHTML={{ __html: customizerBootScript }} />
+      </head>
       <body
         className={`${inter.variable} ${fontMono.variable} font-sans antialiased flex flex-col min-h-screen`}
       >
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <CustomizerProvider>{children}</CustomizerProvider>
+        </RootProvider>
         {IS_PRODUCTION && (
           <Script
             src='https://cloud.umami.is/script.js'

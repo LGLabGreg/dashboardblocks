@@ -14,7 +14,7 @@ import {
   DataTableHeader,
   DataTableRow,
 } from '@/registry/components/dashboardblocks/data-table'
-import { DownloadIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -159,7 +159,14 @@ const Billing3 = (props: Billing3Props) => {
                   size='sm'
                   onClick={() => onDownload?.(invoice.id)}
                 >
-                  <DownloadIcon aria-hidden />
+                  <IconPlaceholder
+                    lucide='DownloadIcon'
+                    tabler='IconDownload'
+                    hugeicons='Download01Icon'
+                    phosphor='DownloadIcon'
+                    remixicon='RiDownloadLine'
+                    aria-hidden
+                  />
                   <span className='sr-only'>Download </span>
                   PDF
                   <span className='sr-only'> for {invoice.number}</span>

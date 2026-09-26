@@ -1,14 +1,6 @@
 'use client'
 
-import {
-  CircleCheck,
-  CircleDashed,
-  CircleX,
-  type LucideIcon,
-  OctagonAlert,
-  TriangleAlert,
-  Wrench,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type KeyboardEvent, type PointerEvent, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -24,7 +16,7 @@ type StatusLevel =
 interface StatusConfig {
   /** Solid fill for dots and uptime bars. */
   fill: string
-  icon: LucideIcon
+  icon: React.ReactNode
   label: string
   /** Tinted background with readable foreground, for badges. */
   soft: string
@@ -36,42 +28,96 @@ interface StatusConfig {
 const statusConfig: Record<StatusLevel, StatusConfig> = {
   operational: {
     fill: 'bg-emerald-500',
-    icon: CircleCheck,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Operational',
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     text: 'text-emerald-700 dark:text-emerald-400',
   },
   degraded: {
     fill: 'bg-amber-400',
-    icon: TriangleAlert,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Degraded performance',
     soft: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
     text: 'text-amber-700 dark:text-amber-400',
   },
   partial: {
     fill: 'bg-orange-500',
-    icon: OctagonAlert,
+    icon: (
+      <IconPlaceholder
+        lucide='OctagonAlertIcon'
+        tabler='IconAlertOctagon'
+        hugeicons='AlertDiamondIcon'
+        phosphor='WarningOctagonIcon'
+        remixicon='RiAlarmWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Partial outage',
     soft: 'bg-orange-500/10 text-orange-700 dark:text-orange-400',
     text: 'text-orange-700 dark:text-orange-400',
   },
   major: {
     fill: 'bg-red-500',
-    icon: CircleX,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleXIcon'
+        tabler='IconCircleX'
+        hugeicons='CancelCircleIcon'
+        phosphor='XCircleIcon'
+        remixicon='RiCloseCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Major outage',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     text: 'text-red-700 dark:text-red-400',
   },
   maintenance: {
     fill: 'bg-sky-500',
-    icon: Wrench,
+    icon: (
+      <IconPlaceholder
+        lucide='WrenchIcon'
+        tabler='IconTool'
+        hugeicons='Wrench01Icon'
+        phosphor='WrenchIcon'
+        remixicon='RiToolsLine'
+        aria-hidden
+      />
+    ),
     label: 'Maintenance',
     soft: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
     text: 'text-sky-700 dark:text-sky-400',
   },
   unknown: {
     fill: 'bg-muted-foreground/25',
-    icon: CircleDashed,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleDashedIcon'
+        tabler='IconCircleDashed'
+        hugeicons='DashedLineCircleIcon'
+        phosphor='CircleDashedIcon'
+        remixicon='RiLoaderLine'
+        aria-hidden
+      />
+    ),
     label: 'No data',
     soft: 'bg-muted text-muted-foreground',
     text: 'text-muted-foreground',
@@ -131,16 +177,15 @@ interface StatusBadgeProps {
 /** A tinted pill with the status icon and label. */
 function StatusBadge({ className, label, status }: StatusBadgeProps) {
   const config = statusConfig[status]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.soft,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label ?? config.label}
     </span>
   )

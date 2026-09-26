@@ -16,7 +16,7 @@ import {
   formatSigned,
   insightKindConfig,
 } from '@/registry/components/dashboardblocks/insights'
-import { ArrowRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 import {
   Area,
@@ -338,7 +338,14 @@ const Insights2 = (props: Insights2Props) => {
         {href && (
           <a href={href} className={buttonVariants({ size: 'sm' })}>
             Investigate
-            <ArrowRightIcon data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </a>
         )}
         <Button

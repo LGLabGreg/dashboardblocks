@@ -13,7 +13,9 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "prepare": "husky",
-    "registry:build": "tsx scripts/build-registry.ts && shadcn build",
+    "styles:sync": "tsx scripts/sync-styles.ts",
+    "registry:verify": "tsx scripts/verify-registry.ts",
+    "registry:build": "tsx scripts/generate-icons.ts && tsx scripts/build-registry.ts && shadcn build && tsx scripts/build-bases.ts",
     "ci:version": "pnpm changeset version && pnpm registry:build",
     "ci:publish": "pnpm changeset tag"
   },
@@ -29,6 +31,11 @@
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@changesets/changelog-github": "^1.0.1",
+    "@hugeicons/core-free-icons": "^4.3.5",
+    "@hugeicons/react": "^1.1.10",
+    "@phosphor-icons/react": "^2.1.10",
+    "@remixicon/react": "^4.9.0",
+    "@tabler/icons-react": "^3.48.0",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -59,6 +66,7 @@
     "postcss": "^8.5.28",
     "shadcn": "^4.21.0",
     "tailwindcss": "^4.3.3",
+    "ts-morph": "^28.0.0",
     "tsx": "^4.23.15",
     "tw-animate-css": "^1.4.0",
     "typescript": "^7.0.2"

@@ -10,7 +10,7 @@ import {
   StatValue,
   formatStatValue,
 } from '@/registry/components/dashboardblocks/stat-group'
-import { RotateCwIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -79,7 +79,13 @@ const States1 = (props: States1Props) => {
             disabled={loading}
             onClick={() => void reload({ clear: true })}
           >
-            <RotateCwIcon />
+            <IconPlaceholder
+              lucide='RotateCwIcon'
+              tabler='IconRotateClockwise2'
+              hugeicons='Rotate01Icon'
+              phosphor='ArrowClockwiseIcon'
+              remixicon='RiRefreshLine'
+            />
             Reload
           </Button>
         </CardAction>

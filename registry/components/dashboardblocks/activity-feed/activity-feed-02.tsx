@@ -4,14 +4,7 @@ import {
   ActivityFeedTimeline,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import {
-  AlertCircle,
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  LucideIcon,
-  Zap,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,7 +17,7 @@ interface DeploymentEvent {
   description: string
   time: string
   status: EventStatus
-  icon: LucideIcon
+  icon: React.ReactNode
 }
 
 interface ActivityFeed02Props {
@@ -51,7 +44,15 @@ const exampleProps: ActivityFeed02Props = {
       description: 'Production v2.4.1 deployed to all regions',
       time: '10:32 AM',
       status: 'success',
-      icon: CheckCircle2,
+      icon: (
+        <IconPlaceholder
+          lucide='CircleCheckIcon'
+          tabler='IconCircleCheck'
+          hugeicons='CheckmarkCircle02Icon'
+          phosphor='CheckCircleIcon'
+          remixicon='RiCheckboxCircleLine'
+        />
+      ),
     },
     {
       id: 2,
@@ -59,7 +60,15 @@ const exampleProps: ActivityFeed02Props = {
       description: 'Building production bundle...',
       time: '10:30 AM',
       status: 'progress',
-      icon: Clock,
+      icon: (
+        <IconPlaceholder
+          lucide='ClockIcon'
+          tabler='IconClock'
+          hugeicons='Clock01Icon'
+          phosphor='ClockIcon'
+          remixicon='RiTimeLine'
+        />
+      ),
     },
     {
       id: 3,
@@ -67,7 +76,15 @@ const exampleProps: ActivityFeed02Props = {
       description: 'CPU usage exceeded 90% threshold',
       time: '9:15 AM',
       status: 'error',
-      icon: AlertCircle,
+      icon: (
+        <IconPlaceholder
+          lucide='CircleAlertIcon'
+          tabler='IconExclamationCircle'
+          hugeicons='AlertCircleIcon'
+          phosphor='WarningCircleIcon'
+          remixicon='RiErrorWarningLine'
+        />
+      ),
     },
     {
       id: 4,
@@ -75,7 +92,15 @@ const exampleProps: ActivityFeed02Props = {
       description: 'Cache hit rate improved by 23%',
       time: '8:45 AM',
       status: 'info',
-      icon: Zap,
+      icon: (
+        <IconPlaceholder
+          lucide='ZapIcon'
+          tabler='IconBolt'
+          hugeicons='FlashIcon'
+          phosphor='LightningIcon'
+          remixicon='RiFlashlightLine'
+        />
+      ),
     },
   ],
 }
@@ -89,17 +114,27 @@ const ActivityFeed02 = (props: ActivityFeed02Props) => {
           {title}
           <Button variant='outline' size='sm'>
             View all
-            <ArrowRight data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent>
         <ActivityFeedTimeline>
           {events.map((event) => {
-            const EventIcon = event.icon
             return (
               <ActivityFeedItem key={event.id}>
-                <Icon icon={EventIcon} size='md' className={statusStyles[event.status]} />
+                <Icon
+                  icon={event.icon}
+                  size='md'
+                  className={statusStyles[event.status]}
+                />
                 <ActivityFeedContent>
                   <div className='space-y-1'>
                     <p className='font-medium mb-0.5'>{event.title}</p>
