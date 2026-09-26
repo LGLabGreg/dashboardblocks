@@ -190,6 +190,18 @@
       ]
     },
     {
+      "name": "deployments",
+      "type": "registry:component",
+      "title": "Deployments",
+      "description": "Primitives for deployments: ready, failed, running, queued and rolled back statuses each with an icon and label, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA badge and a run history strip.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/deployments.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "distribution",
       "type": "registry:component",
       "title": "Distribution",
@@ -2934,6 +2946,63 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback/feedback-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "deployments-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/deployments.json",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/deployments/deployments-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "deployments-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/deployments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/deployments/deployments-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "deployments-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/deployments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/deployments/deployments-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "deployments-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/deployments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/deployments/deployments-04.tsx",
           "type": "registry:component"
         }
       ]

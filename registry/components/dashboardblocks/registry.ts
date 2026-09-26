@@ -178,6 +178,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'deployments',
+    type: 'registry:component',
+    title: 'Deployments',
+    description:
+      'Primitives for deployments: ready, failed, running, queued and rolled back statuses each with an icon and label, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA badge and a run history strip.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/deployments.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'distribution',
     type: 'registry:component',
     title: 'Distribution',
