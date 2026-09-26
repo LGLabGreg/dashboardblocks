@@ -26,12 +26,24 @@ import {
   UsageMeter7,
   usageMeter7ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-07'
+import { useSyncExternalStore } from 'react'
+
+const subscribe = () => () => {}
 
 export function Showcase() {
+  // The blocks count up and fill in once hydrated. Hold the entrance until then
+  // so it plays once, together with them, instead of rising with empty values.
+  const hydrated = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  )
+
   return (
     <div className='relative mx-auto mt-16 max-w-6xl px-4 [perspective:2400px] md:mt-20'>
       <div
         role='img'
+        data-hydrated={hydrated || undefined}
         aria-label='A sample dashboard assembled from Dashboardblocks components'
         className='home-tilt bg-muted/60 relative rounded-2xl border p-2 shadow-2xl shadow-black/10 backdrop-blur md:rounded-3xl md:p-3 dark:shadow-black/50'
       >

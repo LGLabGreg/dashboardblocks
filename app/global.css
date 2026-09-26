@@ -161,8 +161,11 @@
       animation-name: home-rise;
     }
     .home-tilt {
-      animation: home-tilt 1.4s cubic-bezier(0.16, 1, 0.3, 1) 300ms backwards;
+      animation: home-tilt 1.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
       transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .home-tilt:not([data-hydrated]) {
+      animation-play-state: paused;
     }
   }
   @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
