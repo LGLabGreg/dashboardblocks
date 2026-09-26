@@ -478,6 +478,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'timeline',
+    type: 'registry:component',
+    title: 'Timeline',
+    description:
+      'Primitives for timelines: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis, grid lines, a today line and a Gantt-style timeline with grouped rows, progress fills and a readout.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/timeline.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'trend',
     type: 'registry:component',
     title: 'Trend',

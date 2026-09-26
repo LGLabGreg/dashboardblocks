@@ -117,6 +117,10 @@ import {
   teamExampleProps,
 } from '@/registry/components/dashboardblocks/team/index'
 import {
+  timelineComponents,
+  timelineExampleProps,
+} from '@/registry/components/dashboardblocks/timeline/index'
+import {
   usageMeterComponents,
   usageMeterExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/index'
@@ -152,6 +156,7 @@ const exampleComponents = {
   ...distributionComponents,
   ...spendComponents,
   ...flowComponents,
+  ...timelineComponents,
 }
 
 const examplePropsMap = {
@@ -185,6 +190,7 @@ const examplePropsMap = {
   ...distributionExampleProps,
   ...spendExampleProps,
   ...flowExampleProps,
+  ...timelineExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
