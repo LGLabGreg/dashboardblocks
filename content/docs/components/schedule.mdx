@@ -1,0 +1,30 @@
+---
+title: Schedule
+description: Agendas, month calendars, deadlines and the week ahead.
+---
+
+What's coming up, the forward-looking counterpart to the activity feed. Every date helper takes a fixed `now` and a time zone (UTC unless you pass one), so days, times and countdowns render the same on the server and in the browser. Each event's colour comes with its calendar name, and urgency comes with an icon and a label, so colour never carries meaning alone.
+
+### Agenda
+
+Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.
+
+<ComponentPreview name='schedule-01' previewClassName='max-w-md' />
+
+### Calendar
+
+A month calendar with a dot for each event. Select a day with the mouse or the keyboard to list its events.
+
+<ComponentPreview name='schedule-02' previewClassName='max-w-2xl' />
+
+### Deadlines
+
+Deadlines and renewals in date order, each with a countdown and an urgency badge.
+
+<ComponentPreview name='schedule-03' previewClassName='max-w-2xl' />
+
+### Week Ahead
+
+The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.
+
+<ComponentPreview name='schedule-04' previewClassName='max-w-3xl' />

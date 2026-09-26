@@ -25,6 +25,10 @@ import {
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
 import {
+  Checklist1,
+  checklist1ExampleProps,
+} from '@/registry/components/dashboardblocks/checklist/checklist-01'
+import {
   Comparison2,
   comparison2ExampleProps,
 } from '@/registry/components/dashboardblocks/comparison/comparison-02'
@@ -78,6 +82,14 @@ import {
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
 import {
+  Pipeline1,
+  pipeline1ExampleProps,
+} from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
+import {
+  Schedule2,
+  schedule2ExampleProps,
+} from '@/registry/components/dashboardblocks/schedule/schedule-02'
+import {
   StatGroup2,
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
@@ -89,6 +101,10 @@ import {
   Status2,
   status2ExampleProps,
 } from '@/registry/components/dashboardblocks/status/status-02'
+import {
+  Team3,
+  team3ExampleProps,
+} from '@/registry/components/dashboardblocks/team/team-03'
 import {
   UsageMeter8,
   usageMeter8ExampleProps,
@@ -120,6 +136,10 @@ export interface CategoryCounts {
   geo: number
   billing: number
   insights: number
+  pipeline: number
+  schedule: number
+  team: number
+  checklist: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -319,6 +339,43 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <div className='hidden lg:block'>
             <Insights3 {...insights3ExampleProps} />
           </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/pipeline'
+          title='Pipeline'
+          description='Work in flight across stages: boards, stage totals, stuck items and weighted forecasts.'
+          count={counts.pipeline}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Pipeline1 {...pipeline1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/team'
+          title='Team'
+          description='Member lists with presence, workload against capacity, who is online and on-call rotas.'
+          count={counts.team}
+          previewClassName='*:w-80'
+        >
+          <Team3 {...team3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/checklist'
+          title='Checklist'
+          description='Onboarding checklists, setup steppers and task lists with due dates.'
+          count={counts.checklist}
+        >
+          <Checklist1 {...checklist1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/schedule'
+          title='Schedule'
+          description='Agendas, month calendars, deadlines and the week ahead.'
+          count={counts.schedule}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Schedule2 {...schedule2ExampleProps} />
         </CategoryCard>
       </div>
     </section>

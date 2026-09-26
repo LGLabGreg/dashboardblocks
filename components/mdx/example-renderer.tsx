@@ -21,6 +21,10 @@ import {
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
 import {
+  checklistComponents,
+  checklistExampleProps,
+} from '@/registry/components/dashboardblocks/checklist/index'
+import {
   comparisonComponents,
   comparisonExampleProps,
 } from '@/registry/components/dashboardblocks/comparison/index'
@@ -61,6 +65,14 @@ import {
   leaderboardExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/index'
 import {
+  pipelineComponents,
+  pipelineExampleProps,
+} from '@/registry/components/dashboardblocks/pipeline/index'
+import {
+  scheduleComponents,
+  scheduleExampleProps,
+} from '@/registry/components/dashboardblocks/schedule/index'
+import {
   statGroupComponents,
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -72,6 +84,10 @@ import {
   statusComponents,
   statusExampleProps,
 } from '@/registry/components/dashboardblocks/status/index'
+import {
+  teamComponents,
+  teamExampleProps,
+} from '@/registry/components/dashboardblocks/team/index'
 import {
   usageMeterComponents,
   usageMeterExampleProps,
@@ -97,6 +113,10 @@ const exampleComponents = {
   ...geoComponents,
   ...billingComponents,
   ...insightsComponents,
+  ...pipelineComponents,
+  ...scheduleComponents,
+  ...teamComponents,
+  ...checklistComponents,
 }
 
 const examplePropsMap = {
@@ -119,6 +139,10 @@ const examplePropsMap = {
   ...geoExampleProps,
   ...billingExampleProps,
   ...insightsExampleProps,
+  ...pipelineExampleProps,
+  ...scheduleExampleProps,
+  ...teamExampleProps,
+  ...checklistExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

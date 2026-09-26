@@ -3,6 +3,7 @@ import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/i
 import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
+import { checklistComponents } from '@/registry/components/dashboardblocks/checklist/index'
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
@@ -13,9 +14,12 @@ import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap
 import { insightsComponents } from '@/registry/components/dashboardblocks/insights/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
+import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
+import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
+import { teamComponents } from '@/registry/components/dashboardblocks/team/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 
 import { Categories } from '@/components/home/categories'
@@ -43,6 +47,10 @@ const counts = {
   geo: Object.keys(geoComponents).length,
   billing: Object.keys(billingComponents).length,
   insights: Object.keys(insightsComponents).length,
+  pipeline: Object.keys(pipelineComponents).length,
+  schedule: Object.keys(scheduleComponents).length,
+  team: Object.keys(teamComponents).length,
+  checklist: Object.keys(checklistComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
