@@ -1,0 +1,30 @@
+---
+title: Deployments
+description: Recent deploys, environments and what is waiting to ship, DORA metrics and build health.
+---
+
+Deployment blocks show what shipped, where it's running and how healthy the pipeline is. Statuses (ready, failed, running, queued and rolled back) each have an icon and a label, and the running spinner stops for reduced motion. DORA metrics are rated against the widely used elite, high, medium and low bands; bands differ between reports, so adjust `getDoraLevels` to yours. Pass fixed dates, so the blocks render the same on the server and in the browser.
+
+### Recent Deployments
+
+The latest builds with their commit, environment, author, how long they took and their status.
+
+<ComponentPreview name='deployments-01' previewClassName='max-w-lg' />
+
+### Environments
+
+What each environment is running and how many commits are waiting to be promoted to the next.
+
+<ComponentPreview name='deployments-02' previewClassName='max-w-3xl' />
+
+### Delivery Performance
+
+The four DORA metrics with their band and the change on the period before, in the direction that's better.
+
+<ComponentPreview name='deployments-03' previewClassName='max-w-3xl' />
+
+### Build Health
+
+The last runs of each pipeline as a strip, with the pass rate and median duration.
+
+<ComponentPreview name='deployments-04' previewClassName='max-w-lg' />

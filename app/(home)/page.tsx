@@ -7,6 +7,7 @@ import { checklistComponents } from '@/registry/components/dashboardblocks/check
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
+import { deploymentsComponents } from '@/registry/components/dashboardblocks/deployments/index'
 import { distributionComponents } from '@/registry/components/dashboardblocks/distribution/index'
 import { feedbackComponents } from '@/registry/components/dashboardblocks/feedback/index'
 import { flowComponents } from '@/registry/components/dashboardblocks/flow/index'
@@ -71,6 +72,7 @@ const counts = {
   timeline: Object.keys(timelineComponents).length,
   realtime: Object.keys(realtimeComponents).length,
   feedback: Object.keys(feedbackComponents).length,
+  deployments: Object.keys(deploymentsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

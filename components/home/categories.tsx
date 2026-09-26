@@ -41,6 +41,14 @@ import {
   dataTable1ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-01'
 import {
+  Deployments1,
+  deployments1ExampleProps,
+} from '@/registry/components/dashboardblocks/deployments/deployments-01'
+import {
+  Deployments4,
+  deployments4ExampleProps,
+} from '@/registry/components/dashboardblocks/deployments/deployments-04'
+import {
   Distribution1,
   distribution1ExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/distribution-01'
@@ -194,6 +202,7 @@ export interface CategoryCounts {
   timeline: number
   realtime: number
   feedback: number
+  deployments: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -519,6 +528,17 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.feedback}
         >
           <Feedback1 {...feedback1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/deployments'
+          title='Deployments'
+          description='Recent deploys, environments and what is waiting to ship, DORA metrics and build health.'
+          count={counts.deployments}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[24rem]'
+        >
+          <Deployments1 {...deployments1ExampleProps} />
+          <Deployments4 {...deployments4ExampleProps} />
         </CategoryCard>
       </div>
     </section>
