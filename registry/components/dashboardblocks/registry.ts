@@ -342,6 +342,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'inventory',
+    type: 'registry:component',
+    title: 'Inventory',
+    description:
+      'Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/inventory.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'kpi',
     type: 'registry:component',
     title: 'KPI',

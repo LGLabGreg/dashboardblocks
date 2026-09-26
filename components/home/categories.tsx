@@ -94,6 +94,10 @@ import {
   insights4ExampleProps,
 } from '@/registry/components/dashboardblocks/insights/insights-04'
 import {
+  Inventory1,
+  inventory1ExampleProps,
+} from '@/registry/components/dashboardblocks/inventory/inventory-01'
+import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -217,6 +221,7 @@ export interface CategoryCounts {
   deployments: number
   scatter: number
   security: number
+  inventory: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -567,11 +572,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Security'
           description='Sign-in activity, an audit log, active sessions and a security posture score.'
           count={counts.security}
-          className='md:col-span-3'
-          previewClassName='*:w-80 sm:*:w-[24rem]'
+          className='md:col-span-2'
+          previewClassName='*:w-80'
         >
           <Security2 {...security2ExampleProps} />
           <Security3 {...security3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/inventory'
+          title='Inventory'
+          description='Low stock with what to reorder, warehouse capacity, stock health and a stock projection.'
+          count={counts.inventory}
+        >
+          <Inventory1 {...inventory1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

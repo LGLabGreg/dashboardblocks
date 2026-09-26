@@ -81,6 +81,10 @@ import {
   insightsExampleProps,
 } from '@/registry/components/dashboardblocks/insights/index'
 import {
+  inventoryComponents,
+  inventoryExampleProps,
+} from '@/registry/components/dashboardblocks/inventory/index'
+import {
   kpiComponents,
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
@@ -182,6 +186,7 @@ const exampleComponents = {
   ...deploymentsComponents,
   ...scatterComponents,
   ...securityComponents,
+  ...inventoryComponents,
 }
 
 const examplePropsMap = {
@@ -221,6 +226,7 @@ const examplePropsMap = {
   ...deploymentsExampleProps,
   ...scatterExampleProps,
   ...securityExampleProps,
+  ...inventoryExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

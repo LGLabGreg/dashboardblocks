@@ -19,6 +19,7 @@ import { examples as geoExamples } from '@/registry/components/dashboardblocks/g
 import { examples as goalsExamples } from '@/registry/components/dashboardblocks/goals/registry'
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
 import { examples as insightsExamples } from '@/registry/components/dashboardblocks/insights/registry'
+import { examples as inventoryExamples } from '@/registry/components/dashboardblocks/inventory/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { examples as metricListExamples } from '@/registry/components/dashboardblocks/metric-list/registry'
@@ -83,6 +84,7 @@ const registry = {
     ...deploymentsExamples,
     ...scatterExamples,
     ...securityExamples,
+    ...inventoryExamples,
     ...hooks,
   ],
 }

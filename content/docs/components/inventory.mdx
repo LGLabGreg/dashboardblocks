@@ -1,0 +1,30 @@
+---
+title: Inventory
+description: Low stock with what to reorder, warehouse capacity, stock health and a stock projection.
+---
+
+Inventory blocks show what's running low and what to do about it. An item is low at or below its reorder point and out of stock at zero, and each status has an icon and a label. Days of cover is stock on hand over daily demand. The reorder quantity covers the lead time plus a target number of days, less what's on hand and on order. Pass a fixed date, so the blocks render the same on the server and in the browser.
+
+### Low Stock
+
+Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.
+
+<ComponentPreview name='inventory-01' previewClassName='max-w-lg' />
+
+### Warehouse Capacity
+
+Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.
+
+<ComponentPreview name='inventory-02' previewClassName='max-w-lg' />
+
+### Stock Health
+
+Every SKU by status, with the value of stock on hand and how many times a year it turns over.
+
+<ComponentPreview name='inventory-03' previewClassName='max-w-2xl' />
+
+### Stock Projection
+
+One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.
+
+<ComponentPreview name='inventory-04' previewClassName='max-w-2xl' />
