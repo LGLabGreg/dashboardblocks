@@ -18,6 +18,7 @@ import { geoComponents } from '@/registry/components/dashboardblocks/geo/index'
 import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { insightsComponents } from '@/registry/components/dashboardblocks/insights/index'
+import { inventoryComponents } from '@/registry/components/dashboardblocks/inventory/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
@@ -77,6 +78,7 @@ const counts = {
   deployments: Object.keys(deploymentsComponents).length,
   scatter: Object.keys(scatterComponents).length,
   security: Object.keys(securityComponents).length,
+  inventory: Object.keys(inventoryComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

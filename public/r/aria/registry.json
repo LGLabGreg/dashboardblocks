@@ -363,6 +363,21 @@
       ]
     },
     {
+      "name": "inventory",
+      "type": "registry:component",
+      "title": "Inventory",
+      "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/aria/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/inventory.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "kpi",
       "type": "registry:component",
       "title": "KPI",
@@ -3157,6 +3172,66 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "inventory-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/inventory.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/inventory/inventory-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "inventory-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/inventory/inventory-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "inventory-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/billing.json",
+        "https://dashboardblocks.com/r/aria/inventory.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/inventory/inventory-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "inventory-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/chart-panel.json",
+        "https://dashboardblocks.com/r/aria/inventory.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/inventory/inventory-04.tsx",
           "type": "registry:component"
         }
       ]
