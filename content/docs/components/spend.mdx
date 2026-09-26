@@ -1,0 +1,30 @@
+---
+title: Spend
+description: Budget against actual, spend by service, monthly variance, and burn and runway.
+---
+
+Spend blocks compare what's gone out with what was planned. Pace assumes the budget is spent evenly over the period, so the projection is spend so far divided by the share of the period gone. A status says whether that lands under, on or over budget, with an icon and a label as well as a colour. Pass fixed dates, so the blocks render the same on the server and in the browser.
+
+### Monthly Budget
+
+Spend so far against the month's budget, with the projected month end and what's left to spend per day.
+
+<ComponentPreview name='spend-01' previewClassName='max-w-md' />
+
+### Spend by Service
+
+One budget bar per service, each with its own status, and the total underneath.
+
+<ComponentPreview name='spend-02' previewClassName='max-w-lg' />
+
+### Spend vs Budget
+
+Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.
+
+<ComponentPreview name='spend-03' previewClassName='max-w-2xl' />
+
+### Burn and Runway
+
+The cash balance, the average net burn and how many months of runway are left, with the balance projected to zero.
+
+<ComponentPreview name='spend-04' previewClassName='max-w-2xl' />

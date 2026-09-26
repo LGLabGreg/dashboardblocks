@@ -21,6 +21,7 @@ import { metricListComponents } from '@/registry/components/dashboardblocks/metr
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { retentionComponents } from '@/registry/components/dashboardblocks/retention/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
+import { spendComponents } from '@/registry/components/dashboardblocks/spend/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
@@ -61,6 +62,7 @@ const counts = {
   forecast: Object.keys(forecastComponents).length,
   retention: Object.keys(retentionComponents).length,
   distribution: Object.keys(distributionComponents).length,
+  spend: Object.keys(spendComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

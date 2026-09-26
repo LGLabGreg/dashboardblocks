@@ -443,6 +443,21 @@
       ]
     },
     {
+      "name": "spend",
+      "type": "registry:component",
+      "title": "Spend",
+      "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/spend.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "stat-group",
       "type": "registry:component",
       "title": "Stat Group",
@@ -2563,6 +2578,74 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "spend-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/spend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/spend/spend-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "spend-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/spend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/spend/spend-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "spend-03",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/spend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/spend/spend-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "spend-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/spend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/spend/spend-04.tsx",
           "type": "registry:component"
         }
       ]
