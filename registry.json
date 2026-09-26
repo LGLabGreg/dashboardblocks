@@ -76,6 +76,24 @@
       ]
     },
     {
+      "name": "billing",
+      "type": "registry:component",
+      "title": "Billing",
+      "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "block-state",
       "type": "registry:component",
       "title": "Block State",
@@ -190,6 +208,25 @@
       ]
     },
     {
+      "name": "geo",
+      "type": "registry:component",
+      "title": "Geo",
+      "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/heatmap.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "goals",
       "type": "registry:component",
       "title": "Goals",
@@ -231,6 +268,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/icon.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights",
+      "type": "registry:component",
+      "title": "Insights",
+      "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a \"why\" line of drivers.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights.tsx",
           "type": "registry:component"
         }
       ]
@@ -1757,6 +1809,203 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/billing.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-04.tsx",
           "type": "registry:component"
         }
       ]
