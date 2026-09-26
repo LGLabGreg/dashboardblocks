@@ -9,6 +9,7 @@ import { examples as dashboardHeaderExamples } from '@/registry/components/dashb
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
 import { examples as distributionExamples } from '@/registry/components/dashboardblocks/distribution/registry'
+import { examples as flowExamples } from '@/registry/components/dashboardblocks/flow/registry'
 import { examples as forecastExamples } from '@/registry/components/dashboardblocks/forecast/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
 import { examples as gaugeExamples } from '@/registry/components/dashboardblocks/gauge/registry'
@@ -69,6 +70,7 @@ const registry = {
     ...retentionExamples,
     ...distributionExamples,
     ...spendExamples,
+    ...flowExamples,
     ...hooks,
   ],
 }

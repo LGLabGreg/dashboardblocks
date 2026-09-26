@@ -205,6 +205,18 @@
       ]
     },
     {
+      "name": "flow",
+      "type": "registry:component",
+      "title": "Flow",
+      "description": "Primitives for flows: a Sankey layout that places nodes in columns and links as bands, keeping each flow's colour downstream and drawing drop-offs muted, a Sankey chart with hover highlighting and a readout, and path steps as chips.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/flow.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "forecast",
       "type": "registry:component",
       "title": "Forecast",
@@ -2646,6 +2658,66 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flow-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/flow.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/flow/flow-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flow-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/flow.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/flow/flow-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flow-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/flow.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/flow/flow-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flow-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/flow.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/flow/flow-04.tsx",
           "type": "registry:component"
         }
       ]
