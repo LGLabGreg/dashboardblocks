@@ -113,6 +113,10 @@ import {
   scheduleExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/index'
 import {
+  securityComponents,
+  securityExampleProps,
+} from '@/registry/components/dashboardblocks/security/index'
+import {
   spendComponents,
   spendExampleProps,
 } from '@/registry/components/dashboardblocks/spend/index'
@@ -177,6 +181,7 @@ const exampleComponents = {
   ...feedbackComponents,
   ...deploymentsComponents,
   ...scatterComponents,
+  ...securityComponents,
 }
 
 const examplePropsMap = {
@@ -215,6 +220,7 @@ const examplePropsMap = {
   ...feedbackExampleProps,
   ...deploymentsExampleProps,
   ...scatterExampleProps,
+  ...securityExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

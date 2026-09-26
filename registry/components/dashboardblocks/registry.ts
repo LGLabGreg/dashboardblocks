@@ -476,6 +476,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'security',
+    type: 'registry:component',
+    title: 'Security',
+    description:
+      'Primitives for security: info, warning and critical audit severities and passing, attention and failing check results, each with an icon and label, a desktop or phone device icon, a weighted security score and a time-since format.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/security.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'spend',
     type: 'registry:component',
     title: 'Spend',

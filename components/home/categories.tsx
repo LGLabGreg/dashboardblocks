@@ -138,6 +138,14 @@ import {
   schedule2ExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/schedule-02'
 import {
+  Security2,
+  security2ExampleProps,
+} from '@/registry/components/dashboardblocks/security/security-02'
+import {
+  Security3,
+  security3ExampleProps,
+} from '@/registry/components/dashboardblocks/security/security-03'
+import {
   Spend1,
   spend1ExampleProps,
 } from '@/registry/components/dashboardblocks/spend/spend-01'
@@ -208,6 +216,7 @@ export interface CategoryCounts {
   feedback: number
   deployments: number
   scatter: number
+  security: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -552,6 +561,17 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.scatter}
         >
           <Scatter4 {...scatter4ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/security'
+          title='Security'
+          description='Sign-in activity, an audit log, active sessions and a security posture score.'
+          count={counts.security}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[24rem]'
+        >
+          <Security2 {...security2ExampleProps} />
+          <Security3 {...security3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

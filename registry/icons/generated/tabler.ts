@@ -35,6 +35,7 @@ export {
   IconCurrencyDollar,
   IconDatabase,
   IconDeviceDesktop,
+  IconDeviceMobile,
   IconDots,
   IconDownload,
   IconExclamationCircle,

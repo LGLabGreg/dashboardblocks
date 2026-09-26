@@ -53,6 +53,7 @@ export {
   Rotate01Icon,
   SearchRemoveIcon,
   SettingsIcon,
+  SmartPhone01Icon,
   SmileIcon,
   Sofa01Icon,
   SortByDown01Icon,

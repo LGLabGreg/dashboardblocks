@@ -31,6 +31,7 @@ export {
   CrownIcon,
   CurrencyDollarIcon,
   DatabaseIcon,
+  DeviceMobileIcon,
   DotsThreeOutlineIcon,
   DownloadIcon,
   EnvelopeIcon,
