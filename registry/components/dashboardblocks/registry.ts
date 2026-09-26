@@ -184,6 +184,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'forecast',
+    type: 'registry:component',
+    title: 'Forecast',
+    description:
+      'Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.',
+    dependencies: ['lucide-react', 'recharts'],
+    registryDependencies: [registryUrl('chart-panel'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forecast.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'funnel',
     type: 'registry:component',
     title: 'Funnel',
@@ -193,6 +208,21 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'gauge',
+    type: 'registry:component',
+    title: 'Gauge',
+    description:
+      'Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/gauge.tsx',
         type: 'registry:component',
       },
     ],
@@ -291,6 +321,21 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'metric-list',
+    type: 'registry:component',
+    title: 'Metric List',
+    description:
+      'Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/metric-list.tsx',
         type: 'registry:component',
       },
     ],

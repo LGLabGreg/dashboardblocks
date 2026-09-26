@@ -41,6 +41,10 @@ import {
   dataTable1ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-01'
 import {
+  Forecast3,
+  forecast3ExampleProps,
+} from '@/registry/components/dashboardblocks/forecast/forecast-03'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -48,6 +52,10 @@ import {
   Funnel2,
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
+import {
+  Gauge1,
+  gauge1ExampleProps,
+} from '@/registry/components/dashboardblocks/gauge/gauge-01'
 import { Geo3, geo3ExampleProps } from '@/registry/components/dashboardblocks/geo/geo-03'
 import {
   Goals1,
@@ -81,6 +89,10 @@ import {
   Leaderboard04,
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
+import {
+  MetricList1,
+  metricList1ExampleProps,
+} from '@/registry/components/dashboardblocks/metric-list/metric-list-01'
 import {
   Pipeline1,
   pipeline1ExampleProps,
@@ -140,6 +152,9 @@ export interface CategoryCounts {
   schedule: number
   team: number
   checklist: number
+  gauge: number
+  metricList: number
+  forecast: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -376,6 +391,30 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[40rem]'
         >
           <Schedule2 {...schedule2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/gauge'
+          title='Gauge'
+          description='NPS, health scores, system load and scores against a target.'
+          count={counts.gauge}
+        >
+          <Gauge1 {...gauge1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/metric-list'
+          title='Metric List'
+          description='Many metrics in one card, with sparklines, sections, targets and a watchlist.'
+          count={counts.metricList}
+        >
+          <MetricList1 {...metricList1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/forecast'
+          title='Forecast'
+          description='Actuals running into forecasts, dates to target, run-rates and scenarios.'
+          count={counts.forecast}
+        >
+          <Forecast3 {...forecast3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

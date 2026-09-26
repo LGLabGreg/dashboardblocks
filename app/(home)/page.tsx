@@ -7,13 +7,16 @@ import { checklistComponents } from '@/registry/components/dashboardblocks/check
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
+import { forecastComponents } from '@/registry/components/dashboardblocks/forecast/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
+import { gaugeComponents } from '@/registry/components/dashboardblocks/gauge/index'
 import { geoComponents } from '@/registry/components/dashboardblocks/geo/index'
 import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { insightsComponents } from '@/registry/components/dashboardblocks/insights/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
+import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -51,6 +54,9 @@ const counts = {
   schedule: Object.keys(scheduleComponents).length,
   team: Object.keys(teamComponents).length,
   checklist: Object.keys(checklistComponents).length,
+  gauge: Object.keys(gaugeComponents).length,
+  metricList: Object.keys(metricListComponents).length,
+  forecast: Object.keys(forecastComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

@@ -37,9 +37,17 @@ import {
   dataTableExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/index'
 import {
+  forecastComponents,
+  forecastExampleProps,
+} from '@/registry/components/dashboardblocks/forecast/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
+import {
+  gaugeComponents,
+  gaugeExampleProps,
+} from '@/registry/components/dashboardblocks/gauge/index'
 import {
   geoComponents,
   geoExampleProps,
@@ -64,6 +72,10 @@ import {
   leaderboardComponents,
   leaderboardExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/index'
+import {
+  metricListComponents,
+  metricListExampleProps,
+} from '@/registry/components/dashboardblocks/metric-list/index'
 import {
   pipelineComponents,
   pipelineExampleProps,
@@ -117,6 +129,9 @@ const exampleComponents = {
   ...scheduleComponents,
   ...teamComponents,
   ...checklistComponents,
+  ...gaugeComponents,
+  ...metricListComponents,
+  ...forecastComponents,
 }
 
 const examplePropsMap = {
@@ -143,6 +158,9 @@ const examplePropsMap = {
   ...scheduleExampleProps,
   ...teamExampleProps,
   ...checklistExampleProps,
+  ...gaugeExampleProps,
+  ...metricListExampleProps,
+  ...forecastExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

@@ -1,0 +1,30 @@
+---
+title: Gauge
+description: NPS, health scores, system load and scores against a target, on radial gauges.
+---
+
+A gauge is for one number on a known scale, where the bands or the target matter as much as the value. Each gauge is a `meter` with its range and a text value for screen readers, and every band comes with a label and an icon, so colour never carries it alone. Bands sit on the track when you mark the value with a knob, or as a thin scale inside the track when the value is a fill. The fill animates in once, and not at all with reduced motion.
+
+### Net Promoter Score
+
+NPS on its full −100 to 100 scale, filled from zero, with the split of promoters, passives and detractors behind it.
+
+<ComponentPreview name='gauge-01' previewClassName='max-w-sm' />
+
+### Health Score
+
+An account health score weighted from its contributing factors, marked on poor, fair and good bands.
+
+<ComponentPreview name='gauge-02' previewClassName='max-w-2xl' />
+
+### System Load
+
+CPU, memory and disk as small gauges. Each fill takes the colour of its band, and the warning and critical thresholds show as a scale inside the track.
+
+<ComponentPreview name='gauge-03' previewClassName='max-w-xl' />
+
+### Score Card
+
+A satisfaction score with a target tick on the arc, the change since last period and the gap to target.
+
+<ComponentPreview name='gauge-04' previewClassName='max-w-lg' />

@@ -8,13 +8,16 @@ import { examples as comparisonExamples } from '@/registry/components/dashboardb
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
+import { examples as forecastExamples } from '@/registry/components/dashboardblocks/forecast/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
+import { examples as gaugeExamples } from '@/registry/components/dashboardblocks/gauge/registry'
 import { examples as geoExamples } from '@/registry/components/dashboardblocks/geo/registry'
 import { examples as goalsExamples } from '@/registry/components/dashboardblocks/goals/registry'
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
 import { examples as insightsExamples } from '@/registry/components/dashboardblocks/insights/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
+import { examples as metricListExamples } from '@/registry/components/dashboardblocks/metric-list/registry'
 import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as scheduleExamples } from '@/registry/components/dashboardblocks/schedule/registry'
@@ -57,6 +60,9 @@ const registry = {
     ...scheduleExamples,
     ...teamExamples,
     ...checklistExamples,
+    ...gaugeExamples,
+    ...metricListExamples,
+    ...forecastExamples,
     ...hooks,
   ],
 }

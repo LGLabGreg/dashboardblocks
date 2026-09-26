@@ -208,6 +208,26 @@
       ]
     },
     {
+      "name": "forecast",
+      "type": "registry:component",
+      "title": "Forecast",
+      "description": "Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forecast.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "funnel",
       "type": "registry:component",
       "title": "Funnel",
@@ -218,6 +238,24 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gauge",
+      "type": "registry:component",
+      "title": "Gauge",
+      "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/gauge.tsx",
           "type": "registry:component"
         }
       ]
@@ -332,6 +370,25 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "metric-list",
+      "type": "registry:component",
+      "title": "Metric List",
+      "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/trend.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/metric-list.tsx",
           "type": "registry:component"
         }
       ]
@@ -2340,6 +2397,189 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist/checklist-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gauge-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/gauge.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/gauge/gauge-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gauge-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/gauge.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/gauge/gauge-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gauge-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/gauge.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/gauge/gauge-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gauge-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/gauge.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/gauge/gauge-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "metric-list-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/metric-list.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/metric-list/metric-list-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "metric-list-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/metric-list.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/metric-list/metric-list-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "metric-list-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/metric-list.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/metric-list/metric-list-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "metric-list-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/metric-list.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/metric-list/metric-list-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forecast-01",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/forecast.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forecast/forecast-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forecast-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/forecast.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forecast/forecast-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forecast-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/forecast.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forecast/forecast-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forecast-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/forecast.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forecast/forecast-04.tsx",
           "type": "registry:component"
         }
       ]
