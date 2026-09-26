@@ -192,6 +192,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'flow',
+    type: 'registry:component',
+    title: 'Flow',
+    description:
+      "Primitives for flows: a Sankey layout that places nodes in columns and links as bands, keeping each flow's colour downstream and drawing drop-offs muted, a Sankey chart with hover highlighting and a readout, and path steps as chips.",
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/flow.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'forecast',
     type: 'registry:component',
     title: 'Forecast',

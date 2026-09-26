@@ -45,6 +45,10 @@ import {
   distribution1ExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/distribution-01'
 import {
+  Flow1,
+  flow1ExampleProps,
+} from '@/registry/components/dashboardblocks/flow/flow-01'
+import {
   Forecast3,
   forecast3ExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/forecast-03'
@@ -170,6 +174,7 @@ export interface CategoryCounts {
   retention: number
   distribution: number
   spend: number
+  flow: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -458,6 +463,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.spend}
         >
           <Spend1 {...spend1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/flow'
+          title='Flow'
+          description='Sankey diagrams for traffic and user paths, income flows and the most common routes.'
+          count={counts.flow}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <Flow1 {...flow1ExampleProps} />
         </CategoryCard>
       </div>
     </section>
