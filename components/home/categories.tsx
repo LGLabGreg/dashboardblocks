@@ -41,6 +41,10 @@ import {
   dataTable1ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-01'
 import {
+  Distribution1,
+  distribution1ExampleProps,
+} from '@/registry/components/dashboardblocks/distribution/distribution-01'
+import {
   Forecast3,
   forecast3ExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/forecast-03'
@@ -160,6 +164,7 @@ export interface CategoryCounts {
   metricList: number
   forecast: number
   retention: number
+  distribution: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -430,6 +435,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[44rem]'
         >
           <Retention1 {...retention1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/distribution'
+          title='Distribution'
+          description='Histograms with percentiles, box plots by group, spread summaries and before and after comparisons.'
+          count={counts.distribution}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Distribution1 {...distribution1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

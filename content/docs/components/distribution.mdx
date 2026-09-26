@@ -1,0 +1,30 @@
+---
+title: Distribution
+description: Histograms with percentiles, box plots by group, spread summaries and before and after comparisons.
+---
+
+Distributions show the shape of a metric, not just its average: where most values sit, how far the tail reaches and whether a few large values pull the mean up. Blocks take binned counts, such as histogram buckets from a metrics backend, a summary of percentiles or raw values. Percentiles from bins assume values are spread evenly within each bin, so they are estimates. Every chart comes with a table of the same values for screen readers.
+
+### Histogram
+
+Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the SLO in red. Hover a bar to read its count.
+
+<ComponentPreview name='distribution-01' previewClassName='max-w-2xl' />
+
+### Box Plots
+
+One box and whiskers per group on a shared axis: the box spans the middle half, the line is the median and the whiskers reach the 5th and 95th percentiles.
+
+<ComponentPreview name='distribution-02' previewClassName='max-w-xl' />
+
+### Spread
+
+The median, mean and percentiles of raw values, with a note when a long tail pulls the mean away from the median.
+
+<ComponentPreview name='distribution-03' previewClassName='max-w-md' />
+
+### Before and After
+
+This week's distribution against last week's outline, as shares so weeks of different sizes compare fairly, with both medians and the change at the median and p90.
+
+<ComponentPreview name='distribution-04' previewClassName='max-w-2xl' />
