@@ -134,6 +134,10 @@ import {
   team3ExampleProps,
 } from '@/registry/components/dashboardblocks/team/team-03'
 import {
+  Timeline2,
+  timeline2ExampleProps,
+} from '@/registry/components/dashboardblocks/timeline/timeline-02'
+import {
   UsageMeter8,
   usageMeter8ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-08'
@@ -175,6 +179,7 @@ export interface CategoryCounts {
   distribution: number
   spend: number
   flow: number
+  timeline: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -469,10 +474,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Flow'
           description='Sankey diagrams for traffic and user paths, income flows and the most common routes.'
           count={counts.flow}
-          className='md:col-span-3'
+          className='md:col-span-2'
           previewClassName='*:w-80 sm:*:w-[44rem]'
         >
           <Flow1 {...flow1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/timeline'
+          title='Timeline'
+          description='Roadmaps, launch milestones, release cadence and plan against actual.'
+          count={counts.timeline}
+        >
+          <Timeline2 {...timeline2ExampleProps} />
         </CategoryCard>
       </div>
     </section>

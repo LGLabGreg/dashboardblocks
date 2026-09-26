@@ -513,6 +513,18 @@
       ]
     },
     {
+      "name": "timeline",
+      "type": "registry:component",
+      "title": "Timeline",
+      "description": "Primitives for timelines: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis, grid lines, a today line and a Gantt-style timeline with grouped rows, progress fills and a readout.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/timeline.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "trend",
       "type": "registry:component",
       "title": "Trend",
@@ -2718,6 +2730,62 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "timeline-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/timeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/timeline/timeline-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "timeline-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/timeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/timeline/timeline-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "timeline-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/timeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/timeline/timeline-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "timeline-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/timeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/timeline/timeline-04.tsx",
           "type": "registry:component"
         }
       ]

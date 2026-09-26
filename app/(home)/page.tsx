@@ -27,6 +27,7 @@ import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
 import { teamComponents } from '@/registry/components/dashboardblocks/team/index'
+import { timelineComponents } from '@/registry/components/dashboardblocks/timeline/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 
 import { Categories } from '@/components/home/categories'
@@ -65,6 +66,7 @@ const counts = {
   distribution: Object.keys(distributionComponents).length,
   spend: Object.keys(spendComponents).length,
   flow: Object.keys(flowComponents).length,
+  timeline: Object.keys(timelineComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

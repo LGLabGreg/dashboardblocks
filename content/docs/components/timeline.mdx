@@ -1,0 +1,30 @@
+---
+title: Timeline
+description: Roadmaps, launch milestones, release cadence and plan against actual.
+---
+
+Timelines place work on a calendar. Dates are handled in UTC, so pass fixed dates and a fixed `now`, and the blocks render the same on the server and in the browser. Statuses (done, in progress, planned and at risk) each have an icon and a label, so colour never carries them alone. Wide timelines scroll sideways in narrow cards, with the labels kept in view.
+
+### Roadmap
+
+Projects grouped by team, each a bar from start to end filled to its progress, with a today line. Hover a bar for its dates.
+
+<ComponentPreview name='timeline-01' previewClassName='max-w-3xl' />
+
+### Milestones
+
+A launch plan as a list on a rail, with the next milestone highlighted and how soon, or how late, each one is.
+
+<ComponentPreview name='timeline-02' previewClassName='max-w-md' />
+
+### Release Cadence
+
+Every release on one line, sized by major, minor and patch, with the median gap and days since the last one.
+
+<ComponentPreview name='timeline-03' previewClassName='max-w-2xl' />
+
+### Plan vs Actual
+
+Each phase's plan as a dashed outline and what actually happened as a bar beneath it, with how many days it slipped.
+
+<ComponentPreview name='timeline-04' previewClassName='max-w-2xl' />
