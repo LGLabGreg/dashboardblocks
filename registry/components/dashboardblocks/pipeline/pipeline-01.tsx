@@ -10,7 +10,7 @@ import {
   getStageColor,
   getStageSummaries,
 } from '@/registry/components/dashboardblocks/pipeline'
-import { EllipsisIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -272,7 +272,13 @@ function MoveMenu({
           />
         }
       >
-        <EllipsisIcon />
+        <IconPlaceholder
+          lucide='EllipsisIcon'
+          tabler='IconDots'
+          hugeicons='MoreHorizontalCircle01Icon'
+          phosphor='DotsThreeOutlineIcon'
+          remixicon='RiMoreLine'
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-auto min-w-40'>
         <DropdownMenuGroup>

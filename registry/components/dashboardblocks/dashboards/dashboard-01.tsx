@@ -10,6 +10,7 @@ import {
   DateRangePicker,
   ExportMenu,
   FilterChip,
+  FilterMenu,
   formatDateRange,
   getDateRange,
   getPreset,
@@ -18,19 +19,8 @@ import {
 import { DataTable2 } from '@/registry/components/dashboardblocks/data-table/data-table-02'
 import { Funnel1 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
 import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
-import { MapPinIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
-
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 /*
  * A store dashboard: the header's date range, compare switch and region
@@ -279,36 +269,22 @@ const Dashboard1 = (props: Dashboard1Props) => {
             className='px-1'
             onCheckedChange={(compare) => update({ compare })}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
-              <MapPinIcon />
-              {query.region ? 'Change region' : 'Filter by region'}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='start' className='w-auto min-w-48'>
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>Region</DropdownMenuLabel>
-                <DropdownMenuRadioGroup
-                  value={query.region ?? 'all'}
-                  onValueChange={(value) =>
-                    update({ region: value === 'all' ? null : String(value) })
-                  }
-                >
-                  <DropdownMenuRadioItem value='all' closeOnClick>
-                    All regions
-                  </DropdownMenuRadioItem>
-                  {REGIONS.map((region) => (
-                    <DropdownMenuRadioItem
-                      key={region.name}
-                      value={region.name}
-                      closeOnClick
-                    >
-                      {region.name}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <FilterMenu
+            allLabel='All regions'
+            label='Region'
+            onValueChange={(region) => update({ region })}
+            options={REGIONS.map((item) => item.name)}
+            value={query.region}
+          >
+            <IconPlaceholder
+              lucide='MapPinIcon'
+              tabler='IconMapPin'
+              hugeicons='Location01Icon'
+              phosphor='MapPinIcon'
+              remixicon='RiMapPinLine'
+            />
+            {query.region ? 'Change region' : 'Filter by region'}
+          </FilterMenu>
           {query.region && (
             <FilterChip
               field='Region'

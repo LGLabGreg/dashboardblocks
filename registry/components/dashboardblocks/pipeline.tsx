@@ -1,7 +1,7 @@
 'use client'
 
-import { ClockAlertIcon, ClockIcon } from 'lucide-react'
-import { type ReactNode } from 'react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -126,18 +126,35 @@ function PipelineAge({
   expectedDays?: number
 }) {
   const stuck = isStuck(days, expectedDays)
-  const Icon = stuck ? ClockAlertIcon : ClockIcon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums',
+        'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
         stuck
           ? 'bg-amber-500/10 text-amber-800 dark:text-amber-400'
           : 'text-muted-foreground',
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {stuck ? (
+        <IconPlaceholder
+          lucide='ClockAlertIcon'
+          tabler='IconClockExclamation'
+          hugeicons='TimeQuarterPassIcon'
+          phosphor='ClockCountdownIcon'
+          remixicon='RiTimerFlashLine'
+          aria-hidden
+        />
+      ) : (
+        <IconPlaceholder
+          lucide='ClockIcon'
+          tabler='IconClock'
+          hugeicons='Clock01Icon'
+          phosphor='ClockIcon'
+          remixicon='RiTimeLine'
+          aria-hidden
+        />
+      )}
       <span aria-hidden>{formatAge(days)}</span>
       <span className='sr-only'>
         {formatAge(days, 'long')} in stage

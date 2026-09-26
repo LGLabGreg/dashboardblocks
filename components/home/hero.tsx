@@ -31,27 +31,34 @@ export function Hero({ blockCount }: { blockCount: number }) {
             </span>
           </div>
 
-          <div className='mt-10 grid gap-10 md:mt-14 lg:grid-cols-12 lg:items-end lg:gap-12'>
-            <h1 className='text-5xl leading-[1.1] font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:col-span-8 lg:text-7xl'>
-              Ship dashboards,
-              <br />
-              <span className='text-muted-foreground'>one block at a time.</span>
+          <div className='mt-10 grid gap-10 md:mt-14 xl:grid-cols-12 xl:items-end xl:gap-12'>
+            <h1 className='text-5xl leading-[1.1] font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:text-7xl xl:col-span-8'>
+              <span className='block text-balance'>Dashboard blocks for shadcn/ui.</span>
+              <span className='text-muted-foreground block text-balance'>
+                Copy a block, own the code.
+              </span>
             </h1>
 
-            <div className='flex flex-col gap-6 lg:col-span-4'>
+            <div className='flex flex-col gap-6 xl:col-span-4'>
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 KPI cards, charts, usage meters, activity feeds and leaderboards.
-                Composable blocks built with Tailwind CSS and shadcn/ui — copy one or all
-                of them, and own the code.
+                Composable blocks built with Tailwind CSS and shadcn/ui. Works with every{' '}
+                <Link
+                  href='/docs/compatibility'
+                  className='text-foreground underline underline-offset-4'
+                >
+                  style, component library and icon set
+                </Link>
+                .
               </p>
-              <div className='flex flex-wrap items-center gap-3'>
-                <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
+              <div className='flex flex-nowrap items-center gap-2'>
+                <Button nativeButton={false} render={<Link href='/docs' />}>
                   Get started
                   <ArrowRight data-icon='inline-end' />
                 </Button>
                 <Button
                   variant='ghost'
-                  size='lg'
+                  className='px-2.5'
                   nativeButton={false}
                   render={<Link href='/docs/components/activity-feed' />}
                 >

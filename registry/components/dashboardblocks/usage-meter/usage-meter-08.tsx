@@ -2,14 +2,14 @@
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { Database, LucideIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface UsageMeter8Props {
   daysLeft?: number
-  icon: LucideIcon
+  icon: React.ReactNode
   limit: number
   onUpgrade?: () => void
   title: string
@@ -19,7 +19,15 @@ interface UsageMeter8Props {
 
 const exampleProps: UsageMeter8Props = {
   daysLeft: 27,
-  icon: Database,
+  icon: (
+    <IconPlaceholder
+      lucide='DatabaseIcon'
+      tabler='IconDatabase'
+      hugeicons='Database01Icon'
+      phosphor='DatabaseIcon'
+      remixicon='RiDatabase2Line'
+    />
+  ),
   limit: 1500,
   title: 'Storage',
   unit: 'MB',
@@ -27,7 +35,7 @@ const exampleProps: UsageMeter8Props = {
 }
 
 const UsageMeter8 = (props: UsageMeter8Props) => {
-  const { daysLeft, icon: IconComponent, limit, onUpgrade, title, unit, used } = props
+  const { daysLeft, icon, limit, onUpgrade, title, unit, used } = props
   const remaining = limit - used
   const availablePercentage = Math.round((remaining / limit) * 100)
 
@@ -35,7 +43,7 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
     <Card>
       <CardHeader className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <Icon icon={IconComponent} size='sm' />
+          <Icon icon={icon} size='sm' />
           <CardTitle>{title}</CardTitle>
         </div>
         {onUpgrade && (

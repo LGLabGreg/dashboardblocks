@@ -23,9 +23,6 @@
       "type": "registry:component",
       "title": "Alerts",
       "description": "Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts.tsx",
@@ -80,9 +77,6 @@
       "type": "registry:component",
       "title": "Billing",
       "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/use-in-view.json"
       ],
@@ -98,9 +92,6 @@
       "type": "registry:component",
       "title": "Block State",
       "description": "Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/block-state.tsx",
@@ -143,9 +134,6 @@
       "type": "registry:component",
       "title": "Checklist",
       "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist.tsx",
@@ -158,9 +146,6 @@
       "type": "registry:component",
       "title": "Data Table",
       "description": "Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "dropdown-menu"
@@ -191,10 +176,7 @@
       "name": "dashboard-header",
       "type": "registry:component",
       "title": "Dashboard Header",
-      "description": "Primitives for dashboard headers: a date range preset menu, a compare switch, filter chips and an export menu.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "description": "Primitives for dashboard headers: a date range preset menu, a compare switch, filter menus, filter chips and an export menu.",
       "registryDependencies": [
         "button",
         "dropdown-menu",
@@ -213,7 +195,6 @@
       "title": "Forecast",
       "description": "Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.",
       "dependencies": [
-        "lucide-react",
         "recharts"
       ],
       "registryDependencies": [
@@ -247,9 +228,6 @@
       "type": "registry:component",
       "title": "Gauge",
       "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/use-in-view.json"
       ],
@@ -265,9 +243,6 @@
       "type": "registry:component",
       "title": "Geo",
       "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/heatmap.json",
         "https://dashboardblocks.com/r/use-in-view.json"
@@ -284,9 +259,6 @@
       "type": "registry:component",
       "title": "Goals",
       "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/use-in-view.json"
       ],
@@ -315,8 +287,7 @@
       "title": "Icon",
       "description": "An icon component.",
       "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
+        "class-variance-authority"
       ],
       "files": [
         {
@@ -330,9 +301,6 @@
       "type": "registry:component",
       "title": "Insights",
       "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a \"why\" line of drivers.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights.tsx",
@@ -361,8 +329,7 @@
       "title": "Leaderboard",
       "description": "Primitives for composing ranked lists and leaderboards.",
       "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
+        "class-variance-authority"
       ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/use-in-view.json"
@@ -379,9 +346,6 @@
       "type": "registry:component",
       "title": "Metric List",
       "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/trend.json",
         "https://dashboardblocks.com/r/use-in-view.json"
@@ -398,9 +362,6 @@
       "type": "registry:component",
       "title": "Pipeline",
       "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline.tsx",
@@ -443,9 +404,6 @@
       "type": "registry:component",
       "title": "Schedule",
       "description": "Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule.tsx",
@@ -474,9 +432,6 @@
       "type": "registry:component",
       "title": "Status",
       "description": "Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/status.tsx",
@@ -505,8 +460,7 @@
       "title": "Trend",
       "description": "A trend indicator component.",
       "dependencies": [
-        "class-variance-authority",
-        "lucide-react"
+        "class-variance-authority"
       ],
       "registryDependencies": [
         "https://dashboardblocks.com/r/animated-number.json"
@@ -704,9 +658,6 @@
     {
       "name": "activity-feed-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -724,9 +675,6 @@
     {
       "name": "activity-feed-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -743,9 +691,6 @@
     {
       "name": "activity-feed-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "avatar",
         "button",
@@ -762,9 +707,6 @@
     {
       "name": "activity-feed-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -782,9 +724,6 @@
     {
       "name": "activity-feed-05",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -902,9 +841,6 @@
     {
       "name": "usage-meter-07",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -922,9 +858,6 @@
     {
       "name": "usage-meter-08",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -942,9 +875,6 @@
     {
       "name": "leaderboard-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -992,9 +922,6 @@
     {
       "name": "leaderboard-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/icon.json",
@@ -1010,9 +937,6 @@
     {
       "name": "leaderboard-05",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1178,9 +1102,6 @@
     {
       "name": "breakdown-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/breakdown.json"
@@ -1223,9 +1144,6 @@
     {
       "name": "funnel-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "badge",
         "card",
@@ -1283,9 +1201,6 @@
     {
       "name": "status-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1404,12 +1319,7 @@
     {
       "name": "dashboard-header-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
-        "button",
-        "dropdown-menu",
         "https://dashboardblocks.com/r/dashboard-header.json"
       ],
       "files": [
@@ -1450,9 +1360,6 @@
     {
       "name": "dashboard-header-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "https://dashboardblocks.com/r/dashboard-header.json"
@@ -1530,9 +1437,6 @@
     {
       "name": "data-table-05",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "badge",
         "button",
@@ -1605,9 +1509,6 @@
     {
       "name": "states-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1625,7 +1526,6 @@
       "name": "states-02",
       "type": "registry:component",
       "dependencies": [
-        "lucide-react",
         "recharts"
       ],
       "registryDependencies": [
@@ -1644,9 +1544,6 @@
     {
       "name": "states-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1665,7 +1562,6 @@
       "name": "states-04",
       "type": "registry:component",
       "dependencies": [
-        "lucide-react",
         "recharts"
       ],
       "registryDependencies": [
@@ -1686,12 +1582,7 @@
       "type": "registry:block",
       "title": "Store dashboard",
       "description": "A store dashboard: header filters scope stats, revenue, channels, products and a checkout funnel.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
-        "button",
-        "dropdown-menu",
         "https://dashboardblocks.com/r/block-state.json",
         "https://dashboardblocks.com/r/breakdown-01.json",
         "https://dashboardblocks.com/r/chart-panel-01.json",
@@ -1712,13 +1603,9 @@
       "type": "registry:block",
       "title": "SaaS dashboard",
       "description": "A SaaS dashboard: metric tabs, an activity heatmap, accounts by region and service status, filtered by plan.",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "button-group",
-        "dropdown-menu",
         "https://dashboardblocks.com/r/block-state.json",
         "https://dashboardblocks.com/r/breakdown-01.json",
         "https://dashboardblocks.com/r/dashboard-header.json",
@@ -1782,9 +1669,6 @@
     {
       "name": "goals-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/ring.json"
@@ -1815,9 +1699,6 @@
     {
       "name": "comparison-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/comparison.json"
@@ -1861,9 +1742,6 @@
     {
       "name": "alerts-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1880,7 +1758,6 @@
       "name": "alerts-02",
       "type": "registry:component",
       "dependencies": [
-        "lucide-react",
         "recharts"
       ],
       "registryDependencies": [
@@ -1915,9 +1792,6 @@
     {
       "name": "alerts-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2007,9 +1881,6 @@
     {
       "name": "billing-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2025,9 +1896,6 @@
     {
       "name": "billing-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2059,9 +1927,6 @@
     {
       "name": "insights-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2078,7 +1943,6 @@
       "name": "insights-02",
       "type": "registry:component",
       "dependencies": [
-        "lucide-react",
         "recharts"
       ],
       "registryDependencies": [
@@ -2112,9 +1976,6 @@
     {
       "name": "insights-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2130,9 +1991,6 @@
     {
       "name": "pipeline-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2166,9 +2024,6 @@
     {
       "name": "pipeline-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/data-table.json",
@@ -2184,9 +2039,6 @@
     {
       "name": "pipeline-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/pipeline.json",
@@ -2216,9 +2068,6 @@
     {
       "name": "schedule-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2262,9 +2111,6 @@
     {
       "name": "team-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2280,9 +2126,6 @@
     {
       "name": "team-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/team.json"
@@ -2311,9 +2154,6 @@
     {
       "name": "team-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2330,9 +2170,6 @@
     {
       "name": "checklist-01",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2349,9 +2186,6 @@
     {
       "name": "checklist-02",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2367,9 +2201,6 @@
     {
       "name": "checklist-03",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "button",
         "card",
@@ -2386,9 +2217,6 @@
     {
       "name": "checklist-04",
       "type": "registry:component",
-      "dependencies": [
-        "lucide-react"
-      ],
       "registryDependencies": [
         "card",
         "https://dashboardblocks.com/r/checklist.json",

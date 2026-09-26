@@ -1,7 +1,7 @@
 'use client'
 
 import { useAnimatedNumber } from '@/registry/hooks/use-animated-number'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface AnimatedNumberProps {
   /**

@@ -61,7 +61,6 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-05',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['badge', 'button', 'card', registryUrl('data-table')],
     files: [
       {

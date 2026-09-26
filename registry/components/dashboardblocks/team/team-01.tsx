@@ -6,7 +6,7 @@ import {
   PresenceIndicator,
   formatLastActive,
 } from '@/registry/components/dashboardblocks/team'
-import { UserPlusIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -101,7 +101,14 @@ const Team1 = (props: Team1Props) => {
         </CardDescription>
         <CardAction>
           <Button variant='outline' size='sm' onClick={onInvite}>
-            <UserPlusIcon data-icon='inline-start' />
+            <IconPlaceholder
+              lucide='UserPlusIcon'
+              tabler='IconUserPlus'
+              hugeicons='UserAdd01Icon'
+              phosphor='UserPlusIcon'
+              remixicon='RiUserAddLine'
+              data-icon='inline-start'
+            />
             Invite
           </Button>
         </CardAction>

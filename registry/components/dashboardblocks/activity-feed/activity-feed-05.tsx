@@ -4,8 +4,8 @@ import {
   ActivityFeedTimeline,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Icons } from '@/registry/components/dashboardblocks/icon'
-import { ArrowRight, MessageSquare, Smile } from 'lucide-react'
-import { ReactNode } from 'react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -85,10 +85,26 @@ const exampleProps: ActivityFeed05Props = {
           </p>
           <div className='flex items-center gap-2 text-xs text-muted-foreground font-medium'>
             <div className='flex items-center gap-1'>
-              <Smile className='size-4' />2 reactions
+              <IconPlaceholder
+                lucide='SmileIcon'
+                tabler='IconMoodSmile'
+                hugeicons='SmileIcon'
+                phosphor='SmileyIcon'
+                remixicon='RiEmotionLine'
+                className='size-4'
+              />
+              2 reactions
             </div>
             <div className='flex items-center gap-1'>
-              <MessageSquare className='size-4' />3 replies
+              <IconPlaceholder
+                lucide='MessageSquareIcon'
+                tabler='IconMessage'
+                hugeicons='MessageIcon'
+                phosphor='ChatCircleIcon'
+                remixicon='RiChat1Line'
+                className='size-4'
+              />
+              3 replies
             </div>
           </div>
         </div>
@@ -115,7 +131,14 @@ const ActivityFeed05 = (props: ActivityFeed05Props) => {
           {title}
           <Button variant='outline' size='sm'>
             View all
-            <ArrowRight data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         </CardTitle>
       </CardHeader>

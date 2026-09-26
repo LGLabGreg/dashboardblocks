@@ -3,7 +3,7 @@ import {
   ActivityFeedItem,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { Bell, DollarSign, FileText, LucideIcon, Settings, UserPlus } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -18,7 +18,7 @@ interface Activity {
   action: string
   target: string
   time: string
-  icon: LucideIcon
+  icon: React.ReactNode
   iconColor: string
 }
 
@@ -39,7 +39,15 @@ const exampleProps: ActivityFeed01Props = {
       action: 'created a new document',
       target: 'Q4 Revenue Report',
       time: '2 minutes ago',
-      icon: FileText,
+      icon: (
+        <IconPlaceholder
+          lucide='FileTextIcon'
+          tabler='IconFileText'
+          hugeicons='File02Icon'
+          phosphor='FileTextIcon'
+          remixicon='RiFileTextLine'
+        />
+      ),
       iconColor: 'text-blue-600 bg-blue-600/10',
     },
     {
@@ -49,7 +57,15 @@ const exampleProps: ActivityFeed01Props = {
       action: 'invited',
       target: 'Jim Halpert',
       time: '15 minutes ago',
-      icon: UserPlus,
+      icon: (
+        <IconPlaceholder
+          lucide='UserPlusIcon'
+          tabler='IconUserPlus'
+          hugeicons='UserAdd01Icon'
+          phosphor='UserPlusIcon'
+          remixicon='RiUserAddLine'
+        />
+      ),
       iconColor: 'text-teal-600 bg-teal-600/10',
     },
     {
@@ -59,7 +75,15 @@ const exampleProps: ActivityFeed01Props = {
       action: 'updated settings for',
       target: 'Marketing Campaign',
       time: '1 hour ago',
-      icon: Settings,
+      icon: (
+        <IconPlaceholder
+          lucide='SettingsIcon'
+          tabler='IconSettings'
+          hugeicons='SettingsIcon'
+          phosphor='GearIcon'
+          remixicon='RiSettingsLine'
+        />
+      ),
       iconColor: 'text-orange-600 bg-orange-600/10',
     },
     {
@@ -69,7 +93,15 @@ const exampleProps: ActivityFeed01Props = {
       action: 'processed payment of',
       target: '$2,450.00',
       time: '3 hours ago',
-      icon: DollarSign,
+      icon: (
+        <IconPlaceholder
+          lucide='DollarSignIcon'
+          tabler='IconCurrencyDollar'
+          hugeicons='Dollar01Icon'
+          phosphor='CurrencyDollarIcon'
+          remixicon='RiMoneyDollarCircleLine'
+        />
+      ),
       iconColor: 'text-violet-600 bg-violet-600/10',
     },
   ],
@@ -83,14 +115,19 @@ const ActivityFeed01 = (props: ActivityFeed01Props) => {
         <CardTitle className='flex items-center justify-between'>
           {title}
           <Badge variant='secondary' className='bg-blue-600 text-white'>
-            <Bell />
+            <IconPlaceholder
+              lucide='BellIcon'
+              tabler='IconBell'
+              hugeicons='NotificationIcon'
+              phosphor='BellIcon'
+              remixicon='RiNotificationLine'
+            />
             {badgeCount} New
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className='flex flex-col gap-4'>
         {activities.map((activity) => {
-          const ActivityIcon = activity.icon
           return (
             <ActivityFeedItem key={activity.id}>
               <Avatar className='h-10 w-10 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
@@ -106,7 +143,7 @@ const ActivityFeed01 = (props: ActivityFeed01Props) => {
                 <span className='text-xs text-muted-foreground'>{activity.time}</span>
               </ActivityFeedContent>
               <Icon
-                icon={ActivityIcon}
+                icon={activity.icon}
                 shape='circle'
                 size='sm'
                 className={cn('hidden md:flex', activity.iconColor)}

@@ -2,13 +2,13 @@
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { Database, LucideIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface UsageMeter7Props {
-  icon: LucideIcon
+  icon: React.ReactNode
   limit: number
   onUpgrade?: () => void
   title: string
@@ -17,7 +17,15 @@ interface UsageMeter7Props {
 }
 
 const exampleProps: UsageMeter7Props = {
-  icon: Database,
+  icon: (
+    <IconPlaceholder
+      lucide='DatabaseIcon'
+      tabler='IconDatabase'
+      hugeicons='Database01Icon'
+      phosphor='DatabaseIcon'
+      remixicon='RiDatabase2Line'
+    />
+  ),
   limit: 1500,
   title: 'Storage',
   unit: 'MB',
@@ -25,14 +33,14 @@ const exampleProps: UsageMeter7Props = {
 }
 
 const UsageMeter7 = (props: UsageMeter7Props) => {
-  const { icon: IconComponent, limit, onUpgrade, title, unit, used } = props
+  const { icon, limit, onUpgrade, title, unit, used } = props
   const remaining = limit - used
 
   return (
     <Card className='overflow-hidden pb-0'>
       <CardHeader className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <Icon icon={IconComponent} size='sm' />
+          <Icon icon={icon} size='sm' />
           <CardTitle>{title}</CardTitle>
         </div>
         {onUpgrade && (

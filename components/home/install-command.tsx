@@ -3,6 +3,9 @@
 import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
 
+import { useCustomizerConfig } from '@/components/customizer/customizer-provider'
+
+import { registryItemUrl } from '@/lib/customizer'
 import { cn } from '@/lib/utils'
 
 const iconTransition =
@@ -16,7 +19,8 @@ export function InstallCommand({
   className?: string
 }) {
   const [copied, setCopied] = useState(false)
-  const command = `npx shadcn@latest add https://dashboardblocks.com/r/${name}.json`
+  const { base } = useCustomizerConfig()
+  const command = `npx shadcn@latest add ${registryItemUrl(name, base)}`
 
   const copy = () => {
     void navigator.clipboard.writeText(command)

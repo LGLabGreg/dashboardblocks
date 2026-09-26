@@ -7,7 +7,7 @@ import {
   DateRangePicker,
   ExportMenu,
 } from '@/registry/components/dashboardblocks/dashboard-header'
-import { RefreshCwIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -76,7 +76,14 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
               size='xs'
               variant='ghost'
             >
-              <RefreshCwIcon className={cn(refreshing && 'motion-safe:animate-spin')} />
+              <IconPlaceholder
+                lucide='RefreshCwIcon'
+                tabler='IconRefresh'
+                hugeicons='RefreshIcon'
+                phosphor='ArrowClockwiseIcon'
+                remixicon='RiRefreshLine'
+                className={cn(refreshing && 'motion-safe:animate-spin')}
+              />
               Refresh
             </Button>
           </div>

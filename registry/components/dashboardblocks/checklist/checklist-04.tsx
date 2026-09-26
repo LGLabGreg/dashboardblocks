@@ -5,7 +5,7 @@ import {
   getChecklistProgress,
 } from '@/registry/components/dashboardblocks/checklist'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import { CalendarIcon, ClockIcon, TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import {
@@ -107,15 +107,45 @@ function daysUntil(due: Date, now: Date) {
 function DueDate({ done, due, now }: { done: boolean; due: Date; now: Date }) {
   const days = daysUntil(due, now)
   const date = dateFormatter.format(due)
-  let Icon = CalendarIcon
+  let icon = (
+    <IconPlaceholder
+      lucide='CalendarIcon'
+      tabler='IconCalendar'
+      hugeicons='CalendarIcon'
+      phosphor='CalendarBlankIcon'
+      remixicon='RiCalendarLine'
+      aria-hidden
+      className='size-3.5'
+    />
+  )
   let label = `Due ${date}`
   let className = 'text-muted-foreground'
   if (!done && days < 0) {
-    Icon = TriangleAlertIcon
+    icon = (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+        className='size-3.5'
+      />
+    )
     label = `Overdue · ${date}`
     className = 'text-red-700 dark:text-red-400'
   } else if (!done && days === 0) {
-    Icon = ClockIcon
+    icon = (
+      <IconPlaceholder
+        lucide='ClockIcon'
+        tabler='IconClock'
+        hugeicons='Clock01Icon'
+        phosphor='ClockIcon'
+        remixicon='RiTimeLine'
+        aria-hidden
+        className='size-3.5'
+      />
+    )
     label = 'Due today'
     className = 'text-amber-800 dark:text-amber-400'
   } else if (!done && days === 1) {
@@ -123,7 +153,7 @@ function DueDate({ done, due, now }: { done: boolean; due: Date; now: Date }) {
   }
   return (
     <span className={cn('inline-flex items-center gap-1 whitespace-nowrap', className)}>
-      <Icon aria-hidden className='size-3.5' />
+      {icon}
       <time dateTime={due.toISOString().slice(0, 10)}>{label}</time>
     </span>
   )

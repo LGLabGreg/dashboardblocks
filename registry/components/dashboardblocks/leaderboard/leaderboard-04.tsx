@@ -7,15 +7,7 @@ import {
   LeaderboardRankChange,
   LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
-import {
-  Armchair,
-  Headphones,
-  Keyboard,
-  Lamp,
-  type LucideIcon,
-  Monitor,
-  Mouse,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import {
   Card,
@@ -30,7 +22,7 @@ import { cn } from '@/lib/utils'
 interface Product {
   category: string
   change: number | 'new'
-  icon: LucideIcon
+  icon: React.ReactNode
   id: number
   name: string
   revenue: number
@@ -52,7 +44,15 @@ const exampleProps: Leaderboard04Props = {
       id: 1,
       name: 'Studio Monitor 27"',
       category: 'Displays',
-      icon: Monitor,
+      icon: (
+        <IconPlaceholder
+          lucide='MonitorIcon'
+          tabler='IconDeviceDesktop'
+          hugeicons='ComputerIcon'
+          phosphor='MonitorIcon'
+          remixicon='RiComputerLine'
+        />
+      ),
       revenue: 48_920,
       unitsSold: 112,
       change: 1,
@@ -61,7 +61,15 @@ const exampleProps: Leaderboard04Props = {
       id: 2,
       name: 'Wireless Headphones',
       category: 'Audio',
-      icon: Headphones,
+      icon: (
+        <IconPlaceholder
+          lucide='HeadphonesIcon'
+          tabler='IconHeadphones'
+          hugeicons='HeadphonesIcon'
+          phosphor='HeadphonesIcon'
+          remixicon='RiHeadphoneLine'
+        />
+      ),
       revenue: 41_370,
       unitsSold: 287,
       change: -1,
@@ -70,7 +78,15 @@ const exampleProps: Leaderboard04Props = {
       id: 3,
       name: 'Ergonomic Chair',
       category: 'Furniture',
-      icon: Armchair,
+      icon: (
+        <IconPlaceholder
+          lucide='ArmchairIcon'
+          tabler='IconArmchair'
+          hugeicons='Sofa01Icon'
+          phosphor='ArmchairIcon'
+          remixicon='RiSofaLine'
+        />
+      ),
       revenue: 36_540,
       unitsSold: 84,
       change: 0,
@@ -79,7 +95,15 @@ const exampleProps: Leaderboard04Props = {
       id: 4,
       name: 'Mechanical Keyboard',
       category: 'Peripherals',
-      icon: Keyboard,
+      icon: (
+        <IconPlaceholder
+          lucide='KeyboardIcon'
+          tabler='IconKeyboard'
+          hugeicons='KeyboardIcon'
+          phosphor='KeyboardIcon'
+          remixicon='RiKeyboardLine'
+        />
+      ),
       revenue: 22_815,
       unitsSold: 169,
       change: 3,
@@ -88,7 +112,15 @@ const exampleProps: Leaderboard04Props = {
       id: 5,
       name: 'Desk Lamp Pro',
       category: 'Lighting',
-      icon: Lamp,
+      icon: (
+        <IconPlaceholder
+          lucide='LampIcon'
+          tabler='IconLamp'
+          hugeicons='Idea01Icon'
+          phosphor='LampIcon'
+          remixicon='RiLightbulbLine'
+        />
+      ),
       revenue: 14_260,
       unitsSold: 203,
       change: 'new',
@@ -97,7 +129,15 @@ const exampleProps: Leaderboard04Props = {
       id: 6,
       name: 'Precision Mouse',
       category: 'Peripherals',
-      icon: Mouse,
+      icon: (
+        <IconPlaceholder
+          lucide='MouseIcon'
+          tabler='IconMouse'
+          hugeicons='Mouse01Icon'
+          phosphor='MouseIcon'
+          remixicon='RiMouseLine'
+        />
+      ),
       revenue: 9_880,
       unitsSold: 152,
       change: -2,

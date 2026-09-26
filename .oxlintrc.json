@@ -18,12 +18,28 @@
     "build/**",
     "next-env.d.ts",
     ".source/**",
-    "public/r/**"
+    "public/r/**",
+    "registry/bases/**",
+    "scripts/verify/**"
   ],
   "rules": {
     "no-console": "error",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
     "jsx-a11y/prefer-tag-over-role": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["registry/**/*.tsx"],
+      "rules": {
+        "typescript/consistent-type-imports": [
+          "error",
+          {
+            "fixStyle": "inline-type-imports"
+          }
+        ],
+        "typescript/no-import-type-side-effects": "error"
+      }
+    }
+  ]
 }

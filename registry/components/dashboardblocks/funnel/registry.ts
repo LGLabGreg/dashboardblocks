@@ -28,7 +28,6 @@ export const examples: Registry['items'] = [
   {
     name: 'funnel-03',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['badge', 'card', registryUrl('funnel')],
     files: [
       {

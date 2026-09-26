@@ -17,7 +17,7 @@ import {
   getDaysInStage,
   isStuck,
 } from '@/registry/components/dashboardblocks/pipeline'
-import { CircleCheckIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -148,7 +148,12 @@ const Pipeline3 = (props: Pipeline3Props) => {
       </CardHeader>
       {stuck.length === 0 ? (
         <p className='text-muted-foreground flex items-center gap-2 px-6 py-6 text-sm'>
-          <CircleCheckIcon
+          <IconPlaceholder
+            lucide='CircleCheckIcon'
+            tabler='IconCircleCheck'
+            hugeicons='CheckmarkCircle02Icon'
+            phosphor='CheckCircleIcon'
+            remixicon='RiCheckboxCircleLine'
             aria-hidden
             className='size-4 text-emerald-700 dark:text-emerald-400'
           />

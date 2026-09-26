@@ -1,39 +1,22 @@
 'use client'
 
 import {
+  AddFilterMenu,
   CompareToggle,
   DashboardHeaderTitle,
   type DateRangePreset,
   DateRangePicker,
   ExportMenu,
+  type Filter,
   FilterChip,
+  type FilterField,
   formatDateRange,
   getDateRange,
   getPreviousRange,
+  isSameFilter,
 } from '@/registry/components/dashboardblocks/dashboard-header'
-import { PlusIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
-
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-
-interface Filter {
-  field: string
-  value: string
-}
-
-interface FilterField {
-  field: string
-  values: string[]
-}
 
 interface DashboardHeader1Props {
   defaultFilters?: Filter[]
@@ -59,8 +42,6 @@ const exampleProps: DashboardHeader1Props = {
   title: 'Overview',
   today: new Date(Date.UTC(2026, 8, 25)),
 }
-
-const isSameFilter = (a: Filter, b: Filter) => a.field === b.field && a.value === b.value
 
 const DashboardHeader1 = (props: DashboardHeader1Props) => {
   const {
@@ -114,33 +95,20 @@ const DashboardHeader1 = (props: DashboardHeader1Props) => {
               </li>
             ))}
           </ul>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
-              <PlusIcon />
-              Add filter
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='start' className='w-auto min-w-48'>
-              {filterFields.map(({ field, values }, index) => (
-                <DropdownMenuGroup key={field}>
-                  {index > 0 && <DropdownMenuSeparator />}
-                  <DropdownMenuLabel>{field}</DropdownMenuLabel>
-                  {values.map((value) => (
-                    <DropdownMenuCheckboxItem
-                      key={value}
-                      checked={filters.some((item) =>
-                        isSameFilter(item, { field, value }),
-                      )}
-                      onCheckedChange={(checked) =>
-                        toggleFilter({ field, value }, checked)
-                      }
-                    >
-                      {value}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuGroup>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AddFilterMenu
+            fields={filterFields}
+            onFilterChange={toggleFilter}
+            value={filters}
+          >
+            <IconPlaceholder
+              lucide='PlusIcon'
+              tabler='IconPlus'
+              hugeicons='PlusSignIcon'
+              phosphor='PlusIcon'
+              remixicon='RiAddLine'
+            />
+            Add filter
+          </AddFilterMenu>
         </div>
         <ExportMenu className='order-2 @4xl:order-3' onExport={onExport} />
       </div>

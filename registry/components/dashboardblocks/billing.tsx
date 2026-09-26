@@ -1,7 +1,7 @@
 'use client'
 
 import { useInView } from '@/registry/hooks/use-in-view'
-import { CircleCheckIcon, CircleXIcon, ClockIcon, TriangleAlertIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type RefObject, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -285,7 +285,7 @@ type InvoiceStatus = 'paid' | 'due' | 'overdue' | 'failed'
 
 interface InvoiceStatusConfig {
   className: string
-  icon: typeof CircleCheckIcon
+  icon: React.ReactNode
   label: string
 }
 
@@ -293,22 +293,58 @@ interface InvoiceStatusConfig {
 const invoiceStatusConfig: Record<InvoiceStatus, InvoiceStatusConfig> = {
   due: {
     className: 'bg-muted text-muted-foreground',
-    icon: ClockIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='ClockIcon'
+        tabler='IconClock'
+        hugeicons='Clock01Icon'
+        phosphor='ClockIcon'
+        remixicon='RiTimeLine'
+        aria-hidden
+      />
+    ),
     label: 'Due',
   },
   failed: {
     className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: CircleXIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleXIcon'
+        tabler='IconCircleX'
+        hugeicons='CancelCircleIcon'
+        phosphor='XCircleIcon'
+        remixicon='RiCloseCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Failed',
   },
   overdue: {
     className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: TriangleAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Overdue',
   },
   paid: {
     className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Paid',
   },
 }
@@ -321,16 +357,15 @@ function InvoiceStatusBadge({
   status: InvoiceStatus
 }) {
   const config = invoiceStatusConfig[status]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.className,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {config.label}
     </span>
   )

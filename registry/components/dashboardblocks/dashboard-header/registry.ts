@@ -6,8 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-01',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
-    registryDependencies: ['button', 'dropdown-menu', registryUrl('dashboard-header')],
+    registryDependencies: [registryUrl('dashboard-header')],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header/dashboard-header-01.tsx',
@@ -40,7 +39,6 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-04',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['button', registryUrl('dashboard-header')],
     files: [
       {

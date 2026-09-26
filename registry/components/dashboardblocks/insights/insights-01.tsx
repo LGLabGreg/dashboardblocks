@@ -10,7 +10,7 @@ import {
   insightKindConfig,
   insightToString,
 } from '@/registry/components/dashboardblocks/insights'
-import { ArrowRightIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -144,7 +144,14 @@ const Insights1 = (props: Insights1Props) => {
                       className={buttonVariants({ size: 'sm', variant: 'outline' })}
                     >
                       {insight.actionLabel ?? 'Explore'}
-                      <ArrowRightIcon data-icon='inline-end' />
+                      <IconPlaceholder
+                        lucide='ArrowRightIcon'
+                        tabler='IconArrowRight'
+                        hugeicons='ArrowRight01Icon'
+                        phosphor='ArrowRightIcon'
+                        remixicon='RiArrowRightLine'
+                        data-icon='inline-end'
+                      />
                     </a>
                   </div>
                 )}

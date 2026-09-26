@@ -2,8 +2,8 @@
 
 import {
   TinyAreaChart,
-  TinyAreaChartProps,
-  ValueFormatter,
+  type TinyAreaChartProps,
+  type ValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { Trend } from '@/registry/components/dashboardblocks/trend'

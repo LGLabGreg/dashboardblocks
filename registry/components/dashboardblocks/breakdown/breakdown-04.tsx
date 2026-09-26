@@ -4,7 +4,7 @@ import {
   BreakdownLegend,
   useReveal,
 } from '@/registry/components/dashboardblocks/breakdown'
-import { ArrowDown, ArrowUp, Minus } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import {
   Card,
@@ -82,7 +82,6 @@ const Breakdown4 = (props: Breakdown4Props) => {
           <tbody ref={ref}>
             {items.map((item) => {
               const delta = item.current - item.previous
-              const DeltaIcon = delta > 0 ? ArrowUp : delta < 0 ? ArrowDown : Minus
               const low = Math.min(item.current, item.previous)
               const high = Math.max(item.current, item.previous)
               return (
@@ -126,7 +125,37 @@ const Breakdown4 = (props: Breakdown4Props) => {
                   </td>
                   <td className='text-muted-foreground py-2.5 pl-2 text-right text-xs whitespace-nowrap tabular-nums'>
                     <span className='inline-flex items-center justify-end gap-0.5'>
-                      <DeltaIcon aria-hidden className='size-3' />
+                      {delta > 0 ? (
+                        <IconPlaceholder
+                          lucide='ArrowUpIcon'
+                          tabler='IconArrowUp'
+                          hugeicons='ArrowUpIcon'
+                          phosphor='ArrowUpIcon'
+                          remixicon='RiArrowUpLine'
+                          aria-hidden
+                          className='size-3'
+                        />
+                      ) : delta < 0 ? (
+                        <IconPlaceholder
+                          lucide='ArrowDownIcon'
+                          tabler='IconArrowDown'
+                          hugeicons='ArrowDown01Icon'
+                          phosphor='ArrowDownIcon'
+                          remixicon='RiArrowDownLine'
+                          aria-hidden
+                          className='size-3'
+                        />
+                      ) : (
+                        <IconPlaceholder
+                          lucide='MinusIcon'
+                          tabler='IconMinus'
+                          hugeicons='MinusSignIcon'
+                          phosphor='MinusIcon'
+                          remixicon='RiSubtractLine'
+                          aria-hidden
+                          className='size-3'
+                        />
+                      )}
                       <span className='sr-only'>
                         {delta > 0 ? 'Up' : delta < 0 ? 'Down' : 'No change'}
                       </span>

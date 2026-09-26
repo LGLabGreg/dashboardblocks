@@ -6,7 +6,7 @@ import {
   formatRelativeTime,
   severityConfig,
 } from '@/registry/components/dashboardblocks/alerts'
-import { CheckIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -163,7 +163,15 @@ const Alerts1 = (props: Alerts1Props) => {
                 <div className='pl-11 @md:pl-0'>
                   {isAcknowledged ? (
                     <span className='text-muted-foreground inline-flex h-8 items-center gap-1 text-xs'>
-                      <CheckIcon aria-hidden className='size-3.5' />
+                      <IconPlaceholder
+                        lucide='CheckIcon'
+                        tabler='IconCheck'
+                        hugeicons='Tick02Icon'
+                        phosphor='CheckIcon'
+                        remixicon='RiCheckLine'
+                        aria-hidden
+                        className='size-3.5'
+                      />
                       Acknowledged
                     </span>
                   ) : (

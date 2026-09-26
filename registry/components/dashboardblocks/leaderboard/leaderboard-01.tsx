@@ -5,7 +5,7 @@ import {
   LeaderboardLabel,
   LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
-import { ArrowRight } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -59,7 +59,14 @@ const Leaderboard01 = (props: Leaderboard01Props) => {
             className='transition-[color,background-color,border-color,box-shadow,scale,translate] duration-150 ease-out active:scale-[0.96]'
           >
             View all
-            <ArrowRight data-icon='inline-end' />
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
           </Button>
         </CardAction>
       </CardHeader>

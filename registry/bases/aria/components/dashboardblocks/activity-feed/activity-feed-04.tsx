@@ -1,0 +1,137 @@
+// Override of registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx for React Aria
+// source-hash: 8b196c40eab3
+
+import {
+  ActivityFeedContent,
+  ActivityFeedIndicator,
+  ActivityFeedItem,
+  ActivityFeedTimeline,
+} from '@/registry/components/dashboardblocks/activity-feed'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+type EventStatus = 'error' | 'info' | 'progress' | 'success'
+
+interface TimelineEvent {
+  id: number
+  title: string
+  description: string
+  time: string
+  status: EventStatus
+}
+
+interface ActivityFeed04Props {
+  title: string
+  events: TimelineEvent[]
+}
+
+const exampleProps: ActivityFeed04Props = {
+  title: 'Recent Deployments',
+  events: [
+    {
+      id: 1,
+      title: 'Deployment Successful',
+      description: 'Production v2.4.1 deployed to all regions',
+      time: '10:32 AM',
+      status: 'success',
+    },
+    {
+      id: 2,
+      title: 'Build Started',
+      description: 'Building production bundle...',
+      time: '10:30 AM',
+      status: 'progress',
+    },
+    {
+      id: 3,
+      title: 'Critical Alert',
+      description: 'CPU usage exceeded 90% threshold',
+      time: '9:15 AM',
+      status: 'error',
+    },
+    {
+      id: 4,
+      title: 'Performance Optimized',
+      description: 'Cache hit rate improved by 23%',
+      time: '8:45 AM',
+      status: 'info',
+    },
+  ],
+}
+
+const ActivityFeed04 = (props: ActivityFeed04Props) => {
+  const { title, events } = props
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className='flex items-center justify-between'>
+          {title}
+          <Button variant='outline' size='sm'>
+            View all
+            <IconPlaceholder
+              lucide='ArrowRightIcon'
+              tabler='IconArrowRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='ArrowRightIcon'
+              remixicon='RiArrowRightLine'
+              data-icon='inline-end'
+            />
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ActivityFeedTimeline linePosition='center'>
+          {events.map((event) => {
+            return (
+              <ActivityFeedItem key={event.id}>
+                <div className='mt-0.5 flex w-14 justify-end text-center text-xs text-muted-foreground'>
+                  {event.time}
+                </div>
+                <ActivityFeedIndicator status={event.status} variant='ring' />
+                <ActivityFeedContent>
+                  <div className='space-y-1'>
+                    <p className='font-medium leading-none'>{event.title}</p>
+                    <p className='text-sm text-muted-foreground'>{event.description}</p>
+                  </div>
+                </ActivityFeedContent>
+                <DropdownMenuTrigger>
+                  <Button variant='ghost' size='icon'>
+                    <IconPlaceholder
+                      lucide='EllipsisIcon'
+                      tabler='IconDots'
+                      hugeicons='MoreHorizontalCircle01Icon'
+                      phosphor='DotsThreeOutlineIcon'
+                      remixicon='RiMoreLine'
+                    />
+                    <span className='sr-only'>More options</span>
+                  </Button>
+                  <DropdownMenu placement='bottom end'>
+                    <DropdownMenuItem>View deployment</DropdownMenuItem>
+                    <DropdownMenuItem>Download logs</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Contact support</DropdownMenuItem>
+                  </DropdownMenu>
+                </DropdownMenuTrigger>
+              </ActivityFeedItem>
+            )
+          })}
+        </ActivityFeedTimeline>
+      </CardContent>
+    </Card>
+  )
+}
+
+export {
+  ActivityFeed04,
+  exampleProps as activityFeed04ExampleProps,
+  type ActivityFeed04Props,
+  type TimelineEvent,
+}

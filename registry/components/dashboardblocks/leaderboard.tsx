@@ -1,8 +1,8 @@
 'use client'
 
 import { useInView } from '@/registry/hooks/use-in-view'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type VariantProps, cva } from 'class-variance-authority'
-import { ArrowDown, ArrowUp, Minus } from 'lucide-react'
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -178,14 +178,21 @@ function LeaderboardRankChange({ change, className = '' }: LeaderboardRankChange
           className,
         )}
       >
-        <Minus aria-hidden='true' className='size-3' />
+        <IconPlaceholder
+          lucide='MinusIcon'
+          tabler='IconMinus'
+          hugeicons='MinusSignIcon'
+          phosphor='MinusIcon'
+          remixicon='RiSubtractLine'
+          aria-hidden='true'
+          className='size-3'
+        />
         <span className='sr-only'>No change</span>
       </span>
     )
   }
 
   const isUp = change > 0
-  const ChangeIcon = isUp ? ArrowUp : ArrowDown
 
   return (
     <span
@@ -195,7 +202,27 @@ function LeaderboardRankChange({ change, className = '' }: LeaderboardRankChange
         className,
       )}
     >
-      <ChangeIcon aria-hidden='true' className='size-3' />
+      {isUp ? (
+        <IconPlaceholder
+          lucide='ArrowUpIcon'
+          tabler='IconArrowUp'
+          hugeicons='ArrowUpIcon'
+          phosphor='ArrowUpIcon'
+          remixicon='RiArrowUpLine'
+          aria-hidden='true'
+          className='size-3'
+        />
+      ) : (
+        <IconPlaceholder
+          lucide='ArrowDownIcon'
+          tabler='IconArrowDown'
+          hugeicons='ArrowDown01Icon'
+          phosphor='ArrowDownIcon'
+          remixicon='RiArrowDownLine'
+          aria-hidden='true'
+          className='size-3'
+        />
+      )}
       <span className='sr-only'>{isUp ? 'Up' : 'Down'} </span>
       {Math.abs(change)}
     </span>

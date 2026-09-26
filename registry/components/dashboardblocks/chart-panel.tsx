@@ -1,11 +1,8 @@
 'use client'
 
-import { type ReactNode } from 'react'
-import { type TooltipContentProps } from 'recharts'
-import {
-  type NameType,
-  type ValueType,
-} from 'recharts/types/component/DefaultTooltipContent'
+import type { ReactNode } from 'react'
+import type { TooltipContentProps } from 'recharts'
+import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { cn } from '@/lib/utils'
 

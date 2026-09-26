@@ -9,7 +9,7 @@ import {
   DataTablePagination,
   DataTableRow,
 } from '@/registry/components/dashboardblocks/data-table'
-import { CircleCheckIcon, CircleXIcon, ClockIcon, Undo2Icon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
@@ -71,12 +71,61 @@ const exampleProps: DataTable5Props = {
 
 const STATE_CONFIG: Record<
   OrderState,
-  { className?: string; icon: typeof CircleCheckIcon; label: string }
+  { className?: string; icon: React.ReactNode; label: string }
 > = {
-  failed: { className: 'text-destructive', icon: CircleXIcon, label: 'Failed' },
-  paid: { icon: CircleCheckIcon, label: 'Paid' },
-  pending: { icon: ClockIcon, label: 'Pending' },
-  refunded: { icon: Undo2Icon, label: 'Refunded' },
+  failed: {
+    className: 'text-destructive',
+    icon: (
+      <IconPlaceholder
+        lucide='CircleXIcon'
+        tabler='IconCircleX'
+        hugeicons='CancelCircleIcon'
+        phosphor='XCircleIcon'
+        remixicon='RiCloseCircleLine'
+        aria-hidden
+      />
+    ),
+    label: 'Failed',
+  },
+  paid: {
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
+    label: 'Paid',
+  },
+  pending: {
+    icon: (
+      <IconPlaceholder
+        lucide='ClockIcon'
+        tabler='IconClock'
+        hugeicons='Clock01Icon'
+        phosphor='ClockIcon'
+        remixicon='RiTimeLine'
+        aria-hidden
+      />
+    ),
+    label: 'Pending',
+  },
+  refunded: {
+    icon: (
+      <IconPlaceholder
+        lucide='Undo2Icon'
+        tabler='IconArrowBackUp'
+        hugeicons='Undo02Icon'
+        phosphor='ArrowUUpLeftIcon'
+        remixicon='RiArrowGoBackLine'
+        aria-hidden
+      />
+    ),
+    label: 'Refunded',
+  },
 }
 
 const currency = (value: number) =>
@@ -109,7 +158,6 @@ const DataTable5 = (props: DataTable5Props) => {
         <DataTableBody>
           {visible.map((row) => {
             const state = STATE_CONFIG[row.state]
-            const Icon = state.icon
             return (
               <DataTableRow key={row.id}>
                 <DataTableCell primary truncate>
@@ -126,7 +174,7 @@ const DataTable5 = (props: DataTable5Props) => {
                 </DataTableCell>
                 <DataTableCell label='Status'>
                   <Badge variant='outline' className={state.className}>
-                    <Icon aria-hidden />
+                    {state.icon}
                     {state.label}
                   </Badge>
                 </DataTableCell>

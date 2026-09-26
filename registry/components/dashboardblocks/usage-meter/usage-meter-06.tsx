@@ -1,14 +1,13 @@
 'use client'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import { Crown, Database, Mail, Users, Zap } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 
 interface PlanLimit {
-  icon: LucideIcon
+  icon: React.ReactNode
   limit: number
   name: string
   used: number
@@ -21,10 +20,62 @@ interface UsageMeter6Props {
 
 const exampleProps: UsageMeter6Props = {
   limits: [
-    { name: 'Team members', used: 4, limit: 5, icon: Users },
-    { name: 'API calls', used: 8500, limit: 10000, icon: Zap },
-    { name: 'Storage', used: 4.9, limit: 5, icon: Database },
-    { name: 'Emails sent', used: 450, limit: 1000, icon: Mail },
+    {
+      name: 'Team members',
+      used: 4,
+      limit: 5,
+      icon: (
+        <IconPlaceholder
+          lucide='UsersIcon'
+          tabler='IconUsers'
+          hugeicons='UserGroupIcon'
+          phosphor='UsersIcon'
+          remixicon='RiTeamLine'
+        />
+      ),
+    },
+    {
+      name: 'API calls',
+      used: 8500,
+      limit: 10000,
+      icon: (
+        <IconPlaceholder
+          lucide='ZapIcon'
+          tabler='IconBolt'
+          hugeicons='FlashIcon'
+          phosphor='LightningIcon'
+          remixicon='RiFlashlightLine'
+        />
+      ),
+    },
+    {
+      name: 'Storage',
+      used: 4.9,
+      limit: 5,
+      icon: (
+        <IconPlaceholder
+          lucide='DatabaseIcon'
+          tabler='IconDatabase'
+          hugeicons='Database01Icon'
+          phosphor='DatabaseIcon'
+          remixicon='RiDatabase2Line'
+        />
+      ),
+    },
+    {
+      name: 'Emails sent',
+      used: 450,
+      limit: 1000,
+      icon: (
+        <IconPlaceholder
+          lucide='MailIcon'
+          tabler='IconMail'
+          hugeicons='MailIcon'
+          phosphor='EnvelopeIcon'
+          remixicon='RiMailLine'
+        />
+      ),
+    },
   ],
   plan: 'Pro',
 }
@@ -35,7 +86,18 @@ const UsageMeter6 = (props: UsageMeter6Props) => {
     <Card>
       <CardContent className='flex flex-col gap-6'>
         <div className='flex items-center gap-2'>
-          <Icon icon={Crown} size='md' />
+          <Icon
+            icon={
+              <IconPlaceholder
+                lucide='CrownIcon'
+                tabler='IconCrown'
+                hugeicons='CrownIcon'
+                phosphor='CrownIcon'
+                remixicon='RiVipCrownLine'
+              />
+            }
+            size='md'
+          />
           <CardTitle className='text-base font-medium'>{plan} Plan</CardTitle>
         </div>
         <div className='space-y-3'>
@@ -57,8 +119,8 @@ const UsageMeter6 = (props: UsageMeter6Props) => {
             return (
               <div key={item.name} className='space-y-1'>
                 <div className='flex items-end justify-between text-sm'>
-                  <div className='flex items-center gap-2'>
-                    <item.icon className='size-3.5' strokeWidth={1.5} />
+                  <div className='flex items-center gap-2 [&_svg]:size-3.5 [&_svg]:stroke-[1.5]'>
+                    {item.icon}
                     <span>{item.name}</span>
                   </div>
                   <span className='text-xs text-muted-foreground'>

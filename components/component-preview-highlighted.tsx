@@ -1,13 +1,17 @@
 'use client'
 
 import { Check, Code } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+import { DEFAULT_CONFIG } from '@/lib/customizer'
+import { highlightTsx } from '@/lib/highlight-client'
+import { toProjectCode } from '@/lib/registry-code'
 import { cn } from '@/lib/utils'
 
+import { useCustomizerConfig } from './customizer/customizer-provider'
 import { ShadcnCliButton } from './shadcn-cli-button'
 
 interface ComponentPreviewHighlightedProps {
@@ -19,6 +23,56 @@ interface ComponentPreviewHighlightedProps {
   previewClassName?: string
 }
 
+interface VariantCode {
+  code: string
+  html: string
+}
+
+const variants = new Map<string, Promise<VariantCode>>()
+
+/** The block's code as the CLI installs it for another component or icon library. */
+function loadVariant(
+  name: string,
+  base: string,
+  iconLibrary: typeof DEFAULT_CONFIG.iconLibrary,
+) {
+  const key = `${base}/${iconLibrary}/${name}`
+  let variant = variants.get(key)
+  if (!variant) {
+    variant = fetch(`/r/${base}/${name}.json`)
+      .then((response) => response.json() as Promise<{ files: { content: string }[] }>)
+      .then(async (item) => {
+        const code = toProjectCode(item.files[0].content, iconLibrary)
+        return { code, html: await highlightTsx(code) }
+      })
+    variant.catch(() => variants.delete(key))
+    variants.set(key, variant)
+  }
+  return variant
+}
+
+function useVariantCode(name: string, fallback: VariantCode) {
+  const { base, iconLibrary } = useCustomizerConfig()
+  const isDefault =
+    base === DEFAULT_CONFIG.base && iconLibrary === DEFAULT_CONFIG.iconLibrary
+  const key = `${base}/${iconLibrary}`
+  const [loaded, setLoaded] = useState<{ key: string; value: VariantCode } | null>(null)
+
+  useEffect(() => {
+    if (isDefault) return
+    let active = true
+    loadVariant(name, base, iconLibrary)
+      .then((value) => active && setLoaded({ key, value }))
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [base, iconLibrary, isDefault, key, name])
+
+  if (isDefault) return fallback
+  return loaded?.key === key ? loaded.value : null
+}
+
 export function ComponentPreviewHighlighted({
   name,
   code,
@@ -28,12 +82,14 @@ export function ComponentPreviewHighlighted({
   previewClassName,
 }: ComponentPreviewHighlightedProps) {
   const [copied, setCopied] = useState(false)
+  const variant = useVariantCode(name, { code, html: highlightedCode })
 
   const copyToClipboard = useCallback(() => {
-    void navigator.clipboard.writeText(code)
+    if (!variant) return
+    void navigator.clipboard.writeText(variant.code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }, [code])
+  }, [variant])
 
   return (
     <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
@@ -43,7 +99,12 @@ export function ComponentPreviewHighlighted({
             <TabsTrigger value='preview'>Preview</TabsTrigger>
             <TabsTrigger value='code'>Code</TabsTrigger>
           </TabsList>
-          <Button variant='outline' onClick={copyToClipboard} size='sm'>
+          <Button
+            variant='outline'
+            onClick={copyToClipboard}
+            size='sm'
+            disabled={!variant}
+          >
             {copied ? <Check className='size-4' /> : <Code className='size-4' />}
             <span>Copy code</span>
           </Button>
@@ -56,10 +117,14 @@ export function ComponentPreviewHighlighted({
           </div>
         </TabsContent>
         <TabsContent value='code'>
-          <div
-            className='max-h-[500px] overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
-            dangerouslySetInnerHTML={{ __html: highlightedCode }}
-          />
+          {variant ? (
+            <div
+              className='max-h-[500px] overflow-auto text-sm [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-4'
+              dangerouslySetInnerHTML={{ __html: variant.html }}
+            />
+          ) : (
+            <p className='text-muted-foreground p-4 text-sm'>Loading code…</p>
+          )}
         </TabsContent>
       </Tabs>
     </div>

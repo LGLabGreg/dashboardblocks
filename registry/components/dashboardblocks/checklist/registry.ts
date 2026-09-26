@@ -6,7 +6,6 @@ export const examples: Registry['items'] = [
   {
     name: 'checklist-01',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',
@@ -23,7 +22,6 @@ export const examples: Registry['items'] = [
   {
     name: 'checklist-02',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['button', 'card', registryUrl('checklist')],
     files: [
       {
@@ -35,7 +33,6 @@ export const examples: Registry['items'] = [
   {
     name: 'checklist-03',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',
@@ -52,7 +49,6 @@ export const examples: Registry['items'] = [
   {
     name: 'checklist-04',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['card', registryUrl('checklist'), registryUrl('progress-bar')],
     files: [
       {

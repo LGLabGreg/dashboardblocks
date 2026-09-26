@@ -1,5 +1,4 @@
 import { type VariantProps, cva } from 'class-variance-authority'
-import { type LucideIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -32,20 +31,19 @@ const iconVariants = cva('flex items-center justify-center bg-muted aspect-squar
 
 interface IconProps extends VariantProps<typeof iconVariants> {
   className?: string
-  icon: LucideIcon
+  /** The icon element, e.g. `<DatabaseIcon />`. Sized by `size`. */
+  icon: React.ReactNode
 }
 
 function Icon({
   className,
   variant = 'default',
-  icon: IconComponent,
+  icon,
   shape = 'square',
   size,
 }: IconProps) {
   return (
-    <div className={cn(iconVariants({ variant, shape, size }), className)}>
-      <IconComponent />
-    </div>
+    <div className={cn(iconVariants({ variant, shape, size }), className)}>{icon}</div>
   )
 }
 

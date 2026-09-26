@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "funnel-02",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/base/funnel.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/funnel/funnel-02.tsx",
+      "content": "'use client'\n\nimport {\n  FunnelBar,\n  type FunnelStage,\n  formatRate,\n  getFunnelSteps,\n} from '@/registry/components/dashboardblocks/funnel'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface Funnel2Props {\n  description: string\n  stages: FunnelStage[]\n  title: string\n}\n\nconst exampleProps: Funnel2Props = {\n  description: 'Sessions that reached each checkout step, last 7 days',\n  stages: [\n    { label: 'Cart', value: 12_480 },\n    { label: 'Shipping', value: 7_730 },\n    { label: 'Payment', value: 5_910 },\n    { label: 'Review', value: 5_120 },\n    { label: 'Purchase', value: 4_380 },\n  ],\n  title: 'Checkout funnel',\n}\n\nconst Funnel2 = (props: Funnel2Props) => {\n  const { description, stages, title } = props\n  const steps = getFunnelSteps(stages)\n  const last = steps.at(-1)\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent className='flex flex-col gap-6'>\n        <div className='flex flex-col gap-0.5'>\n          <span className='text-3xl font-semibold tracking-tight'>\n            {last ? formatRate(last.fromStart) : '—'}\n          </span>\n          <span className='text-muted-foreground text-xs'>\n            of carts completed a purchase\n          </span>\n        </div>\n        <ol className='flex items-stretch gap-2'>\n          {steps.map((step, index) => (\n            <li key={step.label} className='flex min-w-0 flex-1 flex-col gap-2'>\n              <div className='flex min-h-9 flex-col'>\n                <span className='text-sm font-medium tabular-nums'>\n                  {formatRate(step.fromStart, 0)}\n                </span>\n                {index > 0 && (\n                  <span className='text-muted-foreground text-xs tabular-nums'>\n                    <span className='sr-only'>Dropped </span>−\n                    {formatRate(1 - step.fromPrevious, 0)}\n                  </span>\n                )}\n              </div>\n              <div className='h-40'>\n                <FunnelBar\n                  delay={index * 80}\n                  orientation='vertical'\n                  value={step.fromStart * 100}\n                />\n              </div>\n              <div className='flex min-w-0 flex-col'>\n                <span className='truncate text-sm' title={step.label}>\n                  {step.label}\n                </span>\n                <span className='text-muted-foreground text-xs tabular-nums'>\n                  {step.value.toLocaleString()}\n                  <span className='sr-only'> sessions</span>\n                </span>\n              </div>\n            </li>\n          ))}\n        </ol>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { Funnel2, exampleProps as funnel2ExampleProps, type Funnel2Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

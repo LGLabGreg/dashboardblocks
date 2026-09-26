@@ -1,6 +1,6 @@
 'use client'
 
-import { LoaderCircleIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ComponentProps,
   type ReactNode,
@@ -73,7 +73,14 @@ function BlockBusyIndicator({
         className,
       )}
     >
-      <LoaderCircleIcon className='size-3.5 animate-spin motion-reduce:animate-none' />
+      <IconPlaceholder
+        lucide='LoaderCircleIcon'
+        tabler='IconLoader2'
+        hugeicons='Loading03Icon'
+        phosphor='CircleNotchIcon'
+        remixicon='RiLoader4Line'
+        className='size-3.5 animate-spin motion-reduce:animate-none'
+      />
       {label}
     </span>
   )

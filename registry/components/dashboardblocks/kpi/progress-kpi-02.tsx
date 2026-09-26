@@ -3,7 +3,7 @@
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import { ClipboardList } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { CardTitle } from '@/components/ui/card'
 
@@ -53,7 +53,18 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
       <KPIContent className='gap-1'>
         <div className='flex items-center justify-between'>
           <CardTitle>{title}</CardTitle>
-          <Icon icon={ClipboardList} variant='secondary' />
+          <Icon
+            icon={
+              <IconPlaceholder
+                lucide='ClipboardListIcon'
+                tabler='IconClipboardList'
+                hugeicons='Task01Icon'
+                phosphor='ClipboardTextIcon'
+                remixicon='RiClipboardLine'
+              />
+            }
+            variant='secondary'
+          />
         </div>
         <KPIValue
           value={value}

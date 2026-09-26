@@ -10,7 +10,7 @@ import {
   DataTableHeader,
   DataTableRow,
 } from '@/registry/components/dashboardblocks/data-table'
-import { SearchXIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -119,7 +119,15 @@ const States3 = (props: States3Props) => {
       </CardHeader>
       {rows.length === 0 ? (
         <BlockMessage
-          icon={<SearchXIcon />}
+          icon={
+            <IconPlaceholder
+              lucide='SearchXIcon'
+              tabler='IconZoomCancel'
+              hugeicons='SearchRemoveIcon'
+              phosphor='MagnifyingGlassMinusIcon'
+              remixicon='RiSearchLine'
+            />
+          }
           title='No orders match these filters'
           description='Remove a filter, or clear them all to see every order.'
           action={

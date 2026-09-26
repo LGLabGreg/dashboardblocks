@@ -105,7 +105,6 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-07',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',
@@ -123,7 +122,6 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-08',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'card',

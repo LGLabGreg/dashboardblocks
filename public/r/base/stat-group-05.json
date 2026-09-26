@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-group-05",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/base/stat-group.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/stat-group/stat-group-05.tsx",
+      "content": "'use client'\n\nimport {\n  Stat,\n  StatChange,\n  StatGroup,\n  StatLabel,\n  type StatMetric,\n  StatValue,\n  formatStatValue,\n} from '@/registry/components/dashboardblocks/stat-group'\n\nimport { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'\n\ninterface StatGroup5Props {\n  description: string\n  metrics: StatMetric[]\n  title: string\n}\n\nconst currency = (value: number) =>\n  `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`\n\nconst exampleProps: StatGroup5Props = {\n  description: 'Last 30 days, compared with the previous 30 days',\n  metrics: [\n    {\n      formatter: currency,\n      key: 'revenue',\n      label: 'Revenue',\n      previous: 42_890,\n      value: 48_210,\n    },\n    { key: 'signups', label: 'New customers', previous: 318, value: 342 },\n    {\n      changeType: 'points',\n      formatter: (value) => `${value}%`,\n      key: 'conversion',\n      label: 'Trial conversion',\n      previous: 19.8,\n      value: 18.6,\n    },\n    {\n      formatter: (value) => `${value} h`,\n      goodDirection: 'down',\n      key: 'response',\n      label: 'First response time',\n      previous: 5.6,\n      value: 4.2,\n    },\n  ],\n  title: 'Overview',\n}\n\nconst StatGroup5 = (props: StatGroup5Props) => {\n  const { description, metrics, title } = props\n\n  return (\n    <Card className='@container gap-0 py-0'>\n      <CardHeader className='border-b pt-6'>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <StatGroup className='grid-cols-1 @md:grid-cols-2 @[44rem]:grid-cols-4'>\n        {metrics.map((metric) => (\n          <Stat key={metric.key} className='gap-2 @[44rem]:px-5'>\n            <StatLabel>{metric.label}</StatLabel>\n            <StatValue>{formatStatValue(metric)}</StatValue>\n            <StatChange metric={metric} variant='badge' />\n          </Stat>\n        ))}\n      </StatGroup>\n    </Card>\n  )\n}\n\nexport { StatGroup5, exampleProps as statGroup5ExampleProps, type StatGroup5Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

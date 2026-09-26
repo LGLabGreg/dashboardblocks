@@ -1,18 +1,13 @@
 'use client'
 
-import {
-  CircleCheckIcon,
-  InfoIcon,
-  OctagonAlertIcon,
-  TriangleAlertIcon,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { cn } from '@/lib/utils'
 
 type AlertSeverity = 'critical' | 'warning' | 'info' | 'resolved'
 
 interface SeverityConfig {
-  icon: typeof InfoIcon
+  icon: React.ReactNode
   label: string
   /** Tinted background with readable text, for badges. */
   soft: string
@@ -26,28 +21,64 @@ interface SeverityConfig {
 const severityConfig: Record<AlertSeverity, SeverityConfig> = {
   critical: {
     fill: 'bg-red-600',
-    icon: OctagonAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='OctagonAlertIcon'
+        tabler='IconAlertOctagon'
+        hugeicons='AlertDiamondIcon'
+        phosphor='WarningOctagonIcon'
+        remixicon='RiAlarmWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Critical',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     text: 'text-red-700 dark:text-red-400',
   },
   info: {
     fill: 'bg-sky-600',
-    icon: InfoIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='InfoIcon'
+        tabler='IconInfoCircle'
+        hugeicons='AlertCircleIcon'
+        phosphor='InfoIcon'
+        remixicon='RiInformationLine'
+        aria-hidden
+      />
+    ),
     label: 'Info',
     soft: 'bg-sky-500/10 text-sky-800 dark:text-sky-300',
     text: 'text-sky-800 dark:text-sky-300',
   },
   resolved: {
     fill: 'bg-emerald-600',
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Resolved',
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     text: 'text-emerald-700 dark:text-emerald-400',
   },
   warning: {
     fill: 'bg-amber-500',
-    icon: TriangleAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'Warning',
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     text: 'text-amber-800 dark:text-amber-400',
@@ -67,16 +98,15 @@ function SeverityBadge({
   severity: AlertSeverity
 }) {
   const config = severityConfig[severity]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.soft,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label ?? config.label}
     </span>
   )
@@ -91,7 +121,6 @@ function SeverityIcon({
   severity: AlertSeverity
 }) {
   const config = severityConfig[severity]
-  const Icon = config.icon
   return (
     <span
       aria-hidden
@@ -101,7 +130,7 @@ function SeverityIcon({
         className,
       )}
     >
-      <Icon />
+      {config.icon}
     </span>
   )
 }

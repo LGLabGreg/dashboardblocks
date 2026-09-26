@@ -39,7 +39,6 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-04',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['card', registryUrl('breakdown')],
     files: [
       {

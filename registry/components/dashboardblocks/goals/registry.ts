@@ -40,7 +40,6 @@ export const examples: Registry['items'] = [
   {
     name: 'goals-04',
     type: 'registry:component',
-    dependencies: ['lucide-react'],
     registryDependencies: ['card', registryUrl('ring')],
     files: [
       {

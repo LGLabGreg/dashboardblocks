@@ -11,7 +11,7 @@ import {
   chartAxisProps,
   chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { BookOpenIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 import {
   Area,
@@ -188,7 +188,13 @@ const Alerts2 = (props: Alerts2Props) => {
             href={runbookHref}
             className={buttonVariants({ size: 'sm', variant: 'outline' })}
           >
-            <BookOpenIcon />
+            <IconPlaceholder
+              lucide='BookOpenIcon'
+              tabler='IconBook'
+              hugeicons='BookOpen02Icon'
+              phosphor='BookOpenIcon'
+              remixicon='RiBookOpenLine'
+            />
             Open runbook
           </a>
         )}

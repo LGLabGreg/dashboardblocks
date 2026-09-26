@@ -6,6 +6,7 @@ import {
   type DateRangePreset,
   ExportMenu,
   FilterChip,
+  FilterMenu,
   formatDateRange,
   getDateRange,
   getPreset,
@@ -17,20 +18,11 @@ import {
 } from '@/registry/components/dashboardblocks/data-table/data-table-04'
 import { Heatmap1 } from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
 import { StatGroup3 } from '@/registry/components/dashboardblocks/stat-group/stat-group-03'
-import { LayersIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 /*
  * A SaaS dashboard: the date range and plan filter scope the metrics,
@@ -242,36 +234,22 @@ const Dashboard2 = (props: Dashboard2Props) => {
             ))}
           </ButtonGroup>
           <div className='flex flex-wrap items-center gap-2'>
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
-                <LayersIcon />
-                {query.plan ? 'Change plan' : 'Filter by plan'}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align='start' className='w-auto min-w-44'>
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Plan</DropdownMenuLabel>
-                  <DropdownMenuRadioGroup
-                    value={query.plan ?? 'all'}
-                    onValueChange={(value) =>
-                      update({ plan: value === 'all' ? null : String(value) })
-                    }
-                  >
-                    <DropdownMenuRadioItem value='all' closeOnClick>
-                      All plans
-                    </DropdownMenuRadioItem>
-                    {PLANS.map((plan) => (
-                      <DropdownMenuRadioItem
-                        key={plan.name}
-                        value={plan.name}
-                        closeOnClick
-                      >
-                        {plan.name}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterMenu
+              allLabel='All plans'
+              label='Plan'
+              onValueChange={(plan) => update({ plan })}
+              options={PLANS.map((item) => item.name)}
+              value={query.plan}
+            >
+              <IconPlaceholder
+                lucide='LayersIcon'
+                tabler='IconStack2'
+                hugeicons='Layers01Icon'
+                phosphor='StackIcon'
+                remixicon='RiStackLine'
+              />
+              {query.plan ? 'Change plan' : 'Filter by plan'}
+            </FilterMenu>
             {query.plan && (
               <FilterChip
                 field='Plan'

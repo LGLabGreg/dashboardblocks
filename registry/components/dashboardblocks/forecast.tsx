@@ -5,18 +5,13 @@ import {
   type ChartValueFormatter,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import { useInView } from '@/registry/hooks/use-in-view'
-import {
-  CircleCheckIcon,
-  CircleXIcon,
-  TrendingUpIcon,
-  TriangleAlertIcon,
-} from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type RefObject, useEffect, useState } from 'react'
-import { type TooltipContentProps } from 'recharts'
-import {
-  type NameType,
-  type Payload,
-  type ValueType,
+import type { TooltipContentProps } from 'recharts'
+import type {
+  NameType,
+  Payload,
+  ValueType,
 } from 'recharts/types/component/DefaultTooltipContent'
 
 import { cn } from '@/lib/utils'
@@ -252,29 +247,65 @@ function getProjectionStatus(projected: number, target: number, tolerance = 0.05
 
 const forecastStatusConfig: Record<
   ForecastStatus,
-  { className: string; icon: typeof CircleCheckIcon; label: string; text: string }
+  { className: string; icon: React.ReactNode; label: string; text: string }
 > = {
   'at-risk': {
     className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: TriangleAlertIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TriangleAlertIcon'
+        tabler='IconAlertTriangle'
+        hugeicons='Alert02Icon'
+        phosphor='WarningIcon'
+        remixicon='RiErrorWarningLine'
+        aria-hidden
+      />
+    ),
     label: 'At risk',
     text: 'text-amber-800 dark:text-amber-400',
   },
   'off-track': {
     className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: CircleXIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleXIcon'
+        tabler='IconCircleX'
+        hugeicons='CancelCircleIcon'
+        phosphor='XCircleIcon'
+        remixicon='RiCloseCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Off track',
     text: 'text-red-700 dark:text-red-400',
   },
   'on-track': {
     className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: TrendingUpIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='TrendingUpIcon'
+        tabler='IconTrendingUp'
+        hugeicons='ChartUpIcon'
+        phosphor='TrendUpIcon'
+        remixicon='RiLineChartLine'
+        aria-hidden
+      />
+    ),
     label: 'On track',
     text: 'text-emerald-700 dark:text-emerald-400',
   },
   reached: {
     className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: CircleCheckIcon,
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+        aria-hidden
+      />
+    ),
     label: 'Target reached',
     text: 'text-emerald-700 dark:text-emerald-400',
   },
@@ -291,16 +322,15 @@ function ForecastBadge({
   status: ForecastStatus
 }) {
   const config = forecastStatusConfig[status]
-  const Icon = config.icon
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
         config.className,
         className,
       )}
     >
-      <Icon aria-hidden className='size-3.5' />
+      {config.icon}
       {label ?? config.label}
     </span>
   )

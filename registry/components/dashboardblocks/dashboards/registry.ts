@@ -9,10 +9,7 @@ export const examples: Registry['items'] = [
     title: 'Store dashboard',
     description:
       'A store dashboard: header filters scope stats, revenue, channels, products and a checkout funnel.',
-    dependencies: ['lucide-react'],
     registryDependencies: [
-      'button',
-      'dropdown-menu',
       registryUrl('block-state'),
       registryUrl('breakdown-01'),
       registryUrl('chart-panel-01'),
@@ -34,11 +31,9 @@ export const examples: Registry['items'] = [
     title: 'SaaS dashboard',
     description:
       'A SaaS dashboard: metric tabs, an activity heatmap, accounts by region and service status, filtered by plan.',
-    dependencies: ['lucide-react'],
     registryDependencies: [
       'button',
       'button-group',
-      'dropdown-menu',
       registryUrl('block-state'),
       registryUrl('breakdown-01'),
       registryUrl('dashboard-header'),

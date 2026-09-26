@@ -1,7 +1,7 @@
 export const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL
 
-const REGISTRY_BASE_URL =
+export const REGISTRY_BASE_URL =
   process.env.REGISTRY_BASE_URL ??
   (process.env.NODE_ENV === 'production'
     ? 'https://dashboardblocks.com'

@@ -69,7 +69,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
   const valueRef = useRef(from)
   const previousTo = useRef(to)
   const animationRef = useRef<number | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { isInView, ref } = useInView({ rootMargin, threshold })
 

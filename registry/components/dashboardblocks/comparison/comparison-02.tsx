@@ -4,7 +4,7 @@ import {
   IntervalBar,
   compareProportions,
 } from '@/registry/components/dashboardblocks/comparison'
-import { CircleCheckIcon, CircleDashedIcon } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import {
   Card,
@@ -47,7 +47,6 @@ const Comparison2 = (props: Comparison2Props) => {
   const { control, description, metric, title, variant } = props
   const result = compareProportions(control, variant)
   const extent = Math.max(Math.abs(result.liftLow), Math.abs(result.liftHigh), 0.05) * 1.2
-  const StatusIcon = result.significant ? CircleCheckIcon : CircleDashedIcon
 
   return (
     <Card>
@@ -63,7 +62,27 @@ const Comparison2 = (props: Comparison2Props) => {
                 : 'bg-muted text-muted-foreground',
             )}
           >
-            <StatusIcon aria-hidden className='size-3.5' />
+            {result.significant ? (
+              <IconPlaceholder
+                lucide='CircleCheckIcon'
+                tabler='IconCircleCheck'
+                hugeicons='CheckmarkCircle02Icon'
+                phosphor='CheckCircleIcon'
+                remixicon='RiCheckboxCircleLine'
+                aria-hidden
+                className='size-3.5'
+              />
+            ) : (
+              <IconPlaceholder
+                lucide='CircleDashedIcon'
+                tabler='IconCircleDashed'
+                hugeicons='DashedLineCircleIcon'
+                phosphor='CircleDashedIcon'
+                remixicon='RiLoaderLine'
+                aria-hidden
+                className='size-3.5'
+              />
+            )}
             {result.significant ? 'Significant' : 'Not significant yet'}
           </span>
         </CardAction>

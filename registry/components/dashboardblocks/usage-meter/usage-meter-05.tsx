@@ -2,7 +2,7 @@
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import {
   SegmentedProgressBar,
-  SegmentedProgressBarProps,
+  type SegmentedProgressBarProps,
 } from '@/registry/components/dashboardblocks/progress-bar'
 import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
 

@@ -8,7 +8,7 @@ import {
   UsageMeterStatus,
   UsageMeterValue,
 } from '@/registry/components/dashboardblocks/usage-meter'
-import { Activity } from 'lucide-react'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 
@@ -39,7 +39,19 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
       <CardContent className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <Icon icon={Activity} variant='secondary' size='sm' />
+            <Icon
+              icon={
+                <IconPlaceholder
+                  lucide='ActivityIcon'
+                  tabler='IconActivity'
+                  hugeicons='ActivityIcon'
+                  phosphor='ActivityIcon'
+                  remixicon='RiPulseLine'
+                />
+              }
+              variant='secondary'
+              size='sm'
+            />
             <CardTitle className='text-base font-medium'>{title}</CardTitle>
           </div>
           <UsageMeterStatus percentage={percentage} />

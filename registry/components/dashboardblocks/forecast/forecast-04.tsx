@@ -321,7 +321,6 @@ const Forecast4 = (props: Forecast4Props) => {
                   ? horizon[reachedIndex]
                   : null
             const status = forecastStatusConfig[reached ? 'on-track' : 'off-track']
-            const StatusIcon = status.icon
             return (
               <DataTableRow key={scenario.key}>
                 <DataTableCell primary>
@@ -348,11 +347,11 @@ const Forecast4 = (props: Forecast4Props) => {
                   <DataTableCell align='end' label='Reaches target'>
                     <span
                       className={cn(
-                        'inline-flex items-center gap-1 @2xl/data-table:justify-end',
+                        'inline-flex items-center gap-1 @2xl/data-table:justify-end [&_svg]:size-3.5 [&_svg]:shrink-0',
                         status.text,
                       )}
                     >
-                      <StatusIcon aria-hidden className='size-3.5 shrink-0' />
+                      {status.icon}
                       {reached ?? `Not by ${endLabel}`}
                     </span>
                   </DataTableCell>

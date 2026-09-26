@@ -1,20 +1,20 @@
 'use client'
 
-import { ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 import {
   Area,
   AreaChart,
   Bar,
   BarChart,
-  BarProps,
+  type BarProps,
   Line,
   LineChart,
-  LineProps,
+  type LineProps,
   ResponsiveContainer,
   Tooltip,
-  TooltipContentProps,
+  type TooltipContentProps,
 } from 'recharts'
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
+import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 type AreaProps = ComponentProps<typeof Area>
 

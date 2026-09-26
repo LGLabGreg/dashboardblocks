@@ -119,21 +119,20 @@ const Gauge2 = (props: Gauge2Props) => {
             {factors.map((factor) => {
               const factorBand = getGaugeBand(factor.score, bands)
               const config = factorBand ? gaugeToneConfig[factorBand.tone] : undefined
-              const Icon = config?.icon
               return (
                 <li key={factor.label} className='flex flex-col gap-1.5 py-2.5'>
                   <div className='flex items-baseline justify-between gap-3'>
                     <span className='truncate text-sm font-medium'>{factor.label}</span>
                     <span className='flex shrink-0 items-center gap-1.5 text-sm'>
                       <span className='font-medium tabular-nums'>{factor.score}</span>
-                      {factorBand && config && Icon && (
+                      {factorBand && config && (
                         <span
                           className={cn(
-                            'flex items-center gap-1 self-center text-xs',
+                            'flex items-center gap-1 self-center text-xs [&_svg]:size-3.5 [&_svg]:shrink-0',
                             config.text,
                           )}
                         >
-                          <Icon aria-hidden className='size-3.5' />
+                          {config.icon}
                           {factorBand.label}
                         </span>
                       )}
