@@ -33,16 +33,16 @@ export function Hero({ blockCount }: { blockCount: number }) {
 
           <div className='mt-10 grid gap-10 md:mt-14 xl:grid-cols-12 xl:items-end xl:gap-12'>
             <h1 className='text-5xl leading-[1.1] font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:text-7xl xl:col-span-8'>
-              Ship dashboards,
-              <br />
-              <span className='text-muted-foreground'>one block at a time.</span>
+              <span className='block text-balance'>Dashboard blocks for shadcn/ui.</span>
+              <span className='text-muted-foreground block text-balance'>
+                Copy a block, own the code.
+              </span>
             </h1>
 
             <div className='flex flex-col gap-6 xl:col-span-4'>
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 KPI cards, charts, usage meters, activity feeds and leaderboards.
-                Composable blocks built with Tailwind CSS and shadcn/ui — copy one or all
-                of them, and own the code. Works with every{' '}
+                Composable blocks built with Tailwind CSS and shadcn/ui. Works with every{' '}
                 <Link
                   href='/docs/compatibility'
                   className='text-foreground underline underline-offset-4'
