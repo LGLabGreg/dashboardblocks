@@ -240,6 +240,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'insights',
+    type: 'registry:component',
+    title: 'Insights',
+    description:
+      'Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a "why" line of drivers.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/insights.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'kpi',
     type: 'registry:component',
     title: 'KPI',

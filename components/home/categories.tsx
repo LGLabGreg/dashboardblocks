@@ -58,6 +58,14 @@ import {
   heatmap1ExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
 import {
+  Insights3,
+  insights3ExampleProps,
+} from '@/registry/components/dashboardblocks/insights/insights-03'
+import {
+  Insights4,
+  insights4ExampleProps,
+} from '@/registry/components/dashboardblocks/insights/insights-04'
+import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -115,6 +123,7 @@ export interface CategoryCounts {
   alerts: number
   geo: number
   billing: number
+  insights: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -305,6 +314,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <Billing1 {...billing1ExampleProps} />
           <div className='hidden lg:block'>
             <Billing2 {...billing2ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/insights'
+          title='Insights'
+          description='Plain-language insights, anomaly callouts, key drivers and weekly digests.'
+          count={counts.insights}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Insights4 {...insights4ExampleProps} />
+          <div className='hidden lg:block'>
+            <Insights3 {...insights3ExampleProps} />
           </div>
         </CategoryCard>
       </div>

@@ -11,6 +11,7 @@ import { examples as funnelExamples } from '@/registry/components/dashboardblock
 import { examples as geoExamples } from '@/registry/components/dashboardblocks/geo/registry'
 import { examples as goalsExamples } from '@/registry/components/dashboardblocks/goals/registry'
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
+import { examples as insightsExamples } from '@/registry/components/dashboardblocks/insights/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
@@ -47,6 +48,7 @@ const registry = {
     ...alertsExamples,
     ...geoExamples,
     ...billingExamples,
+    ...insightsExamples,
     ...hooks,
   ],
 }

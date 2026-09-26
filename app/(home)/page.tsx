@@ -10,6 +10,7 @@ import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/i
 import { geoComponents } from '@/registry/components/dashboardblocks/geo/index'
 import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
+import { insightsComponents } from '@/registry/components/dashboardblocks/insights/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -41,6 +42,7 @@ const counts = {
   alerts: Object.keys(alertsComponents).length,
   geo: Object.keys(geoComponents).length,
   billing: Object.keys(billingComponents).length,
+  insights: Object.keys(insightsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

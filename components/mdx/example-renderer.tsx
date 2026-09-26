@@ -49,6 +49,10 @@ import {
   heatmapExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/index'
 import {
+  insightsComponents,
+  insightsExampleProps,
+} from '@/registry/components/dashboardblocks/insights/index'
+import {
   kpiComponents,
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
@@ -92,6 +96,7 @@ const exampleComponents = {
   ...alertsComponents,
   ...geoComponents,
   ...billingComponents,
+  ...insightsComponents,
 }
 
 const examplePropsMap = {
@@ -113,6 +118,7 @@ const examplePropsMap = {
   ...alertsExampleProps,
   ...geoExampleProps,
   ...billingExampleProps,
+  ...insightsExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
