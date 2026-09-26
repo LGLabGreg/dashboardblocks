@@ -412,6 +412,18 @@
       ]
     },
     {
+      "name": "realtime",
+      "type": "registry:component",
+      "title": "Realtime",
+      "description": "Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live badge that stays still for reduced motion, a number that counts to each new value, rolling bars and a short time-ago format.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/realtime.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "retention",
       "type": "registry:component",
       "title": "Retention",
@@ -2786,6 +2798,67 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline/timeline-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "realtime-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/realtime.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/realtime/realtime-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "realtime-02",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/realtime.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/realtime/realtime-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "realtime-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/realtime.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/realtime/realtime-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "realtime-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/realtime.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/realtime/realtime-04.tsx",
           "type": "registry:component"
         }
       ]

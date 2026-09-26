@@ -383,6 +383,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'realtime',
+    type: 'registry:component',
+    title: 'Realtime',
+    description:
+      'Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live badge that stays still for reduced motion, a number that counts to each new value, rolling bars and a short time-ago format.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/realtime.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'retention',
     type: 'registry:component',
     title: 'Retention',

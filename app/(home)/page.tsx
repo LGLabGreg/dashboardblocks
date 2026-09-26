@@ -20,6 +20,7 @@ import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
+import { realtimeComponents } from '@/registry/components/dashboardblocks/realtime/index'
 import { retentionComponents } from '@/registry/components/dashboardblocks/retention/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { spendComponents } from '@/registry/components/dashboardblocks/spend/index'
@@ -67,6 +68,7 @@ const counts = {
   spend: Object.keys(spendComponents).length,
   flow: Object.keys(flowComponents).length,
   timeline: Object.keys(timelineComponents).length,
+  realtime: Object.keys(realtimeComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
