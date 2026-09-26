@@ -9,7 +9,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
       tree={source.pageTree}
-      {...baseOptions()}
+      {...baseOptions({ customizerClassName: 'w-full' })}
       sidebar={{ footer: <VersionBadge className='mt-3 self-start' /> }}
     >
       {children}

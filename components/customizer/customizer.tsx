@@ -2,7 +2,6 @@
 
 import { PaletteIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,33 +60,31 @@ export function Customizer({
 
   return (
     <DropdownMenu>
+      {/* Site chrome, so it keeps the same look whichever style is picked. */}
       <DropdownMenuTrigger
-        render={
-          <Button
-            variant='outline'
-            size='sm'
-            className={cn('gap-1.5', className)}
-            aria-label={`Customize preview: ${style}, ${labelFor(SETTINGS[1], config.base)}, ${labelFor(SETTINGS[2], config.iconLibrary)}`}
-          />
-        }
+        className={cn(
+          'text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-accent-foreground data-popup-open:bg-fd-accent inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-2.5 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-fd-ring',
+          className,
+        )}
+        aria-label={`Customize preview: ${style}, ${labelFor(SETTINGS[1], config.base)}, ${labelFor(SETTINGS[2], config.iconLibrary)}`}
       >
-        <PaletteIcon />
+        <PaletteIcon className='size-4' />
         {compact ? style : `Customize · ${style}`}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-64'>
+      <DropdownMenuContent align='start' className='w-80 min-w-(--anchor-width)'>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Preview with your setup</DropdownMenuLabel>
           {SETTINGS.map((setting) => (
             <DropdownMenuSub key={setting.key}>
               <DropdownMenuSubTrigger>
-                <span className='flex flex-1 items-center justify-between gap-3'>
+                <span className='flex flex-1 items-center justify-between gap-3 whitespace-nowrap'>
                   {setting.label}
                   <span className='text-muted-foreground'>
                     {labelFor(setting, config[setting.key])}
                   </span>
                 </span>
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className='min-w-44'>
+              <DropdownMenuSubContent className='min-w-52'>
                 <DropdownMenuRadioGroup
                   value={config[setting.key]}
                   onValueChange={(value) =>

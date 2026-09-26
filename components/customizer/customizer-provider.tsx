@@ -29,10 +29,24 @@ function readStoredConfig(): CustomizerConfig {
 export function CustomizerProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfigState] = useState<CustomizerConfig>(DEFAULT_CONFIG)
 
-  // The boot script already applied the saved style before paint; sync React state.
+  // The boot script applies the saved style before paint. Apply it again once
+  // mounted: if React re-renders <html> (for example after a hydration mismatch
+  // caused by an injected toolbar), it drops the classes the script added.
   useEffect(() => {
+    const stored = readStoredConfig()
+    applyConfigToDocument(stored)
     // oxlint-disable-next-line react-hooks-js/set-state-in-effect
-    setConfigState(readStoredConfig())
+    setConfigState(stored)
+
+    // Keep other tabs in sync.
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== CUSTOMIZER_STORAGE_KEY) return
+      const next = readStoredConfig()
+      applyConfigToDocument(next)
+      setConfigState(next)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
   }, [])
 
   const setConfig = useCallback((patch: Partial<CustomizerConfig>) => {
