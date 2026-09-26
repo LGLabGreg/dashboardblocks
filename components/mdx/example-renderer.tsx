@@ -37,6 +37,10 @@ import {
   dataTableExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/index'
 import {
+  distributionComponents,
+  distributionExampleProps,
+} from '@/registry/components/dashboardblocks/distribution/index'
+import {
   forecastComponents,
   forecastExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/index'
@@ -137,6 +141,7 @@ const exampleComponents = {
   ...metricListComponents,
   ...forecastComponents,
   ...retentionComponents,
+  ...distributionComponents,
 }
 
 const examplePropsMap = {
@@ -167,6 +172,7 @@ const examplePropsMap = {
   ...metricListExampleProps,
   ...forecastExampleProps,
   ...retentionExampleProps,
+  ...distributionExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

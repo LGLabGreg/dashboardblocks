@@ -178,6 +178,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'distribution',
+    type: 'registry:component',
+    title: 'Distribution',
+    description:
+      'Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/distribution.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'forecast',
     type: 'registry:component',
     title: 'Forecast',

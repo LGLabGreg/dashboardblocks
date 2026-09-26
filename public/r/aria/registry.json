@@ -190,6 +190,21 @@
       ]
     },
     {
+      "name": "distribution",
+      "type": "registry:component",
+      "title": "Distribution",
+      "description": "Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/aria/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/distribution.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "forecast",
       "type": "registry:component",
       "title": "Forecast",
@@ -2489,6 +2504,65 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention/retention-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "distribution-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/chart-panel.json",
+        "https://dashboardblocks.com/r/aria/distribution.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/distribution/distribution-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "distribution-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/chart-panel.json",
+        "https://dashboardblocks.com/r/aria/distribution.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/distribution/distribution-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "distribution-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/distribution.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/distribution/distribution-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "distribution-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/chart-panel.json",
+        "https://dashboardblocks.com/r/aria/distribution.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/distribution/distribution-04.tsx",
           "type": "registry:component"
         }
       ]

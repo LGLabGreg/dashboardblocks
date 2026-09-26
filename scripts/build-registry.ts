@@ -8,6 +8,7 @@ import { examples as comparisonExamples } from '@/registry/components/dashboardb
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
+import { examples as distributionExamples } from '@/registry/components/dashboardblocks/distribution/registry'
 import { examples as forecastExamples } from '@/registry/components/dashboardblocks/forecast/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
 import { examples as gaugeExamples } from '@/registry/components/dashboardblocks/gauge/registry'
@@ -65,6 +66,7 @@ const registry = {
     ...metricListExamples,
     ...forecastExamples,
     ...retentionExamples,
+    ...distributionExamples,
     ...hooks,
   ],
 }
