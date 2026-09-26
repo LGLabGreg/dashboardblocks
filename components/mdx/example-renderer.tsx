@@ -105,6 +105,10 @@ import {
   retentionExampleProps,
 } from '@/registry/components/dashboardblocks/retention/index'
 import {
+  scatterComponents,
+  scatterExampleProps,
+} from '@/registry/components/dashboardblocks/scatter/index'
+import {
   scheduleComponents,
   scheduleExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/index'
@@ -172,6 +176,7 @@ const exampleComponents = {
   ...realtimeComponents,
   ...feedbackComponents,
   ...deploymentsComponents,
+  ...scatterComponents,
 }
 
 const examplePropsMap = {
@@ -209,6 +214,7 @@ const examplePropsMap = {
   ...realtimeExampleProps,
   ...feedbackExampleProps,
   ...deploymentsExampleProps,
+  ...scatterExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

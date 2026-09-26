@@ -482,6 +482,18 @@
       ]
     },
     {
+      "name": "scatter",
+      "type": "registry:component",
+      "title": "Scatter",
+      "description": "Primitives for scatter plots and matrices: a least-squares line with the correlation coefficient described in words, a median, categorical colours in a fixed order, point tooltip content, and risk levels from likelihood and impact with a labelled swatch.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/scatter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "schedule",
       "type": "registry:component",
       "title": "Schedule",
@@ -3003,6 +3015,74 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments/deployments-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scatter-01",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/chart-panel.json",
+        "https://dashboardblocks.com/r/base/scatter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/scatter/scatter-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scatter-02",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/chart-panel.json",
+        "https://dashboardblocks.com/r/base/scatter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/scatter/scatter-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scatter-03",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/chart-panel.json",
+        "https://dashboardblocks.com/r/base/scatter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/scatter/scatter-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scatter-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/base/scatter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/scatter/scatter-04.tsx",
           "type": "registry:component"
         }
       ]
