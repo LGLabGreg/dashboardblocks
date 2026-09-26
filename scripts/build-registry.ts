@@ -2,6 +2,7 @@ import { examples as activityFeedExamples } from '@/registry/components/dashboar
 import { examples as alertsExamples } from '@/registry/components/dashboardblocks/alerts/registry'
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
+import { examples as checklistExamples } from '@/registry/components/dashboardblocks/checklist/registry'
 import { examples as comparisonExamples } from '@/registry/components/dashboardblocks/comparison/registry'
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
@@ -49,6 +50,7 @@ const registry = {
     ...pipelineExamples,
     ...scheduleExamples,
     ...teamExamples,
+    ...checklistExamples,
     ...hooks,
   ],
 }

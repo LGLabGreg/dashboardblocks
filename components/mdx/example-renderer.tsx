@@ -17,6 +17,10 @@ import {
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
 import {
+  checklistComponents,
+  checklistExampleProps,
+} from '@/registry/components/dashboardblocks/checklist/index'
+import {
   comparisonComponents,
   comparisonExampleProps,
 } from '@/registry/components/dashboardblocks/comparison/index'
@@ -97,6 +101,7 @@ const exampleComponents = {
   ...pipelineComponents,
   ...scheduleComponents,
   ...teamComponents,
+  ...checklistComponents,
 }
 
 const examplePropsMap = {
@@ -119,6 +124,7 @@ const examplePropsMap = {
   ...pipelineExampleProps,
   ...scheduleExampleProps,
   ...teamExampleProps,
+  ...checklistExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

@@ -21,6 +21,10 @@ import {
   chartPanel5ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-05'
 import {
+  Checklist1,
+  checklist1ExampleProps,
+} from '@/registry/components/dashboardblocks/checklist/checklist-01'
+import {
   Comparison2,
   comparison2ExampleProps,
 } from '@/registry/components/dashboardblocks/comparison/comparison-02'
@@ -119,6 +123,7 @@ export interface CategoryCounts {
   pipeline: number
   schedule: number
   team: number
+  checklist: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -316,6 +321,14 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80'
         >
           <Team3 {...team3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/checklist'
+          title='Checklist'
+          description='Onboarding checklists, setup steppers and task lists with due dates.'
+          count={counts.checklist}
+        >
+          <Checklist1 {...checklist1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

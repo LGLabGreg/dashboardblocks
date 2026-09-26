@@ -2,6 +2,7 @@ import { activityFeedComponents } from '@/registry/components/dashboardblocks/ac
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
+import { checklistComponents } from '@/registry/components/dashboardblocks/checklist/index'
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
@@ -43,6 +44,7 @@ const counts = {
   pipeline: Object.keys(pipelineComponents).length,
   schedule: Object.keys(scheduleComponents).length,
   team: Object.keys(teamComponents).length,
+  checklist: Object.keys(checklistComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

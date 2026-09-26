@@ -111,6 +111,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'checklist',
+    type: 'registry:component',
+    title: 'Checklist',
+    description:
+      'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/checklist.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'data-table',
     type: 'registry:component',
     title: 'Data Table',
