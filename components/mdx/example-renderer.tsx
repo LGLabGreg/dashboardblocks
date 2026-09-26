@@ -33,6 +33,10 @@ import {
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
 import {
+  gaugeComponents,
+  gaugeExampleProps,
+} from '@/registry/components/dashboardblocks/gauge/index'
+import {
   goalsComponents,
   goalsExampleProps,
 } from '@/registry/components/dashboardblocks/goals/index'
@@ -82,6 +86,7 @@ const exampleComponents = {
   ...goalsComponents,
   ...comparisonComponents,
   ...alertsComponents,
+  ...gaugeComponents,
 }
 
 const examplePropsMap = {
@@ -101,6 +106,7 @@ const examplePropsMap = {
   ...goalsExampleProps,
   ...comparisonExampleProps,
   ...alertsExampleProps,
+  ...gaugeExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

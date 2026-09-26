@@ -41,6 +41,10 @@ import {
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
 import {
+  Gauge1,
+  gauge1ExampleProps,
+} from '@/registry/components/dashboardblocks/gauge/gauge-01'
+import {
   Goals1,
   goals1ExampleProps,
 } from '@/registry/components/dashboardblocks/goals/goals-01'
@@ -104,6 +108,7 @@ export interface CategoryCounts {
   goals: number
   comparison: number
   alerts: number
+  gauge: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -272,6 +277,14 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Alerts1 {...alerts1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/gauge'
+          title='Gauge'
+          description='NPS, health scores, system load and scores against a target.'
+          count={counts.gauge}
+        >
+          <Gauge1 {...gauge1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

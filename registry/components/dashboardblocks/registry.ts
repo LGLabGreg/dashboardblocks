@@ -169,6 +169,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'gauge',
+    type: 'registry:component',
+    title: 'Gauge',
+    description:
+      'Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/gauge.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'goals',
     type: 'registry:component',
     title: 'Goals',
