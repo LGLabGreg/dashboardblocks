@@ -6,6 +6,7 @@ import { comparisonComponents } from '@/registry/components/dashboardblocks/comp
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
+import { geoComponents } from '@/registry/components/dashboardblocks/geo/index'
 import { goalsComponents } from '@/registry/components/dashboardblocks/goals/index'
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
@@ -37,6 +38,7 @@ const counts = {
   goals: Object.keys(goalsComponents).length,
   comparison: Object.keys(comparisonComponents).length,
   alerts: Object.keys(alertsComponents).length,
+  geo: Object.keys(geoComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

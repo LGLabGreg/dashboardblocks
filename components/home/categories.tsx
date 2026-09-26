@@ -40,6 +40,7 @@ import {
   Funnel2,
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
+import { Geo3, geo3ExampleProps } from '@/registry/components/dashboardblocks/geo/geo-03'
 import {
   Goals1,
   goals1ExampleProps,
@@ -104,6 +105,7 @@ export interface CategoryCounts {
   goals: number
   comparison: number
   alerts: number
+  geo: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -272,6 +274,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Alerts1 {...alerts1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/geo'
+          title='Geo'
+          description='State tile maps, dotted world maps, top countries and regional splits.'
+          count={counts.geo}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[32rem]'
+        >
+          <Geo3 {...geo3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

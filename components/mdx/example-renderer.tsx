@@ -33,6 +33,10 @@ import {
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
 import {
+  geoComponents,
+  geoExampleProps,
+} from '@/registry/components/dashboardblocks/geo/index'
+import {
   goalsComponents,
   goalsExampleProps,
 } from '@/registry/components/dashboardblocks/goals/index'
@@ -82,6 +86,7 @@ const exampleComponents = {
   ...goalsComponents,
   ...comparisonComponents,
   ...alertsComponents,
+  ...geoComponents,
 }
 
 const examplePropsMap = {
@@ -101,6 +106,7 @@ const examplePropsMap = {
   ...goalsExampleProps,
   ...comparisonExampleProps,
   ...alertsExampleProps,
+  ...geoExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

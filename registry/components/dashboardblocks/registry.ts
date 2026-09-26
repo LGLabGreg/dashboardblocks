@@ -169,6 +169,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'geo',
+    type: 'registry:component',
+    title: 'Geo',
+    description:
+      'Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/geo.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'goals',
     type: 'registry:component',
     title: 'Goals',
