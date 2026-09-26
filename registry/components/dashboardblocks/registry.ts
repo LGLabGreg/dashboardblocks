@@ -278,6 +278,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'schedule',
+    type: 'registry:component',
+    title: 'Schedule',
+    description:
+      'Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/schedule.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'stat-group',
     type: 'registry:component',
     title: 'Stat Group',

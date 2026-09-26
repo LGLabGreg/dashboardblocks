@@ -13,6 +13,7 @@ import { examples as kpiExamples } from '@/registry/components/dashboardblocks/k
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
+import { examples as scheduleExamples } from '@/registry/components/dashboardblocks/schedule/registry'
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
 import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
 import { examples as statusExamples } from '@/registry/components/dashboardblocks/status/registry'
@@ -45,6 +46,7 @@ const registry = {
     ...comparisonExamples,
     ...alertsExamples,
     ...pipelineExamples,
+    ...scheduleExamples,
     ...hooks,
   ],
 }

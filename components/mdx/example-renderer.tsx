@@ -53,6 +53,10 @@ import {
   pipelineExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/index'
 import {
+  scheduleComponents,
+  scheduleExampleProps,
+} from '@/registry/components/dashboardblocks/schedule/index'
+import {
   statGroupComponents,
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -87,6 +91,7 @@ const exampleComponents = {
   ...comparisonComponents,
   ...alertsComponents,
   ...pipelineComponents,
+  ...scheduleComponents,
 }
 
 const examplePropsMap = {
@@ -107,6 +112,7 @@ const examplePropsMap = {
   ...comparisonExampleProps,
   ...alertsExampleProps,
   ...pipelineExampleProps,
+  ...scheduleExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

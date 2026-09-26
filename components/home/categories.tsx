@@ -69,6 +69,10 @@ import {
   pipeline1ExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
 import {
+  Schedule2,
+  schedule2ExampleProps,
+} from '@/registry/components/dashboardblocks/schedule/schedule-02'
+import {
   StatGroup2,
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
@@ -109,6 +113,7 @@ export interface CategoryCounts {
   comparison: number
   alerts: number
   pipeline: number
+  schedule: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -287,6 +292,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[40rem] lg:*:w-[60rem]'
         >
           <Pipeline1 {...pipeline1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/schedule'
+          title='Schedule'
+          description='Agendas, month calendars, deadlines and the week ahead.'
+          count={counts.schedule}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <Schedule2 {...schedule2ExampleProps} />
         </CategoryCard>
       </div>
     </section>
