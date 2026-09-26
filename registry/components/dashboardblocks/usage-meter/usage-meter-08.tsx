@@ -1,15 +1,33 @@
 'use client'
+
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
 import { Icon } from '@/registry/components/dashboardblocks/icon'
+import {
+  type UsageStatus,
+  formatUsage,
+  getUsageShare,
+  getUsageStatus,
+  usageStatusConfig,
+} from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+
+import { cn } from '@/lib/utils'
 
 interface UsageMeter8Props {
+  /** Days until the quota resets. */
   daysLeft?: number
-  icon: React.ReactNode
+  icon: ReactNode
   limit: number
   onUpgrade?: () => void
   title: string
@@ -28,82 +46,99 @@ const exampleProps: UsageMeter8Props = {
       remixicon='RiDatabase2Line'
     />
   ),
-  limit: 1500,
+  limit: 1_500,
+  onUpgrade: () => {},
   title: 'Storage',
   unit: 'MB',
   used: 430,
 }
 
+/** The liquid is what's left, so it drains as usage grows and turns amber, then red. */
+const waveColors: Record<UsageStatus, string> = {
+  critical: 'text-red-300 dark:text-red-900',
+  ok: 'text-sky-200 dark:text-sky-900',
+  over: 'text-red-300 dark:text-red-900',
+  warning: 'text-amber-200 dark:text-amber-900',
+}
+
+const percent = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 0,
+  style: 'percent',
+})
+
 const UsageMeter8 = (props: UsageMeter8Props) => {
   const { daysLeft, icon, limit, onUpgrade, title, unit, used } = props
-  const remaining = limit - used
-  const availablePercentage = Math.round((remaining / limit) * 100)
+  const remaining = Math.max(0, limit - used)
+  const share = getUsageShare(used, limit)
+  const status = getUsageStatus(used, limit)
+  const stats = [
+    { label: 'Used', value: formatUsage(used, unit) },
+    { label: 'Available', value: percent.format(remaining / (limit || 1)) },
+    ...(daysLeft !== undefined
+      ? [{ label: 'Resets in', value: `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}` }]
+      : []),
+  ]
 
   return (
     <Card>
-      <CardHeader className='flex items-center justify-between'>
+      <CardHeader>
         <div className='flex items-center gap-2'>
-          <Icon icon={icon} size='sm' />
+          <Icon icon={icon} size='sm' variant='secondary' />
           <CardTitle>{title}</CardTitle>
         </div>
         {onUpgrade && (
-          <Button variant='outline' size='sm' onClick={onUpgrade}>
-            Upgrade
-          </Button>
+          <CardAction>
+            <Button variant='outline' size='sm' onClick={onUpgrade}>
+              Upgrade
+            </Button>
+          </CardAction>
         )}
       </CardHeader>
-      <div className='space-y-6 pb-6'>
-        <div className='flex justify-center'>
-          <div className='relative size-[200px] overflow-hidden rounded-full bg-muted shadow-md'>
-            <AnimatedWave
-              percentage={availablePercentage}
-              className='text-blue-300 dark:text-blue-800'
-            />
-            <div className='absolute inset-0 z-10 flex flex-col items-center justify-center space-y-2 text-center text-foreground'>
-              <div className='space-y-1'>
-                <div className='text-sm font-medium tracking-wider'>REMAINING</div>
-                <div className='flex items-start gap-1 text-4xl font-bold leading-none'>
-                  <AnimatedNumber
-                    value={remaining}
-                    formatter={(value) => value.toLocaleString()}
-                  />
-                  <span className='text-sm font-medium'>{unit}</span>
-                </div>
-              </div>
-              <div className='text-xs'>
-                {used.toLocaleString()} {unit} / {limit.toLocaleString()} {unit} used
-              </div>
-            </div>
-          </div>
-        </div>
+      <CardContent className='flex flex-col items-center gap-6'>
         <div
-          className={`grid gap-4 px-6 ${daysLeft !== undefined ? 'grid-cols-3' : 'grid-cols-2'}`}
+          role='meter'
+          aria-label={title}
+          aria-valuemax={limit}
+          aria-valuemin={0}
+          aria-valuenow={Math.min(used, limit)}
+          aria-valuetext={`${formatUsage(used, unit)} of ${formatUsage(limit, unit)} used, ${usageStatusConfig[status].label.toLowerCase()}`}
+          className='bg-muted/60 ring-border relative size-48 overflow-hidden rounded-full ring-1'
         >
-          <div className='flex flex-col items-center space-y-1.5'>
-            <div className='h-[2px] w-12 bg-purple-500' />
-            <div className='text-xs text-muted-foreground'>USED ({unit})</div>
-            <div className='text-2xl font-semibold leading-none'>
-              {used.toLocaleString()}
-            </div>
+          <AnimatedWave
+            percentage={100 - Math.min(100, share)}
+            className={waveColors[status]}
+          />
+          <div
+            aria-hidden
+            className='text-foreground absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-center'
+          >
+            <span className='text-muted-foreground text-xs font-medium'>Remaining</span>
+            <span className='flex items-start gap-1 text-4xl leading-none font-semibold tracking-tight tabular-nums'>
+              <AnimatedNumber
+                value={remaining}
+                formatter={(value) => formatUsage(Math.round(value))}
+              />
+              <span className='text-sm font-medium'>{unit}</span>
+            </span>
+            <span className='text-xs tabular-nums'>of {formatUsage(limit, unit)}</span>
           </div>
-          <div className='flex flex-col items-center space-y-1.5'>
-            <div className='h-[2px] w-12 bg-blue-500' />
-            <div className='text-xs text-muted-foreground'>AVAILABLE</div>
-            <div className='text-2xl font-semibold leading-none'>
-              {availablePercentage}%
-            </div>
-          </div>
-          {daysLeft !== undefined && (
-            <div className='flex flex-col items-center space-y-1.5'>
-              <div className='h-[2px] w-12 bg-green-500' />
-              <div className='text-xs text-muted-foreground'>DAYS LEFT</div>
-              <div className='text-2xl font-semibold leading-none'>
-                {daysLeft.toLocaleString()}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+        <dl
+          className={cn(
+            'grid w-full divide-x text-center',
+            stats.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
+          )}
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className='flex flex-col gap-1 px-2'>
+              <dt className='text-muted-foreground text-xs'>{stat.label}</dt>
+              <dd className='text-lg font-semibold tracking-tight tabular-nums'>
+                {stat.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </CardContent>
     </Card>
   )
 }

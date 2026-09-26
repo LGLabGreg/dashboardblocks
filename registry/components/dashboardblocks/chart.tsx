@@ -44,17 +44,22 @@ const ChartTooltipContent = ({
                 ? item.dataKey
                 : index
             }
-            className='flex items-center gap-1'
+            className='flex items-center gap-1.5'
           >
             <div
               className='size-2.5 shrink-0 rounded-[2px]'
               style={{ backgroundColor: itemColor }}
             />
-            {valueFormatter
-              ? valueFormatter(Number(item.value))
-              : formatter
-                ? formatter(item.value, item.name, item, index, payload)
-                : item.value}
+            {payload.length > 1 && item.name !== undefined && (
+              <span className='text-muted-foreground'>{item.name}</span>
+            )}
+            <span className='ml-auto font-medium tabular-nums'>
+              {valueFormatter
+                ? valueFormatter(Number(item.value))
+                : formatter
+                  ? formatter(item.value, item.name, item, index, payload)
+                  : item.value}
+            </span>
           </div>
         )
       })}

@@ -1,36 +1,47 @@
 'use client'
 
-import type { ValueFormatter } from '@/registry/components/dashboardblocks/chart'
-import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import {
+  KPI,
+  KPIChange,
+  KPIContent,
+  type KPIFormat,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi'
 
 import { CardDescription } from '@/components/ui/card'
 
 interface KPI1Props {
-  trend: number
+  /** What the change is measured against, e.g. "vs last month". */
+  comparison: string
+  format?: KPIFormat
+  previous: number
   title: string
   value: number
-  formatter?: ValueFormatter
 }
 
 const exampleProps: KPI1Props = {
-  trend: 20.1,
-  title: 'Total Revenue',
-  value: 45231,
-  formatter: (value) => `$${value.toLocaleString()}`,
+  comparison: 'vs last month',
+  format: 'currency',
+  previous: 37_660,
+  title: 'Total revenue',
+  value: 45_231,
 }
 
 const KPI1 = (props: KPI1Props) => {
-  const { trend, title, value, formatter } = props
+  const { comparison, format, previous, title, value } = props
 
   return (
     <KPI>
-      <KPIContent className='gap-2'>
+      <KPIContent className='gap-1'>
         <CardDescription>{title}</CardDescription>
-        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1'>
-          <KPIValue value={value} formatter={formatter} animated />
-          <Trend trend={trend} />
-        </div>
+        <KPIValue value={value} format={format} animated />
+        <KPIChange
+          comparison={comparison}
+          previous={previous}
+          value={value}
+          variant='default'
+          showComparison
+        />
       </KPIContent>
     </KPI>
   )

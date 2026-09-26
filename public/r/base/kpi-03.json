@@ -2,14 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-03",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/base/animated-number.json",
-    "https://dashboardblocks.com/r/base/kpi.json",
-    "https://dashboardblocks.com/r/base/trend.json"
+    "card",
+    "https://dashboardblocks.com/r/base/kpi.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-03.tsx",
-      "content": "'use client'\n\nimport type { ValueFormatter } from '@/registry/components/dashboardblocks/chart'\nimport { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI3Props {\n  trend: number\n  description: string\n  title: string\n  value: number\n  formatter?: ValueFormatter\n}\n\nconst exampleProps: KPI3Props = {\n  trend: -2.1,\n  description: 'Compared to last month',\n  title: 'Conversion Rate',\n  value: 3.24,\n  formatter: (value) => `${value.toLocaleString()}%`,\n}\n\nconst KPI3 = (props: KPI3Props) => {\n  const { trend, description, title, value, formatter } = props\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue value={value} formatter={formatter} animated />\n        <div className='flex items-center justify-between border-t pt-2 mt-3'>\n          <CardDescription>{description}</CardDescription>\n          <Trend trend={trend} variant='badge' />\n        </div>\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI3, exampleProps as kpi3ExampleProps, type KPI3Props }\n",
+      "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n  getKPIFormatter,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI3Props {\n  /**\n   * Use `points` for rates, so the change reads in percentage points.\n   * @default 'percent'\n   */\n  changeType?: 'percent' | 'points'\n  /** What the change is measured against, e.g. \"last month\". */\n  comparison: string\n  format?: KPIFormat\n  /** Use `down` for metrics like churn, where a decrease is good. */\n  goodDirection?: 'up' | 'down'\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI3Props = {\n  changeType: 'points',\n  comparison: 'last month',\n  format: 'percent',\n  previous: 3.46,\n  title: 'Conversion rate',\n  value: 3.24,\n}\n\nconst KPI3 = (props: KPI3Props) => {\n  const { changeType, comparison, format, goodDirection, previous, title, value } = props\n  const formatter = getKPIFormatter(format)\n\n  return (\n    <KPI>\n      <KPIContent className='gap-1'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue value={value} format={format} animated />\n        <div className='mt-3 flex items-center justify-between gap-2 border-t pt-3'>\n          <span className='text-muted-foreground text-sm'>\n            {formatter(previous)} {comparison}\n          </span>\n          <KPIChange\n            changeType={changeType}\n            comparison={`vs ${comparison}`}\n            goodDirection={goodDirection}\n            previous={previous}\n            value={value}\n          />\n        </div>\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI3, exampleProps as kpi3ExampleProps, type KPI3Props }\n",
       "type": "registry:component"
     }
   ],

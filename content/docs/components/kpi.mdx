@@ -1,38 +1,72 @@
 ---
 title: KPI
-description: A flexible KPI card with trend indicators, sparklines, and progress tracking.
+description: KPI cards with the change on the last period, progress to a target, and bar, line and area charts.
 ---
 
-### Minimal KPI
+A KPI card puts one headline number first, with what it means next to it: the change on the previous period, the target it's working towards or the shape of the week behind it. Changes come from the value and the previous value, in percent or in percentage points for rates, and keep their arrow and sign so colour never carries them alone. Use `goodDirection` for metrics like churn, where a drop is good. Values count up once in view, and screen readers get the final value. Numbers use named formats in `en-US`, so the server and the browser render the same, and every chart has a text alternative.
 
-Simple KPI cards displaying a value with trend indicators
+### Headline
+
+A value with its change and what it's compared with.
 
 <ComponentPreview name='kpi-01' previewClassName='max-w-sm' />
 
+### Change Badge
+
+A value with its change as a badge beside the label.
+
 <ComponentPreview name='kpi-02' previewClassName='max-w-sm' />
+
+### Previous Value
+
+A rate with its previous value underneath and the change in percentage points.
 
 <ComponentPreview name='kpi-03' previewClassName='max-w-sm' />
 
-### Progress KPI
+### Target Pace
 
-Displays a progress bar with percentage and target information.
+Progress to a monthly target, with a tick where an even pace would be by today and the total you're on pace for.
 
 <ComponentPreview name='progress-kpi-01' previewClassName='max-w-sm' />
 
+### Status Breakdown
+
+The share of work done, with a bar for each status.
+
 <ComponentPreview name='progress-kpi-02' previewClassName='max-w-sm' />
+
+### Goal Ring
+
+A count against a goal as a ring, with how many are left to go.
 
 <ComponentPreview name='progress-kpi-03' previewClassName='max-w-sm' />
 
-### Chart KPI
+### Bar Chart
 
-Combines a KPI value with an interactive chart visualization.
+The week's total with a bar for each day and the change on the week before.
 
 <ComponentPreview name='bar-chart-kpi-01' previewClassName='max-w-sm' />
 
+### Actual vs Goal
+
+Each day's value next to its goal, with the share of the goal reached and how many days met it.
+
 <ComponentPreview name='bar-chart-kpi-02' previewClassName='max-w-sm' />
+
+### Line Chart
+
+This week against the same days last week, drawn as a solid and a dashed line.
 
 <ComponentPreview name='line-chart-kpi-01' previewClassName='max-w-sm' />
 
+### Area Chart
+
+Gross profit with its margin, and revenue and profit by day as stacked areas.
+
 <ComponentPreview name='area-chart-kpi-01' previewClassName='max-w-sm' />
+
+### Background Chart
+
+A total with an area chart behind it, for a hero card at the top of a dashboard.
 
 <ComponentPreview name='area-chart-kpi-02' previewClassName='max-w-sm' />

@@ -107,7 +107,7 @@ import {
 } from '@/registry/components/dashboardblocks/inventory/inventory-01'
 import {
   BarChartKPI2,
-  barChartKPI2ExampleProps,
+  barChartKpi2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
 import {
   ProgressKPI2,
@@ -249,7 +249,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.kpi}
           className='md:col-span-2'
         >
-          <BarChartKPI2 {...barChartKPI2ExampleProps} />
+          <BarChartKPI2 {...barChartKpi2ExampleProps} />
           <div className='hidden sm:block'>
             <ProgressKPI2 {...progressKpi2ExampleProps} />
           </div>
@@ -285,7 +285,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/activity-feed'
           title='Activity Feed'
-          description='Event streams, timelines and deploy logs.'
+          description='Recent activity, record history, notifications and social feeds.'
           count={counts.activityFeed}
         >
           <ActivityFeed02 {...activityFeed02ExampleProps} />

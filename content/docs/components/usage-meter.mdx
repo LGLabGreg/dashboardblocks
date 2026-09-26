@@ -1,47 +1,49 @@
 ---
 title: Usage Meter
-description: Display resource consumption, quotas, and limits with progress indicators.
+description: Usage meters for quotas, storage, metered billing, prepaid credits and plan limits, with projections and upgrade prompts.
 ---
 
-### Simple Usage
+Usage meters show how much of a limit is used and what happens next. Usage is within limit, nearing it from 80%, critical from 95% and over past 100%, and each status has an icon and a label, so colour never carries it alone. Projections take the average daily rate so far to the end of the period, drawn as a striped segment on the bar. When usage or a projection goes past the limit, the bar extends and the limit shows as a tick. Pass fixed dates, so the blocks render the same on the server and in the browser.
 
-Basic usage meters for displaying API limits, storage, or any quantifiable resource.
+### Quota
+
+An API quota with its status, when it resets and the usage it's on pace for, with the date it would hit the limit.
 
 <ComponentPreview name='usage-meter-01' previewClassName='max-w-sm' />
 
-### Ring Visualization
+### Storage Ring
 
-Storage or quota display with a circular progress indicator.
+Storage used as a ring in its status colour, with the space that's free.
 
 <ComponentPreview name='usage-meter-02' previewClassName='max-w-sm' />
 
-### Multi-Resource
+### Metered Billing
 
-Display multiple resources with individual progress bars.
+Usage against what the plan includes, with overage past the limit and what it will cost.
 
-<ComponentPreview name='usage-meter-03' previewClassName='max-w-sm' />
+<ComponentPreview name='usage-meter-03' previewClassName='max-w-md' />
 
-### Credits & Tokens
+### Prepaid Credits
 
-Show remaining credits or tokens with burn rate and projections.
+A credit balance with the average daily use, the date it runs out and a strip of recent days.
 
 <ComponentPreview name='usage-meter-04' previewClassName='max-w-sm' />
 
-### Segmented Breakdown
+### Storage Breakdown
 
-Storage or usage breakdown by category with colored segments.
+Storage by category as one segmented bar, with each category's size and share.
 
 <ComponentPreview name='usage-meter-05' previewClassName='max-w-sm' />
 
-### Subscription Limits
+### Plan Limits
 
-Display plan limits with upgrade prompts.
+Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.
 
 <ComponentPreview name='usage-meter-06' previewClassName='max-w-sm' />
 
 ### Liquid Gauge
 
-Animated fill gauge with a fluid wave effect for visual impact.
+What's left as a liquid that drains as usage grows and turns amber, then red. It's a `meter` for screen readers, and the wave stops for reduced motion.
 
 <ComponentPreview name='usage-meter-07' previewClassName='max-w-sm' />
 

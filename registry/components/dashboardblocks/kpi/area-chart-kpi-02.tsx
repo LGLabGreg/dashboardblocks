@@ -1,95 +1,91 @@
 'use client'
 
+import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import {
-  TinyAreaChart,
-  type TinyAreaChartProps,
-  type ValueFormatter,
-} from '@/registry/components/dashboardblocks/chart'
-import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+  KPI,
+  KPIChange,
+  KPIChart,
+  KPIContent,
+  type KPIFormat,
+  KPIValue,
+  describeSeries,
+  getKPIFormatter,
+} from '@/registry/components/dashboardblocks/kpi'
 
 import { CardDescription, CardTitle } from '@/components/ui/card'
 
-interface AreaChartKPI2Props {
-  trend: number
-  data: unknown[]
-  description: string
-  formatter?: ValueFormatter
-  height: number
-  areas: TinyAreaChartProps['areas']
-  title: string
+interface DailyValue {
+  label: string
   value: number
 }
 
+interface AreaChartKPI2Props {
+  /** What the change is measured against, e.g. "vs last week". */
+  comparison: string
+  /** One point per period, drawn behind the value. The headline is their total. */
+  data: DailyValue[]
+  format?: KPIFormat
+  /** @default 96 */
+  height?: number
+  /** The total for the previous period. */
+  previous: number
+  title: string
+}
+
 const exampleProps: AreaChartKPI2Props = {
-  trend: 18.4,
+  comparison: 'vs last week',
   data: [
-    {
-      label: 'Monday',
-      value: 4200,
-    },
-    {
-      label: 'Tuesday',
-      value: 5100,
-    },
-    {
-      label: 'Wednesday',
-      value: 2800,
-    },
-    {
-      label: 'Thursday',
-      value: 5600,
-    },
-    {
-      label: 'Friday',
-      value: 6300,
-    },
-    {
-      label: 'Saturday',
-      value: 5400,
-    },
-    {
-      label: 'Sunday',
-      value: 6900,
-    },
+    { label: 'Mon', value: 14_200 },
+    { label: 'Tue', value: 17_100 },
+    { label: 'Wed', value: 12_800 },
+    { label: 'Thu', value: 19_600 },
+    { label: 'Fri', value: 22_300 },
+    { label: 'Sat', value: 18_400 },
+    { label: 'Sun', value: 24_000 },
   ],
-  description: '+23.8K this week',
-  formatter: (value) => `$${value.toLocaleString()}`,
-  height: 160,
-  areas: [
-    {
-      dataKey: 'value',
-      fill: 'var(--color-chart-2)',
-      stroke: 'var(--color-chart-2)',
-    },
-  ],
-  title: 'Total Transactions',
-  value: 128400,
+  format: 'currency',
+  previous: 108_450,
+  title: 'Transaction volume',
 }
 
 const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
-  const { trend, data, description, formatter, height, areas, title, value } = props
+  const { comparison, data, format, height = 96, previous, title } = props
+  const formatter = getKPIFormatter(format)
+  const total = data.reduce((sum, point) => sum + point.value, 0)
+  const difference = total - previous
+
   return (
     <KPI className='relative overflow-hidden'>
-      <KPIContent>
-        <div className='relative z-10 space-y-12'>
-          <div className='flex items-center justify-between'>
-            <CardTitle>{title}</CardTitle>
-            <Trend trend={trend} variant='badge' />
-          </div>
-          <div className='space-y-1'>
-            <KPIValue value={value} formatter={formatter} animated />
-            <CardDescription className='text-foreground'>{description}</CardDescription>
-          </div>
+      <KPIContent className='gap-12'>
+        <div className='relative z-10 flex items-center justify-between gap-2'>
+          <CardTitle>{title}</CardTitle>
+          <KPIChange comparison={comparison} previous={previous} value={total} />
         </div>
-        <div className='absolute -bottom-4 -left-4 opacity-75 pointer-events-none w-[calc(100%+2rem)]'>
+        <div className='relative z-10 flex flex-col gap-1'>
+          <KPIValue value={total} format={format} animated />
+          <CardDescription>
+            {difference >= 0 ? '+' : '−'}
+            {formatter(Math.abs(difference))} {comparison}
+          </CardDescription>
+        </div>
+        <KPIChart
+          className='pointer-events-none absolute inset-x-0 bottom-0 opacity-50'
+          label={describeSeries(`${title} by day`, data, format)}
+        >
           <TinyAreaChart
+            areas={[
+              {
+                dataKey: 'value',
+                fill: 'var(--color-chart-2)',
+                fillOpacity: 0.3,
+                stroke: 'var(--color-chart-2)',
+              },
+            ]}
             data={data}
-            areas={areas}
             formatter={formatter}
             height={height}
           />
-        </div>
+        </KPIChart>
       </KPIContent>
     </KPI>
   )
@@ -99,4 +95,5 @@ export {
   AreaChartKPI2,
   exampleProps as areaChartKpi2ExampleProps,
   type AreaChartKPI2Props,
+  type DailyValue,
 }

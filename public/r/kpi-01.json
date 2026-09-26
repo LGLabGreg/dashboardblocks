@@ -2,14 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-01",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/animated-number.json",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/trend.json"
+    "card",
+    "https://dashboardblocks.com/r/kpi.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-01.tsx",
-      "content": "'use client'\n\nimport type { ValueFormatter } from '@/registry/components/dashboardblocks/chart'\nimport { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI1Props {\n  trend: number\n  title: string\n  value: number\n  formatter?: ValueFormatter\n}\n\nconst exampleProps: KPI1Props = {\n  trend: 20.1,\n  title: 'Total Revenue',\n  value: 45231,\n  formatter: (value) => `$${value.toLocaleString()}`,\n}\n\nconst KPI1 = (props: KPI1Props) => {\n  const { trend, title, value, formatter } = props\n\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <CardDescription>{title}</CardDescription>\n        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1'>\n          <KPIValue value={value} formatter={formatter} animated />\n          <Trend trend={trend} />\n        </div>\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI1, exampleProps as kpi1ExampleProps, type KPI1Props }\n",
+      "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI1Props {\n  /** What the change is measured against, e.g. \"vs last month\". */\n  comparison: string\n  format?: KPIFormat\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI1Props = {\n  comparison: 'vs last month',\n  format: 'currency',\n  previous: 37_660,\n  title: 'Total revenue',\n  value: 45_231,\n}\n\nconst KPI1 = (props: KPI1Props) => {\n  const { comparison, format, previous, title, value } = props\n\n  return (\n    <KPI>\n      <KPIContent className='gap-1'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue value={value} format={format} animated />\n        <KPIChange\n          comparison={comparison}\n          previous={previous}\n          value={value}\n          variant='default'\n          showComparison\n        />\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI1, exampleProps as kpi1ExampleProps, type KPI1Props }\n",
       "type": "registry:component"
     }
   ],

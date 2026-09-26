@@ -1,32 +1,43 @@
 'use client'
 
-import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import {
+  KPI,
+  KPIChange,
+  KPIContent,
+  type KPIFormat,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi'
 
 import { CardDescription } from '@/components/ui/card'
 
 interface KPI2Props {
-  trend: number
+  /** What the change is measured against, e.g. "vs last week". */
+  comparison: string
+  format?: KPIFormat
+  previous: number
   title: string
   value: number
 }
 
 const exampleProps: KPI2Props = {
-  trend: 12.5,
-  title: 'Active Users',
-  value: 2420,
+  comparison: 'vs last week',
+  format: 'number',
+  previous: 2_151,
+  title: 'Active users',
+  value: 2_420,
 }
 
 const KPI2 = (props: KPI2Props) => {
-  const { trend, title, value } = props
+  const { comparison, format, previous, title, value } = props
+
   return (
     <KPI>
       <KPIContent className='gap-2'>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between gap-2'>
           <CardDescription>{title}</CardDescription>
-          <Trend trend={trend} variant='badge' />
+          <KPIChange comparison={comparison} previous={previous} value={value} />
         </div>
-        <KPIValue value={value} animated />
+        <KPIValue value={value} format={format} animated />
       </KPIContent>
     </KPI>
   )
