@@ -9,6 +9,10 @@ import {
   alerts1ExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
 import {
+  Billing1,
+  billing1ExampleProps,
+} from '@/registry/components/dashboardblocks/billing/billing-01'
+import {
   Breakdown1,
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
@@ -44,6 +48,7 @@ import {
   Funnel2,
   funnel2ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-02'
+import { Geo3, geo3ExampleProps } from '@/registry/components/dashboardblocks/geo/geo-03'
 import {
   Goals1,
   goals1ExampleProps,
@@ -52,6 +57,14 @@ import {
   Heatmap1,
   heatmap1ExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
+import {
+  Insights3,
+  insights3ExampleProps,
+} from '@/registry/components/dashboardblocks/insights/insights-03'
+import {
+  Insights4,
+  insights4ExampleProps,
+} from '@/registry/components/dashboardblocks/insights/insights-04'
 import {
   BarChartKPI2,
   barChartKPI2ExampleProps,
@@ -120,6 +133,9 @@ export interface CategoryCounts {
   goals: number
   comparison: number
   alerts: number
+  geo: number
+  billing: number
+  insights: number
   pipeline: number
   schedule: number
   team: number
@@ -292,6 +308,37 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Alerts1 {...alerts1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/geo'
+          title='Geo'
+          description='State tile maps, dotted world maps, top countries and regional splits.'
+          count={counts.geo}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[32rem]'
+        >
+          <Geo3 {...geo3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/billing'
+          title='Billing'
+          description='MRR movement, the current plan, invoices and revenue metrics.'
+          count={counts.billing}
+        >
+          <Billing1 {...billing1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/insights'
+          title='Insights'
+          description='Plain-language insights, anomaly callouts, key drivers and weekly digests.'
+          count={counts.insights}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Insights4 {...insights4ExampleProps} />
+          <div className='hidden lg:block'>
+            <Insights3 {...insights3ExampleProps} />
+          </div>
         </CategoryCard>
         <CategoryCard
           href='/docs/components/pipeline'

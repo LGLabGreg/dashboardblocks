@@ -69,6 +69,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'billing',
+    type: 'registry:component',
+    title: 'Billing',
+    description:
+      'Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/billing.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'block-state',
     type: 'registry:component',
     title: 'Block State',
@@ -183,6 +198,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'geo',
+    type: 'registry:component',
+    title: 'Geo',
+    description:
+      'Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/geo.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'goals',
     type: 'registry:component',
     title: 'Goals',
@@ -219,6 +249,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/icon.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'insights',
+    type: 'registry:component',
+    title: 'Insights',
+    description:
+      'Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a "why" line of drivers.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/insights.tsx',
         type: 'registry:component',
       },
     ],
