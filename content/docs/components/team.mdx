@@ -1,0 +1,30 @@
+---
+title: Team
+description: Member lists with presence, workload against capacity, who is online and on-call rotas.
+---
+
+These blocks are about the people on a team, not how they rank. Avatars show initials in a colour picked from the name, so the same person gets the same colour everywhere without needing a photo. Presence always has a label next to its dot, and offline is a hollow dot, so colour never carries it alone. Avatar stacks keep every name for screen readers and on hover, and say how many are hidden behind the "+N". Times take a fixed `now`, and handovers are shown in a named time zone, so they render the same on the server and in the browser.
+
+### Member List
+
+Members with their role, presence and when they were last active.
+
+<ComponentPreview name='team-01' previewClassName='max-w-xl' />
+
+### Workload
+
+Work assigned to each person against their capacity on a shared scale. Anyone over capacity is flagged and listed first.
+
+<ComponentPreview name='team-02' previewClassName='max-w-md' />
+
+### Who's Online
+
+How many people are online, with their avatars, and the team split by presence.
+
+<ComponentPreview name='team-03' previewClassName='max-w-md' />
+
+### On Call
+
+Who is on call now and until when, who is next, and the rest of the rota.
+
+<ComponentPreview name='team-04' previewClassName='max-w-md' />

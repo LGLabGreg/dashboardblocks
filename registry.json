@@ -76,6 +76,24 @@
       ]
     },
     {
+      "name": "billing",
+      "type": "registry:component",
+      "title": "Billing",
+      "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "block-state",
       "type": "registry:component",
       "title": "Block State",
@@ -116,6 +134,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "checklist",
+      "type": "registry:component",
+      "title": "Checklist",
+      "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/checklist.tsx",
           "type": "registry:component"
         }
       ]
@@ -228,6 +261,25 @@
       ]
     },
     {
+      "name": "geo",
+      "type": "registry:component",
+      "title": "Geo",
+      "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/heatmap.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "goals",
       "type": "registry:component",
       "title": "Goals",
@@ -269,6 +321,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/icon.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights",
+      "type": "registry:component",
+      "title": "Insights",
+      "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a \"why\" line of drivers.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights.tsx",
           "type": "registry:component"
         }
       ]
@@ -327,6 +394,21 @@
       ]
     },
     {
+      "name": "pipeline",
+      "type": "registry:component",
+      "title": "Pipeline",
+      "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/pipeline.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "progress-bar",
       "type": "registry:component",
       "title": "Progress Bar",
@@ -352,6 +434,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schedule",
+      "type": "registry:component",
+      "title": "Schedule",
+      "description": "Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/schedule.tsx",
           "type": "registry:component"
         }
       ]
@@ -383,6 +480,21 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "team",
+      "type": "registry:component",
+      "title": "Team",
+      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a \"+N\" overflow.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/team.tsx",
           "type": "registry:component"
         }
       ]
@@ -1814,6 +1926,477 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json",
+        "https://dashboardblocks.com/r/heatmap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/geo.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "geo-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/breakdown.json",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/trend.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/geo/geo-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/billing.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "billing-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/stat-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/billing/billing-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/chart-panel.json",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comparison.json",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "insights-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/insights.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/insights/insights-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pipeline-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "dropdown-menu",
+        "https://dashboardblocks.com/r/pipeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/pipeline/pipeline-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pipeline-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "card",
+        "https://dashboardblocks.com/r/pipeline.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/pipeline/pipeline-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pipeline-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/pipeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/pipeline/pipeline-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pipeline-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/pipeline.json",
+        "https://dashboardblocks.com/r/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/pipeline/pipeline-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schedule-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/schedule/schedule-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schedule-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/schedule/schedule-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schedule-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/schedule/schedule-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schedule-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/schedule/schedule-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "team-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/team/team-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "team-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/team/team-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "team-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/team/team-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "team-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/progress-bar.json",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/team/team-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "checklist-01",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/checklist.json",
+        "https://dashboardblocks.com/r/ring.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/checklist/checklist-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "checklist-02",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/checklist.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/checklist/checklist-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "checklist-03",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/checklist.json",
+        "https://dashboardblocks.com/r/progress-bar.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/checklist/checklist-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "checklist-04",
+      "type": "registry:component",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/checklist.json",
+        "https://dashboardblocks.com/r/progress-bar.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/checklist/checklist-04.tsx",
           "type": "registry:component"
         }
       ]

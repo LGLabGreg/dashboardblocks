@@ -1,0 +1,30 @@
+---
+title: Pipeline
+description: Work in flight across stages, from sales deals to tickets and hiring.
+---
+
+A pipeline shows where work sits right now, not how many people dropped out along the way; for conversion, use the [Funnel](/docs/components/funnel). Stages are ordered, so they share one hue that deepens towards the last stage. Each stage can set the days an item is expected to spend in it: items over that turn amber and swap their clock icon, so the state never rests on colour alone. Days in stage take a fixed `now`, so they render the same on the server and in the browser.
+
+### Board
+
+A column per stage with its item count and total value, and a card per item. The columns scroll sideways when they don't fit. There's no drag and drop: move an item from its menu, which works with a keyboard and a screen reader.
+
+<ComponentPreview name='pipeline-01' />
+
+### Stage Summary
+
+A compact strip with each stage as a segment sized by value or by count, for the top of a dashboard.
+
+<ComponentPreview name='pipeline-02' />
+
+### Stuck Items
+
+Items over their expected time in stage, longest over first, with how long they've waited and who owns them.
+
+<ComponentPreview name='pipeline-03' />
+
+### Weighted Forecast
+
+Closed plus open deals weighted by the chance their stage closes, per owner, against quota.
+
+<ComponentPreview name='pipeline-04' previewClassName='max-w-2xl' />

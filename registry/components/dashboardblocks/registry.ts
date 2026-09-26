@@ -69,6 +69,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'billing',
+    type: 'registry:component',
+    title: 'Billing',
+    description:
+      'Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/billing.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'block-state',
     type: 'registry:component',
     title: 'Block State',
@@ -106,6 +121,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'checklist',
+    type: 'registry:component',
+    title: 'Checklist',
+    description:
+      'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/checklist.tsx',
         type: 'registry:component',
       },
     ],
@@ -199,6 +228,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'geo',
+    type: 'registry:component',
+    title: 'Geo',
+    description:
+      'Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/geo.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'goals',
     type: 'registry:component',
     title: 'Goals',
@@ -235,6 +279,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/icon.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'insights',
+    type: 'registry:component',
+    title: 'Insights',
+    description:
+      'Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a "why" line of drivers.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/insights.tsx',
         type: 'registry:component',
       },
     ],
@@ -283,6 +341,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'pipeline',
+    type: 'registry:component',
+    title: 'Pipeline',
+    description:
+      'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/pipeline.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'progress-bar',
     type: 'registry:component',
     title: 'Progress Bar',
@@ -304,6 +376,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/ring.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'schedule',
+    type: 'registry:component',
+    title: 'Schedule',
+    description:
+      'Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/schedule.tsx',
         type: 'registry:component',
       },
     ],
@@ -332,6 +418,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/status.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'team',
+    type: 'registry:component',
+    title: 'Team',
+    description:
+      'Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a "+N" overflow.',
+    registryDependencies: ['avatar'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/team.tsx',
         type: 'registry:component',
       },
     ],

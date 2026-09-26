@@ -9,6 +9,10 @@ import {
   alertsExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/index'
 import {
+  billingComponents,
+  billingExampleProps,
+} from '@/registry/components/dashboardblocks/billing/index'
+import {
   breakdownComponents,
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
@@ -16,6 +20,10 @@ import {
   chartPanelComponents,
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
+import {
+  checklistComponents,
+  checklistExampleProps,
+} from '@/registry/components/dashboardblocks/checklist/index'
 import {
   comparisonComponents,
   comparisonExampleProps,
@@ -41,6 +49,10 @@ import {
   gaugeExampleProps,
 } from '@/registry/components/dashboardblocks/gauge/index'
 import {
+  geoComponents,
+  geoExampleProps,
+} from '@/registry/components/dashboardblocks/geo/index'
+import {
   goalsComponents,
   goalsExampleProps,
 } from '@/registry/components/dashboardblocks/goals/index'
@@ -48,6 +60,10 @@ import {
   heatmapComponents,
   heatmapExampleProps,
 } from '@/registry/components/dashboardblocks/heatmap/index'
+import {
+  insightsComponents,
+  insightsExampleProps,
+} from '@/registry/components/dashboardblocks/insights/index'
 import {
   kpiComponents,
   kpiExampleProps,
@@ -61,6 +77,14 @@ import {
   metricListExampleProps,
 } from '@/registry/components/dashboardblocks/metric-list/index'
 import {
+  pipelineComponents,
+  pipelineExampleProps,
+} from '@/registry/components/dashboardblocks/pipeline/index'
+import {
+  scheduleComponents,
+  scheduleExampleProps,
+} from '@/registry/components/dashboardblocks/schedule/index'
+import {
   statGroupComponents,
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -72,6 +96,10 @@ import {
   statusComponents,
   statusExampleProps,
 } from '@/registry/components/dashboardblocks/status/index'
+import {
+  teamComponents,
+  teamExampleProps,
+} from '@/registry/components/dashboardblocks/team/index'
 import {
   usageMeterComponents,
   usageMeterExampleProps,
@@ -94,6 +122,13 @@ const exampleComponents = {
   ...goalsComponents,
   ...comparisonComponents,
   ...alertsComponents,
+  ...geoComponents,
+  ...billingComponents,
+  ...insightsComponents,
+  ...pipelineComponents,
+  ...scheduleComponents,
+  ...teamComponents,
+  ...checklistComponents,
   ...gaugeComponents,
   ...metricListComponents,
   ...forecastComponents,
@@ -116,6 +151,13 @@ const examplePropsMap = {
   ...goalsExampleProps,
   ...comparisonExampleProps,
   ...alertsExampleProps,
+  ...geoExampleProps,
+  ...billingExampleProps,
+  ...insightsExampleProps,
+  ...pipelineExampleProps,
+  ...scheduleExampleProps,
+  ...teamExampleProps,
+  ...checklistExampleProps,
   ...gaugeExampleProps,
   ...metricListExampleProps,
   ...forecastExampleProps,
