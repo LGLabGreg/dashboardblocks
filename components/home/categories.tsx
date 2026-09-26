@@ -106,6 +106,14 @@ import {
   pipeline1ExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
 import {
+  Realtime1,
+  realtime1ExampleProps,
+} from '@/registry/components/dashboardblocks/realtime/realtime-01'
+import {
+  Realtime3,
+  realtime3ExampleProps,
+} from '@/registry/components/dashboardblocks/realtime/realtime-03'
+import {
   Retention1,
   retention1ExampleProps,
 } from '@/registry/components/dashboardblocks/retention/retention-01'
@@ -180,6 +188,7 @@ export interface CategoryCounts {
   spend: number
   flow: number
   timeline: number
+  realtime: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -486,6 +495,17 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.timeline}
         >
           <Timeline2 {...timeline2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/realtime'
+          title='Realtime'
+          description='Active users right now, live throughput, an activity stream and today so far.'
+          count={counts.realtime}
+          className='md:col-span-3'
+          previewClassName='*:w-80'
+        >
+          <Realtime1 {...realtime1ExampleProps} />
+          <Realtime3 {...realtime3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

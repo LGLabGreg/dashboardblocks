@@ -1,0 +1,30 @@
+---
+title: Realtime
+description: Active users right now, live throughput, an activity stream and today so far.
+---
+
+Realtime blocks show data that keeps changing. Each block takes its first values as props, so it renders the same on the server and in the browser, then updates from state. Set `simulate` to see it move with made-up data, or replace the interval in the block with your own feed, such as a WebSocket or polling. Numbers count to each new value, and the pulse and counting stop for reduced motion. Updates aren't announced to screen readers, which would be noisy every second.
+
+### Right Now
+
+Active users, page views per second over the last minute and the pages with the most people on them.
+
+<ComponentPreview name='realtime-01' previewClassName='max-w-sm' />
+
+### Throughput
+
+Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.
+
+<ComponentPreview name='realtime-02' previewClassName='max-w-2xl' />
+
+### Live Activity
+
+Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.
+
+<ComponentPreview name='realtime-03' previewClassName='max-w-md' />
+
+### Today So Far
+
+Running totals since midnight against yesterday at the same time, with orders per hour.
+
+<ComponentPreview name='realtime-04' previewClassName='max-w-md' />

@@ -21,6 +21,7 @@ import { examples as kpiExamples } from '@/registry/components/dashboardblocks/k
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { examples as metricListExamples } from '@/registry/components/dashboardblocks/metric-list/registry'
 import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
+import { examples as realtimeExamples } from '@/registry/components/dashboardblocks/realtime/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as retentionExamples } from '@/registry/components/dashboardblocks/retention/registry'
 import { examples as scheduleExamples } from '@/registry/components/dashboardblocks/schedule/registry'
@@ -73,6 +74,7 @@ const registry = {
     ...spendExamples,
     ...flowExamples,
     ...timelineExamples,
+    ...realtimeExamples,
     ...hooks,
   ],
 }

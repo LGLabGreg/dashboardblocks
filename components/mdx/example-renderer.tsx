@@ -89,6 +89,10 @@ import {
   pipelineExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/index'
 import {
+  realtimeComponents,
+  realtimeExampleProps,
+} from '@/registry/components/dashboardblocks/realtime/index'
+import {
   retentionComponents,
   retentionExampleProps,
 } from '@/registry/components/dashboardblocks/retention/index'
@@ -157,6 +161,7 @@ const exampleComponents = {
   ...spendComponents,
   ...flowComponents,
   ...timelineComponents,
+  ...realtimeComponents,
 }
 
 const examplePropsMap = {
@@ -191,6 +196,7 @@ const examplePropsMap = {
   ...spendExampleProps,
   ...flowExampleProps,
   ...timelineExampleProps,
+  ...realtimeExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
