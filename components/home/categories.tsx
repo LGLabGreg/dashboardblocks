@@ -45,6 +45,10 @@ import {
   distribution1ExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/distribution-01'
 import {
+  Feedback1,
+  feedback1ExampleProps,
+} from '@/registry/components/dashboardblocks/feedback/feedback-01'
+import {
   Flow1,
   flow1ExampleProps,
 } from '@/registry/components/dashboardblocks/flow/flow-01'
@@ -189,6 +193,7 @@ export interface CategoryCounts {
   flow: number
   timeline: number
   realtime: number
+  feedback: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -501,11 +506,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Realtime'
           description='Active users right now, live throughput, an activity stream and today so far.'
           count={counts.realtime}
-          className='md:col-span-3'
+          className='md:col-span-2'
           previewClassName='*:w-80'
         >
           <Realtime1 {...realtime1ExampleProps} />
           <Realtime3 {...realtime3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/feedback'
+          title='Feedback'
+          description='Rating breakdowns, sentiment by topic, recent reviews and CSAT over time.'
+          count={counts.feedback}
+        >
+          <Feedback1 {...feedback1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

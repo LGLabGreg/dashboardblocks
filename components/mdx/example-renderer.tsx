@@ -41,6 +41,10 @@ import {
   distributionExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/index'
 import {
+  feedbackComponents,
+  feedbackExampleProps,
+} from '@/registry/components/dashboardblocks/feedback/index'
+import {
   flowComponents,
   flowExampleProps,
 } from '@/registry/components/dashboardblocks/flow/index'
@@ -162,6 +166,7 @@ const exampleComponents = {
   ...flowComponents,
   ...timelineComponents,
   ...realtimeComponents,
+  ...feedbackComponents,
 }
 
 const examplePropsMap = {
@@ -197,6 +202,7 @@ const examplePropsMap = {
   ...flowExampleProps,
   ...timelineExampleProps,
   ...realtimeExampleProps,
+  ...feedbackExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

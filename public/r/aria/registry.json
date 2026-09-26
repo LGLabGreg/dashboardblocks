@@ -205,6 +205,21 @@
       ]
     },
     {
+      "name": "feedback",
+      "type": "registry:component",
+      "title": "Feedback",
+      "description": "Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/aria/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/feedback.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "flow",
       "type": "registry:component",
       "title": "Flow",
@@ -2859,6 +2874,66 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime/realtime-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "feedback-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/feedback.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/feedback/feedback-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "feedback-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/feedback.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/feedback/feedback-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "feedback-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/feedback.json",
+        "https://dashboardblocks.com/r/aria/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/feedback/feedback-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "feedback-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/aria/chart-panel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/feedback/feedback-04.tsx",
           "type": "registry:component"
         }
       ]

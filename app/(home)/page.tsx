@@ -8,6 +8,7 @@ import { comparisonComponents } from '@/registry/components/dashboardblocks/comp
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { distributionComponents } from '@/registry/components/dashboardblocks/distribution/index'
+import { feedbackComponents } from '@/registry/components/dashboardblocks/feedback/index'
 import { flowComponents } from '@/registry/components/dashboardblocks/flow/index'
 import { forecastComponents } from '@/registry/components/dashboardblocks/forecast/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
@@ -69,6 +70,7 @@ const counts = {
   flow: Object.keys(flowComponents).length,
   timeline: Object.keys(timelineComponents).length,
   realtime: Object.keys(realtimeComponents).length,
+  feedback: Object.keys(feedbackComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
