@@ -1,0 +1,30 @@
+---
+title: Retention
+description: Cohort tables, retention curves, day 1, 7 and 30 milestones and growth accounting.
+---
+
+Retention follows each cohort, such as everyone who signed up in March, from the period they joined. Pass a cohort's size and how many were still active in each period since, starting with period 0. Newer cohorts have fewer periods. Averages are weighted by cohort size, so a small cohort doesn't swing them. Changes are in percentage points, not percent.
+
+### Cohort Table
+
+A retention triangle with one row per cohort and a weighted average row. Cells are shaded against the best share after period 0, so period 0's 100% doesn't wash out the rest. Hover a cell to read its count.
+
+<ComponentPreview name='retention-01' previewClassName='max-w-3xl' />
+
+### Retention Curves
+
+Every cohort's curve, with one highlighted against the average and where the average levels off.
+
+<ComponentPreview name='retention-02' previewClassName='max-w-2xl' />
+
+### Milestones
+
+Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.
+
+<ComponentPreview name='retention-03' previewClassName='max-w-sm' />
+
+### Growth Accounting
+
+Users gained (new and resurrected) above the axis and lost (churned) below it, with the net change and the quick ratio: users gained for each one lost.
+
+<ComponentPreview name='retention-04' previewClassName='max-w-2xl' />

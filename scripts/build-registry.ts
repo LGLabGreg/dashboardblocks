@@ -20,6 +20,7 @@ import { examples as leaderboardExamples } from '@/registry/components/dashboard
 import { examples as metricListExamples } from '@/registry/components/dashboardblocks/metric-list/registry'
 import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
+import { examples as retentionExamples } from '@/registry/components/dashboardblocks/retention/registry'
 import { examples as scheduleExamples } from '@/registry/components/dashboardblocks/schedule/registry'
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
 import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
@@ -63,6 +64,7 @@ const registry = {
     ...gaugeExamples,
     ...metricListExamples,
     ...forecastExamples,
+    ...retentionExamples,
     ...hooks,
   ],
 }

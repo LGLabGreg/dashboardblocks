@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "retention-01",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/heatmap.json",
+    "https://dashboardblocks.com/r/retention.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/retention/retention-01.tsx",
+      "content": "'use client'\n\nimport { HeatmapLegend } from '@/registry/components/dashboardblocks/heatmap'\nimport {\n  CohortTable,\n  type RetentionCohort,\n  formatRetention,\n  getAverageRetention,\n} from '@/registry/components/dashboardblocks/retention'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface Retention1Props {\n  /** Oldest first. `retained[0]` is period 0, usually the whole cohort. */\n  cohorts: RetentionCohort[]\n  description: string\n  /** Shows each cell as a share of the cohort or as a count. @default 'percent' */\n  mode?: 'percent' | 'count'\n  /** @default 'Month' */\n  periodName?: string\n  title: string\n}\n\nconst COHORT_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']\nconst COHORT_SIZES = [1_184, 1_246, 1_402, 1_318, 1_527, 1_611, 1_489, 1_702, 1_836]\n\nconst exampleProps: Retention1Props = {\n  // Retention drops fast, then levels off; newer cohorts level off a little higher.\n  cohorts: COHORT_NAMES.map((name, index) => {\n    const size = COHORT_SIZES[index]\n    const floor = 0.21 + index * 0.012\n    const periods = COHORT_NAMES.length - index\n    return {\n      label: `${name} 2026`,\n      retained: Array.from({ length: periods }, (_, month) => {\n        if (month === 0) return size\n        const rate = floor + (0.62 - floor) * Math.exp(-(month - 1) / 1.4)\n        const wobble = Math.sin(index * 2.3 + month * 1.7) * 0.012\n        return Math.round(size * (rate + wobble))\n      }),\n      size,\n    }\n  }),\n  description: 'Share of each monthly signup cohort still active, by months since signup',\n  periodName: 'Month',\n  title: 'Cohort retention',\n}\n\nconst Retention1 = (props: Retention1Props) => {\n  const { cohorts, description, mode = 'percent', periodName = 'Month', title } = props\n  const averages = getAverageRetention(cohorts)\n  const unit = periodName.toLowerCase()\n  const milestone = Math.min(3, averages.length - 1)\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent>\n        <CohortTable\n          caption={`${title}: ${description}. The last row is the average, weighted by cohort size.`}\n          cohorts={cohorts}\n          footer={<HeatmapLegend low='Fewer' high='More retained' />}\n          minWidth='36rem'\n          mode={mode}\n          periodName={periodName}\n        >\n          {milestone > 0 && averages[milestone] !== null\n            ? `On average, ${formatRetention(averages[milestone] ?? 0)} are still active in ${unit} ${milestone}`\n            : null}\n        </CohortTable>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { Retention1, exampleProps as retention1ExampleProps, type Retention1Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

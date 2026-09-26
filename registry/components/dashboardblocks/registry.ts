@@ -356,6 +356,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'retention',
+    type: 'registry:component',
+    title: 'Retention',
+    description:
+      'Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.',
+    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/retention.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'ring',
     type: 'registry:component',
     title: 'Ring',
