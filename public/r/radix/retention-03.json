@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "retention-03",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/radix/retention.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/retention/retention-03.tsx",
+      "content": "'use client'\n\nimport {\n  RetentionBar,\n  RetentionBarKey,\n  RetentionChange,\n  formatRetention,\n} from '@/registry/components/dashboardblocks/retention'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface RetentionMilestone {\n  /** e.g. \"Day 7\". */\n  label: string\n  /** Share of the current cohort still active, 0–1. */\n  current: number\n  /** The same share for the cohort before, 0–1. */\n  previous: number\n}\n\ninterface Retention3Props {\n  description: string\n  milestones: RetentionMilestone[]\n  /** Names the cohort compared against. @default 'Previous cohort' */\n  previousLabel?: string\n  title: string\n}\n\nconst exampleProps: Retention3Props = {\n  description: 'August signups, compared with July',\n  milestones: [\n    { current: 0.584, label: 'Day 1', previous: 0.561 },\n    { current: 0.392, label: 'Day 7', previous: 0.366 },\n    { current: 0.247, label: 'Day 30', previous: 0.253 },\n  ],\n  previousLabel: 'July',\n  title: 'Retention milestones',\n}\n\nconst Retention3 = (props: Retention3Props) => {\n  const { description, milestones, previousLabel = 'Previous cohort', title } = props\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>{title}</CardTitle>\n        <CardDescription>{description}</CardDescription>\n      </CardHeader>\n      <CardContent className='flex flex-col gap-5'>\n        <ul className='flex flex-col gap-5'>\n          {milestones.map((milestone) => (\n            <li key={milestone.label} className='flex flex-col gap-2'>\n              <div className='flex items-end justify-between gap-4'>\n                <span className='text-muted-foreground text-sm'>{milestone.label}</span>\n                <span className='flex items-baseline gap-2'>\n                  <span className='text-xl font-semibold tracking-tight tabular-nums'>\n                    {formatRetention(milestone.current, 1)}\n                  </span>\n                  <RetentionChange\n                    difference={milestone.current - milestone.previous}\n                    versus={`${previousLabel}, ${formatRetention(milestone.previous, 1)}`}\n                  />\n                </span>\n              </div>\n              <RetentionBar previous={milestone.previous} value={milestone.current} />\n            </li>\n          ))}\n        </ul>\n        <RetentionBarKey label={previousLabel} />\n      </CardContent>\n    </Card>\n  )\n}\n\nexport {\n  Retention3,\n  exampleProps as retention3ExampleProps,\n  type Retention3Props,\n  type RetentionMilestone,\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

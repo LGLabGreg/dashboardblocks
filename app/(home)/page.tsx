@@ -18,6 +18,7 @@ import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
+import { retentionComponents } from '@/registry/components/dashboardblocks/retention/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
@@ -57,6 +58,7 @@ const counts = {
   gauge: Object.keys(gaugeComponents).length,
   metricList: Object.keys(metricListComponents).length,
   forecast: Object.keys(forecastComponents).length,
+  retention: Object.keys(retentionComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

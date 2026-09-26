@@ -98,6 +98,10 @@ import {
   pipeline1ExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
 import {
+  Retention1,
+  retention1ExampleProps,
+} from '@/registry/components/dashboardblocks/retention/retention-01'
+import {
   Schedule2,
   schedule2ExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/schedule-02'
@@ -155,6 +159,7 @@ export interface CategoryCounts {
   gauge: number
   metricList: number
   forecast: number
+  retention: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -415,6 +420,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.forecast}
         >
           <Forecast3 {...forecast3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/retention'
+          title='Retention'
+          description='Cohort tables, retention curves, day 1, 7 and 30 milestones and growth accounting.'
+          count={counts.retention}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <Retention1 {...retention1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

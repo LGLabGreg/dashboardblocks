@@ -385,6 +385,22 @@
       ]
     },
     {
+      "name": "retention",
+      "type": "registry:component",
+      "title": "Retention",
+      "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/radix/heatmap.json",
+        "https://dashboardblocks.com/r/radix/use-in-view.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/retention.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "ring",
       "type": "registry:component",
       "title": "Ring",
@@ -2408,6 +2424,71 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast/forecast-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "retention-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/heatmap.json",
+        "https://dashboardblocks.com/r/radix/retention.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/retention/retention-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "retention-02",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/chart-panel.json",
+        "https://dashboardblocks.com/r/radix/retention.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/retention/retention-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "retention-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/retention.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/retention/retention-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "retention-04",
+      "type": "registry:component",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/chart-panel.json",
+        "https://dashboardblocks.com/r/radix/retention.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/retention/retention-04.tsx",
           "type": "registry:component"
         }
       ]
