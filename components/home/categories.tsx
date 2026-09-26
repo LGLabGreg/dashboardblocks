@@ -69,6 +69,10 @@ import {
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
 import {
+  MetricList1,
+  metricList1ExampleProps,
+} from '@/registry/components/dashboardblocks/metric-list/metric-list-01'
+import {
   StatGroup2,
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
@@ -109,6 +113,7 @@ export interface CategoryCounts {
   comparison: number
   alerts: number
   gauge: number
+  metricList: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -285,6 +290,14 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.gauge}
         >
           <Gauge1 {...gauge1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/metric-list'
+          title='Metric List'
+          description='Many metrics in one card, with sparklines, sections, targets and a watchlist.'
+          count={counts.metricList}
+        >
+          <MetricList1 {...metricList1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

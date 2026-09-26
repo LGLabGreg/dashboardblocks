@@ -53,6 +53,10 @@ import {
   leaderboardExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/index'
 import {
+  metricListComponents,
+  metricListExampleProps,
+} from '@/registry/components/dashboardblocks/metric-list/index'
+import {
   statGroupComponents,
   statGroupExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -87,6 +91,7 @@ const exampleComponents = {
   ...comparisonComponents,
   ...alertsComponents,
   ...gaugeComponents,
+  ...metricListComponents,
 }
 
 const examplePropsMap = {
@@ -107,6 +112,7 @@ const examplePropsMap = {
   ...comparisonExampleProps,
   ...alertsExampleProps,
   ...gaugeExampleProps,
+  ...metricListExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

@@ -1,0 +1,30 @@
+---
+title: Metric List
+description: Many metrics in one card, one row each, with their change, sparkline or target.
+---
+
+A metric list is lighter than a data table and denser than a stat group: one row per metric, with the value and change in fixed columns so rows line up. Green and red follow whether a rise is good, so a drop in latency reads as good, and every change keeps its arrow and sign. Values use named formats in `en-US`, so the server and the browser render the same.
+
+### Sparklines
+
+Metrics with their change and a 14-day sparkline. On narrow cards the change moves under the value.
+
+<ComponentPreview name='metric-list-01' previewClassName='max-w-xl' />
+
+### Sections
+
+Metrics grouped into sections, each with a header and how many of its metrics improved.
+
+<ComponentPreview name='metric-list-02' previewClassName='max-w-xl' />
+
+### Targets
+
+Metrics against their targets, each with a bar, a tick at the target and a status. Targets can be floors or ceilings.
+
+<ComponentPreview name='metric-list-03' previewClassName='max-w-2xl' />
+
+### Watchlist
+
+Select a metric to chart it in the same card. The list is a radio group, so it works with the arrow keys.
+
+<ComponentPreview name='metric-list-04' previewClassName='max-w-4xl' />

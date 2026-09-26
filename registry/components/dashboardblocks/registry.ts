@@ -253,6 +253,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'metric-list',
+    type: 'registry:component',
+    title: 'Metric List',
+    description:
+      'Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.',
+    dependencies: ['lucide-react'],
+    registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/metric-list.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'progress-bar',
     type: 'registry:component',
     title: 'Progress Bar',
