@@ -192,6 +192,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'feedback',
+    type: 'registry:component',
+    title: 'Feedback',
+    description:
+      'Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/feedback.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'flow',
     type: 'registry:component',
     title: 'Flow',
