@@ -11,6 +11,7 @@ import { examples as goalsExamples } from '@/registry/components/dashboardblocks
 import { examples as heatmapExamples } from '@/registry/components/dashboardblocks/heatmap/registry'
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
+import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
 import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
@@ -43,6 +44,7 @@ const registry = {
     ...goalsExamples,
     ...comparisonExamples,
     ...alertsExamples,
+    ...pipelineExamples,
     ...hooks,
   ],
 }

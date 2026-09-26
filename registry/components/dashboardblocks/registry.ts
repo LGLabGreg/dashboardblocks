@@ -238,6 +238,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'pipeline',
+    type: 'registry:component',
+    title: 'Pipeline',
+    description:
+      'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.',
+    dependencies: ['lucide-react'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/pipeline.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'progress-bar',
     type: 'registry:component',
     title: 'Progress Bar',

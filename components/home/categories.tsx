@@ -65,6 +65,10 @@ import {
   leaderboard04ExampleProps,
 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-04'
 import {
+  Pipeline1,
+  pipeline1ExampleProps,
+} from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
+import {
   StatGroup2,
   statGroup2ExampleProps,
 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
@@ -104,6 +108,7 @@ export interface CategoryCounts {
   goals: number
   comparison: number
   alerts: number
+  pipeline: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -272,6 +277,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[36rem]'
         >
           <Alerts1 {...alerts1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/pipeline'
+          title='Pipeline'
+          description='Work in flight across stages: boards, stage totals, stuck items and weighted forecasts.'
+          count={counts.pipeline}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[40rem] lg:*:w-[60rem]'
+        >
+          <Pipeline1 {...pipeline1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

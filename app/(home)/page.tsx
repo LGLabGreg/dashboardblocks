@@ -10,6 +10,7 @@ import { goalsComponents } from '@/registry/components/dashboardblocks/goals/ind
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
+import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
 import { statusComponents } from '@/registry/components/dashboardblocks/status/index'
@@ -37,6 +38,7 @@ const counts = {
   goals: Object.keys(goalsComponents).length,
   comparison: Object.keys(comparisonComponents).length,
   alerts: Object.keys(alertsComponents).length,
+  pipeline: Object.keys(pipelineComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
