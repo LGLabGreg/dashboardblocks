@@ -1,5 +1,29 @@
 # dashboardblocks
 
+## 0.10.0
+
+### Minor Changes
+
+- [#83](https://github.com/LGLabGreg/dashboardblocks/pull/83) [`7b203a7`](https://github.com/LGLabGreg/dashboardblocks/commit/7b203a7fb1443435e9241a4fc1014625f8326160) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Billing
+
+- [#84](https://github.com/LGLabGreg/dashboardblocks/pull/84) [`230c055`](https://github.com/LGLabGreg/dashboardblocks/commit/230c05504a3b01a54c4d5b281a76f4fe44c4ed48) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Checklist
+
+- [#85](https://github.com/LGLabGreg/dashboardblocks/pull/85) [`9a70f12`](https://github.com/LGLabGreg/dashboardblocks/commit/9a70f126410beb41fe6152ffbc1a1ec2c95563f6) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Forecast
+
+- [#85](https://github.com/LGLabGreg/dashboardblocks/pull/85) [`ba5d944`](https://github.com/LGLabGreg/dashboardblocks/commit/ba5d944613b7c2d0096d00e71e6bb3df23299dfd) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Gauge
+
+- [#83](https://github.com/LGLabGreg/dashboardblocks/pull/83) [`f853be7`](https://github.com/LGLabGreg/dashboardblocks/commit/f853be74f886f242a49bdcb509fb6af2d660827f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Geo
+
+- [#83](https://github.com/LGLabGreg/dashboardblocks/pull/83) [`305718a`](https://github.com/LGLabGreg/dashboardblocks/commit/305718a40c2416d6a755b01dae2927a77aa8190f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Insights
+
+- [#85](https://github.com/LGLabGreg/dashboardblocks/pull/85) [`78fe805`](https://github.com/LGLabGreg/dashboardblocks/commit/78fe805bdd7b212470bbca8750d034baf1049e2c) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Metric List
+
+- [#84](https://github.com/LGLabGreg/dashboardblocks/pull/84) [`9d5270d`](https://github.com/LGLabGreg/dashboardblocks/commit/9d5270d083550a0a629bf1763c2154da85627d4e) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Pipeline
+
+- [#84](https://github.com/LGLabGreg/dashboardblocks/pull/84) [`0f60d7e`](https://github.com/LGLabGreg/dashboardblocks/commit/0f60d7ec2dab71fd51c8350c2a039eeb5d2722f1) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Schedule
+
+- [#84](https://github.com/LGLabGreg/dashboardblocks/pull/84) [`26d27aa`](https://github.com/LGLabGreg/dashboardblocks/commit/26d27aa222e51a9c2d02323e1f820d1d2e1e9354) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - New component: Team
+
 ## 0.9.0
 
 ### Minor Changes
