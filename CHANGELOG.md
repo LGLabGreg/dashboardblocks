@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 0.12.0
+
+### Minor Changes
+
+- [#104](https://github.com/LGLabGreg/dashboardblocks/pull/104) [`c9034ca`](https://github.com/LGLabGreg/dashboardblocks/commit/c9034cacaf1aa93434c8f0d9fcda8168ce277357) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Refresh KPI, Usage Meter and Activity Feed: changes computed from the previous value, usage statuses with icons and labels, projections and overage, day-grouped activity, record history, notifications and a weekly digest
+
 ## 0.11.0
 
 ### Minor Changes
