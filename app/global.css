@@ -131,7 +131,7 @@
     @apply font-mono text-sm bg-muted!;
   }
   #nd-page {
-    @apply xl:px-0!;
+    @apply xl:max-w-[964px]!;
   }
 }
 
