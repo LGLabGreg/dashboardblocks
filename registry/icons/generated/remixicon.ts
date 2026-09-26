@@ -51,6 +51,7 @@ export {
   RiRefreshLine,
   RiSearchLine,
   RiSettingsLine,
+  RiSmartphoneLine,
   RiSofaLine,
   RiSortAsc,
   RiSortDesc,

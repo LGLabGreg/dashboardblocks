@@ -28,6 +28,7 @@ import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as retentionExamples } from '@/registry/components/dashboardblocks/retention/registry'
 import { examples as scatterExamples } from '@/registry/components/dashboardblocks/scatter/registry'
 import { examples as scheduleExamples } from '@/registry/components/dashboardblocks/schedule/registry'
+import { examples as securityExamples } from '@/registry/components/dashboardblocks/security/registry'
 import { examples as spendExamples } from '@/registry/components/dashboardblocks/spend/registry'
 import { examples as statGroupExamples } from '@/registry/components/dashboardblocks/stat-group/registry'
 import { examples as statesExamples } from '@/registry/components/dashboardblocks/states/registry'
@@ -81,6 +82,7 @@ const registry = {
     ...feedbackExamples,
     ...deploymentsExamples,
     ...scatterExamples,
+    ...securityExamples,
     ...hooks,
   ],
 }

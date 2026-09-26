@@ -56,6 +56,7 @@ export {
   RotateCwIcon,
   SearchXIcon,
   SettingsIcon,
+  SmartphoneIcon,
   SmileIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
