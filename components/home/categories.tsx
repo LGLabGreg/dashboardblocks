@@ -130,6 +130,10 @@ import {
   retention1ExampleProps,
 } from '@/registry/components/dashboardblocks/retention/retention-01'
 import {
+  Scatter4,
+  scatter4ExampleProps,
+} from '@/registry/components/dashboardblocks/scatter/scatter-04'
+import {
   Schedule2,
   schedule2ExampleProps,
 } from '@/registry/components/dashboardblocks/schedule/schedule-02'
@@ -203,6 +207,7 @@ export interface CategoryCounts {
   realtime: number
   feedback: number
   deployments: number
+  scatter: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -534,11 +539,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           title='Deployments'
           description='Recent deploys, environments and what is waiting to ship, DORA metrics and build health.'
           count={counts.deployments}
-          className='md:col-span-3'
-          previewClassName='*:w-80 sm:*:w-[24rem]'
+          className='md:col-span-2'
+          previewClassName='*:w-80'
         >
           <Deployments1 {...deployments1ExampleProps} />
           <Deployments4 {...deployments4ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/scatter'
+          title='Scatter'
+          description='Correlations with a trend line, 2×2 priority quadrants, bubble charts and a risk matrix.'
+          count={counts.scatter}
+        >
+          <Scatter4 {...scatter4ExampleProps} />
         </CategoryCard>
       </div>
     </section>

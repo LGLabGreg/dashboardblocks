@@ -24,6 +24,7 @@ import { metricListComponents } from '@/registry/components/dashboardblocks/metr
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { realtimeComponents } from '@/registry/components/dashboardblocks/realtime/index'
 import { retentionComponents } from '@/registry/components/dashboardblocks/retention/index'
+import { scatterComponents } from '@/registry/components/dashboardblocks/scatter/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { spendComponents } from '@/registry/components/dashboardblocks/spend/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
@@ -73,6 +74,7 @@ const counts = {
   realtime: Object.keys(realtimeComponents).length,
   feedback: Object.keys(feedbackComponents).length,
   deployments: Object.keys(deploymentsComponents).length,
+  scatter: Object.keys(scatterComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

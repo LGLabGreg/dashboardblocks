@@ -450,6 +450,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'scatter',
+    type: 'registry:component',
+    title: 'Scatter',
+    description:
+      'Primitives for scatter plots and matrices: a least-squares line with the correlation coefficient described in words, a median, categorical colours in a fixed order, point tooltip content, and risk levels from likelihood and impact with a labelled swatch.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/scatter.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'schedule',
     type: 'registry:component',
     title: 'Schedule',
