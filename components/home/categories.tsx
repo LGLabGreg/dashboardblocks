@@ -5,6 +5,14 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  AiUsage2,
+  aiUsage2ExampleProps,
+} from '@/registry/components/dashboardblocks/ai-usage/ai-usage-02'
+import {
+  AiUsage4,
+  aiUsage4ExampleProps,
+} from '@/registry/components/dashboardblocks/ai-usage/ai-usage-04'
+import {
   Alerts1,
   alerts1ExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
@@ -222,6 +230,7 @@ export interface CategoryCounts {
   scatter: number
   security: number
   inventory: number
+  aiUsage: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -585,6 +594,17 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.inventory}
         >
           <Inventory1 {...inventory1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/ai-usage'
+          title='AI Usage'
+          description='Tokens by model, cost by feature, model latency and errors, and prompt caching savings.'
+          count={counts.aiUsage}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[24rem]'
+        >
+          <AiUsage2 {...aiUsage2ExampleProps} />
+          <AiUsage4 {...aiUsage4ExampleProps} />
         </CategoryCard>
       </div>
     </section>

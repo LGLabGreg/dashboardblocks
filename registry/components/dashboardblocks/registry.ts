@@ -17,6 +17,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'ai-usage',
+    type: 'registry:component',
+    title: 'AI Usage',
+    description:
+      'Primitives for LLM usage: token cost at per-million prices with cached input billed separately, cache savings and hit rate, compact token and dollar formatting, model colours in a fixed order and an input, cached and output token bar.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ai-usage.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'alerts',
     type: 'registry:component',
     title: 'Alerts',
