@@ -1,75 +1,121 @@
 'use client'
-import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import {
-  SegmentedProgressBar,
-  type SegmentedProgressBarProps,
-} from '@/registry/components/dashboardblocks/progress-bar'
-import { UsageMeterValue } from '@/registry/components/dashboardblocks/usage-meter'
 
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
+import {
+  UsageMeterLimit,
+  UsageMeterValue,
+  UsageStatusBadge,
+  formatUsage,
+  getUsageStatus,
+} from '@/registry/components/dashboardblocks/usage-meter'
+
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+
+interface StorageCategory {
+  label: string
+  value: number
+}
 
 interface UsageMeter5Props {
-  segments: SegmentedProgressBarProps['segments']
+  /** Largest first reads best. Each takes the next chart colour. */
+  categories: StorageCategory[]
+  limit: number
   title: string
-  total: number
   unit: string
 }
 
 const exampleProps: UsageMeter5Props = {
-  segments: [
-    { label: 'Documents', value: 12.4, color: 'hsl(221 83% 53%)' },
-    { label: 'Images', value: 28.6, color: 'hsl(262 83% 58%)' },
-    { label: 'Videos', value: 18.2, color: 'hsl(330 81% 60%)' },
-    { label: 'Other', value: 8.3, color: 'hsl(35 91% 50%)' },
+  categories: [
+    { label: 'Images', value: 28.6 },
+    { label: 'Videos', value: 18.2 },
+    { label: 'Documents', value: 12.4 },
+    { label: 'Other', value: 8.3 },
   ],
-  title: 'Storage Breakdown',
-  total: 100,
+  limit: 100,
+  title: 'Storage',
   unit: 'GB',
 }
 
+const colors = [
+  'var(--color-chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+]
+
+const percent = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 0,
+  style: 'percent',
+})
+
 const UsageMeter5 = (props: UsageMeter5Props) => {
-  const { segments, title, total, unit } = props
-  const used = segments.reduce((acc, s) => acc + s.value, 0)
-  const free = total - used
+  const { categories, limit, title, unit } = props
+  const used = categories.reduce((sum, category) => sum + category.value, 0)
+  const status = getUsageStatus(used, limit)
 
   return (
     <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>
+          {formatUsage(Math.max(0, limit - used), unit)} free
+        </CardDescription>
+        <CardAction>
+          <UsageStatusBadge status={status} />
+        </CardAction>
+      </CardHeader>
       <CardContent className='flex flex-col gap-4'>
-        <div className='flex items-center justify-between'>
-          <CardTitle className='text-base font-medium'>{title}</CardTitle>
-          <CardDescription>
-            {free.toFixed(1)} {unit} free
-          </CardDescription>
-        </div>
-        <div className='space-y-1'>
-          <div className='flex items-baseline justify-between'>
-            <UsageMeterValue>
-              <AnimatedNumber value={used} formatter={(value) => value.toFixed(1)} />{' '}
-              {unit}
-            </UsageMeterValue>
-            <span className='text-sm text-muted-foreground'>
-              of {total} {unit}
-            </span>
+        <div className='flex flex-col gap-2'>
+          <div className='flex items-baseline justify-between gap-2'>
+            <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
+            <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
           </div>
-          <SegmentedProgressBar segments={segments} total={total} />
+          <div aria-hidden>
+            <SegmentedProgressBar
+              className='h-2.5 gap-0.5'
+              segments={categories.map((category, index) => ({
+                color: colors[index % colors.length],
+                label: category.label,
+                value: category.value,
+              }))}
+              total={limit}
+            />
+          </div>
         </div>
-        <div className='grid grid-cols-2 gap-x-3 gap-y-2'>
-          {segments.map((segment) => (
-            <div key={segment.label} className='flex items-center gap-2'>
-              <div
-                className='h-2.5 w-2.5 rounded-full'
-                style={{ backgroundColor: segment.color }}
+        <ul className='flex flex-col gap-2'>
+          {categories.map((category, index) => (
+            <li key={category.label} className='flex items-center gap-2 text-sm'>
+              <span
+                aria-hidden
+                className='size-2.5 shrink-0 rounded-[3px]'
+                style={{ backgroundColor: colors[index % colors.length] }}
               />
-              <span className='text-sm text-muted-foreground'>{segment.label}</span>
-              <span className='ml-auto text-sm font-medium'>
-                {segment.value.toFixed(1)} {unit}
+              <span className='text-muted-foreground truncate'>{category.label}</span>
+              <span className='ml-auto font-medium tabular-nums'>
+                {formatUsage(category.value, unit)}
               </span>
-            </div>
+              <span className='text-muted-foreground w-9 text-right text-xs tabular-nums'>
+                {percent.format(limit > 0 ? category.value / limit : 0)}
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </CardContent>
     </Card>
   )
 }
 
-export { UsageMeter5, exampleProps as usageMeter5ExampleProps, type UsageMeter5Props }
+export {
+  UsageMeter5,
+  exampleProps as usageMeter5ExampleProps,
+  type StorageCategory,
+  type UsageMeter5Props,
+}

@@ -7,8 +7,8 @@ export const components: Registry['items'] = [
     name: 'activity-feed',
     type: 'registry:component',
     title: 'Activity Feed',
-    description: 'Primitives for composing activity and timeline feeds.',
-    dependencies: ['class-variance-authority'],
+    description:
+      'Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and "Today" and "Yesterday" day headings that take a fixed now and a time zone, and grouping by day.',
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed.tsx',
@@ -373,8 +373,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'KPI',
     description:
-      'A flexible KPI card with trend indicators, sparklines, and progress tracking.',
-    registryDependencies: ['card'],
+      'Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.',
+    registryDependencies: ['card', registryUrl('animated-number'), registryUrl('trend')],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi.tsx',
@@ -601,7 +601,9 @@ export const components: Registry['items'] = [
     name: 'usage-meter',
     type: 'registry:component',
     title: 'Usage Meter',
-    description: 'A usage meter component.',
+    description:
+      'Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.',
+    registryDependencies: [registryUrl('use-in-view')],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter.tsx',

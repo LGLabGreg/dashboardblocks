@@ -5,53 +5,48 @@ import { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
-import { CardTitle } from '@/components/ui/card'
+import { CardDescription, CardTitle } from '@/components/ui/card'
 
-interface ProgressKPIBar {
-  label: string
-  target: string
-  percentage: number
-  fillClassName?: string
-  trackClassName?: string
+type TaskStatus = 'done' | 'in-progress' | 'todo'
+
+interface TaskCount {
+  count: number
+  status: TaskStatus
 }
 
 interface ProgressKPI2Props {
+  counts: TaskCount[]
   title: string
-  value: number
-  progressBars: ProgressKPIBar[]
+  /** Counted items, e.g. "tasks". */
+  unit: string
+}
+
+const statusConfig: Record<TaskStatus, { fill: string; label: string }> = {
+  done: { fill: 'bg-emerald-600 dark:bg-emerald-500', label: 'Done' },
+  'in-progress': { fill: 'bg-sky-600 dark:bg-sky-500', label: 'In progress' },
+  todo: { fill: 'bg-muted-foreground/40', label: 'Not started' },
 }
 
 const exampleProps: ProgressKPI2Props = {
-  title: 'Task Completion',
-  value: 87,
-  progressBars: [
-    {
-      label: 'completed',
-      target: '51 tasks',
-      percentage: 59,
-      fillClassName: 'bg-green-600',
-    },
-    {
-      label: 'in progress',
-      target: '26 tasks',
-      percentage: 30,
-      fillClassName: 'bg-blue-600',
-    },
-    {
-      label: 'not started',
-      target: '10 tasks',
-      percentage: 11,
-      fillClassName: 'bg-red-600',
-    },
+  counts: [
+    { count: 51, status: 'done' },
+    { count: 26, status: 'in-progress' },
+    { count: 10, status: 'todo' },
   ],
+  title: 'Sprint progress',
+  unit: 'tasks',
 }
 
 const ProgressKPI2 = (props: ProgressKPI2Props) => {
-  const { title, value, progressBars } = props
+  const { counts, title, unit } = props
+  const total = counts.reduce((sum, item) => sum + item.count, 0)
+  const done = counts.find((item) => item.status === 'done')?.count ?? 0
+  const share = (count: number) => (total > 0 ? (count / total) * 100 : 0)
+
   return (
     <KPI>
       <KPIContent className='gap-1'>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between gap-2'>
           <CardTitle>{title}</CardTitle>
           <Icon
             icon={
@@ -63,39 +58,39 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
                 remixicon='RiClipboardLine'
               />
             }
+            size='sm'
             variant='secondary'
           />
         </div>
-        <KPIValue
-          value={value}
-          formatter={(value) => `${value.toLocaleString()}/100`}
-          animated
-        />
-        <div className='mt-5 space-y-3'>
-          {progressBars.map((bar) => {
-            const safePercentage = Number.isFinite(bar.percentage) ? bar.percentage : 0
-            const normalized = Math.min(100, Math.max(0, safePercentage))
-
+        <KPIValue value={Math.round(share(done))} format='percent' animated />
+        <CardDescription>
+          {done.toLocaleString('en-US')} of {total.toLocaleString('en-US')} {unit} done
+        </CardDescription>
+        <ul className='mt-4 flex flex-col gap-3'>
+          {counts.map((item) => {
+            const config = statusConfig[item.status]
             return (
-              <div key={bar.label} className='space-y-1.5 text-sm text-muted-foreground'>
-                <div className='flex items-center justify-between'>
-                  <span>
-                    <span className='font-semibold text-foreground'>
-                      {normalized.toLocaleString()}%
+              <li key={item.status} className='flex flex-col gap-1.5 text-sm'>
+                <div className='flex items-center justify-between gap-2'>
+                  <span className='text-muted-foreground'>{config.label}</span>
+                  <span className='tabular-nums'>
+                    <span className='font-medium'>
+                      {item.count.toLocaleString('en-US')}
                     </span>{' '}
-                    {bar.label}
+                    <span className='text-muted-foreground'>
+                      ({Math.round(share(item.count))}%)
+                    </span>
                   </span>
-                  <span className='font-semibold text-foreground'>{bar.target}</span>
                 </div>
                 <ProgressBar
-                  className={bar.trackClassName}
-                  fillClassName={bar.fillClassName}
-                  percentage={bar.percentage}
+                  className='h-1.5'
+                  fillClassName={config.fill}
+                  percentage={share(item.count)}
                 />
-              </div>
+              </li>
             )
           })}
-        </div>
+        </ul>
       </KPIContent>
     </KPI>
   )
@@ -105,5 +100,6 @@ export {
   ProgressKPI2,
   exampleProps as progressKpi2ExampleProps,
   type ProgressKPI2Props,
-  type ProgressKPIBar,
+  type TaskCount,
+  type TaskStatus,
 }

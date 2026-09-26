@@ -1,151 +1,256 @@
+'use client'
+
 import {
-  ActivityFeedContent,
+  ActivityFeed,
   ActivityFeedItem,
-  ActivityFeedTimeline,
+  ActivityIcon,
+  ActivityTime,
+  type ActivityTone,
 } from '@/registry/components/dashboardblocks/activity-feed'
-import { Icon } from '@/registry/components/dashboardblocks/icon'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import type { ReactNode } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
-type EventStatus = 'success' | 'progress' | 'error' | 'info'
+type HistoryKind =
+  | 'created'
+  | 'assigned'
+  | 'changed'
+  | 'labelled'
+  | 'commented'
+  | 'resolved'
 
-interface DeploymentEvent {
-  id: number
-  title: string
-  description: string
-  time: string
-  status: EventStatus
-  icon: React.ReactNode
+interface HistoryEvent {
+  /** "opened this ticket", "changed the status". */
+  action: string
+  actor: string
+  at: Date
+  /** A value that changed, shown as from → to. */
+  change?: { from: string; to: string }
+  /** The text of a comment. */
+  comment?: string
+  id: string
+  kind: HistoryKind
 }
 
 interface ActivityFeed02Props {
+  description: string
+  /** Oldest first, so the history reads as a story. */
+  events: HistoryEvent[]
+  /** Pass a fixed date, so the block renders the same on the server and in the browser. */
+  now: Date
+  /** The record's current state, e.g. "Resolved". */
+  status: string
+  /** Time zone for times. @default 'UTC' */
+  timeZone?: string
   title: string
-  events: DeploymentEvent[]
 }
 
-const statusStyles: Record<EventStatus, string> = {
-  success:
-    'bg-[color-mix(in_oklab,var(--color-green-500)_10%,var(--card))] text-green-600 dark:text-green-500',
-  progress:
-    'bg-[color-mix(in_oklab,var(--color-blue-500)_10%,var(--card))] text-blue-600 dark:text-blue-500',
-  error:
-    'bg-[color-mix(in_oklab,var(--color-red-500)_10%,var(--card))] text-red-600 dark:text-red-500',
-  info: 'bg-[color-mix(in_oklab,var(--color-purple-500)_10%,var(--card))] text-purple-600 dark:text-purple-500',
+const kindConfig: Record<HistoryKind, { icon: ReactNode; tone: ActivityTone }> = {
+  assigned: {
+    icon: (
+      <IconPlaceholder
+        lucide='UserCheckIcon'
+        tabler='IconUserCheck'
+        hugeicons='UserCheck01Icon'
+        phosphor='UserCheckIcon'
+        remixicon='RiUserFollowLine'
+      />
+    ),
+    tone: 'info',
+  },
+  changed: {
+    icon: (
+      <IconPlaceholder
+        lucide='ArrowRightIcon'
+        tabler='IconArrowRight'
+        hugeicons='ArrowRight01Icon'
+        phosphor='ArrowRightIcon'
+        remixicon='RiArrowRightLine'
+      />
+    ),
+    tone: 'accent',
+  },
+  commented: {
+    icon: (
+      <IconPlaceholder
+        lucide='MessageSquareIcon'
+        tabler='IconMessage'
+        hugeicons='MessageIcon'
+        phosphor='ChatCircleIcon'
+        remixicon='RiChat1Line'
+      />
+    ),
+    tone: 'neutral',
+  },
+  created: {
+    icon: (
+      <IconPlaceholder
+        lucide='CirclePlusIcon'
+        tabler='IconCirclePlus'
+        hugeicons='AddCircleIcon'
+        phosphor='PlusCircleIcon'
+        remixicon='RiAddCircleLine'
+      />
+    ),
+    tone: 'neutral',
+  },
+  labelled: {
+    icon: (
+      <IconPlaceholder
+        lucide='TagIcon'
+        tabler='IconTag'
+        hugeicons='Tag01Icon'
+        phosphor='TagIcon'
+        remixicon='RiPriceTag3Line'
+      />
+    ),
+    tone: 'warning',
+  },
+  resolved: {
+    icon: (
+      <IconPlaceholder
+        lucide='CircleCheckIcon'
+        tabler='IconCircleCheck'
+        hugeicons='CheckmarkCircle02Icon'
+        phosphor='CheckCircleIcon'
+        remixicon='RiCheckboxCircleLine'
+      />
+    ),
+    tone: 'success',
+  },
 }
+
+const NOW = new Date(Date.UTC(2026, 8, 26, 15, 0))
+const minutesAgo = (minutes: number) => new Date(NOW.getTime() - minutes * 60_000)
 
 const exampleProps: ActivityFeed02Props = {
-  title: 'Recent Deployments',
+  description: 'Checkout fails with a saved card',
   events: [
     {
-      id: 1,
-      title: 'Deployment Successful',
-      description: 'Production v2.4.1 deployed to all regions',
-      time: '10:32 AM',
-      status: 'success',
-      icon: (
-        <IconPlaceholder
-          lucide='CircleCheckIcon'
-          tabler='IconCircleCheck'
-          hugeicons='CheckmarkCircle02Icon'
-          phosphor='CheckCircleIcon'
-          remixicon='RiCheckboxCircleLine'
-        />
-      ),
+      action: 'opened this ticket',
+      actor: 'Amara Okafor',
+      at: minutesAgo(60 * 26),
+      id: 'h1',
+      kind: 'created',
     },
     {
-      id: 2,
-      title: 'Build Started',
-      description: 'Building production bundle...',
-      time: '10:30 AM',
-      status: 'progress',
-      icon: (
-        <IconPlaceholder
-          lucide='ClockIcon'
-          tabler='IconClock'
-          hugeicons='Clock01Icon'
-          phosphor='ClockIcon'
-          remixicon='RiTimeLine'
-        />
-      ),
+      action: 'added the labels Payments and Safari',
+      actor: 'Priya Nair',
+      at: minutesAgo(60 * 25),
+      id: 'h2',
+      kind: 'labelled',
     },
     {
-      id: 3,
-      title: 'Critical Alert',
-      description: 'CPU usage exceeded 90% threshold',
-      time: '9:15 AM',
-      status: 'error',
-      icon: (
-        <IconPlaceholder
-          lucide='CircleAlertIcon'
-          tabler='IconExclamationCircle'
-          hugeicons='AlertCircleIcon'
-          phosphor='WarningCircleIcon'
-          remixicon='RiErrorWarningLine'
-        />
-      ),
+      action: 'assigned this to Kenji Mori',
+      actor: 'Priya Nair',
+      at: minutesAgo(60 * 25 - 2),
+      id: 'h3',
+      kind: 'assigned',
     },
     {
-      id: 4,
-      title: 'Performance Optimized',
-      description: 'Cache hit rate improved by 23%',
-      time: '8:45 AM',
-      status: 'info',
-      icon: (
-        <IconPlaceholder
-          lucide='ZapIcon'
-          tabler='IconBolt'
-          hugeicons='FlashIcon'
-          phosphor='LightningIcon'
-          remixicon='RiFlashlightLine'
-        />
-      ),
+      action: 'changed the priority',
+      actor: 'Kenji Mori',
+      at: minutesAgo(60 * 6),
+      change: { from: 'Normal', to: 'High' },
+      id: 'h4',
+      kind: 'changed',
+    },
+    {
+      action: 'commented',
+      actor: 'Kenji Mori',
+      at: minutesAgo(95),
+      comment:
+        'Reproduced on Safari 18 with a saved card. The card token refreshes after the form submits, so the first charge is declined. Fix is in review.',
+      id: 'h5',
+      kind: 'commented',
+    },
+    {
+      action: 'changed the status',
+      actor: 'Kenji Mori',
+      at: minutesAgo(12),
+      change: { from: 'In progress', to: 'Resolved' },
+      id: 'h6',
+      kind: 'resolved',
     },
   ],
+  now: NOW,
+  status: 'Resolved',
+  title: 'Ticket #4821',
+}
+
+function Value({ children }: { children: ReactNode }) {
+  return (
+    <span className='bg-muted text-foreground rounded px-1.5 py-0.5 text-xs font-medium whitespace-nowrap'>
+      {children}
+    </span>
+  )
 }
 
 const ActivityFeed02 = (props: ActivityFeed02Props) => {
-  const { title, events } = props
+  const { description, events, now, status, timeZone = 'UTC', title } = props
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='flex items-center justify-between'>
-          {title}
-          <Button variant='outline' size='sm'>
-            View all
-            <IconPlaceholder
-              lucide='ArrowRightIcon'
-              tabler='IconArrowRight'
-              hugeicons='ArrowRight01Icon'
-              phosphor='ArrowRightIcon'
-              remixicon='RiArrowRightLine'
-              data-icon='inline-end'
-            />
-          </Button>
-        </CardTitle>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+        <CardAction>
+          <span className='bg-muted rounded-full px-2 py-0.5 text-xs font-medium'>
+            {status}
+          </span>
+        </CardAction>
       </CardHeader>
       <CardContent>
-        <ActivityFeedTimeline>
+        <ActivityFeed aria-label={`History of ${title}`}>
           {events.map((event) => {
+            const config = kindConfig[event.kind]
             return (
-              <ActivityFeedItem key={event.id}>
-                <Icon
-                  icon={event.icon}
-                  size='md'
-                  className={statusStyles[event.status]}
-                />
-                <ActivityFeedContent>
-                  <div className='space-y-1'>
-                    <p className='font-medium mb-0.5'>{event.title}</p>
-                    <p className='text-sm text-muted-foreground'>{event.description}</p>
+              <ActivityFeedItem key={event.id} className='pb-5 last:pb-0' connector>
+                <ActivityIcon icon={config.icon} tone={config.tone} />
+                <div className='flex min-w-0 flex-1 flex-col gap-2 pt-1.5'>
+                  <div className='flex items-start justify-between gap-3'>
+                    <p className='text-sm'>
+                      <span className='font-medium'>{event.actor}</span>{' '}
+                      <span className='text-muted-foreground'>{event.action}</span>
+                      {event.change && (
+                        <>
+                          {' '}
+                          <Value>{event.change.from}</Value>{' '}
+                          <span className='whitespace-nowrap'>
+                            <span aria-hidden className='text-muted-foreground'>
+                              →
+                            </span>
+                            <span className='sr-only'>to</span>{' '}
+                            <Value>{event.change.to}</Value>
+                          </span>
+                        </>
+                      )}
+                    </p>
+                    <ActivityTime
+                      className='mt-0.5'
+                      date={event.at}
+                      now={now}
+                      timeZone={timeZone}
+                    />
                   </div>
-                </ActivityFeedContent>
-                <span className='text-xs text-muted-foreground'>{event.time}</span>
+                  {event.comment && (
+                    <blockquote className='rounded-lg border p-3 text-sm'>
+                      {event.comment}
+                    </blockquote>
+                  )}
+                </div>
               </ActivityFeedItem>
             )
           })}
-        </ActivityFeedTimeline>
+        </ActivityFeed>
       </CardContent>
     </Card>
   )
@@ -155,6 +260,6 @@ export {
   ActivityFeed02,
   exampleProps as activityFeed02ExampleProps,
   type ActivityFeed02Props,
-  type DeploymentEvent,
-  type EventStatus,
+  type HistoryEvent,
+  type HistoryKind,
 }

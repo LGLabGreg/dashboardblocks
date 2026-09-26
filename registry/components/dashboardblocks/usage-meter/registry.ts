@@ -6,13 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-01',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      registryUrl('animated-number'),
-      registryUrl('icon'),
-      registryUrl('progress-bar'),
-      registryUrl('usage-meter'),
-    ],
+    registryDependencies: ['card', registryUrl('icon'), registryUrl('usage-meter')],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-01.tsx',
@@ -39,11 +33,7 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-03',
     type: 'registry:component',
-    registryDependencies: [
-      'card',
-      registryUrl('progress-bar'),
-      registryUrl('usage-meter'),
-    ],
+    registryDependencies: ['card', registryUrl('usage-meter')],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-03.tsx',
@@ -55,11 +45,10 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-04',
     type: 'registry:component',
     registryDependencies: [
+      'button',
       'card',
       registryUrl('animated-number'),
       registryUrl('icon'),
-      registryUrl('progress-bar'),
-      registryUrl('trend'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -74,7 +63,6 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      registryUrl('animated-number'),
       registryUrl('progress-bar'),
       registryUrl('usage-meter'),
     ],
@@ -92,7 +80,6 @@ export const examples: Registry['items'] = [
       'button',
       'card',
       registryUrl('icon'),
-      registryUrl('progress-bar'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -111,6 +98,7 @@ export const examples: Registry['items'] = [
       registryUrl('animated-number'),
       registryUrl('animated-wave'),
       registryUrl('icon'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {
@@ -128,6 +116,7 @@ export const examples: Registry['items'] = [
       registryUrl('animated-number'),
       registryUrl('animated-wave'),
       registryUrl('icon'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {

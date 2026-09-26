@@ -1,156 +1,152 @@
+'use client'
+
 import {
-  ActivityFeedContent,
+  ActivityFeed,
   ActivityFeedItem,
+  ActivityTime,
+  groupActivityByDay,
 } from '@/registry/components/dashboardblocks/activity-feed'
-import { Icon } from '@/registry/components/dashboardblocks/icon'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { useId } from 'react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 interface Activity {
-  id: number
-  user: string
-  avatar: string
+  /** "commented on", "invited", "moved … to Done". */
   action: string
-  target: string
-  time: string
-  icon: React.ReactNode
-  iconColor: string
+  actor: Pick<Person, 'avatar' | 'name'>
+  at: Date
+  id: string
+  /** What the action was on, shown in bold. */
+  target?: string
 }
 
 interface ActivityFeed01Props {
-  title: string
-  badgeCount: number
+  /** Newest first. */
   activities: Activity[]
+  description: string
+  /** Pass a fixed date, so the block renders the same on the server and in the browser. */
+  now: Date
+  onViewAll?: () => void
+  title: string
+  /** Time zone for days and times. @default 'UTC' */
+  timeZone?: string
 }
 
+const NOW = new Date(Date.UTC(2026, 8, 26, 15, 0))
+const minutesAgo = (minutes: number) => new Date(NOW.getTime() - minutes * 60_000)
+
 const exampleProps: ActivityFeed01Props = {
-  title: 'Recent Activity',
-  badgeCount: 4,
   activities: [
     {
-      id: 1,
-      user: 'Sarah Chen',
-      avatar: '/images/women.jpg',
-      action: 'created a new document',
-      target: 'Q4 Revenue Report',
-      time: '2 minutes ago',
-      icon: (
-        <IconPlaceholder
-          lucide='FileTextIcon'
-          tabler='IconFileText'
-          hugeicons='File02Icon'
-          phosphor='FileTextIcon'
-          remixicon='RiFileTextLine'
-        />
-      ),
-      iconColor: 'text-blue-600 bg-blue-600/10',
+      action: 'commented on',
+      actor: { name: 'Priya Nair' },
+      at: minutesAgo(4),
+      id: 'a1',
+      target: 'Q4 pricing page',
     },
     {
-      id: 2,
-      user: 'Michael Scott',
-      avatar: '/images/man.jpg',
       action: 'invited',
-      target: 'Jim Halpert',
-      time: '15 minutes ago',
-      icon: (
-        <IconPlaceholder
-          lucide='UserPlusIcon'
-          tabler='IconUserPlus'
-          hugeicons='UserAdd01Icon'
-          phosphor='UserPlusIcon'
-          remixicon='RiUserAddLine'
-        />
-      ),
-      iconColor: 'text-teal-600 bg-teal-600/10',
+      actor: { name: 'Tomás Rivera' },
+      at: minutesAgo(38),
+      id: 'a2',
+      target: 'mei@example.com',
     },
     {
-      id: 3,
-      user: 'Pam Beesly',
-      avatar: '/images/women.jpg',
-      action: 'updated settings for',
-      target: 'Marketing Campaign',
-      time: '1 hour ago',
-      icon: (
-        <IconPlaceholder
-          lucide='SettingsIcon'
-          tabler='IconSettings'
-          hugeicons='SettingsIcon'
-          phosphor='GearIcon'
-          remixicon='RiSettingsLine'
-        />
-      ),
-      iconColor: 'text-orange-600 bg-orange-600/10',
+      action: 'moved Onboarding checklist to',
+      actor: { name: 'Mei Tanaka' },
+      at: minutesAgo(190),
+      id: 'a3',
+      target: 'Done',
     },
     {
-      id: 4,
-      user: 'Dwight Schrute',
-      avatar: '/images/man.jpg',
-      action: 'processed payment of',
-      target: '$2,450.00',
-      time: '3 hours ago',
-      icon: (
-        <IconPlaceholder
-          lucide='DollarSignIcon'
-          tabler='IconCurrencyDollar'
-          hugeicons='Dollar01Icon'
-          phosphor='CurrencyDollarIcon'
-          remixicon='RiMoneyDollarCircleLine'
-        />
-      ),
-      iconColor: 'text-violet-600 bg-violet-600/10',
+      action: 'uploaded 3 files to',
+      actor: { name: 'Jonah Fischer' },
+      at: minutesAgo(60 * 20),
+      id: 'a4',
+      target: 'Brand assets',
+    },
+    {
+      action: 'created the project',
+      actor: { name: 'Amara Okafor' },
+      at: minutesAgo(60 * 23),
+      id: 'a5',
+      target: 'Mobile checkout',
+    },
+    {
+      action: 'closed 12 issues in',
+      actor: { name: 'Lucas Silva' },
+      at: minutesAgo(60 * 50),
+      id: 'a6',
+      target: 'Sprint 24',
     },
   ],
+  description: 'What your team did across projects',
+  now: NOW,
+  onViewAll: () => {},
+  title: 'Recent activity',
 }
 
 const ActivityFeed01 = (props: ActivityFeed01Props) => {
-  const { title, badgeCount, activities } = props
+  const { activities, description, now, onViewAll, timeZone = 'UTC', title } = props
+  const id = useId()
+  const days = groupActivityByDay(activities, now, timeZone)
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='flex items-center justify-between'>
-          {title}
-          <Badge variant='secondary' className='bg-blue-600 text-white'>
-            <IconPlaceholder
-              lucide='BellIcon'
-              tabler='IconBell'
-              hugeicons='NotificationIcon'
-              phosphor='BellIcon'
-              remixicon='RiNotificationLine'
-            />
-            {badgeCount} New
-          </Badge>
-        </CardTitle>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+        {onViewAll && (
+          <CardAction>
+            <Button variant='outline' size='sm' onClick={onViewAll}>
+              View all
+            </Button>
+          </CardAction>
+        )}
       </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        {activities.map((activity) => {
-          return (
-            <ActivityFeedItem key={activity.id}>
-              <Avatar className='h-10 w-10 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
-                <AvatarImage src={activity.avatar} alt={activity.user} />
-                <AvatarFallback>{activity.user.slice(0, 2)}</AvatarFallback>
-              </Avatar>
-              <ActivityFeedContent className='space-y-0.5'>
-                <p>
-                  <span className='font-medium'>{activity.user}</span>{' '}
-                  <span className='text-muted-foreground'>{activity.action}</span>{' '}
-                  <span className='font-medium'>{activity.target}</span>
-                </p>
-                <span className='text-xs text-muted-foreground'>{activity.time}</span>
-              </ActivityFeedContent>
-              <Icon
-                icon={activity.icon}
-                shape='circle'
-                size='sm'
-                className={cn('hidden md:flex', activity.iconColor)}
-              />
-            </ActivityFeedItem>
-          )
-        })}
+      <CardContent className='flex flex-col gap-5'>
+        {days.map((day) => (
+          <section key={day.key} aria-labelledby={`${id}-${day.key}`}>
+            <h3
+              id={`${id}-${day.key}`}
+              className='text-muted-foreground mb-3 text-xs font-medium'
+            >
+              {day.label}
+            </h3>
+            <ActivityFeed className='gap-4'>
+              {day.items.map((activity) => (
+                <ActivityFeedItem key={activity.id} className='items-start'>
+                  <PersonAvatar person={activity.actor} />
+                  <p className='min-w-0 flex-1 text-sm'>
+                    <span className='font-medium'>{activity.actor.name}</span>{' '}
+                    <span className='text-muted-foreground'>{activity.action}</span>
+                    {activity.target && (
+                      <>
+                        {' '}
+                        <span className='font-medium break-words'>{activity.target}</span>
+                      </>
+                    )}
+                  </p>
+                  <ActivityTime
+                    className='mt-0.5'
+                    date={activity.at}
+                    now={now}
+                    timeZone={timeZone}
+                  />
+                </ActivityFeedItem>
+              ))}
+            </ActivityFeed>
+          </section>
+        ))}
       </CardContent>
     </Card>
   )
@@ -159,6 +155,6 @@ const ActivityFeed01 = (props: ActivityFeed01Props) => {
 export {
   ActivityFeed01,
   exampleProps as activityFeed01ExampleProps,
-  type ActivityFeed01Props,
   type Activity,
+  type ActivityFeed01Props,
 }

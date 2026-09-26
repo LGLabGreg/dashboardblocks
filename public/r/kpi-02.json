@@ -2,14 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-02",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/animated-number.json",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/trend.json"
+    "card",
+    "https://dashboardblocks.com/r/kpi.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
-      "content": "'use client'\n\nimport { KPI, KPIContent, KPIValue } from '@/registry/components/dashboardblocks/kpi'\nimport { Trend } from '@/registry/components/dashboardblocks/trend'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI2Props {\n  trend: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI2Props = {\n  trend: 12.5,\n  title: 'Active Users',\n  value: 2420,\n}\n\nconst KPI2 = (props: KPI2Props) => {\n  const { trend, title, value } = props\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <div className='flex items-center justify-between'>\n          <CardDescription>{title}</CardDescription>\n          <Trend trend={trend} variant='badge' />\n        </div>\n        <KPIValue value={value} animated />\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI2, exampleProps as kpi2ExampleProps, type KPI2Props }\n",
+      "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI2Props {\n  /** What the change is measured against, e.g. \"vs last week\". */\n  comparison: string\n  format?: KPIFormat\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI2Props = {\n  comparison: 'vs last week',\n  format: 'number',\n  previous: 2_151,\n  title: 'Active users',\n  value: 2_420,\n}\n\nconst KPI2 = (props: KPI2Props) => {\n  const { comparison, format, previous, title, value } = props\n\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <div className='flex items-center justify-between gap-2'>\n          <CardDescription>{title}</CardDescription>\n          <KPIChange comparison={comparison} previous={previous} value={value} />\n        </div>\n        <KPIValue value={value} format={format} animated />\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI2, exampleProps as kpi2ExampleProps, type KPI2Props }\n",
       "type": "registry:component"
     }
   ],

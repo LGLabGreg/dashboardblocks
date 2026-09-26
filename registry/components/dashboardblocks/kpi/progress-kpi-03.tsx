@@ -10,49 +10,51 @@ interface ProgressKPI3Props {
   current: number
   goal: number
   title: string
+  /** Counted items, e.g. "sales". */
   unit: string
 }
 
 const exampleProps: ProgressKPI3Props = {
-  current: 7500,
-  goal: 10000,
-  title: 'Monthly Goal',
+  current: 7_500,
+  goal: 10_000,
+  title: 'Monthly goal',
   unit: 'sales',
 }
 
 const ProgressKPI3 = (props: ProgressKPI3Props) => {
   const { current, goal, title, unit } = props
-  const percentage = Math.min(100, Math.max(0, (current / goal) * 100))
+  const percentage = goal > 0 ? Math.min(100, Math.max(0, (current / goal) * 100)) : 0
+  const remaining = Math.max(0, goal - current)
 
   return (
     <KPI>
-      <KPIContent>
-        <div className='grid grid-cols-2 gap-4'>
-          <div className='flex items-center justify-between'>
-            <div className='space-y-4'>
-              <CardTitle>{title}</CardTitle>
-              <div className='space-y-1'>
-                <KPIValue className='text-2xl' value={current} animated />
-                <CardDescription>
-                  of {goal.toLocaleString()} {unit}
-                </CardDescription>
-              </div>
-            </div>
+      <KPIContent className='flex-row items-center justify-between gap-4'>
+        <div className='flex min-w-0 flex-col gap-4'>
+          <CardTitle>{title}</CardTitle>
+          <div className='flex flex-col gap-1'>
+            <KPIValue className='text-2xl' value={current} animated />
+            <CardDescription>
+              of {goal.toLocaleString('en-US')} {unit}
+            </CardDescription>
           </div>
-          <div className='flex items-center justify-center'>
-            <Ring
-              className='h-24 w-24 sm:h-36 sm:w-36 shrink-0'
-              percentage={percentage}
-              ringColor='var(--color-chart-1)'
-            >
-              <AnimatedNumber
-                className='text-lg font-bold'
-                value={percentage}
-                formatter={(value) => `${value.toLocaleString()}%`}
-              />
-            </Ring>
-          </div>
+          <p className='text-muted-foreground text-xs'>
+            {remaining > 0
+              ? `${remaining.toLocaleString('en-US')} ${unit} to go`
+              : 'Goal reached'}
+          </p>
         </div>
+        <Ring
+          ariaLabel={`${Math.round(percentage)}% of goal`}
+          className='size-28 sm:size-32'
+          percentage={percentage}
+          ringColor='var(--color-chart-1)'
+        >
+          <AnimatedNumber
+            className='text-lg font-semibold tabular-nums'
+            value={Math.round(percentage)}
+            formatter={(value) => `${Math.round(value)}%`}
+          />
+        </Ring>
       </KPIContent>
     </KPI>
   )

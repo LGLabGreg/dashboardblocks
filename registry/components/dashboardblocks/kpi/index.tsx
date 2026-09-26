@@ -1,7 +1,7 @@
 import { AreaChartKPI1, areaChartKpi1ExampleProps } from './area-chart-kpi-01'
 import { AreaChartKPI2, areaChartKpi2ExampleProps } from './area-chart-kpi-02'
 import { BarChartKPI1, barChartKpi1ExampleProps } from './bar-chart-kpi-01'
-import { BarChartKPI2, barChartKPI2ExampleProps } from './bar-chart-kpi-02'
+import { BarChartKPI2, barChartKpi2ExampleProps } from './bar-chart-kpi-02'
 import { KPI1, kpi1ExampleProps } from './kpi-01'
 import { KPI2, kpi2ExampleProps } from './kpi-02'
 import { KPI3, kpi3ExampleProps } from './kpi-03'
@@ -32,7 +32,7 @@ export const kpiExampleProps = {
   'progress-kpi-02': progressKpi2ExampleProps,
   'progress-kpi-03': progressKpi3ExampleProps,
   'bar-chart-kpi-01': barChartKpi1ExampleProps,
-  'bar-chart-kpi-02': barChartKPI2ExampleProps,
+  'bar-chart-kpi-02': barChartKpi2ExampleProps,
   'line-chart-kpi-01': lineChartKpi1ExampleProps,
   'area-chart-kpi-01': areaChartKpi1ExampleProps,
   'area-chart-kpi-02': areaChartKpi2ExampleProps,

@@ -1,18 +1,36 @@
 ---
 title: Activity Feed
-description: Flexible primitives for activity streams and event timelines.
+description: Activity feeds grouped by day, a record's history as a timeline, notifications with unread state, a weekly digest and social activity.
 ---
 
-### Compact
+Activity feeds show who did what, and when. Times are relative, like "5 min ago" or "yesterday", with the full date and time on hover, and days are headed "Today" and "Yesterday". Both take a fixed `now` and a time zone, so they render the same on the server and in the browser. Avatars show initials in a colour picked from the name when there's no photo. Icons for each kind of activity are decorative, and the sentence next to them says what happened.
 
-<ComponentPreview name='activity-feed-01' />
+### Recent Activity
 
-<ComponentPreview name='activity-feed-03' />
+What people did across a workspace, newest first and grouped by day.
 
-### Timeline
+<ComponentPreview name='activity-feed-01' previewClassName='max-w-lg' />
 
-<ComponentPreview name='activity-feed-02' />
+### Record History
 
-<ComponentPreview name='activity-feed-04' />
+The history of one record as a timeline, oldest first, with changes shown from one value to the next and comments quoted in full.
 
-<ComponentPreview name='activity-feed-05' />
+<ComponentPreview name='activity-feed-02' previewClassName='max-w-lg' />
+
+### Notifications
+
+Notifications with All, Mentions and Unread tabs. Open one to mark it read, or mark them all at once.
+
+<ComponentPreview name='activity-feed-03' previewClassName='max-w-md' />
+
+### Weekly Digest
+
+A week of activity by kind, with the change on the week before and the most active people.
+
+<ComponentPreview name='activity-feed-04' previewClassName='max-w-md' />
+
+### Social Activity
+
+Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.
+
+<ComponentPreview name='activity-feed-05' previewClassName='max-w-lg' />
