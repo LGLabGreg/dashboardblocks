@@ -158,6 +158,14 @@ import {
   security3ExampleProps,
 } from '@/registry/components/dashboardblocks/security/security-03'
 import {
+  Settings1,
+  settings1ExampleProps,
+} from '@/registry/components/dashboardblocks/settings/settings-01'
+import {
+  Settings5,
+  settings5ExampleProps,
+} from '@/registry/components/dashboardblocks/settings/settings-05'
+import {
   Spend1,
   spend1ExampleProps,
 } from '@/registry/components/dashboardblocks/spend/spend-01'
@@ -231,6 +239,7 @@ export interface CategoryCounts {
   security: number
   inventory: number
   aiUsage: number
+  settings: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -605,6 +614,17 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         >
           <AiUsage2 {...aiUsage2ExampleProps} />
           <AiUsage4 {...aiUsage4ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/settings'
+          title='Settings'
+          description='Members and invites, API keys, notification preferences, integrations, webhooks and a danger zone.'
+          count={counts.settings}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[26rem]'
+        >
+          <Settings1 {...settings1ExampleProps} />
+          <Settings5 {...settings5ExampleProps} />
         </CategoryCard>
       </div>
     </section>

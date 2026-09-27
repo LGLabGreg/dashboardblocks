@@ -516,6 +516,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'settings',
+    type: 'registry:component',
+    title: 'Settings',
+    description:
+      'Primitives for settings pages: owner, admin, member and viewer roles with what each can do and a menu to pick one, a row that puts a label and description beside its control, connected, needs attention, paused and not connected statuses each with an icon and label, secret masking, a copy button that announces itself, and relative and UTC date formatting.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/settings.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'spend',
     type: 'registry:component',
     title: 'Spend',

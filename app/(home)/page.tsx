@@ -29,6 +29,7 @@ import { retentionComponents } from '@/registry/components/dashboardblocks/reten
 import { scatterComponents } from '@/registry/components/dashboardblocks/scatter/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
 import { securityComponents } from '@/registry/components/dashboardblocks/security/index'
+import { settingsComponents } from '@/registry/components/dashboardblocks/settings/index'
 import { spendComponents } from '@/registry/components/dashboardblocks/spend/index'
 import { statGroupComponents } from '@/registry/components/dashboardblocks/stat-group/index'
 import { statesComponents } from '@/registry/components/dashboardblocks/states/index'
@@ -81,6 +82,7 @@ const counts = {
   security: Object.keys(securityComponents).length,
   inventory: Object.keys(inventoryComponents).length,
   aiUsage: Object.keys(aiUsageComponents).length,
+  settings: Object.keys(settingsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
