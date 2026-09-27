@@ -52,4 +52,33 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'team-05',
+    type: 'registry:component',
+    registryDependencies: ['button', 'card', 'checkbox'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/team/team-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'team-06',
+    type: 'registry:component',
+    registryDependencies: [
+      'button',
+      'card',
+      'input',
+      'native-select',
+      registryUrl('settings'),
+      registryUrl('team'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/team/team-06.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

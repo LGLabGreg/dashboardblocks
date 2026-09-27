@@ -81,4 +81,21 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'settings-07',
+    type: 'registry:component',
+    registryDependencies: [
+      'button',
+      'card',
+      'input',
+      'native-select',
+      registryUrl('team'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/settings/settings-07.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]
