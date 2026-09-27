@@ -5,6 +5,10 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  AiAssistant2,
+  aiAssistant2ExampleProps,
+} from '@/registry/components/dashboardblocks/ai-assistant/ai-assistant-02'
+import {
   AiUsage2,
   aiUsage2ExampleProps,
 } from '@/registry/components/dashboardblocks/ai-usage/ai-usage-02'
@@ -846,7 +850,16 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         >
           <Files1 {...files1ExampleProps} />
         </CategoryCard>
-        {/* AI_ASSISTANT_CARD */}
+        <CategoryCard
+          href='/docs/components/ai-assistant'
+          title='AI Assistant'
+          description='A chat panel with suggested prompts, streaming replies and feedback. Bring any model through one onSend.'
+          count={counts.aiAssistant}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
+        >
+          <AiAssistant2 {...aiAssistant2ExampleProps} />
+        </CategoryCard>
         <CategoryCard
           href='/docs/components/invoice'
           title='Invoice'
