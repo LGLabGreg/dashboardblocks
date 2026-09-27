@@ -22,7 +22,7 @@ export async function GET() {
 
 > High-quality, individually installable dashboard components for the shadcn/ui ecosystem. Composable primitives that work alongside shadcn Card components.
 
-Dashboard Blocks provides depth over breadth - exceptionally well-designed dashboard primitives that can be installed via \`npx shadcn add\`.
+Dashboard Blocks provides depth over breadth - exceptionally well-designed dashboard primitives that can be installed via \`npx shadcn add @dashboardblocks/<name>\`.
 
 ## Documentation
 

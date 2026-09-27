@@ -13,9 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { registryItemUrl } from '@/lib/customizer'
+import { registryItemName } from '@/lib/customizer'
 
-import { useCustomizerConfig } from './customizer/customizer-provider'
 import { Icons } from './icons'
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun'
@@ -24,25 +23,24 @@ export function ShadcnCliButton({ name }: { name: string }) {
   const [packageManager, setPackageManager] = useState<PackageManager>('npm')
   const [copied, setCopied] = useState(false)
 
-  const { base } = useCustomizerConfig()
-  const url = registryItemUrl(name, base)
+  const item = registryItemName(name)
   const commands = useMemo(
     () => ({
-      npm: `npx shadcn@latest add ${url}`,
-      pnpm: `pnpm dlx shadcn@latest add ${url}`,
-      yarn: `yarn dlx shadcn@latest add ${url}`,
-      bun: `bunx --bun shadcn@latest add ${url}`,
+      npm: `npx shadcn@latest add ${item}`,
+      pnpm: `pnpm dlx shadcn@latest add ${item}`,
+      yarn: `yarn dlx shadcn@latest add ${item}`,
+      bun: `bunx --bun shadcn@latest add ${item}`,
     }),
-    [url],
+    [item],
   )
   const shortCommands = useMemo(
     () => ({
-      npm: `npx shadcn add ${name}`,
-      pnpm: `pnpm dlx shadcn add ${name}`,
-      yarn: `yarn dlx shadcn add ${name}`,
-      bun: `bunx shadcn add ${name}`,
+      npm: `npx shadcn add ${item}`,
+      pnpm: `pnpm dlx shadcn add ${item}`,
+      yarn: `yarn dlx shadcn add ${item}`,
+      bun: `bunx shadcn add ${item}`,
     }),
-    [name],
+    [item],
   )
 
   const copyToClipboard = useCallback(() => {

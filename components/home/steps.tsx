@@ -24,8 +24,7 @@ const steps = [
     code: (
       <>
         <span className='text-muted-foreground'>$</span> npx shadcn add \{'\n'}
-        {'  '}dashboardblocks.com/r/{'\n'}
-        {'  '}area-chart-kpi-01.json{'\n'}
+        {'  '}@dashboardblocks/area-chart-kpi-01{'\n'}
         <span className='text-muted-foreground'>✔</span> Done.
       </>
     ),

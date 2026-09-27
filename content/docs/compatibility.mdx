@@ -13,7 +13,29 @@ Vega, Nova, Maia, Lyra, Mira, Luma, Sera and Rhea all work. Blocks are built fro
 
 ## Component libraries
 
-Base UI, Radix UI and React Aria are all supported. Where the libraries differ, for example Base UI's `render` prop and Radix's `asChild`, each block is published once per library:
+Base UI, Radix UI and React Aria are all supported. Where the libraries differ, for example Base UI's `render` prop and Radix's `asChild`, each block is published once per library.
+
+Install blocks by name, and the shadcn CLI picks the build for your component library:
+
+```bash
+npx shadcn@latest add @dashboardblocks/kpi-01
+```
+
+`@dashboardblocks` is listed in the [shadcn registry directory](https://ui.shadcn.com/docs/directory), so there's nothing to set up. The first install adds the registry to your `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@dashboardblocks": "https://www.dashboardblocks.com/r/{style}/{name}.json"
+  }
+}
+```
+
+The CLI fills in `{style}` from your project. On an older version of the CLI that doesn't read the directory, add these lines yourself.
+
+### Registry URLs
+
+You can also install a block from its URL:
 
 | Library    | Registry URL                                      |
 | ---------- | ------------------------------------------------- |
@@ -22,24 +44,6 @@ Base UI, Radix UI and React Aria are all supported. Where the libraries differ, 
 | React Aria | `https://dashboardblocks.com/r/aria/{name}.json`  |
 
 URLs without a library, such as `https://dashboardblocks.com/r/kpi-01.json`, are Base UI.
-
-### Pick the library automatically
-
-Add the registry to your `components.json` with the `{style}` placeholder. The shadcn CLI fills it in from your project, so each block comes in for your component library:
-
-```json title="components.json"
-{
-  "registries": {
-    "@dashboardblocks": "https://dashboardblocks.com/r/{style}/{name}.json"
-  }
-}
-```
-
-Then install blocks by name:
-
-```bash
-npx shadcn@latest add @dashboardblocks/kpi-01
-```
 
 ## Icon libraries
 

@@ -12,34 +12,16 @@ Dashboardblocks is a collection of high-quality dashboard components built on to
 Install any block with the shadcn CLI:
 
 ```bash
-npx shadcn@latest add https://dashboardblocks.com/r/kpi-01.json
+npx shadcn@latest add @dashboardblocks/kpi-01
 ```
 
 Or install a full dashboard:
 
 ```bash
-npx shadcn@latest add https://dashboardblocks.com/r/dashboard-01.json
+npx shadcn@latest add @dashboardblocks/dashboard-01
 ```
 
-### Use the registry namespace
-
-Add the registry to your `components.json`. The `{style}` placeholder picks the right build for your component library (Base UI, Radix UI or React Aria):
-
-```json
-{
-  "registries": {
-    "@dashboardblocks": "https://dashboardblocks.com/r/{style}/{name}.json"
-  }
-}
-```
-
-Then install blocks by name:
-
-```bash
-npx shadcn@latest add @dashboardblocks/kpi-01
-```
-
-Blocks work with every shadcn/create style and icon library. See [Compatibility](https://dashboardblocks.com/docs/compatibility).
+`@dashboardblocks` is listed in the [shadcn registry directory](https://ui.shadcn.com/docs/directory), so there's nothing to set up. The CLI picks the build for your component library (Base UI, Radix UI or React Aria), and blocks work with every shadcn/create style and icon library. See [Compatibility](https://dashboardblocks.com/docs/compatibility).
 
 ## Documentation
 
