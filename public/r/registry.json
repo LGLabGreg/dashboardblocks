@@ -769,6 +769,137 @@
       ]
     },
     {
+      "name": "kanban",
+      "type": "registry:component",
+      "title": "Kanban",
+      "description": "Primitives for kanban boards: a board of columns with drag and drop by mouse, touch and keyboard and announced moves, columns with counts, WIP limits that warn or block and collapsing, cards with a move menu, labels, assignees, due dates, priorities, stats and subtasks, an inline add-card form and a helper that moves a card in your array.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dropdown-menu",
+        "input",
+        "kbd",
+        "https://dashboardblocks.com/r/activity-feed.json",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kanban.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comments",
+      "type": "registry:component",
+      "title": "Comments",
+      "description": "Primitives for comments: threads with one level of replies joined by a line, a composer that suggests people after @ and submits with ⌘ Enter, highlighted mentions, reaction toggles with an emoji picker, an edit and delete menu, and resolved threads that collapse to a summary.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dropdown-menu",
+        "input-group",
+        "https://dashboardblocks.com/r/activity-feed.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comments.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:component",
+      "title": "Calendar",
+      "description": "Primitives for calendars: a toolbar with today, previous, next and a view switch, a keyboard-navigable month grid with event chips, multi-day bars and \"+N more\", week and resource views on an hour axis with overlapping events side by side and a now line, an event list for narrow screens, inline event details, a legend that can filter calendars, and date helpers for weeks, event days and lanes.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "tabs",
+        "https://dashboardblocks.com/r/schedule.json",
+        "https://dashboardblocks.com/r/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/calendar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "files",
+      "type": "registry:component",
+      "title": "Files",
+      "description": "Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/files.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-assistant",
+      "type": "registry:component",
+      "title": "AI Assistant",
+      "description": "Primitives for AI chat: a scrolling log that follows streamed replies and reads each one out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.",
+      "registryDependencies": [
+        "button",
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-assistant.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invoice",
+      "type": "registry:component",
+      "title": "Invoice",
+      "description": "Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "checkbox",
+        "table",
+        "https://dashboardblocks.com/r/billing.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/invoice.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "onboarding",
+      "type": "registry:component",
+      "title": "Onboarding",
+      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "native-select",
+        "https://dashboardblocks.com/r/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/onboarding.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "kpi-01",
       "type": "registry:component",
       "registryDependencies": [
@@ -3887,6 +4018,435 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/command-menu/command-menu-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "kanban-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/kanban.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kanban/kanban-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "kanban-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/kanban.json",
+        "https://dashboardblocks.com/r/pipeline.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kanban/kanban-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "kanban-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/kanban.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kanban/kanban-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comments-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/comments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comments/comments-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comments-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "separator",
+        "tabs",
+        "https://dashboardblocks.com/r/comments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comments/comments-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comments-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "card",
+        "tabs",
+        "https://dashboardblocks.com/r/comments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comments/comments-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "comments-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "card",
+        "tabs",
+        "https://dashboardblocks.com/r/comments.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/comments/comments-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "calendar-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/calendar.json",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/calendar/calendar-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "calendar-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/calendar.json",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/calendar/calendar-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "calendar-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/calendar.json",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/calendar/calendar-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "calendar-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/calendar.json",
+        "https://dashboardblocks.com/r/schedule.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/calendar/calendar-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "files-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/files.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/files/files-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "files-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/activity-feed.json",
+        "https://dashboardblocks.com/r/data-table.json",
+        "https://dashboardblocks.com/r/files.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/files/files-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "files-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/files.json",
+        "https://dashboardblocks.com/r/progress-bar.json",
+        "https://dashboardblocks.com/r/usage-meter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/files/files-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "files-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/activity-feed.json",
+        "https://dashboardblocks.com/r/files.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/files/files-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-assistant-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/ai-assistant.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-assistant-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/ai-assistant.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-assistant-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/ai-assistant.json",
+        "https://dashboardblocks.com/r/ai-usage.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ai-assistant-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/ai-assistant.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invoice-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/invoice.json",
+        "https://dashboardblocks.com/r/record-detail.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/invoice/invoice-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invoice-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/invoice.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/invoice/invoice-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invoice-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/invoice.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/invoice/invoice-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invoice-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "https://dashboardblocks.com/r/billing.json",
+        "https://dashboardblocks.com/r/invoice.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/invoice/invoice-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "field",
+        "input",
+        "input-group",
+        "https://dashboardblocks.com/r/checklist.json",
+        "https://dashboardblocks.com/r/forms.json",
+        "https://dashboardblocks.com/r/onboarding.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/onboarding/onboarding-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/checklist.json",
+        "https://dashboardblocks.com/r/onboarding.json",
+        "https://dashboardblocks.com/r/progress-bar.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/onboarding/onboarding-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "field",
+        "input-group",
+        "native-select",
+        "https://dashboardblocks.com/r/block-state.json",
+        "https://dashboardblocks.com/r/onboarding.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/onboarding/onboarding-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "native-select",
+        "https://dashboardblocks.com/r/onboarding.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/onboarding/onboarding-04.tsx",
           "type": "registry:component"
         }
       ]
