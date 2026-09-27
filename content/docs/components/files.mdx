@@ -1,6 +1,72 @@
 ---
 title: Files
-description: TODO
+description: File uploads with progress, cancel and retry, a file table, storage by kind with the largest files, and a folder browser.
 ---
 
-TODO
+The dropzone wraps a real file input, so it opens the file picker on click, on tap and from the keyboard, and takes files dragged onto it. It checks type, size and count before anything is sent, and lists files it turns away with the reason. `useFileUploads` works with any storage: pass an `upload` function that sends one file, reports progress and stops when its signal aborts. Uploads run three at a time by default. File icons and colours come from the name or MIME type, sizes count in steps of 1,024, and times take a fixed `now` so they render the same on the server and in the browser.
+
+### Upload
+
+A dropzone with the accepted types and size limit, and each upload's progress. Cancel an upload while it runs, retry one that failed, or remove it. The example fails every third upload once, to show retry.
+
+<ComponentPreview name='files-01' previewClassName='max-w-lg' />
+
+### File Table
+
+Files with their type, owner, last change and size. Search, filter by type, sort, and download or delete a selection. Each row has a menu to download, copy a link or delete. Built on the [Data Table](/docs/components/data-table).
+
+<ComponentPreview name='files-02' />
+
+### Storage
+
+Storage used against the plan, split by kind of file, with the largest files to clean up. Deleting one frees its space. Builds on the [Usage Meter](/docs/components/usage-meter) primitives.
+
+<ComponentPreview name='files-03' previewClassName='max-w-md' />
+
+### Folder Browser
+
+Folders and files in a grid, with a path back to the top. Open a folder to go into it; each file has a menu.
+
+<ComponentPreview name='files-04' previewClassName='max-w-3xl' />
+
+## Usage
+
+```tsx
+// fetch can't report upload progress, so this uses XMLHttpRequest.
+const upload: UploadFn = (file, { onProgress, signal }) =>
+  new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest()
+    request.open('POST', '/api/files')
+    request.upload.onprogress = (event) => onProgress(event.loaded / event.total)
+    request.onload = () =>
+      request.status < 300 ? resolve() : reject(new Error('Upload failed. Try again.'))
+    request.onerror = () => reject(new Error('Connection lost. Try again.'))
+    signal.addEventListener('abort', () => request.abort())
+    const body = new FormData()
+    body.append('file', file)
+    request.send(body)
+  })
+
+function Attachments() {
+  const { add, cancel, remove, retry, uploads } = useFileUploads({ upload })
+
+  return (
+    <>
+      <FileDropzone accept='.pdf,image/*' maxSize={10 * 1024 * 1024} onFiles={add} />
+      <FileUploadList>
+        {uploads.map((item) => (
+          <FileUploadItem
+            key={item.id}
+            upload={item}
+            onCancel={cancel}
+            onRemove={remove}
+            onRetry={retry}
+          />
+        ))}
+      </FileUploadList>
+    </>
+  )
+}
+```
+
+`upload` resolves when the file is stored, optionally with its `url`, and rejects with an `Error` whose message the row shows. For S3, R2 or another store, upload to a signed URL the same way, or call your storage SDK and pass its progress to `onProgress`.
