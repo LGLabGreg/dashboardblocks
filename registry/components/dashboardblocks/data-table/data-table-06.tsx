@@ -9,6 +9,7 @@ import {
   DataTablePagination,
   DataTableReset,
   DataTableSearch,
+  DataTableSelectionBar,
   DataTableSortMenu,
   DataTableViewOptions,
   useDataTable,
@@ -16,6 +17,7 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type CustomerPlan = 'Enterprise' | 'Free' | 'Pro' | 'Team'
@@ -36,6 +38,10 @@ interface CustomerRow {
 
 interface DataTable6Props {
   description: string
+  /** Called with the selected customers. Defaults to a mailto link to their billing emails. */
+  onEmail?: (rows: CustomerRow[]) => void
+  /** Called with the selected customers. Defaults to downloading them as CSV. */
+  onExport?: (rows: CustomerRow[]) => void
   pageSize?: number
   rows: CustomerRow[]
   title: string
@@ -186,6 +192,38 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 })
 
+const CSV_COLUMNS: (keyof CustomerRow)[] = [
+  'id',
+  'company',
+  'email',
+  'status',
+  'plan',
+  'seats',
+  'mrr',
+  'signedUp',
+]
+
+const csvCell = (value: string | number) => {
+  const text = String(value)
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
+}
+
+const downloadCsv = (rows: CustomerRow[]) => {
+  const csv = [CSV_COLUMNS, ...rows.map((row) => CSV_COLUMNS.map((key) => row[key]))]
+    .map((line) => line.map(csvCell).join(','))
+    .join('\n')
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'customers.csv'
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+const openMailto = (rows: CustomerRow[]) => {
+  window.location.href = `mailto:?bcc=${rows.map((row) => row.email).join(',')}`
+}
+
 const columnHelper = createDataTableColumnHelper<CustomerRow>()
 
 const columns = columnHelper.columns([
@@ -239,7 +277,14 @@ const columns = columnHelper.columns([
 ])
 
 const DataTable6 = (props: DataTable6Props) => {
-  const { description, pageSize = 8, rows, title } = props
+  const {
+    description,
+    onEmail = openMailto,
+    onExport = downloadCsv,
+    pageSize = 8,
+    rows,
+    title,
+  } = props
   const table = useDataTable({
     columns,
     data: rows,
@@ -250,6 +295,7 @@ const DataTable6 = (props: DataTable6Props) => {
     },
     pageSize,
   })
+  const selected = table.getSelectedRowModel().rows.map((row) => row.original)
 
   return (
     <Card className='@container/data-table gap-0 pb-0'>
@@ -257,18 +303,51 @@ const DataTable6 = (props: DataTable6Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <div className='flex flex-wrap items-center gap-2 border-b px-6 py-3'>
-        <DataTableSearch table={table} placeholder='Search customers…' />
-        <DataTableFacetFilter
-          column={table.getColumn('status')}
-          options={STATUS_OPTIONS}
-        />
-        <DataTableFacetFilter column={table.getColumn('plan')} options={PLAN_OPTIONS} />
-        <DataTableReset table={table} />
-        <div className='ml-auto flex items-center gap-2'>
-          <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
-          <DataTableViewOptions className='@max-2xl/data-table:hidden' table={table} />
-        </div>
+      <div className='flex min-h-15 flex-wrap items-center gap-2 border-b px-6 py-3'>
+        {selected.length > 0 ? (
+          <DataTableSelectionBar className='w-full' table={table}>
+            <Button variant='outline' size='sm' onClick={() => onExport(selected)}>
+              <IconPlaceholder
+                lucide='DownloadIcon'
+                tabler='IconDownload'
+                hugeicons='Download01Icon'
+                phosphor='DownloadIcon'
+                remixicon='RiDownloadLine'
+              />
+              Export
+            </Button>
+            <Button variant='outline' size='sm' onClick={() => onEmail(selected)}>
+              <IconPlaceholder
+                lucide='MailIcon'
+                tabler='IconMail'
+                hugeicons='MailIcon'
+                phosphor='EnvelopeIcon'
+                remixicon='RiMailLine'
+              />
+              Email
+            </Button>
+          </DataTableSelectionBar>
+        ) : (
+          <>
+            <DataTableSearch table={table} placeholder='Search customers…' />
+            <DataTableFacetFilter
+              column={table.getColumn('status')}
+              options={STATUS_OPTIONS}
+            />
+            <DataTableFacetFilter
+              column={table.getColumn('plan')}
+              options={PLAN_OPTIONS}
+            />
+            <DataTableReset table={table} />
+            <div className='ml-auto flex items-center gap-2'>
+              <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
+              <DataTableViewOptions
+                className='@max-2xl/data-table:hidden'
+                table={table}
+              />
+            </div>
+          </>
+        )}
       </div>
       <DataTableContent caption={`${title}: ${description}`} table={table} />
       <DataTablePagination

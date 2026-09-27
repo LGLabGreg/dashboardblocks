@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: d12675fd3a49
+// source-hash: 03006f45b4fd
 
 'use client'
 
@@ -929,6 +929,39 @@ function DataTablePagination<TData extends RowData>({
   )
 }
 
+interface DataTableSelectionBarProps<TData extends RowData> {
+  /** Actions for the selected rows. Read them with `table.getSelectedRowModel()`. */
+  children?: ReactNode
+  className?: string
+  table: DataTableInstance<TData>
+}
+
+/**
+ * The number of selected rows, actions for them and a button to clear the
+ * selection. Renders nothing while no rows are selected, so it can take the
+ * place of the toolbar.
+ */
+function DataTableSelectionBar<TData extends RowData>({
+  children,
+  className,
+  table,
+}: DataTableSelectionBarProps<TData>) {
+  'use no memo'
+  const selected = table.getSelectedRowModel().rows.length
+  if (selected === 0) return null
+  return (
+    <div className={cn('flex flex-wrap items-center gap-2', className)}>
+      <p className='text-sm font-medium tabular-nums' aria-live='polite'>
+        {selected} selected
+      </p>
+      <Button variant='ghost' size='sm' onClick={() => table.resetRowSelection(true)}>
+        Clear
+      </Button>
+      <div className='ml-auto flex flex-wrap items-center gap-2'>{children}</div>
+    </div>
+  )
+}
+
 function DataTableSelectAll<TData extends RowData>({
   table,
 }: {
@@ -1001,6 +1034,7 @@ export {
   DataTableReset,
   DataTableRow,
   DataTableSearch,
+  DataTableSelectionBar,
   DataTableSortButton,
   DataTableSortMenu,
   DataTableViewOptions,
@@ -1022,6 +1056,7 @@ export type {
   DataTableInstance,
   DataTablePaginationProps,
   DataTableSearchProps,
+  DataTableSelectionBarProps,
   DataTableSortMenuProps,
   DataTableViewOptionsProps,
   UseDataTableOptions,
