@@ -227,18 +227,27 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandShortcut,
-} from '@/components/ui/command'
-
 import { cn } from '@/lib/utils'
 
 import { SectionHeading } from './section-heading'
+
+const COMMAND_PREVIEW = [
+  {
+    heading: 'Pages',
+    items: [
+      { icon: LayoutDashboard, label: 'Overview' },
+      { icon: ShoppingCart, label: 'Orders' },
+      { icon: Users, label: 'Customers' },
+    ],
+  },
+  {
+    heading: 'Actions',
+    items: [
+      { icon: Search, label: 'Find a customer' },
+      { icon: UserPlus, label: 'Invite a teammate', shortcut: '⌘I' },
+    ],
+  },
+]
 
 export interface CategoryCounts {
   kpi: number
@@ -715,36 +724,40 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           description='Search pages, actions and records from anywhere with ⌘K.'
           count={counts.commandMenu}
         >
-          <Command className='h-auto rounded-xl shadow-xs ring-1 ring-foreground/10'>
-            <CommandInput placeholder='Search pages and actions…' />
-            <CommandList>
-              <CommandGroup heading='Pages'>
-                <CommandItem>
-                  <LayoutDashboard />
-                  Overview
-                </CommandItem>
-                <CommandItem>
-                  <ShoppingCart />
-                  Orders
-                </CommandItem>
-                <CommandItem>
-                  <Users />
-                  Customers
-                </CommandItem>
-              </CommandGroup>
-              <CommandGroup heading='Actions'>
-                <CommandItem>
-                  <Search />
-                  Find a customer
-                </CommandItem>
-                <CommandItem>
-                  <UserPlus />
-                  Invite a teammate
-                  <CommandShortcut>⌘I</CommandShortcut>
-                </CommandItem>
-              </CommandGroup>
-            </CommandList>
-          </Command>
+          {/*
+            Static markup, not cmdk: cmdk scrolls its selected item into view on
+            mount, which would scroll the home page down to this card.
+          */}
+          <div className='bg-popover text-popover-foreground flex flex-col gap-1 rounded-xl p-1 text-sm shadow-xs ring-1 ring-foreground/10'>
+            <div className='bg-input/30 text-muted-foreground flex h-8 items-center gap-2 rounded-lg px-2'>
+              <Search className='size-4 opacity-50' />
+              Search pages and actions…
+            </div>
+            {COMMAND_PREVIEW.map((group) => (
+              <div key={group.heading} className='p-1'>
+                <p className='text-muted-foreground px-2 py-1.5 text-xs font-medium'>
+                  {group.heading}
+                </p>
+                {group.items.map((item, index) => (
+                  <div
+                    key={item.label}
+                    className={cn(
+                      'flex items-center gap-2 rounded-sm px-2 py-1.5 [&_svg]:size-4',
+                      group.heading === 'Pages' && index === 0 && 'bg-muted',
+                    )}
+                  >
+                    <item.icon />
+                    {item.label}
+                    {item.shortcut && (
+                      <span className='text-muted-foreground ml-auto text-xs tracking-widest'>
+                        {item.shortcut}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </CategoryCard>
         <CategoryCard
           href='/docs/components/record-detail'
