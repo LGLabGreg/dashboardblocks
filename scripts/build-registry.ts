@@ -6,6 +6,7 @@ import { examples as billingExamples } from '@/registry/components/dashboardbloc
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as chartPanelExamples } from '@/registry/components/dashboardblocks/chart-panel/registry'
 import { examples as checklistExamples } from '@/registry/components/dashboardblocks/checklist/registry'
+import { examples as commandMenuExamples } from '@/registry/components/dashboardblocks/command-menu/registry'
 import { examples as comparisonExamples } from '@/registry/components/dashboardblocks/comparison/registry'
 import { examples as dashboardHeaderExamples } from '@/registry/components/dashboardblocks/dashboard-header/registry'
 import { examples as dashboardExamples } from '@/registry/components/dashboardblocks/dashboards/registry'
@@ -26,8 +27,11 @@ import { examples as inventoryExamples } from '@/registry/components/dashboardbl
 import { examples as kpiExamples } from '@/registry/components/dashboardblocks/kpi/registry'
 import { examples as leaderboardExamples } from '@/registry/components/dashboardblocks/leaderboard/registry'
 import { examples as metricListExamples } from '@/registry/components/dashboardblocks/metric-list/registry'
+import { examples as notificationsExamples } from '@/registry/components/dashboardblocks/notifications/registry'
+import { examples as pageHeaderExamples } from '@/registry/components/dashboardblocks/page-header/registry'
 import { examples as pipelineExamples } from '@/registry/components/dashboardblocks/pipeline/registry'
 import { examples as realtimeExamples } from '@/registry/components/dashboardblocks/realtime/registry'
+import { examples as recordDetailExamples } from '@/registry/components/dashboardblocks/record-detail/registry'
 import { components } from '@/registry/components/dashboardblocks/registry'
 import { examples as retentionExamples } from '@/registry/components/dashboardblocks/retention/registry'
 import { examples as scatterExamples } from '@/registry/components/dashboardblocks/scatter/registry'
@@ -93,6 +97,10 @@ const registry = {
     ...settingsExamples,
     ...appShellExamples,
     ...formsExamples,
+    ...recordDetailExamples,
+    ...pageHeaderExamples,
+    ...notificationsExamples,
+    ...commandMenuExamples,
     ...hooks,
   ],
 }

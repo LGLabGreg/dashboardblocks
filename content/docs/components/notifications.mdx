@@ -1,0 +1,24 @@
+---
+title: Notifications
+description: A bell with an unread count that opens the latest notifications, requests you can approve from the panel, and a full inbox.
+---
+
+Clicking anywhere on a notification opens it and marks it read. Buttons inside a notification, like Approve, work on their own. Times are relative, with the full date on hover, and take a fixed `now` so they render the same on the server and in the browser. The rows build on the [Activity Feed](/docs/components/activity-feed) primitives. For a notifications card inside a dashboard, see [Activity Feed: Notifications](/docs/components/activity-feed#notifications).
+
+### Bell
+
+The latest notifications in a panel, with mark all as read and a link to the inbox.
+
+<ComponentPreview name='notifications-01' previewClassName='max-w-md' />
+
+### Requests
+
+Notifications that ask for a decision, such as a request to join or a refund, with a tab of the ones still waiting.
+
+<ComponentPreview name='notifications-02' previewClassName='max-w-md' />
+
+### Inbox
+
+Every notification grouped by day, filtered by unread and mentions. Mark each read or unread, or archive it.
+
+<ComponentPreview name='notifications-03' previewClassName='max-w-2xl' />

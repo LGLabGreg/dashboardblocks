@@ -138,6 +138,14 @@ import {
   metricList1ExampleProps,
 } from '@/registry/components/dashboardblocks/metric-list/metric-list-01'
 import {
+  Notifications3,
+  notifications3ExampleProps,
+} from '@/registry/components/dashboardblocks/notifications/notifications-03'
+import {
+  PageHeader3,
+  pageHeader3ExampleProps,
+} from '@/registry/components/dashboardblocks/page-header/page-header-03'
+import {
   Pipeline1,
   pipeline1ExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
@@ -149,6 +157,10 @@ import {
   Realtime3,
   realtime3ExampleProps,
 } from '@/registry/components/dashboardblocks/realtime/realtime-03'
+import {
+  RecordDetail2,
+  recordDetail2ExampleProps,
+} from '@/registry/components/dashboardblocks/record-detail/record-detail-02'
 import {
   Retention1,
   retention1ExampleProps,
@@ -205,8 +217,24 @@ import {
   UsageMeter8,
   usageMeter8ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-08'
-import { ArrowUpRight } from 'lucide-react'
+import {
+  ArrowUpRight,
+  LayoutDashboard,
+  Search,
+  ShoppingCart,
+  UserPlus,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
+
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from '@/components/ui/command'
 
 import { cn } from '@/lib/utils'
 
@@ -254,6 +282,10 @@ export interface CategoryCounts {
   settings: number
   appShell: number
   forms: number
+  commandMenu: number
+  notifications: number
+  pageHeader: number
+  recordDetail: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -664,6 +696,75 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <div className='hidden md:block'>
             <Forms4 {...forms4ExampleProps} />
           </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/page-header'
+          title='Page Header'
+          description='Headings with actions, section tabs, back links, facts and a list page search.'
+          count={counts.pageHeader}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <div className='bg-background rounded-xl p-6 shadow-xs ring-1 ring-foreground/10'>
+            <PageHeader3 {...pageHeader3ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/command-menu'
+          title='Command Menu'
+          description='Search pages, actions and records from anywhere with ⌘K.'
+          count={counts.commandMenu}
+        >
+          <Command className='h-auto rounded-xl shadow-xs ring-1 ring-foreground/10'>
+            <CommandInput placeholder='Search pages and actions…' />
+            <CommandList>
+              <CommandGroup heading='Pages'>
+                <CommandItem>
+                  <LayoutDashboard />
+                  Overview
+                </CommandItem>
+                <CommandItem>
+                  <ShoppingCart />
+                  Orders
+                </CommandItem>
+                <CommandItem>
+                  <Users />
+                  Customers
+                </CommandItem>
+              </CommandGroup>
+              <CommandGroup heading='Actions'>
+                <CommandItem>
+                  <Search />
+                  Find a customer
+                </CommandItem>
+                <CommandItem>
+                  <UserPlus />
+                  Invite a teammate
+                  <CommandShortcut>⌘I</CommandShortcut>
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/record-detail'
+          title='Record Detail'
+          description='Customer, order and ticket pages with properties, related records and a timeline.'
+          count={counts.recordDetail}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <div className='bg-background rounded-xl p-6 shadow-xs ring-1 ring-foreground/10'>
+            <RecordDetail2 {...recordDetail2ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/notifications'
+          title='Notifications'
+          description='A bell with unread counts, requests to approve and a full inbox.'
+          count={counts.notifications}
+        >
+          <Notifications3 {...notifications3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

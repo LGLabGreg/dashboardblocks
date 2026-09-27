@@ -33,6 +33,10 @@ import {
   checklistExampleProps,
 } from '@/registry/components/dashboardblocks/checklist/index'
 import {
+  commandMenuComponents,
+  commandMenuExampleProps,
+} from '@/registry/components/dashboardblocks/command-menu/index'
+import {
   comparisonComponents,
   comparisonExampleProps,
 } from '@/registry/components/dashboardblocks/comparison/index'
@@ -109,6 +113,14 @@ import {
   metricListExampleProps,
 } from '@/registry/components/dashboardblocks/metric-list/index'
 import {
+  notificationsComponents,
+  notificationsExampleProps,
+} from '@/registry/components/dashboardblocks/notifications/index'
+import {
+  pageHeaderComponents,
+  pageHeaderExampleProps,
+} from '@/registry/components/dashboardblocks/page-header/index'
+import {
   pipelineComponents,
   pipelineExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/index'
@@ -116,6 +128,10 @@ import {
   realtimeComponents,
   realtimeExampleProps,
 } from '@/registry/components/dashboardblocks/realtime/index'
+import {
+  recordDetailComponents,
+  recordDetailExampleProps,
+} from '@/registry/components/dashboardblocks/record-detail/index'
 import {
   retentionComponents,
   retentionExampleProps,
@@ -207,6 +223,10 @@ const exampleComponents = {
   ...settingsComponents,
   ...appShellComponents,
   ...formsComponents,
+  ...commandMenuComponents,
+  ...notificationsComponents,
+  ...pageHeaderComponents,
+  ...recordDetailComponents,
 }
 
 const examplePropsMap = {
@@ -251,6 +271,10 @@ const examplePropsMap = {
   ...settingsExampleProps,
   ...appShellExampleProps,
   ...formsExampleProps,
+  ...commandMenuExampleProps,
+  ...notificationsExampleProps,
+  ...pageHeaderExampleProps,
+  ...recordDetailExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents
