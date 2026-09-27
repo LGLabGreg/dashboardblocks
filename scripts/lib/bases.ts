@@ -90,11 +90,33 @@ function renderToAsChild(file: SourceFile) {
   throw new Error('Too many nested render props')
 }
 
+/**
+ * `<Checkbox checked={a} indeterminate={b} />` becomes
+ * `<Checkbox checked={b ? 'indeterminate' : a} />`: Radix has no `indeterminate` prop.
+ */
+function mergeIndeterminate(element: JsxOpening) {
+  const indeterminate = attribute(element, 'indeterminate')
+  if (!indeterminate) return
+  const expression = (item: JsxAttribute | undefined) => {
+    const initializer = item?.getInitializer()
+    if (!initializer) return 'true'
+    return Node.isJsxExpression(initializer)
+      ? (initializer.getExpression()?.getText() ?? 'true')
+      : initializer.getText()
+  }
+  const checked = attribute(element, 'checked')
+  const merged = `{${expression(indeterminate)} ? 'indeterminate' : ${checked ? expression(checked) : 'false'}}`
+  indeterminate.remove()
+  if (checked) checked.setInitializer(merged)
+  else element.addAttribute({ name: 'checked', initializer: merged })
+}
+
 export function toRadix(source: string) {
   const file = createSourceFile(source)
   renderToAsChild(file)
   for (const element of jsxOpenings(file)) {
     const tag = element.getTagNameNode().getText()
+    if (tag === 'Checkbox') mergeIndeterminate(element)
     // Radix closes on select by default; Base UI needs to be told to.
     attribute(element, 'closeOnClick')?.remove()
     attribute(element, 'nativeButton')?.remove()
@@ -111,6 +133,13 @@ export function toRadix(source: string) {
 
 const ARIA_RENAMES: Record<string, Record<string, string>> = {
   Button: { disabled: 'isDisabled' },
+  Checkbox: {
+    checked: 'isSelected',
+    defaultChecked: 'defaultSelected',
+    disabled: 'isDisabled',
+    indeterminate: 'isIndeterminate',
+    onCheckedChange: 'onChange',
+  },
   Switch: {
     checked: 'isSelected',
     defaultChecked: 'defaultSelected',

@@ -314,7 +314,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/data-table'
           title='Data Table'
-          description='Sortable tables with inline bars, trends, sparklines and status.'
+          description='TanStack tables with sorting, search, filters, selection and pagination.'
           count={counts.dataTable}
           className='md:col-span-3'
           previewClassName='*:w-80 sm:*:w-[44rem]'
