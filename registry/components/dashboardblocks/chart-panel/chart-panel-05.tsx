@@ -58,12 +58,12 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
   const percent = (value: number) => (total === 0 ? 0 : (value / total) * 100)
 
   return (
-    <Card>
+    <Card className='@container'>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='flex flex-col items-center gap-6 sm:flex-row'>
+      <CardContent className='flex flex-col items-center gap-6 @lg:flex-row'>
         <div className='relative size-40 shrink-0'>
           <ResponsiveContainer width='100%' height='100%'>
             <PieChart>
