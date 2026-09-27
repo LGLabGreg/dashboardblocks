@@ -1,3 +1,6 @@
+// Override of registry/components/dashboardblocks/kanban.tsx for React Aria
+// source-hash: a1bdf6da7259
+
 'use client'
 
 import {
@@ -35,7 +38,6 @@ import {
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -1050,16 +1052,12 @@ function KanbanCardMenu({ className }: { className?: string }) {
   const siblings = getColumnItems(items, item.column)
   const index = siblings.findIndex((sibling) => sibling.id === item.id)
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            aria-label={`Move ${item.title}`}
-            className={cn('text-muted-foreground', className)}
-            size='icon-xs'
-            variant='ghost'
-          />
-        }
+    <DropdownMenuTrigger>
+      <Button
+        aria-label={`Move ${item.title}`}
+        className={cn('text-muted-foreground', className)}
+        size='icon-xs'
+        variant='ghost'
       >
         <IconPlaceholder
           lucide='EllipsisIcon'
@@ -1068,8 +1066,8 @@ function KanbanCardMenu({ className }: { className?: string }) {
           phosphor='DotsThreeOutlineIcon'
           remixicon='RiMoreLine'
         />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-auto min-w-44'>
+      </Button>
+      <DropdownMenu placement='bottom end' className='w-auto min-w-44'>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Move to</DropdownMenuLabel>
           {columns
@@ -1079,8 +1077,10 @@ function KanbanCardMenu({ className }: { className?: string }) {
               return (
                 <DropdownMenuItem
                   key={column.id}
-                  disabled={full}
-                  onClick={() => moveFromMenu(item.id, column.id, 0)}
+                  id={`column-${column.id}`}
+                  isDisabled={full}
+                  textValue={column.title}
+                  onAction={() => moveFromMenu(item.id, column.id, 0)}
                 >
                   {column.title}
                   {full && (
@@ -1094,19 +1094,21 @@ function KanbanCardMenu({ className }: { className?: string }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          disabled={index <= 0}
-          onClick={() => moveFromMenu(item.id, item.column, index - 1)}
+          id='up'
+          isDisabled={index <= 0}
+          onAction={() => moveFromMenu(item.id, item.column, index - 1)}
         >
           Move up
         </DropdownMenuItem>
         <DropdownMenuItem
-          disabled={index === siblings.length - 1}
-          onClick={() => moveFromMenu(item.id, item.column, index + 1)}
+          id='down'
+          isDisabled={index === siblings.length - 1}
+          onAction={() => moveFromMenu(item.id, item.column, index + 1)}
         >
           Move down
         </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </DropdownMenuTrigger>
   )
 }
 
@@ -1503,7 +1505,7 @@ function KanbanAddCard({
         {status}
       </p>
       <div className='flex items-center gap-2'>
-        <Button type='submit' size='sm' disabled={!value.trim()}>
+        <Button type='submit' size='sm' isDisabled={!value.trim()}>
           {label}
         </Button>
         <Button type='button' variant='ghost' size='sm' onClick={close}>
