@@ -29,6 +29,10 @@ import {
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
 import {
+  Calendar1,
+  calendar1ExampleProps,
+} from '@/registry/components/dashboardblocks/calendar/calendar-01'
+import {
   ChartPanel1,
   chartPanel1ExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-01'
@@ -40,6 +44,10 @@ import {
   Checklist1,
   checklist1ExampleProps,
 } from '@/registry/components/dashboardblocks/checklist/checklist-01'
+import {
+  Comments1,
+  comments1ExampleProps,
+} from '@/registry/components/dashboardblocks/comments/comments-01'
 import {
   Comparison2,
   comparison2ExampleProps,
@@ -68,6 +76,10 @@ import {
   Feedback1,
   feedback1ExampleProps,
 } from '@/registry/components/dashboardblocks/feedback/feedback-01'
+import {
+  Files1,
+  files1ExampleProps,
+} from '@/registry/components/dashboardblocks/files/files-01'
 import {
   Flow1,
   flow1ExampleProps,
@@ -118,6 +130,14 @@ import {
   inventory1ExampleProps,
 } from '@/registry/components/dashboardblocks/inventory/inventory-01'
 import {
+  Invoice2,
+  invoice2ExampleProps,
+} from '@/registry/components/dashboardblocks/invoice/invoice-02'
+import {
+  Kanban1,
+  kanban1ExampleProps,
+} from '@/registry/components/dashboardblocks/kanban/kanban-01'
+import {
   BarChartKPI2,
   barChartKpi2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -141,6 +161,10 @@ import {
   Notifications3,
   notifications3ExampleProps,
 } from '@/registry/components/dashboardblocks/notifications/notifications-03'
+import {
+  Onboarding3,
+  onboarding3ExampleProps,
+} from '@/registry/components/dashboardblocks/onboarding/onboarding-03'
 import {
   PageHeader3,
   pageHeader3ExampleProps,
@@ -295,6 +319,13 @@ export interface CategoryCounts {
   notifications: number
   pageHeader: number
   recordDetail: number
+  kanban: number
+  comments: number
+  calendar: number
+  files: number
+  aiAssistant: number
+  invoice: number
+  onboarding: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -778,6 +809,61 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           count={counts.notifications}
         >
           <Notifications3 {...notifications3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/kanban'
+          title='Kanban'
+          description='Boards for sprints, deals and support queues. Drag cards by mouse, touch or keyboard, with counts and WIP limits.'
+          count={counts.kanban}
+          className='md:col-span-3'
+          previewClassName='*:w-[64rem]'
+        >
+          <Kanban1 {...kanban1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/calendar'
+          title='Calendar'
+          description='Month, week and room views with multi-day events, overlapping meetings and a now line.'
+          count={counts.calendar}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[48rem]'
+        >
+          <Calendar1 {...calendar1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/comments'
+          title='Comments'
+          description='Threads with replies, @mentions, reactions and resolve, for reviews and tickets.'
+          count={counts.comments}
+        >
+          <Comments1 {...comments1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/files'
+          title='Files'
+          description='Uploads with progress, file tables, folders and storage usage.'
+          count={counts.files}
+        >
+          <Files1 {...files1ExampleProps} />
+        </CategoryCard>
+        {/* AI_ASSISTANT_CARD */}
+        <CategoryCard
+          href='/docs/components/invoice'
+          title='Invoice'
+          description='Printable invoices, receipts, quotes and packing slips.'
+          count={counts.invoice}
+        >
+          <Invoice2 {...invoice2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/onboarding'
+          title='Onboarding'
+          description='A first-run setup wizard, an empty workspace welcome, and steps to connect data and personalise.'
+          count={counts.onboarding}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[48rem]'
+        >
+          <Onboarding3 {...onboarding3ExampleProps} />
         </CategoryCard>
       </div>
     </section>

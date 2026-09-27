@@ -1,18 +1,22 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
+import { aiAssistantComponents } from '@/registry/components/dashboardblocks/ai-assistant/index'
 import { aiUsageComponents } from '@/registry/components/dashboardblocks/ai-usage/index'
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
 import { appShellComponents } from '@/registry/components/dashboardblocks/app-shell/index'
 import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
+import { calendarComponents } from '@/registry/components/dashboardblocks/calendar/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { checklistComponents } from '@/registry/components/dashboardblocks/checklist/index'
 import { commandMenuComponents } from '@/registry/components/dashboardblocks/command-menu/index'
+import { commentsComponents } from '@/registry/components/dashboardblocks/comments/index'
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { deploymentsComponents } from '@/registry/components/dashboardblocks/deployments/index'
 import { distributionComponents } from '@/registry/components/dashboardblocks/distribution/index'
 import { feedbackComponents } from '@/registry/components/dashboardblocks/feedback/index'
+import { filesComponents } from '@/registry/components/dashboardblocks/files/index'
 import { flowComponents } from '@/registry/components/dashboardblocks/flow/index'
 import { forecastComponents } from '@/registry/components/dashboardblocks/forecast/index'
 import { formsComponents } from '@/registry/components/dashboardblocks/forms/index'
@@ -23,10 +27,13 @@ import { goalsComponents } from '@/registry/components/dashboardblocks/goals/ind
 import { heatmapComponents } from '@/registry/components/dashboardblocks/heatmap/index'
 import { insightsComponents } from '@/registry/components/dashboardblocks/insights/index'
 import { inventoryComponents } from '@/registry/components/dashboardblocks/inventory/index'
+import { invoiceComponents } from '@/registry/components/dashboardblocks/invoice/index'
+import { kanbanComponents } from '@/registry/components/dashboardblocks/kanban/index'
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
 import { notificationsComponents } from '@/registry/components/dashboardblocks/notifications/index'
+import { onboardingComponents } from '@/registry/components/dashboardblocks/onboarding/index'
 import { pageHeaderComponents } from '@/registry/components/dashboardblocks/page-header/index'
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { realtimeComponents } from '@/registry/components/dashboardblocks/realtime/index'
@@ -95,6 +102,13 @@ const counts = {
   pageHeader: Object.keys(pageHeaderComponents).length,
   notifications: Object.keys(notificationsComponents).length,
   commandMenu: Object.keys(commandMenuComponents).length,
+  kanban: Object.keys(kanbanComponents).length,
+  comments: Object.keys(commentsComponents).length,
+  calendar: Object.keys(calendarComponents).length,
+  files: Object.keys(filesComponents).length,
+  aiAssistant: Object.keys(aiAssistantComponents).length,
+  invoice: Object.keys(invoiceComponents).length,
+  onboarding: Object.keys(onboardingComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 
