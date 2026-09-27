@@ -722,7 +722,17 @@ export const components: Registry['items'] = [
     name: 'kanban',
     type: 'registry:component',
     title: 'Kanban',
-    description: 'TODO',
+    description:
+      'Primitives for kanban boards: a board of columns with drag and drop by mouse, touch and keyboard and announced moves, columns with counts, WIP limits that warn or block and collapsing, cards with a move menu, labels, assignees, due dates, priorities, stats and subtasks, an inline add-card form and a helper that moves a card in your array.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input',
+      'kbd',
+      registryUrl('activity-feed'),
+      registryUrl('schedule'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kanban.tsx',
