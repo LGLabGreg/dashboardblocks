@@ -16,7 +16,7 @@ const config = {
       },
       // Styles from before the base-* and radix-* names are built on Radix UI.
       {
-        source: '/r/:style(new-york|default)/:name.json',
+        source: '/r/:style(new-york|new-york-v4|default)/:name.json',
         destination: '/r/radix/:name.json',
       },
     ]
