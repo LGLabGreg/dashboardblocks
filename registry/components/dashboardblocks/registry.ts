@@ -770,7 +770,9 @@ export const components: Registry['items'] = [
     name: 'ai-assistant',
     type: 'registry:component',
     title: 'AI Assistant',
-    description: 'TODO',
+    description:
+      'Primitives for AI chat: a scrolling log that follows streamed replies and reads each one out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
+    registryDependencies: ['button', 'input-group'],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant.tsx',
