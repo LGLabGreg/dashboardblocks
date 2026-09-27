@@ -1,5 +1,5 @@
 ---
-'dashboardblocks': patch
+'dashboardblocks': minor
 ---
 
 feat: add forms family
