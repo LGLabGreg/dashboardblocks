@@ -782,7 +782,16 @@ export const components: Registry['items'] = [
     name: 'invoice',
     type: 'registry:component',
     title: 'Invoice',
-    description: 'TODO',
+    description:
+      'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
+    registryDependencies: [
+      'badge',
+      'button',
+      'card',
+      'checkbox',
+      'table',
+      registryUrl('billing'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/invoice.tsx',

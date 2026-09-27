@@ -1,6 +1,33 @@
 ---
 title: Invoice
-description: TODO
+description: Invoices, receipts, quotes and packing slips that print cleanly, with totals that add up to the cent.
+full: true
 ---
 
-TODO
+Totals are worked out in cents, or the currency's smallest unit, so the subtotal, discount, tax, shipping and total always add up. A discount is shared across tax rates in proportion to their lines, and tax is rounded once per rate. Dates are formatted in UTC so they render the same on the server and in the browser, and amounts, statuses and dates come from [Billing](/docs/components/billing).
+
+Printing uses Tailwind's `print:` variants, so there's no stylesheet to add. The toolbar and other screen-only controls hide, the card fills the paper, and dark mode prints black on white. Rows, totals and notes don't split across pages, and the table header repeats on each page. Your app's own sidebar and header print too, so add `print:hidden` to them. The previews on this page print the whole docs page.
+
+### Invoice
+
+An overdue invoice with a discount, sales tax, a deposit and the balance due, how to pay online or by bank transfer, and a reminder you can send.
+
+<ComponentPreview name='invoice-01' />
+
+### Receipt
+
+A paid receipt with the payment method, a partial refund and the net amount paid. Narrow tables show quantity and unit price under each item.
+
+<ComponentPreview name='invoice-02' />
+
+### Quote
+
+Optional items to tick before accepting, with totals that follow, and an expiry date. The printed copy has a signature block instead of the buttons.
+
+<ComponentPreview name='invoice-03' />
+
+### Packing Slip
+
+Items with their SKU and bin, a checkbox for each one picked, and a scannable barcode of the order number. No prices, so it can go in a gift.
+
+<ComponentPreview name='invoice-04' />
