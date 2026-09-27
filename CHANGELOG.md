@@ -1,5 +1,21 @@
 # dashboardblocks
 
+## 1.0.0
+
+### Major Changes
+
+- [#108](https://github.com/LGLabGreg/dashboardblocks/pull/108) [`0b36c69`](https://github.com/LGLabGreg/dashboardblocks/commit/0b36c69329f92ec75b944310b02ce115fba3d26f) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Dashboardblocks 1.0: dashboard blocks for any shadcn/ui project, in every style, with Base UI, Radix UI or React Aria, and any of the five icon libraries. From 1.0, renaming or removing a block, or changing its props in a way that breaks existing code, is a major release.
+
+### Minor Changes
+
+- [#104](https://github.com/LGLabGreg/dashboardblocks/pull/104) [`c9034ca`](https://github.com/LGLabGreg/dashboardblocks/commit/c9034cacaf1aa93434c8f0d9fcda8168ce277357) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Refresh KPI, Usage Meter and Activity Feed: changes computed from the previous value, usage statuses with icons and labels, projections and overage, day-grouped activity, record history, notifications and a weekly digest
+
+- [#106](https://github.com/LGLabGreg/dashboardblocks/pull/106) [`80cf33a`](https://github.com/LGLabGreg/dashboardblocks/commit/80cf33adeb03e57721dd072350f19c1aec7aa098) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Add a web analytics example dashboard, and extend the store dashboard with month-to-date revenue and low stock and the SaaS dashboard with MRR by region, MRR movement and retention milestones
+
+### Patch Changes
+
+- [#106](https://github.com/LGLabGreg/dashboardblocks/pull/106) [`9d4bf0e`](https://github.com/LGLabGreg/dashboardblocks/commit/9d4bf0e4dbed3e903ac46061cf0cff884ccc1a6a) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Chart Panel Breakdown Donut: place the legend beside the donut based on the card's width rather than the viewport, so it no longer overflows narrow cards
+
 ## 0.11.0
 
 ### Minor Changes
