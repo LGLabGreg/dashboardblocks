@@ -277,7 +277,7 @@ const Team5 = (props: Team5Props) => {
                               checked={on}
                               disabled={role.locked}
                               onCheckedChange={(next) =>
-                                toggle(role.id, permission.id, next)
+                                toggle(role.id, permission.id, next === true)
                               }
                             />
                           </span>
