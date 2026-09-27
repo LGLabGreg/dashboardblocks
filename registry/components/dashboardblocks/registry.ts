@@ -734,7 +734,15 @@ export const components: Registry['items'] = [
     name: 'comments',
     type: 'registry:component',
     title: 'Comments',
-    description: 'TODO',
+    description:
+      'Primitives for comments: threads with one level of replies joined by a line, a composer that suggests people after @ and submits with ⌘ Enter, highlighted mentions, reaction toggles with an emoji picker, an edit and delete menu, and resolved threads that collapse to a summary.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input-group',
+      registryUrl('activity-feed'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/comments.tsx',
