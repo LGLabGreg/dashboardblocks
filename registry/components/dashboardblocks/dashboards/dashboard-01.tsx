@@ -17,15 +17,18 @@ import {
   getPreviousRange,
 } from '@/registry/components/dashboardblocks/dashboard-header'
 import { DataTable2 } from '@/registry/components/dashboardblocks/data-table/data-table-02'
+import { Forecast3 } from '@/registry/components/dashboardblocks/forecast/forecast-03'
 import { Funnel1 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
+import { Inventory1 } from '@/registry/components/dashboardblocks/inventory/inventory-01'
 import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
 
 /*
  * A store dashboard: the header's date range, compare switch and region
- * filter scope every block below it. Swap `buildStoreData` for your own
- * queries; the blocks only need their props.
+ * filter scope every block below it. Month-to-date revenue follows the region
+ * but not the date range, and stock is current. Swap `buildStoreData` for
+ * your own queries; the blocks only need their props.
  */
 
 interface Dashboard1Props {
@@ -60,6 +63,46 @@ const PRODUCTS = [
   { category: 'Accessories', name: 'USB-C dock', price: 90, share: 0.08 },
   { category: 'Audio', name: 'Desk speakers', price: 90, share: 0.05 },
 ]
+
+/** Stock on hand for the products above, with how fast each one sells. */
+const STOCK = [
+  {
+    dailyDemand: 9,
+    leadTimeDays: 12,
+    name: 'Studio Display 27"',
+    onHand: 0,
+    reorderPoint: 110,
+    sku: 'SD-27-SLV',
+  },
+  {
+    dailyDemand: 21,
+    leadTimeDays: 8,
+    name: 'Wireless headphones',
+    onHand: 64,
+    onOrder: 200,
+    reorderPoint: 170,
+    sku: 'WH-01-BLK',
+  },
+  {
+    dailyDemand: 6,
+    leadTimeDays: 21,
+    name: 'Ergonomic chair',
+    onHand: 88,
+    reorderPoint: 126,
+    sku: 'EC-02-GRY',
+  },
+  {
+    dailyDemand: 14,
+    leadTimeDays: 6,
+    name: 'USB-C dock',
+    onHand: 131,
+    reorderPoint: 84,
+    sku: 'UD-11-GRY',
+  },
+]
+
+/** Revenue each day needs to average for the monthly target. */
+const DAILY_TARGET = 1_750
 
 interface Query {
   compare: boolean
@@ -141,6 +184,14 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
       timeZone: 'UTC',
     })
   }
+  // Month to date: the region applies, the date range doesn't.
+  const elapsed = today.getUTCDate()
+  const daysInMonth = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0),
+  ).getUTCDate()
+  const regionShare = region
+    ? (REGIONS.find((item) => item.name === region)?.share ?? 1)
+    : 1
   const rangeLabel = formatDateRange(range)
   const previousLabel = formatDateRange(previousRange)
   const scope = `${hourly ? 'Today' : rangeLabel}${region ? `, ${region}` : ''}`
@@ -161,6 +212,15 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
       label: CHANNELS[index].label,
       value,
     })),
+    month: {
+      current: Array.from({ length: elapsed }, (_, offset) =>
+        Math.round(revenueAt(offset, region, false)),
+      ).reduce((sum, value) => sum + value, 0),
+      elapsed,
+      name: today.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      target: Math.round((DAILY_TARGET * daysInMonth * regionShare) / 1_000) * 1_000,
+      total: daysInMonth,
+    },
     funnel: [
       { label: 'Sessions', value: Math.round(now.sessions) },
       { label: 'Viewed a product', value: Math.round(now.sessions * 0.62) },
@@ -339,6 +399,22 @@ const Dashboard1 = (props: Dashboard1Props) => {
           />
         </div>
         <Funnel1 description={data.scope} stages={data.funnel} title='Checkout funnel' />
+        <Forecast3
+          current={data.month.current}
+          description={`Month to date${shown.region ? `, ${shown.region}` : ''}, projected at the daily run-rate`}
+          elapsed={data.month.elapsed}
+          formatter={currency}
+          target={data.month.target}
+          title={`${data.month.name} revenue`}
+          total={data.month.total}
+        />
+        <div className='@4xl:col-span-2'>
+          <Inventory1
+            description='Products at or near their reorder point, soonest to run out first'
+            items={STOCK}
+            title='Low stock'
+          />
+        </div>
       </BlockBusy>
     </div>
   )

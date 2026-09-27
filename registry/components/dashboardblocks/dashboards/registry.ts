@@ -8,14 +8,16 @@ export const examples: Registry['items'] = [
     type: 'registry:block',
     title: 'Store dashboard',
     description:
-      'A store dashboard: header filters scope stats, revenue, channels, products and a checkout funnel.',
+      'A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.',
     registryDependencies: [
       registryUrl('block-state'),
       registryUrl('breakdown-01'),
       registryUrl('chart-panel-01'),
       registryUrl('dashboard-header'),
       registryUrl('data-table-02'),
+      registryUrl('forecast-03'),
       registryUrl('funnel-01'),
+      registryUrl('inventory-01'),
       registryUrl('stat-group-02'),
     ],
     files: [
@@ -30,20 +32,45 @@ export const examples: Registry['items'] = [
     type: 'registry:block',
     title: 'SaaS dashboard',
     description:
-      'A SaaS dashboard: metric tabs, an activity heatmap, accounts by region and service status, filtered by plan.',
+      'A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.',
     registryDependencies: [
       'button',
       'button-group',
+      registryUrl('billing-01'),
       registryUrl('block-state'),
-      registryUrl('breakdown-01'),
       registryUrl('dashboard-header'),
       registryUrl('data-table-04'),
+      registryUrl('geo-04'),
       registryUrl('heatmap-01'),
+      registryUrl('retention-03'),
       registryUrl('stat-group-03'),
     ],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboards/dashboard-02.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'dashboard-03',
+    type: 'registry:block',
+    title: 'Web analytics dashboard',
+    description:
+      'A web analytics dashboard: traffic tabs, visitors right now, a traffic flow, top pages, top countries and browsers, filtered by device.',
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown-01'),
+      registryUrl('chart-panel-02'),
+      registryUrl('dashboard-header'),
+      registryUrl('flow-01'),
+      registryUrl('geo-02'),
+      registryUrl('leaderboard-01'),
+      registryUrl('realtime-01'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/dashboards/dashboard-03.tsx',
         type: 'registry:component',
       },
     ],
