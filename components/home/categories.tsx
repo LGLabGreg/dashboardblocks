@@ -832,7 +832,7 @@ function CategoryCard({
           </h3>
           <p className='text-muted-foreground mt-1 text-sm text-pretty'>{description}</p>
         </div>
-        <span className='bg-background group-hover:bg-foreground group-hover:text-background flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors'>
+        <span className='bg-background group-hover:border-foreground group-hover:bg-foreground group-hover:text-background flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors'>
           <ArrowUpRight className='size-4 transition-transform motion-safe:group-hover:rotate-45' />
         </span>
       </div>
