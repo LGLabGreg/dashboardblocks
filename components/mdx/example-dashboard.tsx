@@ -18,12 +18,12 @@ const DASHBOARDS = {
 
 export function ExampleDashboard({ name }: { name: keyof typeof DASHBOARDS }) {
   return (
-    <div className='not-prose mb-6 flex flex-col gap-8'>
+    <div className='not-prose -mt-8 mb-6 flex flex-col gap-6'>
       <div className='flex'>
         <ShadcnCliButton name={name} />
       </div>
       {/* A rule keeps the install command apart from the dashboard's own header. */}
-      <div className='border-t pt-8'>{DASHBOARDS[name](startOfToday())}</div>
+      <div className='border-t pt-6'>{DASHBOARDS[name](startOfToday())}</div>
     </div>
   )
 }
