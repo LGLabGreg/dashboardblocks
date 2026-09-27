@@ -299,6 +299,23 @@
       ]
     },
     {
+      "name": "forms",
+      "type": "registry:component",
+      "title": "Forms",
+      "description": "Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.",
+      "registryDependencies": [
+        "button",
+        "input",
+        "sheet"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "funnel",
       "type": "registry:component",
       "title": "Funnel",
@@ -3543,6 +3560,80 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell/app-shell-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forms-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "field",
+        "input",
+        "native-select",
+        "separator",
+        "switch",
+        "textarea",
+        "https://dashboardblocks.com/r/radix/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forms-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "field",
+        "input",
+        "native-select",
+        "textarea",
+        "https://dashboardblocks.com/r/radix/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forms-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "native-select",
+        "switch",
+        "textarea",
+        "https://dashboardblocks.com/r/radix/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "forms-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://dashboardblocks.com/r/radix/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-04.tsx",
           "type": "registry:component"
         }
       ]
