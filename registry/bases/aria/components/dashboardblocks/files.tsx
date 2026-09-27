@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: a4ebf3dc1803
+// source-hash: 42373b0f00ad
 
 'use client'
 
