@@ -69,7 +69,10 @@ export function Customizer({
         aria-label={`Customize preview: ${style}, ${labelFor(SETTINGS[1], config.base)}, ${labelFor(SETTINGS[2], config.iconLibrary)}`}
       >
         <PaletteIcon className='size-4' />
-        {compact ? style : `Customize · ${style}`}
+        {!compact && 'Customize'}
+        <span className='bg-fd-secondary text-fd-secondary-foreground ms-auto rounded border px-1.5 py-px text-xs leading-4 font-medium'>
+          {style}
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='w-80 min-w-(--anchor-width)'>
         <DropdownMenuGroup>
