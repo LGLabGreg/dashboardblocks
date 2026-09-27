@@ -13,6 +13,10 @@ import {
   alertsExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/index'
 import {
+  appShellComponents,
+  appShellExampleProps,
+} from '@/registry/components/dashboardblocks/app-shell/index'
+import {
   billingComponents,
   billingExampleProps,
 } from '@/registry/components/dashboardblocks/billing/index'
@@ -197,6 +201,7 @@ const exampleComponents = {
   ...inventoryComponents,
   ...aiUsageComponents,
   ...settingsComponents,
+  ...appShellComponents,
 }
 
 const examplePropsMap = {
@@ -239,6 +244,7 @@ const examplePropsMap = {
   ...inventoryExampleProps,
   ...aiUsageExampleProps,
   ...settingsExampleProps,
+  ...appShellExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

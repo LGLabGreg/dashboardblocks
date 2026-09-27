@@ -1,6 +1,7 @@
 import { activityFeedComponents } from '@/registry/components/dashboardblocks/activity-feed/index'
 import { aiUsageComponents } from '@/registry/components/dashboardblocks/ai-usage/index'
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
+import { appShellComponents } from '@/registry/components/dashboardblocks/app-shell/index'
 import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
@@ -83,6 +84,7 @@ const counts = {
   inventory: Object.keys(inventoryComponents).length,
   aiUsage: Object.keys(aiUsageComponents).length,
   settings: Object.keys(settingsComponents).length,
+  appShell: Object.keys(appShellComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

@@ -68,6 +68,29 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'app-shell',
+    type: 'registry:component',
+    title: 'App Shell',
+    description:
+      'Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, plan usage and a top navigation row.',
+    registryDependencies: [
+      'avatar',
+      'breadcrumb',
+      'button',
+      'collapsible',
+      'dropdown-menu',
+      'kbd',
+      'progress',
+      'sidebar',
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/app-shell.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'chart',
     type: 'registry:component',
     title: 'Chart',

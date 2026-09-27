@@ -184,3 +184,22 @@
     transform: translateY(60px) rotateX(28deg);
   }
 }
+
+/*
+ * Page-level blocks such as app shells preview in a fixed-height frame. Layout
+ * containment makes the frame the containing block for the sidebar's fixed
+ * container, so the shell fills the frame instead of the viewport and the page
+ * scrolls inside it. Unlayered, so it wins over the blocks' own utilities.
+ */
+.page-preview {
+  contain: layout paint;
+}
+.page-preview > *,
+.page-preview [data-slot='sidebar-container'] {
+  height: 100%;
+  min-height: 0;
+}
+.page-preview > *,
+.page-preview [data-slot='sidebar-inset'] {
+  overflow-y: auto;
+}

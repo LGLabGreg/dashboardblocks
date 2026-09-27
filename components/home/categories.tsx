@@ -17,6 +17,10 @@ import {
   alerts1ExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
 import {
+  AppShell3,
+  appShell3ExampleProps,
+} from '@/registry/components/dashboardblocks/app-shell/app-shell-03'
+import {
   Billing1,
   billing1ExampleProps,
 } from '@/registry/components/dashboardblocks/billing/billing-01'
@@ -240,6 +244,7 @@ export interface CategoryCounts {
   inventory: number
   aiUsage: number
   settings: number
+  appShell: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -626,6 +631,18 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <Settings1 {...settings1ExampleProps} />
           <Settings5 {...settings5ExampleProps} />
         </CategoryCard>
+        <CategoryCard
+          href='/docs/components/app-shell'
+          title='App Shell'
+          description='The frame around every page: sidebar navigation, a workspace switcher, a user menu, breadcrumbs, search and notifications.'
+          count={counts.appShell}
+          className='md:col-span-3'
+          previewClassName='*:w-[64rem]'
+        >
+          <div className='page-preview bg-background h-[32rem] rounded-xl shadow-xs ring-1 ring-foreground/10'>
+            <AppShell3 {...appShell3ExampleProps} />
+          </div>
+        </CategoryCard>
       </div>
     </section>
   )
@@ -648,11 +665,12 @@ function CategoryCard({
   previewClassName?: string
   children: React.ReactNode
 }) {
+  // The link stretches over the card rather than wrapping it, so previews that
+  // contain links (like the app shell) don't nest one link inside another.
   return (
-    <Link
-      href={href}
+    <div
       className={cn(
-        'group bg-muted/40 hover:border-foreground/20 flex flex-col overflow-hidden rounded-3xl border transition-colors',
+        'group bg-muted/40 hover:border-foreground/20 has-focus-visible:ring-ring/50 relative flex flex-col overflow-hidden rounded-3xl border transition-colors has-focus-visible:ring-[3px]',
         className,
       )}
     >
@@ -669,7 +687,9 @@ function CategoryCard({
       <div className='flex items-end justify-between gap-4 px-6 pb-6'>
         <div>
           <h3 className='flex items-center gap-2 text-lg font-semibold'>
-            {title}
+            <Link href={href} className='outline-none after:absolute after:inset-0'>
+              {title}
+            </Link>
             <span className='bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums'>
               {count} blocks
             </span>
@@ -680,6 +700,6 @@ function CategoryCard({
           <ArrowUpRight className='size-4 transition-transform motion-safe:group-hover:rotate-45' />
         </span>
       </div>
-    </Link>
+    </div>
   )
 }
