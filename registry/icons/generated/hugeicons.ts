@@ -59,6 +59,7 @@ export {
   FileZipIcon,
   FilterHorizontalIcon,
   FlashIcon,
+  FloppyDiskIcon,
   Folder01Icon,
   Globe02Icon,
   HeadphonesIcon,

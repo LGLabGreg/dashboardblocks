@@ -25,6 +25,10 @@ import {
   appShell3ExampleProps,
 } from '@/registry/components/dashboardblocks/app-shell/app-shell-03'
 import {
+  Auth1,
+  auth1ExampleProps,
+} from '@/registry/components/dashboardblocks/auth/auth-01'
+import {
   Billing1,
   billing1ExampleProps,
 } from '@/registry/components/dashboardblocks/billing/billing-01'
@@ -76,6 +80,10 @@ import {
   Distribution1,
   distribution1ExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/distribution-01'
+import {
+  ErrorPages1,
+  errorPages1ExampleProps,
+} from '@/registry/components/dashboardblocks/error-pages/error-pages-01'
 import {
   Feedback1,
   feedback1ExampleProps,
@@ -330,6 +338,8 @@ export interface CategoryCounts {
   aiAssistant: number
   invoice: number
   onboarding: number
+  errorPages: number
+  auth: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -877,6 +887,24 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           previewClassName='*:w-80 sm:*:w-[48rem]'
         >
           <Onboarding3 {...onboarding3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/error-pages'
+          title='Error Pages'
+          description='Not found, no access, server errors, maintenance and an ended session.'
+          count={counts.errorPages}
+          previewClassName='*:w-80 *:min-h-0 *:rounded-2xl *:border'
+        >
+          <ErrorPages1 {...errorPages1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/auth'
+          title='Auth'
+          description='Accepting an invite, choosing a workspace, two-factor and email codes.'
+          count={counts.auth}
+          previewClassName='*:w-80 *:min-h-0 *:rounded-2xl *:border'
+        >
+          <Auth1 {...auth1ExampleProps} />
         </CategoryCard>
       </div>
     </section>

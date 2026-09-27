@@ -21,6 +21,10 @@ import {
   appShellExampleProps,
 } from '@/registry/components/dashboardblocks/app-shell/index'
 import {
+  authComponents,
+  authExampleProps,
+} from '@/registry/components/dashboardblocks/auth/index'
+import {
   billingComponents,
   billingExampleProps,
 } from '@/registry/components/dashboardblocks/billing/index'
@@ -68,6 +72,10 @@ import {
   distributionComponents,
   distributionExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/index'
+import {
+  errorPagesComponents,
+  errorPagesExampleProps,
+} from '@/registry/components/dashboardblocks/error-pages/index'
 import {
   feedbackComponents,
   feedbackExampleProps,
@@ -262,6 +270,8 @@ const exampleComponents = {
   ...aiAssistantComponents,
   ...invoiceComponents,
   ...onboardingComponents,
+  ...errorPagesComponents,
+  ...authComponents,
 }
 
 const examplePropsMap = {
@@ -317,6 +327,8 @@ const examplePropsMap = {
   ...aiAssistantExampleProps,
   ...invoiceExampleProps,
   ...onboardingExampleProps,
+  ...errorPagesExampleProps,
+  ...authExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

@@ -104,6 +104,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'auth',
+    type: 'registry:component',
+    title: 'Auth',
+    description:
+      'Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.',
+    registryDependencies: ['input', registryUrl('team')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/auth.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'billing',
     type: 'registry:component',
     title: 'Billing',
@@ -251,6 +265,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/distribution.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'error-pages',
+    type: 'registry:component',
+    title: 'Error Pages',
+    description:
+      'Primitives for error and interruption pages: a full-page frame with your brand, a centred message, an optional code and icon, actions and footer links, plus UTC time and duration formatting.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/error-pages.tsx',
         type: 'registry:component',
       },
     ],

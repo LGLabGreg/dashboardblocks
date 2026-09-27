@@ -3,6 +3,7 @@ import { examples as aiAssistantExamples } from '@/registry/components/dashboard
 import { examples as aiUsageExamples } from '@/registry/components/dashboardblocks/ai-usage/registry'
 import { examples as alertsExamples } from '@/registry/components/dashboardblocks/alerts/registry'
 import { examples as appShellExamples } from '@/registry/components/dashboardblocks/app-shell/registry'
+import { examples as authExamples } from '@/registry/components/dashboardblocks/auth/registry'
 import { examples as billingExamples } from '@/registry/components/dashboardblocks/billing/registry'
 import { examples as breakdownExamples } from '@/registry/components/dashboardblocks/breakdown/registry'
 import { examples as calendarExamples } from '@/registry/components/dashboardblocks/calendar/registry'
@@ -16,6 +17,7 @@ import { examples as dashboardExamples } from '@/registry/components/dashboardbl
 import { examples as dataTableExamples } from '@/registry/components/dashboardblocks/data-table/registry'
 import { examples as deploymentsExamples } from '@/registry/components/dashboardblocks/deployments/registry'
 import { examples as distributionExamples } from '@/registry/components/dashboardblocks/distribution/registry'
+import { examples as errorPagesExamples } from '@/registry/components/dashboardblocks/error-pages/registry'
 import { examples as feedbackExamples } from '@/registry/components/dashboardblocks/feedback/registry'
 import { examples as filesExamples } from '@/registry/components/dashboardblocks/files/registry'
 import { examples as flowExamples } from '@/registry/components/dashboardblocks/flow/registry'
@@ -115,6 +117,8 @@ const registry = {
     ...aiAssistantExamples,
     ...invoiceExamples,
     ...onboardingExamples,
+    ...errorPagesExamples,
+    ...authExamples,
     ...hooks,
   ],
 }

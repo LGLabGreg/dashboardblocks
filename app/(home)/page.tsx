@@ -3,6 +3,7 @@ import { aiAssistantComponents } from '@/registry/components/dashboardblocks/ai-
 import { aiUsageComponents } from '@/registry/components/dashboardblocks/ai-usage/index'
 import { alertsComponents } from '@/registry/components/dashboardblocks/alerts/index'
 import { appShellComponents } from '@/registry/components/dashboardblocks/app-shell/index'
+import { authComponents } from '@/registry/components/dashboardblocks/auth/index'
 import { billingComponents } from '@/registry/components/dashboardblocks/billing/index'
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { calendarComponents } from '@/registry/components/dashboardblocks/calendar/index'
@@ -15,6 +16,7 @@ import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
 import { deploymentsComponents } from '@/registry/components/dashboardblocks/deployments/index'
 import { distributionComponents } from '@/registry/components/dashboardblocks/distribution/index'
+import { errorPagesComponents } from '@/registry/components/dashboardblocks/error-pages/index'
 import { feedbackComponents } from '@/registry/components/dashboardblocks/feedback/index'
 import { filesComponents } from '@/registry/components/dashboardblocks/files/index'
 import { flowComponents } from '@/registry/components/dashboardblocks/flow/index'
@@ -109,6 +111,8 @@ const counts = {
   aiAssistant: Object.keys(aiAssistantComponents).length,
   invoice: Object.keys(invoiceComponents).length,
   onboarding: Object.keys(onboardingComponents).length,
+  errorPages: Object.keys(errorPagesComponents).length,
+  auth: Object.keys(authComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

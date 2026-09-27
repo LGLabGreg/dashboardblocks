@@ -104,6 +104,22 @@
       ]
     },
     {
+      "name": "auth",
+      "type": "registry:component",
+      "title": "Auth",
+      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.",
+      "registryDependencies": [
+        "input",
+        "https://dashboardblocks.com/r/radix/team.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "billing",
       "type": "registry:component",
       "title": "Billing",
@@ -265,6 +281,18 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages",
+      "type": "registry:component",
+      "title": "Error Pages",
+      "description": "Primitives for error and interruption pages: a full-page frame with your brand, a centred message, an optional code and icon, actions and footer links, plus UTC time and duration formatting.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages.tsx",
           "type": "registry:component"
         }
       ]
@@ -4549,6 +4577,142 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding/onboarding-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "https://dashboardblocks.com/r/radix/error-pages.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages/error-pages-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "textarea",
+        "https://dashboardblocks.com/r/radix/team.json",
+        "https://dashboardblocks.com/r/radix/error-pages.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages/error-pages-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/radix/settings.json",
+        "https://dashboardblocks.com/r/radix/error-pages.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages/error-pages-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "https://dashboardblocks.com/r/radix/error-pages.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages/error-pages-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "error-pages-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/radix/error-pages.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/error-pages/error-pages-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "auth-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/radix/team.json",
+        "https://dashboardblocks.com/r/radix/auth.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "auth-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "https://dashboardblocks.com/r/radix/auth.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "auth-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "switch",
+        "https://dashboardblocks.com/r/radix/auth.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "auth-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "https://dashboardblocks.com/r/radix/auth.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-04.tsx",
           "type": "registry:component"
         }
       ]
