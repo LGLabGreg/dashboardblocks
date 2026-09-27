@@ -512,7 +512,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/billing'
           title='Billing'
-          description='MRR movement, the current plan, invoices and revenue metrics.'
+          description='MRR movement, the current plan, changing plans, invoices and revenue metrics.'
           count={counts.billing}
         >
           <Billing1 {...billing1ExampleProps} />
@@ -543,7 +543,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/team'
           title='Team'
-          description='Member lists with presence, workload against capacity, who is online and on-call rotas.'
+          description='Member lists with presence, workload, on-call rotas, roles and permissions, and sharing.'
           count={counts.team}
           previewClassName='*:w-80'
         >
@@ -678,7 +678,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/security'
           title='Security'
-          description='Sign-in activity, an audit log, active sessions and a security posture score.'
+          description='Sign-in activity, an audit log, sessions, a posture score, two-factor and SSO.'
           count={counts.security}
           className='md:col-span-2'
           previewClassName='*:w-80'
@@ -708,7 +708,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/settings'
           title='Settings'
-          description='Members and invites, API keys, notification preferences, integrations, webhooks and a danger zone.'
+          description='Members and invites, API keys, notifications, integrations, webhooks, a danger zone and your profile.'
           count={counts.settings}
           className='md:col-span-3'
           previewClassName='*:w-80 sm:*:w-[26rem]'

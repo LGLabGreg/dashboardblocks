@@ -48,4 +48,34 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'security-05',
+    type: 'registry:component',
+    registryDependencies: ['button', 'card', 'input', registryUrl('settings')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/security/security-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'security-06',
+    type: 'registry:component',
+    registryDependencies: [
+      'button',
+      'card',
+      'input',
+      'native-select',
+      'switch',
+      'textarea',
+      registryUrl('settings'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/security/security-06.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

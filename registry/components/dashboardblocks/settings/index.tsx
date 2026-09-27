@@ -4,6 +4,7 @@ import { Settings3, settings3ExampleProps } from './settings-03'
 import { Settings4, settings4ExampleProps } from './settings-04'
 import { Settings5, settings5ExampleProps } from './settings-05'
 import { Settings6, settings6ExampleProps } from './settings-06'
+import { Settings7, settings7ExampleProps } from './settings-07'
 
 export const settingsComponents = {
   'settings-01': Settings1,
@@ -12,6 +13,7 @@ export const settingsComponents = {
   'settings-04': Settings4,
   'settings-05': Settings5,
   'settings-06': Settings6,
+  'settings-07': Settings7,
 }
 
 export const settingsExampleProps = {
@@ -21,4 +23,5 @@ export const settingsExampleProps = {
   'settings-04': settings4ExampleProps,
   'settings-05': settings5ExampleProps,
   'settings-06': settings6ExampleProps,
+  'settings-07': settings7ExampleProps,
 }
