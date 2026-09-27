@@ -746,7 +746,15 @@ export const components: Registry['items'] = [
     name: 'calendar',
     type: 'registry:component',
     title: 'Calendar',
-    description: 'TODO',
+    description:
+      'Primitives for calendars: a toolbar with today, previous, next and a view switch, a keyboard-navigable month grid with event chips, multi-day bars and "+N more", week and resource views on an hour axis with overlapping events side by side and a now line, an event list for narrow screens, inline event details, a legend that can filter calendars, and date helpers for weeks, event days and lanes.',
+    registryDependencies: [
+      'button',
+      'button-group',
+      'tabs',
+      registryUrl('schedule'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/calendar.tsx',
