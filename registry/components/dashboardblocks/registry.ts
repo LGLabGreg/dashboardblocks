@@ -284,6 +284,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'forms',
+    type: 'registry:component',
+    title: 'Forms',
+    description:
+      'Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.',
+    registryDependencies: ['button', 'input', 'sheet'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'funnel',
     type: 'registry:component',
     title: 'Funnel',

@@ -14,6 +14,7 @@ import { distributionComponents } from '@/registry/components/dashboardblocks/di
 import { feedbackComponents } from '@/registry/components/dashboardblocks/feedback/index'
 import { flowComponents } from '@/registry/components/dashboardblocks/flow/index'
 import { forecastComponents } from '@/registry/components/dashboardblocks/forecast/index'
+import { formsComponents } from '@/registry/components/dashboardblocks/forms/index'
 import { funnelComponents } from '@/registry/components/dashboardblocks/funnel/index'
 import { gaugeComponents } from '@/registry/components/dashboardblocks/gauge/index'
 import { geoComponents } from '@/registry/components/dashboardblocks/geo/index'
@@ -85,6 +86,7 @@ const counts = {
   aiUsage: Object.keys(aiUsageComponents).length,
   settings: Object.keys(settingsComponents).length,
   appShell: Object.keys(appShellComponents).length,
+  forms: Object.keys(formsComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

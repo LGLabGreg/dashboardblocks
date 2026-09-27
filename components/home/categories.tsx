@@ -77,6 +77,14 @@ import {
   forecast3ExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/forecast-03'
 import {
+  Forms3,
+  forms3ExampleProps,
+} from '@/registry/components/dashboardblocks/forms/forms-03'
+import {
+  Forms4,
+  forms4ExampleProps,
+} from '@/registry/components/dashboardblocks/forms/forms-04'
+import {
   Funnel1,
   funnel1ExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
@@ -245,6 +253,7 @@ export interface CategoryCounts {
   aiUsage: number
   settings: number
   appShell: number
+  forms: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -641,6 +650,19 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         >
           <div className='page-preview bg-background h-[32rem] rounded-xl shadow-xs ring-1 ring-foreground/10'>
             <AppShell3 {...appShell3ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/forms'
+          title='Forms'
+          description='Settings sections with a save bar, a form in a side sheet, a multi-step wizard and inline editing.'
+          count={counts.forms}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Forms3 {...forms3ExampleProps} />
+          <div className='hidden md:block'>
+            <Forms4 {...forms4ExampleProps} />
           </div>
         </CategoryCard>
       </div>

@@ -15,6 +15,7 @@ import { examples as distributionExamples } from '@/registry/components/dashboar
 import { examples as feedbackExamples } from '@/registry/components/dashboardblocks/feedback/registry'
 import { examples as flowExamples } from '@/registry/components/dashboardblocks/flow/registry'
 import { examples as forecastExamples } from '@/registry/components/dashboardblocks/forecast/registry'
+import { examples as formsExamples } from '@/registry/components/dashboardblocks/forms/registry'
 import { examples as funnelExamples } from '@/registry/components/dashboardblocks/funnel/registry'
 import { examples as gaugeExamples } from '@/registry/components/dashboardblocks/gauge/registry'
 import { examples as geoExamples } from '@/registry/components/dashboardblocks/geo/registry'
@@ -91,6 +92,7 @@ const registry = {
     ...aiUsageExamples,
     ...settingsExamples,
     ...appShellExamples,
+    ...formsExamples,
     ...hooks,
   ],
 }
