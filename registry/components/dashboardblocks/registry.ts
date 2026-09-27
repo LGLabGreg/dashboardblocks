@@ -758,7 +758,9 @@ export const components: Registry['items'] = [
     name: 'files',
     type: 'registry:component',
     title: 'Files',
-    description: 'TODO',
+    description:
+      'Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.',
+    registryDependencies: ['button', 'dropdown-menu'],
     files: [
       {
         path: 'registry/components/dashboardblocks/files.tsx',

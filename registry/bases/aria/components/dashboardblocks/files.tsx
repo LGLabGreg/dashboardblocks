@@ -1,3 +1,6 @@
+// Override of registry/components/dashboardblocks/files.tsx for React Aria
+// source-hash: 0160d9ec3ce7
+
 'use client'
 
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -15,7 +18,6 @@ import {
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -987,17 +989,8 @@ function FileActionsMenu({
 }) {
   const firstDestructive = actions.findIndex((action) => action.variant === 'destructive')
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            aria-label={label}
-            className={className}
-          />
-        }
-      >
+    <DropdownMenuTrigger>
+      <Button variant='ghost' size='icon-sm' aria-label={label} className={className}>
         <IconPlaceholder
           lucide='EllipsisIcon'
           tabler='IconDots'
@@ -1005,19 +998,23 @@ function FileActionsMenu({
           phosphor='DotsThreeIcon'
           remixicon='RiMoreLine'
         />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-auto min-w-40'>
+      </Button>
+      <DropdownMenu placement='bottom end' className='w-auto min-w-40'>
         {actions.map((action, index) => (
           <Fragment key={action.label}>
             {index === firstDestructive && index > 0 && <DropdownMenuSeparator />}
-            <DropdownMenuItem variant={action.variant} onClick={action.onSelect}>
+            <DropdownMenuItem
+              variant={action.variant}
+              textValue={action.label}
+              onAction={action.onSelect}
+            >
               {action.icon}
               {action.label}
             </DropdownMenuItem>
           </Fragment>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </DropdownMenuTrigger>
   )
 }
 
