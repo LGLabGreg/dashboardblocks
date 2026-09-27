@@ -16,7 +16,7 @@ import {
 import {
   type FileAction,
   FileActionsMenu,
-  FileIcon,
+  FileKindIcon,
   type FileKind,
   fileKindConfig,
   formatFileSize,
@@ -182,7 +182,7 @@ const columns = columnHelper.columns([
   columnHelper.accessor('name', {
     cell: ({ row }) => (
       <span className='flex min-w-0 items-center gap-3'>
-        <FileIcon kind={row.original.kind} size='sm' />
+        <FileKindIcon kind={row.original.kind} size='sm' />
         <a
           href={row.original.href}
           className='truncate underline-offset-4 outline-none hover:underline focus-visible:underline'

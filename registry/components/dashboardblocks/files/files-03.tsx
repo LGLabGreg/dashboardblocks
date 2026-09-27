@@ -3,7 +3,7 @@
 import {
   type FileAction,
   FileActionsMenu,
-  FileIcon,
+  FileKindIcon,
   type FileKind,
   fileKindConfig,
   formatFileSize,
@@ -256,7 +256,7 @@ const Files3 = (props: Files3Props) => {
                   key={file.id}
                   className='hover:bg-muted/50 focus-within:bg-muted/50 flex items-center gap-3 rounded-md px-2 py-2 transition-colors'
                 >
-                  <FileIcon kind={file.kind} size='sm' />
+                  <FileKindIcon kind={file.kind} size='sm' />
                   <div className='flex min-w-0 flex-1 flex-col'>
                     <a
                       href={file.href}

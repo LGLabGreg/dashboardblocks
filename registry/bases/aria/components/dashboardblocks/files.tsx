@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: 0160d9ec3ce7
+// source-hash: a4ebf3dc1803
 
 'use client'
 
@@ -318,7 +318,7 @@ const fileIconSizes = {
   sm: 'size-8 rounded-md [&_svg]:size-4',
 }
 
-interface FileIconProps {
+interface FileKindIconProps {
   className?: string
   /** Leave out to work it out from `name` and `type`. */
   kind?: FileKind
@@ -330,7 +330,13 @@ interface FileIconProps {
 }
 
 /** The icon for a kind of file in a tinted square. Decorative: show the name beside it. */
-function FileIcon({ className, kind, name = '', size = 'md', type }: FileIconProps) {
+function FileKindIcon({
+  className,
+  kind,
+  name = '',
+  size = 'md',
+  type,
+}: FileKindIconProps) {
   const config = fileKindConfig[kind ?? getFileKind(name, type)]
   return (
     <span
@@ -851,7 +857,7 @@ function FileUploadItem({
       data-status={status}
       className={cn('flex items-center gap-3 py-3 [&_svg]:shrink-0', className)}
     >
-      <FileIcon name={name} type={upload.type} />
+      <FileKindIcon name={name} type={upload.type} />
       <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
         <div className='flex items-baseline justify-between gap-3'>
           <p className='truncate text-sm font-medium' title={name}>
@@ -1083,7 +1089,7 @@ export {
   FileActionsMenu,
   FileBreadcrumbs,
   FileDropzone,
-  FileIcon,
+  FileKindIcon,
   FileUploadItem,
   FileUploadList,
   FileUploadProgress,
@@ -1100,7 +1106,7 @@ export type {
   FileAction,
   FileBreadcrumb,
   FileDropzoneProps,
-  FileIconProps,
+  FileKindIconProps,
   FileKind,
   FileKindConfig,
   FileRejection,

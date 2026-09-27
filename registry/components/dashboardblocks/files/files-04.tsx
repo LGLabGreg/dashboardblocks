@@ -5,7 +5,7 @@ import {
   type FileAction,
   FileActionsMenu,
   FileBreadcrumbs,
-  FileIcon,
+  FileKindIcon,
   formatFileSize,
 } from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -266,7 +266,7 @@ const Files4 = (props: Files4Props) => {
                     onClick={() => open(item.id)}
                     className='hover:bg-muted/50 focus-visible:border-ring focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors outline-none focus-visible:ring-3'
                   >
-                    <FileIcon kind='folder' />
+                    <FileKindIcon kind='folder' />
                     <span className='flex min-w-0 flex-col'>
                       <span className='truncate text-sm font-medium'>{item.name}</span>
                       <span className='text-muted-foreground text-xs tabular-nums'>
@@ -291,10 +291,14 @@ const Files4 = (props: Files4Props) => {
                   className='hover:bg-muted/50 focus-within:bg-muted/50 relative flex flex-col gap-2 rounded-lg border p-2 transition-colors'
                 >
                   <div className='bg-muted/50 hidden aspect-2/1 items-center justify-center rounded-md @sm/files:flex'>
-                    <FileIcon name={item.name} size='lg' />
+                    <FileKindIcon name={item.name} size='lg' />
                   </div>
                   <div className='flex items-center gap-3 @sm/files:items-start @sm/files:gap-1 @sm/files:pl-1'>
-                    <FileIcon name={item.name} size='sm' className='@sm/files:hidden' />
+                    <FileKindIcon
+                      name={item.name}
+                      size='sm'
+                      className='@sm/files:hidden'
+                    />
                     <div className='flex min-w-0 flex-1 flex-col'>
                       <a
                         href={item.href}
@@ -322,7 +326,7 @@ const Files4 = (props: Files4Props) => {
           )}
           {folders.length === 0 && files.length === 0 && (
             <div className='text-muted-foreground flex flex-col items-center gap-2 rounded-lg border border-dashed px-6 py-10 text-center text-sm'>
-              <FileIcon kind='folder' />
+              <FileKindIcon kind='folder' />
               {current.name} is empty.
             </div>
           )}
