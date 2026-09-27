@@ -243,7 +243,7 @@ const Billing5 = (props: Billing5Props) => {
               />
               {value === 'month' ? 'Monthly' : 'Yearly'}
               {value === 'year' && yearlySaving > 0 && (
-                <span className='text-emerald-700 dark:text-emerald-400 text-xs'>
+                <span className='rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-emerald-700 dark:text-emerald-400'>
                   Save {!plan?.price && 'up to '}
                   {Math.round(yearlySaving * 100)}%
                 </span>
