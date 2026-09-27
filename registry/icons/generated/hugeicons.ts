@@ -38,6 +38,7 @@ export {
   Idea01Icon,
   KeyboardIcon,
   Layers01Icon,
+  LayoutThreeColumnIcon,
   Loading03Icon,
   Location01Icon,
   MailIcon,
