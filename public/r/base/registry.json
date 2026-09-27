@@ -1743,14 +1743,16 @@
       "name": "dashboard-01",
       "type": "registry:block",
       "title": "Store dashboard",
-      "description": "A store dashboard: header filters scope stats, revenue, channels, products and a checkout funnel.",
+      "description": "A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.",
       "registryDependencies": [
         "https://dashboardblocks.com/r/base/block-state.json",
         "https://dashboardblocks.com/r/base/breakdown-01.json",
         "https://dashboardblocks.com/r/base/chart-panel-01.json",
         "https://dashboardblocks.com/r/base/dashboard-header.json",
         "https://dashboardblocks.com/r/base/data-table-02.json",
+        "https://dashboardblocks.com/r/base/forecast-03.json",
         "https://dashboardblocks.com/r/base/funnel-01.json",
+        "https://dashboardblocks.com/r/base/inventory-01.json",
         "https://dashboardblocks.com/r/base/stat-group-02.json"
       ],
       "files": [
@@ -1764,20 +1766,44 @@
       "name": "dashboard-02",
       "type": "registry:block",
       "title": "SaaS dashboard",
-      "description": "A SaaS dashboard: metric tabs, an activity heatmap, accounts by region and service status, filtered by plan.",
+      "description": "A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.",
       "registryDependencies": [
         "button",
         "button-group",
+        "https://dashboardblocks.com/r/base/billing-01.json",
         "https://dashboardblocks.com/r/base/block-state.json",
-        "https://dashboardblocks.com/r/base/breakdown-01.json",
         "https://dashboardblocks.com/r/base/dashboard-header.json",
         "https://dashboardblocks.com/r/base/data-table-04.json",
+        "https://dashboardblocks.com/r/base/geo-04.json",
         "https://dashboardblocks.com/r/base/heatmap-01.json",
+        "https://dashboardblocks.com/r/base/retention-03.json",
         "https://dashboardblocks.com/r/base/stat-group-03.json"
       ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-03",
+      "type": "registry:block",
+      "title": "Web analytics dashboard",
+      "description": "A web analytics dashboard: traffic tabs, visitors right now, a traffic flow, top pages, top countries and browsers, filtered by device.",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/base/block-state.json",
+        "https://dashboardblocks.com/r/base/breakdown-01.json",
+        "https://dashboardblocks.com/r/base/chart-panel-02.json",
+        "https://dashboardblocks.com/r/base/dashboard-header.json",
+        "https://dashboardblocks.com/r/base/flow-01.json",
+        "https://dashboardblocks.com/r/base/geo-02.json",
+        "https://dashboardblocks.com/r/base/leaderboard-01.json",
+        "https://dashboardblocks.com/r/base/realtime-01.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboards/dashboard-03.tsx",
           "type": "registry:component"
         }
       ]

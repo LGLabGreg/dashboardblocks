@@ -1,7 +1,7 @@
 'use client'
 
+import { Billing1 } from '@/registry/components/dashboardblocks/billing/billing-01'
 import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
-import { Breakdown1 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
 import {
   type DateRangePreset,
   ExportMenu,
@@ -16,7 +16,9 @@ import {
   DataTable4,
   dataTable4ExampleProps,
 } from '@/registry/components/dashboardblocks/data-table/data-table-04'
+import { Geo4 } from '@/registry/components/dashboardblocks/geo/geo-04'
 import { Heatmap1 } from '@/registry/components/dashboardblocks/heatmap/heatmap-01'
+import { Retention3 } from '@/registry/components/dashboardblocks/retention/retention-03'
 import { StatGroup3 } from '@/registry/components/dashboardblocks/stat-group/stat-group-03'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
@@ -26,8 +28,9 @@ import { ButtonGroup } from '@/components/ui/button-group'
 
 /*
  * A SaaS dashboard: the date range and plan filter scope the metrics,
- * activity and regions below. Service status is live, so it isn't filtered.
- * Swap `buildSaasData` for your own queries.
+ * activity, MRR by region and MRR movement below. Retention compares the latest
+ * monthly cohorts on the chosen plan. Service status is live, so it isn't
+ * filtered. Swap `buildSaasData` for your own queries.
  */
 
 interface Dashboard2Props {
@@ -41,10 +44,11 @@ const exampleProps: Dashboard2Props = {
   today: new Date(Date.UTC(2026, 8, 25)),
 }
 
+/** Each plan's share of accounts, price and day 1, 7 and 30 retention. */
 const PLANS = [
-  { name: 'Starter', price: 19, share: 0.58 },
-  { name: 'Pro', price: 49, share: 0.33 },
-  { name: 'Enterprise', price: 240, share: 0.09 },
+  { name: 'Starter', price: 19, retention: [0.52, 0.33, 0.19], share: 0.58 },
+  { name: 'Pro', price: 49, retention: [0.64, 0.46, 0.31], share: 0.33 },
+  { name: 'Enterprise', price: 240, retention: [0.81, 0.69, 0.58], share: 0.09 },
 ]
 
 const REGIONS = [
@@ -121,6 +125,26 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
   const nps = daily('nps')
   const scope = `${formatDateRange(range)}${plan ? `, ${plan} plan` : ''}`
 
+  // MRR movement across the range. Expansion, contraction and churn are
+  // monthly rates scaled to its length; new business makes up the rest.
+  const months = days / 30
+  const starting = day(days).mrr
+  const ending = last(mrr).current
+  const churned = Math.round((starting * mean(churn, 'current') * months) / 100)
+  const contraction = Math.round(starting * 0.011 * months)
+  const expansion = Math.round(starting * (plan === 'Starter' ? 0.018 : 0.034) * months)
+
+  // Day 1, 7 and 30 retention of the latest monthly cohort and the one before.
+  const retention = [1, 7, 30].map((dayNumber, index) => {
+    const rate = plans.reduce((sum, item) => sum + item.share * item.retention[index], 0)
+    return {
+      current: Number((rate / share + 0.012).toFixed(3)),
+      label: `Day ${dayNumber}`,
+      // Day 30 slipped against the cohort before, the early days improved.
+      previous: Number((rate / share + [-0.009, -0.011, 0.018][index]).toFixed(3)),
+    }
+  })
+
   return {
     activity: DAYS.map((_, weekday) =>
       Array.from({ length: 24 }, (_, hour) => {
@@ -166,23 +190,25 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
         value: Math.round(mean(nps, 'current')),
       },
     ],
+    movement: {
+      churn: churned,
+      contraction,
+      expansion,
+      newBusiness: Math.max(0, ending - starting - expansion + contraction + churned),
+      starting,
+    },
     previousLabel: formatDateRange(previousRange),
     regions: REGIONS.map((region, index) => {
-      const total = last(accounts).current
-      const earlier = REGIONS.slice(0, -1).reduce(
-        (sum, item) => sum + Math.round(total * item.share),
-        0,
-      )
+      // Growth differs by region, so each one's share moves a little.
+      const drift = (index - 1) * 0.01
       return {
         color: region.color,
+        current: Math.round(last(mrr).current * (region.share + drift)),
         label: region.label,
-        // The last region takes the rounding remainder, so the parts add up.
-        value:
-          index === REGIONS.length - 1
-            ? total - earlier
-            : Math.round(total * region.share),
+        previous: Math.round(last(mrr).previous * (region.share - drift)),
       }
     }),
+    retention,
     scope,
   }
 }
@@ -281,11 +307,25 @@ const Dashboard2 = (props: Dashboard2Props) => {
             values={data.activity}
           />
         </div>
-        <Breakdown1
-          description={`Active accounts, ${data.scope}`}
-          formatter={(value) => value.toLocaleString()}
-          segments={data.regions}
-          title='Accounts by region'
+        <Geo4
+          description={`MRR at the end of ${data.scope}`}
+          formatter={(value) => `$${value.toLocaleString('en-US')}`}
+          previousLabel={`vs ${data.previousLabel}`}
+          regions={data.regions}
+          title='MRR by region'
+        />
+        <div className='@4xl:col-span-2'>
+          <Billing1
+            description={data.scope}
+            movement={data.movement}
+            title='MRR movement'
+          />
+        </div>
+        <Retention3
+          description={`Latest monthly signup cohort${shown.plan ? `, ${shown.plan} plan` : ''}, compared with the one before`}
+          milestones={data.retention}
+          previousLabel='Previous cohort'
+          title='Retention milestones'
         />
       </BlockBusy>
       <DataTable4 {...dataTable4ExampleProps} />
