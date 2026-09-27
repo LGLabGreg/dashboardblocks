@@ -5,6 +5,10 @@ import {
   activityFeedExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/index'
 import {
+  aiAssistantComponents,
+  aiAssistantExampleProps,
+} from '@/registry/components/dashboardblocks/ai-assistant/index'
+import {
   aiUsageComponents,
   aiUsageExampleProps,
 } from '@/registry/components/dashboardblocks/ai-usage/index'
@@ -25,6 +29,10 @@ import {
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
 import {
+  calendarComponents,
+  calendarExampleProps,
+} from '@/registry/components/dashboardblocks/calendar/index'
+import {
   chartPanelComponents,
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
@@ -36,6 +44,10 @@ import {
   commandMenuComponents,
   commandMenuExampleProps,
 } from '@/registry/components/dashboardblocks/command-menu/index'
+import {
+  commentsComponents,
+  commentsExampleProps,
+} from '@/registry/components/dashboardblocks/comments/index'
 import {
   comparisonComponents,
   comparisonExampleProps,
@@ -60,6 +72,10 @@ import {
   feedbackComponents,
   feedbackExampleProps,
 } from '@/registry/components/dashboardblocks/feedback/index'
+import {
+  filesComponents,
+  filesExampleProps,
+} from '@/registry/components/dashboardblocks/files/index'
 import {
   flowComponents,
   flowExampleProps,
@@ -101,6 +117,14 @@ import {
   inventoryExampleProps,
 } from '@/registry/components/dashboardblocks/inventory/index'
 import {
+  invoiceComponents,
+  invoiceExampleProps,
+} from '@/registry/components/dashboardblocks/invoice/index'
+import {
+  kanbanComponents,
+  kanbanExampleProps,
+} from '@/registry/components/dashboardblocks/kanban/index'
+import {
   kpiComponents,
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
@@ -116,6 +140,10 @@ import {
   notificationsComponents,
   notificationsExampleProps,
 } from '@/registry/components/dashboardblocks/notifications/index'
+import {
+  onboardingComponents,
+  onboardingExampleProps,
+} from '@/registry/components/dashboardblocks/onboarding/index'
 import {
   pageHeaderComponents,
   pageHeaderExampleProps,
@@ -227,6 +255,13 @@ const exampleComponents = {
   ...notificationsComponents,
   ...pageHeaderComponents,
   ...recordDetailComponents,
+  ...kanbanComponents,
+  ...commentsComponents,
+  ...calendarComponents,
+  ...filesComponents,
+  ...aiAssistantComponents,
+  ...invoiceComponents,
+  ...onboardingComponents,
 }
 
 const examplePropsMap = {
@@ -275,6 +310,13 @@ const examplePropsMap = {
   ...notificationsExampleProps,
   ...pageHeaderExampleProps,
   ...recordDetailExampleProps,
+  ...kanbanExampleProps,
+  ...commentsExampleProps,
+  ...calendarExampleProps,
+  ...filesExampleProps,
+  ...aiAssistantExampleProps,
+  ...invoiceExampleProps,
+  ...onboardingExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

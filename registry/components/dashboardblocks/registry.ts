@@ -718,4 +718,136 @@ export const components: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'kanban',
+    type: 'registry:component',
+    title: 'Kanban',
+    description:
+      'Primitives for kanban boards: a board of columns with drag and drop by mouse, touch and keyboard and announced moves, columns with counts, WIP limits that warn or block and collapsing, cards with a move menu, labels, assignees, due dates, priorities, stats and subtasks, an inline add-card form and a helper that moves a card in your array.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input',
+      'kbd',
+      registryUrl('activity-feed'),
+      registryUrl('schedule'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kanban.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'comments',
+    type: 'registry:component',
+    title: 'Comments',
+    description:
+      'Primitives for comments: threads with one level of replies joined by a line, a composer that suggests people after @ and submits with ⌘ Enter, highlighted mentions, reaction toggles with an emoji picker, an edit and delete menu, and resolved threads that collapse to a summary.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input-group',
+      registryUrl('activity-feed'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/comments.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'calendar',
+    type: 'registry:component',
+    title: 'Calendar',
+    description:
+      'Primitives for calendars: a toolbar with today, previous, next and a view switch, a keyboard-navigable month grid with event chips, multi-day bars and "+N more", week and resource views on an hour axis with overlapping events side by side and a now line, an event list for narrow screens, inline event details, a legend that can filter calendars, and date helpers for weeks, event days and lanes.',
+    registryDependencies: [
+      'button',
+      'button-group',
+      'tabs',
+      registryUrl('schedule'),
+      registryUrl('team'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/calendar.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'files',
+    type: 'registry:component',
+    title: 'Files',
+    description:
+      'Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/files.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'ai-assistant',
+    type: 'registry:component',
+    title: 'AI Assistant',
+    description:
+      'Primitives for AI chat: a scrolling log that follows streamed replies and reads each one out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
+    registryDependencies: ['button', 'input-group'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ai-assistant.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'invoice',
+    type: 'registry:component',
+    title: 'Invoice',
+    description:
+      'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
+    registryDependencies: [
+      'badge',
+      'button',
+      'card',
+      'checkbox',
+      'table',
+      registryUrl('billing'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/invoice.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'onboarding',
+    type: 'registry:component',
+    title: 'Onboarding',
+    description:
+      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.',
+    registryDependencies: [
+      'button',
+      'card',
+      'field',
+      'input',
+      'native-select',
+      registryUrl('forms'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/onboarding.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

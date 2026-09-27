@@ -1,0 +1,72 @@
+---
+title: AI Assistant
+description: A chat panel docked beside a page, a conversation with code and feedback, questions about a usage card with the cost of each answer, and a failed reply with retry.
+---
+
+The assistant works with any model and any API. Messages are plain objects with an `id`, a `role` of `user` or `assistant`, and `content` text, and `status` is `ready`, `submitted`, `streaming` or `error`: the same shapes as the [AI SDK](https://ai-sdk.dev)'s `useChat`. Replies are formatted safely, with no HTML, for paragraphs, lists, **bold**, `code` and fenced code blocks. The log follows a reply as it streams unless you scroll up, and screen readers hear the whole reply once it's done, not every word. The examples stream canned replies; see [Usage](#usage) to connect your own.
+
+### Side Panel
+
+An assistant docked beside the page, with suggested prompts to start from, the page as context, and new chat and close buttons. On narrow screens it covers the page.
+
+<ComponentPreview name='ai-assistant-01' layout='page' />
+
+### Conversation
+
+A conversation with a list and a SQL query. Copy a reply or its code, rate it, regenerate the last one, or pick a follow-up question.
+
+<ComponentPreview name='ai-assistant-02' previewClassName='max-w-xl' />
+
+### Ask About Data
+
+Questions about an [AI Usage](/docs/components/ai-usage) card, with the tokens and cost of each answer.
+
+<ComponentPreview name='ai-assistant-03' previewClassName='max-w-lg' />
+
+### Retry
+
+A reply that failed, kept in the conversation with a button to try again.
+
+<ComponentPreview name='ai-assistant-04' previewClassName='max-w-md' />
+
+## Usage
+
+The examples run on `useChatStream`, a small hook in the primitives. Give it `onSend`, a function that streams the reply to the conversation so far as chunks of text, and it keeps the messages and status, and handles stop, regenerate and new chat. Stop aborts the `signal`.
+
+```tsx
+async function* onSend(messages: ChatMessageData[], signal: AbortSignal) {
+  const response = await fetch('/api/chat', {
+    body: JSON.stringify({ messages }),
+    method: 'POST',
+    signal,
+  })
+  const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader()
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) return
+    yield value
+  }
+}
+
+const chat = useChatStream({ onSend })
+```
+
+With the AI SDK, use `useChat` instead and pass its values to the same primitives. Its messages keep text in `parts`, so join those into `content`:
+
+```tsx
+const { messages, regenerate, sendMessage, status, stop } = useChat()
+
+const chatMessages = messages.flatMap((message) =>
+  message.role === 'system'
+    ? []
+    : [
+        {
+          content: message.parts.map((part) => (part.type === 'text' ? part.text : '')).join(''),
+          id: message.id,
+          role: message.role,
+        },
+      ],
+)
+
+<ChatComposer status={status} onSubmit={(text) => sendMessage({ text })} onStop={stop} />
+```
