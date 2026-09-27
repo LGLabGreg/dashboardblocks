@@ -187,6 +187,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'command-menu',
+    type: 'registry:component',
+    title: 'Command Menu',
+    description:
+      'Primitives for a command menu: a search dialog of pages, actions and records that filters as you type or shows results you fetch, with descriptions, shortcuts and a searching state, a search button with ⌘K, and a shortcut hook.',
+    registryDependencies: ['button', 'command', 'kbd'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/command-menu.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'comparison',
     type: 'registry:component',
     title: 'Comparison',
@@ -449,6 +463,34 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'notifications',
+    type: 'registry:component',
+    title: 'Notifications',
+    description:
+      'Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.',
+    registryDependencies: ['button', 'popover', registryUrl('activity-feed')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/notifications.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'page-header',
+    type: 'registry:component',
+    title: 'Page Header',
+    description:
+      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/page-header.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'pipeline',
     type: 'registry:component',
     title: 'Pipeline',
@@ -483,6 +525,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'record-detail',
+    type: 'registry:component',
+    title: 'Record Detail',
+    description:
+      "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/record-detail.tsx',
         type: 'registry:component',
       },
     ],

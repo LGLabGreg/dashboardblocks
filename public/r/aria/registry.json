@@ -194,6 +194,23 @@
       ]
     },
     {
+      "name": "command-menu",
+      "type": "registry:component",
+      "title": "Command Menu",
+      "description": "Primitives for a command menu: a search dialog of pages, actions and records that filters as you type or shows results you fetch, with descriptions, shortcuts and a searching state, a search button with ⌘K, and a shortcut hook.",
+      "registryDependencies": [
+        "button",
+        "command",
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/command-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "comparison",
       "type": "registry:component",
       "title": "Comparison",
@@ -482,6 +499,39 @@
       ]
     },
     {
+      "name": "notifications",
+      "type": "registry:component",
+      "title": "Notifications",
+      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.",
+      "registryDependencies": [
+        "button",
+        "popover",
+        "https://dashboardblocks.com/r/aria/activity-feed.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/notifications.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:component",
+      "title": "Page Header",
+      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/page-header.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "pipeline",
       "type": "registry:component",
       "title": "Pipeline",
@@ -516,6 +566,18 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "record-detail",
+      "type": "registry:component",
+      "title": "Record Detail",
+      "description": "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/record-detail.tsx",
           "type": "registry:component"
         }
       ]
@@ -3634,6 +3696,197 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms/forms-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "record-detail-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "table",
+        "https://dashboardblocks.com/r/aria/page-header.json",
+        "https://dashboardblocks.com/r/aria/record-detail.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/record-detail/record-detail-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "record-detail-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "table",
+        "https://dashboardblocks.com/r/aria/activity-feed.json",
+        "https://dashboardblocks.com/r/aria/page-header.json",
+        "https://dashboardblocks.com/r/aria/record-detail.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/record-detail/record-detail-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "record-detail-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "textarea",
+        "https://dashboardblocks.com/r/aria/activity-feed.json",
+        "https://dashboardblocks.com/r/aria/page-header.json",
+        "https://dashboardblocks.com/r/aria/record-detail.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/record-detail/record-detail-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/aria/page-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/page-header/page-header-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "https://dashboardblocks.com/r/aria/page-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/page-header/page-header-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "https://dashboardblocks.com/r/aria/page-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/page-header/page-header-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "input-group",
+        "https://dashboardblocks.com/r/aria/page-header.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/page-header/page-header-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "notifications-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "https://dashboardblocks.com/r/aria/notifications.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/notifications/notifications-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "notifications-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "tabs",
+        "https://dashboardblocks.com/r/aria/notifications.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/notifications/notifications-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "notifications-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "card",
+        "tabs",
+        "https://dashboardblocks.com/r/aria/activity-feed.json",
+        "https://dashboardblocks.com/r/aria/notifications.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/notifications/notifications-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "command-menu-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/aria/command-menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/command-menu/command-menu-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "command-menu-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/aria/command-menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/command-menu/command-menu-02.tsx",
           "type": "registry:component"
         }
       ]

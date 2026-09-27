@@ -6,6 +6,7 @@ import { billingComponents } from '@/registry/components/dashboardblocks/billing
 import { breakdownComponents } from '@/registry/components/dashboardblocks/breakdown/index'
 import { chartPanelComponents } from '@/registry/components/dashboardblocks/chart-panel/index'
 import { checklistComponents } from '@/registry/components/dashboardblocks/checklist/index'
+import { commandMenuComponents } from '@/registry/components/dashboardblocks/command-menu/index'
 import { comparisonComponents } from '@/registry/components/dashboardblocks/comparison/index'
 import { dashboardHeaderComponents } from '@/registry/components/dashboardblocks/dashboard-header/index'
 import { dataTableComponents } from '@/registry/components/dashboardblocks/data-table/index'
@@ -25,8 +26,11 @@ import { inventoryComponents } from '@/registry/components/dashboardblocks/inven
 import { kpiComponents } from '@/registry/components/dashboardblocks/kpi/index'
 import { leaderboardComponents } from '@/registry/components/dashboardblocks/leaderboard/index'
 import { metricListComponents } from '@/registry/components/dashboardblocks/metric-list/index'
+import { notificationsComponents } from '@/registry/components/dashboardblocks/notifications/index'
+import { pageHeaderComponents } from '@/registry/components/dashboardblocks/page-header/index'
 import { pipelineComponents } from '@/registry/components/dashboardblocks/pipeline/index'
 import { realtimeComponents } from '@/registry/components/dashboardblocks/realtime/index'
+import { recordDetailComponents } from '@/registry/components/dashboardblocks/record-detail/index'
 import { retentionComponents } from '@/registry/components/dashboardblocks/retention/index'
 import { scatterComponents } from '@/registry/components/dashboardblocks/scatter/index'
 import { scheduleComponents } from '@/registry/components/dashboardblocks/schedule/index'
@@ -87,6 +91,10 @@ const counts = {
   settings: Object.keys(settingsComponents).length,
   appShell: Object.keys(appShellComponents).length,
   forms: Object.keys(formsComponents).length,
+  recordDetail: Object.keys(recordDetailComponents).length,
+  pageHeader: Object.keys(pageHeaderComponents).length,
+  notifications: Object.keys(notificationsComponents).length,
+  commandMenu: Object.keys(commandMenuComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
 

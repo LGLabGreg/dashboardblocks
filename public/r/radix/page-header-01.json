@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header-01",
+  "registryDependencies": [
+    "button",
+    "https://dashboardblocks.com/r/radix/page-header.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/page-header/page-header-01.tsx",
+      "content": "'use client'\n\nimport {\n  PageHeader,\n  PageHeaderActions,\n  PageHeaderHeading,\n  PageHeaderRow,\n} from '@/registry/components/dashboardblocks/page-header'\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\n\nimport { Button } from '@/components/ui/button'\n\ninterface PageHeader1Props {\n  description: string\n  onCreate?: () => void\n  onExport?: () => void\n  title: string\n}\n\nconst exampleProps: PageHeader1Props = {\n  description: 'Every order across your stores, newest first.',\n  title: 'Orders',\n}\n\nconst PageHeader1 = (props: PageHeader1Props) => {\n  const { description, onCreate = () => {}, onExport = () => {}, title } = props\n\n  return (\n    <PageHeader>\n      <PageHeaderRow>\n        <PageHeaderHeading title={title} description={description} />\n        <PageHeaderActions>\n          <Button variant='outline' onClick={onExport}>\n            <IconPlaceholder\n              lucide='DownloadIcon'\n              tabler='IconDownload'\n              hugeicons='Download01Icon'\n              phosphor='DownloadIcon'\n              remixicon='RiDownloadLine'\n              data-icon='inline-start'\n            />\n            Export\n          </Button>\n          <Button onClick={onCreate}>\n            <IconPlaceholder\n              lucide='PlusIcon'\n              tabler='IconPlus'\n              hugeicons='PlusSignIcon'\n              phosphor='PlusIcon'\n              remixicon='RiAddLine'\n              data-icon='inline-start'\n            />\n            New order\n          </Button>\n        </PageHeaderActions>\n      </PageHeaderRow>\n    </PageHeader>\n  )\n}\n\nexport { PageHeader1, exampleProps as pageHeader1ExampleProps, type PageHeader1Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}
