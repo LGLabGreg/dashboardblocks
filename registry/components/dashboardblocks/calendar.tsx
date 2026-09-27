@@ -294,9 +294,8 @@ function formatShortTime(date: Date, timeZone: string) {
 }
 
 /** A tint of the event's colour over the card, for bars and blocks. */
-const eventStyle = (event: ScheduleEvent, amount = 22): CSSProperties => ({
+const eventStyle = (event: ScheduleEvent, amount = 28): CSSProperties => ({
   backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} ${amount}%, var(--card))`,
-  borderColor: event.color ?? 'var(--chart-1)',
 })
 
 const eventFocus =
@@ -445,15 +444,15 @@ function EventBar({
       aria-current={selected ? 'true' : undefined}
       onClick={onSelect}
       className={cn(
-        'flex h-5 w-full min-w-0 items-center gap-1 rounded-sm border-l-2 px-1.5 text-left text-xs font-medium',
-        continuesBefore && 'rounded-l-none border-l-0',
+        'flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
+        continuesBefore && 'rounded-l-none',
         continuesAfter && 'rounded-r-none',
         ended && 'text-muted-foreground',
         selected && 'ring-primary ring-2',
         eventFocus,
         className,
       )}
-      style={{ ...eventStyle(event, ended ? 12 : 22), ...style }}
+      style={{ ...eventStyle(event, ended ? 14 : 28), ...style }}
     >
       {!event.allDay && !continuesBefore && (
         <span className='text-muted-foreground shrink-0 tabular-nums'>
@@ -1057,13 +1056,13 @@ function TimeGrid<T extends ScheduleEvent>({
                             aria-current={selected ? 'true' : undefined}
                             onClick={() => onSelectEvent?.(event)}
                             className={cn(
-                              'ring-card flex size-full min-w-0 overflow-hidden rounded-sm border-l-2 px-1.5 py-0.5 text-left text-xs leading-4 ring-1',
+                              'ring-card flex size-full min-w-0 overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-xs leading-4 ring-1',
                               short ? 'items-center gap-1' : 'flex-col',
                               ended && 'text-muted-foreground',
                               selected && 'ring-primary relative z-10 ring-2',
                               eventFocus,
                             )}
-                            style={eventStyle(event, ended ? 12 : 22)}
+                            style={eventStyle(event, ended ? 14 : 28)}
                           >
                             <span className='truncate font-medium'>{event.title}</span>
                             <span className='text-muted-foreground truncate tabular-nums'>

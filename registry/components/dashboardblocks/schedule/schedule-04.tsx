@@ -313,12 +313,11 @@ const Schedule4 = (props: Schedule4Props) => {
                           key={event.id}
                           title={`${event.title} · ${formatTimeRange(event.start, event.end, timeZone)}${event.calendar ? ` · ${event.calendar}` : ''}`}
                           className={cn(
-                            'absolute flex h-5 items-center overflow-hidden rounded-sm border-l-2 px-1 text-[11px] leading-none font-medium',
+                            'absolute flex h-5 items-center overflow-hidden rounded-sm px-1 text-[11px] leading-none font-medium',
                             ended && 'text-muted-foreground opacity-60',
                           )}
                           style={{
-                            backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} 22%, var(--card))`,
-                            borderColor: event.color ?? 'var(--chart-1)',
+                            backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} 28%, var(--card))`,
                             left: `${left}%`,
                             top: `calc(${lane} * 1.5rem + 0.25rem)`,
                             width: `${width}%`,

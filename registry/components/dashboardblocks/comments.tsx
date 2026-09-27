@@ -338,6 +338,9 @@ function ReactionBar({
               aria-label='Reactions'
               className='bg-popover text-popover-foreground ring-foreground/10 flex items-center gap-0.5 rounded-md p-0.5 shadow-xs ring-1'
               onKeyDown={onPickerKeyDown}
+              // Safari doesn't focus a button on click, so pressing one would blur
+              // the picker and close it before the click lands. Keep focus put.
+              onMouseDown={(event) => event.preventDefault()}
             >
               {choices.map((choice) => (
                 <Button
@@ -462,6 +465,7 @@ function CommentItem({
   return (
     <article
       aria-labelledby={`${id}-author ${id}-time`}
+      data-comment-id={comment.id}
       className={cn('flex gap-3', className)}
     >
       <CommentAvatar author={comment.author} size={size} />
@@ -794,6 +798,7 @@ function CommentThread({
   const [expanded, setExpanded] = useState(false)
   const [status, setStatus] = useState('')
   const pendingFocus = useRef<'reopen' | 'resolve' | null>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const replies = comment.replies ?? []
   const resolved = Boolean(comment.resolved)
   const canReply = Boolean(onReply) && !resolved
@@ -832,6 +837,18 @@ function CommentThread({
     setReplying(false)
     setDraft('')
     focusReply()
+  }
+
+  // The menu is hidden while editing: put focus back on it once the editor closes.
+  function stopEditing(commentId: string) {
+    setEditingId(null)
+    requestAnimationFrame(() =>
+      rootRef.current
+        ?.querySelector<HTMLElement>(
+          `[data-comment-id="${CSS.escape(commentId)}"] [aria-label^="More actions"]`,
+        )
+        ?.focus(),
+    )
   }
 
   function resolve(next: boolean) {
@@ -909,10 +926,10 @@ function CommentThread({
               people={people}
               submitLabel='Save'
               pendingLabel='Saving…'
-              onCancel={() => setEditingId(null)}
+              onCancel={() => stopEditing(item.id)}
               onSubmit={async (body) => {
                 await onEdit(item.id, body)
-                setEditingId(null)
+                stopEditing(item.id)
                 setStatus('Comment saved')
               }}
             />
@@ -987,7 +1004,7 @@ function CommentThread({
   }
 
   return (
-    <div className={cn('flex flex-col gap-3', className)}>
+    <div ref={rootRef} className={cn('flex flex-col gap-3', className)}>
       {resolved && (
         <div className='bg-muted/50 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg px-3 py-2'>
           <p className='flex min-w-0 flex-1 basis-48 items-center gap-2 text-sm'>

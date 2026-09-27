@@ -122,8 +122,10 @@ async function saveReply() {
 function highlight(paragraph: string, comments: ReviewComment[], activeId?: string) {
   const parts: ReactNode[] = []
   let rest = paragraph
+  // An empty quote would match forever, and each quote is marked once.
+  let pending = comments.filter((comment) => comment.quote)
   for (;;) {
-    const next = comments
+    const next = pending
       .map((comment) => ({ comment, index: rest.indexOf(comment.quote) }))
       .filter((found) => found.index >= 0)
       .sort((a, b) => a.index - b.index)[0]
@@ -139,6 +141,7 @@ function highlight(paragraph: string, comments: ReviewComment[], activeId?: stri
       </mark>,
     )
     rest = rest.slice(next.index + next.comment.quote.length)
+    pending = pending.filter((comment) => comment !== next.comment)
   }
   parts.push(rest)
   return parts.map((part, index) => <Fragment key={index}>{part}</Fragment>)

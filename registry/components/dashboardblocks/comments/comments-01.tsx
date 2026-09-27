@@ -9,7 +9,7 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import {
   Card,
@@ -123,6 +123,7 @@ const Comments1 = (props: Comments1Props) => {
     title,
   } = props
   const [comments, setComments] = useState(initialComments)
+  const composerRef = useRef<HTMLDivElement>(null)
   const open = comments.filter((comment) => !comment.resolved).length
 
   async function post(body: string, parentId?: string) {
@@ -188,11 +189,18 @@ const Comments1 = (props: Comments1Props) => {
             onDelete={(commentId) => {
               onDelete(commentId)
               setComments((current) => updateComment(current, commentId, () => null))
+              // Deleting a thread's first comment removes the thread: move focus
+              // to the message box rather than losing it.
+              if (commentId === comment.id) {
+                requestAnimationFrame(() =>
+                  composerRef.current?.querySelector('textarea')?.focus(),
+                )
+              }
             }}
           />
         ))}
       </CardContent>
-      <CardFooter className='gap-3 border-t'>
+      <CardFooter ref={composerRef} className='gap-3 border-t'>
         <CommentAvatar author={currentUser} className='self-start' />
         <CommentComposer
           className='min-w-0 flex-1'
