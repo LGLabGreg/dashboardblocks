@@ -16,6 +16,7 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  writeFileSync,
 } from 'fs'
 import { createServer } from 'http'
 import { tmpdir } from 'os'
@@ -83,6 +84,27 @@ function run(command: string, args: string[], cwd: string) {
   })
 }
 
+/**
+ * Works around bugs in shadcn's own components that fail the type check in a
+ * fresh project whatever blocks are installed. Each fix is exact, so it stops
+ * applying (and should be removed) once shadcn ships the fix.
+ */
+function patchUpstream(cwd: string) {
+  // React Aria's label imports React without using it, which fails noUnusedLocals.
+  const label = join(cwd, 'src/components/ui/label.tsx')
+  if (existsSync(label)) {
+    const source = readFileSync(label, 'utf8')
+    if (
+      /import \* as React from ['"]react['"]/.test(source) &&
+      !source.includes('React.')
+    ) {
+      writeFileSync(label, source.replace(/import \* as React from ['"]react['"]\n/, ''))
+      // oxlint-disable-next-line no-console
+      console.log('  patched shadcn label.tsx: unused React import')
+    }
+  }
+}
+
 async function verify(
   base: string,
   iconLibrary: PresetConfig['iconLibrary'],
@@ -116,6 +138,7 @@ async function verify(
     .map((file) => `${localUrl}/r/${base}/${file}`)
   await run('npx', ['shadcn@latest', 'add', ...items, '--yes', '--overwrite'], cwd)
 
+  patchUpstream(cwd)
   copyFileSync(resolve(root, 'scripts/verify/App.tsx'), join(cwd, 'src/App.tsx'))
   await run('npx', ['tsc', '-b'], cwd)
   await run('npx', ['vite', 'build'], cwd)

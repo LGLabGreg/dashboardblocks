@@ -63,6 +63,7 @@ export {
   PackageIcon,
   PaperPlaneTiltIcon,
   PauseCircleIcon,
+  PencilSimpleIcon,
   PlusCircleIcon,
   PlusIcon,
   QuestionIcon,

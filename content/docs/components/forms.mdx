@@ -1,0 +1,32 @@
+---
+title: Forms
+description: Settings sections with a save bar, a form in a side sheet, a multi-step wizard and inline editing. Built on shadcn Field, with no form library.
+---
+
+The fields use shadcn's [Field](https://ui.shadcn.com/docs/components/field). State lives in `useSimpleForm`, a small hook in the primitives. It validates a field when it loses focus and the whole form on submit, focuses the first invalid field, and shows errors your server returns.
+
+To use React Hook Form or TanStack Form instead, keep the layout and swap `useSimpleForm` for your library's hook. The fields take the same `id`, `name`, `value`, `onChange`, `onBlur` and `aria-invalid` props.
+
+### Sections
+
+Fields grouped into titled sections. A save bar appears while there are unsaved changes. Try the URL "acme" to see an error from the server.
+
+<ComponentPreview name='forms-01' />
+
+### Sheet
+
+Create a record in a panel that slides in from the side. Try the email "taken@example.com" to see an error from the server.
+
+<ComponentPreview name='forms-02' previewClassName='max-w-md' />
+
+### Wizard
+
+A form in steps. Next checks the current step before moving on, and the last step reviews everything before it's created.
+
+<ComponentPreview name='forms-03' previewClassName='max-w-xl' />
+
+### Inline Edit
+
+Edit one value at a time, in place. Enter saves and Escape cancels.
+
+<ComponentPreview name='forms-04' previewClassName='max-w-xl' />

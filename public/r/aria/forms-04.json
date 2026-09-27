@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "forms-04",
+  "registryDependencies": [
+    "card",
+    "https://dashboardblocks.com/r/aria/forms.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/forms/forms-04.tsx",
+      "content": "'use client'\n\nimport { InlineEditField, isEmail } from '@/registry/components/dashboardblocks/forms'\nimport { useState } from 'react'\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from '@/components/ui/card'\n\ninterface CustomerDetails {\n  company: string\n  email: string\n  name: string\n  phone: string\n  website: string\n}\n\ninterface Forms4Props {\n  defaultValues: CustomerDetails\n  /** Saves one field. Return an error message to keep it open and show the message. */\n  onSave?: (field: keyof CustomerDetails, value: string) => Promise<string | void>\n}\n\nconst exampleProps: Forms4Props = {\n  defaultValues: {\n    company: 'Northwind Traders',\n    email: 'jonas@northwind.io',\n    name: 'Jonas Weber',\n    phone: '',\n    website: 'https://northwind.io',\n  },\n}\n\n/** Stands in for a request to your API. */\nasync function saveField() {\n  await new Promise((resolve) => setTimeout(resolve, 600))\n}\n\nconst Forms4 = (props: Forms4Props) => {\n  const { defaultValues, onSave = saveField } = props\n  const [details, setDetails] = useState(defaultValues)\n\n  function save(field: keyof CustomerDetails) {\n    return async (value: string) => {\n      const error = await onSave(field, value)\n      if (error) return error\n      setDetails((current) => ({ ...current, [field]: value }))\n    }\n  }\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>Customer details</CardTitle>\n        <CardDescription>Changes save as soon as you confirm them.</CardDescription>\n      </CardHeader>\n      <CardContent className='divide-y'>\n        <InlineEditField\n          label='Name'\n          value={details.name}\n          onSave={save('name')}\n          validate={(value) => (value.trim() ? undefined : 'Enter a name.')}\n        />\n        <InlineEditField\n          label='Email'\n          type='email'\n          value={details.email}\n          onSave={save('email')}\n          validate={(value) =>\n            isEmail(value) ? undefined : 'Enter an email address like name@example.com.'\n          }\n        />\n        <InlineEditField\n          label='Phone'\n          type='tel'\n          value={details.phone}\n          onSave={save('phone')}\n        />\n        <InlineEditField\n          label='Company'\n          value={details.company}\n          onSave={save('company')}\n        />\n        <InlineEditField\n          label='Website'\n          type='url'\n          value={details.website}\n          onSave={save('website')}\n          validate={(value) =>\n            !value || /^https?:\\/\\/\\S+\\.\\S+$/.test(value)\n              ? undefined\n              : 'Enter a full address, starting with https://.'\n          }\n        />\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { Forms4, exampleProps as forms4ExampleProps, type Forms4Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

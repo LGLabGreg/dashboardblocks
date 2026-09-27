@@ -65,6 +65,10 @@ import {
   forecastExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/index'
 import {
+  formsComponents,
+  formsExampleProps,
+} from '@/registry/components/dashboardblocks/forms/index'
+import {
   funnelComponents,
   funnelExampleProps,
 } from '@/registry/components/dashboardblocks/funnel/index'
@@ -202,6 +206,7 @@ const exampleComponents = {
   ...aiUsageComponents,
   ...settingsComponents,
   ...appShellComponents,
+  ...formsComponents,
 }
 
 const examplePropsMap = {
@@ -245,6 +250,7 @@ const examplePropsMap = {
   ...aiUsageExampleProps,
   ...settingsExampleProps,
   ...appShellExampleProps,
+  ...formsExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

@@ -70,6 +70,7 @@ export {
   OctagonAlertIcon,
   PackageIcon,
   PanelLeftIcon,
+  PencilIcon,
   PlusIcon,
   RefreshCwIcon,
   RotateCwIcon,
