@@ -1,6 +1,31 @@
 ---
 title: Comments
-description: TODO
+description: Discussion threads with replies and reactions, a composer that mentions people, review comments you resolve, and a ticket conversation with internal notes.
+full: true
 ---
 
-TODO
+Type @ in any comment box to suggest people: Up and Down choose, Enter or Tab inserts the name, and Escape closes the list. ⌘ or Ctrl + Enter posts. Mentions are highlighted in the posted text. Reactions toggle on and off, and the smiley button opens a row of emoji to add one. Your own comments have a menu to edit or delete them, and a resolved thread collapses to one line you can expand or reopen. Times are relative, with the full date on hover, and take a fixed `now` so they render the same on the server and in the browser. They come from the [Activity Feed](/docs/components/activity-feed) primitives.
+
+### Discussion
+
+Threads with replies, reactions and a resolved thread, and a box to start a new one. Replying to a reply mentions its author.
+
+<ComponentPreview name='comments-01' previewClassName='max-w-2xl' />
+
+### Update
+
+A composer with a preview of how mentions will look and who will be notified, above the latest updates.
+
+<ComponentPreview name='comments-02' previewClassName='max-w-xl' />
+
+### Review
+
+Comments on a document in a column beside it, each quoting the words it's about. Resolve a comment to move it to Resolved, and reopen it from there.
+
+<ComponentPreview name='comments-03' />
+
+### Ticket
+
+A support ticket's conversation, with replies emailed to the customer and internal notes only the team sees. Pairs with [Record Detail: Ticket](/docs/components/record-detail#ticket).
+
+<ComponentPreview name='comments-04' previewClassName='max-w-2xl' />

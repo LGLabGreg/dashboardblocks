@@ -1,3 +1,6 @@
+// Override of registry/components/dashboardblocks/comments.tsx for React Aria
+// source-hash: 92f71a5d5e5c
+
 'use client'
 
 import {
@@ -22,7 +25,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -386,16 +388,12 @@ function CommentMenu({
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant='ghost'
-            size='icon-xs'
-            aria-label={label}
-            className='text-muted-foreground'
-          />
-        }
+    <DropdownMenuTrigger>
+      <Button
+        variant='ghost'
+        size='icon-xs'
+        aria-label={label}
+        className='text-muted-foreground'
       >
         <IconPlaceholder
           lucide='EllipsisIcon'
@@ -404,19 +402,23 @@ function CommentMenu({
           phosphor='DotsThreeIcon'
           remixicon='RiMoreLine'
         />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-auto min-w-36'>
+      </Button>
+      <DropdownMenu placement='bottom end' className='w-auto min-w-36'>
         {items.map((item, index) => (
           <Fragment key={item.label}>
             {index === firstDestructive && index > 0 && <DropdownMenuSeparator />}
-            <DropdownMenuItem variant={item.variant} onClick={item.onSelect}>
+            <DropdownMenuItem
+              variant={item.variant}
+              textValue={item.label}
+              onAction={item.onSelect}
+            >
               {item.icon}
               {item.label}
             </DropdownMenuItem>
           </Fragment>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </DropdownMenuTrigger>
   )
 }
 
@@ -712,13 +714,13 @@ function CommentComposer({
               type='button'
               variant='ghost'
               size='sm'
-              disabled={isSubmitting}
+              isDisabled={isSubmitting}
               onClick={onCancel}
             >
               Cancel
             </Button>
           )}
-          <Button type='submit' size='sm' disabled={isSubmitting || !text.trim()}>
+          <Button type='submit' size='sm' isDisabled={isSubmitting || !text.trim()}>
             {isSubmitting ? pendingLabel : submitLabel}
           </Button>
         </InputGroupAddon>
