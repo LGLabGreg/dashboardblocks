@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header-04",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "input-group",
+    "https://dashboardblocks.com/r/aria/page-header.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/page-header/page-header-04.tsx",
+      "content": "'use client'\n\nimport {\n  PageHeader,\n  PageHeaderActions,\n  PageHeaderHeading,\n  PageHeaderRow,\n} from '@/registry/components/dashboardblocks/page-header'\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport { useState } from 'react'\n\nimport { Badge } from '@/components/ui/badge'\nimport { Button } from '@/components/ui/button'\nimport { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'\n\ninterface PageHeader4Props {\n  count: number\n  description: string\n  onCreate?: () => void\n  /** Runs as the search changes. Debounce it if it calls your API. */\n  onSearch?: (query: string) => void\n  title: string\n}\n\nconst countFormatter = new Intl.NumberFormat('en-US')\n\nconst exampleProps: PageHeader4Props = {\n  count: 2_481,\n  description: 'People who bought from any of your stores.',\n  title: 'Customers',\n}\n\nconst PageHeader4 = (props: PageHeader4Props) => {\n  const { count, description, onCreate = () => {}, onSearch = () => {}, title } = props\n  const [query, setQuery] = useState('')\n\n  return (\n    <PageHeader>\n      <PageHeaderRow className='@2xl/page-header:items-center'>\n        <PageHeaderHeading\n          title={title}\n          description={description}\n          badge={\n            <Badge variant='outline' className='tabular-nums'>\n              {countFormatter.format(count)}\n            </Badge>\n          }\n        />\n        <PageHeaderActions className='@2xl/page-header:flex-nowrap'>\n          <InputGroup className='min-w-0 flex-1 @2xl/page-header:w-64 @2xl/page-header:flex-none'>\n            <InputGroupAddon>\n              <IconPlaceholder\n                lucide='SearchIcon'\n                tabler='IconSearch'\n                hugeicons='SearchIcon'\n                phosphor='MagnifyingGlassIcon'\n                remixicon='RiSearchLine'\n              />\n            </InputGroupAddon>\n            <InputGroupInput\n              type='search'\n              aria-label={`Search ${title.toLowerCase()}`}\n              placeholder={`Search ${title.toLowerCase()}…`}\n              value={query}\n              onChange={(event) => {\n                setQuery(event.target.value)\n                onSearch(event.target.value)\n              }}\n            />\n          </InputGroup>\n          <Button onClick={onCreate}>\n            <IconPlaceholder\n              lucide='PlusIcon'\n              tabler='IconPlus'\n              hugeicons='PlusSignIcon'\n              phosphor='PlusIcon'\n              remixicon='RiAddLine'\n              data-icon='inline-start'\n            />\n            New customer\n          </Button>\n        </PageHeaderActions>\n      </PageHeaderRow>\n    </PageHeader>\n  )\n}\n\nexport { PageHeader4, exampleProps as pageHeader4ExampleProps, type PageHeader4Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}
