@@ -142,11 +142,15 @@ const Files1 = (props: Files1Props) => {
           maxSize={maxSize}
           onFiles={add}
         />
+        {/* Always mounted, so the first status after adding files is announced. */}
+        <p aria-live='polite' className='sr-only'>
+          {uploads.length > 0 && status}
+        </p>
         {uploads.length > 0 && (
           <section aria-label='Uploads' className='flex flex-col'>
             <div className='flex min-h-8 items-center justify-between gap-2'>
               <p className='text-muted-foreground text-xs tabular-nums'>
-                <span aria-live='polite'>{status}</span>
+                <span aria-hidden>{status}</span>
                 {summary.active > 0 && (
                   <span aria-hidden> {Math.round(summary.progress * 100)}%</span>
                 )}

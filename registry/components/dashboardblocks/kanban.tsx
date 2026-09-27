@@ -287,7 +287,20 @@ function KanbanBoard({
     const frame = requestAnimationFrame(() => {
       const active = document.activeElement
       if (pending.onlyIfLost && active && active !== document.body) return
-      handles.current.get(pending.id)?.focus()
+      const handle = handles.current.get(pending.id)
+      if (handle) {
+        handle.focus()
+        return
+      }
+      // A collapsed column doesn't render its cards: focus its expand button,
+      // or the column itself, instead.
+      const column = items.find((item) => item.id === pending.id)?.column
+      const collapsed =
+        column &&
+        scrollerRef.current?.querySelector<HTMLElement>(
+          `[data-kanban-column="${CSS.escape(column)}"][data-collapsed]`,
+        )
+      if (collapsed) (collapsed.querySelector('button') ?? collapsed).focus()
     })
     return () => cancelAnimationFrame(frame)
   }, [items])
@@ -857,6 +870,7 @@ function KanbanColumn({
         aria-labelledby={headingId}
         data-kanban-column={column.id}
         data-collapsed=''
+        tabIndex={-1}
         data-over={isOver ? '' : undefined}
         data-blocked={target?.blocked ? '' : undefined}
         className={cn(columnClassName, 'w-11 items-center gap-3 px-1 py-2', className)}

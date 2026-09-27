@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: 42373b0f00ad
+// source-hash: 09f9d1951407
 
 'use client'
 
@@ -140,7 +140,7 @@ function getFileKind(name: string, type?: string): FileKind {
   if (name.endsWith('/')) return 'folder'
   const dot = name.lastIndexOf('.')
   const extension = dot > 0 ? name.slice(dot + 1).toLowerCase() : ''
-  if (extension in EXTENSION_KINDS) return EXTENSION_KINDS[extension]
+  if (Object.hasOwn(EXTENSION_KINDS, extension)) return EXTENSION_KINDS[extension]
   const mime = (type || name).toLowerCase()
   return MIME_KINDS.find(([pattern]) => pattern.test(mime))?.[1] ?? 'other'
 }
@@ -851,6 +851,16 @@ function FileUploadItem({
   const running = status === 'queued' || status === 'uploading'
   const canRetry =
     (status === 'error' || status === 'canceled') && !!upload.file && !upload.rejected
+  const actionsRef = useRef<HTMLDivElement>(null)
+  const canceling = useRef(false)
+
+  // Cancel is replaced by Retry and Remove, so move focus to them rather than
+  // losing it to the page.
+  useEffect(() => {
+    if (!canceling.current || running) return
+    canceling.current = false
+    actionsRef.current?.querySelector('button')?.focus()
+  }, [running])
 
   return (
     <li
@@ -918,13 +928,16 @@ function FileUploadItem({
           {status === 'canceled' && <>{formatFileSize(size)} · Canceled</>}
         </p>
       </div>
-      <div className='flex shrink-0 items-center'>
+      <div ref={actionsRef} className='flex shrink-0 items-center'>
         {running && onCancel && (
           <Button
             variant='ghost'
             size='icon-sm'
             aria-label={`Cancel upload of ${name}`}
-            onClick={() => onCancel(upload.id)}
+            onClick={() => {
+              canceling.current = true
+              onCancel(upload.id)
+            }}
           >
             <IconPlaceholder
               lucide='XIcon'

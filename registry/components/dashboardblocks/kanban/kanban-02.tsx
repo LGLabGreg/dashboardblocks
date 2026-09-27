@@ -39,7 +39,7 @@ interface Deal extends KanbanItem {
 }
 
 interface Kanban2Props {
-  /** The columns for closed deals. They're left out of the open pipeline and start collapsed. */
+  /** The columns for closed deals. They're left out of the open pipeline, and Lost starts collapsed. */
   closedColumns: { lost: string; won: string }
   columns: KanbanColumnDef[]
   deals: Deal[]

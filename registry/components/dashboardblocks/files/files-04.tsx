@@ -133,7 +133,7 @@ function removeItem(folder: BrowserFolder, id: string): BrowserFolder {
 const plural = (count: number, noun: string) =>
   `${count} ${count === 1 ? noun : `${noun}s`}`
 
-const byName = (a: BrowserItem, b: BrowserItem) => a.name.localeCompare(b.name)
+const byName = (a: BrowserItem, b: BrowserItem) => a.name.localeCompare(b.name, 'en-US')
 
 const Files4 = (props: Files4Props) => {
   const {

@@ -443,6 +443,16 @@ function ChatMessages({
     }
   }
 
+  // Mounted with a question already on its way, such as the first one after a
+  // welcome screen: announce it once the empty status region is in the page,
+  // since a region that mounts with its text isn't read.
+  const mountedStatus = useRef(status)
+  useEffect(() => {
+    if (mountedStatus.current !== 'submitted') return
+    const frame = requestAnimationFrame(() => setAnnouncement('Assistant is thinking'))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   function scrollToBottom() {
     const scroller = scrollRef.current
     if (scroller) scroller.scrollTop = scroller.scrollHeight

@@ -645,6 +645,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
       </div>
       {weeks.map((week) => {
         const segments = layoutSegments(spanning, week, timeZone)
+        const activeColumn = week.findIndex((day) => day.getTime() === active.getTime())
         return (
           <div key={week[0].getTime()} role='row' className='grid grid-cols-7 gap-px'>
             {week.map((day, column) => {
@@ -754,15 +755,18 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                           return <li key={row} aria-hidden className='h-5' />
                         }
                         if (slot.type === 'bar') {
-                          const { continuesAfter, continuesBefore, event, span } =
+                          const { continuesAfter, continuesBefore, event, span, start } =
                             slot.segment
+                          // Tabbable from any day the bar covers, not only its first.
+                          const covers =
+                            activeColumn >= start && activeColumn < start + span
                           return (
                             <li key={row} className='relative h-5'>
                               <EventBar
                                 event={event}
                                 now={now}
                                 timeZone={timeZone}
-                                tabIndex={tabIndex}
+                                tabIndex={covers ? 0 : -1}
                                 selected={event.id === selectedEventId}
                                 continuesBefore={continuesBefore}
                                 continuesAfter={continuesAfter}

@@ -16,7 +16,7 @@ import {
   getUsageStatus,
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -149,13 +149,21 @@ const Files3 = (props: Files3Props) => {
   const [breakdown, setBreakdown] = useState(initialBreakdown)
   const [files, setFiles] = useState(initialFiles)
   const [message, setMessage] = useState('')
+  const deleting = useRef(new Set<string>())
 
   const used = breakdown.reduce((sum, item) => sum + item.size, 0)
   const status = getUsageStatus(used, limit)
 
   async function remove(file: StorageFile) {
+    // Ignore a second Delete while the first is still in flight.
+    if (deleting.current.has(file.id)) return
+    deleting.current.add(file.id)
     setMessage(`Deleting ${file.name}…`)
-    await onDelete(file)
+    try {
+      await onDelete(file)
+    } finally {
+      deleting.current.delete(file.id)
+    }
     const kind = breakdownKind(
       file.kind,
       breakdown.map((item) => item.kind),

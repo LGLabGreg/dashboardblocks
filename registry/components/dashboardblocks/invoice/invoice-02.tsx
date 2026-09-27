@@ -19,6 +19,7 @@ import {
   LineItemsTable,
   PrintButton,
   formatDocumentAmount,
+  getCurrencyDigits,
   getDocumentTotals,
   getTotalRows,
 } from '@/registry/components/dashboardblocks/invoice'
@@ -149,8 +150,11 @@ const Invoice2 = (props: Invoice2Props) => {
   } = props
   const [emailState, setEmailState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, shipping, taxRate })
-  const refunded = refunds.reduce((sum, refund) => sum + refund.amount, 0)
-  const netPaid = amounts.total - refunded
+  // Sum in the currency's smallest unit, so refunds of 10.10 and 20.20 make 30.30.
+  const unit = 10 ** getCurrencyDigits(currency)
+  const refunded =
+    refunds.reduce((sum, refund) => sum + Math.round(refund.amount * unit), 0) / unit
+  const netPaid = (Math.round(amounts.total * unit) - Math.round(refunded * unit)) / unit
 
   const rows: DocumentTotalRow[] = [
     ...getTotalRows(amounts).map((row) =>

@@ -262,7 +262,10 @@ const Files2 = (props: Files2Props) => {
     )
     await onDelete(targets)
     setRows((current) => current.filter((row) => !ids.has(row.id)))
-    table.resetRowSelection(true)
+    // Only drop the deleted rows from the selection, not every selected row.
+    table.setRowSelection((current) =>
+      Object.fromEntries(Object.entries(current).filter(([id]) => !ids.has(id))),
+    )
     setMessage(
       `Deleted ${targets.length === 1 ? targets[0].name : plural(targets.length)}`,
     )

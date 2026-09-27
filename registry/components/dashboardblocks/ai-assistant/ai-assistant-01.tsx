@@ -42,8 +42,15 @@ interface AiAssistant1Props {
   description: string
   messages: ChatMessageData[]
   metrics: Metric[]
-  /** Streams the reply to the conversation as chunks of text. Defaults to canned demo replies. */
-  onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
+  /**
+   * Streams the reply to the conversation as chunks of text. `context` is the
+   * page's label while its chip is in the message box. Defaults to canned demo replies.
+   */
+  onSend?: (
+    messages: ChatMessageData[],
+    signal: AbortSignal,
+    context?: string,
+  ) => AsyncIterable<string>
   suggestions: SuggestedPrompt[]
   title: string
 }
@@ -149,9 +156,15 @@ function wait(ms: number, signal: AbortSignal) {
 }
 
 /** Stands in for your model: streams a canned answer word by word. */
-async function* simulateStream(messages: ChatMessageData[], signal: AbortSignal) {
+async function* simulateStream(
+  messages: ChatMessageData[],
+  signal: AbortSignal,
+  context?: string,
+) {
   const question = messages.at(-1)?.content ?? ''
-  const reply = cannedReplies[question] ?? fallbackReply
+  const reply = context
+    ? (cannedReplies[question] ?? fallbackReply)
+    : 'I can’t see this page without its context. Add it back to the message box to ask about these numbers.'
   await wait(700, signal)
   for (const word of reply.split(/(?<=\s)/)) {
     await wait(25, signal)
@@ -174,7 +187,11 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   const panelId = useId()
   const [open, setOpen] = useState(defaultOpen)
   const [withContext, setWithContext] = useState(true)
-  const chat = useChatStream({ initialMessages, onSend })
+  const chat = useChatStream({
+    initialMessages,
+    onSend: (conversation, signal) =>
+      onSend(conversation, signal, withContext ? contextLabel : undefined),
+  })
   const { messages, status } = chat
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
