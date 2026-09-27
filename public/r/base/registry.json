@@ -67,6 +67,28 @@
       ]
     },
     {
+      "name": "app-shell",
+      "type": "registry:component",
+      "title": "App Shell",
+      "description": "Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, plan usage and a top navigation row.",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "collapsible",
+        "dropdown-menu",
+        "kbd",
+        "progress",
+        "sidebar"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/app-shell.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "chart",
       "type": "registry:component",
       "title": "Chart",
@@ -3462,6 +3484,65 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-06.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "app-shell-01",
+      "type": "registry:component",
+      "registryDependencies": [
+        "separator",
+        "sidebar",
+        "https://dashboardblocks.com/r/base/app-shell.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/app-shell/app-shell-01.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "app-shell-02",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "separator",
+        "sidebar",
+        "https://dashboardblocks.com/r/base/app-shell.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/app-shell/app-shell-02.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "app-shell-03",
+      "type": "registry:component",
+      "registryDependencies": [
+        "separator",
+        "sidebar",
+        "https://dashboardblocks.com/r/base/app-shell.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/app-shell/app-shell-03.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "app-shell-04",
+      "type": "registry:component",
+      "registryDependencies": [
+        "https://dashboardblocks.com/r/base/app-shell.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/app-shell/app-shell-04.tsx",
           "type": "registry:component"
         }
       ]
