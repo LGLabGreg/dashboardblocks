@@ -813,7 +813,16 @@ export const components: Registry['items'] = [
     name: 'onboarding',
     type: 'registry:component',
     title: 'Onboarding',
-    description: 'TODO',
+    description:
+      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.',
+    registryDependencies: [
+      'button',
+      'card',
+      'field',
+      'input',
+      'native-select',
+      registryUrl('forms'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/onboarding.tsx',

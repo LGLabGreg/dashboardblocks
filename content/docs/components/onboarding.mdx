@@ -1,6 +1,31 @@
 ---
 title: Onboarding
-description: TODO
+description: A first-run setup wizard, a welcome page for an empty workspace, a data source picker and a short personalisation step.
+full: true
 ---
 
-TODO
+Choice cards are native radio buttons and checkboxes, so Tab reaches each group, the arrow keys move between options and they work in any form. When a step changes, focus moves to its title, so keyboard and screen reader users start from the top. The wizard's fields use `useSimpleForm` from [Forms](/docs/components/forms), and setup progress uses the [Checklist](/docs/components/checklist) primitives. For a getting-started checklist inside a dashboard, see [Checklist: Onboarding](/docs/components/checklist#onboarding).
+
+### Setup Wizard
+
+Name the workspace and pick its URL, say what it's for, then invite the team. Each step checks its own fields, and the URL is checked with the server before moving on. Try `acme` to see a taken URL. Paste a list of addresses into an email field to fill a row for each.
+
+<ComponentPreview name='onboarding-01' layout='page' />
+
+### Welcome
+
+The first page of an empty workspace: quick starts, an empty dashboards list with a way in, setup progress and help.
+
+<ComponentPreview name='onboarding-02' layout='page' />
+
+### Connect a Source
+
+Search and filter the sources, pick one, then follow it through connecting to connected. Snowflake fails, to show the error state.
+
+<ComponentPreview name='onboarding-03' previewClassName='max-w-4xl' />
+
+### Personalise
+
+A role, a team size and up to three goals, turned into the dashboards set up for them.
+
+<ComponentPreview name='onboarding-04' previewClassName='max-w-2xl' />
