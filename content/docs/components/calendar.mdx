@@ -1,6 +1,31 @@
 ---
 title: Calendar
-description: TODO
+description: Month and week calendars with events, a planner that switches between them, and a day of meeting rooms.
+full: true
 ---
 
-TODO
+Full-size calendars built on plain dates, with no calendar library. The month grid draws timed events as chips, all-day and multi-day events as bars across the days they cover, and "+N more" when a day is full; in narrow containers each day shows dots instead, so pair it with the selected day's events. The week and room views place events on an hour axis, side by side when they overlap, with a line at the current time. Every date takes a fixed `now` and a time zone (UTC unless you pass one), so days and times render the same on the server and in the browser. The date helpers and the day's event list come from [Schedule](/docs/components/schedule).
+
+### Month
+
+A month of team events, launches, travel and holidays. Select a day or an event to list the day beside the grid, or move between days with the arrow keys.
+
+<ComponentPreview name='calendar-01' />
+
+### Week
+
+A week on an hour axis that opens at working hours, with overlapping meetings side by side, all-day events at the top and the details of the selected event.
+
+<ComponentPreview name='calendar-02' />
+
+### Planner
+
+A content calendar that switches between month and week, with each calendar shown or hidden from the sidebar and the selected event's details below it.
+
+<ComponentPreview name='calendar-03' />
+
+### Rooms
+
+A day of meeting room bookings, a column per room with whether it's free right now.
+
+<ComponentPreview name='calendar-04' />
