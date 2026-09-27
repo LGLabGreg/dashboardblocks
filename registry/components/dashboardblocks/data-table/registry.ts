@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', 'dropdown-menu', registryUrl('data-table')],
+    registryDependencies: ['card', registryUrl('data-table')],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-01.tsx',
@@ -44,13 +44,7 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-04',
     type: 'registry:component',
-    registryDependencies: [
-      'button',
-      'card',
-      'dropdown-menu',
-      registryUrl('data-table'),
-      registryUrl('status'),
-    ],
+    registryDependencies: ['card', registryUrl('data-table'), registryUrl('status')],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-04.tsx',
@@ -61,10 +55,21 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-05',
     type: 'registry:component',
-    registryDependencies: ['badge', 'button', 'card', registryUrl('data-table')],
+    registryDependencies: ['badge', 'card', registryUrl('data-table')],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'data-table-06',
+    type: 'registry:component',
+    registryDependencies: ['badge', 'card', registryUrl('data-table')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/data-table/data-table-06.tsx',
         type: 'registry:component',
       },
     ],

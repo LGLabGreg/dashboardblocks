@@ -154,10 +154,15 @@
       "name": "data-table",
       "type": "registry:component",
       "title": "Data Table",
-      "description": "Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.",
+      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.",
+      "dependencies": [
+        "@tanstack/react-table@^9.2.4"
+      ],
       "registryDependencies": [
         "button",
-        "dropdown-menu"
+        "checkbox",
+        "dropdown-menu",
+        "input"
       ],
       "files": [
         {
@@ -1553,9 +1558,7 @@
       "name": "data-table-01",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
         "card",
-        "dropdown-menu",
         "https://dashboardblocks.com/r/aria/data-table.json"
       ],
       "files": [
@@ -1599,9 +1602,7 @@
       "name": "data-table-04",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
         "card",
-        "dropdown-menu",
         "https://dashboardblocks.com/r/aria/data-table.json",
         "https://dashboardblocks.com/r/aria/status.json"
       ],
@@ -1617,13 +1618,27 @@
       "type": "registry:component",
       "registryDependencies": [
         "badge",
-        "button",
         "card",
         "https://dashboardblocks.com/r/aria/data-table.json"
       ],
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table-06",
+      "type": "registry:component",
+      "registryDependencies": [
+        "badge",
+        "card",
+        "https://dashboardblocks.com/r/aria/data-table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/data-table/data-table-06.tsx",
           "type": "registry:component"
         }
       ]

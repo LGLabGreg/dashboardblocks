@@ -1,14 +1,10 @@
 'use client'
 
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHeader,
-  DataTableRow,
-  DataTableSortHead,
+  createDataTableColumnHelper,
+  DataTableContent,
   DataTableSortMenu,
-  useTableSort,
+  useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 import {
   StatusBadge,
@@ -95,27 +91,48 @@ const STATUS_RANK: Record<StatusLevel, number> = {
   unknown: 0,
 }
 
-type SortKey = 'errorRate' | 'latency' | 'name' | 'status'
+const columnHelper = createDataTableColumnHelper<ServiceRow>()
 
-const COLUMNS: { align?: 'end'; key: SortKey; label: string }[] = [
-  { key: 'name', label: 'Service' },
-  { key: 'status', label: 'Status' },
-  { align: 'end', key: 'latency', label: 'p95 latency' },
-  { align: 'end', key: 'errorRate', label: 'Error rate' },
-]
+const columns = columnHelper.columns([
+  columnHelper.accessor('name', {
+    cell: ({ row }) => (
+      <>
+        <span className='block truncate'>{row.original.name}</span>
+        <span className='text-muted-foreground block text-xs font-normal'>
+          {row.original.region}
+        </span>
+      </>
+    ),
+    header: 'Service',
+    meta: { primary: true, truncate: true },
+  }),
+  columnHelper.accessor((row) => STATUS_RANK[row.status], {
+    cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    header: 'Status',
+    id: 'status',
+    meta: { cellClassName: '@max-2xl/data-table:col-span-2' },
+  }),
+  columnHelper.accessor('latency', {
+    cell: ({ getValue, row }) =>
+      row.original.status === 'maintenance' ? '—' : `${getValue().toLocaleString()} ms`,
+    header: 'p95 latency',
+    meta: { align: 'end' },
+  }),
+  columnHelper.accessor('errorRate', {
+    cell: ({ getValue, row }) =>
+      row.original.status === 'maintenance' ? '—' : `${getValue()}%`,
+    header: 'Error rate',
+    meta: { align: 'end' },
+  }),
+])
 
 const DataTable4 = (props: DataTable4Props) => {
   const { rows, title } = props
-  const { setSort, sort, sorted, toggleSort } = useTableSort<ServiceRow, SortKey>(
-    rows,
-    {
-      errorRate: (row) => row.errorRate,
-      latency: (row) => row.latency,
-      name: (row) => row.name,
-      status: (row) => STATUS_RANK[row.status],
-    },
-    { direction: 'descending', key: 'status' },
-  )
+  const table = useDataTable({
+    columns,
+    data: rows,
+    initialState: { sorting: [{ desc: true, id: 'status' }] },
+  })
   const affected = rows.filter((row) =>
     ['degraded', 'partial', 'major'].includes(row.status),
   ).length
@@ -130,55 +147,10 @@ const DataTable4 = (props: DataTable4Props) => {
             : `${affected} of ${rows.length} services with issues`}
         </CardDescription>
         <CardAction>
-          <DataTableSortMenu
-            className='@2xl/data-table:hidden'
-            columns={COLUMNS}
-            onSortChange={setSort}
-            sort={sort}
-          />
+          <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
         </CardAction>
       </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{title}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            {COLUMNS.map((column) => (
-              <DataTableSortHead
-                key={column.key}
-                align={column.align}
-                label={column.label}
-                onSort={toggleSort}
-                sort={sort}
-                sortKey={column.key}
-              />
-            ))}
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {sorted.map((row) => {
-            const measured = row.status !== 'maintenance'
-            return (
-              <DataTableRow key={row.name}>
-                <DataTableCell primary truncate>
-                  <span className='block truncate'>{row.name}</span>
-                  <span className='text-muted-foreground block text-xs font-normal'>
-                    {row.region}
-                  </span>
-                </DataTableCell>
-                <DataTableCell label='Status' className='@max-2xl/data-table:col-span-2'>
-                  <StatusBadge status={row.status} />
-                </DataTableCell>
-                <DataTableCell align='end' label='p95 latency'>
-                  {measured ? `${row.latency.toLocaleString()} ms` : '—'}
-                </DataTableCell>
-                <DataTableCell align='end' label='Error rate'>
-                  {measured ? `${row.errorRate}%` : '—'}
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
+      <DataTableContent caption={title} table={table} />
     </Card>
   )
 }

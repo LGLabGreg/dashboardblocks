@@ -31,6 +31,7 @@ export {
   IconClock,
   IconClockExclamation,
   IconCoins,
+  IconColumns,
   IconCopy,
   IconCreditCard,
   IconCrown,

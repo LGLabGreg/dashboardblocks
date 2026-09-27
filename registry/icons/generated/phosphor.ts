@@ -27,6 +27,7 @@ export {
   ClockCountdownIcon,
   ClockIcon,
   CoinsIcon,
+  ColumnsIcon,
   CopyIcon,
   CreditCardIcon,
   CrownIcon,

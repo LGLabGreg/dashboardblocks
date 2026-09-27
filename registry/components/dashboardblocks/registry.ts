@@ -153,8 +153,9 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Data Table',
     description:
-      'Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.',
-    registryDependencies: ['button', 'dropdown-menu'],
+      'Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.',
+    dependencies: ['@tanstack/react-table@^9.2.4'],
+    registryDependencies: ['button', 'checkbox', 'dropdown-menu', 'input'],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table.tsx',

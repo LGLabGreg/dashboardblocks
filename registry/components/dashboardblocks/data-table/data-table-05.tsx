@@ -1,16 +1,12 @@
 'use client'
 
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHead,
-  DataTableHeader,
+  createDataTableColumnHelper,
+  DataTableContent,
   DataTablePagination,
-  DataTableRow,
+  useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -131,10 +127,57 @@ const STATE_CONFIG: Record<
 const currency = (value: number) =>
   `$${value.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
 
+const columnHelper = createDataTableColumnHelper<OrderRow>()
+
+const columns = columnHelper.columns([
+  columnHelper.accessor('customer', {
+    cell: ({ row }) => (
+      <>
+        <span className='block truncate'>{row.original.customer}</span>
+        <span className='text-muted-foreground block truncate text-xs font-normal'>
+          {row.original.email}
+        </span>
+      </>
+    ),
+    header: 'Customer',
+    meta: { primary: true, truncate: true },
+  }),
+  columnHelper.accessor('id', {
+    header: 'Order',
+    meta: { cellClassName: 'tabular-nums' },
+  }),
+  columnHelper.accessor('date', {
+    header: 'Date',
+    meta: { cellClassName: 'whitespace-nowrap' },
+  }),
+  columnHelper.accessor('state', {
+    cell: ({ getValue }) => {
+      const state = STATE_CONFIG[getValue()]
+      return (
+        <Badge variant='outline' className={state.className}>
+          {state.icon}
+          {state.label}
+        </Badge>
+      )
+    },
+    header: 'Status',
+  }),
+  columnHelper.accessor('amount', {
+    cell: ({ getValue }) => currency(getValue()),
+    header: 'Amount',
+    meta: { align: 'end', cellClassName: 'font-medium' },
+  }),
+])
+
 const DataTable5 = (props: DataTable5Props) => {
   const { description, pageSize = 5, rows, title } = props
-  const [page, setPage] = useState(0)
-  const visible = rows.slice(page * pageSize, (page + 1) * pageSize)
+  const table = useDataTable({
+    columns,
+    data: rows,
+    enableSorting: false,
+    pageSize,
+  })
+  const { pageIndex } = table.state.pagination
 
   return (
     <Card className='@container/data-table gap-0 pb-0'>
@@ -142,57 +185,11 @@ const DataTable5 = (props: DataTable5Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>
-          {`${title}, page ${page + 1} of ${Math.ceil(rows.length / pageSize)}`}
-        </caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Customer</DataTableHead>
-            <DataTableHead>Order</DataTableHead>
-            <DataTableHead>Date</DataTableHead>
-            <DataTableHead>Status</DataTableHead>
-            <DataTableHead align='end'>Amount</DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {visible.map((row) => {
-            const state = STATE_CONFIG[row.state]
-            return (
-              <DataTableRow key={row.id}>
-                <DataTableCell primary truncate>
-                  <span className='block truncate'>{row.customer}</span>
-                  <span className='text-muted-foreground block truncate text-xs font-normal'>
-                    {row.email}
-                  </span>
-                </DataTableCell>
-                <DataTableCell label='Order' className='tabular-nums'>
-                  {row.id}
-                </DataTableCell>
-                <DataTableCell label='Date' className='whitespace-nowrap'>
-                  {row.date}
-                </DataTableCell>
-                <DataTableCell label='Status'>
-                  <Badge variant='outline' className={state.className}>
-                    {state.icon}
-                    {state.label}
-                  </Badge>
-                </DataTableCell>
-                <DataTableCell align='end' label='Amount' className='font-medium'>
-                  {currency(row.amount)}
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-      <DataTablePagination
-        className='border-t px-6 py-3'
-        onPageChange={setPage}
-        page={page}
-        pageSize={pageSize}
-        total={rows.length}
+      <DataTableContent
+        caption={`${title}, page ${pageIndex + 1} of ${table.getPageCount()}`}
+        table={table}
       />
+      <DataTablePagination className='border-t px-6 py-3' table={table} />
     </Card>
   )
 }
