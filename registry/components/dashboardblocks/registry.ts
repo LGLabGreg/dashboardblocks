@@ -718,4 +718,88 @@ export const components: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'kanban',
+    type: 'registry:component',
+    title: 'Kanban',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kanban.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'comments',
+    type: 'registry:component',
+    title: 'Comments',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/comments.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'calendar',
+    type: 'registry:component',
+    title: 'Calendar',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/calendar.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'files',
+    type: 'registry:component',
+    title: 'Files',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/files.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'ai-assistant',
+    type: 'registry:component',
+    title: 'AI Assistant',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ai-assistant.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'invoice',
+    type: 'registry:component',
+    title: 'Invoice',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/invoice.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'onboarding',
+    type: 'registry:component',
+    title: 'Onboarding',
+    description: 'TODO',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/onboarding.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]
