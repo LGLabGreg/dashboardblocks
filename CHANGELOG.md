@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.1.1
+
+### Patch Changes
+
+- [#119](https://github.com/LGLabGreg/dashboardblocks/pull/119) [`d978eb8`](https://github.com/LGLabGreg/dashboardblocks/commit/d978eb8f0060df59db24d740607233b2f8f43571) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add profile, roles and permissions, share, change plan, two-factor and SSO blocks
+
+- [#121](https://github.com/LGLabGreg/dashboardblocks/pull/121) [`1ea72d7`](https://github.com/LGLabGreg/dashboardblocks/commit/1ea72d79eb0dee7ce6b30490474fa2895619fb9d) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add error pages and auth families
+
 ## 1.1.0
 
 ### Minor Changes
