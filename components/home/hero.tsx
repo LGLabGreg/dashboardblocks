@@ -39,7 +39,7 @@ export function Hero({ blockCount }: { blockCount: number }) {
               </span>
             </h1>
 
-            <div className='flex flex-col gap-6 xl:col-span-4'>
+            <div className='flex min-w-0 flex-col gap-6 xl:col-span-4'>
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 KPI cards, charts, usage meters, activity feeds and leaderboards.
                 Composable blocks built with Tailwind CSS and shadcn/ui. Works with every{' '}

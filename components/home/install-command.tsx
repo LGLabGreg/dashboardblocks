@@ -3,9 +3,7 @@
 import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
 
-import { useCustomizerConfig } from '@/components/customizer/customizer-provider'
-
-import { registryItemUrl } from '@/lib/customizer'
+import { registryItemName } from '@/lib/customizer'
 import { cn } from '@/lib/utils'
 
 const iconTransition =
@@ -19,8 +17,7 @@ export function InstallCommand({
   className?: string
 }) {
   const [copied, setCopied] = useState(false)
-  const { base } = useCustomizerConfig()
-  const command = `npx shadcn@latest add ${registryItemUrl(name, base)}`
+  const command = `npx shadcn@latest add ${registryItemName(name)}`
 
   const copy = () => {
     void navigator.clipboard.writeText(command)
@@ -35,7 +32,7 @@ export function InstallCommand({
         onClick={copy}
         title={command}
         className={cn(
-          'group bg-card/80 hover:border-foreground/20 flex max-w-full items-center gap-3 rounded-full border py-2 pr-2 pl-4 font-mono text-xs backdrop-blur transition-[border-color,scale] duration-150 ease-out active:scale-[0.96] sm:text-sm',
+          'group bg-card/80 hover:border-foreground/20 flex max-w-full items-center gap-2 rounded-full border py-2 pr-2 pl-4 font-mono text-xs backdrop-blur transition-[border-color,scale] duration-150 ease-out active:scale-[0.96] sm:gap-3 sm:text-sm xl:gap-2 xl:text-xs',
           className,
         )}
       >
@@ -43,7 +40,9 @@ export function InstallCommand({
           $
         </span>
         <span className='truncate'>
-          npx shadcn add <span className='text-muted-foreground'>{name}</span>
+          <span className='hidden sm:inline xl:hidden'>npx </span>shadcn add
+          @dashboardblocks/
+          <span className='text-muted-foreground'>{name}</span>
         </span>
         <span className='sr-only'>, copy install command</span>
         <span

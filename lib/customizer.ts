@@ -118,7 +118,10 @@ export const customizerBootScript = `(${bootCustomizer.toString()})(${[
   .map((value) => JSON.stringify(value))
   .join(',')})`
 
-/** The registry URL for an item, built for the selected component library. */
-export function registryItemUrl(name: string, base: Base) {
-  return `https://dashboardblocks.com/r/${base}/${name}.json`
+/**
+ * The namespaced name for an item. The shadcn CLI resolves `@dashboardblocks` from
+ * the registry directory and picks the build for the project's component library.
+ */
+export function registryItemName(name: string) {
+  return `@dashboardblocks/${name}`
 }
