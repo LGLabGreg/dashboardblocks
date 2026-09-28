@@ -1,5 +1,25 @@
 # dashboardblocks
 
+## 1.1.0
+
+### Minor Changes
+
+- [#114](https://github.com/LGLabGreg/dashboardblocks/pull/114) [`4dbf6d6`](https://github.com/LGLabGreg/dashboardblocks/commit/4dbf6d6c9fc51c3dc1ce6d9ffc7bb18a01f810a1) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add app shell family
+
+- [#113](https://github.com/LGLabGreg/dashboardblocks/pull/113) [`764e281`](https://github.com/LGLabGreg/dashboardblocks/commit/764e281d48ef70a202ad0388c3b7a94f3b94af0c) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Data Table is now built on TanStack Table v9. `useDataTable` and `DataTableContent` add sorting (with multi-sort), search, facet filters with counts, pagination with page sizes, row selection with a selection bar for bulk actions, and column visibility, laid out from each column's `meta`. New example: Full Featured.
+  
+  Breaking: `useTableSort` and `DataTableSortHead` are removed, and `DataTableSortMenu` and `DataTablePagination` now take a `table` from `useDataTable`. The layout primitives (`DataTable`, `DataTableRow`, `DataTableCell`…) are unchanged.
+
+- [#115](https://github.com/LGLabGreg/dashboardblocks/pull/115) [`b925377`](https://github.com/LGLabGreg/dashboardblocks/commit/b925377814d46edcdf581d3f246bc24a3389c209) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add forms family
+
+- [#109](https://github.com/LGLabGreg/dashboardblocks/pull/109) [`a561644`](https://github.com/LGLabGreg/dashboardblocks/commit/a56164433708054cd9398880297dd4280ba11bc6) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - The `@dashboardblocks` registry URL now resolves for projects using the `new-york-v4` style.
+
+- [#112](https://github.com/LGLabGreg/dashboardblocks/pull/112) [`eea543b`](https://github.com/LGLabGreg/dashboardblocks/commit/eea543b5bfaffb0eb3beebf5c4a9d507be0f8809) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add settings family
+
+- [#116](https://github.com/LGLabGreg/dashboardblocks/pull/116) [`c6972f5`](https://github.com/LGLabGreg/dashboardblocks/commit/c6972f5020bd86389d880ab9361326183b79d35e) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add page header, record detail, notifications and command menu families
+
+- [#117](https://github.com/LGLabGreg/dashboardblocks/pull/117) [`2b2f692`](https://github.com/LGLabGreg/dashboardblocks/commit/2b2f692ee47684b6756301e904e4d1c379182209) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - feat: add kanban, comments, calendar, files, AI assistant, invoice and onboarding families
+
 ## 1.0.0
 
 ### Major Changes

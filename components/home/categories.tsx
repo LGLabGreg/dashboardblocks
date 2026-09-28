@@ -5,6 +5,10 @@ import {
   activityFeed02ExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-02'
 import {
+  AiAssistant2,
+  aiAssistant2ExampleProps,
+} from '@/registry/components/dashboardblocks/ai-assistant/ai-assistant-02'
+import {
   AiUsage2,
   aiUsage2ExampleProps,
 } from '@/registry/components/dashboardblocks/ai-usage/ai-usage-02'
@@ -17,6 +21,14 @@ import {
   alerts1ExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
 import {
+  AppShell3,
+  appShell3ExampleProps,
+} from '@/registry/components/dashboardblocks/app-shell/app-shell-03'
+import {
+  Auth1,
+  auth1ExampleProps,
+} from '@/registry/components/dashboardblocks/auth/auth-01'
+import {
   Billing1,
   billing1ExampleProps,
 } from '@/registry/components/dashboardblocks/billing/billing-01'
@@ -24,6 +36,10 @@ import {
   Breakdown1,
   breakdown1ExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
+import {
+  Calendar1,
+  calendar1ExampleProps,
+} from '@/registry/components/dashboardblocks/calendar/calendar-01'
 import {
   ChartPanel1,
   chartPanel1ExampleProps,
@@ -36,6 +52,10 @@ import {
   Checklist1,
   checklist1ExampleProps,
 } from '@/registry/components/dashboardblocks/checklist/checklist-01'
+import {
+  Comments1,
+  comments1ExampleProps,
+} from '@/registry/components/dashboardblocks/comments/comments-01'
 import {
   Comparison2,
   comparison2ExampleProps,
@@ -61,9 +81,17 @@ import {
   distribution1ExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/distribution-01'
 import {
+  ErrorPages1,
+  errorPages1ExampleProps,
+} from '@/registry/components/dashboardblocks/error-pages/error-pages-01'
+import {
   Feedback1,
   feedback1ExampleProps,
 } from '@/registry/components/dashboardblocks/feedback/feedback-01'
+import {
+  Files1,
+  files1ExampleProps,
+} from '@/registry/components/dashboardblocks/files/files-01'
 import {
   Flow1,
   flow1ExampleProps,
@@ -72,6 +100,14 @@ import {
   Forecast3,
   forecast3ExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/forecast-03'
+import {
+  Forms3,
+  forms3ExampleProps,
+} from '@/registry/components/dashboardblocks/forms/forms-03'
+import {
+  Forms4,
+  forms4ExampleProps,
+} from '@/registry/components/dashboardblocks/forms/forms-04'
 import {
   Funnel1,
   funnel1ExampleProps,
@@ -106,6 +142,14 @@ import {
   inventory1ExampleProps,
 } from '@/registry/components/dashboardblocks/inventory/inventory-01'
 import {
+  Invoice2,
+  invoice2ExampleProps,
+} from '@/registry/components/dashboardblocks/invoice/invoice-02'
+import {
+  Kanban1,
+  kanban1ExampleProps,
+} from '@/registry/components/dashboardblocks/kanban/kanban-01'
+import {
   BarChartKPI2,
   barChartKpi2ExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/bar-chart-kpi-02'
@@ -126,6 +170,18 @@ import {
   metricList1ExampleProps,
 } from '@/registry/components/dashboardblocks/metric-list/metric-list-01'
 import {
+  Notifications3,
+  notifications3ExampleProps,
+} from '@/registry/components/dashboardblocks/notifications/notifications-03'
+import {
+  Onboarding3,
+  onboarding3ExampleProps,
+} from '@/registry/components/dashboardblocks/onboarding/onboarding-03'
+import {
+  PageHeader3,
+  pageHeader3ExampleProps,
+} from '@/registry/components/dashboardblocks/page-header/page-header-03'
+import {
   Pipeline1,
   pipeline1ExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/pipeline-01'
@@ -137,6 +193,10 @@ import {
   Realtime3,
   realtime3ExampleProps,
 } from '@/registry/components/dashboardblocks/realtime/realtime-03'
+import {
+  RecordDetail2,
+  recordDetail2ExampleProps,
+} from '@/registry/components/dashboardblocks/record-detail/record-detail-02'
 import {
   Retention1,
   retention1ExampleProps,
@@ -157,6 +217,14 @@ import {
   Security3,
   security3ExampleProps,
 } from '@/registry/components/dashboardblocks/security/security-03'
+import {
+  Settings1,
+  settings1ExampleProps,
+} from '@/registry/components/dashboardblocks/settings/settings-01'
+import {
+  Settings5,
+  settings5ExampleProps,
+} from '@/registry/components/dashboardblocks/settings/settings-05'
 import {
   Spend1,
   spend1ExampleProps,
@@ -185,12 +253,37 @@ import {
   UsageMeter8,
   usageMeter8ExampleProps,
 } from '@/registry/components/dashboardblocks/usage-meter/usage-meter-08'
-import { ArrowUpRight } from 'lucide-react'
+import {
+  ArrowUpRight,
+  LayoutDashboard,
+  Search,
+  ShoppingCart,
+  UserPlus,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
 import { SectionHeading } from './section-heading'
+
+const COMMAND_PREVIEW = [
+  {
+    heading: 'Pages',
+    items: [
+      { icon: LayoutDashboard, label: 'Overview' },
+      { icon: ShoppingCart, label: 'Orders' },
+      { icon: Users, label: 'Customers' },
+    ],
+  },
+  {
+    heading: 'Actions',
+    items: [
+      { icon: Search, label: 'Find a customer' },
+      { icon: UserPlus, label: 'Invite a teammate', shortcut: '⌘I' },
+    ],
+  },
+]
 
 export interface CategoryCounts {
   kpi: number
@@ -231,6 +324,22 @@ export interface CategoryCounts {
   security: number
   inventory: number
   aiUsage: number
+  settings: number
+  appShell: number
+  forms: number
+  commandMenu: number
+  notifications: number
+  pageHeader: number
+  recordDetail: number
+  kanban: number
+  comments: number
+  calendar: number
+  files: number
+  aiAssistant: number
+  invoice: number
+  onboarding: number
+  errorPages: number
+  auth: number
 }
 
 export function Categories({ counts }: { counts: CategoryCounts }) {
@@ -305,7 +414,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/data-table'
           title='Data Table'
-          description='Sortable tables with inline bars, trends, sparklines and status.'
+          description='TanStack tables with sorting, search, filters, selection and pagination.'
           count={counts.dataTable}
           className='md:col-span-3'
           previewClassName='*:w-80 sm:*:w-[44rem]'
@@ -413,7 +522,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/billing'
           title='Billing'
-          description='MRR movement, the current plan, invoices and revenue metrics.'
+          description='MRR movement, the current plan, changing plans, invoices and revenue metrics.'
           count={counts.billing}
         >
           <Billing1 {...billing1ExampleProps} />
@@ -444,7 +553,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/team'
           title='Team'
-          description='Member lists with presence, workload against capacity, who is online and on-call rotas.'
+          description='Member lists with presence, workload, on-call rotas, roles and permissions, and sharing.'
           count={counts.team}
           previewClassName='*:w-80'
         >
@@ -579,7 +688,7 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
         <CategoryCard
           href='/docs/components/security'
           title='Security'
-          description='Sign-in activity, an audit log, active sessions and a security posture score.'
+          description='Sign-in activity, an audit log, sessions, a posture score, two-factor and SSO.'
           count={counts.security}
           className='md:col-span-2'
           previewClassName='*:w-80'
@@ -606,6 +715,197 @@ export function Categories({ counts }: { counts: CategoryCounts }) {
           <AiUsage2 {...aiUsage2ExampleProps} />
           <AiUsage4 {...aiUsage4ExampleProps} />
         </CategoryCard>
+        <CategoryCard
+          href='/docs/components/settings'
+          title='Settings'
+          description='Members and invites, API keys, notifications, integrations, webhooks, a danger zone and your profile.'
+          count={counts.settings}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[26rem]'
+        >
+          <Settings1 {...settings1ExampleProps} />
+          <Settings5 {...settings5ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/app-shell'
+          title='App Shell'
+          description='The frame around every page: sidebar navigation, a workspace switcher, a user menu, breadcrumbs, search and notifications.'
+          count={counts.appShell}
+          className='md:col-span-3'
+          previewClassName='*:w-[64rem]'
+        >
+          <div className='page-preview bg-background h-[32rem] rounded-xl shadow-xs ring-1 ring-foreground/10'>
+            <AppShell3 {...appShell3ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/forms'
+          title='Forms'
+          description='Settings sections with a save bar, a form in a side sheet, a multi-step wizard and inline editing.'
+          count={counts.forms}
+          className='md:col-span-3'
+          previewClassName='*:w-80 sm:*:w-[30rem]'
+        >
+          <Forms3 {...forms3ExampleProps} />
+          <div className='hidden md:block'>
+            <Forms4 {...forms4ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/page-header'
+          title='Page Header'
+          description='Headings with actions, section tabs, back links, facts and a list page search.'
+          count={counts.pageHeader}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[40rem]'
+        >
+          <div className='bg-background rounded-xl p-6 shadow-xs ring-1 ring-foreground/10'>
+            <PageHeader3 {...pageHeader3ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/command-menu'
+          title='Command Menu'
+          description='Search pages, actions and records from anywhere with ⌘K.'
+          count={counts.commandMenu}
+        >
+          {/*
+            Static markup, not cmdk: cmdk scrolls its selected item into view on
+            mount, which would scroll the home page down to this card.
+          */}
+          <div className='bg-popover text-popover-foreground flex flex-col gap-1 rounded-xl p-1 text-sm shadow-xs ring-1 ring-foreground/10'>
+            <div className='bg-input/30 text-muted-foreground flex h-8 items-center gap-2 rounded-lg px-2'>
+              <Search className='size-4 opacity-50' />
+              Search pages and actions…
+            </div>
+            {COMMAND_PREVIEW.map((group) => (
+              <div key={group.heading} className='p-1'>
+                <p className='text-muted-foreground px-2 py-1.5 text-xs font-medium'>
+                  {group.heading}
+                </p>
+                {group.items.map((item, index) => (
+                  <div
+                    key={item.label}
+                    className={cn(
+                      'flex items-center gap-2 rounded-sm px-2 py-1.5 [&_svg]:size-4',
+                      group.heading === 'Pages' && index === 0 && 'bg-muted',
+                    )}
+                  >
+                    <item.icon />
+                    {item.label}
+                    {item.shortcut && (
+                      <span className='text-muted-foreground ml-auto text-xs tracking-widest'>
+                        {item.shortcut}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/record-detail'
+          title='Record Detail'
+          description='Customer, order and ticket pages with properties, related records and a timeline.'
+          count={counts.recordDetail}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[44rem]'
+        >
+          <div className='bg-background rounded-xl p-6 shadow-xs ring-1 ring-foreground/10'>
+            <RecordDetail2 {...recordDetail2ExampleProps} />
+          </div>
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/notifications'
+          title='Notifications'
+          description='A bell with unread counts, requests to approve and a full inbox.'
+          count={counts.notifications}
+        >
+          <Notifications3 {...notifications3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/kanban'
+          title='Kanban'
+          description='Boards for sprints, deals and support queues. Drag cards by mouse, touch or keyboard, with counts and WIP limits.'
+          count={counts.kanban}
+          className='md:col-span-3'
+          previewClassName='*:w-[64rem]'
+        >
+          <Kanban1 {...kanban1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/calendar'
+          title='Calendar'
+          description='Month, week and room views with multi-day events, overlapping meetings and a now line.'
+          count={counts.calendar}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[48rem]'
+        >
+          <Calendar1 {...calendar1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/comments'
+          title='Comments'
+          description='Threads with replies, @mentions, reactions and resolve, for reviews and tickets.'
+          count={counts.comments}
+        >
+          <Comments1 {...comments1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/files'
+          title='Files'
+          description='Uploads with progress, file tables, folders and storage usage.'
+          count={counts.files}
+        >
+          <Files1 {...files1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/ai-assistant'
+          title='AI Assistant'
+          description='A chat panel with suggested prompts, streaming replies and feedback. Bring any model through one onSend.'
+          count={counts.aiAssistant}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[36rem]'
+        >
+          <AiAssistant2 {...aiAssistant2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/invoice'
+          title='Invoice'
+          description='Printable invoices, receipts, quotes and packing slips.'
+          count={counts.invoice}
+        >
+          <Invoice2 {...invoice2ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/onboarding'
+          title='Onboarding'
+          description='A first-run setup wizard, an empty workspace welcome, and steps to connect data and personalise.'
+          count={counts.onboarding}
+          className='md:col-span-2'
+          previewClassName='*:w-80 sm:*:w-[48rem]'
+        >
+          <Onboarding3 {...onboarding3ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/error-pages'
+          title='Error Pages'
+          description='Not found, no access, server errors, maintenance and an ended session.'
+          count={counts.errorPages}
+          previewClassName='*:w-80 *:min-h-0 *:rounded-2xl *:border'
+        >
+          <ErrorPages1 {...errorPages1ExampleProps} />
+        </CategoryCard>
+        <CategoryCard
+          href='/docs/components/auth'
+          title='Auth'
+          description='Accepting an invite, choosing a workspace, two-factor and email codes.'
+          count={counts.auth}
+          previewClassName='*:w-80 *:min-h-0 *:rounded-2xl *:border'
+        >
+          <Auth1 {...auth1ExampleProps} />
+        </CategoryCard>
       </div>
     </section>
   )
@@ -628,11 +928,12 @@ function CategoryCard({
   previewClassName?: string
   children: React.ReactNode
 }) {
+  // The link stretches over the card rather than wrapping it, so previews that
+  // contain links (like the app shell) don't nest one link inside another.
   return (
-    <Link
-      href={href}
+    <div
       className={cn(
-        'group bg-muted/40 hover:border-foreground/20 flex flex-col overflow-hidden rounded-3xl border transition-colors',
+        'group bg-muted/40 hover:border-foreground/20 has-focus-visible:ring-ring/50 relative flex flex-col overflow-hidden rounded-3xl border transition-colors has-focus-visible:ring-[3px]',
         className,
       )}
     >
@@ -649,17 +950,19 @@ function CategoryCard({
       <div className='flex items-end justify-between gap-4 px-6 pb-6'>
         <div>
           <h3 className='flex items-center gap-2 text-lg font-semibold'>
-            {title}
+            <Link href={href} className='outline-none after:absolute after:inset-0'>
+              {title}
+            </Link>
             <span className='bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums'>
               {count} blocks
             </span>
           </h3>
           <p className='text-muted-foreground mt-1 text-sm text-pretty'>{description}</p>
         </div>
-        <span className='bg-background group-hover:bg-foreground group-hover:text-background flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors'>
+        <span className='bg-background group-hover:border-foreground group-hover:bg-foreground group-hover:text-background flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors'>
           <ArrowUpRight className='size-4 transition-transform motion-safe:group-hover:rotate-45' />
         </span>
       </div>
-    </Link>
+    </div>
   )
 }

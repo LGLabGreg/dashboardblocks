@@ -1,6 +1,6 @@
 ---
 title: Security
-description: Sign-in activity, an audit log, active sessions and a security posture score.
+description: Sign-in activity, an audit log, active sessions, a security posture score, two-factor authentication and single sign-on.
 ---
 
 Security blocks show who is getting in, what changed and how well the workspace is set up. Severities and check results each have an icon and a label, so colour never carries them alone. Pass fixed dates, so the blocks render the same on the server and in the browser.
@@ -28,3 +28,15 @@ The devices signed in to an account, with where and when each was last active, a
 A weighted score from workspace checks, with failing checks first and what to do about each.
 
 <ComponentPreview name='security-04' previewClassName='max-w-md' />
+
+### Two-Factor Authentication
+
+Set up an authenticator app with a QR code and a 6-digit code, add security keys and passkeys, and get recovery codes that are shown once. When the workspace requires two-factor, the last method can't be removed.
+
+<ComponentPreview name='security-05' previewClassName='max-w-xl' />
+
+### Single Sign-On
+
+A SAML connection with the details to copy into your identity provider, domains verified by TXT record, and a switch to require SSO once a domain is verified.
+
+<ComponentPreview name='security-06' previewClassName='max-w-xl' />

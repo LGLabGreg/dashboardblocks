@@ -1,0 +1,31 @@
+---
+title: Auth
+description: Accepting an invite, choosing a workspace, a two-factor code at sign-in and verifying an email address.
+full: true
+---
+
+These are the auth pages that are specific to a dashboard with workspaces. For sign-in and sign-up forms, use [shadcn's login blocks](https://ui.shadcn.com/blocks/login). Each page is built on `AuthLayout`: your brand, then one narrow column that stays readable on a phone. Codes go in `OtpInput`, one box per digit. Typing moves to the next box, Backspace goes back, and a pasted or autofilled code fills every box and submits. Every step that waits on the server shows that it's working, and says what to do when it fails. Try `123456` as the code.
+
+### Accept Invite
+
+The workspace, who invited you, the role you'll get and who's already there. When you're signed in with a different address from the invite, it asks you to switch account instead of joining the wrong one. Pass `expired` for an invite that can't be used.
+
+<ComponentPreview name='auth-01' layout='page' />
+
+### Workspace Picker
+
+Every workspace you're in, with your role, pending invites you can join from the list, and a search once there are more than five.
+
+<ComponentPreview name='auth-02' layout='page' />
+
+### Two-Factor Code
+
+The 6-digit code from an authenticator app, with a recovery code instead, the tries left, and trusting the device for a while.
+
+<ComponentPreview name='auth-03' layout='page' />
+
+### Verify Email
+
+A code sent by email, a resend that waits a minute between emails, and a way to fix a mistyped address.
+
+<ComponentPreview name='auth-04' layout='page' />

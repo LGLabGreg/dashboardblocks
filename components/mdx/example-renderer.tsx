@@ -5,6 +5,10 @@ import {
   activityFeedExampleProps,
 } from '@/registry/components/dashboardblocks/activity-feed/index'
 import {
+  aiAssistantComponents,
+  aiAssistantExampleProps,
+} from '@/registry/components/dashboardblocks/ai-assistant/index'
+import {
   aiUsageComponents,
   aiUsageExampleProps,
 } from '@/registry/components/dashboardblocks/ai-usage/index'
@@ -12,6 +16,14 @@ import {
   alertsComponents,
   alertsExampleProps,
 } from '@/registry/components/dashboardblocks/alerts/index'
+import {
+  appShellComponents,
+  appShellExampleProps,
+} from '@/registry/components/dashboardblocks/app-shell/index'
+import {
+  authComponents,
+  authExampleProps,
+} from '@/registry/components/dashboardblocks/auth/index'
 import {
   billingComponents,
   billingExampleProps,
@@ -21,6 +33,10 @@ import {
   breakdownExampleProps,
 } from '@/registry/components/dashboardblocks/breakdown/index'
 import {
+  calendarComponents,
+  calendarExampleProps,
+} from '@/registry/components/dashboardblocks/calendar/index'
+import {
   chartPanelComponents,
   chartPanelExampleProps,
 } from '@/registry/components/dashboardblocks/chart-panel/index'
@@ -28,6 +44,14 @@ import {
   checklistComponents,
   checklistExampleProps,
 } from '@/registry/components/dashboardblocks/checklist/index'
+import {
+  commandMenuComponents,
+  commandMenuExampleProps,
+} from '@/registry/components/dashboardblocks/command-menu/index'
+import {
+  commentsComponents,
+  commentsExampleProps,
+} from '@/registry/components/dashboardblocks/comments/index'
 import {
   comparisonComponents,
   comparisonExampleProps,
@@ -49,9 +73,17 @@ import {
   distributionExampleProps,
 } from '@/registry/components/dashboardblocks/distribution/index'
 import {
+  errorPagesComponents,
+  errorPagesExampleProps,
+} from '@/registry/components/dashboardblocks/error-pages/index'
+import {
   feedbackComponents,
   feedbackExampleProps,
 } from '@/registry/components/dashboardblocks/feedback/index'
+import {
+  filesComponents,
+  filesExampleProps,
+} from '@/registry/components/dashboardblocks/files/index'
 import {
   flowComponents,
   flowExampleProps,
@@ -60,6 +92,10 @@ import {
   forecastComponents,
   forecastExampleProps,
 } from '@/registry/components/dashboardblocks/forecast/index'
+import {
+  formsComponents,
+  formsExampleProps,
+} from '@/registry/components/dashboardblocks/forms/index'
 import {
   funnelComponents,
   funnelExampleProps,
@@ -89,6 +125,14 @@ import {
   inventoryExampleProps,
 } from '@/registry/components/dashboardblocks/inventory/index'
 import {
+  invoiceComponents,
+  invoiceExampleProps,
+} from '@/registry/components/dashboardblocks/invoice/index'
+import {
+  kanbanComponents,
+  kanbanExampleProps,
+} from '@/registry/components/dashboardblocks/kanban/index'
+import {
   kpiComponents,
   kpiExampleProps,
 } from '@/registry/components/dashboardblocks/kpi/index'
@@ -101,6 +145,18 @@ import {
   metricListExampleProps,
 } from '@/registry/components/dashboardblocks/metric-list/index'
 import {
+  notificationsComponents,
+  notificationsExampleProps,
+} from '@/registry/components/dashboardblocks/notifications/index'
+import {
+  onboardingComponents,
+  onboardingExampleProps,
+} from '@/registry/components/dashboardblocks/onboarding/index'
+import {
+  pageHeaderComponents,
+  pageHeaderExampleProps,
+} from '@/registry/components/dashboardblocks/page-header/index'
+import {
   pipelineComponents,
   pipelineExampleProps,
 } from '@/registry/components/dashboardblocks/pipeline/index'
@@ -108,6 +164,10 @@ import {
   realtimeComponents,
   realtimeExampleProps,
 } from '@/registry/components/dashboardblocks/realtime/index'
+import {
+  recordDetailComponents,
+  recordDetailExampleProps,
+} from '@/registry/components/dashboardblocks/record-detail/index'
 import {
   retentionComponents,
   retentionExampleProps,
@@ -124,6 +184,10 @@ import {
   securityComponents,
   securityExampleProps,
 } from '@/registry/components/dashboardblocks/security/index'
+import {
+  settingsComponents,
+  settingsExampleProps,
+} from '@/registry/components/dashboardblocks/settings/index'
 import {
   spendComponents,
   spendExampleProps,
@@ -192,6 +256,22 @@ const exampleComponents = {
   ...securityComponents,
   ...inventoryComponents,
   ...aiUsageComponents,
+  ...settingsComponents,
+  ...appShellComponents,
+  ...formsComponents,
+  ...commandMenuComponents,
+  ...notificationsComponents,
+  ...pageHeaderComponents,
+  ...recordDetailComponents,
+  ...kanbanComponents,
+  ...commentsComponents,
+  ...calendarComponents,
+  ...filesComponents,
+  ...aiAssistantComponents,
+  ...invoiceComponents,
+  ...onboardingComponents,
+  ...errorPagesComponents,
+  ...authComponents,
 }
 
 const examplePropsMap = {
@@ -233,6 +313,22 @@ const examplePropsMap = {
   ...securityExampleProps,
   ...inventoryExampleProps,
   ...aiUsageExampleProps,
+  ...settingsExampleProps,
+  ...appShellExampleProps,
+  ...formsExampleProps,
+  ...commandMenuExampleProps,
+  ...notificationsExampleProps,
+  ...pageHeaderExampleProps,
+  ...recordDetailExampleProps,
+  ...kanbanExampleProps,
+  ...commentsExampleProps,
+  ...calendarExampleProps,
+  ...filesExampleProps,
+  ...aiAssistantExampleProps,
+  ...invoiceExampleProps,
+  ...onboardingExampleProps,
+  ...errorPagesExampleProps,
+  ...authExampleProps,
 }
 
 export type ComponentName = keyof typeof exampleComponents

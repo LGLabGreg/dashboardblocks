@@ -20,6 +20,8 @@ interface ComponentPreviewHighlightedProps {
   highlightedCode: string
   children: React.ReactNode
   className?: string
+  /** `page` previews a full page, such as an app shell, in a fixed-height frame. */
+  layout?: 'block' | 'page'
   previewClassName?: string
 }
 
@@ -79,6 +81,7 @@ export function ComponentPreviewHighlighted({
   highlightedCode,
   children,
   className,
+  layout = 'block',
   previewClassName,
 }: ComponentPreviewHighlightedProps) {
   const [copied, setCopied] = useState(false)
@@ -112,9 +115,15 @@ export function ComponentPreviewHighlighted({
         </div>
 
         <TabsContent value='preview' className='bg-muted/40 dark:bg-black/30'>
-          <div className='flex items-center justify-center px-4 py-8 sm:px-6'>
-            <div className={cn('w-full', previewClassName)}>{children}</div>
-          </div>
+          {layout === 'page' ? (
+            <div className={cn('page-preview bg-background h-[40rem]', previewClassName)}>
+              {children}
+            </div>
+          ) : (
+            <div className='flex items-center justify-center px-4 py-8 sm:px-6'>
+              <div className={cn('w-full', previewClassName)}>{children}</div>
+            </div>
+          )}
         </TabsContent>
         <TabsContent value='code'>
           {variant ? (

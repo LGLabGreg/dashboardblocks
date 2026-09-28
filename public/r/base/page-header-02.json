@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header-02",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "https://dashboardblocks.com/r/base/page-header.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/page-header/page-header-02.tsx",
+      "content": "'use client'\n\nimport {\n  PageHeader,\n  PageHeaderActions,\n  PageHeaderHeading,\n  PageHeaderRow,\n  type PageTab,\n  PageTabs,\n} from '@/registry/components/dashboardblocks/page-header'\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\n\nimport { Badge } from '@/components/ui/badge'\nimport { Button } from '@/components/ui/button'\n\ninterface PageHeader2Props {\n  description: string\n  onInvite?: () => void\n  /** The current path, used to mark the active tab. */\n  pathname: string\n  status: string\n  tabs: PageTab[]\n  title: string\n}\n\nconst exampleProps: PageHeader2Props = {\n  description: 'Storefront, checkout and fulfilment for the EU region.',\n  pathname: '/projects/acme-store',\n  status: 'Live',\n  tabs: [\n    { href: '/projects/acme-store', title: 'Overview' },\n    { badge: 12, href: '/projects/acme-store/orders', title: 'Orders' },\n    { href: '/projects/acme-store/customers', title: 'Customers' },\n    { badge: 3, href: '/projects/acme-store/issues', title: 'Issues' },\n    { href: '/projects/acme-store/settings', title: 'Settings' },\n  ],\n  title: 'Acme Store',\n}\n\nconst PageHeader2 = (props: PageHeader2Props) => {\n  const { description, onInvite = () => {}, pathname, status, tabs, title } = props\n\n  return (\n    <PageHeader>\n      <PageHeaderRow>\n        <PageHeaderHeading\n          title={title}\n          description={description}\n          badge={<Badge variant='secondary'>{status}</Badge>}\n        />\n        <PageHeaderActions>\n          <Button variant='outline' onClick={onInvite}>\n            <IconPlaceholder\n              lucide='UserPlusIcon'\n              tabler='IconUserPlus'\n              hugeicons='UserAdd01Icon'\n              phosphor='UserPlusIcon'\n              remixicon='RiUserAddLine'\n              data-icon='inline-start'\n            />\n            Invite\n          </Button>\n        </PageHeaderActions>\n      </PageHeaderRow>\n      <PageTabs items={tabs} pathname={pathname} />\n    </PageHeader>\n  )\n}\n\nexport { PageHeader2, exampleProps as pageHeader2ExampleProps, type PageHeader2Props }\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

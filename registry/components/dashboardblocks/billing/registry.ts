@@ -52,4 +52,15 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'billing-05',
+    type: 'registry:component',
+    registryDependencies: ['badge', 'button', 'card', 'input', registryUrl('billing')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/billing/billing-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

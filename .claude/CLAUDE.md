@@ -37,4 +37,6 @@ Every block must install unchanged into any shadcn/create project: any style, Ba
 ### Checks
 
 - `pnpm registry:build` regenerates icons and the `/r/{base}/` copies, and fails on missing icon names or stale overrides.
+- Don't commit `registry.json`, `public/r/` or `registry/icons/generated/`. CI rebuilds and commits them on every pull request, and a local build writes `localhost` URLs into them.
+- Look at every new or changed block before committing: at phone (360px), tablet (768px) and desktop (1280px) widths, in light and dark mode, and after using it (open panels, errors, confirmations). Blocks size to their container with `@container`, so check a narrow card as well as a narrow viewport. Nothing may overflow the card; wide tables scroll inside it.
 - `pnpm registry:verify` installs every block with the shadcn CLI into Base UI, Radix and React Aria projects, then type-checks and builds them. It needs network and takes a few minutes. CI runs it on every pull request.

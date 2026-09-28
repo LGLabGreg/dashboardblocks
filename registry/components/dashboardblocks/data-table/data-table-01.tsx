@@ -1,14 +1,10 @@
 'use client'
 
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHeader,
-  DataTableRow,
-  DataTableSortHead,
+  createDataTableColumnHelper,
+  DataTableContent,
   DataTableSortMenu,
-  useTableSort,
+  useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 
 import {
@@ -69,29 +65,42 @@ const exampleProps: DataTable1Props = {
 const formatDuration = (seconds: number) =>
   `${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, '0')}s`
 
-type SortKey = 'bounceRate' | 'duration' | 'path' | 'views' | 'visitors'
+const columnHelper = createDataTableColumnHelper<PageRow>()
 
-const COLUMNS: { align?: 'end'; key: SortKey; label: string }[] = [
-  { key: 'path', label: 'Page' },
-  { align: 'end', key: 'visitors', label: 'Visitors' },
-  { align: 'end', key: 'views', label: 'Views' },
-  { align: 'end', key: 'bounceRate', label: 'Bounce rate' },
-  { align: 'end', key: 'duration', label: 'Avg time' },
-]
+const columns = columnHelper.columns([
+  columnHelper.accessor('path', {
+    header: 'Page',
+    meta: { primary: true, truncate: true },
+  }),
+  columnHelper.accessor('visitors', {
+    cell: ({ getValue }) => getValue().toLocaleString(),
+    header: 'Visitors',
+    meta: { align: 'end' },
+  }),
+  columnHelper.accessor('views', {
+    cell: ({ getValue }) => getValue().toLocaleString(),
+    header: 'Views',
+    meta: { align: 'end' },
+  }),
+  columnHelper.accessor('bounceRate', {
+    cell: ({ getValue }) => `${getValue()}%`,
+    header: 'Bounce rate',
+    meta: { align: 'end' },
+  }),
+  columnHelper.accessor('duration', {
+    cell: ({ getValue }) => formatDuration(getValue()),
+    header: 'Avg time',
+    meta: { align: 'end' },
+  }),
+])
 
 const DataTable1 = (props: DataTable1Props) => {
   const { description, rows, title } = props
-  const { setSort, sort, sorted, toggleSort } = useTableSort<PageRow, SortKey>(
-    rows,
-    {
-      bounceRate: (row) => row.bounceRate,
-      duration: (row) => row.duration,
-      path: (row) => row.path,
-      views: (row) => row.views,
-      visitors: (row) => row.visitors,
-    },
-    { direction: 'descending', key: 'visitors' },
-  )
+  const table = useDataTable({
+    columns,
+    data: rows,
+    initialState: { sorting: [{ desc: true, id: 'visitors' }] },
+  })
 
   return (
     <Card className='@container/data-table gap-0 pb-0'>
@@ -99,54 +108,13 @@ const DataTable1 = (props: DataTable1Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
         <CardAction>
-          <DataTableSortMenu
-            className='@2xl/data-table:hidden'
-            columns={COLUMNS}
-            onSortChange={setSort}
-            sort={sort}
-          />
+          <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
         </CardAction>
       </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>
-          {title}, {description.toLowerCase()}
-        </caption>
-        <DataTableHeader>
-          <DataTableRow>
-            {COLUMNS.map((column) => (
-              <DataTableSortHead
-                key={column.key}
-                align={column.align}
-                label={column.label}
-                onSort={toggleSort}
-                sort={sort}
-                sortKey={column.key}
-              />
-            ))}
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {sorted.map((row) => (
-            <DataTableRow key={row.path}>
-              <DataTableCell primary truncate>
-                {row.path}
-              </DataTableCell>
-              <DataTableCell align='end' label='Visitors'>
-                {row.visitors.toLocaleString()}
-              </DataTableCell>
-              <DataTableCell align='end' label='Views'>
-                {row.views.toLocaleString()}
-              </DataTableCell>
-              <DataTableCell align='end' label='Bounce rate'>
-                {row.bounceRate}%
-              </DataTableCell>
-              <DataTableCell align='end' label='Avg time'>
-                {formatDuration(row.duration)}
-              </DataTableCell>
-            </DataTableRow>
-          ))}
-        </DataTableBody>
-      </DataTable>
+      <DataTableContent
+        caption={`${title}, ${description.toLowerCase()}`}
+        table={table}
+      />
     </Card>
   )
 }

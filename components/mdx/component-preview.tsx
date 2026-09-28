@@ -28,6 +28,10 @@ interface ComponentPreviewProps {
    */
   className?: string
   /**
+   * `page` previews a full page, such as an app shell, in a fixed-height frame
+   */
+  layout?: 'block' | 'page'
+  /**
    * Optional className for the preview content wrapper
    */
   previewClassName?: string
@@ -46,6 +50,7 @@ async function getRegistryItem(name: string): Promise<RegistryItem | null> {
 export async function ComponentPreview({
   name,
   className,
+  layout,
   previewClassName,
 }: ComponentPreviewProps) {
   const registryItem = await getRegistryItem(name)
@@ -74,6 +79,7 @@ export async function ComponentPreview({
       code={code}
       highlightedCode={highlightedCode}
       className={className}
+      layout={layout}
       previewClassName={previewClassName}
     >
       <ExampleRenderer name={name} />

@@ -1,0 +1,48 @@
+---
+title: Settings
+description: Members and invites, API keys, notification preferences, integrations, webhooks, a danger zone and your profile.
+---
+
+Settings blocks are the pages every dashboard needs behind the charts: who can get in, what they can do, where notifications go and what the workspace is connected to. Each block keeps its own state so it works as soon as it's installed, and calls back with every change so you can save it. Roles, connection statuses and webhook deliveries each have a label, and failed deliveries are taller as well as red, so colour never carries them alone. Secrets are only ever shown once, and anything that can't be undone asks for the workspace name first. Pass fixed dates, so the blocks render the same on the server and in the browser.
+
+### Members
+
+Invite people by email with a role, change roles, remove members, and resend or revoke pending invites. Counts seats against the plan, and stops invites when they're all taken.
+
+<ComponentPreview name='settings-01' previewClassName='max-w-xl' />
+
+### API Keys
+
+Keys with their access, when they were last used and who created them, with unused keys flagged. A new key is shown once, with a button to copy it.
+
+<ComponentPreview name='settings-02' previewClassName='max-w-xl' />
+
+### Notifications
+
+Each notification against each channel, grouped by topic, with a switch per channel to turn it on or off for everything.
+
+<ComponentPreview name='settings-03' previewClassName='max-w-xl' />
+
+### Integrations
+
+Connected and available integrations, with a tab for each, what they do, and ones that need reconnecting.
+
+<ComponentPreview name='settings-04' previewClassName='max-w-2xl' />
+
+### Webhooks
+
+Endpoints with the events they receive, their recent deliveries and delivery rate, and a switch to pause each one. An endpoint is failing when its last three deliveries failed.
+
+<ComponentPreview name='settings-05' previewClassName='max-w-xl' />
+
+### Danger Zone
+
+Transferring, archiving and deleting the workspace. Deleting asks for the workspace name first.
+
+<ComponentPreview name='settings-06' previewClassName='max-w-xl' />
+
+### Profile
+
+Your photo, name, email, time zone and theme. A new email only takes effect once it's confirmed, and photos over 2 MB are refused before upload.
+
+<ComponentPreview name='settings-07' previewClassName='max-w-xl' />

@@ -1,0 +1,37 @@
+---
+title: Error Pages
+description: Not found, no access, something went wrong, down for maintenance and an ended session, each with a way forward.
+full: true
+---
+
+Error pages say what happened in plain words, whose fault it was, and what to do next, so nobody is left on a dead end. Each one is a full page built on `ErrorPageLayout`: your brand at the top, a centred message, then actions. Leave out `brand` to use one inside an [app shell](/docs/components/app-shell). Pass `focusOnMount` when the page is a route, so focus moves to the title and screen readers announce the error after a client-side navigation. Times are shown in UTC, and anything that waits on the server shows that it's working and says when it fails again.
+
+### Not Found
+
+The path that wasn't found, so a typo is easy to spot, a search, and the places people usually look for.
+
+<ComponentPreview name='error-pages-01' layout='page' />
+
+### No Access
+
+Who can give access, a request with an optional message, and the account you're signed in with, since the wrong account is the most common cause.
+
+<ComponentPreview name='error-pages-02' layout='page' />
+
+### Something Went Wrong
+
+Try again, with a count of failed retries, an error ID to copy for support, and the technical details folded away.
+
+<ComponentPreview name='error-pages-03' layout='page' />
+
+### Maintenance
+
+What's being done, when it'll be back, progress through the planned window, the latest updates, and an email when it's over. When it runs late, it says so instead of showing a time that has passed.
+
+<ComponentPreview name='error-pages-04' layout='page' />
+
+### Session Ended
+
+Why the session ended, whether unsaved work was kept, and a sign-in link that goes back to the same page.
+
+<ComponentPreview name='error-pages-05' layout='page' />

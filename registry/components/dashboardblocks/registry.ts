@@ -68,6 +68,29 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'app-shell',
+    type: 'registry:component',
+    title: 'App Shell',
+    description:
+      'Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, plan usage and a top navigation row.',
+    registryDependencies: [
+      'avatar',
+      'breadcrumb',
+      'button',
+      'collapsible',
+      'dropdown-menu',
+      'kbd',
+      'progress',
+      'sidebar',
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/app-shell.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'chart',
     type: 'registry:component',
     title: 'Chart',
@@ -76,6 +99,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/chart.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'auth',
+    type: 'registry:component',
+    title: 'Auth',
+    description:
+      'Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.',
+    registryDependencies: ['input', registryUrl('team')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/auth.tsx',
         type: 'registry:component',
       },
     ],
@@ -153,11 +190,26 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Data Table',
     description:
-      'Primitives for dashboard tables: sortable headers, inline bars, pagination and a stacked layout for narrow cards.',
-    registryDependencies: ['button', 'dropdown-menu'],
+      'Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.',
+    dependencies: ['@tanstack/react-table@^9.2.4'],
+    registryDependencies: ['button', 'checkbox', 'dropdown-menu', 'input'],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'command-menu',
+    type: 'registry:component',
+    title: 'Command Menu',
+    description:
+      'Primitives for a command menu: a search dialog of pages, actions and records that filters as you type or shows results you fetch, with descriptions, shortcuts and a searching state, a search button with ⌘K, and a shortcut hook.',
+    registryDependencies: ['button', 'command', 'kbd'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/command-menu.tsx',
         type: 'registry:component',
       },
     ],
@@ -218,6 +270,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'error-pages',
+    type: 'registry:component',
+    title: 'Error Pages',
+    description:
+      'Primitives for error and interruption pages: a full-page frame with your brand, a centred message, an optional code and icon, actions and footer links, plus UTC time and duration formatting.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/error-pages.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'feedback',
     type: 'registry:component',
     title: 'Feedback',
@@ -255,6 +320,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/forecast.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'forms',
+    type: 'registry:component',
+    title: 'Forms',
+    description:
+      'Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.',
+    registryDependencies: ['button', 'input', 'sheet'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms.tsx',
         type: 'registry:component',
       },
     ],
@@ -411,6 +490,34 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'notifications',
+    type: 'registry:component',
+    title: 'Notifications',
+    description:
+      'Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.',
+    registryDependencies: ['button', 'popover', registryUrl('activity-feed')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/notifications.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'page-header',
+    type: 'registry:component',
+    title: 'Page Header',
+    description:
+      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/page-header.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'pipeline',
     type: 'registry:component',
     title: 'Pipeline',
@@ -445,6 +552,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'record-detail',
+    type: 'registry:component',
+    title: 'Record Detail',
+    description:
+      "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/record-detail.tsx',
         type: 'registry:component',
       },
     ],
@@ -511,6 +631,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/security.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'settings',
+    type: 'registry:component',
+    title: 'Settings',
+    description:
+      'Primitives for settings pages: owner, admin, member and viewer roles with what each can do and a menu to pick one, a row that puts a label and description beside its control, connected, needs attention, paused and not connected statuses each with an icon and label, secret masking, a copy button that announces itself, and relative and UTC date formatting.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/settings.tsx',
         type: 'registry:component',
       },
     ],
@@ -607,6 +741,138 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'kanban',
+    type: 'registry:component',
+    title: 'Kanban',
+    description:
+      'Primitives for kanban boards: a board of columns with drag and drop by mouse, touch and keyboard and announced moves, columns with counts, WIP limits that warn or block and collapsing, cards with a move menu, labels, assignees, due dates, priorities, stats and subtasks, an inline add-card form and a helper that moves a card in your array.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input',
+      'kbd',
+      registryUrl('activity-feed'),
+      registryUrl('schedule'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kanban.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'comments',
+    type: 'registry:component',
+    title: 'Comments',
+    description:
+      'Primitives for comments: threads with one level of replies joined by a line, a composer that suggests people after @ and submits with ⌘ Enter, highlighted mentions, reaction toggles with an emoji picker, an edit and delete menu, and resolved threads that collapse to a summary.',
+    registryDependencies: [
+      'avatar',
+      'button',
+      'dropdown-menu',
+      'input-group',
+      registryUrl('activity-feed'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/comments.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'calendar',
+    type: 'registry:component',
+    title: 'Calendar',
+    description:
+      'Primitives for calendars: a toolbar with today, previous, next and a view switch, a keyboard-navigable month grid with event chips, multi-day bars and "+N more", week and resource views on an hour axis with overlapping events side by side and a now line, an event list for narrow screens, inline event details, a legend that can filter calendars, and date helpers for weeks, event days and lanes.',
+    registryDependencies: [
+      'button',
+      'button-group',
+      'tabs',
+      registryUrl('schedule'),
+      registryUrl('team'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/calendar.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'files',
+    type: 'registry:component',
+    title: 'Files',
+    description:
+      'Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.',
+    registryDependencies: ['button', 'dropdown-menu'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/files.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'ai-assistant',
+    type: 'registry:component',
+    title: 'AI Assistant',
+    description:
+      'Primitives for AI chat: a scrolling log that follows streamed replies and reads each one out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
+    registryDependencies: ['button', 'input-group'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ai-assistant.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'invoice',
+    type: 'registry:component',
+    title: 'Invoice',
+    description:
+      'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
+    registryDependencies: [
+      'badge',
+      'button',
+      'card',
+      'checkbox',
+      'table',
+      registryUrl('billing'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/invoice.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'onboarding',
+    type: 'registry:component',
+    title: 'Onboarding',
+    description:
+      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.',
+    registryDependencies: [
+      'button',
+      'card',
+      'field',
+      'input',
+      'native-select',
+      registryUrl('forms'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/onboarding.tsx',
         type: 'registry:component',
       },
     ],

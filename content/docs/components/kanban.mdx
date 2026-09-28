@@ -1,0 +1,27 @@
+---
+title: Kanban
+description: Boards you can edit, for sprints, deals and support tickets. Drag cards between columns with a mouse, a finger or the keyboard.
+full: true
+---
+
+Drag a card to another column or to a new place in its own. On a touch screen, press and hold a card to pick it up, so a swipe still scrolls the board. With a keyboard, focus a card's title and press Space or Enter to pick it up, the arrow keys to move it between columns and up and down, then Space or Enter to drop it or Escape to put it back. Every step is announced to screen readers, and each card also has a Move menu. Near the edges the board scrolls under the card.
+
+Columns can set a WIP limit, shown as "3 / 4" beside the title. By default a column can go over its limit and turns red; set `wipLimitMode='block'` to refuse cards instead. The board reports each move as `onMove(id, column, index)`, and `moveItem` applies it to your array. Due dates take a fixed `now`, so they render the same on the server and in the browser. For a read-only view of work by stage, see [Pipeline](/docs/components/pipeline).
+
+### Sprint Board
+
+Issues with labels, assignees, due dates, priorities, comments and subtasks. In progress and In review have WIP limits that warn when they're passed.
+
+<ComponentPreview name='kanban-01' />
+
+### Deals
+
+A sales board with each column's total value, which updates as deals move, and the next step on every deal. The Lost column collapses to a strip that still takes drops.
+
+<ComponentPreview name='kanban-02' />
+
+### Support Queue
+
+Tickets with priority and time left to their SLA, paused while waiting on the customer. Add tickets from the first column. Escalated is full, so it refuses more tickets until one moves on.
+
+<ComponentPreview name='kanban-03' />
