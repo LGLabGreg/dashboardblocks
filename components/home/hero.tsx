@@ -10,7 +10,7 @@ import { Showcase } from './showcase'
 
 export function Hero({ blockCount }: { blockCount: number }) {
   return (
-    <section className='w-full'>
+    <section className='w-full overflow-x-clip'>
       <div className='border-b md:px-6'>
         <div className='relative mx-auto max-w-6xl px-6 md:border-x pt-16 pb-14 md:px-10 md:pt-24 md:pb-20'>
           <Corner className='-bottom-[6px] -left-[5px]' />
