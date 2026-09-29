@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 8f4208f5631b
+// source-hash: 5d5afca3905e
 
 'use client'
 

@@ -3,7 +3,7 @@ title: Notifications
 description: A bell with an unread count that opens the latest notifications, requests you can approve from the panel, and a full inbox.
 ---
 
-Clicking anywhere on a notification opens it and marks it read. Buttons inside a notification, like Approve, work on their own. Times are relative, with the full date on hover, and take a fixed `now` so they render the same on the server and in the browser. The rows build on the [Activity Feed](/docs/components/activity-feed) primitives. For a notifications card inside a dashboard, see [Activity Feed: Notifications](/docs/components/activity-feed#notifications).
+Clicking anywhere on a notification opens it and marks it read. Buttons inside a notification, like Approve, work on their own. Times are relative, with the full date on hover, and take a fixed `now` so they render the same on the server and in the browser. The rows build on the [Activity Feed](/docs/components/activity-feed) primitives. For a notifications card inside a dashboard, see [Activity Feed: Notifications](/docs/components/activity-feed#notifications). Notification links are plain `<a>` elements. For client-side navigation, pass your router's link to `LinkProvider`. See [Routers](/docs/compatibility#routers).
 
 ### Bell
 

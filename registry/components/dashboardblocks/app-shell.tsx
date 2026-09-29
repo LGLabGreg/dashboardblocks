@@ -1,7 +1,5 @@
 'use client'
 
-/* oxlint-disable jsx-a11y/control-has-associated-label -- anchors passed to `render` take their text from the children */
-
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, type ReactNode, useEffect } from 'react'
