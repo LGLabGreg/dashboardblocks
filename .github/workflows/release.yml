@@ -45,4 +45,4 @@ jobs:
           pr-title: 'chore(release): version'
           publish-script: pnpm ci:publish
         env:
-          REGISTRY_BASE_URL: https://dashboardblocks.com
+          REGISTRY_BASE_URL: https://www.dashboardblocks.com

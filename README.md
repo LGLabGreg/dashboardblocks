@@ -21,11 +21,11 @@ Or install a full dashboard:
 npx shadcn@latest add @dashboardblocks/dashboard-01
 ```
 
-`@dashboardblocks` is listed in the [shadcn registry directory](https://ui.shadcn.com/docs/directory), so there's nothing to set up. The CLI picks the build for your component library (Base UI, Radix UI or React Aria), and blocks work with every shadcn/create style and icon library. See [Compatibility](https://dashboardblocks.com/docs/compatibility).
+`@dashboardblocks` is listed in the [shadcn registry directory](https://ui.shadcn.com/docs/directory), so there's nothing to set up. The CLI picks the build for your component library (Base UI, Radix UI or React Aria), and blocks work with every shadcn/create style and icon library. See [Compatibility](https://www.dashboardblocks.com/docs/compatibility).
 
 ## Documentation
 
-Visit https://dashboardblocks.com/docs to browse all blocks and view the documentation.
+Visit https://www.dashboardblocks.com/docs to browse all blocks and view the documentation.
 
 ## License
 

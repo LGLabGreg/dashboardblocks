@@ -1,10 +1,11 @@
 export const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://dashboardblocks.com'
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.dashboardblocks.com'
 
 export const REGISTRY_BASE_URL =
   process.env.REGISTRY_BASE_URL ??
   (process.env.NODE_ENV === 'production'
-    ? 'https://dashboardblocks.com'
+    ? 'https://www.dashboardblocks.com'
     : 'http://localhost:3000')
 
 export function registryUrl(componentName: string): string {
