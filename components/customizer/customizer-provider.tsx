@@ -52,6 +52,7 @@ export function CustomizerProvider({ children }: { children: React.ReactNode }) 
       if (event.key !== CUSTOMIZER_STORAGE_KEY) return
       const next = readStoredConfig()
       applyConfigToDocument(next)
+      setPreviewState(null)
       setConfigState(next)
     }
     window.addEventListener('storage', onStorage)

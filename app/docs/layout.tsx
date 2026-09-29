@@ -12,8 +12,8 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
       tree={source.pageTree}
       {...baseOptions({ customizer: false })}
       sidebar={{
-        // Above the scrolling page list, so it stays in view. Fumadocs renders
-        // the banner in a list, hence the key.
+        // Above the scrolling page list, so it stays in view. Without a key,
+        // React warns about a missing key in fumadocs' Sidebar.
         banner: <Customizer key='customizer' className='w-full' />,
         footer: <VersionBadge className='mt-3 self-start' />,
       }}
