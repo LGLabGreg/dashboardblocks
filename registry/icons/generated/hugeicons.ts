@@ -23,6 +23,7 @@ export {
   AudioWave01Icon,
   BookOpen02Icon,
   BubbleChatIcon,
+  Building03Icon,
   BulbIcon,
   Calendar03Icon,
   CalendarIcon,

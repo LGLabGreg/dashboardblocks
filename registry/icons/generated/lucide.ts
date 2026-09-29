@@ -15,6 +15,7 @@ export {
   BellRingIcon,
   BlocksIcon,
   BookOpenIcon,
+  BuildingIcon,
   CalendarClockIcon,
   CalendarIcon,
   ChartBarIcon,
