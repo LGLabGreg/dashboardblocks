@@ -67,6 +67,7 @@ export {
   FunnelSimpleIcon,
   GearIcon,
   GlobeIcon,
+  HardDrivesIcon,
   HeadphonesIcon,
   HouseIcon,
   InfoIcon,

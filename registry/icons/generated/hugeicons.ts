@@ -103,6 +103,7 @@ export {
   SearchIcon,
   SearchRemoveIcon,
   SentIcon,
+  ServerStack01Icon,
   Settings05Icon,
   ShoppingBag01Icon,
   ShoppingCart01Icon,

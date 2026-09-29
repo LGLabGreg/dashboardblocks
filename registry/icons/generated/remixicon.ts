@@ -102,6 +102,7 @@ export {
   RiSave3Line,
   RiSearchLine,
   RiSendPlaneLine,
+  RiServerLine,
   RiSettingsLine,
   RiShoppingBag3Line,
   RiShoppingCartLine,

@@ -112,6 +112,7 @@ export {
   IconSearch,
   IconSelector,
   IconSend,
+  IconServer,
   IconSettings,
   IconShoppingBag,
   IconShoppingCart,

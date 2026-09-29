@@ -108,6 +108,7 @@ export {
   SearchIcon,
   SearchXIcon,
   SendIcon,
+  ServerIcon,
   Settings2Icon,
   ShoppingBagIcon,
   ShoppingCartIcon,

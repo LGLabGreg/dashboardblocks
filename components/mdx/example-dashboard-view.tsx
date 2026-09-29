@@ -4,6 +4,7 @@ import { Dashboard1 } from '@/registry/components/dashboardblocks/dashboards/das
 import { Dashboard2 } from '@/registry/components/dashboardblocks/dashboards/dashboard-02'
 import { Dashboard3 } from '@/registry/components/dashboardblocks/dashboards/dashboard-03'
 import { Dashboard4 } from '@/registry/components/dashboardblocks/dashboards/dashboard-04'
+import { Dashboard5 } from '@/registry/components/dashboardblocks/dashboards/dashboard-05'
 import { useSyncExternalStore } from 'react'
 
 import { startOfToday } from '@/components/mdx/start-of-today'
@@ -13,6 +14,7 @@ const DASHBOARDS = {
   'dashboard-02': (today: Date) => <Dashboard2 title='Product health' today={today} />,
   'dashboard-03': (today: Date) => <Dashboard3 title='Site analytics' today={today} />,
   'dashboard-04': (today: Date) => <Dashboard4 title='Sales overview' today={today} />,
+  'dashboard-05': (today: Date) => <Dashboard5 title='Platform health' today={today} />,
 }
 
 export type ExampleDashboardName = keyof typeof DASHBOARDS

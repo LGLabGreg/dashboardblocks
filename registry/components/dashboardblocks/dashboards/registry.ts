@@ -102,4 +102,30 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'dashboard-05',
+    type: 'registry:block',
+    title: 'DevOps dashboard',
+    description:
+      'A DevOps dashboard: live throughput, delivery performance, response time percentiles, open alerts, uptime, build health and recent deployments, filtered by service.',
+    registryDependencies: [
+      registryUrl('alerts-01'),
+      registryUrl('block-state'),
+      registryUrl('chart-panel-06'),
+      registryUrl('dashboard-header'),
+      registryUrl('deployments'),
+      registryUrl('deployments-01'),
+      registryUrl('deployments-03'),
+      registryUrl('deployments-04'),
+      registryUrl('realtime-02'),
+      registryUrl('status'),
+      registryUrl('status-02'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/dashboards/dashboard-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]

@@ -42,6 +42,8 @@ interface ChartPanel6Props {
   description: string
   formatter?: ChartValueFormatter
   headline: string
+  /** Heads the label column of the data table. @default 'Hour' */
+  labelHeading?: string
   percentiles: Percentile[]
   title: string
   trend: number
@@ -82,6 +84,7 @@ const ChartPanel6 = (props: ChartPanel6Props) => {
     description,
     formatter = (value) => value.toLocaleString(),
     headline,
+    labelHeading = 'Hour',
     percentiles,
     title,
     trend,
@@ -171,7 +174,7 @@ const ChartPanel6 = (props: ChartPanel6Props) => {
         <ChartPanelTable
           caption={`${title}: ${description}`}
           columns={[
-            { key: 'label', label: 'Hour' },
+            { key: 'label', label: labelHeading },
             ...percentiles.map((item) => ({
               format: formatter,
               key: item.key,
