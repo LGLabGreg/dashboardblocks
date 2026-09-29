@@ -1,7 +1,7 @@
 'use client'
 
 import { PaletteIcon } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   DropdownMenu,
@@ -47,58 +47,68 @@ const PREVIEW_DELAY = 150
 
 /**
  * Previews an option while the pointer rests on it, like ui.shadcn.com/create,
- * and puts the saved config back when it leaves or the menu closes. Moving
+ * and puts the saved config back when it moves off or the menu closes. Moving
  * between options keeps the preview until the next one applies, so it doesn't
- * flash back to the saved style in between.
+ * flash back to the saved style in between. Options opt in with
+ * `data-preview-key` and `data-preview-value`.
  */
-function useHoverPreview(config: CustomizerConfig) {
+function useHoverPreview(config: CustomizerConfig, open: boolean) {
+  const saved = useRef(config)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const previewing = useRef<string | null>(null)
-  const pointer = useRef({ x: NaN, y: NaN })
+
+  useEffect(() => {
+    saved.current = config
+  }, [config])
 
   const clear = () => {
     if (timer.current) clearTimeout(timer.current)
     timer.current = null
   }
 
-  const schedule = (patch: Partial<CustomizerConfig> | null) => {
-    clear()
-    timer.current = setTimeout(() => {
-      previewing.current = patch && JSON.stringify(patch)
-      applyConfigToDocument({ ...config, ...patch })
-    }, PREVIEW_DELAY)
-  }
-
   const revert = () => {
     clear()
     if (!previewing.current) return
     previewing.current = null
-    applyConfigToDocument(config)
+    applyConfigToDocument(saved.current)
   }
 
-  // Previewing a style resizes the menu, and browsers send pointer events when
-  // the layout moves under a still pointer. Only count events where the
-  // pointer moved, so the preview doesn't flip back and forth on its own.
-  const moved = (event: React.PointerEvent) =>
-    event.pointerType === 'mouse' &&
-    (event.clientX !== pointer.current.x || event.clientY !== pointer.current.y)
+  useEffect(() => {
+    if (!open) return
+    let last = { x: NaN, y: NaN }
 
-  useEffect(() => clear, [])
+    const onPointerMove = (event: PointerEvent) => {
+      // Previewing a style resizes the menu, and browsers send pointer events
+      // when the layout moves under a still pointer. Only real movement counts,
+      // so the preview doesn't flip back and forth on its own.
+      if (event.pointerType !== 'mouse') return
+      if (event.clientX === last.x && event.clientY === last.y) return
+      last = { x: event.clientX, y: event.clientY }
 
-  return {
-    revert,
-    optionProps: (patch: Partial<CustomizerConfig>) => ({
-      onPointerMove: (event: React.PointerEvent) => {
-        if (!moved(event)) return
-        pointer.current = { x: event.clientX, y: event.clientY }
-        if (previewing.current === JSON.stringify(patch)) clear()
-        else schedule(patch)
-      },
-      onPointerLeave: (event: React.PointerEvent) => {
-        if (moved(event)) schedule(null)
-      },
-    }),
-  }
+      const option =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>('[data-preview-key]')
+          : null
+      const patch = option
+        ? { [option.dataset.previewKey!]: option.dataset.previewValue }
+        : null
+      const id = patch && JSON.stringify(patch)
+      clear()
+      if (id === previewing.current) return
+      timer.current = setTimeout(() => {
+        previewing.current = id
+        applyConfigToDocument({ ...saved.current, ...patch })
+      }, PREVIEW_DELAY)
+    }
+
+    document.addEventListener('pointermove', onPointerMove)
+    return () => {
+      document.removeEventListener('pointermove', onPointerMove)
+      revert()
+    }
+  }, [open])
+
+  return revert
 }
 
 function labelFor(setting: (typeof SETTINGS)[number], value: string) {
@@ -119,14 +129,11 @@ export function Customizer({
 }) {
   const { config, reset, setConfig } = useCustomizer()
   const style = labelFor(SETTINGS[0], config.style)
-  const { optionProps, revert } = useHoverPreview(config)
+  const [open, setOpen] = useState(false)
+  const revertPreview = useHoverPreview(config, open)
 
   return (
-    <DropdownMenu
-      onOpenChange={(open) => {
-        if (!open) revert()
-      }}
-    >
+    <DropdownMenu onOpenChange={setOpen}>
       {/* Site chrome, so it keeps the same look whichever style is picked. */}
       <DropdownMenuTrigger
         className={cn(
@@ -158,7 +165,7 @@ export function Customizer({
                 <DropdownMenuRadioGroup
                   value={config[setting.key]}
                   onValueChange={(value) => {
-                    revert()
+                    revertPreview()
                     setConfig({
                       [setting.key]: value,
                     } as Partial<CustomizerConfig>)
@@ -168,9 +175,10 @@ export function Customizer({
                     <DropdownMenuRadioItem
                       key={option.value}
                       value={option.value}
-                      {...(setting.preview
-                        ? optionProps({ [setting.key]: option.value })
-                        : {})}
+                      {...(setting.preview && {
+                        'data-preview-key': setting.key,
+                        'data-preview-value': option.value,
+                      })}
                     >
                       {option.label}
                     </DropdownMenuRadioItem>
