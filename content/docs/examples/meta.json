@@ -1,5 +1,5 @@
 {
   "title": "Dashboards",
   "defaultOpen": true,
-  "pages": ["store", "saas", "web-analytics", "crm"]
+  "pages": ["store", "saas", "web-analytics", "crm", "devops"]
 }
