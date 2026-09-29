@@ -3945,7 +3945,8 @@
       "name": "app-shell-04",
       "type": "registry:component",
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/base/app-shell.json"
+        "https://www.dashboardblocks.com/r/base/app-shell.json",
+        "https://www.dashboardblocks.com/r/base/link.json"
       ],
       "files": [
         {
@@ -4152,6 +4153,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
+        "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/notifications.json"
       ],
       "files": [
@@ -4583,6 +4585,7 @@
         "input-group",
         "https://www.dashboardblocks.com/r/base/checklist.json",
         "https://www.dashboardblocks.com/r/base/forms.json",
+        "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/onboarding.json"
       ],
       "files": [
@@ -4601,6 +4604,7 @@
         "card",
         "https://www.dashboardblocks.com/r/base/block-state.json",
         "https://www.dashboardblocks.com/r/base/checklist.json",
+        "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/onboarding.json",
         "https://www.dashboardblocks.com/r/base/progress-bar.json"
       ],
@@ -4622,6 +4626,7 @@
         "input-group",
         "native-select",
         "https://www.dashboardblocks.com/r/base/block-state.json",
+        "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/onboarding.json"
       ],
       "files": [
