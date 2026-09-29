@@ -79,14 +79,15 @@ export function parseConfig(value: unknown): CustomizerConfig {
 
 /**
  * Props for site chrome built from components/ui, such as the customizer menu
- * and the preview toolbar. It keeps the default style and radius, so only the
- * blocks change with the customizer. Portalled popups render outside the
+ * and the preview toolbar. It keeps the default style and radius (see
+ * `[data-site-chrome]` in app/global.css), so only the blocks change with the
+ * customizer. Portalled popups render outside the
  * chrome, so they need these props as well.
  */
 export function siteChrome(className?: string) {
   return {
     'data-site-chrome': '',
-    className: cn(`style-${DEFAULT_CONFIG.style} [--radius:0.625rem]`, className),
+    className: cn(`style-${DEFAULT_CONFIG.style}`, className),
   }
 }
 

@@ -61,7 +61,8 @@
 
 :root {
   --fd-layout-width: 100%;
-  --radius: 0.625rem;
+  --default-radius: 0.625rem;
+  --radius: var(--default-radius);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -93,6 +94,22 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* Site chrome (siteChrome in lib/customizer.ts) keeps the default radius
+   whatever the customizer picks. The radius steps resolve on :root, so they're
+   declared again here. */
+@layer base {
+  [data-site-chrome] {
+    --radius: var(--default-radius);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+    --radius-4xl: calc(var(--radius) + 16px);
+  }
 }
 
 .dark {

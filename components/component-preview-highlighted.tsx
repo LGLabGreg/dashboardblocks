@@ -95,7 +95,13 @@ export function ComponentPreviewHighlighted({
   }, [variant])
 
   return (
-    <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
+    <div
+      className={cn(
+        // Site chrome, so it keeps the default radius like the toolbar inside it.
+        'not-prose my-6 overflow-hidden rounded-[calc(var(--default-radius)+4px)] border',
+        className,
+      )}
+    >
       <Tabs defaultValue='preview' className='gap-0'>
         <div
           {...siteChrome('bg-background flex flex-wrap items-center gap-2 border-b p-3')}
