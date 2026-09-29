@@ -595,7 +595,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
             noun='open deals'
             now={today}
             stages={STAGES}
-            title='Stuck deals'
+            title={`Stuck deals${data.segmentLabel}`}
           />
         </div>
       </BlockBusy>
