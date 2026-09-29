@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { registryItemName } from '@/lib/customizer'
+import { registryItemName, siteChrome } from '@/lib/customizer'
 
 import { Icons } from './icons'
 
@@ -61,7 +61,7 @@ export function ShadcnCliButton({ name }: { name: string }) {
         >
           <ChevronDownIcon />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='[--radius:1rem]'>
+        <DropdownMenuContent align='end' {...siteChrome('[--radius:1rem]')}>
           <DropdownMenuGroup>
             {Object.entries(commands).map(([key]) => {
               const IconComponent = Icons[key as PackageManager]

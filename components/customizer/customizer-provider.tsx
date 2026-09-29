@@ -11,12 +11,20 @@ import {
 } from '@/lib/customizer'
 
 interface CustomizerContextValue {
+  /** The saved choice. */
   config: CustomizerConfig
+  /** The saved choice with any option previewed on hover, which blocks render with. */
+  previewConfig: CustomizerConfig
   reset: () => void
   setConfig: (patch: Partial<CustomizerConfig>) => void
+  /** Shows an option without saving it. Pass null to go back to the saved choice. */
+  setPreview: (patch: Partial<CustomizerConfig> | null) => void
 }
 
 const CustomizerContext = createContext<CustomizerContextValue | null>(null)
+
+/** Site chrome renders with the saved choice, so it doesn't change on hover. */
+const SavedConfigContext = createContext(false)
 
 function readStoredConfig(): CustomizerConfig {
   try {
@@ -28,6 +36,7 @@ function readStoredConfig(): CustomizerConfig {
 
 export function CustomizerProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfigState] = useState<CustomizerConfig>(DEFAULT_CONFIG)
+  const [preview, setPreviewState] = useState<Partial<CustomizerConfig> | null>(null)
 
   // The boot script applies the saved style before paint. Apply it again once
   // mounted: if React re-renders <html> (for example after a hydration mismatch
@@ -43,6 +52,7 @@ export function CustomizerProvider({ children }: { children: React.ReactNode }) 
       if (event.key !== CUSTOMIZER_STORAGE_KEY) return
       const next = readStoredConfig()
       applyConfigToDocument(next)
+      setPreviewState(null)
       setConfigState(next)
     }
     window.addEventListener('storage', onStorage)
@@ -50,6 +60,7 @@ export function CustomizerProvider({ children }: { children: React.ReactNode }) 
   }, [])
 
   const setConfig = useCallback((patch: Partial<CustomizerConfig>) => {
+    setPreviewState(null)
     setConfigState((current) => {
       const next = { ...current, ...patch }
       try {
@@ -64,7 +75,24 @@ export function CustomizerProvider({ children }: { children: React.ReactNode }) 
 
   const reset = useCallback(() => setConfig(DEFAULT_CONFIG), [setConfig])
 
-  const value = useMemo(() => ({ config, reset, setConfig }), [config, reset, setConfig])
+  const setPreview = useCallback(
+    (patch: Partial<CustomizerConfig> | null) => {
+      setPreviewState(patch)
+      applyConfigToDocument({ ...config, ...patch })
+    },
+    [config],
+  )
+
+  const value = useMemo(
+    () => ({
+      config,
+      previewConfig: preview ? { ...config, ...preview } : config,
+      reset,
+      setConfig,
+      setPreview,
+    }),
+    [config, preview, reset, setConfig, setPreview],
+  )
 
   return <CustomizerContext value={value}>{children}</CustomizerContext>
 }
@@ -75,7 +103,23 @@ export function useCustomizer() {
   return context
 }
 
-/** Falls back to defaults outside the provider, e.g. in isolated renders. */
-export function useCustomizerConfig(): CustomizerConfig {
+/** Renders its children with the saved choice, ignoring hover previews. */
+export function SavedCustomizerConfig({ children }: { children: React.ReactNode }) {
+  return <SavedConfigContext value>{children}</SavedConfigContext>
+}
+
+/** The saved choice, for code that shouldn't follow hover previews. */
+export function useSavedCustomizerConfig(): CustomizerConfig {
   return use(CustomizerContext)?.config ?? DEFAULT_CONFIG
+}
+
+/**
+ * The config to render with, including an option previewed on hover. Falls back
+ * to defaults outside the provider, e.g. in isolated renders.
+ */
+export function useCustomizerConfig(): CustomizerConfig {
+  const context = use(CustomizerContext)
+  const saved = use(SavedConfigContext)
+  if (!context) return DEFAULT_CONFIG
+  return saved ? context.config : context.previewConfig
 }

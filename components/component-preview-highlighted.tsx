@@ -6,12 +6,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { DEFAULT_CONFIG } from '@/lib/customizer'
+import { DEFAULT_CONFIG, siteChrome } from '@/lib/customizer'
 import { highlightTsx } from '@/lib/highlight-client'
 import { toProjectCode } from '@/lib/registry-code'
 import { cn } from '@/lib/utils'
 
-import { useCustomizerConfig } from './customizer/customizer-provider'
+import { useSavedCustomizerConfig } from './customizer/customizer-provider'
 import { ShadcnCliButton } from './shadcn-cli-button'
 
 interface ComponentPreviewHighlightedProps {
@@ -54,7 +54,8 @@ function loadVariant(
 }
 
 function useVariantCode(name: string, fallback: VariantCode) {
-  const { base, iconLibrary } = useCustomizerConfig()
+  // Not the hover preview, so hovering an icon library doesn't fetch its code.
+  const { base, iconLibrary } = useSavedCustomizerConfig()
   const isDefault =
     base === DEFAULT_CONFIG.base && iconLibrary === DEFAULT_CONFIG.iconLibrary
   const key = `${base}/${iconLibrary}`
@@ -95,9 +96,17 @@ export function ComponentPreviewHighlighted({
   }, [variant])
 
   return (
-    <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
+    <div
+      className={cn(
+        // Site chrome, so it keeps the default radius like the toolbar inside it.
+        'not-prose my-6 overflow-hidden rounded-[calc(var(--default-radius)+4px)] border',
+        className,
+      )}
+    >
       <Tabs defaultValue='preview' className='gap-0'>
-        <div className='bg-background flex flex-wrap items-center gap-2 border-b p-3'>
+        <div
+          {...siteChrome('bg-background flex flex-wrap items-center gap-2 border-b p-3')}
+        >
           <TabsList>
             <TabsTrigger value='preview'>Preview</TabsTrigger>
             <TabsTrigger value='code'>Code</TabsTrigger>

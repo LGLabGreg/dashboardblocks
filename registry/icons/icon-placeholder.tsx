@@ -3,7 +3,10 @@
 import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react'
 import { useEffect, useState } from 'react'
 
-import { useCustomizerConfig } from '@/components/customizer/customizer-provider'
+import {
+  useCustomizerConfig,
+  useSavedCustomizerConfig,
+} from '@/components/customizer/customizer-provider'
 
 import type { IconLibrary } from '@/lib/customizer'
 
@@ -37,7 +40,8 @@ function loadLibrary(library: Exclude<IconLibrary, 'lucide'>) {
   return pending[library]
 }
 
-function useIconModule(library: IconLibrary) {
+/** While a library loads, shows the fallback if it's loaded, else Lucide. */
+function useIconModule(library: IconLibrary, fallback: IconLibrary) {
   const [, setVersion] = useState(0)
   useEffect(() => {
     if (library === 'lucide' || loaded[library]) return
@@ -47,7 +51,8 @@ function useIconModule(library: IconLibrary) {
       active = false
     }
   }, [library])
-  return loaded[library] ? library : 'lucide'
+  if (loaded[library]) return library
+  return loaded[fallback] ? fallback : 'lucide'
 }
 
 function IconPlaceholder({
@@ -59,7 +64,8 @@ function IconPlaceholder({
   ...props
 }: IconPlaceholderProps) {
   const { iconLibrary } = useCustomizerConfig()
-  const library = useIconModule(iconLibrary)
+  // A library previewed on hover may still be loading; keep the saved one until then.
+  const library = useIconModule(iconLibrary, useSavedCustomizerConfig().iconLibrary)
   const names: Record<IconLibrary, string> = {
     hugeicons,
     lucide: lucideName,
