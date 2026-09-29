@@ -4,6 +4,7 @@
 
 - Do not add a "Generated with Claude Code" footer or a Claude session link to pull request descriptions.
 - Do not add `Co-Authored-By: Claude …` or `Claude-Session: …` trailers to commit messages.
+- Commit as the user, not as Claude. In cloud sessions, set the git author and committer to the user's GitHub noreply identity (`<id>+<login>@users.noreply.github.com`, from the GitHub `get_me` tool). Don't use the email address from the session context.
 - The GitHub tool appends that footer when it creates a pull request. Right after creating one, read the description back and update it to remove the footer.
 
 ## Fresh-eyes verification (cloud agents)

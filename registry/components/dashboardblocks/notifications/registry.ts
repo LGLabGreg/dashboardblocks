@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'notifications-01',
     type: 'registry:component',
-    registryDependencies: ['button', registryUrl('notifications')],
+    registryDependencies: ['button', registryUrl('link'), registryUrl('notifications')],
     files: [
       {
         path: 'registry/components/dashboardblocks/notifications/notifications-01.tsx',

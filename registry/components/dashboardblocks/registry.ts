@@ -82,6 +82,7 @@ export const components: Registry['items'] = [
       'kbd',
       'progress',
       'sidebar',
+      registryUrl('link'),
     ],
     files: [
       {
@@ -476,6 +477,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'link',
+    type: 'registry:component',
+    title: 'Link',
+    description:
+      "A link provider that makes every primitive render your router's link, for client-side navigation, with plain anchors as the default.",
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/link.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'metric-list',
     type: 'registry:component',
     title: 'Metric List',
@@ -495,7 +509,12 @@ export const components: Registry['items'] = [
     title: 'Notifications',
     description:
       'Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.',
-    registryDependencies: ['button', 'popover', registryUrl('activity-feed')],
+    registryDependencies: [
+      'button',
+      'popover',
+      registryUrl('activity-feed'),
+      registryUrl('link'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/notifications.tsx',
@@ -509,7 +528,7 @@ export const components: Registry['items'] = [
     title: 'Page Header',
     description:
       'Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.',
-    registryDependencies: ['button', 'dropdown-menu'],
+    registryDependencies: ['button', 'dropdown-menu', registryUrl('link')],
     files: [
       {
         path: 'registry/components/dashboardblocks/page-header.tsx',
@@ -869,6 +888,7 @@ export const components: Registry['items'] = [
       'input',
       'native-select',
       registryUrl('forms'),
+      registryUrl('link'),
     ],
     files: [
       {

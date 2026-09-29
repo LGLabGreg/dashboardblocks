@@ -1,5 +1,6 @@
 'use client'
 
+import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type AppNotification,
   NotificationBell,
@@ -144,12 +145,12 @@ const Notifications1 = (props: Notifications1Props) => {
             />
           ))}
         </NotificationList>
-        <a
+        <Link
           href={viewAllHref}
           className='hover:bg-muted/50 focus-visible:bg-muted/50 rounded-b-[inherit] px-4 py-2.5 text-center text-sm font-medium outline-none'
         >
           View all notifications
-        </a>
+        </Link>
       </NotificationBell>
     </div>
   )

@@ -7,6 +7,7 @@ import {
   StepIndicator,
   stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { ActionCard } from '@/registry/components/dashboardblocks/onboarding'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -221,7 +222,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
               can be ready in minutes.
             </p>
           </div>
-          <a
+          <Link
             href={tourHref}
             className={cn(
               buttonVariants({ variant: 'outline' }),
@@ -237,7 +238,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
               data-icon='inline-start'
             />
             Watch the tour
-          </a>
+          </Link>
         </header>
         <div className='grid gap-8 @4xl/page:grid-cols-[minmax(0,1fr)_20rem]'>
           <div className='flex flex-col gap-8'>
@@ -285,12 +286,12 @@ const Onboarding2 = (props: Onboarding2Props) => {
                   title='No dashboards yet'
                   description='Dashboards you build or start from a template show up here.'
                   action={
-                    <a
+                    <Link
                       href={templatesHref}
                       className={buttonVariants({ size: 'sm', variant: 'outline' })}
                     >
                       Browse templates
-                    </a>
+                    </Link>
                   }
                 />
               </div>
@@ -332,7 +333,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
                         state={task.state}
                       />
                       {task.href && task.state !== 'done' ? (
-                        <a
+                        <Link
                           href={task.href}
                           className={cn(
                             'hover:underline',
@@ -340,7 +341,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
                           )}
                         >
                           {task.title}
-                        </a>
+                        </Link>
                       ) : (
                         <span className='text-muted-foreground'>{task.title}</span>
                       )}
@@ -359,7 +360,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
               <ul className='flex flex-col gap-1'>
                 {help.map((link) => (
                   <li key={link.id}>
-                    <a
+                    <Link
                       href={link.href}
                       className='hover:bg-muted/50 focus-visible:ring-ring/50 -mx-2 flex items-center gap-3 rounded-md p-2 outline-none focus-visible:ring-3'
                     >
@@ -375,7 +376,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
                           {link.description}
                         </span>
                       </span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

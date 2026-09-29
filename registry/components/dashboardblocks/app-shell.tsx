@@ -1,9 +1,8 @@
 'use client'
 
-/* oxlint-disable jsx-a11y/control-has-associated-label -- anchors passed to `render` take their text from the children */
-
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { Fragment, type ReactNode, useEffect } from 'react'
+import { Fragment, type ReactNode, useEffect, useState } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -48,7 +47,7 @@ import { cn } from '@/lib/utils'
 
 /*
  * Links are plain anchors, so the shell works with any router. For client-side
- * navigation, render your router's link instead of <a>.
+ * navigation, wrap your app in `LinkProvider` with your router's link.
  */
 
 interface NavLink {
@@ -71,6 +70,17 @@ interface NavItem {
 interface NavSection {
   items: NavItem[]
   label?: string
+}
+
+/**
+ * Closes the mobile sidebar when a link in it is clicked. A router's link
+ * navigates without reloading the page, so the sheet would otherwise stay open.
+ */
+function useCloseMobileSidebar() {
+  const { isMobile, setOpenMobile } = useSidebar()
+  return () => {
+    if (isMobile) setOpenMobile(false)
+  }
 }
 
 /** Whether `href` is the current page or one of its parents. */
@@ -116,6 +126,16 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
 
 function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const { setOpen, state } = useSidebar()
+  const closeMobile = useCloseMobileSidebar()
+  const childActive =
+    item.items?.some((child) => isActiveHref(child.href, pathname)) ?? false
+  // Open the group when navigation moves into it, which a router does without a remount.
+  const [expanded, setExpanded] = useState(childActive)
+  const [wasChildActive, setWasChildActive] = useState(childActive)
+  if (childActive !== wasChildActive) {
+    setWasChildActive(childActive)
+    if (childActive) setExpanded(true)
+  }
 
   if (!item.items?.length) {
     const active = item.href !== undefined && isActiveHref(item.href, pathname)
@@ -125,9 +145,10 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           isActive={active}
           tooltip={item.title}
           render={
-            <a
+            <Link
               href={item.href}
               aria-current={item.href === pathname ? 'page' : undefined}
+              onClick={closeMobile}
             />
           }
         >
@@ -139,10 +160,10 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
     )
   }
 
-  const childActive = item.items.some((child) => isActiveHref(child.href, pathname))
   return (
     <Collapsible
-      defaultOpen={childActive}
+      open={expanded}
+      onOpenChange={setExpanded}
       className='group/collapsible'
       render={<SidebarMenuItem />}
     >
@@ -171,7 +192,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           {item.items.map((child) => (
             <SidebarMenuSubItem key={child.href}>
               <SidebarMenuSubButton
-                href={child.href}
+                render={<Link href={child.href} onClick={closeMobile} />}
                 isActive={isActiveHref(child.href, pathname)}
                 aria-current={child.href === pathname ? 'page' : undefined}
               >
@@ -200,10 +221,11 @@ interface AppBrandProps {
 
 /** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
+  const closeMobile = useCloseMobileSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' render={<a href={href} />}>
+        <SidebarMenuButton size='lg' render={<Link href={href} onClick={closeMobile} />}>
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -366,7 +388,12 @@ function UserSummary({ user }: { user: AppUser }) {
   )
 }
 
-function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
+function UserMenuItems({
+  links,
+  onNavigate,
+  onSignOut,
+  user,
+}: UserMenuProps & { onNavigate?: () => void }) {
   return (
     <>
       <DropdownMenuGroup>
@@ -376,15 +403,22 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
         </DropdownMenuLabel>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuGroup>
-        {links.map((link) => (
-          <DropdownMenuItem key={link.href} render={<a href={link.href} />}>
-            {link.icon}
-            {link.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuGroup>
-      <DropdownMenuSeparator />
+      {links.length > 0 && (
+        <>
+          <DropdownMenuGroup>
+            {links.map((link) => (
+              <DropdownMenuItem
+                key={link.href}
+                render={<Link href={link.href} onClick={onNavigate} />}
+              >
+                {link.icon}
+                {link.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+        </>
+      )}
       <DropdownMenuItem onClick={onSignOut}>
         <IconPlaceholder
           lucide='LogOutIcon'
@@ -402,6 +436,7 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
 /** The signed-in user at the bottom of the sidebar, with account links and sign out. */
 function SidebarUserMenu(props: UserMenuProps) {
   const { isMobile } = useSidebar()
+  const closeMobile = useCloseMobileSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -425,7 +460,7 @@ function SidebarUserMenu(props: UserMenuProps) {
             align='end'
             side={isMobile ? 'bottom' : 'right'}
           >
-            <UserMenuItems {...props} />
+            <UserMenuItems {...props} onNavigate={closeMobile} />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
@@ -494,7 +529,9 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
                 {last || !item.href ? (
                   <BreadcrumbPage className='truncate'>{item.label}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                  <BreadcrumbLink render={<Link href={item.href} />}>
+                    {item.label}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
               {!last && <BreadcrumbSeparator className='hidden md:inline-flex' />}
@@ -593,8 +630,9 @@ interface PlanUsageProps {
 
 const countFormatter = new Intl.NumberFormat('en-US')
 
-/** Usage against the plan's limit, in the sidebar footer. Hidden when the sidebar collapses to icons. */
+/** Usage against the plan's limit, in the sidebar footer, inside `SidebarProvider`. Hidden when the sidebar collapses to icons. */
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
+  const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
   return (
     <div className='bg-background flex flex-col gap-3 rounded-lg border p-3 text-sm group-data-[collapsible=icon]:hidden'>
@@ -606,9 +644,13 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
       </div>
       <Progress value={percent} aria-label={`${title}: ${Math.round(percent)}% used`} />
       {action && (
-        <a href={action.href} className={buttonVariants({ size: 'sm' })}>
+        <Link
+          href={action.href}
+          onClick={closeMobile}
+          className={buttonVariants({ size: 'sm' })}
+        >
           {action.label}
-        </a>
+        </Link>
       )}
     </div>
   )
@@ -633,7 +675,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
       {items.map((item) => {
         const active = isActiveHref(item.href, pathname)
         return (
-          <a
+          <Link
             key={item.href}
             href={item.href}
             aria-current={item.href === pathname ? 'page' : undefined}
@@ -646,7 +688,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
                 {item.badge}
               </span>
             )}
-          </a>
+          </Link>
         )
       })}
     </nav>

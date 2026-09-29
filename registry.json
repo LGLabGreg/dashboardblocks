@@ -79,7 +79,8 @@
         "dropdown-menu",
         "kbd",
         "progress",
-        "sidebar"
+        "sidebar",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -511,6 +512,18 @@
       ]
     },
     {
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "A link provider that makes every primitive render your router's link, for client-side navigation, with plain anchors as the default.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/link.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "metric-list",
       "type": "registry:component",
       "title": "Metric List",
@@ -534,7 +547,8 @@
       "registryDependencies": [
         "button",
         "popover",
-        "https://www.dashboardblocks.com/r/activity-feed.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -550,7 +564,8 @@
       "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.",
       "registryDependencies": [
         "button",
-        "dropdown-menu"
+        "dropdown-menu",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -918,7 +933,8 @@
         "field",
         "input",
         "native-select",
-        "https://www.dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -3929,7 +3945,8 @@
       "name": "app-shell-04",
       "type": "registry:component",
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/app-shell.json"
+        "https://www.dashboardblocks.com/r/app-shell.json",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -4136,6 +4153,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
+        "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/notifications.json"
       ],
       "files": [
@@ -4567,6 +4585,7 @@
         "input-group",
         "https://www.dashboardblocks.com/r/checklist.json",
         "https://www.dashboardblocks.com/r/forms.json",
+        "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/onboarding.json"
       ],
       "files": [
@@ -4585,6 +4604,7 @@
         "card",
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/onboarding.json",
         "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
@@ -4606,6 +4626,7 @@
         "input-group",
         "native-select",
         "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/onboarding.json"
       ],
       "files": [

@@ -10,6 +10,7 @@ import {
   UserMenu,
   type UserMenuLink,
 } from '@/registry/components/dashboardblocks/app-shell'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
@@ -90,7 +91,7 @@ const AppShell4 = (props: AppShell4Props) => {
       <header className='bg-background sticky top-0 z-10 border-b'>
         <div className='flex h-14 items-center gap-2 px-4 md:px-6'>
           {/* oxlint-disable-next-line nextjs/no-html-link-for-pages -- blocks work with any router */}
-          <a href='/' className='flex items-center gap-2 text-sm font-medium'>
+          <Link href='/' className='flex items-center gap-2 text-sm font-medium'>
             <BrandMark>
               <IconPlaceholder
                 lucide='BlocksIcon'
@@ -101,7 +102,7 @@ const AppShell4 = (props: AppShell4Props) => {
               />
             </BrandMark>
             <span className='max-sm:sr-only'>Orbit</span>
-          </a>
+          </Link>
           <div className='ml-auto flex items-center gap-2'>
             <SearchButton onOpen={onSearch} />
             <NotificationsButton

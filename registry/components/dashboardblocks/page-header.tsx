@@ -1,5 +1,6 @@
 'use client'
 
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, type ReactNode } from 'react'
 
@@ -16,7 +17,7 @@ import { cn } from '@/lib/utils'
 
 /*
  * Links are plain anchors, so the header works with any router. For
- * client-side navigation, render your router's link instead of <a>.
+ * client-side navigation, wrap your app in `LinkProvider` with your router's link.
  */
 
 /** The top of a page: put a back link, the heading, actions, meta and tabs in it. */
@@ -144,7 +145,7 @@ function BackLink({
   href: string
 }) {
   return (
-    <a
+    <Link
       href={href}
       className={cn(
         'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 -ml-1 inline-flex w-fit items-center gap-1 rounded-md px-1 text-sm outline-none focus-visible:ring-[3px] [&_svg]:size-4',
@@ -159,7 +160,7 @@ function BackLink({
         remixicon='RiArrowLeftSLine'
       />
       {children}
-    </a>
+    </Link>
   )
 }
 
@@ -190,7 +191,7 @@ function PageTabs({
         {items.map((item) => {
           const active = item.href === pathname
           return (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               aria-current={active ? 'page' : undefined}
@@ -203,7 +204,7 @@ function PageTabs({
                   {item.badge}
                 </span>
               )}
-            </a>
+            </Link>
           )
         })}
       </div>

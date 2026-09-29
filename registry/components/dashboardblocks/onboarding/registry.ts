@@ -14,6 +14,7 @@ export const examples: Registry['items'] = [
       'input-group',
       registryUrl('checklist'),
       registryUrl('forms'),
+      registryUrl('link'),
       registryUrl('onboarding'),
     ],
     files: [
@@ -32,6 +33,7 @@ export const examples: Registry['items'] = [
       'card',
       registryUrl('block-state'),
       registryUrl('checklist'),
+      registryUrl('link'),
       registryUrl('onboarding'),
       registryUrl('progress-bar'),
     ],
@@ -53,6 +55,7 @@ export const examples: Registry['items'] = [
       'input-group',
       'native-select',
       registryUrl('block-state'),
+      registryUrl('link'),
       registryUrl('onboarding'),
     ],
     files: [

@@ -49,7 +49,11 @@ function renameAttribute(element: JsxOpening, from: string, to: string) {
  * The reverse of what the shadcn CLI does when installing into a Base UI project.
  */
 function renderToAsChild(file: SourceFile) {
-  for (let pass = 0; pass < 10; pass++) {
+  // Each pass removes one render prop, so this many passes always finish.
+  const renderProps = file
+    .getDescendantsOfKind(SyntaxKind.JsxAttribute)
+    .filter((item) => item.getNameNode().getText() === 'render').length
+  for (let pass = 0; pass <= renderProps; pass++) {
     const element = file
       .getDescendantsOfKind(SyntaxKind.JsxElement)
       .find((candidate) => attribute(candidate.getOpeningElement(), 'render'))
