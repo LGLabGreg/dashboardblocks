@@ -1,5 +1,5 @@
 export const IS_PRODUCTION = process.env.VERCEL_ENV === 'production'
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://dashboardblocks.com'
 
 export const REGISTRY_BASE_URL =
   process.env.REGISTRY_BASE_URL ??
@@ -14,24 +14,28 @@ export function registryUrl(componentName: string): string {
 export const siteConfig = {
   name: 'Dashboardblocks',
   url: APP_URL,
-  description: 'Beautifully designed dashboard blocks.',
+  title: 'Dashboardblocks – Dashboard blocks for shadcn/ui and React',
+  description:
+    'Open-source dashboard blocks for shadcn/ui: KPI cards, charts, data tables, usage meters and activity feeds. Install with the shadcn CLI and own the code.',
   keywords: [
-    'Next.js',
-    'React',
-    'Tailwind CSS',
-    'Components',
     'shadcn',
-    'Dashboard',
-    'Blocks',
-    'Dashboard Blocks',
-    'Dashboard Blocks UI',
-    'Dashboard Blocks Components',
-    'Dashboard Blocks Examples',
-    'Dashboard Blocks Documentation',
-    'Dashboard Blocks API',
-    'Dashboard Blocks SDK',
-    'Dashboard Blocks Library',
+    'shadcn/ui',
+    'shadcn blocks',
+    'shadcn dashboard',
+    'dashboard blocks',
+    'dashboard components',
+    'dashboard template',
+    'admin dashboard',
+    'React',
+    'Next.js',
+    'Tailwind CSS',
+    'Base UI',
+    'Radix UI',
+    'React Aria',
+    'KPI cards',
+    'charts',
+    'data table',
   ],
   creator: 'LGLab',
-  ogImage: `${APP_URL}/opengraph-image.png`,
+  ogImage: '/og/image.png',
 }
