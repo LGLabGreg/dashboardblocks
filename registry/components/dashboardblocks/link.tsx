@@ -32,11 +32,16 @@ function LinkProvider({ children, component }: LinkProviderProps) {
   return <LinkContext.Provider value={component}>{children}</LinkContext.Provider>
 }
 
-/** An in-app link: the provider's component, or a plain anchor without one. */
-function Link(props: LinkProps) {
+/**
+ * An in-app link: the provider's component, or a plain anchor without one.
+ * Without `href` it's an anchor that goes nowhere, as `<a>` without one is.
+ */
+function Link({ href, ...props }: Omit<LinkProps, 'href'> & { href?: string }) {
   const Component = useContext(LinkContext)
+  // oxlint-disable-next-line jsx-a11y/anchor-has-content -- the content comes in `children`
+  if (href === undefined) return <a {...props} />
   // oxlint-disable-next-line react/static-components -- it comes from context, so it's the same component on every render
-  return <Component {...props} />
+  return <Component href={href} {...props} />
 }
 
 export { Link, LinkProvider }

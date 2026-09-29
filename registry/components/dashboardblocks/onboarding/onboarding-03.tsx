@@ -1,6 +1,7 @@
 'use client'
 
 import { BlockMessage } from '@/registry/components/dashboardblocks/block-state'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type ChoiceCardOption,
   ChoiceCards,
@@ -312,12 +313,12 @@ const Onboarding3 = (props: Onboarding3Props) => {
           <CardFooter className='flex-col items-stretch gap-3 border-t @md:flex-row @md:items-center @md:justify-between'>
             <p className='text-muted-foreground text-sm'>
               Can&apos;t find yours?{' '}
-              <a
+              <Link
                 href={requestHref}
                 className='text-foreground font-medium underline underline-offset-4'
               >
                 Request a source
-              </a>
+              </Link>
             </p>
             <Button type='submit'>{source ? `Connect ${source.name}` : 'Connect'}</Button>
           </CardFooter>

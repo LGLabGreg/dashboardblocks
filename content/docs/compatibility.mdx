@@ -47,7 +47,7 @@ URLs without a library, such as `https://www.dashboardblocks.com/r/kpi-01.json`,
 
 ## Routers
 
-By default, the links in the App Shell, Page Header, Notifications and Onboarding primitives are plain `<a>` elements, so blocks work in any React app. With a client-side router, pass its link to `LinkProvider` once, near the root, and those links navigate without reloading the page. `LinkProvider` comes with the blocks that need it.
+By default, the links in the App Shell, Page Header, Notifications and Onboarding blocks are plain `<a>` elements, so blocks work in any React app. With a client-side router, pass its link to `LinkProvider` once, near the root, and those links navigate without reloading the page. `LinkProvider` comes with the blocks that need it.
 
 Next.js's `Link` takes `href`, so pass it as it is, from a client component:
 
@@ -60,6 +60,16 @@ import { LinkProvider } from '@/components/dashboardblocks/link'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return <LinkProvider component={NextLink}>{children}</LinkProvider>
+}
+```
+
+With `typedRoutes` on, Next.js's `Link` only takes known routes, so wrap it and pass `href` as a `Route`:
+
+```tsx
+import type { Route } from 'next'
+
+function Link({ href, ...props }: LinkProps) {
+  return <NextLink href={href as Route} {...props} />
 }
 ```
 
@@ -78,6 +88,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return <LinkProvider component={Link}>{children}</LinkProvider>
 }
 ```
+
+The App Shell and Page Header mark the current page from the `pathname` you pass them. Pass your router's, such as Next.js's `usePathname()`, so the active link follows navigation. The mobile sidebar and the notifications panel close when one of their links is followed.
 
 With React Aria, the App Shell's sidebar, menu and breadcrumb links are React Aria links, which navigate through its [`RouterProvider`](https://react-spectrum.adobe.com/react-aria/routing.html). Wrap your app in both.
 

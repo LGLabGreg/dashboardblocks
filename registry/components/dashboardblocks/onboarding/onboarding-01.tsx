@@ -7,6 +7,7 @@ import {
   FormSteps,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type ChoiceCardOption,
   ChoiceCards,
@@ -296,7 +297,7 @@ const Onboarding1 = (props: Onboarding1Props) => {
           </li>
         </ul>
         <div className='mt-8 flex flex-wrap gap-2'>
-          <a href={`/${values.slug}`} className={buttonVariants()}>
+          <Link href={`/${values.slug}`} className={buttonVariants()}>
             Open {values.name}
             <IconPlaceholder
               lucide='ArrowRightIcon'
@@ -306,7 +307,7 @@ const Onboarding1 = (props: Onboarding1Props) => {
               remixicon='RiArrowRightLine'
               data-icon='inline-end'
             />
-          </a>
+          </Link>
           <Button variant='ghost' onClick={startOver}>
             Start over
           </Button>

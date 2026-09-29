@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/notifications.tsx for React Aria
-// source-hash: e63ea5dcba1e
+// source-hash: c53a9d6954f8
 
 'use client'
 
@@ -11,7 +11,7 @@ import {
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import type { ReactNode } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import { Dialog } from 'react-aria-components'
 
 import { Button } from '@/components/ui/button'
@@ -41,6 +41,18 @@ interface NotificationBellProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
   unreadCount: number
+}
+
+/** A plain click on a link, which navigates in this tab rather than opening a new one. */
+function isLinkClick(event: MouseEvent) {
+  return (
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey &&
+    event.target instanceof Element &&
+    event.target.closest('a[href]') !== null
+  )
 }
 
 /** A bell button with a count of unread notifications, opening a panel of them. */
@@ -79,7 +91,17 @@ function NotificationBell({
         className={cn('w-96 max-w-[calc(100vw-2rem)] gap-0 p-0', className)}
       >
         <Dialog aria-label='Notifications' className='flex flex-col outline-none'>
-          {children}
+          {({ close }) => (
+            // A router's link doesn't reload the page, so close the panel when one is followed.
+            <div
+              className='contents'
+              onClick={(event) => {
+                if (isLinkClick(event)) close()
+              }}
+            >
+              {children}
+            </div>
+          )}
         </Dialog>
       </Popover>
     </PopoverTrigger>

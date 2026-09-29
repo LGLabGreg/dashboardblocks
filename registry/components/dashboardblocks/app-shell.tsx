@@ -73,6 +73,17 @@ interface NavSection {
 }
 
 /** Whether `href` is the current page or one of its parents. */
+/**
+ * Closes the mobile sidebar when a link in it is clicked. A router's link
+ * navigates without reloading the page, so the sheet would otherwise stay open.
+ */
+function useCloseMobileSidebar() {
+  const { isMobile, setOpenMobile } = useSidebar()
+  return () => {
+    if (isMobile) setOpenMobile(false)
+  }
+}
+
 function isActiveHref(href: string, pathname: string) {
   if (href === pathname) return true
   return href !== '/' && pathname.startsWith(`${href.replace(/\/$/, '')}/`)
@@ -115,6 +126,7 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
 
 function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const { setOpen, state } = useSidebar()
+  const closeMobile = useCloseMobileSidebar()
 
   if (!item.items?.length) {
     const active = item.href !== undefined && isActiveHref(item.href, pathname)
@@ -125,8 +137,9 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           tooltip={item.title}
           render={
             <Link
-              href={item.href ?? ''}
+              href={item.href}
               aria-current={item.href === pathname ? 'page' : undefined}
+              onClick={closeMobile}
             />
           }
         >
@@ -170,7 +183,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           {item.items.map((child) => (
             <SidebarMenuSubItem key={child.href}>
               <SidebarMenuSubButton
-                render={<Link href={child.href} />}
+                render={<Link href={child.href} onClick={closeMobile} />}
                 isActive={isActiveHref(child.href, pathname)}
                 aria-current={child.href === pathname ? 'page' : undefined}
               >
@@ -199,10 +212,11 @@ interface AppBrandProps {
 
 /** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
+  const closeMobile = useCloseMobileSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' render={<Link href={href} />}>
+        <SidebarMenuButton size='lg' render={<Link href={href} onClick={closeMobile} />}>
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -365,7 +379,12 @@ function UserSummary({ user }: { user: AppUser }) {
   )
 }
 
-function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
+function UserMenuItems({
+  links,
+  onNavigate,
+  onSignOut,
+  user,
+}: UserMenuProps & { onNavigate?: () => void }) {
   return (
     <>
       <DropdownMenuGroup>
@@ -379,7 +398,10 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
         <>
           <DropdownMenuGroup>
             {links.map((link) => (
-              <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
+              <DropdownMenuItem
+                key={link.href}
+                render={<Link href={link.href} onClick={onNavigate} />}
+              >
                 {link.icon}
                 {link.label}
               </DropdownMenuItem>
@@ -405,6 +427,7 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
 /** The signed-in user at the bottom of the sidebar, with account links and sign out. */
 function SidebarUserMenu(props: UserMenuProps) {
   const { isMobile } = useSidebar()
+  const closeMobile = useCloseMobileSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -428,7 +451,7 @@ function SidebarUserMenu(props: UserMenuProps) {
             align='end'
             side={isMobile ? 'bottom' : 'right'}
           >
-            <UserMenuItems {...props} />
+            <UserMenuItems {...props} onNavigate={closeMobile} />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
@@ -600,6 +623,7 @@ const countFormatter = new Intl.NumberFormat('en-US')
 
 /** Usage against the plan's limit, in the sidebar footer. Hidden when the sidebar collapses to icons. */
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
+  const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
   return (
     <div className='bg-background flex flex-col gap-3 rounded-lg border p-3 text-sm group-data-[collapsible=icon]:hidden'>
@@ -611,7 +635,11 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
       </div>
       <Progress value={percent} aria-label={`${title}: ${Math.round(percent)}% used`} />
       {action && (
-        <Link href={action.href} className={buttonVariants({ size: 'sm' })}>
+        <Link
+          href={action.href}
+          onClick={closeMobile}
+          className={buttonVariants({ size: 'sm' })}
+        >
           {action.label}
         </Link>
       )}
