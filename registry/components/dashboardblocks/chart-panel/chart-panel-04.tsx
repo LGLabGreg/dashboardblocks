@@ -106,7 +106,7 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
               <YAxis
                 {...chartAxisProps}
                 tickFormatter={(value: number) => formatCompact(value)}
-                width={40}
+                width={48}
               />
               <Tooltip
                 content={(tooltipProps) => (

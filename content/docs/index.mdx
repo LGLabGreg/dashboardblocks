@@ -22,7 +22,7 @@ Full dashboards composed from the blocks, with header filters that scope every b
 
 Each dashboard is a single component you can install and adapt. Its header controls one query: the date range, comparison and filters. Every block below re-renders from that query, so the numbers always agree. While new data loads, the blocks stay in place, dimmed, instead of flashing skeletons.
 
-The data comes from one function in each file (`buildStoreData`, `buildSaasData` and `buildAnalyticsData`). Replace it with your own queries; the blocks only need their props.
+The data comes from one function in each file (`buildStoreData`, `buildSaasData`, `buildAnalyticsData` and `buildCrmData`). Replace it with your own queries; the blocks only need their props.
 
 ### Store
 
@@ -52,4 +52,14 @@ Visitors, page views and bounce rate as metric tabs, visitors right now, a traff
 
 ```bash
 npx shadcn@latest add @dashboardblocks/dashboard-03
+```
+
+### CRM
+
+Bookings, win rate, deal size and sales cycle with sparklines, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep against quota, deal activity and stuck deals. Filter by date range and segment.
+
+[Open the CRM dashboard](/docs/examples/crm)
+
+```bash
+npx shadcn@latest add @dashboardblocks/dashboard-04
 ```
