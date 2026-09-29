@@ -3,6 +3,8 @@ import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/config'
 import { source } from '@/lib/source'
 
+export const dynamic = 'force-static'
+
 const baseUrl = siteConfig.url
 
 export default function sitemap(): MetadataRoute.Sitemap {

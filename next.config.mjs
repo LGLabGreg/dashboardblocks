@@ -6,28 +6,9 @@ const withMDX = createMDX()
 const config = {
   reactStrictMode: true,
   reactCompiler: true,
-  async rewrites() {
-    return [
-      // `"@dashboardblocks": "https://www.dashboardblocks.com/r/{style}/{name}.json"` in
-      // components.json resolves each block for the project's component library.
-      {
-        source: '/r/:base(base|radix|aria)-:style/:name.json',
-        destination: '/r/:base/:name.json',
-      },
-      // Styles from before the base-* and radix-* names are built on Radix UI.
-      {
-        source: '/r/:style(new-york|new-york-v4|default)/:name.json',
-        destination: '/r/radix/:name.json',
-      },
-    ]
-  },
-  async redirects() {
-    return [
-      { source: '/examples', destination: '/docs#dashboards', permanent: true },
-      { source: '/examples/:slug', destination: '/docs/examples/:slug', permanent: true },
-      { source: '/docs/examples', destination: '/docs#dashboards', permanent: true },
-    ]
-  },
+  // Plain static files: Vercel serves them without touching the ISR cache.
+  // Rewrites and redirects live in vercel.json.
+  output: 'export',
 }
 
 export default withMDX(config)
