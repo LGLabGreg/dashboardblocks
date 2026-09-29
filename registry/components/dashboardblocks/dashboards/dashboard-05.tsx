@@ -30,6 +30,8 @@ import { Status2 } from '@/registry/components/dashboardblocks/status/status-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
 
+import { cn } from '@/lib/utils'
+
 /*
  * A DevOps dashboard: the service filter scopes every block but live
  * throughput, which covers all services. The date range scopes delivery
@@ -118,6 +120,14 @@ const INCIDENTS: {
     slowdown: 1.15,
     status: 'partial',
     uptime: 99.2,
+  },
+  {
+    daysAgo: 0,
+    note: 'Slow responses in us-east-1',
+    service: 'Web app',
+    slowdown: 2.2,
+    status: 'degraded',
+    uptime: 99.8,
   },
   {
     daysAgo: 3,
@@ -644,7 +654,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
       <BlockBusy
         busy={busy}
         label='Updating the dashboard'
-        className='grid grid-cols-1 gap-4 @4xl:grid-cols-3'
+        className='grid grid-flow-dense grid-cols-1 gap-4 @4xl:grid-cols-3'
       >
         <div className='grid @4xl:col-span-3'>
           <Deployments3
@@ -670,9 +680,9 @@ const Dashboard5 = (props: Dashboard5Props) => {
             trend={data.latencyTrend}
           />
         </div>
-        {/* Spans the response time and uptime rows. Acknowledged alerts stay
-            acknowledged when the filter changes, since their ids don't. */}
-        <div className='grid @4xl:row-span-2'>
+        {/* A long list spans the response time and uptime rows. Acknowledged
+            alerts stay acknowledged when the filter changes, since their ids don't. */}
+        <div className={cn('grid', data.alerts.length > 3 && '@4xl:row-span-2')}>
           <Alerts1 alerts={data.alerts} now={data.now} title='Open alerts' />
         </div>
         <div className='grid @4xl:col-span-2'>
@@ -682,7 +692,14 @@ const Dashboard5 = (props: Dashboard5Props) => {
             title='Uptime'
           />
         </div>
-        <div className='grid @4xl:col-span-2'>
+        {/* With a short alert list, build health moves up beside uptime and
+            deployments take the full width. */}
+        <div
+          className={cn(
+            'grid',
+            data.alerts.length > 3 ? '@4xl:col-span-2' : '@4xl:col-span-3',
+          )}
+        >
           <Deployments1
             deployments={data.deployments}
             description={`${data.serviceName}: the latest deploys to every environment`}
