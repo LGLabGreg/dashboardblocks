@@ -18,6 +18,9 @@ const chartAxisProps = {
   tick: { fill: 'var(--color-muted-foreground)', fontSize: 12 },
 } as const
 
+/** Room for compact value labels up to "999.9K" beside the value axis. */
+const chartValueAxisWidth = 48
+
 /** Solid hairline gridlines on the value axis only. */
 const chartGridProps = {
   stroke: 'var(--color-border)',
@@ -206,6 +209,7 @@ export {
   ChartPanelTooltip,
   chartAxisProps,
   chartGridProps,
+  chartValueAxisWidth,
   formatCompact,
 }
 

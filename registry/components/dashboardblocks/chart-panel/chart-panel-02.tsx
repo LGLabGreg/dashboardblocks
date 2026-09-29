@@ -7,6 +7,7 @@ import {
   type ChartValueFormatter,
   chartAxisProps,
   chartGridProps,
+  chartValueAxisWidth,
   formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -132,7 +133,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
                       tickFormatter={(value: number) =>
                         metric.formatter ? metric.formatter(value) : formatCompact(value)
                       }
-                      width={40}
+                      width={chartValueAxisWidth}
                     />
                     <Tooltip
                       content={(tooltipProps) => (

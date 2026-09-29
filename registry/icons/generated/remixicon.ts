@@ -20,6 +20,7 @@ export {
   RiBarChartLine,
   RiBookOpenLine,
   RiBox3Line,
+  RiBuildingLine,
   RiCalendarLine,
   RiCalendarScheduleLine,
   RiChat1Line,

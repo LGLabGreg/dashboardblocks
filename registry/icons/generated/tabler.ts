@@ -18,6 +18,7 @@ export {
   IconBellRinging,
   IconBolt,
   IconBook,
+  IconBuilding,
   IconBulb,
   IconCalendar,
   IconCalendarTime,

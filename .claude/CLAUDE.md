@@ -6,6 +6,19 @@
 - Do not add `Co-Authored-By: Claude …` or `Claude-Session: …` trailers to commit messages.
 - The GitHub tool appends that footer when it creates a pull request. Right after creating one, read the description back and update it to remove the footer.
 
+## Fresh-eyes verification (cloud agents)
+
+When you run in the cloud (`CLAUDE_CODE_REMOTE=true`, as in Claude Code on the web), have a subagent verify every change before you finish. It checks the code and how the result looks and behaves, not just the diff.
+
+When the work is done and your own checks pass, launch one subagent with none of your session's context. Run `git fetch origin main` first, then give it the branch, the base (`git diff origin/main...HEAD`) and one line on what the change is for. Ask it to report findings without editing files, each with file and line or a screenshot, and to cover:
+
+- **Code:** bugs, edge cases (empty data, zero, one item, long text, dates at month or quarter boundaries), rules from this file and `AGENTS.md`, types, accessibility (labels, roles, focus order, state not shown by colour alone), and anything that would confuse a reader.
+- **Checks:** run `pnpm lint`, `pnpm format:check`, `pnpm types:check` and `pnpm registry:build`, and report any failure. The build also regenerates `registry/icons/generated/`, which the dev server needs for new icon names, so run the build, then the UI pass, then restore what the build wrote. The restore is part of the check and the only file change allowed: `git checkout -- public/r registry.json registry/icons/generated && git clean -fdq public/r`. Afterwards `git status` should show nothing beyond what was uncommitted before the build.
+- **UI:** use the dev server if one is running (check its port), or start `pnpm dev`. Open every changed page or block with Playwright: it's installed globally (load it from `$(npm root -g)/playwright`) and Chromium is preconfigured, so don't run `playwright install`. Take screenshots at 360, 768 and 1280px wide, in light and dark mode (Playwright's `colorScheme: 'dark'` switches the site's theme), and of each changed block in a narrow card as well (for example, set the card's width to 280px with `locator.evaluate`). Then use it: open menus and filters, switch tabs, trigger empty and error states, and tab through with the keyboard. Look for overflow past the card or page, clipped or overlapping text, wrapping that breaks the layout, contrast in dark mode, and console errors or hydration warnings.
+- **Docs:** changed blocks have docs, links and anchors resolve, and the copy matches what the code does.
+
+Then fix every finding you can confirm and rerun the checks. Tell the user what it found, what you fixed and, for anything you left, why. Verify again after a later round of changes to the same pull request, before the last push.
+
 ## Registry blocks
 
 Every block must install unchanged into any shadcn/create project: any style, Base UI, Radix UI or React Aria, and any of the five icon libraries. See `content/docs/compatibility.mdx`.

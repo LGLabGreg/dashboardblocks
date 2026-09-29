@@ -16,6 +16,7 @@ export {
   BellIcon,
   BellRingingIcon,
   BookOpenIcon,
+  BuildingIcon,
   CalendarBlankIcon,
   CalendarDotsIcon,
   CaretDoubleUpIcon,

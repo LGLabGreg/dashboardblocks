@@ -2100,6 +2100,32 @@
       ]
     },
     {
+      "name": "dashboard-04",
+      "type": "registry:block",
+      "title": "CRM dashboard",
+      "description": "A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "https://www.dashboardblocks.com/r/activity-feed-01.json",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/chart-panel-04.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/funnel-03.json",
+        "https://www.dashboardblocks.com/r/pipeline.json",
+        "https://www.dashboardblocks.com/r/pipeline-02.json",
+        "https://www.dashboardblocks.com/r/pipeline-03.json",
+        "https://www.dashboardblocks.com/r/pipeline-04.json",
+        "https://www.dashboardblocks.com/r/stat-group-02.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboards/dashboard-04.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "goals-01",
       "type": "registry:component",
       "registryDependencies": [

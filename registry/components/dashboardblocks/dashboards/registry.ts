@@ -75,4 +75,31 @@ export const examples: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'dashboard-04',
+    type: 'registry:block',
+    title: 'CRM dashboard',
+    description:
+      'A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.',
+    registryDependencies: [
+      'button',
+      'button-group',
+      registryUrl('activity-feed-01'),
+      registryUrl('block-state'),
+      registryUrl('chart-panel-04'),
+      registryUrl('dashboard-header'),
+      registryUrl('funnel-03'),
+      registryUrl('pipeline'),
+      registryUrl('pipeline-02'),
+      registryUrl('pipeline-03'),
+      registryUrl('pipeline-04'),
+      registryUrl('stat-group-02'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/dashboards/dashboard-04.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
 ]
