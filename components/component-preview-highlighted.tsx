@@ -11,7 +11,7 @@ import { highlightTsx } from '@/lib/highlight-client'
 import { toProjectCode } from '@/lib/registry-code'
 import { cn } from '@/lib/utils'
 
-import { useCustomizerConfig } from './customizer/customizer-provider'
+import { useSavedCustomizerConfig } from './customizer/customizer-provider'
 import { ShadcnCliButton } from './shadcn-cli-button'
 
 interface ComponentPreviewHighlightedProps {
@@ -54,7 +54,8 @@ function loadVariant(
 }
 
 function useVariantCode(name: string, fallback: VariantCode) {
-  const { base, iconLibrary } = useCustomizerConfig()
+  // Not the hover preview, so hovering an icon library doesn't fetch its code.
+  const { base, iconLibrary } = useSavedCustomizerConfig()
   const isDefault =
     base === DEFAULT_CONFIG.base && iconLibrary === DEFAULT_CONFIG.iconLibrary
   const key = `${base}/${iconLibrary}`
