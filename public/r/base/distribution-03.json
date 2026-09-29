@@ -3,7 +3,7 @@
   "name": "distribution-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/distribution.json"
+    "https://www.dashboardblocks.com/r/base/distribution.json"
   ],
   "files": [
     {

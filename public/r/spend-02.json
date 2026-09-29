@@ -3,8 +3,8 @@
   "name": "spend-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/billing.json",
-    "https://dashboardblocks.com/r/spend.json"
+    "https://www.dashboardblocks.com/r/billing.json",
+    "https://www.dashboardblocks.com/r/spend.json"
   ],
   "files": [
     {

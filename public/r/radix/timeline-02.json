@@ -3,7 +3,7 @@
   "name": "timeline-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/timeline.json"
+    "https://www.dashboardblocks.com/r/radix/timeline.json"
   ],
   "files": [
     {

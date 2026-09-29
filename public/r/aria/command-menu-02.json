@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "command-menu-02",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/aria/command-menu.json"
+    "https://www.dashboardblocks.com/r/aria/command-menu.json"
   ],
   "files": [
     {

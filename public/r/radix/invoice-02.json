@@ -4,8 +4,8 @@
   "registryDependencies": [
     "badge",
     "button",
-    "https://dashboardblocks.com/r/radix/billing.json",
-    "https://dashboardblocks.com/r/radix/invoice.json"
+    "https://www.dashboardblocks.com/r/radix/billing.json",
+    "https://www.dashboardblocks.com/r/radix/invoice.json"
   ],
   "files": [
     {

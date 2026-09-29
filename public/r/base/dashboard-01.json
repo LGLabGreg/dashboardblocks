@@ -4,15 +4,15 @@
   "title": "Store dashboard",
   "description": "A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/base/block-state.json",
-    "https://dashboardblocks.com/r/base/breakdown-01.json",
-    "https://dashboardblocks.com/r/base/chart-panel-01.json",
-    "https://dashboardblocks.com/r/base/dashboard-header.json",
-    "https://dashboardblocks.com/r/base/data-table-02.json",
-    "https://dashboardblocks.com/r/base/forecast-03.json",
-    "https://dashboardblocks.com/r/base/funnel-01.json",
-    "https://dashboardblocks.com/r/base/inventory-01.json",
-    "https://dashboardblocks.com/r/base/stat-group-02.json"
+    "https://www.dashboardblocks.com/r/base/block-state.json",
+    "https://www.dashboardblocks.com/r/base/breakdown-01.json",
+    "https://www.dashboardblocks.com/r/base/chart-panel-01.json",
+    "https://www.dashboardblocks.com/r/base/dashboard-header.json",
+    "https://www.dashboardblocks.com/r/base/data-table-02.json",
+    "https://www.dashboardblocks.com/r/base/forecast-03.json",
+    "https://www.dashboardblocks.com/r/base/funnel-01.json",
+    "https://www.dashboardblocks.com/r/base/inventory-01.json",
+    "https://www.dashboardblocks.com/r/base/stat-group-02.json"
   ],
   "files": [
     {

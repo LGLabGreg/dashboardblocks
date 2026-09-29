@@ -3,8 +3,8 @@
   "name": "distribution-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/chart-panel.json",
-    "https://dashboardblocks.com/r/distribution.json"
+    "https://www.dashboardblocks.com/r/chart-panel.json",
+    "https://www.dashboardblocks.com/r/distribution.json"
   ],
   "files": [
     {

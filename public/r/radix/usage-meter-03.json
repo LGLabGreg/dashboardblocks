@@ -3,7 +3,7 @@
   "name": "usage-meter-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/usage-meter.json"
+    "https://www.dashboardblocks.com/r/radix/usage-meter.json"
   ],
   "files": [
     {

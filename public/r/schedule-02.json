@@ -4,7 +4,7 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/schedule.json"
+    "https://www.dashboardblocks.com/r/schedule.json"
   ],
   "files": [
     {

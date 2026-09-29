@@ -4,9 +4,9 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/block-state.json",
-    "https://dashboardblocks.com/r/radix/dashboard-header.json",
-    "https://dashboardblocks.com/r/radix/data-table.json"
+    "https://www.dashboardblocks.com/r/radix/block-state.json",
+    "https://www.dashboardblocks.com/r/radix/dashboard-header.json",
+    "https://www.dashboardblocks.com/r/radix/data-table.json"
   ],
   "files": [
     {

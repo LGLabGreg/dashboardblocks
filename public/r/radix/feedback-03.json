@@ -3,8 +3,8 @@
   "name": "feedback-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/feedback.json",
-    "https://dashboardblocks.com/r/radix/team.json"
+    "https://www.dashboardblocks.com/r/radix/feedback.json",
+    "https://www.dashboardblocks.com/r/radix/team.json"
   ],
   "files": [
     {

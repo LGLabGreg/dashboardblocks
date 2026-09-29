@@ -3,7 +3,7 @@
   "name": "goals-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/goals.json"
+    "https://www.dashboardblocks.com/r/aria/goals.json"
   ],
   "files": [
     {

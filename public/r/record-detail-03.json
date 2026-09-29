@@ -7,9 +7,9 @@
     "button",
     "card",
     "textarea",
-    "https://dashboardblocks.com/r/activity-feed.json",
-    "https://dashboardblocks.com/r/page-header.json",
-    "https://dashboardblocks.com/r/record-detail.json"
+    "https://www.dashboardblocks.com/r/activity-feed.json",
+    "https://www.dashboardblocks.com/r/page-header.json",
+    "https://www.dashboardblocks.com/r/record-detail.json"
   ],
   "files": [
     {

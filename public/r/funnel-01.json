@@ -3,7 +3,7 @@
   "name": "funnel-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/funnel.json"
+    "https://www.dashboardblocks.com/r/funnel.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "ai-assistant-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/ai-assistant.json",
-    "https://dashboardblocks.com/r/aria/ai-usage.json"
+    "https://www.dashboardblocks.com/r/aria/ai-assistant.json",
+    "https://www.dashboardblocks.com/r/aria/ai-usage.json"
   ],
   "files": [
     {

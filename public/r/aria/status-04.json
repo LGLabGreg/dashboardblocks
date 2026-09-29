@@ -3,7 +3,7 @@
   "name": "status-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/status.json"
+    "https://www.dashboardblocks.com/r/aria/status.json"
   ],
   "files": [
     {

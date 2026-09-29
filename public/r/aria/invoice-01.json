@@ -3,9 +3,9 @@
   "name": "invoice-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/aria/billing.json",
-    "https://dashboardblocks.com/r/aria/invoice.json",
-    "https://dashboardblocks.com/r/aria/record-detail.json"
+    "https://www.dashboardblocks.com/r/aria/billing.json",
+    "https://www.dashboardblocks.com/r/aria/invoice.json",
+    "https://www.dashboardblocks.com/r/aria/record-detail.json"
   ],
   "files": [
     {

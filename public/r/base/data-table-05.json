@@ -4,7 +4,7 @@
   "registryDependencies": [
     "badge",
     "card",
-    "https://dashboardblocks.com/r/base/data-table.json"
+    "https://www.dashboardblocks.com/r/base/data-table.json"
   ],
   "files": [
     {

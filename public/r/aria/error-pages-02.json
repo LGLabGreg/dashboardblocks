@@ -4,8 +4,8 @@
   "registryDependencies": [
     "button",
     "textarea",
-    "https://dashboardblocks.com/r/aria/team.json",
-    "https://dashboardblocks.com/r/aria/error-pages.json"
+    "https://www.dashboardblocks.com/r/aria/team.json",
+    "https://www.dashboardblocks.com/r/aria/error-pages.json"
   ],
   "files": [
     {

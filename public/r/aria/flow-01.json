@@ -3,8 +3,8 @@
   "name": "flow-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/chart-panel.json",
-    "https://dashboardblocks.com/r/aria/flow.json"
+    "https://www.dashboardblocks.com/r/aria/chart-panel.json",
+    "https://www.dashboardblocks.com/r/aria/flow.json"
   ],
   "files": [
     {

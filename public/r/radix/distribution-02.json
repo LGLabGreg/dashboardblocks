@@ -3,8 +3,8 @@
   "name": "distribution-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/chart-panel.json",
-    "https://dashboardblocks.com/r/radix/distribution.json"
+    "https://www.dashboardblocks.com/r/radix/chart-panel.json",
+    "https://www.dashboardblocks.com/r/radix/distribution.json"
   ],
   "files": [
     {

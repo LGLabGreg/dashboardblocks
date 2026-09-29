@@ -3,7 +3,7 @@
   "name": "goals-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/goals.json"
+    "https://www.dashboardblocks.com/r/goals.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "notifications-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/notifications.json"
+    "https://www.dashboardblocks.com/r/notifications.json"
   ],
   "files": [
     {

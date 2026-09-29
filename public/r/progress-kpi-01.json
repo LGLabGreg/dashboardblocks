@@ -3,8 +3,8 @@
   "name": "progress-kpi-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/progress-bar.json"
+    "https://www.dashboardblocks.com/r/kpi.json",
+    "https://www.dashboardblocks.com/r/progress-bar.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "deployments-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/deployments.json",
-    "https://dashboardblocks.com/r/radix/team.json"
+    "https://www.dashboardblocks.com/r/radix/deployments.json",
+    "https://www.dashboardblocks.com/r/radix/team.json"
   ],
   "files": [
     {

@@ -7,8 +7,8 @@
     "recharts"
   ],
   "registryDependencies": [
-    "https://dashboardblocks.com/r/aria/chart-panel.json",
-    "https://dashboardblocks.com/r/aria/use-in-view.json"
+    "https://www.dashboardblocks.com/r/aria/chart-panel.json",
+    "https://www.dashboardblocks.com/r/aria/use-in-view.json"
   ],
   "files": [
     {

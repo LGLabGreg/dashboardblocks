@@ -4,8 +4,8 @@
   "title": "Metric List",
   "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/aria/trend.json",
-    "https://dashboardblocks.com/r/aria/use-in-view.json"
+    "https://www.dashboardblocks.com/r/aria/trend.json",
+    "https://www.dashboardblocks.com/r/aria/use-in-view.json"
   ],
   "files": [
     {

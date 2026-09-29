@@ -4,7 +4,7 @@
   "registryDependencies": [
     "separator",
     "sidebar",
-    "https://dashboardblocks.com/r/aria/app-shell.json"
+    "https://www.dashboardblocks.com/r/aria/app-shell.json"
   ],
   "files": [
     {

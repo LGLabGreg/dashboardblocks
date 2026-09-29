@@ -7,8 +7,8 @@
   "registryDependencies": [
     "card",
     "tabs",
-    "https://dashboardblocks.com/r/base/chart-panel.json",
-    "https://dashboardblocks.com/r/base/stat-group.json"
+    "https://www.dashboardblocks.com/r/base/chart-panel.json",
+    "https://www.dashboardblocks.com/r/base/stat-group.json"
   ],
   "files": [
     {

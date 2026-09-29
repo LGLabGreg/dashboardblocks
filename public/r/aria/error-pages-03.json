@@ -3,8 +3,8 @@
   "name": "error-pages-03",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/aria/settings.json",
-    "https://dashboardblocks.com/r/aria/error-pages.json"
+    "https://www.dashboardblocks.com/r/aria/settings.json",
+    "https://www.dashboardblocks.com/r/aria/error-pages.json"
   ],
   "files": [
     {

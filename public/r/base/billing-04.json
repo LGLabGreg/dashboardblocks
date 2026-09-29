@@ -3,8 +3,8 @@
   "name": "billing-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/billing.json",
-    "https://dashboardblocks.com/r/base/stat-group.json"
+    "https://www.dashboardblocks.com/r/base/billing.json",
+    "https://www.dashboardblocks.com/r/base/stat-group.json"
   ],
   "files": [
     {

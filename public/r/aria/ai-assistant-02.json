@@ -3,7 +3,7 @@
   "name": "ai-assistant-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/ai-assistant.json"
+    "https://www.dashboardblocks.com/r/aria/ai-assistant.json"
   ],
   "files": [
     {

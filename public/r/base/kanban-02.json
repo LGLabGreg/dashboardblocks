@@ -3,8 +3,8 @@
   "name": "kanban-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/kanban.json",
-    "https://dashboardblocks.com/r/base/pipeline.json"
+    "https://www.dashboardblocks.com/r/base/kanban.json",
+    "https://www.dashboardblocks.com/r/base/pipeline.json"
   ],
   "files": [
     {

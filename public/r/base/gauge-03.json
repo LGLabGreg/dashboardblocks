@@ -3,7 +3,7 @@
   "name": "gauge-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/gauge.json"
+    "https://www.dashboardblocks.com/r/base/gauge.json"
   ],
   "files": [
     {

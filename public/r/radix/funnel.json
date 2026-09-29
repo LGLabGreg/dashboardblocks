@@ -4,7 +4,7 @@
   "title": "Funnel",
   "description": "Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/use-in-view.json"
+    "https://www.dashboardblocks.com/r/radix/use-in-view.json"
   ],
   "files": [
     {

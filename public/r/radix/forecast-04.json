@@ -6,9 +6,9 @@
   ],
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/chart-panel.json",
-    "https://dashboardblocks.com/r/radix/data-table.json",
-    "https://dashboardblocks.com/r/radix/forecast.json"
+    "https://www.dashboardblocks.com/r/radix/chart-panel.json",
+    "https://www.dashboardblocks.com/r/radix/data-table.json",
+    "https://www.dashboardblocks.com/r/radix/forecast.json"
   ],
   "files": [
     {

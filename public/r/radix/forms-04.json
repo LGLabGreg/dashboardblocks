@@ -3,7 +3,7 @@
   "name": "forms-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/forms.json"
+    "https://www.dashboardblocks.com/r/radix/forms.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "registryDependencies": [
     "button",
     "tabs",
-    "https://dashboardblocks.com/r/radix/notifications.json"
+    "https://www.dashboardblocks.com/r/radix/notifications.json"
   ],
   "files": [
     {

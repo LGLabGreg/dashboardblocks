@@ -4,9 +4,9 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/files.json",
-    "https://dashboardblocks.com/r/progress-bar.json",
-    "https://dashboardblocks.com/r/usage-meter.json"
+    "https://www.dashboardblocks.com/r/files.json",
+    "https://www.dashboardblocks.com/r/progress-bar.json",
+    "https://www.dashboardblocks.com/r/usage-meter.json"
   ],
   "files": [
     {

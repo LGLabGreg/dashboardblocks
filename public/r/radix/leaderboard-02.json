@@ -4,8 +4,8 @@
   "registryDependencies": [
     "avatar",
     "card",
-    "https://dashboardblocks.com/r/radix/leaderboard.json",
-    "https://dashboardblocks.com/r/radix/trend.json"
+    "https://www.dashboardblocks.com/r/radix/leaderboard.json",
+    "https://www.dashboardblocks.com/r/radix/trend.json"
   ],
   "files": [
     {

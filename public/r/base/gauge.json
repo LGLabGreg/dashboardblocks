@@ -4,7 +4,7 @@
   "title": "Gauge",
   "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/base/use-in-view.json"
+    "https://www.dashboardblocks.com/r/base/use-in-view.json"
   ],
   "files": [
     {

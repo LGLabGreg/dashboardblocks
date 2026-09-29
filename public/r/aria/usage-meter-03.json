@@ -3,7 +3,7 @@
   "name": "usage-meter-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/usage-meter.json"
+    "https://www.dashboardblocks.com/r/aria/usage-meter.json"
   ],
   "files": [
     {

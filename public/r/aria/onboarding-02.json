@@ -5,10 +5,10 @@
     "badge",
     "button",
     "card",
-    "https://dashboardblocks.com/r/aria/block-state.json",
-    "https://dashboardblocks.com/r/aria/checklist.json",
-    "https://dashboardblocks.com/r/aria/onboarding.json",
-    "https://dashboardblocks.com/r/aria/progress-bar.json"
+    "https://www.dashboardblocks.com/r/aria/block-state.json",
+    "https://www.dashboardblocks.com/r/aria/checklist.json",
+    "https://www.dashboardblocks.com/r/aria/onboarding.json",
+    "https://www.dashboardblocks.com/r/aria/progress-bar.json"
   ],
   "files": [
     {

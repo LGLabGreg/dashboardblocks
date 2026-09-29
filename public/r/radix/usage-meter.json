@@ -4,7 +4,7 @@
   "title": "Usage Meter",
   "description": "Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/use-in-view.json"
+    "https://www.dashboardblocks.com/r/radix/use-in-view.json"
   ],
   "files": [
     {

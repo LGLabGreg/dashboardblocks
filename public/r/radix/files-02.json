@@ -5,9 +5,9 @@
     "avatar",
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/activity-feed.json",
-    "https://dashboardblocks.com/r/radix/data-table.json",
-    "https://dashboardblocks.com/r/radix/files.json"
+    "https://www.dashboardblocks.com/r/radix/activity-feed.json",
+    "https://www.dashboardblocks.com/r/radix/data-table.json",
+    "https://www.dashboardblocks.com/r/radix/files.json"
   ],
   "files": [
     {

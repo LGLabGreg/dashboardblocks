@@ -6,8 +6,8 @@
   ],
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/chart-panel.json",
-    "https://dashboardblocks.com/r/aria/goals.json"
+    "https://www.dashboardblocks.com/r/aria/chart-panel.json",
+    "https://www.dashboardblocks.com/r/aria/goals.json"
   ],
   "files": [
     {

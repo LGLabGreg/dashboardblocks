@@ -4,8 +4,8 @@
   "registryDependencies": [
     "avatar",
     "card",
-    "https://dashboardblocks.com/r/base/leaderboard.json",
-    "https://dashboardblocks.com/r/base/use-in-view.json"
+    "https://www.dashboardblocks.com/r/base/leaderboard.json",
+    "https://www.dashboardblocks.com/r/base/use-in-view.json"
   ],
   "files": [
     {

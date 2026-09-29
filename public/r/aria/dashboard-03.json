@@ -4,14 +4,14 @@
   "title": "Web analytics dashboard",
   "description": "A web analytics dashboard: traffic tabs, visitors right now, a traffic flow, top pages, top countries and browsers, filtered by device.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/aria/block-state.json",
-    "https://dashboardblocks.com/r/aria/breakdown-01.json",
-    "https://dashboardblocks.com/r/aria/chart-panel-02.json",
-    "https://dashboardblocks.com/r/aria/dashboard-header.json",
-    "https://dashboardblocks.com/r/aria/flow-01.json",
-    "https://dashboardblocks.com/r/aria/geo-02.json",
-    "https://dashboardblocks.com/r/aria/leaderboard-01.json",
-    "https://dashboardblocks.com/r/aria/realtime-01.json"
+    "https://www.dashboardblocks.com/r/aria/block-state.json",
+    "https://www.dashboardblocks.com/r/aria/breakdown-01.json",
+    "https://www.dashboardblocks.com/r/aria/chart-panel-02.json",
+    "https://www.dashboardblocks.com/r/aria/dashboard-header.json",
+    "https://www.dashboardblocks.com/r/aria/flow-01.json",
+    "https://www.dashboardblocks.com/r/aria/geo-02.json",
+    "https://www.dashboardblocks.com/r/aria/leaderboard-01.json",
+    "https://www.dashboardblocks.com/r/aria/realtime-01.json"
   ],
   "files": [
     {

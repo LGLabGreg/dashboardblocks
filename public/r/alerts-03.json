@@ -4,8 +4,8 @@
   "registryDependencies": [
     "card",
     "switch",
-    "https://dashboardblocks.com/r/alerts.json",
-    "https://dashboardblocks.com/r/data-table.json"
+    "https://www.dashboardblocks.com/r/alerts.json",
+    "https://www.dashboardblocks.com/r/data-table.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "calendar-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/calendar.json",
-    "https://dashboardblocks.com/r/aria/schedule.json"
+    "https://www.dashboardblocks.com/r/aria/calendar.json",
+    "https://www.dashboardblocks.com/r/aria/schedule.json"
   ],
   "files": [
     {

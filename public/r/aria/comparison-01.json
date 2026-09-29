@@ -3,9 +3,9 @@
   "name": "comparison-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/comparison.json",
-    "https://dashboardblocks.com/r/aria/data-table.json",
-    "https://dashboardblocks.com/r/aria/trend.json"
+    "https://www.dashboardblocks.com/r/aria/comparison.json",
+    "https://www.dashboardblocks.com/r/aria/data-table.json",
+    "https://www.dashboardblocks.com/r/aria/trend.json"
   ],
   "files": [
     {

@@ -3,9 +3,9 @@
   "name": "comparison-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/comparison.json",
-    "https://dashboardblocks.com/r/radix/data-table.json",
-    "https://dashboardblocks.com/r/radix/trend.json"
+    "https://www.dashboardblocks.com/r/radix/comparison.json",
+    "https://www.dashboardblocks.com/r/radix/data-table.json",
+    "https://www.dashboardblocks.com/r/radix/trend.json"
   ],
   "files": [
     {

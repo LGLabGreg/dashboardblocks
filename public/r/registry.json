@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "dashboardblocks",
-  "homepage": "https://dashboardblocks.com",
+  "homepage": "https://www.dashboardblocks.com",
   "items": [
     {
       "name": "activity-feed",
@@ -45,7 +45,7 @@
       "title": "Animated Number",
       "description": "An animated number component.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-animated-number.json"
+        "https://www.dashboardblocks.com/r/use-animated-number.json"
       ],
       "files": [
         {
@@ -110,7 +110,7 @@
       "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.",
       "registryDependencies": [
         "input",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -125,7 +125,7 @@
       "title": "Billing",
       "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -152,7 +152,7 @@
       "title": "Breakdown",
       "description": "Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -232,7 +232,7 @@
       "title": "Comparison",
       "description": "Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -276,7 +276,7 @@
       "title": "Distribution",
       "description": "Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -303,7 +303,7 @@
       "title": "Feedback",
       "description": "Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -333,8 +333,8 @@
         "recharts"
       ],
       "registryDependencies": [
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -366,7 +366,7 @@
       "title": "Funnel",
       "description": "Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -381,7 +381,7 @@
       "title": "Gauge",
       "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -396,8 +396,8 @@
       "title": "Geo",
       "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/heatmap.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/heatmap.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -412,7 +412,7 @@
       "title": "Goals",
       "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -466,7 +466,7 @@
       "title": "Inventory",
       "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -482,8 +482,8 @@
       "description": "Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -501,7 +501,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -516,8 +516,8 @@
       "title": "Metric List",
       "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/trend.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/trend.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -534,7 +534,7 @@
       "registryDependencies": [
         "button",
         "popover",
-        "https://dashboardblocks.com/r/activity-feed.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json"
       ],
       "files": [
         {
@@ -577,7 +577,7 @@
       "title": "Progress Bar",
       "description": "A progress bar component.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -616,8 +616,8 @@
       "title": "Retention",
       "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/heatmap.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/heatmap.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -632,7 +632,7 @@
       "title": "Ring",
       "description": "A ring component.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -699,7 +699,7 @@
       "title": "Spend",
       "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -714,8 +714,8 @@
       "title": "Stat Group",
       "description": "Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/trend.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/trend.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -772,7 +772,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "https://dashboardblocks.com/r/animated-number.json"
+        "https://www.dashboardblocks.com/r/animated-number.json"
       ],
       "files": [
         {
@@ -787,7 +787,7 @@
       "title": "Usage Meter",
       "description": "Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -807,8 +807,8 @@
         "dropdown-menu",
         "input",
         "kbd",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -827,7 +827,7 @@
         "button",
         "dropdown-menu",
         "input-group",
-        "https://dashboardblocks.com/r/activity-feed.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json"
       ],
       "files": [
         {
@@ -845,8 +845,8 @@
         "button",
         "button-group",
         "tabs",
-        "https://dashboardblocks.com/r/schedule.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/schedule.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -898,7 +898,7 @@
         "card",
         "checkbox",
         "table",
-        "https://dashboardblocks.com/r/billing.json"
+        "https://www.dashboardblocks.com/r/billing.json"
       ],
       "files": [
         {
@@ -918,7 +918,7 @@
         "field",
         "input",
         "native-select",
-        "https://dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json"
       ],
       "files": [
         {
@@ -932,7 +932,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -946,7 +946,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -960,7 +960,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -974,8 +974,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "https://www.dashboardblocks.com/r/kpi.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
         {
@@ -989,9 +989,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/kpi.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
         {
@@ -1005,9 +1005,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/kpi.json",
-        "https://dashboardblocks.com/r/ring.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/kpi.json",
+        "https://www.dashboardblocks.com/r/ring.json"
       ],
       "files": [
         {
@@ -1024,8 +1024,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -1042,8 +1042,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -1060,8 +1060,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -1078,8 +1078,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -1096,8 +1096,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart.json",
-        "https://dashboardblocks.com/r/kpi.json"
+        "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/kpi.json"
       ],
       "files": [
         {
@@ -1112,8 +1112,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -1127,7 +1127,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json"
       ],
       "files": [
         {
@@ -1143,8 +1143,8 @@
         "button",
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -1158,8 +1158,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -1175,9 +1175,9 @@
         "badge",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -1191,8 +1191,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1206,9 +1206,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/ring.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/ring.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1222,7 +1222,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1237,9 +1237,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1253,8 +1253,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/progress-bar.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1269,8 +1269,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1285,10 +1285,10 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/animated-wave.json",
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1303,10 +1303,10 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/animated-number.json",
-        "https://dashboardblocks.com/r/animated-wave.json",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/animated-number.json",
+        "https://www.dashboardblocks.com/r/animated-wave.json",
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -1321,7 +1321,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/leaderboard.json"
+        "https://www.dashboardblocks.com/r/leaderboard.json"
       ],
       "files": [
         {
@@ -1336,8 +1336,8 @@
       "registryDependencies": [
         "avatar",
         "card",
-        "https://dashboardblocks.com/r/leaderboard.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/leaderboard.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1352,8 +1352,8 @@
       "registryDependencies": [
         "avatar",
         "card",
-        "https://dashboardblocks.com/r/leaderboard.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/leaderboard.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -1367,8 +1367,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/icon.json",
-        "https://dashboardblocks.com/r/leaderboard.json"
+        "https://www.dashboardblocks.com/r/icon.json",
+        "https://www.dashboardblocks.com/r/leaderboard.json"
       ],
       "files": [
         {
@@ -1383,7 +1383,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/leaderboard.json"
+        "https://www.dashboardblocks.com/r/leaderboard.json"
       ],
       "files": [
         {
@@ -1400,8 +1400,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1419,8 +1419,8 @@
       "registryDependencies": [
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1437,8 +1437,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1455,8 +1455,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1473,7 +1473,7 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -1490,8 +1490,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1505,7 +1505,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/breakdown.json"
+        "https://www.dashboardblocks.com/r/breakdown.json"
       ],
       "files": [
         {
@@ -1519,7 +1519,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/breakdown.json"
+        "https://www.dashboardblocks.com/r/breakdown.json"
       ],
       "files": [
         {
@@ -1533,7 +1533,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/breakdown.json"
+        "https://www.dashboardblocks.com/r/breakdown.json"
       ],
       "files": [
         {
@@ -1547,7 +1547,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/breakdown.json"
+        "https://www.dashboardblocks.com/r/breakdown.json"
       ],
       "files": [
         {
@@ -1561,7 +1561,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/funnel.json"
+        "https://www.dashboardblocks.com/r/funnel.json"
       ],
       "files": [
         {
@@ -1575,7 +1575,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/funnel.json"
+        "https://www.dashboardblocks.com/r/funnel.json"
       ],
       "files": [
         {
@@ -1590,7 +1590,7 @@
       "registryDependencies": [
         "badge",
         "card",
-        "https://dashboardblocks.com/r/funnel.json"
+        "https://www.dashboardblocks.com/r/funnel.json"
       ],
       "files": [
         {
@@ -1604,7 +1604,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/funnel.json"
+        "https://www.dashboardblocks.com/r/funnel.json"
       ],
       "files": [
         {
@@ -1618,7 +1618,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1632,7 +1632,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1647,7 +1647,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1661,7 +1661,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1675,7 +1675,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1689,7 +1689,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1703,7 +1703,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1721,8 +1721,8 @@
       "registryDependencies": [
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1736,7 +1736,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1750,7 +1750,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1763,7 +1763,7 @@
       "name": "dashboard-header-01",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/dashboard-header.json"
+        "https://www.dashboardblocks.com/r/dashboard-header.json"
       ],
       "files": [
         {
@@ -1776,7 +1776,7 @@
       "name": "dashboard-header-02",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/dashboard-header.json"
+        "https://www.dashboardblocks.com/r/dashboard-header.json"
       ],
       "files": [
         {
@@ -1791,7 +1791,7 @@
       "registryDependencies": [
         "button",
         "button-group",
-        "https://dashboardblocks.com/r/dashboard-header.json"
+        "https://www.dashboardblocks.com/r/dashboard-header.json"
       ],
       "files": [
         {
@@ -1805,7 +1805,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/dashboard-header.json"
+        "https://www.dashboardblocks.com/r/dashboard-header.json"
       ],
       "files": [
         {
@@ -1819,7 +1819,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -1833,7 +1833,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -1847,9 +1847,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/stat-group.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/stat-group.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -1863,8 +1863,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/status.json"
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/status.json"
       ],
       "files": [
         {
@@ -1879,7 +1879,7 @@
       "registryDependencies": [
         "badge",
         "card",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -1894,7 +1894,7 @@
       "registryDependencies": [
         "badge",
         "card",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -1908,7 +1908,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/heatmap.json"
+        "https://www.dashboardblocks.com/r/heatmap.json"
       ],
       "files": [
         {
@@ -1922,7 +1922,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/heatmap.json"
+        "https://www.dashboardblocks.com/r/heatmap.json"
       ],
       "files": [
         {
@@ -1936,7 +1936,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/heatmap.json"
+        "https://www.dashboardblocks.com/r/heatmap.json"
       ],
       "files": [
         {
@@ -1950,7 +1950,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/heatmap.json"
+        "https://www.dashboardblocks.com/r/heatmap.json"
       ],
       "files": [
         {
@@ -1965,8 +1965,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -1984,8 +1984,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -2000,9 +2000,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/dashboard-header.json",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -2020,8 +2020,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -2036,15 +2036,15 @@
       "title": "Store dashboard",
       "description": "A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/breakdown-01.json",
-        "https://dashboardblocks.com/r/chart-panel-01.json",
-        "https://dashboardblocks.com/r/dashboard-header.json",
-        "https://dashboardblocks.com/r/data-table-02.json",
-        "https://dashboardblocks.com/r/forecast-03.json",
-        "https://dashboardblocks.com/r/funnel-01.json",
-        "https://dashboardblocks.com/r/inventory-01.json",
-        "https://dashboardblocks.com/r/stat-group-02.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/breakdown-01.json",
+        "https://www.dashboardblocks.com/r/chart-panel-01.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/data-table-02.json",
+        "https://www.dashboardblocks.com/r/forecast-03.json",
+        "https://www.dashboardblocks.com/r/funnel-01.json",
+        "https://www.dashboardblocks.com/r/inventory-01.json",
+        "https://www.dashboardblocks.com/r/stat-group-02.json"
       ],
       "files": [
         {
@@ -2061,14 +2061,14 @@
       "registryDependencies": [
         "button",
         "button-group",
-        "https://dashboardblocks.com/r/billing-01.json",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/dashboard-header.json",
-        "https://dashboardblocks.com/r/data-table-04.json",
-        "https://dashboardblocks.com/r/geo-04.json",
-        "https://dashboardblocks.com/r/heatmap-01.json",
-        "https://dashboardblocks.com/r/retention-03.json",
-        "https://dashboardblocks.com/r/stat-group-03.json"
+        "https://www.dashboardblocks.com/r/billing-01.json",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/data-table-04.json",
+        "https://www.dashboardblocks.com/r/geo-04.json",
+        "https://www.dashboardblocks.com/r/heatmap-01.json",
+        "https://www.dashboardblocks.com/r/retention-03.json",
+        "https://www.dashboardblocks.com/r/stat-group-03.json"
       ],
       "files": [
         {
@@ -2083,14 +2083,14 @@
       "title": "Web analytics dashboard",
       "description": "A web analytics dashboard: traffic tabs, visitors right now, a traffic flow, top pages, top countries and browsers, filtered by device.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/breakdown-01.json",
-        "https://dashboardblocks.com/r/chart-panel-02.json",
-        "https://dashboardblocks.com/r/dashboard-header.json",
-        "https://dashboardblocks.com/r/flow-01.json",
-        "https://dashboardblocks.com/r/geo-02.json",
-        "https://dashboardblocks.com/r/leaderboard-01.json",
-        "https://dashboardblocks.com/r/realtime-01.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/breakdown-01.json",
+        "https://www.dashboardblocks.com/r/chart-panel-02.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/flow-01.json",
+        "https://www.dashboardblocks.com/r/geo-02.json",
+        "https://www.dashboardblocks.com/r/leaderboard-01.json",
+        "https://www.dashboardblocks.com/r/realtime-01.json"
       ],
       "files": [
         {
@@ -2104,7 +2104,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/goals.json"
+        "https://www.dashboardblocks.com/r/goals.json"
       ],
       "files": [
         {
@@ -2118,7 +2118,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/goals.json"
+        "https://www.dashboardblocks.com/r/goals.json"
       ],
       "files": [
         {
@@ -2135,8 +2135,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/goals.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/goals.json"
       ],
       "files": [
         {
@@ -2150,7 +2150,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ring.json"
+        "https://www.dashboardblocks.com/r/ring.json"
       ],
       "files": [
         {
@@ -2164,9 +2164,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comparison.json",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/comparison.json",
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -2180,7 +2180,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comparison.json"
+        "https://www.dashboardblocks.com/r/comparison.json"
       ],
       "files": [
         {
@@ -2194,7 +2194,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comparison.json"
+        "https://www.dashboardblocks.com/r/comparison.json"
       ],
       "files": [
         {
@@ -2208,8 +2208,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comparison.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/comparison.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -2224,7 +2224,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/alerts.json"
+        "https://www.dashboardblocks.com/r/alerts.json"
       ],
       "files": [
         {
@@ -2242,8 +2242,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/alerts.json",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/alerts.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -2258,8 +2258,8 @@
       "registryDependencies": [
         "card",
         "switch",
-        "https://dashboardblocks.com/r/alerts.json",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/alerts.json",
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -2274,7 +2274,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/alerts.json"
+        "https://www.dashboardblocks.com/r/alerts.json"
       ],
       "files": [
         {
@@ -2288,8 +2288,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/geo.json",
-        "https://dashboardblocks.com/r/heatmap.json"
+        "https://www.dashboardblocks.com/r/geo.json",
+        "https://www.dashboardblocks.com/r/heatmap.json"
       ],
       "files": [
         {
@@ -2303,7 +2303,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/geo.json"
+        "https://www.dashboardblocks.com/r/geo.json"
       ],
       "files": [
         {
@@ -2317,7 +2317,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/geo.json"
+        "https://www.dashboardblocks.com/r/geo.json"
       ],
       "files": [
         {
@@ -2331,9 +2331,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/breakdown.json",
-        "https://dashboardblocks.com/r/comparison.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/breakdown.json",
+        "https://www.dashboardblocks.com/r/comparison.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -2347,8 +2347,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -2363,7 +2363,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/billing.json"
+        "https://www.dashboardblocks.com/r/billing.json"
       ],
       "files": [
         {
@@ -2378,8 +2378,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/data-table.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/data-table.json"
       ],
       "files": [
         {
@@ -2393,8 +2393,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/stat-group.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/stat-group.json"
       ],
       "files": [
         {
@@ -2411,7 +2411,7 @@
         "button",
         "card",
         "input",
-        "https://dashboardblocks.com/r/billing.json"
+        "https://www.dashboardblocks.com/r/billing.json"
       ],
       "files": [
         {
@@ -2426,7 +2426,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/insights.json"
+        "https://www.dashboardblocks.com/r/insights.json"
       ],
       "files": [
         {
@@ -2444,8 +2444,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/insights.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/insights.json"
       ],
       "files": [
         {
@@ -2459,8 +2459,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comparison.json",
-        "https://dashboardblocks.com/r/insights.json"
+        "https://www.dashboardblocks.com/r/comparison.json",
+        "https://www.dashboardblocks.com/r/insights.json"
       ],
       "files": [
         {
@@ -2475,7 +2475,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/insights.json"
+        "https://www.dashboardblocks.com/r/insights.json"
       ],
       "files": [
         {
@@ -2491,7 +2491,7 @@
         "button",
         "card",
         "dropdown-menu",
-        "https://dashboardblocks.com/r/pipeline.json"
+        "https://www.dashboardblocks.com/r/pipeline.json"
       ],
       "files": [
         {
@@ -2507,8 +2507,8 @@
         "button",
         "button-group",
         "card",
-        "https://dashboardblocks.com/r/pipeline.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/pipeline.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -2522,8 +2522,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/pipeline.json"
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/pipeline.json"
       ],
       "files": [
         {
@@ -2537,8 +2537,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/pipeline.json",
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/pipeline.json",
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {
@@ -2552,7 +2552,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -2567,7 +2567,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -2581,7 +2581,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -2595,7 +2595,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -2610,7 +2610,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -2624,7 +2624,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -2638,7 +2638,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -2653,8 +2653,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/progress-bar.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -2686,8 +2686,8 @@
         "card",
         "input",
         "native-select",
-        "https://dashboardblocks.com/r/settings.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/settings.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -2702,8 +2702,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/checklist.json",
-        "https://dashboardblocks.com/r/ring.json"
+        "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/ring.json"
       ],
       "files": [
         {
@@ -2718,7 +2718,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/checklist.json"
+        "https://www.dashboardblocks.com/r/checklist.json"
       ],
       "files": [
         {
@@ -2733,8 +2733,8 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/checklist.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
         {
@@ -2748,8 +2748,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/checklist.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
         {
@@ -2763,8 +2763,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/gauge.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/gauge.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -2778,7 +2778,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/gauge.json"
+        "https://www.dashboardblocks.com/r/gauge.json"
       ],
       "files": [
         {
@@ -2792,7 +2792,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/gauge.json"
+        "https://www.dashboardblocks.com/r/gauge.json"
       ],
       "files": [
         {
@@ -2806,8 +2806,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/gauge.json",
-        "https://dashboardblocks.com/r/trend.json"
+        "https://www.dashboardblocks.com/r/gauge.json",
+        "https://www.dashboardblocks.com/r/trend.json"
       ],
       "files": [
         {
@@ -2821,7 +2821,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/metric-list.json"
+        "https://www.dashboardblocks.com/r/metric-list.json"
       ],
       "files": [
         {
@@ -2835,7 +2835,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/metric-list.json"
+        "https://www.dashboardblocks.com/r/metric-list.json"
       ],
       "files": [
         {
@@ -2849,7 +2849,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/metric-list.json"
+        "https://www.dashboardblocks.com/r/metric-list.json"
       ],
       "files": [
         {
@@ -2866,8 +2866,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/metric-list.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/metric-list.json"
       ],
       "files": [
         {
@@ -2884,8 +2884,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/forecast.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/forecast.json"
       ],
       "files": [
         {
@@ -2899,7 +2899,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/forecast.json"
+        "https://www.dashboardblocks.com/r/forecast.json"
       ],
       "files": [
         {
@@ -2913,7 +2913,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/forecast.json"
+        "https://www.dashboardblocks.com/r/forecast.json"
       ],
       "files": [
         {
@@ -2930,9 +2930,9 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/forecast.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/forecast.json"
       ],
       "files": [
         {
@@ -2946,8 +2946,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/heatmap.json",
-        "https://dashboardblocks.com/r/retention.json"
+        "https://www.dashboardblocks.com/r/heatmap.json",
+        "https://www.dashboardblocks.com/r/retention.json"
       ],
       "files": [
         {
@@ -2964,8 +2964,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/retention.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/retention.json"
       ],
       "files": [
         {
@@ -2979,7 +2979,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/retention.json"
+        "https://www.dashboardblocks.com/r/retention.json"
       ],
       "files": [
         {
@@ -2996,8 +2996,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/retention.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/retention.json"
       ],
       "files": [
         {
@@ -3011,8 +3011,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/distribution.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/distribution.json"
       ],
       "files": [
         {
@@ -3026,8 +3026,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/distribution.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/distribution.json"
       ],
       "files": [
         {
@@ -3041,7 +3041,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/distribution.json"
+        "https://www.dashboardblocks.com/r/distribution.json"
       ],
       "files": [
         {
@@ -3055,8 +3055,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/distribution.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/distribution.json"
       ],
       "files": [
         {
@@ -3070,8 +3070,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/spend.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/spend.json"
       ],
       "files": [
         {
@@ -3085,8 +3085,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/spend.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/spend.json"
       ],
       "files": [
         {
@@ -3103,9 +3103,9 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/spend.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/spend.json"
       ],
       "files": [
         {
@@ -3122,9 +3122,9 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/spend.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/spend.json"
       ],
       "files": [
         {
@@ -3138,8 +3138,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/flow.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/flow.json"
       ],
       "files": [
         {
@@ -3153,8 +3153,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/flow.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/flow.json"
       ],
       "files": [
         {
@@ -3168,9 +3168,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/flow.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/flow.json"
       ],
       "files": [
         {
@@ -3184,7 +3184,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/flow.json"
+        "https://www.dashboardblocks.com/r/flow.json"
       ],
       "files": [
         {
@@ -3198,7 +3198,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/timeline.json"
+        "https://www.dashboardblocks.com/r/timeline.json"
       ],
       "files": [
         {
@@ -3212,7 +3212,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/timeline.json"
+        "https://www.dashboardblocks.com/r/timeline.json"
       ],
       "files": [
         {
@@ -3226,7 +3226,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/timeline.json"
+        "https://www.dashboardblocks.com/r/timeline.json"
       ],
       "files": [
         {
@@ -3240,7 +3240,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/timeline.json"
+        "https://www.dashboardblocks.com/r/timeline.json"
       ],
       "files": [
         {
@@ -3254,7 +3254,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/realtime.json"
+        "https://www.dashboardblocks.com/r/realtime.json"
       ],
       "files": [
         {
@@ -3271,8 +3271,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/realtime.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/realtime.json"
       ],
       "files": [
         {
@@ -3287,7 +3287,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/realtime.json"
+        "https://www.dashboardblocks.com/r/realtime.json"
       ],
       "files": [
         {
@@ -3301,7 +3301,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/realtime.json"
+        "https://www.dashboardblocks.com/r/realtime.json"
       ],
       "files": [
         {
@@ -3315,7 +3315,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/feedback.json"
+        "https://www.dashboardblocks.com/r/feedback.json"
       ],
       "files": [
         {
@@ -3329,7 +3329,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/feedback.json"
+        "https://www.dashboardblocks.com/r/feedback.json"
       ],
       "files": [
         {
@@ -3343,8 +3343,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/feedback.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/feedback.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -3361,7 +3361,7 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -3375,8 +3375,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/deployments.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/deployments.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -3390,7 +3390,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/deployments.json"
+        "https://www.dashboardblocks.com/r/deployments.json"
       ],
       "files": [
         {
@@ -3404,7 +3404,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/deployments.json"
+        "https://www.dashboardblocks.com/r/deployments.json"
       ],
       "files": [
         {
@@ -3418,7 +3418,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/deployments.json"
+        "https://www.dashboardblocks.com/r/deployments.json"
       ],
       "files": [
         {
@@ -3435,8 +3435,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/scatter.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/scatter.json"
       ],
       "files": [
         {
@@ -3453,8 +3453,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/scatter.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/scatter.json"
       ],
       "files": [
         {
@@ -3471,8 +3471,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/scatter.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/scatter.json"
       ],
       "files": [
         {
@@ -3486,7 +3486,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/scatter.json"
+        "https://www.dashboardblocks.com/r/scatter.json"
       ],
       "files": [
         {
@@ -3503,7 +3503,7 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -3518,7 +3518,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/security.json"
+        "https://www.dashboardblocks.com/r/security.json"
       ],
       "files": [
         {
@@ -3533,7 +3533,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/security.json"
+        "https://www.dashboardblocks.com/r/security.json"
       ],
       "files": [
         {
@@ -3547,8 +3547,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ring.json",
-        "https://dashboardblocks.com/r/security.json"
+        "https://www.dashboardblocks.com/r/ring.json",
+        "https://www.dashboardblocks.com/r/security.json"
       ],
       "files": [
         {
@@ -3564,7 +3564,7 @@
         "button",
         "card",
         "input",
-        "https://dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
         {
@@ -3583,7 +3583,7 @@
         "native-select",
         "switch",
         "textarea",
-        "https://dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
         {
@@ -3597,7 +3597,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/inventory.json"
+        "https://www.dashboardblocks.com/r/inventory.json"
       ],
       "files": [
         {
@@ -3624,8 +3624,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/inventory.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/inventory.json"
       ],
       "files": [
         {
@@ -3642,8 +3642,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/chart-panel.json",
-        "https://dashboardblocks.com/r/inventory.json"
+        "https://www.dashboardblocks.com/r/chart-panel.json",
+        "https://www.dashboardblocks.com/r/inventory.json"
       ],
       "files": [
         {
@@ -3660,8 +3660,8 @@
       ],
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-usage.json",
-        "https://dashboardblocks.com/r/chart-panel.json"
+        "https://www.dashboardblocks.com/r/ai-usage.json",
+        "https://www.dashboardblocks.com/r/chart-panel.json"
       ],
       "files": [
         {
@@ -3675,7 +3675,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-usage.json"
+        "https://www.dashboardblocks.com/r/ai-usage.json"
       ],
       "files": [
         {
@@ -3689,7 +3689,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-usage.json"
+        "https://www.dashboardblocks.com/r/ai-usage.json"
       ],
       "files": [
         {
@@ -3703,8 +3703,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-usage.json",
-        "https://dashboardblocks.com/r/ring.json"
+        "https://www.dashboardblocks.com/r/ai-usage.json",
+        "https://www.dashboardblocks.com/r/ring.json"
       ],
       "files": [
         {
@@ -3720,8 +3720,8 @@
         "button",
         "card",
         "input",
-        "https://dashboardblocks.com/r/settings.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/settings.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -3738,7 +3738,7 @@
         "button",
         "card",
         "input",
-        "https://dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
         {
@@ -3768,8 +3768,8 @@
         "button",
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/settings.json",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/settings.json",
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -3786,7 +3786,7 @@
         "button",
         "card",
         "switch",
-        "https://dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
         {
@@ -3802,7 +3802,7 @@
         "button",
         "card",
         "input",
-        "https://dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
         {
@@ -3819,7 +3819,7 @@
         "card",
         "input",
         "native-select",
-        "https://dashboardblocks.com/r/team.json"
+        "https://www.dashboardblocks.com/r/team.json"
       ],
       "files": [
         {
@@ -3834,7 +3834,7 @@
       "registryDependencies": [
         "separator",
         "sidebar",
-        "https://dashboardblocks.com/r/app-shell.json"
+        "https://www.dashboardblocks.com/r/app-shell.json"
       ],
       "files": [
         {
@@ -3850,7 +3850,7 @@
         "button",
         "separator",
         "sidebar",
-        "https://dashboardblocks.com/r/app-shell.json"
+        "https://www.dashboardblocks.com/r/app-shell.json"
       ],
       "files": [
         {
@@ -3865,7 +3865,7 @@
       "registryDependencies": [
         "separator",
         "sidebar",
-        "https://dashboardblocks.com/r/app-shell.json"
+        "https://www.dashboardblocks.com/r/app-shell.json"
       ],
       "files": [
         {
@@ -3878,7 +3878,7 @@
       "name": "app-shell-04",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/app-shell.json"
+        "https://www.dashboardblocks.com/r/app-shell.json"
       ],
       "files": [
         {
@@ -3898,7 +3898,7 @@
         "separator",
         "switch",
         "textarea",
-        "https://dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json"
       ],
       "files": [
         {
@@ -3918,7 +3918,7 @@
         "input",
         "native-select",
         "textarea",
-        "https://dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json"
       ],
       "files": [
         {
@@ -3938,7 +3938,7 @@
         "native-select",
         "switch",
         "textarea",
-        "https://dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json"
       ],
       "files": [
         {
@@ -3952,7 +3952,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/forms.json"
+        "https://www.dashboardblocks.com/r/forms.json"
       ],
       "files": [
         {
@@ -3970,8 +3970,8 @@
         "button",
         "card",
         "table",
-        "https://dashboardblocks.com/r/page-header.json",
-        "https://dashboardblocks.com/r/record-detail.json"
+        "https://www.dashboardblocks.com/r/page-header.json",
+        "https://www.dashboardblocks.com/r/record-detail.json"
       ],
       "files": [
         {
@@ -3988,9 +3988,9 @@
         "button",
         "card",
         "table",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/page-header.json",
-        "https://dashboardblocks.com/r/record-detail.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/page-header.json",
+        "https://www.dashboardblocks.com/r/record-detail.json"
       ],
       "files": [
         {
@@ -4008,9 +4008,9 @@
         "button",
         "card",
         "textarea",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/page-header.json",
-        "https://dashboardblocks.com/r/record-detail.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/page-header.json",
+        "https://www.dashboardblocks.com/r/record-detail.json"
       ],
       "files": [
         {
@@ -4024,7 +4024,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/page-header.json"
+        "https://www.dashboardblocks.com/r/page-header.json"
       ],
       "files": [
         {
@@ -4039,7 +4039,7 @@
       "registryDependencies": [
         "badge",
         "button",
-        "https://dashboardblocks.com/r/page-header.json"
+        "https://www.dashboardblocks.com/r/page-header.json"
       ],
       "files": [
         {
@@ -4055,7 +4055,7 @@
         "avatar",
         "badge",
         "button",
-        "https://dashboardblocks.com/r/page-header.json"
+        "https://www.dashboardblocks.com/r/page-header.json"
       ],
       "files": [
         {
@@ -4071,7 +4071,7 @@
         "badge",
         "button",
         "input-group",
-        "https://dashboardblocks.com/r/page-header.json"
+        "https://www.dashboardblocks.com/r/page-header.json"
       ],
       "files": [
         {
@@ -4085,7 +4085,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/notifications.json"
+        "https://www.dashboardblocks.com/r/notifications.json"
       ],
       "files": [
         {
@@ -4100,7 +4100,7 @@
       "registryDependencies": [
         "button",
         "tabs",
-        "https://dashboardblocks.com/r/notifications.json"
+        "https://www.dashboardblocks.com/r/notifications.json"
       ],
       "files": [
         {
@@ -4116,8 +4116,8 @@
         "button",
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/notifications.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/notifications.json"
       ],
       "files": [
         {
@@ -4130,7 +4130,7 @@
       "name": "command-menu-01",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/command-menu.json"
+        "https://www.dashboardblocks.com/r/command-menu.json"
       ],
       "files": [
         {
@@ -4143,7 +4143,7 @@
       "name": "command-menu-02",
       "type": "registry:component",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/command-menu.json"
+        "https://www.dashboardblocks.com/r/command-menu.json"
       ],
       "files": [
         {
@@ -4157,7 +4157,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kanban.json"
+        "https://www.dashboardblocks.com/r/kanban.json"
       ],
       "files": [
         {
@@ -4171,8 +4171,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kanban.json",
-        "https://dashboardblocks.com/r/pipeline.json"
+        "https://www.dashboardblocks.com/r/kanban.json",
+        "https://www.dashboardblocks.com/r/pipeline.json"
       ],
       "files": [
         {
@@ -4186,7 +4186,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/kanban.json"
+        "https://www.dashboardblocks.com/r/kanban.json"
       ],
       "files": [
         {
@@ -4200,7 +4200,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/comments.json"
+        "https://www.dashboardblocks.com/r/comments.json"
       ],
       "files": [
         {
@@ -4217,7 +4217,7 @@
         "card",
         "separator",
         "tabs",
-        "https://dashboardblocks.com/r/comments.json"
+        "https://www.dashboardblocks.com/r/comments.json"
       ],
       "files": [
         {
@@ -4233,7 +4233,7 @@
         "badge",
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/comments.json"
+        "https://www.dashboardblocks.com/r/comments.json"
       ],
       "files": [
         {
@@ -4249,7 +4249,7 @@
         "badge",
         "card",
         "tabs",
-        "https://dashboardblocks.com/r/comments.json"
+        "https://www.dashboardblocks.com/r/comments.json"
       ],
       "files": [
         {
@@ -4263,8 +4263,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/calendar.json",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/calendar.json",
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -4278,8 +4278,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/calendar.json",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/calendar.json",
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -4293,8 +4293,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/calendar.json",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/calendar.json",
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -4308,8 +4308,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/calendar.json",
-        "https://dashboardblocks.com/r/schedule.json"
+        "https://www.dashboardblocks.com/r/calendar.json",
+        "https://www.dashboardblocks.com/r/schedule.json"
       ],
       "files": [
         {
@@ -4324,7 +4324,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/files.json"
+        "https://www.dashboardblocks.com/r/files.json"
       ],
       "files": [
         {
@@ -4340,9 +4340,9 @@
         "avatar",
         "button",
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/data-table.json",
-        "https://dashboardblocks.com/r/files.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/data-table.json",
+        "https://www.dashboardblocks.com/r/files.json"
       ],
       "files": [
         {
@@ -4357,9 +4357,9 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/files.json",
-        "https://dashboardblocks.com/r/progress-bar.json",
-        "https://dashboardblocks.com/r/usage-meter.json"
+        "https://www.dashboardblocks.com/r/files.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json",
+        "https://www.dashboardblocks.com/r/usage-meter.json"
       ],
       "files": [
         {
@@ -4373,8 +4373,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/activity-feed.json",
-        "https://dashboardblocks.com/r/files.json"
+        "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/files.json"
       ],
       "files": [
         {
@@ -4389,7 +4389,7 @@
       "registryDependencies": [
         "button",
         "card",
-        "https://dashboardblocks.com/r/ai-assistant.json"
+        "https://www.dashboardblocks.com/r/ai-assistant.json"
       ],
       "files": [
         {
@@ -4403,7 +4403,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-assistant.json"
+        "https://www.dashboardblocks.com/r/ai-assistant.json"
       ],
       "files": [
         {
@@ -4417,8 +4417,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-assistant.json",
-        "https://dashboardblocks.com/r/ai-usage.json"
+        "https://www.dashboardblocks.com/r/ai-assistant.json",
+        "https://www.dashboardblocks.com/r/ai-usage.json"
       ],
       "files": [
         {
@@ -4432,7 +4432,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://dashboardblocks.com/r/ai-assistant.json"
+        "https://www.dashboardblocks.com/r/ai-assistant.json"
       ],
       "files": [
         {
@@ -4446,9 +4446,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/invoice.json",
-        "https://dashboardblocks.com/r/record-detail.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/invoice.json",
+        "https://www.dashboardblocks.com/r/record-detail.json"
       ],
       "files": [
         {
@@ -4463,8 +4463,8 @@
       "registryDependencies": [
         "badge",
         "button",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/invoice.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/invoice.json"
       ],
       "files": [
         {
@@ -4479,8 +4479,8 @@
       "registryDependencies": [
         "badge",
         "button",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/invoice.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/invoice.json"
       ],
       "files": [
         {
@@ -4495,8 +4495,8 @@
       "registryDependencies": [
         "badge",
         "button",
-        "https://dashboardblocks.com/r/billing.json",
-        "https://dashboardblocks.com/r/invoice.json"
+        "https://www.dashboardblocks.com/r/billing.json",
+        "https://www.dashboardblocks.com/r/invoice.json"
       ],
       "files": [
         {
@@ -4514,9 +4514,9 @@
         "field",
         "input",
         "input-group",
-        "https://dashboardblocks.com/r/checklist.json",
-        "https://dashboardblocks.com/r/forms.json",
-        "https://dashboardblocks.com/r/onboarding.json"
+        "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/forms.json",
+        "https://www.dashboardblocks.com/r/onboarding.json"
       ],
       "files": [
         {
@@ -4532,10 +4532,10 @@
         "badge",
         "button",
         "card",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/checklist.json",
-        "https://dashboardblocks.com/r/onboarding.json",
-        "https://dashboardblocks.com/r/progress-bar.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/onboarding.json",
+        "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
         {
@@ -4554,8 +4554,8 @@
         "field",
         "input-group",
         "native-select",
-        "https://dashboardblocks.com/r/block-state.json",
-        "https://dashboardblocks.com/r/onboarding.json"
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/onboarding.json"
       ],
       "files": [
         {
@@ -4572,7 +4572,7 @@
         "card",
         "field",
         "native-select",
-        "https://dashboardblocks.com/r/onboarding.json"
+        "https://www.dashboardblocks.com/r/onboarding.json"
       ],
       "files": [
         {
@@ -4587,7 +4587,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "https://dashboardblocks.com/r/error-pages.json"
+        "https://www.dashboardblocks.com/r/error-pages.json"
       ],
       "files": [
         {
@@ -4602,8 +4602,8 @@
       "registryDependencies": [
         "button",
         "textarea",
-        "https://dashboardblocks.com/r/team.json",
-        "https://dashboardblocks.com/r/error-pages.json"
+        "https://www.dashboardblocks.com/r/team.json",
+        "https://www.dashboardblocks.com/r/error-pages.json"
       ],
       "files": [
         {
@@ -4617,8 +4617,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/settings.json",
-        "https://dashboardblocks.com/r/error-pages.json"
+        "https://www.dashboardblocks.com/r/settings.json",
+        "https://www.dashboardblocks.com/r/error-pages.json"
       ],
       "files": [
         {
@@ -4633,7 +4633,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "https://dashboardblocks.com/r/error-pages.json"
+        "https://www.dashboardblocks.com/r/error-pages.json"
       ],
       "files": [
         {
@@ -4647,7 +4647,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/error-pages.json"
+        "https://www.dashboardblocks.com/r/error-pages.json"
       ],
       "files": [
         {
@@ -4661,8 +4661,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "https://dashboardblocks.com/r/team.json",
-        "https://dashboardblocks.com/r/auth.json"
+        "https://www.dashboardblocks.com/r/team.json",
+        "https://www.dashboardblocks.com/r/auth.json"
       ],
       "files": [
         {
@@ -4677,7 +4677,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "https://dashboardblocks.com/r/auth.json"
+        "https://www.dashboardblocks.com/r/auth.json"
       ],
       "files": [
         {
@@ -4693,7 +4693,7 @@
         "button",
         "input",
         "switch",
-        "https://dashboardblocks.com/r/auth.json"
+        "https://www.dashboardblocks.com/r/auth.json"
       ],
       "files": [
         {
@@ -4708,7 +4708,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "https://dashboardblocks.com/r/auth.json"
+        "https://www.dashboardblocks.com/r/auth.json"
       ],
       "files": [
         {
@@ -4723,7 +4723,7 @@
       "title": "Use Animated Number",
       "description": "A hook for animating a number.",
       "registryDependencies": [
-        "https://dashboardblocks.com/r/use-in-view.json"
+        "https://www.dashboardblocks.com/r/use-in-view.json"
       ],
       "files": [
         {

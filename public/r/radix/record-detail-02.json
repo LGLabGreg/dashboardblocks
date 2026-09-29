@@ -6,9 +6,9 @@
     "button",
     "card",
     "table",
-    "https://dashboardblocks.com/r/radix/activity-feed.json",
-    "https://dashboardblocks.com/r/radix/page-header.json",
-    "https://dashboardblocks.com/r/radix/record-detail.json"
+    "https://www.dashboardblocks.com/r/radix/activity-feed.json",
+    "https://www.dashboardblocks.com/r/radix/page-header.json",
+    "https://www.dashboardblocks.com/r/radix/record-detail.json"
   ],
   "files": [
     {

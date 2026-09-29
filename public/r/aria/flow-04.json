@@ -3,7 +3,7 @@
   "name": "flow-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/flow.json"
+    "https://www.dashboardblocks.com/r/aria/flow.json"
   ],
   "files": [
     {

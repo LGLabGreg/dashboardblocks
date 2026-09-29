@@ -4,7 +4,7 @@
   "title": "Comparison",
   "description": "Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/aria/use-in-view.json"
+    "https://www.dashboardblocks.com/r/aria/use-in-view.json"
   ],
   "files": [
     {

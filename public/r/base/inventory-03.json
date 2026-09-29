@@ -3,8 +3,8 @@
   "name": "inventory-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/billing.json",
-    "https://dashboardblocks.com/r/base/inventory.json"
+    "https://www.dashboardblocks.com/r/base/billing.json",
+    "https://www.dashboardblocks.com/r/base/inventory.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "kpi-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/kpi.json"
+    "https://www.dashboardblocks.com/r/radix/kpi.json"
   ],
   "files": [
     {

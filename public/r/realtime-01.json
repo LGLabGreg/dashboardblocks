@@ -3,7 +3,7 @@
   "name": "realtime-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/realtime.json"
+    "https://www.dashboardblocks.com/r/realtime.json"
   ],
   "files": [
     {

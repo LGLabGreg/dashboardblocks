@@ -3,8 +3,8 @@
   "name": "calendar-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/calendar.json",
-    "https://dashboardblocks.com/r/schedule.json"
+    "https://www.dashboardblocks.com/r/calendar.json",
+    "https://www.dashboardblocks.com/r/schedule.json"
   ],
   "files": [
     {

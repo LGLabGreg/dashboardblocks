@@ -3,7 +3,7 @@
   "name": "schedule-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/schedule.json"
+    "https://www.dashboardblocks.com/r/base/schedule.json"
   ],
   "files": [
     {

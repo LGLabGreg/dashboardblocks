@@ -6,7 +6,7 @@
   "registryDependencies": [
     "button",
     "popover",
-    "https://dashboardblocks.com/r/radix/activity-feed.json"
+    "https://www.dashboardblocks.com/r/radix/activity-feed.json"
   ],
   "files": [
     {

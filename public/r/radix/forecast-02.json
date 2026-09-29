@@ -3,7 +3,7 @@
   "name": "forecast-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/forecast.json"
+    "https://www.dashboardblocks.com/r/radix/forecast.json"
   ],
   "files": [
     {

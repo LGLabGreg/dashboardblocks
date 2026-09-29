@@ -3,8 +3,8 @@
   "name": "security-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/ring.json",
-    "https://dashboardblocks.com/r/aria/security.json"
+    "https://www.dashboardblocks.com/r/aria/ring.json",
+    "https://www.dashboardblocks.com/r/aria/security.json"
   ],
   "files": [
     {

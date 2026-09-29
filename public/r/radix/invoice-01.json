@@ -3,9 +3,9 @@
   "name": "invoice-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/radix/billing.json",
-    "https://dashboardblocks.com/r/radix/invoice.json",
-    "https://dashboardblocks.com/r/radix/record-detail.json"
+    "https://www.dashboardblocks.com/r/radix/billing.json",
+    "https://www.dashboardblocks.com/r/radix/invoice.json",
+    "https://www.dashboardblocks.com/r/radix/record-detail.json"
   ],
   "files": [
     {

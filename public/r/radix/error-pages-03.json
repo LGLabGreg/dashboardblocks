@@ -3,8 +3,8 @@
   "name": "error-pages-03",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/radix/settings.json",
-    "https://dashboardblocks.com/r/radix/error-pages.json"
+    "https://www.dashboardblocks.com/r/radix/settings.json",
+    "https://www.dashboardblocks.com/r/radix/error-pages.json"
   ],
   "files": [
     {
