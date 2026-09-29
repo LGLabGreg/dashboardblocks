@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 /**
  * Options mirrored from https://ui.shadcn.com/create. Blocks are written once and
  * adapt to whichever combination a project was initialised with.
@@ -72,6 +74,19 @@ export function parseConfig(value: unknown): CustomizerConfig {
     iconLibrary: pick(ICON_LIBRARIES, input.iconLibrary, DEFAULT_CONFIG.iconLibrary),
     radius: pick(RADII, input.radius, DEFAULT_CONFIG.radius),
     style: pick(STYLES, input.style, DEFAULT_CONFIG.style),
+  }
+}
+
+/**
+ * Props for site chrome built from components/ui, such as the customizer menu
+ * and the preview toolbar. It keeps the default style and radius, so only the
+ * blocks change with the customizer. Portalled popups render outside the
+ * chrome, so they need these props as well.
+ */
+export function siteChrome(className?: string) {
+  return {
+    'data-site-chrome': '',
+    className: cn(`style-${DEFAULT_CONFIG.style} [--radius:0.625rem]`, className),
   }
 }
 

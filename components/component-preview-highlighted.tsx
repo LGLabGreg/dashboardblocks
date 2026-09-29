@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { DEFAULT_CONFIG } from '@/lib/customizer'
+import { DEFAULT_CONFIG, siteChrome } from '@/lib/customizer'
 import { highlightTsx } from '@/lib/highlight-client'
 import { toProjectCode } from '@/lib/registry-code'
 import { cn } from '@/lib/utils'
@@ -97,7 +97,9 @@ export function ComponentPreviewHighlighted({
   return (
     <div className={cn('not-prose my-6 overflow-hidden rounded-xl border', className)}>
       <Tabs defaultValue='preview' className='gap-0'>
-        <div className='bg-background flex flex-wrap items-center gap-2 border-b p-3'>
+        <div
+          {...siteChrome('bg-background flex flex-wrap items-center gap-2 border-b p-3')}
+        >
           <TabsList>
             <TabsTrigger value='preview'>Preview</TabsTrigger>
             <TabsTrigger value='code'>Code</TabsTrigger>

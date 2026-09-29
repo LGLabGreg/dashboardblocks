@@ -1,7 +1,7 @@
 'use client'
 
 import { PaletteIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import {
   DropdownMenu,
@@ -24,6 +24,7 @@ import {
   type CustomizerConfig,
   ICON_LIBRARIES,
   RADII,
+  siteChrome,
   STYLES,
 } from '@/lib/customizer'
 import { cn } from '@/lib/utils'
@@ -57,7 +58,9 @@ function useHoverPreview(config: CustomizerConfig, open: boolean) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const previewing = useRef<string | null>(null)
 
-  useEffect(() => {
+  // A layout effect, so it runs before the cleanup below when a choice (such
+  // as Reset) also closes the menu. Otherwise that cleanup puts the old config back.
+  useLayoutEffect(() => {
     saved.current = config
   }, [config])
 
@@ -75,16 +78,12 @@ function useHoverPreview(config: CustomizerConfig, open: boolean) {
 
   useEffect(() => {
     if (!open) return
-    let last = { x: NaN, y: NaN }
+    // What the pointer is over: an option's id, null off the options, or
+    // undefined before the first move. Only a change restarts the delay.
+    let hovered: string | null | undefined
 
     const onPointerMove = (event: PointerEvent) => {
-      // Previewing a style resizes the menu, and browsers send pointer events
-      // when the layout moves under a still pointer. Only real movement counts,
-      // so the preview doesn't flip back and forth on its own.
       if (event.pointerType !== 'mouse') return
-      if (event.clientX === last.x && event.clientY === last.y) return
-      last = { x: event.clientX, y: event.clientY }
-
       const option =
         event.target instanceof Element
           ? event.target.closest<HTMLElement>('[data-preview-key]')
@@ -93,6 +92,8 @@ function useHoverPreview(config: CustomizerConfig, open: boolean) {
         ? { [option.dataset.previewKey!]: option.dataset.previewValue }
         : null
       const id = patch && JSON.stringify(patch)
+      if (id === hovered) return
+      hovered = id
       clear()
       if (id === previewing.current) return
       timer.current = setTimeout(() => {
@@ -148,7 +149,7 @@ export function Customizer({
           {style}
         </span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='start' className='w-80 min-w-(--anchor-width)'>
+      <DropdownMenuContent align='start' {...siteChrome('w-80 min-w-(--anchor-width)')}>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Preview with your setup</DropdownMenuLabel>
           {SETTINGS.map((setting) => (
@@ -161,7 +162,7 @@ export function Customizer({
                   </span>
                 </span>
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className='min-w-52'>
+              <DropdownMenuSubContent {...siteChrome('min-w-52')}>
                 <DropdownMenuRadioGroup
                   value={config[setting.key]}
                   onValueChange={(value) => {

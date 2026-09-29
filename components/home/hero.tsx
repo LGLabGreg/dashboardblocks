@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { VersionBadge } from '@/components/version-badge'
 
+import { siteChrome } from '@/lib/customizer'
+
 import { Corner } from './corner'
 import { InstallCommand } from './install-command'
 import { Showcase } from './showcase'
@@ -51,7 +53,7 @@ export function Hero({ blockCount }: { blockCount: number }) {
                 </Link>
                 .
               </p>
-              <div className='flex flex-nowrap items-center gap-2'>
+              <div {...siteChrome('flex flex-nowrap items-center gap-2')}>
                 <Button nativeButton={false} render={<Link href='/docs' />}>
                   Get started
                   <ArrowRight data-icon='inline-end' />

@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
+import { siteChrome } from '@/lib/customizer'
+
 import { Corner } from './corner'
 
 export function CTA({ blockCount }: { blockCount: number }) {
@@ -35,7 +37,7 @@ export function CTA({ blockCount }: { blockCount: number }) {
               <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
                 Free and open source under the MIT license. Star it, fork it, ship it.
               </p>
-              <div className='flex flex-wrap items-center gap-3'>
+              <div {...siteChrome('flex flex-wrap items-center gap-3')}>
                 <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
                   Get started
                   <ArrowRight data-icon='inline-end' />
