@@ -1,6 +1,7 @@
 'use client'
 
 import { PaletteIcon } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import {
+  applyConfigToDocument,
   BASES,
   type CustomizerConfig,
   ICON_LIBRARIES,
@@ -32,12 +34,72 @@ const SETTINGS: {
   key: keyof CustomizerConfig
   label: string
   options: ReadonlyArray<{ label: string; value: string }>
+  /** Applied to <html> alone, so it can be previewed on hover without re-rendering. */
+  preview?: boolean
 }[] = [
-  { key: 'style', label: 'Style', options: STYLES },
+  { key: 'style', label: 'Style', options: STYLES, preview: true },
   { key: 'base', label: 'Component library', options: BASES },
   { key: 'iconLibrary', label: 'Icon library', options: ICON_LIBRARIES },
-  { key: 'radius', label: 'Radius', options: RADII },
+  { key: 'radius', label: 'Radius', options: RADII, preview: true },
 ]
+
+const PREVIEW_DELAY = 150
+
+/**
+ * Previews an option while the pointer rests on it, like ui.shadcn.com/create,
+ * and puts the saved config back when it leaves or the menu closes. Moving
+ * between options keeps the preview until the next one applies, so it doesn't
+ * flash back to the saved style in between.
+ */
+function useHoverPreview(config: CustomizerConfig) {
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const previewing = useRef<string | null>(null)
+  const pointer = useRef({ x: NaN, y: NaN })
+
+  const clear = () => {
+    if (timer.current) clearTimeout(timer.current)
+    timer.current = null
+  }
+
+  const schedule = (patch: Partial<CustomizerConfig> | null) => {
+    clear()
+    timer.current = setTimeout(() => {
+      previewing.current = patch && JSON.stringify(patch)
+      applyConfigToDocument({ ...config, ...patch })
+    }, PREVIEW_DELAY)
+  }
+
+  const revert = () => {
+    clear()
+    if (!previewing.current) return
+    previewing.current = null
+    applyConfigToDocument(config)
+  }
+
+  // Previewing a style resizes the menu, and browsers send pointer events when
+  // the layout moves under a still pointer. Only count events where the
+  // pointer moved, so the preview doesn't flip back and forth on its own.
+  const moved = (event: React.PointerEvent) =>
+    event.pointerType === 'mouse' &&
+    (event.clientX !== pointer.current.x || event.clientY !== pointer.current.y)
+
+  useEffect(() => clear, [])
+
+  return {
+    revert,
+    optionProps: (patch: Partial<CustomizerConfig>) => ({
+      onPointerMove: (event: React.PointerEvent) => {
+        if (!moved(event)) return
+        pointer.current = { x: event.clientX, y: event.clientY }
+        if (previewing.current === JSON.stringify(patch)) clear()
+        else schedule(patch)
+      },
+      onPointerLeave: (event: React.PointerEvent) => {
+        if (moved(event)) schedule(null)
+      },
+    }),
+  }
+}
 
 function labelFor(setting: (typeof SETTINGS)[number], value: string) {
   return setting.options.find((option) => option.value === value)?.label ?? value
@@ -57,9 +119,14 @@ export function Customizer({
 }) {
   const { config, reset, setConfig } = useCustomizer()
   const style = labelFor(SETTINGS[0], config.style)
+  const { optionProps, revert } = useHoverPreview(config)
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (!open) revert()
+      }}
+    >
       {/* Site chrome, so it keeps the same look whichever style is picked. */}
       <DropdownMenuTrigger
         className={cn(
@@ -90,12 +157,21 @@ export function Customizer({
               <DropdownMenuSubContent className='min-w-52'>
                 <DropdownMenuRadioGroup
                   value={config[setting.key]}
-                  onValueChange={(value) =>
-                    setConfig({ [setting.key]: value } as Partial<CustomizerConfig>)
-                  }
+                  onValueChange={(value) => {
+                    revert()
+                    setConfig({
+                      [setting.key]: value,
+                    } as Partial<CustomizerConfig>)
+                  }}
                 >
                   {setting.options.map((option) => (
-                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                    <DropdownMenuRadioItem
+                      key={option.value}
+                      value={option.value}
+                      {...(setting.preview
+                        ? optionProps({ [setting.key]: option.value })
+                        : {})}
+                    >
                       {option.label}
                     </DropdownMenuRadioItem>
                   ))}
