@@ -73,7 +73,7 @@ export default function Layout({ children }: LayoutProps<'/'>) {
       <body
         className={`${inter.variable} ${fontMono.variable} font-sans antialiased flex flex-col min-h-screen`}
       >
-        <RootProvider>
+        <RootProvider search={{ options: { type: 'static', api: '/api/search.json' } }}>
           <CustomizerProvider>{children}</CustomizerProvider>
         </RootProvider>
         {IS_PRODUCTION && (
