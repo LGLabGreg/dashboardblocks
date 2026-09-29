@@ -2,7 +2,7 @@
 
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { Fragment, type ReactNode, useEffect } from 'react'
+import { Fragment, type ReactNode, useEffect, useState } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -72,7 +72,6 @@ interface NavSection {
   label?: string
 }
 
-/** Whether `href` is the current page or one of its parents. */
 /**
  * Closes the mobile sidebar when a link in it is clicked. A router's link
  * navigates without reloading the page, so the sheet would otherwise stay open.
@@ -84,6 +83,7 @@ function useCloseMobileSidebar() {
   }
 }
 
+/** Whether `href` is the current page or one of its parents. */
 function isActiveHref(href: string, pathname: string) {
   if (href === pathname) return true
   return href !== '/' && pathname.startsWith(`${href.replace(/\/$/, '')}/`)
@@ -127,6 +127,15 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
 function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const { setOpen, state } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
+  const childActive =
+    item.items?.some((child) => isActiveHref(child.href, pathname)) ?? false
+  // Open the group when navigation moves into it, which a router does without a remount.
+  const [expanded, setExpanded] = useState(childActive)
+  const [wasChildActive, setWasChildActive] = useState(childActive)
+  if (childActive !== wasChildActive) {
+    setWasChildActive(childActive)
+    if (childActive) setExpanded(true)
+  }
 
   if (!item.items?.length) {
     const active = item.href !== undefined && isActiveHref(item.href, pathname)
@@ -151,10 +160,10 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
     )
   }
 
-  const childActive = item.items.some((child) => isActiveHref(child.href, pathname))
   return (
     <Collapsible
-      defaultOpen={childActive}
+      open={expanded}
+      onOpenChange={setExpanded}
       className='group/collapsible'
       render={<SidebarMenuItem />}
     >
@@ -621,7 +630,7 @@ interface PlanUsageProps {
 
 const countFormatter = new Intl.NumberFormat('en-US')
 
-/** Usage against the plan's limit, in the sidebar footer. Hidden when the sidebar collapses to icons. */
+/** Usage against the plan's limit, in the sidebar footer, inside `SidebarProvider`. Hidden when the sidebar collapses to icons. */
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0

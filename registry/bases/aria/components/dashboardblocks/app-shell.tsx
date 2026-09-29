@@ -1,11 +1,11 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: de766f643661
+// source-hash: 03d12f8e11ef
 
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useEffect } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -126,6 +126,15 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
 function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const { setOpen, state } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
+  const childActive =
+    item.items?.some((child) => isActiveHref(child.href, pathname)) ?? false
+  // Open the group when navigation moves into it, which a router does without a remount.
+  const [expanded, setExpanded] = useState(childActive)
+  const [wasChildActive, setWasChildActive] = useState(childActive)
+  if (childActive !== wasChildActive) {
+    setWasChildActive(childActive)
+    if (childActive) setExpanded(true)
+  }
 
   if (!item.items?.length) {
     const active = item.href !== undefined && isActiveHref(item.href, pathname)
@@ -146,10 +155,10 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
     )
   }
 
-  const childActive = item.items.some((child) => isActiveHref(child.href, pathname))
   return (
     <Collapsible
-      defaultExpanded={childActive}
+      isExpanded={expanded}
+      onExpandedChange={setExpanded}
       className='group/collapsible'
       render={(props) => <SidebarMenuItem {...props} />}
     >
@@ -606,7 +615,7 @@ interface PlanUsageProps {
 
 const countFormatter = new Intl.NumberFormat('en-US')
 
-/** Usage against the plan's limit, in the sidebar footer. Hidden when the sidebar collapses to icons. */
+/** Usage against the plan's limit, in the sidebar footer, inside `SidebarProvider`. Hidden when the sidebar collapses to icons. */
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0

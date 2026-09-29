@@ -65,11 +65,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 With `typedRoutes` on, Next.js's `Link` only takes known routes, so wrap it and pass `href` as a `Route`:
 
-```tsx
+```tsx title="app/providers.tsx"
+'use client'
+
 import type { Route } from 'next'
+import NextLink from 'next/link'
+
+import { type LinkProps, LinkProvider } from '@/components/dashboardblocks/link'
 
 function Link({ href, ...props }: LinkProps) {
   return <NextLink href={href as Route} {...props} />
+}
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <LinkProvider component={Link}>{children}</LinkProvider>
 }
 ```
 
