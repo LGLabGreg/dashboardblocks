@@ -1,5 +1,15 @@
 # dashboardblocks
 
+## 1.2.0
+
+### Minor Changes
+
+- [#125](https://github.com/LGLabGreg/dashboardblocks/pull/125) [`91eb3df`](https://github.com/LGLabGreg/dashboardblocks/commit/91eb3dfdc72175b1a17e9e0cd5df05c7bc80dd65) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Add a CRM example dashboard with sales stats, open pipeline, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals. Widen the value axis in the chart panels so labels of 100K and up aren't clipped, and keep the highlighted bar's label inside narrow cards
+
+- [#127](https://github.com/LGLabGreg/dashboardblocks/pull/127) [`1571748`](https://github.com/LGLabGreg/dashboardblocks/commit/1571748a194fc679b077f44d20ea0915d2fbf6f4) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Add a DevOps example dashboard with live throughput, delivery performance, response time percentiles, open alerts, uptime, build health and recent deployments
+
+- [#128](https://github.com/LGLabGreg/dashboardblocks/pull/128) [`98e2e63`](https://github.com/LGLabGreg/dashboardblocks/commit/98e2e63af4f5f898dc6dbb87ec3ce040dd23563e) Thanks [@LGLabGreg](https://github.com/LGLabGreg)! - Add `LinkProvider`, which makes the links in the App Shell, Page Header, Notifications and Onboarding blocks render your router's link, for client-side navigation. Links stay plain anchors without it. The mobile sidebar and the notifications panel close when one of their links is followed. The app shell's user menu no longer shows an empty group between two separators when it has no links.
+
 ## 1.1.1
 
 ### Patch Changes
