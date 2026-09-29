@@ -6,14 +6,14 @@
   "registryDependencies": [
     "button",
     "button-group",
-    "https://dashboardblocks.com/r/aria/billing-01.json",
-    "https://dashboardblocks.com/r/aria/block-state.json",
-    "https://dashboardblocks.com/r/aria/dashboard-header.json",
-    "https://dashboardblocks.com/r/aria/data-table-04.json",
-    "https://dashboardblocks.com/r/aria/geo-04.json",
-    "https://dashboardblocks.com/r/aria/heatmap-01.json",
-    "https://dashboardblocks.com/r/aria/retention-03.json",
-    "https://dashboardblocks.com/r/aria/stat-group-03.json"
+    "https://www.dashboardblocks.com/r/aria/billing-01.json",
+    "https://www.dashboardblocks.com/r/aria/block-state.json",
+    "https://www.dashboardblocks.com/r/aria/dashboard-header.json",
+    "https://www.dashboardblocks.com/r/aria/data-table-04.json",
+    "https://www.dashboardblocks.com/r/aria/geo-04.json",
+    "https://www.dashboardblocks.com/r/aria/heatmap-01.json",
+    "https://www.dashboardblocks.com/r/aria/retention-03.json",
+    "https://www.dashboardblocks.com/r/aria/stat-group-03.json"
   ],
   "files": [
     {

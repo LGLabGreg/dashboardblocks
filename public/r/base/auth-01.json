@@ -3,8 +3,8 @@
   "name": "auth-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/base/team.json",
-    "https://dashboardblocks.com/r/base/auth.json"
+    "https://www.dashboardblocks.com/r/base/team.json",
+    "https://www.dashboardblocks.com/r/base/auth.json"
   ],
   "files": [
     {

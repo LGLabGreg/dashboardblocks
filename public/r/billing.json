@@ -4,7 +4,7 @@
   "title": "Billing",
   "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/use-in-view.json"
+    "https://www.dashboardblocks.com/r/use-in-view.json"
   ],
   "files": [
     {

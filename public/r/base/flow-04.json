@@ -3,7 +3,7 @@
   "name": "flow-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/flow.json"
+    "https://www.dashboardblocks.com/r/base/flow.json"
   ],
   "files": [
     {

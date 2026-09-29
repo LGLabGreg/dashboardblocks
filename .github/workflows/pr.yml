@@ -35,12 +35,12 @@ jobs:
       - name: Build Registry
         run: pnpm registry:build
         env:
-          REGISTRY_BASE_URL: https://dashboardblocks.com
+          REGISTRY_BASE_URL: https://www.dashboardblocks.com
 
       - name: Install every block with the shadcn CLI
         run: pnpm registry:verify
         env:
-          REGISTRY_BASE_URL: https://dashboardblocks.com
+          REGISTRY_BASE_URL: https://www.dashboardblocks.com
 
       - name: Commit registry.json if changed
         uses: stefanzweifel/git-auto-commit-action@v7

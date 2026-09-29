@@ -4,7 +4,7 @@
   "title": "Inventory",
   "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/use-in-view.json"
+    "https://www.dashboardblocks.com/r/radix/use-in-view.json"
   ],
   "files": [
     {

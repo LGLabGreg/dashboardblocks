@@ -3,7 +3,7 @@
   "name": "feedback-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/feedback.json"
+    "https://www.dashboardblocks.com/r/base/feedback.json"
   ],
   "files": [
     {

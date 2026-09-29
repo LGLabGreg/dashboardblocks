@@ -3,7 +3,7 @@
   "name": "inventory-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/inventory.json"
+    "https://www.dashboardblocks.com/r/aria/inventory.json"
   ],
   "files": [
     {

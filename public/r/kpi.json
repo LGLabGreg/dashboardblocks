@@ -5,8 +5,8 @@
   "description": "Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/animated-number.json",
-    "https://dashboardblocks.com/r/trend.json"
+    "https://www.dashboardblocks.com/r/animated-number.json",
+    "https://www.dashboardblocks.com/r/trend.json"
   ],
   "files": [
     {

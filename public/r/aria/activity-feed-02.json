@@ -3,7 +3,7 @@
   "name": "activity-feed-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/activity-feed.json"
+    "https://www.dashboardblocks.com/r/aria/activity-feed.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "checklist-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/checklist.json",
-    "https://dashboardblocks.com/r/progress-bar.json"
+    "https://www.dashboardblocks.com/r/checklist.json",
+    "https://www.dashboardblocks.com/r/progress-bar.json"
   ],
   "files": [
     {

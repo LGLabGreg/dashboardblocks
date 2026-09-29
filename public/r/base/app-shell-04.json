@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "app-shell-04",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/base/app-shell.json"
+    "https://www.dashboardblocks.com/r/base/app-shell.json"
   ],
   "files": [
     {

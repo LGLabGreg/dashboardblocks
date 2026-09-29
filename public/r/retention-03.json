@@ -3,7 +3,7 @@
   "name": "retention-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/retention.json"
+    "https://www.dashboardblocks.com/r/retention.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "geo-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/geo.json"
+    "https://www.dashboardblocks.com/r/geo.json"
   ],
   "files": [
     {

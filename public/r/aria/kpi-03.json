@@ -3,7 +3,7 @@
   "name": "kpi-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/kpi.json"
+    "https://www.dashboardblocks.com/r/aria/kpi.json"
   ],
   "files": [
     {

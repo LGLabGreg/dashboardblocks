@@ -4,8 +4,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/aria/progress-bar.json",
-    "https://dashboardblocks.com/r/aria/team.json"
+    "https://www.dashboardblocks.com/r/aria/progress-bar.json",
+    "https://www.dashboardblocks.com/r/aria/team.json"
   ],
   "files": [
     {

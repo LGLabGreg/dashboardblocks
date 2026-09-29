@@ -52,11 +52,16 @@ import { statusComponents } from '@/registry/components/dashboardblocks/status/i
 import { teamComponents } from '@/registry/components/dashboardblocks/team/index'
 import { timelineComponents } from '@/registry/components/dashboardblocks/timeline/index'
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
+import type { Metadata } from 'next'
 
 import { Categories } from '@/components/home/categories'
 import { CTA } from '@/components/home/cta'
 import { Hero } from '@/components/home/hero'
 import { Steps } from '@/components/home/steps'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 const counts = {
   kpi: Object.keys(kpiComponents).length,

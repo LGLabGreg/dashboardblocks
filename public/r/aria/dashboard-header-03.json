@@ -4,7 +4,7 @@
   "registryDependencies": [
     "button",
     "button-group",
-    "https://dashboardblocks.com/r/aria/dashboard-header.json"
+    "https://www.dashboardblocks.com/r/aria/dashboard-header.json"
   ],
   "files": [
     {

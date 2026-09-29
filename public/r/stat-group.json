@@ -4,8 +4,8 @@
   "title": "Stat Group",
   "description": "Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/trend.json",
-    "https://dashboardblocks.com/r/use-in-view.json"
+    "https://www.dashboardblocks.com/r/trend.json",
+    "https://www.dashboardblocks.com/r/use-in-view.json"
   ],
   "files": [
     {

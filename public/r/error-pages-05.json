@@ -3,7 +3,7 @@
   "name": "error-pages-05",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/error-pages.json"
+    "https://www.dashboardblocks.com/r/error-pages.json"
   ],
   "files": [
     {

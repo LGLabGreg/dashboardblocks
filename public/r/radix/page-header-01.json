@@ -3,7 +3,7 @@
   "name": "page-header-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/radix/page-header.json"
+    "https://www.dashboardblocks.com/r/radix/page-header.json"
   ],
   "files": [
     {

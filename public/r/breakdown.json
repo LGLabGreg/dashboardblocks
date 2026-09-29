@@ -4,7 +4,7 @@
   "title": "Breakdown",
   "description": "Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/use-in-view.json"
+    "https://www.dashboardblocks.com/r/use-in-view.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "scatter-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/scatter.json"
+    "https://www.dashboardblocks.com/r/base/scatter.json"
   ],
   "files": [
     {

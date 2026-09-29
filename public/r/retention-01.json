@@ -3,8 +3,8 @@
   "name": "retention-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/heatmap.json",
-    "https://dashboardblocks.com/r/retention.json"
+    "https://www.dashboardblocks.com/r/heatmap.json",
+    "https://www.dashboardblocks.com/r/retention.json"
   ],
   "files": [
     {

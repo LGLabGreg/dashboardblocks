@@ -3,9 +3,9 @@
   "name": "geo-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/breakdown.json",
-    "https://dashboardblocks.com/r/radix/comparison.json",
-    "https://dashboardblocks.com/r/radix/trend.json"
+    "https://www.dashboardblocks.com/r/radix/breakdown.json",
+    "https://www.dashboardblocks.com/r/radix/comparison.json",
+    "https://www.dashboardblocks.com/r/radix/trend.json"
   ],
   "files": [
     {

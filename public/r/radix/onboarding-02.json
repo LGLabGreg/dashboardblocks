@@ -5,10 +5,10 @@
     "badge",
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/block-state.json",
-    "https://dashboardblocks.com/r/radix/checklist.json",
-    "https://dashboardblocks.com/r/radix/onboarding.json",
-    "https://dashboardblocks.com/r/radix/progress-bar.json"
+    "https://www.dashboardblocks.com/r/radix/block-state.json",
+    "https://www.dashboardblocks.com/r/radix/checklist.json",
+    "https://www.dashboardblocks.com/r/radix/onboarding.json",
+    "https://www.dashboardblocks.com/r/radix/progress-bar.json"
   ],
   "files": [
     {

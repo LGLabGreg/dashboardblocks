@@ -3,8 +3,8 @@
   "name": "ai-usage-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/ai-usage.json",
-    "https://dashboardblocks.com/r/radix/ring.json"
+    "https://www.dashboardblocks.com/r/radix/ai-usage.json",
+    "https://www.dashboardblocks.com/r/radix/ring.json"
   ],
   "files": [
     {

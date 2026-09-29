@@ -3,8 +3,8 @@
   "name": "insights-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/comparison.json",
-    "https://dashboardblocks.com/r/radix/insights.json"
+    "https://www.dashboardblocks.com/r/radix/comparison.json",
+    "https://www.dashboardblocks.com/r/radix/insights.json"
   ],
   "files": [
     {

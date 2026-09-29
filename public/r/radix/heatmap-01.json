@@ -3,7 +3,7 @@
   "name": "heatmap-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/heatmap.json"
+    "https://www.dashboardblocks.com/r/radix/heatmap.json"
   ],
   "files": [
     {

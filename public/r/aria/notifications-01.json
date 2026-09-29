@@ -3,7 +3,7 @@
   "name": "notifications-01",
   "registryDependencies": [
     "button",
-    "https://dashboardblocks.com/r/aria/notifications.json"
+    "https://www.dashboardblocks.com/r/aria/notifications.json"
   ],
   "files": [
     {

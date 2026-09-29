@@ -3,7 +3,7 @@
   "name": "breakdown-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/breakdown.json"
+    "https://www.dashboardblocks.com/r/radix/breakdown.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Goals",
   "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/use-in-view.json"
+    "https://www.dashboardblocks.com/r/radix/use-in-view.json"
   ],
   "files": [
     {

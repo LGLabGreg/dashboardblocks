@@ -6,8 +6,8 @@
   ],
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/chart-panel.json",
-    "https://dashboardblocks.com/r/scatter.json"
+    "https://www.dashboardblocks.com/r/chart-panel.json",
+    "https://www.dashboardblocks.com/r/scatter.json"
   ],
   "files": [
     {

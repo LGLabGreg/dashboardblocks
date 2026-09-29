@@ -3,7 +3,7 @@
   "name": "comments-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/comments.json"
+    "https://www.dashboardblocks.com/r/base/comments.json"
   ],
   "files": [
     {

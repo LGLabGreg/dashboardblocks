@@ -3,7 +3,7 @@
   "name": "status-05",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/base/status.json"
+    "https://www.dashboardblocks.com/r/base/status.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
   "name": "security-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/ring.json",
-    "https://dashboardblocks.com/r/radix/security.json"
+    "https://www.dashboardblocks.com/r/radix/ring.json",
+    "https://www.dashboardblocks.com/r/radix/security.json"
   ],
   "files": [
     {

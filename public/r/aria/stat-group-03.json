@@ -7,8 +7,8 @@
   "registryDependencies": [
     "card",
     "tabs",
-    "https://dashboardblocks.com/r/aria/chart-panel.json",
-    "https://dashboardblocks.com/r/aria/stat-group.json"
+    "https://www.dashboardblocks.com/r/aria/chart-panel.json",
+    "https://www.dashboardblocks.com/r/aria/stat-group.json"
   ],
   "files": [
     {

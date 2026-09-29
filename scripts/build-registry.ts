@@ -61,7 +61,7 @@ import { resolve } from 'path'
 const registry = {
   $schema: 'https://ui.shadcn.com/schema/registry.json',
   name: 'dashboardblocks',
-  homepage: 'https://dashboardblocks.com',
+  homepage: 'https://www.dashboardblocks.com',
   items: [
     ...components,
     ...kpiExamples,

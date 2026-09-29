@@ -4,8 +4,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/checklist.json",
-    "https://dashboardblocks.com/r/radix/ring.json"
+    "https://www.dashboardblocks.com/r/radix/checklist.json",
+    "https://www.dashboardblocks.com/r/radix/ring.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "forecast-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/forecast.json"
+    "https://www.dashboardblocks.com/r/aria/forecast.json"
   ],
   "files": [
     {

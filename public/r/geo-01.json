@@ -3,8 +3,8 @@
   "name": "geo-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/geo.json",
-    "https://dashboardblocks.com/r/heatmap.json"
+    "https://www.dashboardblocks.com/r/geo.json",
+    "https://www.dashboardblocks.com/r/heatmap.json"
   ],
   "files": [
     {

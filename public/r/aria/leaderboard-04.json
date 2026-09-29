@@ -3,8 +3,8 @@
   "name": "leaderboard-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/icon.json",
-    "https://dashboardblocks.com/r/aria/leaderboard.json"
+    "https://www.dashboardblocks.com/r/aria/icon.json",
+    "https://www.dashboardblocks.com/r/aria/leaderboard.json"
   ],
   "files": [
     {

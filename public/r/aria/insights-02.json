@@ -7,8 +7,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/aria/chart-panel.json",
-    "https://dashboardblocks.com/r/aria/insights.json"
+    "https://www.dashboardblocks.com/r/aria/chart-panel.json",
+    "https://www.dashboardblocks.com/r/aria/insights.json"
   ],
   "files": [
     {

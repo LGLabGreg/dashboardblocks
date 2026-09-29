@@ -4,8 +4,8 @@
   "registryDependencies": [
     "avatar",
     "card",
-    "https://dashboardblocks.com/r/aria/leaderboard.json",
-    "https://dashboardblocks.com/r/aria/trend.json"
+    "https://www.dashboardblocks.com/r/aria/leaderboard.json",
+    "https://www.dashboardblocks.com/r/aria/trend.json"
   ],
   "files": [
     {

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next'
 
+import { siteConfig } from '@/lib/config'
 import { source } from '@/lib/source'
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL!
+const baseUrl = siteConfig.url
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const docs = source.getPages().map((page) => ({

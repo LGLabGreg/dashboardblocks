@@ -4,7 +4,7 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/security.json"
+    "https://www.dashboardblocks.com/r/radix/security.json"
   ],
   "files": [
     {

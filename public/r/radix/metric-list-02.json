@@ -3,7 +3,7 @@
   "name": "metric-list-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/metric-list.json"
+    "https://www.dashboardblocks.com/r/radix/metric-list.json"
   ],
   "files": [
     {

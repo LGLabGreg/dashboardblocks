@@ -3,7 +3,7 @@
   "name": "activity-feed-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/activity-feed.json"
+    "https://www.dashboardblocks.com/r/radix/activity-feed.json"
   ],
   "files": [
     {

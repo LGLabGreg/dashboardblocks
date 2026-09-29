@@ -8,7 +8,7 @@ const config = {
   reactCompiler: true,
   async rewrites() {
     return [
-      // `"@dashboardblocks": "https://dashboardblocks.com/r/{style}/{name}.json"` in
+      // `"@dashboardblocks": "https://www.dashboardblocks.com/r/{style}/{name}.json"` in
       // components.json resolves each block for the project's component library.
       {
         source: '/r/:base(base|radix|aria)-:style/:name.json',

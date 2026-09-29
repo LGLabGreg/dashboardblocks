@@ -4,8 +4,8 @@
   "title": "Geo",
   "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/heatmap.json",
-    "https://dashboardblocks.com/r/use-in-view.json"
+    "https://www.dashboardblocks.com/r/heatmap.json",
+    "https://www.dashboardblocks.com/r/use-in-view.json"
   ],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "geo-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/geo.json"
+    "https://www.dashboardblocks.com/r/radix/geo.json"
   ],
   "files": [
     {

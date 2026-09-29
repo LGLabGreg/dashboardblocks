@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dashboard-header-01",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/dashboard-header.json"
+    "https://www.dashboardblocks.com/r/radix/dashboard-header.json"
   ],
   "files": [
     {

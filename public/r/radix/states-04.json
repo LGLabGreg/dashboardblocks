@@ -7,8 +7,8 @@
   "registryDependencies": [
     "button",
     "card",
-    "https://dashboardblocks.com/r/radix/block-state.json",
-    "https://dashboardblocks.com/r/radix/chart-panel.json"
+    "https://www.dashboardblocks.com/r/radix/block-state.json",
+    "https://www.dashboardblocks.com/r/radix/chart-panel.json"
   ],
   "files": [
     {

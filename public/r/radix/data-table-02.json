@@ -3,7 +3,7 @@
   "name": "data-table-02",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/data-table.json"
+    "https://www.dashboardblocks.com/r/radix/data-table.json"
   ],
   "files": [
     {

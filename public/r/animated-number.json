@@ -4,7 +4,7 @@
   "title": "Animated Number",
   "description": "An animated number component.",
   "registryDependencies": [
-    "https://dashboardblocks.com/r/use-animated-number.json"
+    "https://www.dashboardblocks.com/r/use-animated-number.json"
   ],
   "files": [
     {

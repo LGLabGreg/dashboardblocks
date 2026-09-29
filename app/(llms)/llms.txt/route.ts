@@ -1,3 +1,4 @@
+import { siteConfig } from '@/lib/config'
 import { source } from '@/lib/source'
 
 export const revalidate = false
@@ -16,7 +17,7 @@ export async function GET() {
     sections.get(section)!.push(page)
   }
 
-  const baseUrl = 'https://dashboardblocks.com'
+  const baseUrl = siteConfig.url
 
   let content = `# Dashboard Blocks
 

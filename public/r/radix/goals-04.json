@@ -3,7 +3,7 @@
   "name": "goals-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/radix/ring.json"
+    "https://www.dashboardblocks.com/r/radix/ring.json"
   ],
   "files": [
     {

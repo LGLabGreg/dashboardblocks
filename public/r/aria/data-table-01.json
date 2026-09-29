@@ -3,7 +3,7 @@
   "name": "data-table-01",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/aria/data-table.json"
+    "https://www.dashboardblocks.com/r/aria/data-table.json"
   ],
   "files": [
     {

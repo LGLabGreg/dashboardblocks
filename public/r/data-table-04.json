@@ -3,8 +3,8 @@
   "name": "data-table-04",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/data-table.json",
-    "https://dashboardblocks.com/r/status.json"
+    "https://www.dashboardblocks.com/r/data-table.json",
+    "https://www.dashboardblocks.com/r/status.json"
   ],
   "files": [
     {

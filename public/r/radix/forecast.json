@@ -7,8 +7,8 @@
     "recharts"
   ],
   "registryDependencies": [
-    "https://dashboardblocks.com/r/radix/chart-panel.json",
-    "https://dashboardblocks.com/r/radix/use-in-view.json"
+    "https://www.dashboardblocks.com/r/radix/chart-panel.json",
+    "https://www.dashboardblocks.com/r/radix/use-in-view.json"
   ],
   "files": [
     {

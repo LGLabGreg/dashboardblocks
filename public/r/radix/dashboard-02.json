@@ -6,14 +6,14 @@
   "registryDependencies": [
     "button",
     "button-group",
-    "https://dashboardblocks.com/r/radix/billing-01.json",
-    "https://dashboardblocks.com/r/radix/block-state.json",
-    "https://dashboardblocks.com/r/radix/dashboard-header.json",
-    "https://dashboardblocks.com/r/radix/data-table-04.json",
-    "https://dashboardblocks.com/r/radix/geo-04.json",
-    "https://dashboardblocks.com/r/radix/heatmap-01.json",
-    "https://dashboardblocks.com/r/radix/retention-03.json",
-    "https://dashboardblocks.com/r/radix/stat-group-03.json"
+    "https://www.dashboardblocks.com/r/radix/billing-01.json",
+    "https://www.dashboardblocks.com/r/radix/block-state.json",
+    "https://www.dashboardblocks.com/r/radix/dashboard-header.json",
+    "https://www.dashboardblocks.com/r/radix/data-table-04.json",
+    "https://www.dashboardblocks.com/r/radix/geo-04.json",
+    "https://www.dashboardblocks.com/r/radix/heatmap-01.json",
+    "https://www.dashboardblocks.com/r/radix/retention-03.json",
+    "https://www.dashboardblocks.com/r/radix/stat-group-03.json"
   ],
   "files": [
     {

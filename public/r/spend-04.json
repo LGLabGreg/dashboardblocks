@@ -6,9 +6,9 @@
   ],
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/billing.json",
-    "https://dashboardblocks.com/r/chart-panel.json",
-    "https://dashboardblocks.com/r/spend.json"
+    "https://www.dashboardblocks.com/r/billing.json",
+    "https://www.dashboardblocks.com/r/chart-panel.json",
+    "https://www.dashboardblocks.com/r/spend.json"
   ],
   "files": [
     {

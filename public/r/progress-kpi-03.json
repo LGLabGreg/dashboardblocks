@@ -3,9 +3,9 @@
   "name": "progress-kpi-03",
   "registryDependencies": [
     "card",
-    "https://dashboardblocks.com/r/animated-number.json",
-    "https://dashboardblocks.com/r/kpi.json",
-    "https://dashboardblocks.com/r/ring.json"
+    "https://www.dashboardblocks.com/r/animated-number.json",
+    "https://www.dashboardblocks.com/r/kpi.json",
+    "https://www.dashboardblocks.com/r/ring.json"
   ],
   "files": [
     {
