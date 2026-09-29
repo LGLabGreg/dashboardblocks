@@ -112,6 +112,14 @@ const INCIDENTS: {
   uptime: number
 }[] = [
   {
+    daysAgo: 0,
+    note: 'Elevated error rate in eu-west-1',
+    service: 'API',
+    slowdown: 1.15,
+    status: 'partial',
+    uptime: 99.2,
+  },
+  {
     daysAgo: 3,
     note: 'Elevated 5xx errors for 42 min',
     service: 'API',
@@ -204,7 +212,7 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
     service: 'Web app',
     severity: 'warning',
     source: 'web · us-east-1',
-    title: 'p95 response time above 800 ms',
+    title: 'p95 response time above 250 ms',
   },
   {
     acknowledged: true,
@@ -250,7 +258,7 @@ const PIPELINES = [
   {
     medianDuration: 538,
     name: 'api',
-    runs: 'sssssssssfsssssssssssssssssssr',
+    runs: 'sssssssssfssssssssssssssssssss',
     service: 'API',
   },
   {
@@ -262,7 +270,7 @@ const PIPELINES = [
   {
     medianDuration: 1_386,
     name: 'payments',
-    runs: 'ssssssssssssssssssssssssssssss',
+    runs: 'sssssssssssssssssssssssssssssr',
     service: 'Payments',
   },
   {
@@ -428,7 +436,11 @@ function deliveryAt(service: Service, daysAgo: number, today: Date) {
   }
 }
 
-/** The four DORA metrics over `days` days, ending `shift` days ago. */
+/**
+ * The four DORA metrics over `days` days, ending `shift` days ago. Lead time
+ * and time to restore are deploy-weighted means, standing in for the medians
+ * a real query would return.
+ */
 function doraFor(services: Service[], days: number, shift: number, today: Date) {
   let deploys = 0
   let failures = 0
@@ -488,7 +500,8 @@ function buildOpsData({ preset, service }: Query, today: Date) {
     p99: Math.round(weigh(services, (item) => latencyAt(item, 'p99', daysAgo, hour))),
   })
   const latency = hourly
-    ? Array.from({ length: 24 }, (_, hour) => ({
+    ? // Hours so far today, up to now.
+      Array.from({ length: NOW_HOURS + 1 }, (_, hour) => ({
         label: `${String(hour).padStart(2, '0')}:00`,
         ...point(0, hour),
       }))
@@ -516,12 +529,10 @@ function buildOpsData({ preset, service }: Query, today: Date) {
   const matches = (item: { service: string }) => !service || item.service === service
 
   return {
-    alerts: ALERTS.filter(matches)
-      .slice(0, 4)
-      .map(({ minutesAgo, service: _service, ...alert }) => ({
-        ...alert,
-        firedAt: new Date(now.getTime() - minutesAgo * MINUTE),
-      })),
+    alerts: ALERTS.filter(matches).map(({ minutesAgo, service: _service, ...alert }) => ({
+      ...alert,
+      firedAt: new Date(now.getTime() - minutesAgo * MINUTE),
+    })),
     deployments: DEPLOYMENTS.filter(matches)
       .slice(0, 6)
       .map(({ environment, minutesAgo, service: name, ...deployment }) => ({
@@ -543,7 +554,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
     })),
     previousLabel: hourly ? 'yesterday' : formatDateRange(previousRange),
     scope,
-    serviceLabel,
+    serviceName: service ?? 'All services',
     uptime: services.map((item) => ({
       days: uptimeDays(item.name, today),
       name: item.name,
@@ -633,9 +644,9 @@ const Dashboard5 = (props: Dashboard5Props) => {
       <BlockBusy
         busy={busy}
         label='Updating the dashboard'
-        className='grid gap-4 @4xl:grid-cols-3'
+        className='grid grid-cols-1 gap-4 @4xl:grid-cols-3'
       >
-        <div className='@4xl:col-span-3'>
+        <div className='grid @4xl:col-span-3'>
           <Deployments3
             current={data.dora.current}
             description={`${data.scope}, compared with ${data.previousLabel}`}
@@ -643,12 +654,13 @@ const Dashboard5 = (props: Dashboard5Props) => {
             title='Delivery performance'
           />
         </div>
-        <div className='@4xl:col-span-2'>
+        <div className='grid @4xl:col-span-2'>
           <ChartPanel6
             data={data.latency}
             description={`Response time percentiles, ${data.scope}`}
             formatter={ms}
             headline='p95'
+            labelHeading={shown.preset === 'today' ? 'Hour' : 'Day'}
             percentiles={[
               { key: 'p50', label: 'p50' },
               { key: 'p95', label: 'p95' },
@@ -658,31 +670,31 @@ const Dashboard5 = (props: Dashboard5Props) => {
             trend={data.latencyTrend}
           />
         </div>
-        <Deployments4
-          description={`The last 30 runs of each pipeline, oldest on the left${data.serviceLabel}`}
-          pipelines={data.pipelines}
-          title='Build health'
-        />
-        <div className='@4xl:col-span-2'>
+        {/* Spans the response time and uptime rows. Acknowledged alerts stay
+            acknowledged when the filter changes, since their ids don't. */}
+        <div className='grid @4xl:row-span-2'>
+          <Alerts1 alerts={data.alerts} now={data.now} title='Open alerts' />
+        </div>
+        <div className='grid @4xl:col-span-2'>
           <Status2
-            description={`Daily status over the last 90 days${data.serviceLabel}`}
+            description={`${data.serviceName}: daily status over the last 90 days`}
             services={data.uptime}
             title='Uptime'
           />
         </div>
-        {/* Keyed by service, so acknowledged alerts reset with the filter. */}
-        <Alerts1
-          key={shown.service ?? 'all'}
-          alerts={data.alerts}
-          now={data.now}
-          title='Open alerts'
-        />
-        <div className='@4xl:col-span-3'>
+        <div className='grid @4xl:col-span-2'>
           <Deployments1
             deployments={data.deployments}
-            description={`Latest deploys to every environment${data.serviceLabel}`}
+            description={`${data.serviceName}: the latest deploys to every environment`}
             now={data.now}
             title='Recent deployments'
+          />
+        </div>
+        <div className='grid'>
+          <Deployments4
+            description={`${data.serviceName}: the last 30 runs of each pipeline, oldest on the left`}
+            pipelines={data.pipelines}
+            title='Build health'
           />
         </div>
       </BlockBusy>
