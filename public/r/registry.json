@@ -2126,6 +2126,31 @@
       ]
     },
     {
+      "name": "dashboard-05",
+      "type": "registry:block",
+      "title": "DevOps dashboard",
+      "description": "A DevOps dashboard: live throughput, delivery performance, response time percentiles, open alerts, uptime, build health and recent deployments, filtered by service.",
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/alerts-01.json",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/chart-panel-06.json",
+        "https://www.dashboardblocks.com/r/dashboard-header.json",
+        "https://www.dashboardblocks.com/r/deployments.json",
+        "https://www.dashboardblocks.com/r/deployments-01.json",
+        "https://www.dashboardblocks.com/r/deployments-03.json",
+        "https://www.dashboardblocks.com/r/deployments-04.json",
+        "https://www.dashboardblocks.com/r/realtime-02.json",
+        "https://www.dashboardblocks.com/r/status.json",
+        "https://www.dashboardblocks.com/r/status-02.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/dashboards/dashboard-05.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "goals-01",
       "type": "registry:component",
       "registryDependencies": [
