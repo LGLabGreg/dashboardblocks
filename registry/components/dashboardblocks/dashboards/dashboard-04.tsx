@@ -32,11 +32,11 @@ import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 
 /*
- * A CRM dashboard: the date range and segment filter scope the sales stats and
- * lead conversion. Bookings by month cover the last full months, and the open
- * pipeline, quarter forecast, deal activity and stuck deals are as of today, so
- * the segment scopes them but the date range doesn't. Swap `buildCrmData` for
- * your own queries.
+ * A CRM dashboard: the segment filter scopes every block. The date range
+ * scopes the sales stats and lead conversion. Bookings by month cover the last
+ * twelve full months, and the open pipeline, quarter forecast, deal activity and
+ * stuck deals are as of today, so the date range doesn't apply to them. Swap
+ * `buildCrmData` for your own queries.
  */
 
 interface Dashboard4Props {
@@ -51,12 +51,14 @@ const exampleProps: Dashboard4Props = {
 }
 
 const DAY = 86_400_000
+/** Deal activity is measured back from 5pm today. */
+const NOW_HOURS = 17
 
 /** Leads a day, conversion at each step, deal size and days to close, per segment. */
 const SEGMENTS = [
-  { cycle: 24, deal: 9_400, leads: 3, name: 'SMB', rates: [0.36, 0.48, 0.34] },
-  { cycle: 48, deal: 36_500, leads: 1.2, name: 'Mid-market', rates: [0.42, 0.54, 0.29] },
-  { cycle: 96, deal: 138_000, leads: 0.35, name: 'Enterprise', rates: [0.5, 0.6, 0.24] },
+  { cycle: 24, deal: 9_400, leads: 6, name: 'SMB', rates: [0.36, 0.48, 0.34] },
+  { cycle: 48, deal: 36_500, leads: 3.5, name: 'Mid-market', rates: [0.42, 0.54, 0.29] },
+  { cycle: 96, deal: 96_000, leads: 3, name: 'Enterprise', rates: [0.5, 0.6, 0.24] },
 ]
 
 /** Days a deal is expected to spend in each stage, and the chance it closes from there. */
@@ -68,20 +70,20 @@ const STAGES: PipelineStage[] = [
   { expectedDays: 10, id: 'negotiation', label: 'Negotiation', probability: 0.75 },
 ]
 
-/** Reps, their segment, quarterly quota and pace against it. */
+/** Reps, their segment, their share of its closed deals and their quarterly quota. */
 const REPS = [
-  { name: 'Luis Romero', pace: 0.98, quota: 150_000, segment: 'SMB' },
-  { name: 'Aiko Tanaka', pace: 0.66, quota: 140_000, segment: 'SMB' },
-  { name: 'Jonas Weber', pace: 0.78, quota: 340_000, segment: 'Mid-market' },
-  { name: 'Grace Kim', pace: 1.05, quota: 300_000, segment: 'Mid-market' },
-  { name: 'Maya Patel', pace: 0.6, quota: 820_000, segment: 'Enterprise' },
+  { name: 'Luis Romero', quota: 180_000, segment: 'SMB', share: 0.56 },
+  { name: 'Aiko Tanaka', quota: 175_000, segment: 'SMB', share: 0.44 },
+  { name: 'Jonas Weber', quota: 460_000, segment: 'Mid-market', share: 0.45 },
+  { name: 'Grace Kim', quota: 470_000, segment: 'Mid-market', share: 0.55 },
+  { name: 'Maya Patel', quota: 1_900_000, segment: 'Enterprise', share: 1 },
 ]
 
 /** Open deals per stage, first to last, in each segment. */
 const OPEN_DEALS: Record<string, number[]> = {
-  Enterprise: [2, 2, 1, 1, 1],
-  'Mid-market': [7, 5, 4, 3, 2],
-  SMB: [12, 9, 6, 4, 3],
+  Enterprise: [4, 3, 3, 2, 2],
+  'Mid-market': [9, 7, 5, 4, 3],
+  SMB: [14, 10, 8, 5, 4],
 }
 
 const COMPANIES = [
@@ -149,7 +151,7 @@ interface DealActivity extends Activity {
   segment: string
 }
 
-/** Recent deal activity, newest first, in minutes before the end of today. */
+/** Recent deal activity, newest first, in minutes before 5pm today. */
 const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
   {
     action: 'moved Keystone Freight to',
@@ -225,7 +227,7 @@ const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
   },
 ]
 
-const SEGMENT_OPTIONS: { label: string; value: DateRangePreset }[] = [
+const RANGE_OPTIONS: { label: string; value: DateRangePreset }[] = [
   { label: '7 days', value: '7d' },
   { label: '30 days', value: '30d' },
   { label: '90 days', value: '90d' },
@@ -328,17 +330,24 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
     )
   const current = series(0)
   const previous = series(days)
-  const totals = (points: Day[]) => {
+  // A period counts whole leads and deals, so the stats and the funnel agree.
+  // The sparklines keep the fractions, so they stay smooth.
+  const totals = (points: Day[], whole = true) => {
     const sum = (key: keyof Day) => points.reduce((total, point) => total + point[key], 0)
-    const won = sum('won')
+    const count = (key: keyof Day) => (whole ? Math.round(sum(key)) : sum(key))
+    const exactWon = sum('won') || 1
+    const won = count('won')
+    const proposals = count('proposals')
+    const deal = sum('revenue') / exactWon
     return {
-      cycle: points.reduce((total, point) => total + point.cycle * point.won, 0) / won,
-      deal: sum('revenue') / won,
-      leads: sum('leads'),
-      proposals: sum('proposals'),
-      qualified: sum('qualified'),
-      revenue: sum('revenue'),
-      winRate: (won / sum('proposals')) * 100,
+      cycle:
+        points.reduce((total, point) => total + point.cycle * point.won, 0) / exactWon,
+      deal,
+      leads: count('leads'),
+      proposals,
+      qualified: count('qualified'),
+      revenue: won * deal,
+      winRate: proposals > 0 ? (won / proposals) * 100 : 0,
       won,
     }
   }
@@ -346,7 +355,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
   const before = totals(previous)
   // Sparklines show the trailing seven days at each day, so weekends don't read as dips.
   const week = [...previous.slice(-6), ...current]
-  const trend = current.map((_, index) => totals(week.slice(index, index + 7)))
+  const trend = current.map((_, index) => totals(week.slice(index, index + 7), false))
 
   // Bookings in each of the last twelve full months.
   const monthStart = (back: number) =>
@@ -368,12 +377,19 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
     }
   })
 
-  // The quarter so far: closed at each rep's pace, plus their open deals.
+  // The quarter so far: each rep's share of their segment's closed deals, plus their open deals.
   const quarter = Math.floor(today.getUTCMonth() / 3)
   const quarterStart = Date.UTC(today.getUTCFullYear(), quarter * 3, 1)
   const quarterEnd = Date.UTC(today.getUTCFullYear(), quarter * 3 + 3, 1)
-  const elapsed = (today.getTime() - quarterStart) / DAY + 1
+  const elapsed = Math.floor((today.getTime() - quarterStart) / DAY) + 1
   const quarterDays = (quarterEnd - quarterStart) / DAY
+  const closedThisQuarter = (name: string) => {
+    const item = SEGMENTS.find((entry) => entry.name === name)
+    if (!item) return 0
+    return Array.from({ length: elapsed }, (_, offset) =>
+      dayAt(item, offset, today),
+    ).reduce((total, day) => total + day.revenue, 0)
+  }
   const deals = buildOpenDeals(today).filter(
     (deal) => !segment || deal.segment === segment,
   )
@@ -385,20 +401,18 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
       .slice(0, 6)
       .map(({ minutesAgo, ...item }) => ({
         ...item,
-        at: new Date(today.getTime() + 17 * 3_600_000 - minutesAgo * 60_000),
+        at: new Date(today.getTime() + NOW_HOURS * 3_600_000 - minutesAgo * 60_000),
       })),
     deals,
     funnel: [
-      { label: 'Leads', value: Math.round(now.leads) },
-      { label: 'Qualified', value: Math.round(now.qualified) },
-      { label: 'Proposal sent', value: Math.round(now.proposals) },
-      { label: 'Won', value: Math.round(now.won) },
+      { label: 'Leads', value: now.leads },
+      { label: 'Qualified', value: now.qualified },
+      { label: 'Proposal sent', value: now.proposals },
+      { label: 'Won', value: now.won },
     ],
     months,
     owners: reps.map((rep) => ({
-      closed:
-        Math.round((rep.quota * rep.pace * Math.min(1, elapsed / quarterDays)) / 1_000) *
-        1_000,
+      closed: Math.round((closedThisQuarter(rep.segment) * rep.share) / 1_000) * 1_000,
       deals: deals
         .filter((deal) => deal.owner === rep.name)
         .map((deal) => ({ stage: deal.stage, value: deal.value ?? 0 })),
@@ -494,7 +508,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
         </div>
         <div className='flex flex-wrap items-center gap-x-4 gap-y-3'>
           <ButtonGroup aria-label='Date range'>
-            {SEGMENT_OPTIONS.map((option) => (
+            {RANGE_OPTIONS.map((option) => (
               <Button
                 key={option.value}
                 aria-pressed={query.preset === option.value}
@@ -572,7 +586,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
         <ActivityFeed01
           activities={data.activity}
           description={`Latest changes to deals${data.segmentLabel}`}
-          now={new Date(today.getTime() + 17 * 3_600_000)}
+          now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
           title='Deal activity'
         />
         <div className='@4xl:col-span-3'>

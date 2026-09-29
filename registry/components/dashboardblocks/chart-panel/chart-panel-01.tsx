@@ -8,6 +8,7 @@ import {
   type ChartValueFormatter,
   chartAxisProps,
   chartGridProps,
+  chartValueAxisWidth,
   formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import { Trend } from '@/registry/components/dashboardblocks/trend'
@@ -131,7 +132,7 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
               <YAxis
                 {...chartAxisProps}
                 tickFormatter={(value: number) => formatCompact(value)}
-                width={40}
+                width={chartValueAxisWidth}
               />
               <Tooltip
                 content={(tooltipProps) => (
