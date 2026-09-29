@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/notifications.tsx for React Aria
-// source-hash: 6f986f26016b
+// source-hash: e63ea5dcba1e
 
 'use client'
 
@@ -9,6 +9,7 @@ import {
   type ActivityTone,
   UnreadDot,
 } from '@/registry/components/dashboardblocks/activity-feed'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 import { Dialog } from 'react-aria-components'
@@ -169,13 +170,13 @@ function NotificationItem({
       <div className='flex min-w-0 flex-1 flex-col gap-1'>
         <p className='text-sm'>
           {notification.href ? (
-            <a
+            <Link
               href={notification.href}
               onClick={() => onOpen(notification)}
               className='outline-none focus-visible:underline'
             >
               {target}
-            </a>
+            </Link>
           ) : (
             <button
               type='button'

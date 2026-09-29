@@ -2,6 +2,7 @@
 
 /* oxlint-disable jsx-a11y/control-has-associated-label -- anchors passed to `render` take their text from the children */
 
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, type ReactNode, useEffect } from 'react'
 
@@ -48,7 +49,7 @@ import { cn } from '@/lib/utils'
 
 /*
  * Links are plain anchors, so the shell works with any router. For client-side
- * navigation, render your router's link instead of <a>.
+ * navigation, wrap your app in `LinkProvider` with your router's link.
  */
 
 interface NavLink {
@@ -125,8 +126,8 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           isActive={active}
           tooltip={item.title}
           render={
-            <a
-              href={item.href}
+            <Link
+              href={item.href ?? ''}
               aria-current={item.href === pathname ? 'page' : undefined}
             />
           }
@@ -171,7 +172,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           {item.items.map((child) => (
             <SidebarMenuSubItem key={child.href}>
               <SidebarMenuSubButton
-                href={child.href}
+                render={<Link href={child.href} />}
                 isActive={isActiveHref(child.href, pathname)}
                 aria-current={child.href === pathname ? 'page' : undefined}
               >
@@ -203,7 +204,7 @@ function AppBrand({ description, href, logo, name }: AppBrandProps) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' render={<a href={href} />}>
+        <SidebarMenuButton size='lg' render={<Link href={href} />}>
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -376,15 +377,19 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
         </DropdownMenuLabel>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuGroup>
-        {links.map((link) => (
-          <DropdownMenuItem key={link.href} render={<a href={link.href} />}>
-            {link.icon}
-            {link.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuGroup>
-      <DropdownMenuSeparator />
+      {links.length > 0 && (
+        <>
+          <DropdownMenuGroup>
+            {links.map((link) => (
+              <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
+                {link.icon}
+                {link.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+        </>
+      )}
       <DropdownMenuItem onClick={onSignOut}>
         <IconPlaceholder
           lucide='LogOutIcon'
@@ -494,7 +499,9 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
                 {last || !item.href ? (
                   <BreadcrumbPage className='truncate'>{item.label}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                  <BreadcrumbLink render={<Link href={item.href} />}>
+                    {item.label}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
               {!last && <BreadcrumbSeparator className='hidden md:inline-flex' />}
@@ -606,9 +613,9 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
       </div>
       <Progress value={percent} aria-label={`${title}: ${Math.round(percent)}% used`} />
       {action && (
-        <a href={action.href} className={buttonVariants({ size: 'sm' })}>
+        <Link href={action.href} className={buttonVariants({ size: 'sm' })}>
           {action.label}
-        </a>
+        </Link>
       )}
     </div>
   )
@@ -633,7 +640,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
       {items.map((item) => {
         const active = isActiveHref(item.href, pathname)
         return (
-          <a
+          <Link
             key={item.href}
             href={item.href}
             aria-current={item.href === pathname ? 'page' : undefined}
@@ -646,7 +653,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
                 {item.badge}
               </span>
             )}
-          </a>
+          </Link>
         )
       })}
     </nav>

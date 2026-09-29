@@ -1,8 +1,9 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 2df83151d5fe
+// source-hash: 8f4208f5631b
 
 'use client'
 
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, useEffect } from 'react'
 
@@ -42,8 +43,10 @@ import {
 import { cn } from '@/lib/utils'
 
 /*
- * Links are React Aria links, so the shell works with any router. For
- * client-side navigation, wrap your app in React Aria's RouterProvider.
+ * The sidebar, menu and breadcrumb links are React Aria links, and the rest
+ * render `Link`, so the shell works with any router. For client-side
+ * navigation, wrap your app in React Aria's RouterProvider and in `LinkProvider`
+ * with your router's link.
  */
 
 interface NavLink {
@@ -363,15 +366,19 @@ function UserMenuItems({ links, onSignOut, user }: UserMenuProps) {
         </DropdownMenuLabel>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuGroup>
-        {links.map((link) => (
-          <DropdownMenuItem key={link.href} href={link.href} textValue={link.label}>
-            {link.icon}
-            {link.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuGroup>
-      <DropdownMenuSeparator />
+      {links.length > 0 && (
+        <>
+          <DropdownMenuGroup>
+            {links.map((link) => (
+              <DropdownMenuItem key={link.href} href={link.href} textValue={link.label}>
+                {link.icon}
+                {link.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+        </>
+      )}
       <DropdownMenuItem textValue='Sign out' onAction={onSignOut}>
         <IconPlaceholder
           lucide='LogOutIcon'
@@ -586,9 +593,9 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
       </div>
       <Progress value={percent} aria-label={`${title}: ${Math.round(percent)}% used`} />
       {action && (
-        <a href={action.href} className={buttonVariants({ size: 'sm' })}>
+        <Link href={action.href} className={buttonVariants({ size: 'sm' })}>
           {action.label}
-        </a>
+        </Link>
       )}
     </div>
   )
@@ -613,7 +620,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
       {items.map((item) => {
         const active = isActiveHref(item.href, pathname)
         return (
-          <a
+          <Link
             key={item.href}
             href={item.href}
             aria-current={item.href === pathname ? 'page' : undefined}
@@ -626,7 +633,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
                 {item.badge}
               </span>
             )}
-          </a>
+          </Link>
         )
       })}
     </nav>

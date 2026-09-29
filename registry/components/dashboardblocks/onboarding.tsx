@@ -1,6 +1,7 @@
 'use client'
 
 import { isEmail } from '@/registry/components/dashboardblocks/forms'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ClipboardEvent,
@@ -627,14 +628,14 @@ function ActionCard({
         <div className='flex min-w-0 flex-1 flex-col gap-1'>
           <span className='flex flex-wrap items-center gap-2'>
             {href ? (
-              <a
+              <Link
                 href={href}
                 onClick={onClick}
                 aria-describedby={describedBy}
                 className='text-sm font-medium outline-none'
               >
                 {target}
-              </a>
+              </Link>
             ) : (
               <button
                 type='button'
