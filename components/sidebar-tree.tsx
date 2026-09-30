@@ -5,6 +5,7 @@ import type * as PageTree from 'fumadocs-core/page-tree'
 import {
   SidebarFolder,
   SidebarFolderContent,
+  SidebarFolderLink,
   SidebarFolderTrigger,
   SidebarItem,
   useFolderDepth,
@@ -53,27 +54,43 @@ export function SidebarTreeFolder({
   children: React.ReactNode
 }) {
   const path = useTreePath()
+  const pathname = usePathname()
+  const topLevel = useFolderDepth() === 0
   const count = item.children.filter((child) => child.type === 'page').length
+  const className = cn(
+    row,
+    'text-foreground hover:bg-accent/60 font-medium [&_[data-icon]]:text-muted-foreground [&_[data-icon]]:size-3.5',
+  )
+  const label = (
+    <>
+      {item.icon}
+      <span className='flex-1 text-start'>{item.name}</span>
+      <span className='text-muted-foreground text-xs font-normal tabular-nums'>
+        {count}
+        <span className='sr-only'> pages</span>
+      </span>
+    </>
+  )
 
   return (
     <SidebarFolder
       collapsible={item.collapsible}
       active={path.includes(item)}
       defaultOpen={item.defaultOpen}
-      className='mt-5'
+      className={topLevel ? 'mt-5' : undefined}
     >
-      <SidebarFolderTrigger
-        className={cn(
-          row,
-          'text-foreground hover:bg-accent/60 font-medium [&_[data-icon]]:text-muted-foreground [&_[data-icon]]:size-3.5',
-        )}
-      >
-        {item.icon}
-        <span className='flex-1 text-start'>{item.name}</span>
-        <span className='text-muted-foreground text-xs font-normal tabular-nums'>
-          {count}
-        </span>
-      </SidebarFolderTrigger>
+      {item.index ? (
+        <SidebarFolderLink
+          href={item.index.url}
+          external={item.index.external}
+          active={isActive(item.index.url, pathname)}
+          className={cn(className, 'data-[active=true]:bg-accent')}
+        >
+          {label}
+        </SidebarFolderLink>
+      ) : (
+        <SidebarFolderTrigger className={className}>{label}</SidebarFolderTrigger>
+      )}
       <SidebarFolderContent className='relative flex flex-col gap-px pt-1 before:absolute before:inset-y-1 before:start-[15px] before:w-px before:bg-border'>
         {children}
       </SidebarFolderContent>

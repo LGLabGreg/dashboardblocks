@@ -145,7 +145,7 @@ export function Categories({
           description='The frame around every page: sidebar, workspace switcher, user menu, breadcrumbs and search.'
           count={counts['app-shell']}
           className='md:col-span-2'
-          previewClassName='*:w-[64rem]'
+          previewClassName='*:w-[64rem] justify-start'
         >
           <div className='page-preview bg-background h-[32rem] rounded-xl shadow-xs ring-1 ring-foreground/10'>
             <AppShell3 {...appShell3ExampleProps} />
@@ -199,7 +199,7 @@ function CategoryCard({
     <div className={cn('group relative flex min-w-0 flex-col gap-4', className)}>
       <div
         inert
-        className='bg-muted/70 group-hover:bg-muted group-has-focus-visible:ring-ring/50 h-80 overflow-hidden rounded-2xl transition-colors select-none group-has-focus-visible:ring-[3px] sm:h-96 dark:bg-muted/40 dark:group-hover:bg-muted/60'
+        className='bg-muted/70 group-hover:bg-muted group-has-focus-visible:ring-ring h-80 overflow-hidden rounded-2xl transition-colors select-none group-has-focus-visible:ring-2 group-has-focus-visible:ring-offset-2 group-has-focus-visible:ring-offset-background sm:h-96 dark:bg-muted/40 dark:group-hover:bg-muted/60'
       >
         <div
           className={cn(
@@ -217,7 +217,7 @@ function CategoryCard({
               {title}
             </Link>
             <span className='text-muted-foreground text-sm font-normal tabular-nums'>
-              {count} blocks
+              {count} {count === 1 ? 'block' : 'blocks'}
             </span>
           </h3>
           <p className='text-muted-foreground mt-1 text-sm text-pretty'>{description}</p>

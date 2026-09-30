@@ -20,6 +20,14 @@ import { cn } from '@/lib/utils'
 
 import { Icons } from './icons'
 
+// The menu closes on click, so the split button's label reports every copy.
+const LABELS = {
+  idle: 'Copy page',
+  markdown: 'Copied',
+  link: 'Link copied',
+  failed: "Couldn't copy",
+}
+
 /**
  * Copy the page as Markdown, or hand it to an AI chat. The Markdown comes from
  * app/llms.mdx, where each preview becomes its install command.
@@ -38,14 +46,14 @@ export function PageActions({
   githubUrl: string
   className?: string
 }) {
-  const [copied, setCopied] = useState<'markdown' | 'link' | null>(null)
+  const [status, setStatus] = useState<'markdown' | 'link' | 'failed' | null>(null)
   const markdown = useRef<Promise<string> | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const done = (what: 'markdown' | 'link') => {
-    setCopied(what)
+  const show = (next: 'markdown' | 'link' | 'failed') => {
+    setStatus(next)
     if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(() => setCopied(null), 2000)
+    timer.current = setTimeout(() => setStatus(null), 2000)
   }
 
   const copyMarkdown = async () => {
@@ -54,6 +62,11 @@ export function PageActions({
       return res.text()
     })
     try {
+      if (typeof ClipboardItem === 'undefined') {
+        await navigator.clipboard.writeText(await markdown.current)
+        show('markdown')
+        return
+      }
       // Safari only allows a clipboard write inside the click, so the text goes
       // in as a promise instead of being awaited first.
       await navigator.clipboard.write([
@@ -63,15 +76,20 @@ export function PageActions({
           ),
         }),
       ])
-      done('markdown')
+      show('markdown')
     } catch {
       markdown.current = null
+      show('failed')
     }
   }
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(pageUrl)
-    done('link')
+    try {
+      await navigator.clipboard.writeText(pageUrl)
+      show('link')
+    } catch {
+      show('failed')
+    }
   }
 
   const prompt = `Read ${new URL(markdownUrl, pageUrl).href}, I want to ask questions about it.`
@@ -80,8 +98,8 @@ export function PageActions({
     <div {...siteChrome(cn('flex', className))}>
       <ButtonGroup>
         <Button variant='outline' size='sm' onClick={copyMarkdown}>
-          {copied === 'markdown' ? <Check /> : <Copy />}
-          {copied === 'markdown' ? 'Copied' : 'Copy page'}
+          {status === 'markdown' || status === 'link' ? <Check /> : <Copy />}
+          {LABELS[status ?? 'idle']}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -112,8 +130,8 @@ export function PageActions({
                 View as Markdown
               </DropdownMenuItem>
               <DropdownMenuItem onClick={copyLink}>
-                {copied === 'link' ? <Check /> : <Link2 />}
-                {copied === 'link' ? 'Link copied' : 'Copy link'}
+                <Link2 />
+                Copy link
               </DropdownMenuItem>
               <DropdownMenuItem
                 render={
@@ -163,11 +181,7 @@ export function PageActions({
         </DropdownMenu>
       </ButtonGroup>
       <span role='status' className='sr-only'>
-        {copied === 'markdown'
-          ? 'Page copied as Markdown'
-          : copied === 'link'
-            ? 'Link copied'
-            : ''}
+        {status === 'markdown' ? 'Page copied as Markdown' : status ? LABELS[status] : ''}
       </span>
     </div>
   )

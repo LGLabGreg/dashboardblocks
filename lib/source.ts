@@ -32,7 +32,7 @@ export async function getLLMText(page: InferPageType<typeof source>) {
   const processed = await page.data.getText('processed')
   // Previews mean nothing outside the site, so each becomes its install command.
   const body = processed.replace(
-    /<ComponentPreview\s+name="([^"]+)"[^>]*\/>/g,
+    /<(?:ComponentPreview|ExampleDashboard)\s+name="([^"]+)"[^>]*\/>/g,
     (_, name: string) =>
       `\`\`\`bash\nnpx shadcn@latest add @dashboardblocks/${name}\n\`\`\``,
   )
