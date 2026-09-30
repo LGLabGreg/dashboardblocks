@@ -6,74 +6,47 @@ import { VersionBadge } from '@/components/version-badge'
 
 import { siteChrome } from '@/lib/customizer'
 
-import { Corner } from './corner'
 import { InstallCommand } from './install-command'
-import { Showcase } from './showcase'
 
 export function Hero({ blockCount }: { blockCount: number }) {
   return (
-    <section className='w-full overflow-x-clip'>
-      <div className='border-b md:px-6'>
-        <div className='relative mx-auto max-w-6xl px-6 md:border-x pt-16 pb-14 md:px-10 md:pt-24 md:pb-20'>
-          <Corner className='-bottom-[6px] -left-[5px]' />
-          <Corner className='-right-[5px] -bottom-[6px]' />
+    <section className='w-full px-4 pt-20 pb-20 md:pt-28 md:pb-24'>
+      <div className='mx-auto flex max-w-3xl flex-col items-center text-center'>
+        <Link
+          href='/docs/compatibility'
+          className='text-muted-foreground hover:text-foreground hover:border-foreground/20 inline-flex items-center gap-2 rounded-full border py-1 pr-3 pl-1 text-xs transition-colors'
+        >
+          <VersionBadge className='border-0 bg-muted' />
+          Base UI, Radix and React Aria
+          <ArrowRight className='size-3' />
+        </Link>
 
-          <div className='text-muted-foreground flex items-center justify-between gap-4 font-mono text-xs tracking-wider uppercase'>
-            <Link
-              href='/docs'
-              className='hover:text-foreground inline-flex min-h-6 items-center gap-2 transition-colors'
-            >
-              <span className='bg-foreground size-1.5 rounded-full' />
-              {blockCount} blocks for shadcn/ui
-              <ArrowRight className='size-3' />
-            </Link>
-            <span className='hidden items-center gap-3 sm:inline-flex'>
-              <VersionBadge />
-              Open source · MIT
-            </span>
-          </div>
+        <h1 className='mt-8 text-5xl leading-[1.05] font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:text-7xl'>
+          Dashboard blocks for shadcn/ui.
+        </h1>
 
-          <div className='mt-10 grid gap-10 md:mt-14 xl:grid-cols-12 xl:items-end xl:gap-12'>
-            <h1 className='text-5xl leading-[1.1] font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:text-7xl xl:col-span-8'>
-              <span className='block text-balance'>Dashboard blocks for shadcn/ui.</span>
-              <span className='text-muted-foreground block text-balance'>
-                Copy a block, own the code.
-              </span>
-            </h1>
+        <p className='text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed text-pretty'>
+          {blockCount} open-source blocks for KPIs, charts, tables and whole app pages.
+          Add them with the shadcn CLI and own every line.
+        </p>
 
-            <div className='flex min-w-0 flex-col gap-6 xl:col-span-4'>
-              <p className='text-muted-foreground text-base leading-relaxed text-pretty'>
-                KPI cards, charts, usage meters, activity feeds and leaderboards.
-                Composable blocks built with Tailwind CSS and shadcn/ui. Works with every{' '}
-                <Link
-                  href='/docs/compatibility'
-                  className='text-foreground underline underline-offset-4'
-                >
-                  style, component library and icon set
-                </Link>
-                .
-              </p>
-              <div {...siteChrome('flex flex-nowrap items-center gap-2')}>
-                <Button nativeButton={false} render={<Link href='/docs' />}>
-                  Get started
-                  <ArrowRight data-icon='inline-end' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  className='px-2.5'
-                  nativeButton={false}
-                  render={<Link href='/docs/components/activity-feed' />}
-                >
-                  Browse blocks
-                </Button>
-              </div>
-              <InstallCommand className='self-start' />
-            </div>
-          </div>
+        <div {...siteChrome('mt-9 flex flex-wrap items-center justify-center gap-3')}>
+          <Button size='lg' nativeButton={false} render={<Link href='/docs' />}>
+            Get started
+            <ArrowRight data-icon='inline-end' />
+          </Button>
+          <Button
+            size='lg'
+            variant='outline'
+            nativeButton={false}
+            render={<Link href='#blocks' />}
+          >
+            Browse blocks
+          </Button>
         </div>
-      </div>
 
-      <Showcase />
+        <InstallCommand className='mt-8' />
+      </div>
     </section>
   )
 }

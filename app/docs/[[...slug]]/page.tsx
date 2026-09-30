@@ -9,9 +9,10 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getMDXComponents } from '@/components/mdx/mdx-components'
+import { PageActions } from '@/components/page-actions'
 
 import { siteConfig } from '@/lib/config'
-import { getPageImage, source } from '@/lib/source'
+import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source'
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params
@@ -22,7 +23,14 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <div className='flex flex-wrap items-center justify-between gap-x-6 gap-y-3'>
+        <DocsTitle>{page.data.title}</DocsTitle>
+        <PageActions
+          markdownUrl={getPageMarkdownUrl(page).url}
+          pageUrl={`${siteConfig.url}${page.url}`}
+          githubUrl={`https://github.com/LGLabGreg/dashboardblocks/blob/main/content/docs/${page.path}`}
+        />
+      </div>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
         <MDX

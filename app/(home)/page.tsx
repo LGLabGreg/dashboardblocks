@@ -54,80 +54,97 @@ import { timelineComponents } from '@/registry/components/dashboardblocks/timeli
 import { usageMeterComponents } from '@/registry/components/dashboardblocks/usage-meter/index'
 import type { Metadata } from 'next'
 
+import { AllCategories } from '@/components/home/all-categories'
 import { Categories } from '@/components/home/categories'
 import { CTA } from '@/components/home/cta'
+import { Footer } from '@/components/home/footer'
 import { Hero } from '@/components/home/hero'
 import { Steps } from '@/components/home/steps'
+
+import { source } from '@/lib/source'
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
 }
 
-const counts = {
-  kpi: Object.keys(kpiComponents).length,
-  statGroup: Object.keys(statGroupComponents).length,
-  dashboardHeader: Object.keys(dashboardHeaderComponents).length,
-  chartPanel: Object.keys(chartPanelComponents).length,
-  breakdown: Object.keys(breakdownComponents).length,
-  funnel: Object.keys(funnelComponents).length,
-  status: Object.keys(statusComponents).length,
-  usageMeter: Object.keys(usageMeterComponents).length,
-  activityFeed: Object.keys(activityFeedComponents).length,
-  leaderboard: Object.keys(leaderboardComponents).length,
-  dataTable: Object.keys(dataTableComponents).length,
-  heatmap: Object.keys(heatmapComponents).length,
-  states: Object.keys(statesComponents).length,
-  goals: Object.keys(goalsComponents).length,
-  comparison: Object.keys(comparisonComponents).length,
+/** Blocks in each family, by its docs slug. */
+const counts: Record<string, number> = {
+  'activity-feed': Object.keys(activityFeedComponents).length,
+  'ai-assistant': Object.keys(aiAssistantComponents).length,
+  'ai-usage': Object.keys(aiUsageComponents).length,
   alerts: Object.keys(alertsComponents).length,
-  geo: Object.keys(geoComponents).length,
-  billing: Object.keys(billingComponents).length,
-  insights: Object.keys(insightsComponents).length,
-  pipeline: Object.keys(pipelineComponents).length,
-  schedule: Object.keys(scheduleComponents).length,
-  team: Object.keys(teamComponents).length,
-  checklist: Object.keys(checklistComponents).length,
-  gauge: Object.keys(gaugeComponents).length,
-  metricList: Object.keys(metricListComponents).length,
-  forecast: Object.keys(forecastComponents).length,
-  retention: Object.keys(retentionComponents).length,
-  distribution: Object.keys(distributionComponents).length,
-  spend: Object.keys(spendComponents).length,
-  flow: Object.keys(flowComponents).length,
-  timeline: Object.keys(timelineComponents).length,
-  realtime: Object.keys(realtimeComponents).length,
-  feedback: Object.keys(feedbackComponents).length,
-  deployments: Object.keys(deploymentsComponents).length,
-  scatter: Object.keys(scatterComponents).length,
-  security: Object.keys(securityComponents).length,
-  inventory: Object.keys(inventoryComponents).length,
-  aiUsage: Object.keys(aiUsageComponents).length,
-  settings: Object.keys(settingsComponents).length,
-  appShell: Object.keys(appShellComponents).length,
-  forms: Object.keys(formsComponents).length,
-  recordDetail: Object.keys(recordDetailComponents).length,
-  pageHeader: Object.keys(pageHeaderComponents).length,
-  notifications: Object.keys(notificationsComponents).length,
-  commandMenu: Object.keys(commandMenuComponents).length,
-  kanban: Object.keys(kanbanComponents).length,
-  comments: Object.keys(commentsComponents).length,
-  calendar: Object.keys(calendarComponents).length,
-  files: Object.keys(filesComponents).length,
-  aiAssistant: Object.keys(aiAssistantComponents).length,
-  invoice: Object.keys(invoiceComponents).length,
-  onboarding: Object.keys(onboardingComponents).length,
-  errorPages: Object.keys(errorPagesComponents).length,
+  'app-shell': Object.keys(appShellComponents).length,
   auth: Object.keys(authComponents).length,
+  billing: Object.keys(billingComponents).length,
+  breakdown: Object.keys(breakdownComponents).length,
+  calendar: Object.keys(calendarComponents).length,
+  'chart-panel': Object.keys(chartPanelComponents).length,
+  checklist: Object.keys(checklistComponents).length,
+  'command-menu': Object.keys(commandMenuComponents).length,
+  comments: Object.keys(commentsComponents).length,
+  comparison: Object.keys(comparisonComponents).length,
+  'dashboard-header': Object.keys(dashboardHeaderComponents).length,
+  'data-table': Object.keys(dataTableComponents).length,
+  deployments: Object.keys(deploymentsComponents).length,
+  distribution: Object.keys(distributionComponents).length,
+  'error-pages': Object.keys(errorPagesComponents).length,
+  feedback: Object.keys(feedbackComponents).length,
+  files: Object.keys(filesComponents).length,
+  flow: Object.keys(flowComponents).length,
+  forecast: Object.keys(forecastComponents).length,
+  forms: Object.keys(formsComponents).length,
+  funnel: Object.keys(funnelComponents).length,
+  gauge: Object.keys(gaugeComponents).length,
+  geo: Object.keys(geoComponents).length,
+  goals: Object.keys(goalsComponents).length,
+  heatmap: Object.keys(heatmapComponents).length,
+  insights: Object.keys(insightsComponents).length,
+  inventory: Object.keys(inventoryComponents).length,
+  invoice: Object.keys(invoiceComponents).length,
+  kanban: Object.keys(kanbanComponents).length,
+  kpi: Object.keys(kpiComponents).length,
+  leaderboard: Object.keys(leaderboardComponents).length,
+  'metric-list': Object.keys(metricListComponents).length,
+  notifications: Object.keys(notificationsComponents).length,
+  onboarding: Object.keys(onboardingComponents).length,
+  'page-header': Object.keys(pageHeaderComponents).length,
+  pipeline: Object.keys(pipelineComponents).length,
+  realtime: Object.keys(realtimeComponents).length,
+  'record-detail': Object.keys(recordDetailComponents).length,
+  retention: Object.keys(retentionComponents).length,
+  scatter: Object.keys(scatterComponents).length,
+  schedule: Object.keys(scheduleComponents).length,
+  security: Object.keys(securityComponents).length,
+  settings: Object.keys(settingsComponents).length,
+  spend: Object.keys(spendComponents).length,
+  'stat-group': Object.keys(statGroupComponents).length,
+  states: Object.keys(statesComponents).length,
+  status: Object.keys(statusComponents).length,
+  team: Object.keys(teamComponents).length,
+  timeline: Object.keys(timelineComponents).length,
+  'usage-meter': Object.keys(usageMeterComponents).length,
 }
 const blockCount = Object.values(counts).reduce((sum, count) => sum + count, 0)
+
+const families = source
+  .getPages()
+  .filter((page) => page.slugs[0] === 'components')
+  .map((page) => ({
+    title: page.data.title,
+    href: page.url,
+    count: counts[page.slugs[1]] ?? 0,
+  }))
+  .sort((a, b) => a.title.localeCompare(b.title))
 
 export default function HomePage() {
   return (
     <div className='flex flex-1 flex-col items-center'>
       <Hero blockCount={blockCount} />
-      <Categories counts={counts} />
+      <Categories counts={counts} familyCount={families.length} />
+      <AllCategories families={families} />
       <Steps />
       <CTA blockCount={blockCount} />
+      <Footer />
     </div>
   )
 }
