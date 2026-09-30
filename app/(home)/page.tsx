@@ -59,7 +59,6 @@ import { Categories } from '@/components/home/categories'
 import { CTA } from '@/components/home/cta'
 import { Footer } from '@/components/home/footer'
 import { Hero } from '@/components/home/hero'
-import { Steps } from '@/components/home/steps'
 
 import { source } from '@/lib/source'
 
@@ -142,7 +141,6 @@ export default function HomePage() {
       <Hero blockCount={blockCount} />
       <Categories counts={counts} familyCount={families.length} />
       <AllCategories families={families} />
-      <Steps />
       <CTA blockCount={blockCount} />
       <Footer />
     </div>

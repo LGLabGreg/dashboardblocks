@@ -39,7 +39,7 @@ export function Hero({ blockCount }: { blockCount: number }) {
             size='lg'
             variant='outline'
             nativeButton={false}
-            render={<Link href='#blocks' />}
+            render={<Link href='/docs/components/activity-feed' />}
           >
             Browse blocks
           </Button>

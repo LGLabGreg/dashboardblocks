@@ -1,7 +1,6 @@
 {
   "pages": [
-    "index",
-    "compatibility",
+    "(docs)",
     "examples",
     "...",
     "---",

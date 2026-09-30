@@ -6,7 +6,7 @@ export function AllCategories({
   families: { title: string; href: string; count: number }[]
 }) {
   return (
-    <section id='all-blocks' className='mx-auto w-full max-w-6xl scroll-mt-20 px-4 pb-24'>
+    <section id='all-blocks' className='mx-auto w-full max-w-6xl scroll-mt-20 px-4'>
       <div className='border-t pt-10'>
         <h2 className='text-xl font-medium tracking-tight'>
           All {families.length} families
