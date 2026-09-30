@@ -60,11 +60,24 @@ export function ShadcnCliButton({ name }: { name: string }) {
         className='min-w-0 shrink'
       >
         {copied ? <Check /> : <Terminal />}
-        <span className='truncate'>{shortCommands[packageManager]}</span>
+        {/* The prefix truncates first, so the block name stays readable. */}
+        <span className='flex min-w-0'>
+          <span className='truncate'>
+            {shortCommands[packageManager].slice(0, -name.length)}
+          </span>
+          <span className='shrink-0'>{name}</span>
+        </span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button variant='outline' className='pl-2!' size='sm' />}
+          render={
+            <Button
+              variant='outline'
+              className='pl-2!'
+              size='sm'
+              aria-label='Choose package manager'
+            />
+          }
         >
           <ChevronDownIcon />
         </DropdownMenuTrigger>
