@@ -33,15 +33,14 @@ export function ShadcnCliButton({ name }: { name: string }) {
     }),
     [item],
   )
-  const shortCommands = useMemo(
-    () => ({
-      npm: `npx shadcn add ${item}`,
-      pnpm: `pnpm dlx shadcn add ${item}`,
-      yarn: `yarn dlx shadcn add ${item}`,
-      bun: `bunx shadcn add ${item}`,
-    }),
-    [item],
-  )
+  // Shown without @latest to save room. The copied command keeps it.
+  const shortPrefixes: Record<PackageManager, string> = {
+    npm: 'npx shadcn add ',
+    pnpm: 'pnpm dlx shadcn add ',
+    yarn: 'yarn dlx shadcn add ',
+    bun: 'bunx shadcn add ',
+  }
+  const shortCommand = shortPrefixes[packageManager] + item
 
   const copyToClipboard = useCallback(() => {
     void navigator.clipboard.writeText(commands[packageManager])
@@ -50,14 +49,38 @@ export function ShadcnCliButton({ name }: { name: string }) {
   }, [commands, packageManager])
 
   return (
-    <ButtonGroup>
-      <Button variant='outline' size='sm' onClick={copyToClipboard}>
+    <ButtonGroup className='max-w-full min-w-0'>
+      {/* Shrinks and truncates in narrow previews rather than overflowing. */}
+      <Button
+        variant='outline'
+        size='sm'
+        onClick={copyToClipboard}
+        title={commands[packageManager]}
+        className='min-w-0 shrink overflow-hidden'
+      >
         {copied ? <Check /> : <Terminal />}
-        {shortCommands[packageManager]}
+        {/* The prefix truncates first, so the block name stays readable. The
+            split spans read as two words, so screen readers get the whole
+            command from one span instead. */}
+        <span aria-hidden className='flex min-w-0'>
+          <span className='truncate'>
+            {shortPrefixes[packageManager]}
+            {registryItemName('')}
+          </span>
+          <span className='shrink-0'>{name}</span>
+        </span>
+        <span className='sr-only'>{shortCommand}</span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button variant='outline' className='pl-2!' size='sm' />}
+          render={
+            <Button
+              variant='outline'
+              className='pl-2!'
+              size='sm'
+              aria-label='Choose package manager'
+            />
+          }
         >
           <ChevronDownIcon />
         </DropdownMenuTrigger>
