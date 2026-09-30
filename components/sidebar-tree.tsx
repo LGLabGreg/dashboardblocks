@@ -66,6 +66,7 @@ export function SidebarTreeFolder({
       {item.icon}
       <span className='flex-1 text-start'>{item.name}</span>
       <span className='text-muted-foreground text-xs font-normal tabular-nums'>
+        <span className='sr-only'>, </span>
         {count}
         <span className='sr-only'> pages</span>
       </span>
@@ -77,7 +78,7 @@ export function SidebarTreeFolder({
       collapsible={item.collapsible}
       active={path.includes(item)}
       defaultOpen={item.defaultOpen}
-      className={topLevel ? 'mt-5' : undefined}
+      className={topLevel ? 'mt-5 first:mt-0' : undefined}
     >
       {item.index ? (
         <SidebarFolderLink
