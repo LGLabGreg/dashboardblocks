@@ -50,10 +50,17 @@ export function ShadcnCliButton({ name }: { name: string }) {
   }, [commands, packageManager])
 
   return (
-    <ButtonGroup>
-      <Button variant='outline' size='sm' onClick={copyToClipboard}>
+    <ButtonGroup className='max-w-full min-w-0'>
+      {/* Shrinks and truncates in narrow previews rather than overflowing. */}
+      <Button
+        variant='outline'
+        size='sm'
+        onClick={copyToClipboard}
+        title={commands[packageManager]}
+        className='min-w-0 shrink'
+      >
         {copied ? <Check /> : <Terminal />}
-        {shortCommands[packageManager]}
+        <span className='truncate'>{shortCommands[packageManager]}</span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger
