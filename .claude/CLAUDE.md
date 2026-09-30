@@ -22,7 +22,7 @@ Then fix every finding you can confirm and rerun the checks. Tell the user what 
 
 ## Registry blocks
 
-Every block must install unchanged into any shadcn/create project: any style, Base UI, Radix UI or React Aria, and any of the five icon libraries. See `content/docs/compatibility.mdx`.
+Every block must install unchanged into any shadcn/create project: any style, Base UI, Radix UI or React Aria, and any of the five icon libraries. See `content/docs/(docs)/compatibility.mdx`.
 
 ### Icons
 
