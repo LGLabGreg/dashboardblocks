@@ -1,6 +1,0 @@
-{
-  "title": "Docs",
-  "icon": "BookOpen",
-  "defaultOpen": true,
-  "pages": ["index", "compatibility"]
-}

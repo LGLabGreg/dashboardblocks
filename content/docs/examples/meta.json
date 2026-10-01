@@ -1,6 +1,0 @@
-{
-  "title": "Dashboards",
-  "icon": "LayoutDashboard",
-  "defaultOpen": true,
-  "pages": ["store", "saas", "web-analytics", "crm", "devops"]
-}
