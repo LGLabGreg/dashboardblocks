@@ -3,12 +3,14 @@
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ChangeEvent,
+  type FocusEvent,
   type FormEvent,
   type KeyboardEvent,
   type ReactNode,
   useId,
   useState,
 } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -44,7 +46,7 @@ interface UseSimpleFormOptions<T extends FormValues> {
    * server, to show them on their fields.
    */
   onSubmit: (values: T) => SubmitResult<T> | Promise<SubmitResult<T>>
-  /** Checks the values. Runs when a field loses focus and on submit. */
+  /** Checks the values. Runs when a field with a value loses focus, and on submit. */
   validate?: (values: T) => FormErrors<T>
 }
 
@@ -77,6 +79,17 @@ function useSimpleForm<T extends FormValues>({
 
   const getId = (name: keyof T & string) => `${formId}-${name}`
 
+  /** Focuses the invalid field that comes first on the page, not first in `values`. */
+  function focusFirst(invalid: (keyof T & string)[]) {
+    const elements = invalid
+      .map((name) => document.getElementById(getId(name)))
+      .filter((element) => element !== null)
+    elements.sort((a, b) =>
+      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+    )
+    elements[0]?.focus()
+  }
+
   function setValue<K extends keyof T & string>(name: K, value: T[K]) {
     setValues((current) => ({ ...current, [name]: value }))
     setServerErrors((current) => ({ ...current, [name]: undefined }))
@@ -84,13 +97,16 @@ function useSimpleForm<T extends FormValues>({
 
   /** Shows the errors for `fields` and says whether they're valid, such as before a wizard's next step. */
   function validateFields(fields: (keyof T & string)[]) {
-    setTouched((current) => ({
-      ...current,
-      ...Object.fromEntries(fields.map((name) => [name, true])),
-    }))
-    const invalid = fields.find((name) => clientErrors[name])
-    if (invalid) document.getElementById(getId(invalid))?.focus()
-    return !invalid
+    // Errors render before focus moves, so the field is read with its error.
+    flushSync(() =>
+      setTouched((current) => ({
+        ...current,
+        ...Object.fromEntries(fields.map((name) => [name, true])),
+      })),
+    )
+    const invalid = fields.filter((name) => clientErrors[name])
+    focusFirst(invalid)
+    return invalid.length === 0
   }
 
   /** Props for an Input, Textarea or NativeSelect that edits a text value. */
@@ -101,7 +117,23 @@ function useSimpleForm<T extends FormValues>({
       'aria-invalid': errors[name] ? true : undefined,
       id,
       name,
-      onBlur: () => setTouched((current) => ({ ...current, [name]: true })),
+      onBlur: (
+        event: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+      ) => {
+        // An empty field waits for submit, and so does one left for the submit
+        // button: an error shown now would move the button down under the pointer
+        // and lose the click. Browsers that don't focus a clicked button (Safari)
+        // only get the first case.
+        const next = event.relatedTarget
+        if (
+          !event.currentTarget.value.trim() ||
+          (next instanceof HTMLButtonElement &&
+            next.type === 'submit' &&
+            next.form === event.currentTarget.form)
+        )
+          return
+        setTouched((current) => ({ ...current, [name]: true }))
+      },
       onChange: (
         event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
       ) => setValue(name, event.target.value as T[typeof name]),
@@ -116,19 +148,18 @@ function useSimpleForm<T extends FormValues>({
 
   async function submit(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault()
-    setSubmitted(true)
-    const invalid = names.find((name) => clientErrors[name])
-    if (invalid) {
-      document.getElementById(getId(invalid))?.focus()
+    flushSync(() => setSubmitted(true))
+    const invalid = names.filter((name) => clientErrors[name])
+    if (invalid.length) {
+      focusFirst(invalid)
       return false
     }
     setIsSubmitting(true)
     try {
       const result = await onSubmit(values)
       if (result && hasErrors(result)) {
-        setServerErrors(result)
-        const first = names.find((name) => result[name])
-        if (first) document.getElementById(getId(first))?.focus()
+        flushSync(() => setServerErrors(result))
+        focusFirst(names.filter((name) => result[name]))
         return false
       }
       setSavedValues(values)
@@ -339,6 +370,7 @@ function FormSheet({
 }
 
 interface InlineEditFieldProps {
+  /** Styles the wrapper, which is a size container; the label and value sit in a grid inside it. */
   className?: string
   /** Shown when the value is empty. @default 'Not set' */
   emptyLabel?: string
@@ -401,70 +433,68 @@ function InlineEditField({
   }
 
   return (
-    <div
-      className={cn(
-        'grid gap-1.5 py-3 sm:grid-cols-[10rem_1fr] sm:items-start sm:gap-4',
-        className,
-      )}
-    >
-      <span id={`${id}-label`} className='text-muted-foreground pt-2 text-sm'>
-        {label}
-      </span>
-      {editing ? (
-        <div className='flex flex-col gap-1.5'>
-          <div className='flex gap-2'>
-            <Input
-              // Focus moves into the field the user just asked to edit.
-              // oxlint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus
-              type={type}
-              aria-labelledby={`${id}-label`}
-              value={draft}
-              aria-invalid={error ? true : undefined}
-              aria-describedby={error ? `${id}-error` : undefined}
-              disabled={isSaving}
-              onChange={(event) => {
-                setDraft(event.target.value)
-                setError(undefined)
-              }}
-              onKeyDown={onKeyDown}
-            />
-            <Button type='button' disabled={isSaving} onClick={() => void save()}>
-              {isSaving ? 'Saving…' : 'Save'}
-            </Button>
-            <Button type='button' variant='ghost' disabled={isSaving} onClick={cancel}>
-              Cancel
+    // Sized by its own width, so the label moves beside the value only when both fit.
+    <div className={cn('@container py-3', className)}>
+      <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-4'>
+        <span id={`${id}-label`} className='text-muted-foreground pt-2 text-sm'>
+          {label}
+        </span>
+        {editing ? (
+          <div className='flex flex-col gap-1.5'>
+            <div className='flex gap-2'>
+              <Input
+                // Focus moves into the field the user just asked to edit.
+                // oxlint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus
+                type={type}
+                aria-labelledby={`${id}-label`}
+                value={draft}
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? `${id}-error` : undefined}
+                disabled={isSaving}
+                onChange={(event) => {
+                  setDraft(event.target.value)
+                  setError(undefined)
+                }}
+                onKeyDown={onKeyDown}
+              />
+              <Button type='button' disabled={isSaving} onClick={() => void save()}>
+                {isSaving ? 'Saving…' : 'Save'}
+              </Button>
+              <Button type='button' variant='ghost' disabled={isSaving} onClick={cancel}>
+                Cancel
+              </Button>
+            </div>
+            {error && (
+              <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
+                {error}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className='flex min-h-9 items-center justify-between gap-2'>
+            <span className={cn('truncate text-sm', !value && 'text-muted-foreground')}>
+              {value || emptyLabel}
+            </span>
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              aria-label={`Edit ${label.toLowerCase()}`}
+              onClick={() => setDraft(value)}
+            >
+              <IconPlaceholder
+                lucide='PencilIcon'
+                tabler='IconPencil'
+                hugeicons='PencilEdit02Icon'
+                phosphor='PencilSimpleIcon'
+                remixicon='RiPencilLine'
+              />
+              Edit
             </Button>
           </div>
-          {error && (
-            <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
-              {error}
-            </p>
-          )}
-        </div>
-      ) : (
-        <div className='flex min-h-9 items-center justify-between gap-2'>
-          <span className={cn('truncate text-sm', !value && 'text-muted-foreground')}>
-            {value || emptyLabel}
-          </span>
-          <Button
-            type='button'
-            variant='ghost'
-            size='sm'
-            aria-label={`Edit ${label.toLowerCase()}`}
-            onClick={() => setDraft(value)}
-          >
-            <IconPlaceholder
-              lucide='PencilIcon'
-              tabler='IconPencil'
-              hugeicons='PencilEdit02Icon'
-              phosphor='PencilSimpleIcon'
-              remixicon='RiPencilLine'
-            />
-            Edit
-          </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

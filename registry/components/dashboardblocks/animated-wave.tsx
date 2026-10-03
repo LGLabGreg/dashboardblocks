@@ -32,7 +32,7 @@ export const AnimatedWave = ({
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
   return (
-    <div className={cn('relative size-full text-blue-500', className)}>
+    <div className={cn('relative size-full overflow-hidden text-blue-500', className)}>
       {/* Wave container */}
       <div
         className='absolute inset-0 transition-[transform] duration-1000 ease-out'

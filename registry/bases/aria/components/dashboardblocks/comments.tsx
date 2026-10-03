@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/comments.tsx for React Aria
-// source-hash: d9cd1156e44c
+// source-hash: a04aa060431c
 
 'use client'
 
@@ -626,7 +626,9 @@ function CommentComposer({
   async function submit(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault()
     const body = text.trim()
-    if (!body || isSubmitting) return
+    if (isSubmitting) return
+    // Nothing to post: back to the text box rather than a disabled button.
+    if (!body) return textareaRef.current?.focus()
     setIsSubmitting(true)
     try {
       await onSubmit(body)
@@ -724,7 +726,7 @@ function CommentComposer({
               Cancel
             </Button>
           )}
-          <Button type='submit' size='sm' isDisabled={isSubmitting || !text.trim()}>
+          <Button type='submit' size='sm' isDisabled={isSubmitting}>
             {isSubmitting ? pendingLabel : submitLabel}
           </Button>
         </InputGroupAddon>

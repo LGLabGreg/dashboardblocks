@@ -3,6 +3,7 @@
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -178,8 +179,10 @@ const Settings7 = (props: Settings7Props) => {
       email: EMAIL.test(email) ? undefined : 'Enter an email address.',
       name: name ? undefined : 'Enter your name.',
     }
-    setErrors((current) => ({ ...current, ...next }))
-    if (next.email || next.name) return
+    // Errors render before focus moves, so the field is read with its error.
+    flushSync(() => setErrors((current) => ({ ...current, ...next })))
+    if (next.name) return document.getElementById(`${id}-name`)?.focus()
+    if (next.email) return document.getElementById(`${id}-email`)?.focus()
     const profile = { ...draft, email, name }
     setDraft(profile)
     setSaved(profile)

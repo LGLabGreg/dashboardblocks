@@ -913,7 +913,7 @@ function ChatComposer({
   const [draft, setDraft] = useState('')
   const text = value ?? draft
   const busy = isBusy(status)
-  const canSend = !disabled && !busy && text.trim().length > 0
+  const canSend = !disabled && !busy
 
   useImperativeHandle(textareaRef, () => inner.current as HTMLTextAreaElement, [])
 
@@ -924,6 +924,8 @@ function ChatComposer({
 
   function send() {
     if (!canSend) return
+    // Nothing to send: back to the text box rather than a disabled button.
+    if (!text.trim()) return inner.current?.focus()
     onSubmit(text.trim())
     change('')
     inner.current?.focus()

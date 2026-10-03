@@ -77,7 +77,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
   const [active, setActive] = useState(metrics[0]?.key)
 
   return (
-    <Card className='gap-0 py-0'>
+    <Card className='@container gap-0 py-0'>
       <Tabs
         value={active}
         onValueChange={(value) => setActive(String(value))}
@@ -93,12 +93,12 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
               <TabsTrigger
                 key={metric.key}
                 value={metric.key}
-                className='hover:bg-muted/40 data-active:bg-muted/60 dark:data-active:bg-muted/60 h-auto flex-col items-start gap-1 rounded-none border-0 border-r px-6 py-4 text-left last:border-r-0 data-active:shadow-none dark:data-active:border-transparent'
+                className='hover:bg-muted/40 data-active:bg-muted/60 dark:data-active:bg-muted/60 h-auto flex-col items-start gap-1 rounded-none border-0 border-r px-3 py-4 text-left @sm:px-6 last:border-r-0 data-active:shadow-none dark:data-active:border-transparent'
               >
                 <span className='text-muted-foreground text-xs font-normal'>
                   {metric.label}
                 </span>
-                <span className='text-foreground text-2xl font-semibold tracking-tight'>
+                <span className='text-foreground text-xl font-semibold tracking-tight @sm:text-2xl'>
                   {format(metric.total)}
                 </span>
                 <Trend

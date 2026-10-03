@@ -1,6 +1,6 @@
 # Dashboardblocks
 
-Dashboardblocks is a collection of high-quality dashboard components built on top of [shadcn/ui](https://ui.shadcn.com). Install only what you need, customize everything, and own your code.
+Dashboardblocks is a set of open-source dashboard blocks built on [shadcn/ui](https://ui.shadcn.com). The shadcn CLI copies each block's source into your project, so you add only the blocks you use and can edit every line.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/store-dark.png">

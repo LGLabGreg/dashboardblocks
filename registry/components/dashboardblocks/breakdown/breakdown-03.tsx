@@ -63,12 +63,12 @@ const Breakdown3 = (props: Breakdown3Props) => {
   )
 
   return (
-    <Card>
+    <Card className='@container'>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='flex flex-col items-center gap-6 sm:flex-row sm:items-start'>
+      <CardContent className='flex flex-col items-center gap-6 @sm:flex-row @sm:items-start'>
         <div ref={ref} aria-hidden className='grid w-40 shrink-0 grid-cols-10 gap-0.5'>
           {cells.map((color, index) => (
             <span
@@ -83,7 +83,7 @@ const Breakdown3 = (props: Breakdown3Props) => {
             />
           ))}
         </div>
-        <div className='flex w-full flex-col gap-4'>
+        <div className='flex w-full min-w-0 flex-col gap-4'>
           <div className='flex flex-col gap-0.5'>
             <span className='text-3xl font-semibold tracking-tight'>
               {total.toLocaleString()}
@@ -96,7 +96,7 @@ const Breakdown3 = (props: Breakdown3Props) => {
             {segments.map((segment) => (
               <li key={segment.label} className='flex items-center gap-2'>
                 <BreakdownKey color={segment.color} />
-                <span className='flex-1'>{segment.label}</span>
+                <span className='min-w-0 flex-1 truncate'>{segment.label}</span>
                 <span className='font-medium tabular-nums'>
                   {segment.value.toLocaleString()}
                 </span>

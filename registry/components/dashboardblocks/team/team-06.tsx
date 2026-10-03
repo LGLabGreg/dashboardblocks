@@ -4,6 +4,7 @@ import { useCopyToClipboard } from '@/registry/components/dashboardblocks/settin
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -132,12 +133,18 @@ const Team6 = (props: Team6Props) => {
   const [error, setError] = useState<string | null>(null)
   const { copied, copy } = useCopyToClipboard()
 
+  const fail = (message: string) => {
+    // The error renders before focus moves, so the field is read with it.
+    flushSync(() => setError(message))
+    document.getElementById(`${id}-email`)?.focus()
+  }
+
   const invite = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const address = email.trim().toLowerCase()
-    if (!EMAIL.test(address)) return setError('Enter an email address.')
+    if (!EMAIL.test(address)) return fail('Enter an email address.')
     if (people.some((person) => person.email === address)) {
-      return setError(`${address} already has access.`)
+      return fail(`${address} already has access.`)
     }
     setPeople((current) => [
       ...current,

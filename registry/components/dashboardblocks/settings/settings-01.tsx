@@ -10,6 +10,7 @@ import {
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, useId, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -107,15 +108,21 @@ const Settings1 = (props: Settings1Props) => {
     (a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role),
   )
 
+  const fail = (message: string) => {
+    // The error renders before focus moves, so the field is read with it.
+    flushSync(() => setError(message))
+    document.getElementById(emailId)?.focus()
+  }
+
   const invite = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const address = email.trim().toLowerCase()
-    if (!EMAIL.test(address)) return setError('Enter an email address.')
+    if (!EMAIL.test(address)) return fail('Enter an email address.')
     if (
       members.some((member) => member.email === address) ||
       invites.some((pending) => pending.email === address)
     ) {
-      return setError(`${address} is already in the workspace or invited.`)
+      return fail(`${address} is already in the workspace or invited.`)
     }
     setInvites((current) => [
       { email: address, id: `invite-${address}`, role, sentAt: now },

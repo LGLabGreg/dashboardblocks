@@ -77,7 +77,7 @@ const AiUsage3 = (props: AiUsage3Props) => {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='-mx-1 overflow-x-auto px-1'>
+        <div className='relative -mx-1 overflow-x-auto px-1'>
           <table className='w-full min-w-[30rem] text-sm tabular-nums'>
             <thead>
               <tr className='text-muted-foreground border-b text-xs'>

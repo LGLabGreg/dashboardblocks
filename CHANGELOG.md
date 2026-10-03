@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.2.1
+
+### Patch Changes
+
+- 507116f: Forms move focus to the first invalid field on the page after a failed submit: `useSimpleForm` used the order of its values, and the auth, settings and team invite forms left focus on the button. An empty field's error now waits for submit instead of appearing on blur, and so does any field's when you're clicking the submit button: the error moved the button and lost the click. Errors render before focus moves, so screen readers read the field with its error. Submit buttons in the AI assistant and comment composers, the record activity comment box and the kanban add card form stay enabled while empty, and the API keys form shows an error when the key has no name. Fixes for narrow cards and small screens: Inline Edit fields, the waffle breakdown and the chart panel tabs fit a 280px card, data table pagination and integration actions wrap, integration names no longer sit under their status, the page header back link and the usage wave stay inside their card, and the model table and retention grid no longer scroll the page sideways.
+
 ## 1.2.0
 
 ### Minor Changes

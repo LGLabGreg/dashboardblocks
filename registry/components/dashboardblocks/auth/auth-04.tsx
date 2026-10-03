@@ -2,7 +2,7 @@
 
 import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useEffect, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -68,6 +68,8 @@ const Auth4 = (props: Auth4Props) => {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(props.email)
   const [verified, setVerified] = useState(false)
+  const [failures, setFailures] = useState(0)
+  const formsRef = useRef<HTMLDivElement>(null)
 
   // Counts down once a second while a resend is blocked.
   useEffect(() => {
@@ -76,23 +78,32 @@ const Auth4 = (props: Auth4Props) => {
     return () => clearTimeout(timer)
   }, [cooldown])
 
+  // After a failed try, focus the box or field to fix, once it's enabled again.
+  useEffect(() => {
+    if (failures && !checking)
+      formsRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
+  }, [failures, checking])
+
+  const fail = (message: string) => {
+    setError(message)
+    setFailures((count) => count + 1)
+  }
+
   const verify = async (value: string) => {
     if (checking) return
-    if (!/^\d{6}$/.test(value)) return setError('Enter all 6 digits from the email.')
+    if (!/^\d{6}$/.test(value)) return fail('Enter all 6 digits from the email.')
     setChecking(true)
     setError(null)
     try {
       const ok = onVerify ? await onVerify(value) : value === '123456'
       if (!ok) {
         setCode('')
-        return setError(
-          'That code didn’t work. Check the newest email, or send a new code.',
-        )
+        return fail('That code didn’t work. Check the newest email, or send a new code.')
       }
       setVerified(true)
       onVerified?.()
     } catch {
-      setError('We couldn’t check the code. Try again.')
+      fail('We couldn’t check the code. Try again.')
     } finally {
       setChecking(false)
     }
@@ -112,7 +123,7 @@ const Auth4 = (props: Auth4Props) => {
   const saveEmail = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const address = draft.trim().toLowerCase()
-    if (!EMAIL.test(address)) return setError('Enter an email address.')
+    if (!EMAIL.test(address)) return fail('Enter an email address.')
     setError(null)
     try {
       await onChangeEmail?.(address)
@@ -122,7 +133,7 @@ const Auth4 = (props: Auth4Props) => {
       setCooldown(resendAfter)
       setStatus(`We sent a code to ${address}.`)
     } catch {
-      setError('We couldn’t change the address. Try again.')
+      fail('We couldn’t change the address. Try again.')
     }
   }
 
@@ -192,7 +203,7 @@ const Auth4 = (props: Auth4Props) => {
         </>
       }
     >
-      <div className='flex flex-col gap-4'>
+      <div ref={formsRef} className='flex flex-col gap-4'>
         {editing ? (
           <form
             noValidate

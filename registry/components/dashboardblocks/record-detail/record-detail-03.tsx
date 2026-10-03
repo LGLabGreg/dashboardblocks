@@ -146,7 +146,8 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const text = draft.trim()
-    if (!text) return
+    // Nothing to post: back to the text box rather than a disabled button.
+    if (!text) return document.getElementById(commentId)?.focus()
     setIsSaving(true)
     try {
       await onComment(text)
@@ -293,11 +294,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
               />
-              <Button
-                type='submit'
-                className='self-end'
-                disabled={isSaving || !draft.trim()}
-              >
+              <Button type='submit' className='self-end' disabled={isSaving}>
                 {isSaving ? 'Posting…' : 'Comment'}
               </Button>
             </form>

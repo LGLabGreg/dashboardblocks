@@ -148,7 +148,7 @@ function BackLink({
     <Link
       href={href}
       className={cn(
-        'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 -ml-1 inline-flex w-fit items-center gap-1 rounded-md px-1 text-sm outline-none focus-visible:ring-[3px] [&_svg]:size-4',
+        'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 inline-flex w-fit items-center gap-1 rounded-md text-sm outline-none focus-visible:ring-[3px] [&_svg]:size-4',
         className,
       )}
     >

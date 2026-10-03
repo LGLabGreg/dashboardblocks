@@ -152,9 +152,10 @@ const Settings4 = (props: Settings4Props) => {
                   {view.items.map((item) => (
                     <li
                       key={item.id}
-                      className='flex flex-col gap-3 rounded-lg border p-4'
+                      className='flex min-w-0 flex-col gap-3 rounded-lg border p-4'
                     >
-                      <div className='flex items-start gap-3'>
+                      {/* In a narrow card the status drops under the name rather than over it. */}
+                      <div className='flex flex-wrap items-start gap-x-3 gap-y-2'>
                         <span
                           aria-hidden
                           className={cn(
@@ -165,8 +166,10 @@ const Settings4 = (props: Settings4Props) => {
                         >
                           {item.logo ?? item.name[0]}
                         </span>
-                        <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                          <span className='text-sm font-medium'>{item.name}</span>
+                        <div className='flex min-w-24 flex-1 flex-col gap-0.5'>
+                          <span className='text-sm font-medium break-words'>
+                            {item.name}
+                          </span>
                           <span className='text-muted-foreground text-xs'>
                             {item.category}
                           </span>
@@ -186,7 +189,7 @@ const Settings4 = (props: Settings4Props) => {
                           {item.detail}
                         </p>
                       )}
-                      <div className='mt-auto flex gap-2'>
+                      <div className='mt-auto flex flex-wrap gap-2'>
                         {item.status === 'disconnected' ? (
                           <Button
                             variant='outline'

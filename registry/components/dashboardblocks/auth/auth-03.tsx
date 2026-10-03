@@ -2,7 +2,7 @@
 
 import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -77,6 +77,19 @@ const Auth3 = (props: Auth3Props) => {
   const [locked, setLocked] = useState(false)
   const [verified, setVerified] = useState(false)
   const [exampleAttempts, setExampleAttempts] = useState(EXAMPLE_ATTEMPTS)
+  const [failures, setFailures] = useState(0)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  // After a failed try, focus the box or field to fix, once it's enabled again.
+  useEffect(() => {
+    if (failures && !checking)
+      formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
+  }, [failures, checking])
+
+  const fail = (message: string) => {
+    setError(message)
+    setFailures((count) => count + 1)
+  }
 
   /** Stands in for your server when `onVerify` is left out. */
   const tryExampleCode = (value: string): VerifyResult => {
@@ -89,8 +102,8 @@ const Auth3 = (props: Auth3Props) => {
   const verify = async (value: string) => {
     if (checking || locked) return
     if (kind === 'app' && !/^\d{6}$/.test(value))
-      return setError('Enter all 6 digits from your authenticator app.')
-    if (kind === 'recovery' && !value.trim()) return setError('Enter a recovery code.')
+      return fail('Enter all 6 digits from your authenticator app.')
+    if (kind === 'recovery' && !value.trim()) return fail('Enter a recovery code.')
     setChecking(true)
     setError(null)
     try {
@@ -107,13 +120,13 @@ const Auth3 = (props: Auth3Props) => {
         return setError('Too many tries. Wait 15 minutes, then try again.')
       }
       setCode('')
-      setError(
+      fail(
         kind === 'app'
           ? `That code didn’t work.${result.attemptsLeft ? ` ${result.attemptsLeft} tries left.` : ''} Codes change every 30 seconds, so use the newest one.`
           : 'That recovery code didn’t work, or it has been used.',
       )
     } catch {
-      setError('We couldn’t check the code. Try again.')
+      fail('We couldn’t check the code. Try again.')
     } finally {
       setChecking(false)
     }
@@ -185,7 +198,7 @@ const Auth3 = (props: Auth3Props) => {
         </>
       }
     >
-      <form noValidate onSubmit={submit} className='flex flex-col gap-4'>
+      <form ref={formRef} noValidate onSubmit={submit} className='flex flex-col gap-4'>
         {kind === 'app' ? (
           <OtpInput
             aria-label='Code from your authenticator app'

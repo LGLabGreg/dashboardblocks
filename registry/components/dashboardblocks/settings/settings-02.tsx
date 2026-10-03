@@ -9,6 +9,7 @@ import {
 } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type RefObject, useEffect, useId, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -133,6 +134,7 @@ const Settings2 = (props: Settings2Props) => {
   const [keys, setKeys] = useState(props.keys)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
+  const [nameError, setNameError] = useState<string | null>(null)
   const [scope, setScope] = useState<KeyScope>('read')
   const [revealed, setRevealed] = useState<{ name: string; secret: string } | null>(null)
   const createButton = useRef<HTMLButtonElement>(null)
@@ -149,7 +151,11 @@ const Settings2 = (props: Settings2Props) => {
   const create = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = name.trim()
-    if (!trimmed) return
+    if (!trimmed) {
+      // The error renders before focus moves, so the field is read with it.
+      flushSync(() => setNameError('Enter a name for the key, such as where it’s used.'))
+      return nameInput.current?.focus()
+    }
     const { key, secret } = createKey(trimmed, scope)
     setKeys((current) => [key, ...current])
     setRevealed({ name: key.name, secret })
@@ -205,8 +211,22 @@ const Settings2 = (props: Settings2Props) => {
                 autoComplete='off'
                 placeholder='e.g. Production backend'
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) => {
+                  setName(event.target.value)
+                  setNameError(null)
+                }}
+                aria-invalid={nameError ? true : undefined}
+                aria-describedby={nameError ? `${id}-name-error` : undefined}
               />
+              {nameError && (
+                <p
+                  id={`${id}-name-error`}
+                  role='alert'
+                  className='text-destructive text-sm'
+                >
+                  {nameError}
+                </p>
+              )}
             </div>
             <fieldset className='flex flex-col gap-2'>
               <legend className='mb-2 text-sm font-medium'>Access</legend>
@@ -232,14 +252,13 @@ const Settings2 = (props: Settings2Props) => {
                 variant='ghost'
                 onClick={() => {
                   setCreating(false)
+                  setNameError(null)
                   focusNext.current = createButton
                 }}
               >
                 Cancel
               </Button>
-              <Button type='submit' disabled={!name.trim()}>
-                Create key
-              </Button>
+              <Button type='submit'>Create key</Button>
             </div>
           </form>
         )}

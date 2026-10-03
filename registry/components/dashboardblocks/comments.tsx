@@ -624,7 +624,9 @@ function CommentComposer({
   async function submit(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault()
     const body = text.trim()
-    if (!body || isSubmitting) return
+    if (isSubmitting) return
+    // Nothing to post: back to the text box rather than a disabled button.
+    if (!body) return textareaRef.current?.focus()
     setIsSubmitting(true)
     try {
       await onSubmit(body)
@@ -722,7 +724,7 @@ function CommentComposer({
               Cancel
             </Button>
           )}
-          <Button type='submit' size='sm' disabled={isSubmitting || !text.trim()}>
+          <Button type='submit' size='sm' disabled={isSubmitting}>
             {isSubmitting ? pendingLabel : submitLabel}
           </Button>
         </InputGroupAddon>

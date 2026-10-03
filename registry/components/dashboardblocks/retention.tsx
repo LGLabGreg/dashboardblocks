@@ -254,7 +254,7 @@ function CohortTable({
   return (
     <div className={cn('flex flex-col gap-3', className)}>
       <div
-        className={cn(minWidth && '-my-1 overflow-x-auto py-1')}
+        className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
         onPointerLeave={() => setActive(null)}
       >
         <table

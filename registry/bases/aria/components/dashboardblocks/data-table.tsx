@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 03006f45b4fd
+// source-hash: 194c7ecc639d
 
 'use client'
 
@@ -872,7 +872,7 @@ function DataTablePagination<TData extends RowData>({
         {from}–{to} of {total}
         {selected > 0 && ` · ${selected} selected`}
       </p>
-      <div className='flex items-center gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
         {pageSizeOptions && (
           <DropdownMenuTrigger>
             <Button variant='ghost' size='sm' aria-label='Rows per page'>
@@ -908,22 +908,25 @@ function DataTablePagination<TData extends RowData>({
             </DropdownMenu>
           </DropdownMenuTrigger>
         )}
-        <Button
-          variant='outline'
-          size='sm'
-          isDisabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          isDisabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        {/* Previous and Next wrap together, never apart. */}
+        <div className='flex gap-2'>
+          <Button
+            variant='outline'
+            size='sm'
+            isDisabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            isDisabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   )

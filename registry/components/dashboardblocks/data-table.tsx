@@ -869,7 +869,7 @@ function DataTablePagination<TData extends RowData>({
         {from}–{to} of {total}
         {selected > 0 && ` · ${selected} selected`}
       </p>
-      <div className='flex items-center gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
         {pageSizeOptions && (
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -906,22 +906,25 @@ function DataTablePagination<TData extends RowData>({
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-        <Button
-          variant='outline'
-          size='sm'
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        {/* Previous and Next wrap together, never apart. */}
+        <div className='flex gap-2'>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   )

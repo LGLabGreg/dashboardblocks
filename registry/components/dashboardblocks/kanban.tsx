@@ -1471,7 +1471,8 @@ function KanbanAddCard({
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const title = value.trim()
-    if (!title) return
+    // Nothing to add: back to the text box rather than a disabled button.
+    if (!title) return inputRef.current?.focus()
     onAdd(title)
     setValue('')
     setStatus(`Added ${title}`)
@@ -1517,7 +1518,7 @@ function KanbanAddCard({
         {status}
       </p>
       <div className='flex items-center gap-2'>
-        <Button type='submit' size='sm' disabled={!value.trim()}>
+        <Button type='submit' size='sm'>
           {label}
         </Button>
         <Button type='button' variant='ghost' size='sm' onClick={close}>

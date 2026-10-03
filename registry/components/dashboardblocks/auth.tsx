@@ -134,7 +134,7 @@ interface OtpInputProps {
   focusOnMount?: boolean
   className?: string
   disabled?: boolean
-  /** Marks every box as invalid. */
+  /** Marks the boxes to fix as invalid: the empty ones, or every box of a full code. */
   invalid?: boolean
   /** @default 6 */
   length?: number
@@ -225,7 +225,10 @@ function OtpInput({
             inputs.current[index] = node
           }}
           aria-label={`Digit ${index + 1} of ${length}`}
-          aria-invalid={invalid || undefined}
+          // A short code: the empty boxes are the ones to fix. A full one: all of them.
+          aria-invalid={
+            (invalid && (value.length === length || index >= value.length)) || undefined
+          }
           autoComplete={index === 0 ? 'one-time-code' : 'off'}
           inputMode='numeric'
           pattern='[0-9]*'
