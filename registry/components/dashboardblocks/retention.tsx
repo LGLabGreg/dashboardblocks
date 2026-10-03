@@ -143,6 +143,11 @@ function RetentionChange({ className, difference, versus }: RetentionChangeProps
   )
 }
 
+interface CohortCell {
+  period: number
+  row: number | 'average'
+}
+
 interface CohortTableProps {
   /** Shown under the table when no cell is hovered, such as a summary. */
   children?: ReactNode
@@ -199,8 +204,7 @@ function CohortTable({
   scaleMax: scaleMaxProp,
   sizeHeader = 'Users',
 }: CohortTableProps) {
-  // `row` is a cohort index, or -1 for the average row.
-  const [active, setActive] = useState<{ period: number; row: number } | null>(null)
+  const [active, setActive] = useState<CohortCell | null>(null)
 
   const averages = getAverageRetention(cohorts)
   const periods = averages.length
@@ -210,8 +214,8 @@ function CohortTable({
   const unit = periodName.toLowerCase()
   const shortName = periodName.charAt(0).toUpperCase()
 
-  const describe = ({ period, row }: { period: number; row: number }) => {
-    if (row === -1) {
+  const describe = ({ period, row }: CohortCell) => {
+    if (row === 'average') {
       return `Average, ${unit} ${period}: ${formatRetention(averages[period] ?? 0, 1)} retained`
     }
     const cohort = cohorts[row]
@@ -219,7 +223,12 @@ function CohortTable({
     return `${cohort.label}, ${unit} ${period}: ${formatCount(cohort.retained[period])} of ${formatCount(cohort.size)} (${formatRetention(rate, 1)})`
   }
 
-  const renderCell = (row: number, period: number, rate: number, label: string) => {
+  const renderCell = (
+    row: CohortCell['row'],
+    period: number,
+    rate: number,
+    label: string,
+  ) => {
     const isActive = active?.row === row && active.period === period
     return (
       <td
@@ -228,7 +237,7 @@ function CohortTable({
         onPointerDown={() => setActive({ period, row })}
         className={cn(
           'ring-offset-card h-8 min-w-11 rounded-[3px] px-1 text-center font-medium whitespace-nowrap',
-          row === -1 && 'font-semibold',
+          row === 'average' && 'font-semibold',
           isActive && 'ring-foreground ring-2 ring-offset-1',
         )}
         style={{
@@ -318,7 +327,7 @@ function CohortTable({
                 {averages.map((rate, period) =>
                   rate === null
                     ? emptyCell(period)
-                    : renderCell(-1, period, rate, formatRetention(rate)),
+                    : renderCell('average', period, rate, formatRetention(rate)),
                 )}
               </tr>
             </tfoot>

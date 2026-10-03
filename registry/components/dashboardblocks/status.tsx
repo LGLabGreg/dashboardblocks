@@ -124,8 +124,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
   },
 }
 
-/** Severity order, used to find the worst status in a set. */
-const severity: StatusLevel[] = [
+const severityOrder: StatusLevel[] = [
   'unknown',
   'operational',
   'maintenance',
@@ -137,7 +136,7 @@ const severity: StatusLevel[] = [
 function getWorstStatus(statuses: StatusLevel[]): StatusLevel {
   return statuses.reduce<StatusLevel>(
     (worst, status) =>
-      severity.indexOf(status) > severity.indexOf(worst) ? status : worst,
+      severityOrder.indexOf(status) > severityOrder.indexOf(worst) ? status : worst,
     'unknown',
   )
 }

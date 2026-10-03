@@ -63,7 +63,6 @@ function OnboardingLayout({
   const headingRef = useRef<HTMLHeadingElement>(null)
   const shownStep = useRef(step)
 
-  // Only after a step change, never on mount.
   useEffect(() => {
     if (shownStep.current === step) return
     shownStep.current = step
@@ -314,7 +313,6 @@ function ChoiceCards(props: ChoiceCardsProps) {
   )
 }
 
-/** The radio dot or checkbox tick in a choice card's corner. */
 function ChoiceIndicator({ multiple }: { multiple: boolean }) {
   return (
     <span
@@ -388,7 +386,6 @@ function InviteList({
 
   const emailId = (invite: Invite) => `${id ?? baseId}-${invite.id}`
 
-  // Moves focus after adding or removing a row: the change the user just made.
   useEffect(() => {
     if (!focusNext.current) return
     document.getElementById(focusNext.current)?.focus()
@@ -450,7 +447,6 @@ function InviteList({
   return (
     <div className={cn('@container', className)}>
       <div className='grid grid-cols-[minmax(0,1fr)_6.5rem_auto] gap-x-2 gap-y-3 @sm:grid-cols-[minmax(0,1fr)_8rem_auto]'>
-        {/* Column headings. Each control has its own label. */}
         <span aria-hidden className='text-sm font-medium'>
           Email
         </span>
@@ -497,7 +493,6 @@ function InviteList({
                   variant='ghost'
                   size='icon'
                   aria-label={`Remove ${label}`}
-                  // One row always stays, so there is somewhere to type.
                   className={cn(value.length === 1 && 'invisible')}
                   onClick={() => remove(index)}
                 >

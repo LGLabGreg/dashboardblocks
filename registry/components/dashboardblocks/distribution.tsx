@@ -183,7 +183,6 @@ interface HistogramProps {
   thresholdColor?: string
 }
 
-/** Roughly how wide an 11px label is, to keep labels from overlapping. */
 function estimateLabelWidth(text: string) {
   return text.length * 6.5 + 8
 }
@@ -211,7 +210,6 @@ function Histogram({
 }: HistogramProps) {
   const { ref, revealed } = useReveal(animated)
   const [active, setActive] = useState<number | null>(null)
-  // Measured, so labels and ticks can make room for each other at any width.
   const [width, setWidth] = useState(600)
 
   useEffect(() => {
@@ -234,7 +232,6 @@ function Histogram({
   ]
     .map((line) => ({ ...line, position: getBinPosition(bins, line.value) }))
     .sort((a, b) => a.position - b.position)
-  // A label that would overlap one to its left steps down a row.
   const rowEnds: number[] = []
   const rows = lines.map((line) => {
     const half = estimateLabelWidth(line.label) / 2
@@ -245,7 +242,6 @@ function Histogram({
     return row
   })
   const labelRows = rowEnds.length
-  // Skip edge labels that wouldn't fit between their neighbours.
   const widestTick = Math.max(
     0,
     ...bins.map((bin) => estimateLabelWidth(formatEdge(bin.x0))),

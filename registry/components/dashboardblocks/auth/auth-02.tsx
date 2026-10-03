@@ -65,7 +65,6 @@ const exampleProps: Auth2Props = {
   ],
 }
 
-/** Search appears once there are more workspaces than this. */
 const SEARCH_AFTER = 5
 
 const Auth2 = (props: Auth2Props) => {

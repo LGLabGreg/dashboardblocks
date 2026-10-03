@@ -55,7 +55,6 @@ const Goals1 = (props: Goals1Props) => {
     title,
     today,
   } = props
-  // Count the last day in full, so the period ends at the end of `end`.
   const periodEnd = new Date(end.getTime() + DAY)
   const pace = getPace({ current, elapsed: getElapsed(start, periodEnd, today), target })
   const daysLeft = Math.max(

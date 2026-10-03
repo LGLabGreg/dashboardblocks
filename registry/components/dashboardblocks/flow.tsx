@@ -93,7 +93,6 @@ function layoutFlow(
   }: FlowLayoutOptions,
 ) {
   const totals = getFlowTotals(nodes, links)
-  // Longest path from a source, for nodes without a column.
   const depth = new Map<string, number>()
   const visit = (id: string, seen: Set<string>): number => {
     if (depth.has(id)) return depth.get(id)!
@@ -150,7 +149,6 @@ function layoutFlow(
       y += value * ky + nodePadding
     })
   })
-  // Downstream nodes take the colour of their largest source, so a flow keeps its hue.
   for (let column = 1; colorBy === 'source' && column <= lastColumn; column++) {
     for (const entry of byColumn[column]) {
       const node = placed.get(entry.node.id)!
@@ -263,7 +261,6 @@ function FlowChart({
     return () => observer.disconnect()
   }, [])
 
-  // Room for the first column's labels on the right and the last column's on the left.
   const labelGap = 6
   const layout = layoutFlow(nodes, links, { colorBy, height, width: Math.max(0, width) })
   const byId = new Map(layout.nodes.map((node) => [node.id, node]))

@@ -47,7 +47,6 @@ const CALENDARS = {
   travel: { calendar: 'Travel', color: 'var(--chart-5)' },
 }
 
-/** The weekly team sync, every Tuesday from September 1 to October 27. */
 const teamSyncs: CalendarEvent[] = Array.from({ length: 9 }, (_, week) => ({
   ...CALENDARS.team,
   end: at(8, 1 + week * 7, 10, 45),

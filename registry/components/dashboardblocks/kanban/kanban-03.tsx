@@ -176,14 +176,12 @@ async function saveTicket() {
   await new Promise((resolve) => setTimeout(resolve, 300))
 }
 
-/** "45m", "3h", "2d". */
 function formatSpan(minutes: number) {
   if (minutes < 60) return `${minutes}m`
   if (minutes < 1_440) return `${Math.round(minutes / 60)}h`
   return `${Math.round(minutes / 1_440)}d`
 }
 
-/** Time to the SLA: red once breached, amber in the last hour, and paused while waiting. */
 function SlaBadge({ due, now, paused }: { due: Date; now: Date; paused: boolean }) {
   const minutes = Math.round((due.getTime() - now.getTime()) / 60_000)
   const state = paused
@@ -291,7 +289,6 @@ const Kanban3 = (props: Kanban3Props) => {
       slaDueAt: new Date(now.getTime() + slaHours * 3_600_000),
       title: ticketTitle,
     }
-    // New tickets go to the top of the first column.
     setTickets((current) => [ticket, ...current])
     await onAdd(ticket)
   }
@@ -349,7 +346,6 @@ const Kanban3 = (props: Kanban3Props) => {
                       {ticket.customer ?? 'Added on the board'}
                     </p>
                   </div>
-                  {/* After the title, so it comes second in tab order. */}
                   <KanbanCardMenu className='absolute top-3 right-2' />
                   {column.id !== 'solved' && (
                     <div className='flex min-h-6 items-center gap-2'>

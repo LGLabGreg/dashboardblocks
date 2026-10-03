@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/dashboard-header.tsx for React Aria
-// source-hash: c84bd12f41c2
+// source-hash: 50da9870edce
 
 'use client'
 
@@ -211,7 +211,6 @@ interface FilterField {
   values: string[]
 }
 
-/** The value of the option that clears a `FilterMenu`. */
 const ALL_OPTIONS = '__all__'
 
 interface FilterMenuProps {
@@ -280,7 +279,6 @@ interface AddFilterMenuProps {
 
 const isSameFilter = (a: Filter, b: Filter) => a.field === b.field && a.value === b.value
 
-/** A menu key for a filter. Keys must be unique across every field. */
 const filterKey = (filter: Filter) => JSON.stringify([filter.field, filter.value])
 
 /** A menu of every field and its values. Each value toggles a filter. */

@@ -151,7 +151,6 @@ interface FileTableContext {
   timeZone: string
 }
 
-/** Lets the module-level columns reach the block's actions and clock. */
 const FileTable = createContext<FileTableContext>({
   actionsFor: () => [],
   now: new Date(0),
@@ -233,8 +232,7 @@ const columns = columnHelper.columns([
       cellClassName:
         'w-px pl-0 @max-2xl/data-table:absolute @max-2xl/data-table:right-4.5 @max-2xl/data-table:bottom-3 @max-2xl/data-table:w-auto',
       headerClassName: 'w-px',
-      // No label above the menu when stacked.
-      label: '',
+      hideLabelWhenStacked: true,
     },
   }),
 ])
@@ -262,7 +260,6 @@ const Files2 = (props: Files2Props) => {
     )
     await onDelete(targets)
     setRows((current) => current.filter((row) => !ids.has(row.id)))
-    // Only drop the deleted rows from the selection, not every selected row.
     table.setRowSelection((current) =>
       Object.fromEntries(Object.entries(current).filter(([id]) => !ids.has(id))),
     )

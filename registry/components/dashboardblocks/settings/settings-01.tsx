@@ -77,7 +77,6 @@ const exampleProps: Settings1Props = {
   title: 'Members',
 }
 
-/** Invites older than this have expired and need resending. */
 const INVITE_EXPIRY_DAYS = 7
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

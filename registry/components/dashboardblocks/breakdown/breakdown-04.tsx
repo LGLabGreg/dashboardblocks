@@ -50,7 +50,6 @@ const Breakdown4 = (props: Breakdown4Props) => {
   const { currentLabel, description, items, previousLabel, title } = props
   const { ref, revealed } = useReveal<HTMLTableSectionElement>(true)
   const values = items.flatMap((item) => [item.current, item.previous])
-  // Pad the data range so the extreme dots sit inside the track.
   const pad = (Math.max(...values) - Math.min(...values)) * 0.1 || 1
   const min = Math.max(0, Math.min(...values) - pad)
   const max = Math.max(...values) + pad

@@ -45,7 +45,6 @@ interface StatGroup3Props {
   title: string
 }
 
-/** Thirty days of example values for the current and previous period. */
 const exampleDaily = (
   base: number,
   slope: number,
@@ -66,7 +65,6 @@ const exampleDaily = (
     }
   })
 
-/** Sums or averages the daily values into the period's value and previous value. */
 const exampleTotals = (daily: DailyValue[], mode: 'mean' | 'sum', digits = 0) => {
   const total = (key: 'current' | 'previous') => {
     const sum = daily.reduce((acc, day) => acc + day[key], 0)

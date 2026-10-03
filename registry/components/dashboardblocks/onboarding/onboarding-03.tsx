@@ -156,8 +156,6 @@ const Onboarding3 = (props: Onboarding3Props) => {
     (item) => item.id === (status.state === 'picking' ? selected : status.id),
   )
 
-  // The button that was pressed goes away when the state changes, so focus
-  // moves to what replaced it rather than falling back to the page.
   useEffect(() => {
     const from = shownState.current
     shownState.current = status.state
@@ -195,9 +193,12 @@ const Onboarding3 = (props: Onboarding3Props) => {
     void connect(selected)
   }
 
-  function backToSources() {
-    // Ignores a connection still in flight.
+  function cancelPendingConnection() {
     attempt.current += 1
+  }
+
+  function backToSources() {
+    cancelPendingConnection()
     setStatus({ state: 'picking' })
   }
 

@@ -144,6 +144,11 @@ interface OtpInputProps {
   value: string
 }
 
+function resolveTypedDigits(current: string, entered: string) {
+  if (!current || entered.length !== 2) return entered
+  return entered.startsWith(current) ? entered[1] : entered[0]
+}
+
 /**
  * One box per digit. Typing moves to the next box, Backspace to the previous
  * one, and pasting a code fills every box. Browsers can fill it from a text
@@ -175,15 +180,12 @@ function OtpInput({
     if (clean.length === length) onComplete?.(clean)
   }
 
+  const isDigitInvalid = (index: number) =>
+    invalid && (value.length === length || index >= value.length)
+
   const type = (index: number, typed: string) => {
-    let entered = typed.replace(/\D/g, '')
+    const entered = resolveTypedDigits(digits[index], typed.replace(/\D/g, ''))
     if (!entered) return
-    // Typing into a filled box whose digit wasn't selected keeps both characters.
-    const current = digits[index]
-    if (current && entered.length === 2) {
-      entered = entered.startsWith(current) ? entered[1] : entered[0]
-    }
-    // A whole code arrives at once from autofill or a paste into one box.
     if (entered.length > 1) return set(entered, entered.length)
     const next = [...digits]
     next[index] = entered
@@ -225,16 +227,12 @@ function OtpInput({
             inputs.current[index] = node
           }}
           aria-label={`Digit ${index + 1} of ${length}`}
-          // A short code: the empty boxes are the ones to fix. A full one: all of them.
-          aria-invalid={
-            (invalid && (value.length === length || index >= value.length)) || undefined
-          }
+          aria-invalid={isDigitInvalid(index) || undefined}
           autoComplete={index === 0 ? 'one-time-code' : 'off'}
           inputMode='numeric'
           pattern='[0-9]*'
           disabled={disabled}
           value={digit}
-          // Only the next empty box, or a filled one, takes focus from Tab.
           tabIndex={index <= value.length ? 0 : -1}
           onChange={(event) => type(index, event.target.value)}
           onKeyDown={(event) => keyDown(index, event)}

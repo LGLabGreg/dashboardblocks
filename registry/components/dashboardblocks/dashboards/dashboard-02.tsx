@@ -44,7 +44,6 @@ const exampleProps: Dashboard2Props = {
   today: new Date(Date.UTC(2026, 8, 25)),
 }
 
-/** Each plan's share of accounts, price and day 1, 7 and 30 retention. */
 const PLANS = [
   { name: 'Starter', price: 19, retention: [0.52, 0.33, 0.19], share: 0.58 },
   { name: 'Pro', price: 49, retention: [0.64, 0.46, 0.31], share: 0.33 },
@@ -70,11 +69,9 @@ interface Query {
   preset: DateRangePreset
 }
 
-/** Paying subscribers `offset` days before the end: grows smoothly, unlike daily activity. */
 const subscribersAt = (offset: number, share: number) =>
   share * (7_600 - offset * 9 + Math.sin(offset / 9) * 60)
 
-/** Active accounts on the day `offset` days before the end. Dips at weekends. */
 const accountsAt = (offset: number, share: number) =>
   share *
   (5_400 - offset * 6 + Math.sin(offset / 4.3) * 140 - ((offset + 2) % 7 < 2 ? 520 : 0))
@@ -125,8 +122,6 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
   const nps = daily('nps')
   const scope = `${formatDateRange(range)}${plan ? `, ${plan} plan` : ''}`
 
-  // MRR movement across the range. Expansion, contraction and churn are
-  // monthly rates scaled to its length; new business makes up the rest.
   const months = days / 30
   const starting = day(days).mrr
   const ending = last(mrr).current
@@ -134,13 +129,11 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
   const contraction = Math.round(starting * 0.011 * months)
   const expansion = Math.round(starting * (plan === 'Starter' ? 0.018 : 0.034) * months)
 
-  // Day 1, 7 and 30 retention of the latest monthly cohort and the one before.
   const retention = [1, 7, 30].map((dayNumber, index) => {
     const rate = plans.reduce((sum, item) => sum + item.share * item.retention[index], 0)
     return {
       current: Number((rate / share + 0.012).toFixed(3)),
       label: `Day ${dayNumber}`,
-      // Day 30 slipped against the cohort before, the early days improved.
       previous: Number((rate / share + [-0.009, -0.011, 0.018][index]).toFixed(3)),
     }
   })
@@ -199,7 +192,6 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
     },
     previousLabel: formatDateRange(previousRange),
     regions: REGIONS.map((region, index) => {
-      // Growth differs by region, so each one's share moves a little.
       const drift = (index - 1) * 0.01
       return {
         color: region.color,
@@ -216,20 +208,19 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
 const Dashboard2 = (props: Dashboard2Props) => {
   const { title, today } = props
   const [query, setQuery] = useState<Query>({ plan: null, preset: '30d' })
-  // The query the blocks currently show. It lags behind while "fetching",
-  // and the blocks stay in place, dimmed, until the new data arrives.
-  const [shown, setShown] = useState(query)
-  const busy = shown !== query
+  const [displayedQuery, setDisplayedQuery] = useState(query)
+  const busy = displayedQuery !== query
 
+  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
-    if (shown === query) return
-    const timer = setTimeout(() => setShown(query), 500)
+    if (displayedQuery === query) return
+    const timer = setTimeout(() => setDisplayedQuery(query), 500)
     return () => clearTimeout(timer)
-  }, [query, shown])
+  }, [query, displayedQuery])
 
   const update = (patch: Partial<Query>) =>
     setQuery((current) => ({ ...current, ...patch }))
-  const data = buildSaasData(shown, today)
+  const data = buildSaasData(displayedQuery, today)
   const range = getDateRange(query.preset, today)
 
   return (
@@ -322,7 +313,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
           />
         </div>
         <Retention3
-          description={`Latest monthly signup cohort${shown.plan ? `, ${shown.plan} plan` : ''}, compared with the one before`}
+          description={`Latest monthly signup cohort${displayedQuery.plan ? `, ${displayedQuery.plan} plan` : ''}, compared with the one before`}
           milestones={data.retention}
           previousLabel='Previous cohort'
           title='Retention milestones'

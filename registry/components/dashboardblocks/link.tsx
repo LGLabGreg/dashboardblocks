@@ -8,12 +8,6 @@ import {
   useContext,
 } from 'react'
 
-/*
- * Primitives render in-app links with `Link`. Without a provider it's a plain
- * anchor, which reloads the page. Wrap your app in `LinkProvider` with your
- * router's link to navigate on the client instead.
- */
-
 type LinkProps = ComponentProps<'a'> & { href: string }
 
 /** A link that takes anchor props with a string `href`, such as Next.js's `Link`. */
@@ -36,12 +30,15 @@ function LinkProvider({ children, component }: LinkProviderProps) {
  * An in-app link: the provider's component, or a plain anchor without one.
  * Without `href` it's an anchor that goes nowhere, as `<a>` without one is.
  */
-function Link({ href, ...props }: Omit<LinkProps, 'href'> & { href?: string }) {
+function Link({ children, href, ...props }: Omit<LinkProps, 'href'> & { href?: string }) {
   const Component = useContext(LinkContext)
-  // oxlint-disable-next-line jsx-a11y/anchor-has-content -- the content comes in `children`
-  if (href === undefined) return <a {...props} />
-  // oxlint-disable-next-line react/static-components -- it comes from context, so it's the same component on every render
-  return <Component href={href} {...props} />
+  if (href === undefined) return <a {...props}>{children}</a>
+  return (
+    // oxlint-disable-next-line react/static-components -- it comes from context, so it's the same component on every render
+    <Component href={href} {...props}>
+      {children}
+    </Component>
+  )
 }
 
 export { Link, LinkProvider }

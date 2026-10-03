@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: 09f9d1951407
+// source-hash: aeb738a91811
 
 'use client'
 
@@ -24,15 +24,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { cn } from '@/lib/utils'
-
-/*
- * Uploads are provider-agnostic: `useFileUploads` takes an `upload` function
- * that sends one file wherever you store files (S3, R2, UploadThing, your own
- * API), reports progress and honours the abort signal. The dropzone checks
- * type, size and count before anything is sent.
- */
-
-// Kinds
 
 type FileKind =
   | 'archive'
@@ -353,8 +344,6 @@ function FileKindIcon({
   )
 }
 
-// Sizes
-
 const FILE_SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
 const sizeFormatters = [0, 1].map(
   (digits) => new Intl.NumberFormat('en-US', { maximumFractionDigits: digits }),
@@ -378,8 +367,6 @@ function formatFileSize(bytes: number) {
   const formatter = sizeFormatters[exponent > 0 && value < 100 ? 1 : 0]
   return `${formatter.format(value)} ${FILE_SIZE_UNITS[exponent]}`
 }
-
-// Validation
 
 type FileRejectionReason = 'count' | 'size' | 'type'
 
@@ -444,8 +431,6 @@ function validateFiles(files: File[], { accept, maxFiles, maxSize }: FileRules =
   }
   return { accepted, rejected }
 }
-
-// Dropzone
 
 interface FileDropzoneProps extends FileRules {
   className?: string
@@ -578,8 +563,6 @@ function FileDropzone({
   )
 }
 
-// Uploads
-
 type UploadStatus = 'canceled' | 'done' | 'error' | 'queued' | 'uploading'
 
 interface FileUpload {
@@ -652,7 +635,6 @@ function useFileUploads({
     }
   }, [])
 
-  // Starts queued uploads while there's room.
   useEffect(() => {
     const running = controllers.current
     const room = concurrency - running.size
@@ -667,6 +649,10 @@ function useFileUploads({
         if (!signal.aborted)
           setUploads((current) => patchUpload(current, item.id, changes))
       }
+      const finish = (changes: Partial<FileUpload>) => {
+        if (running.get(item.id) === controller) running.delete(item.id)
+        update(changes)
+      }
       update({ error: undefined, progress: 0, status: 'uploading' })
       uploadRef
         .current(item.file as File, {
@@ -674,18 +660,13 @@ function useFileUploads({
             update({ progress: Math.min(1, Math.max(0, progress)) }),
           signal,
         })
-        .then((result) => update({ progress: 1, status: 'done', url: result?.url }))
+        .then((result) => finish({ progress: 1, status: 'done', url: result?.url }))
         .catch((error: unknown) =>
-          update({
+          finish({
             error: error instanceof Error ? error.message : 'Upload failed',
             status: 'error',
           }),
         )
-        .finally(() => {
-          if (running.get(item.id) === controller) running.delete(item.id)
-          // Wakes the queue for the next file.
-          if (!signal.aborted) setUploads((current) => [...current])
-        })
     }
   }, [concurrency, uploads])
 
@@ -854,8 +835,6 @@ function FileUploadItem({
   const actionsRef = useRef<HTMLDivElement>(null)
   const canceling = useRef(false)
 
-  // Cancel is replaced by Retry and Remove, so move focus to them rather than
-  // losing it to the page.
   useEffect(() => {
     if (!canceling.current || running) return
     canceling.current = false
@@ -984,8 +963,6 @@ function FileUploadItem({
     </li>
   )
 }
-
-// Actions and navigation
 
 interface FileAction {
   icon?: ReactNode

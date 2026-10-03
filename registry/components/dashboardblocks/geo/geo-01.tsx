@@ -120,7 +120,6 @@ const Geo1 = (props: Geo1Props) => {
           format={formatter}
           label={`${title}, ${description.toLowerCase()}`}
           nameHeader='State'
-          // Revenue follows population, so a square-root scale keeps the smaller states apart.
           scale='sqrt'
           tiles={US_STATE_TILES}
           valueHeader={valueLabel}

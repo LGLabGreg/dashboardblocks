@@ -36,7 +36,6 @@ const exampleProps: Breakdown3Props = {
 
 const CELLS = 100
 
-/** Splits 100 cells across segments with the largest-remainder method. */
 function toCells(segments: BreakdownSegment[]) {
   const total = getTotal(segments)
   if (total === 0) return segments.map(() => 0)

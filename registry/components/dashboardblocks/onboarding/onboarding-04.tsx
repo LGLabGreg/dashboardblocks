@@ -215,8 +215,6 @@ const Onboarding4 = (props: Onboarding4Props) => {
   const fieldId = (name: keyof Answers) => `${id}-${name}`
   const shownSaved = useRef(saved)
 
-  // The pressed button goes away with the form or the result, so focus
-  // moves to what replaced it. Never on mount.
   useEffect(() => {
     if (shownSaved.current === saved) return
     shownSaved.current = saved

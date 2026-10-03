@@ -59,7 +59,6 @@ const reasons: Record<SessionEndReason, (idleMinutes: number) => string> = {
   'signed-out-elsewhere': () => 'You signed out in another tab or window.',
 }
 
-/** Adds `returnTo` to the sign-in link, keeping any query it already has. */
 function withReturnTo(href: string, returnTo?: string) {
   if (!returnTo) return href
   const [path, hash = ''] = href.split('#')

@@ -46,10 +46,7 @@ interface Distribution2Props {
   unit?: string
 }
 
-/**
- * Deterministic, right-skewed sample values, like resolution times. Integer
- * hashing, not Math.sin, so the server and the browser get the same numbers.
- */
+/** Integer hashing, not Math.sin, so the server and the browser get the same numbers. */
 function sample(count: number, scale: number, seed: number) {
   return Array.from({ length: count }, (_, index) => {
     const u = ((index * 2_654_435_761 + seed * 40_503) % 4_294_967_296) / 4_294_967_296

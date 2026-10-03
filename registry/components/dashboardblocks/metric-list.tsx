@@ -120,7 +120,6 @@ function describeHistory(
   return `${metric.label}${period ? `, ${period}` : ''}: ${direction} from ${format(first)} to ${format(last)}`
 }
 
-/** Flips to true once the element scrolls into view, after the first paint. */
 function useReveal(animated: boolean) {
   const { isInView, ref } = useInView({ threshold: 0.3 })
   const [revealed, setRevealed] = useState(!animated)
@@ -184,6 +183,7 @@ interface MetricSparklineProps {
 
 const SPARKLINE_WIDTH = 64
 const SPARKLINE_HEIGHT = 24
+const SPARKLINE_INSET = 2
 
 /** A small line with a dot on the latest value, sized to sit in a row. Reveals left to right. */
 function MetricSparkline({
@@ -200,10 +200,11 @@ function MetricSparkline({
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = max - min || 1
-  // Keep a 2px inset so the stroke is never clipped at the extremes.
   const points = data.map((value, index) => ({
     x: (index / (data.length - 1)) * SPARKLINE_WIDTH,
-    y: 2 + (1 - (value - min) / range) * (SPARKLINE_HEIGHT - 4),
+    y:
+      SPARKLINE_INSET +
+      (1 - (value - min) / range) * (SPARKLINE_HEIGHT - 2 * SPARKLINE_INSET),
   }))
   const line = points.map(({ x, y }, index) => `${index ? 'L' : 'M'}${x},${y}`).join('')
   const last = points[points.length - 1]
@@ -286,7 +287,6 @@ function MetricRow({
       {...props}
     >
       <span className='text-sm'>{metric.label}</span>
-      {/* Keeps its grid cell when there's no history, so the columns stay aligned. */}
       {showSparkline && (
         <div className='min-w-0'>
           {metric.history && (

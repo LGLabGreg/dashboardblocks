@@ -92,7 +92,6 @@ Together they could lift the hit rate to about 55%, saving around $180 a month.`
 const fallbackReply =
   'This is a demo reply. Pass `onSend` to stream answers from your own model, with the card’s data as context.'
 
-/** Resolves after `ms`, or rejects as soon as `signal` aborts. */
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => {

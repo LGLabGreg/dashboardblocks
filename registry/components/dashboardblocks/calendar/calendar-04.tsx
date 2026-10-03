@@ -210,7 +210,6 @@ const exampleProps: Calendar4Props = {
   })),
 }
 
-/** Whether a room is in use at `now` and until when, or free and until when. */
 function getRoomStatus(bookings: CalendarEvent[], now: Date, timeZone: string) {
   if (bookings.some((booking) => booking.allDay))
     return { busy: true, label: 'Closed today' }
@@ -219,7 +218,6 @@ function getRoomStatus(bookings: CalendarEvent[], now: Date, timeZone: string) {
     .sort((a, b) => a.start.getTime() - b.start.getTime())
   const current = times.find(({ end, start }) => start <= now && now < end)
   if (current) {
-    // Back-to-back bookings keep the room in use.
     let until = current.end
     for (const { end, start } of times) {
       if (start <= until && end > until) until = end

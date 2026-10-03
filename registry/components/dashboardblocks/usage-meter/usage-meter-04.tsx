@@ -50,10 +50,12 @@ const exampleProps: UsageMeter4Props = {
   title: 'Credits',
 }
 
-/** Warn two weeks out, and again in the last week. */
+const CRITICAL_RUNWAY_DAYS = 7
+const WARNING_RUNWAY_DAYS = 14
+
 function getRunwayStatus(days: number): UsageStatus {
-  if (days < 7) return 'critical'
-  if (days < 14) return 'warning'
+  if (days < CRITICAL_RUNWAY_DAYS) return 'critical'
+  if (days < WARNING_RUNWAY_DAYS) return 'warning'
   return 'ok'
 }
 

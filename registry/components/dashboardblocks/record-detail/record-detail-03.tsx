@@ -146,7 +146,6 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const text = draft.trim()
-    // Nothing to post: back to the text box rather than a disabled button.
     if (!text) return document.getElementById(commentId)?.focus()
     setIsSaving(true)
     try {

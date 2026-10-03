@@ -71,13 +71,11 @@ const Insights3 = (props: Insights3Props) => {
   const rows = [...contributions].sort((a, b) => b.value - a.value)
   const net = rows.reduce((sum, row) => sum + row.value, 0)
   const max = Math.max(...rows.map((row) => Math.abs(row.value)), 0)
-  // Contribution in percentage points of the previous value, so rows add up to the total change.
   const points = (value: number) =>
     previous === 0 ? 0 : Math.round((value / Math.abs(previous)) * 1000) / 10
   const percent = points(net)
   const netTone = getChangeTone(net, goodDirection)
 
-  // The largest contribution in the direction of the change, and the largest against it.
   const lead = net >= 0 ? rows[0] : rows[rows.length - 1]
   const drag = net >= 0 ? rows[rows.length - 1] : rows[0]
   const summary: InsightSegment[] = [

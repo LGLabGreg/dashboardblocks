@@ -54,7 +54,6 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
   } = props
   const formatter = getKPIFormatter(format)
   const share = target > 0 ? (value / target) * 100 : 0
-  // Where an even pace would be by today, marked on the bar.
   const expected = Math.min(100, (daysElapsed / daysInPeriod) * 100)
   const projected = daysElapsed > 0 ? (value / daysElapsed) * daysInPeriod : value
   const onPace = projected >= target

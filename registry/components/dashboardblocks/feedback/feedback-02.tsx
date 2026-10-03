@@ -42,7 +42,6 @@ const exampleProps: Feedback2Props = {
 const Feedback2 = (props: Feedback2Props) => {
   const { description, title, topics } = props
   const sorted = [...topics].sort((a, b) => getNetSentiment(b) - getNetSentiment(a))
-  // One scale for every row: each half spans the largest side of any row.
   const extent = Math.max(
     0.01,
     ...topics.map((topic) => {
@@ -72,7 +71,6 @@ const Feedback2 = (props: Feedback2Props) => {
             Positive
           </li>
         </ul>
-        {/* Narrow cards stack the bar under its label; wider ones put it between label and net. */}
         <div className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 @md:grid-cols-[auto_minmax(0,1fr)_auto]'>
           <span className='hidden @md:block' />
           <span className='text-muted-foreground col-span-full flex justify-between text-[11px] @md:col-span-1'>

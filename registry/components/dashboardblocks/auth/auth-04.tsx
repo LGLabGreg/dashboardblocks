@@ -71,14 +71,12 @@ const Auth4 = (props: Auth4Props) => {
   const [failures, setFailures] = useState(0)
   const formsRef = useRef<HTMLDivElement>(null)
 
-  // Counts down once a second while a resend is blocked.
   useEffect(() => {
     if (cooldown <= 0) return
     const timer = setTimeout(() => setCooldown((seconds) => seconds - 1), 1000)
     return () => clearTimeout(timer)
   }, [cooldown])
 
-  // After a failed try, focus the box or field to fix, once it's enabled again.
   useEffect(() => {
     if (failures && !checking)
       formsRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()

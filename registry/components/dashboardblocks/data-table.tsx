@@ -60,14 +60,7 @@ import { cn } from '@/lib/utils'
  * labelled values. Use `@2xl/data-table:` for controls that only apply to one
  * layout, such as `DataTableSortMenu`. Explicit ARIA roles keep the table
  * semantics when the display changes, which some browsers otherwise drop.
- *
- * The file has two layers. The layout primitives (`DataTable`, `DataTableRow`,
- * `DataTableCell`…) render static rows. `useDataTable` and the components that
- * take a `table` add TanStack Table: sorting, filtering, search, pagination,
- * row selection and column visibility.
  */
-
-// Layout primitives
 
 function DataTable({ className, ...props }: ComponentProps<'table'>) {
   return (
@@ -206,8 +199,6 @@ function DataTableBar({
   )
 }
 
-// TanStack Table
-
 /** Column options read by the data table components. Set them in a column's `meta`. */
 interface DataTableColumnMeta {
   /** @default 'start' */
@@ -216,6 +207,8 @@ interface DataTableColumnMeta {
   cellClassName?: string
   /** Classes for the column's header. */
   headerClassName?: string
+  /** Leaves its values without a label when the table is stacked, such as a column of row actions. */
+  hideLabelWhenStacked?: boolean
   /**
    * Names the column in menus and labels its values when the table is stacked.
    * Defaults to the column's `header` when that is a string, then its id.
@@ -227,10 +220,6 @@ interface DataTableColumnMeta {
   truncate?: boolean
 }
 
-/**
- * Keeps rows whose value is one of the filter values. Array values, such as
- * tags, match when they contain any of them. The filter `DataTableFacetFilter` sets.
- */
 const filterFn_oneOf = constructFilterFn({
   autoRemove: (value: unknown[] | undefined) => !value?.length,
   filter: (dataValue: unknown, filterValue: unknown[]) => {
@@ -502,7 +491,9 @@ function DataTableContent<TData extends RowData>({
                     key={cell.id}
                     align={meta?.align}
                     label={
-                      meta?.primary || cell.column.id === SELECT_COLUMN_ID
+                      meta?.primary ||
+                      meta?.hideLabelWhenStacked ||
+                      cell.column.id === SELECT_COLUMN_ID
                         ? undefined
                         : getColumnLabel(cell.column)
                     }
@@ -531,7 +522,6 @@ function DataTableContent<TData extends RowData>({
   )
 }
 
-/** Whether the search or any column filter is narrowing the rows. */
 function getIsFiltered<TData extends RowData>(table: DataTableInstance<TData>) {
   return Boolean(table.state.globalFilter) || table.state.columnFilters.length > 0
 }
@@ -906,7 +896,6 @@ function DataTablePagination<TData extends RowData>({
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-        {/* Previous and Next wrap together, never apart. */}
         <div className='flex gap-2'>
           <Button
             variant='outline'

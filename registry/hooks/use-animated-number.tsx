@@ -65,8 +65,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
   const [value, setValue] = useState(from)
   const [isAnimating, setIsAnimating] = useState(false)
   const hasAnimated = useRef(false)
-  // Mirrors the displayed value so a new target animates from where it is now
-  const valueRef = useRef(from)
+  const displayedValueRef = useRef(from)
   const previousTo = useRef(to)
   const animationRef = useRef<number | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -90,7 +89,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
   }, [])
 
   const animate = useCallback(
-    (startValue: number = valueRef.current) => {
+    (startValue: number = displayedValueRef.current) => {
       cancel()
 
       const startTime = performance.now()
@@ -105,7 +104,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
         const rounded =
           decimals > 0 ? Number(currentValue.toFixed(decimals)) : Math.round(currentValue)
 
-        valueRef.current = rounded
+        displayedValueRef.current = rounded
         setValue(rounded)
 
         if (progress < 1) {
@@ -123,7 +122,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
 
   const reset = useCallback(() => {
     cancel()
-    valueRef.current = from
+    displayedValueRef.current = from
     setValue(from)
     setIsAnimating(false)
     hasAnimated.current = false
@@ -140,33 +139,28 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
     [animate, delay],
   )
 
-  // Latest callbacks, read by the in-view effect without re-running it on every change
   const startAnimationRef = useRef(startAnimation)
   useEffect(() => {
     startAnimationRef.current = startAnimation
   }, [startAnimation])
 
-  // Trigger animation when element comes into view
   useEffect(() => {
     if (!isInView) return
     if (hasAnimated.current && !reanimateOnView) return
 
-    // Defer to the next frame so the initial value paints first
     const frame = requestAnimationFrame(() => {
       hasAnimated.current = true
-      startAnimationRef.current(reanimateOnView ? from : valueRef.current)
+      startAnimationRef.current(reanimateOnView ? from : displayedValueRef.current)
     })
     return () => cancelAnimationFrame(frame)
   }, [isInView, reanimateOnView, from])
 
-  // Retarget from the current value when the target changes after the first run
   useEffect(() => {
     if (previousTo.current === to) return
     previousTo.current = to
-    if (hasAnimated.current) animate(valueRef.current)
+    if (hasAnimated.current) animate(displayedValueRef.current)
   }, [to, animate])
 
-  // Cleanup animations and timeouts on unmount
   useEffect(() => cancel, [cancel])
 
   return {

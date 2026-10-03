@@ -199,6 +199,8 @@ interface BudgetBarProps {
   spent: number
 }
 
+const SCALE_HEADROOM = 1.04
+
 /**
  * Spend against a budget: the bar fills to what's spent, turns red past the
  * budget line, and a striped segment runs on to the projected total.
@@ -222,8 +224,7 @@ function BudgetBar({
     return () => cancelAnimationFrame(frame)
   }, [animated, isInView])
 
-  // Leave room past the budget so overspend and projections stay visible.
-  const scale = Math.max(budget, spent, projected ?? 0) * 1.04 || 1
+  const scale = Math.max(budget, spent, projected ?? 0) * SCALE_HEADROOM || 1
   const at = (value: number) => `${(Math.max(0, value) / scale) * 100}%`
   const withinBudget = Math.min(spent, budget)
   const overspend = Math.max(0, spent - budget)

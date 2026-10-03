@@ -143,20 +143,22 @@ const exampleProps: Team5Props = {
   title: 'Roles and permissions',
 }
 
-/** Adds a permission and everything it needs. */
-function grant(granted: Set<string>, id: string, byId: Map<string, Permission>) {
+function grantWithRequirements(
+  granted: Set<string>,
+  id: string,
+  byId: Map<string, Permission>,
+) {
   for (let next: string | undefined = id; next && !granted.has(next);) {
     granted.add(next)
     next = byId.get(next)?.requires
   }
 }
 
-/** Removes a permission and everything that needs it. */
-function revoke(granted: Set<string>, id: string, all: Permission[]) {
+function revokeWithDependents(granted: Set<string>, id: string, all: Permission[]) {
   granted.delete(id)
   for (const permission of all) {
     if (permission.requires === id && granted.has(permission.id))
-      revoke(granted, permission.id, all)
+      revokeWithDependents(granted, permission.id, all)
   }
 }
 
@@ -185,8 +187,8 @@ const Team5 = (props: Team5Props) => {
   const toggle = (roleId: string, permissionId: string, on: boolean) => {
     setGrants((current) => {
       const granted = new Set(current[roleId] ?? [])
-      if (on) grant(granted, permissionId, byId)
-      else revoke(granted, permissionId, all)
+      if (on) grantWithRequirements(granted, permissionId, byId)
+      else revokeWithDependents(granted, permissionId, all)
       return { ...current, [roleId]: all.map((p) => p.id).filter((p) => granted.has(p)) }
     })
   }

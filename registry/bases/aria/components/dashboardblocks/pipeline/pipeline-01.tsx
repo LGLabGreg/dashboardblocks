@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/pipeline/pipeline-01.tsx for React Aria
-// source-hash: 0f4fd67f99c4
+// source-hash: 314d22bbd438
 
 'use client'
 
@@ -167,7 +167,6 @@ const Pipeline1 = (props: Pipeline1Props) => {
 
   const move = (item: PipelineItem, stage: PipelineStage) => {
     if (item.stage === stage.id) return
-    // Moved items go to the top of their new column, with the clock reset.
     setItems((current) => [
       { ...item, enteredStageAt: now, stage: stage.id },
       ...current.filter((other) => other.id !== item.id),

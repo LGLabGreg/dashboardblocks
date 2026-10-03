@@ -116,7 +116,6 @@ function LeaderboardBar({
 
   useEffect(() => {
     if (animated && isInView) {
-      // Wait a frame so the bar paints at 0 before growing
       const frame = requestAnimationFrame(() => {
         setWidth(normalized)
       })

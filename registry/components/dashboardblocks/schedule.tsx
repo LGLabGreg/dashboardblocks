@@ -508,8 +508,7 @@ function MonthCalendar({
   return (
     <table
       ref={grid}
-      // The date grid pattern from the ARIA Authoring Practices: a table with the grid role.
-      // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+      // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role -- the ARIA date grid pattern is a table with the grid role
       role='grid'
       aria-label={label}
       onKeyDown={onKeyDown}

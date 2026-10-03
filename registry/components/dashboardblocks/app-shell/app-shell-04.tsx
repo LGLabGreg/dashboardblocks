@@ -90,7 +90,6 @@ const AppShell4 = (props: AppShell4Props) => {
     <div className='flex min-h-svh w-full flex-col'>
       <header className='bg-background sticky top-0 z-10 border-b'>
         <div className='flex h-14 items-center gap-2 px-4 md:px-6'>
-          {/* oxlint-disable-next-line nextjs/no-html-link-for-pages -- blocks work with any router */}
           <Link href='/' className='flex items-center gap-2 text-sm font-medium'>
             <BrandMark>
               <IconPlaceholder

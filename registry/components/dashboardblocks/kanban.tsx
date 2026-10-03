@@ -72,7 +72,6 @@ interface KanbanItem {
 type KanbanWipLimitMode = 'block' | 'warn'
 
 interface KanbanTarget {
-  /** Set when the column is at its limit and `wipLimitMode` is `block`. */
   blocked?: boolean
   column: string
   /** The position in the column, counted without the card being moved. */
@@ -83,7 +82,6 @@ interface KanbanDrag {
   id: string
   mode: 'keyboard' | 'pointer'
   origin: KanbanTarget
-  /** Where the card lands if dropped now. `null` while it's outside the board. */
   target: KanbanTarget | null
 }
 
@@ -126,7 +124,6 @@ interface KanbanState {
   wipLimitMode: KanbanWipLimitMode
 }
 
-/** Whether `id` can go into `column`: always, unless the column is full and the mode is `block`. */
 function canDrop(state: KanbanState, id: string, column: string) {
   const item = state.items.find((candidate) => candidate.id === id)
   const limit = state.columns.find((candidate) => candidate.id === column)?.wipLimit
@@ -136,7 +133,6 @@ function canDrop(state: KanbanState, id: string, column: string) {
   )
 }
 
-/** Whether moving `id` into `column` takes the column over its WIP limit. */
 function exceedsLimit(state: KanbanState, id: string, column: string) {
   const item = state.items.find((candidate) => candidate.id === id)
   const limit = state.columns.find((candidate) => candidate.id === column)?.wipLimit
@@ -148,7 +144,6 @@ function exceedsLimit(state: KanbanState, id: string, column: string) {
   )
 }
 
-/** "In progress, position 2 of 4", counting the moved card. */
 function describePosition(state: KanbanState, id: string, target: KanbanTarget) {
   const column = state.columns.find((candidate) => candidate.id === target.column)
   const count = getColumnItems(state.items, target.column, id).length + 1
@@ -212,14 +207,10 @@ interface PointerSession {
   y: number
 }
 
-/** Mouse drags start after the pointer moves this far, in pixels. */
-const DRAG_DISTANCE = 4
-/** Touch drags start after a press this long, in milliseconds, so a swipe still scrolls. */
-const TOUCH_DELAY = 250
-/** A touch that moves this far before the delay is a scroll, not a drag. */
-const TOUCH_TOLERANCE = 8
-/** Dragging this close to an edge scrolls the board or the page. */
-const SCROLL_EDGE = 56
+const MOUSE_DRAG_DISTANCE_PX = 4
+const TOUCH_HOLD_MS = 250
+const TOUCH_SCROLL_TOLERANCE_PX = 8
+const SCROLL_EDGE_PX = 56
 
 const INTERACTIVE =
   'a, button, input, select, textarea, [contenteditable], [role="button"], [role="menuitem"]'
@@ -267,8 +258,6 @@ function KanbanBoard({
   const handles = useRef(new Map<string, HTMLButtonElement>())
   const [drag, setDragState] = useState<KanbanDrag | null>(null)
   const [announcement, setAnnouncement] = useState('')
-  // Pointer and keyboard handlers outlive the render that created them, so they
-  // read the current drag and props from refs.
   const dragRef = useRef<KanbanDrag | null>(null)
   const session = useRef<PointerSession | null>(null)
   const pendingFocus = useRef<{ id: string; onlyIfLost: boolean } | null>(null)
@@ -278,8 +267,6 @@ function KanbanBoard({
     latest.current = { columns, items, onMove, wipLimitMode }
   })
 
-  // Moving a card between columns remounts it, which drops focus. Put it back
-  // on the card once the new position has rendered.
   useEffect(() => {
     const pending = pendingFocus.current
     if (!pending) return
@@ -292,8 +279,6 @@ function KanbanBoard({
         handle.focus()
         return
       }
-      // A collapsed column doesn't render its cards: focus its expand button,
-      // or the column itself, instead.
       const column = items.find((item) => item.id === pending.id)?.column
       const collapsed =
         column &&
@@ -305,7 +290,6 @@ function KanbanBoard({
     return () => cancelAnimationFrame(frame)
   }, [items])
 
-  // Keep the drop position in view while moving with the keyboard.
   useEffect(() => {
     if (drag?.mode !== 'keyboard' || !drag.target) return
     const root = scrollerRef.current
@@ -417,7 +401,6 @@ function KanbanBoard({
       let position =
         state.columns.findIndex((column) => column.id === target.column) + step
       const passed: string[] = []
-      // In `block` mode, skip over full columns to the next one with room.
       while (
         position >= 0 &&
         position < state.columns.length &&
@@ -485,12 +468,11 @@ function KanbanBoard({
     state.onMove(cardId, column, index)
   }
 
-  /** The column and position under the pointer, or `null` when it's well outside the board. */
   function findTarget(cardId: string, x: number, y: number): KanbanTarget | null {
     const root = scrollerRef.current
     if (!root) return null
     const bounds = root.getBoundingClientRect()
-    if (y < bounds.top - SCROLL_EDGE || y > bounds.bottom + SCROLL_EDGE) return null
+    if (y < bounds.top - SCROLL_EDGE_PX || y > bounds.bottom + SCROLL_EDGE_PX) return null
     const clampedX = Math.max(bounds.left + 1, Math.min(bounds.right - 1, x))
     let closest: HTMLElement | null = null
     let distance = Infinity
@@ -537,16 +519,14 @@ function KanbanBoard({
     const { x, y } = current
     const bounds = root.getBoundingClientRect()
 
-    // Scroll the board near its sides and the page near the window's top and bottom.
-    const edge = Math.min(SCROLL_EDGE, bounds.width / 5)
+    const edge = Math.min(SCROLL_EDGE_PX, bounds.width / 5)
     const speed = (depth: number) => Math.min(20, Math.ceil((depth / edge) * 14))
     if (x < bounds.left + edge) root.scrollLeft -= speed(bounds.left + edge - x)
     else if (x > bounds.right - edge) root.scrollLeft += speed(x - bounds.right + edge)
-    if (y < SCROLL_EDGE) window.scrollBy(0, -speed(SCROLL_EDGE - y))
-    else if (y > window.innerHeight - SCROLL_EDGE)
-      window.scrollBy(0, speed(y - window.innerHeight + SCROLL_EDGE))
+    if (y < SCROLL_EDGE_PX) window.scrollBy(0, -speed(SCROLL_EDGE_PX - y))
+    else if (y > window.innerHeight - SCROLL_EDGE_PX)
+      window.scrollBy(0, speed(y - window.innerHeight + SCROLL_EDGE_PX))
 
-    // Follow the pointer, kept inside the board so it never widens the scroll area.
     const slot = (
       current.surface.parentElement ?? current.surface
     ).getBoundingClientRect()
@@ -588,7 +568,6 @@ function KanbanBoard({
   function onPointerDown(event: PointerEvent<HTMLElement>, cardId: string) {
     if (event.button !== 0 || dragRef.current || session.current) return
     const target = event.target as HTMLElement
-    // Buttons and links inside a card work on their own; only the card itself drags.
     if (!target.closest('[data-kanban-handle]') && target.closest(INTERACTIVE)) return
     const isTouch = event.pointerType === 'touch'
 
@@ -603,8 +582,8 @@ function KanbanBoard({
       current.y = moveEvent.clientY
       if (current.active) return
       const distance = Math.hypot(current.x - current.startX, current.y - current.startY)
-      if (isTouch && distance > TOUCH_TOLERANCE) endPointer(false)
-      else if (!isTouch && distance > DRAG_DISTANCE) activate()
+      if (isTouch && distance > TOUCH_SCROLL_TOLERANCE_PX) endPointer(false)
+      else if (!isTouch && distance > MOUSE_DRAG_DISTANCE_PX) activate()
     }
     const onUp = (upEvent: globalThis.PointerEvent) => {
       if (upEvent.pointerId === session.current?.pointerId) endPointer(true)
@@ -617,7 +596,6 @@ function KanbanBoard({
       keyEvent.preventDefault()
       endPointer(false)
     }
-    // Once a touch drag starts, stop the page from scrolling under it.
     const onTouchMove = (touchEvent: TouchEvent) => {
       if (session.current?.active && touchEvent.cancelable) touchEvent.preventDefault()
     }
@@ -651,7 +629,7 @@ function KanbanBoard({
       startX: event.clientX,
       startY: event.clientY,
       surface: event.currentTarget,
-      timer: isTouch ? setTimeout(activate, TOUCH_DELAY) : undefined,
+      timer: isTouch ? setTimeout(activate, TOUCH_HOLD_MS) : undefined,
       x: event.clientX,
       y: event.clientY,
     }
@@ -706,7 +684,6 @@ function KanbanBoard({
           {children}
         </div>
         {drag?.mode === 'keyboard' && (
-          // Sticks to the bottom of the window while the board runs past it.
           <div aria-hidden className='pointer-events-none sticky bottom-4 z-20 h-0'>
             <div className='bg-popover text-popover-foreground absolute inset-x-4 bottom-4 mx-auto flex w-fit max-w-[calc(100%-2rem)] flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-xs shadow-md ring-1 ring-foreground/10'>
               <span className='flex items-center gap-1'>
@@ -946,7 +923,6 @@ function KanbanColumn({
   )
 }
 
-/** The line where a dragged card will land, in the gap above or below a card. */
 function DropIndicator({ edge, over }: { edge: 'after' | 'before'; over: boolean }) {
   return (
     <span
@@ -1456,7 +1432,6 @@ function KanbanAddCard({
   const buttonRef = useRef<HTMLButtonElement>(null)
   const wasOpen = useRef(false)
 
-  // Move focus into the form when it opens and back to the button when it closes.
   useEffect(() => {
     if (open) inputRef.current?.focus()
     else if (wasOpen.current) buttonRef.current?.focus()
@@ -1471,7 +1446,6 @@ function KanbanAddCard({
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const title = value.trim()
-    // Nothing to add: back to the text box rather than a disabled button.
     if (!title) return inputRef.current?.focus()
     onAdd(title)
     setValue('')

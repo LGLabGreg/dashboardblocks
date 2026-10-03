@@ -104,7 +104,6 @@ const Insights4 = (props: Insights4Props) => {
             <li key={index} className='flex items-start gap-3'>
               <InsightIcon kind={takeaway.kind} className='size-6 [&_svg]:size-3.5' />
               <p className='text-sm leading-6 text-pretty'>
-                {/* The icon is decorative, so name the kind for screen readers. */}
                 <span className='sr-only'>
                   {insightKindConfig[takeaway.kind].label}:{' '}
                 </span>

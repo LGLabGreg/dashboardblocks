@@ -145,7 +145,6 @@ const Security5 = (props: Security5Props) => {
 
   const methods = (authenticator ? 1 : 0) + keys.length
   const enabled = methods > 0
-  // The last method can't go while the workspace requires two-factor.
   const locked = required && methods === 1
 
   const verify = async (event: FormEvent<HTMLFormElement>) => {

@@ -140,12 +140,11 @@ const Settings2 = (props: Settings2Props) => {
   const createButton = useRef<HTMLButtonElement>(null)
   const nameInput = useRef<HTMLInputElement>(null)
   const revealedPanel = useRef<HTMLDivElement>(null)
-  // Focus moves after the next render, once its target exists, so it's never lost with an unmounted button.
-  const focusNext = useRef<RefObject<HTMLElement | null> | null>(null)
+  const focusAfterRender = useRef<RefObject<HTMLElement | null> | null>(null)
 
   useEffect(() => {
-    focusNext.current?.current?.focus()
-    focusNext.current = null
+    focusAfterRender.current?.current?.focus()
+    focusAfterRender.current = null
   })
 
   const create = (event: FormEvent<HTMLFormElement>) => {
@@ -160,7 +159,7 @@ const Settings2 = (props: Settings2Props) => {
     setKeys((current) => [key, ...current])
     setRevealed({ name: key.name, secret })
     setCreating(false)
-    focusNext.current = revealedPanel
+    focusAfterRender.current = revealedPanel
     setName('')
     setScope('read')
   }
@@ -179,7 +178,7 @@ const Settings2 = (props: Settings2Props) => {
               onClick={() => {
                 setCreating(true)
                 setRevealed(null)
-                focusNext.current = nameInput
+                focusAfterRender.current = nameInput
               }}
             >
               <IconPlaceholder
@@ -253,7 +252,7 @@ const Settings2 = (props: Settings2Props) => {
                 onClick={() => {
                   setCreating(false)
                   setNameError(null)
-                  focusNext.current = createButton
+                  focusAfterRender.current = createButton
                 }}
               >
                 Cancel
@@ -289,7 +288,7 @@ const Settings2 = (props: Settings2Props) => {
               className='self-end'
               onClick={() => {
                 setRevealed(null)
-                focusNext.current = createButton
+                focusAfterRender.current = createButton
               }}
             >
               Done

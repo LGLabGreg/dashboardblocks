@@ -40,7 +40,6 @@ interface Team4Props {
 }
 
 const NOW = Date.UTC(2026, 8, 25, 14, 30)
-/** Weekly shifts that hand over on Mondays at 09:00 UTC. */
 const monday = (weeks: number) => new Date(Date.UTC(2026, 8, 21 + weeks * 7, 9))
 
 const exampleProps: Team4Props = {
@@ -78,7 +77,6 @@ const exampleProps: Team4Props = {
 
 const MINUTE = 60_000
 
-/** "2 d 18 h", "5 h 20 min", "45 min". */
 function formatDuration(ms: number) {
   const minutes = Math.max(0, Math.round(ms / MINUTE))
   const days = Math.floor(minutes / 1_440)
@@ -198,7 +196,6 @@ const Team4 = (props: Team4Props) => {
                   <time dateTime={next.start.toISOString()}>
                     {handoverFormatter.format(next.start)}
                   </time>
-                  {/* With someone on call, the countdown above already says when this starts. */}
                   {!current &&
                     `, in ${formatDuration(next.start.getTime() - now.getTime())}`}
                 </span>

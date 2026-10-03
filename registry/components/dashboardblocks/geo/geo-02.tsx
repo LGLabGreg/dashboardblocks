@@ -61,7 +61,6 @@ const Geo2 = (props: Geo2Props) => {
   const total = props.total ?? countries.reduce((sum, country) => sum + country.value, 0)
   const shown = sorted.slice(0, limit)
   const other = total - shown.reduce((sum, country) => sum + country.value, 0)
-  // Bars are scaled to the top row so the differences stay visible; the share is the text.
   const largest = Math.max(shown[0]?.value ?? 0, other)
   const share = (value: number) =>
     total > 0 ? `${((value / total) * 100).toFixed(1)}%` : '0%'

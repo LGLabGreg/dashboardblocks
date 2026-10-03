@@ -72,7 +72,6 @@ const exampleProps: ChartPanel6Props = {
   trend: -6.8,
 }
 
-/** Percentiles are ordered, so they share one hue from light to full strength. */
 const rampColor = (index: number, count: number) => {
   const strength = count <= 1 ? 100 : Math.round(45 + (55 * index) / (count - 1))
   return `color-mix(in oklab, var(--chart-1) ${strength}%, var(--color-card))`

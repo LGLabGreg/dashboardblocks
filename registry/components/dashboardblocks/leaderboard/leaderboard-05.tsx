@@ -59,7 +59,6 @@ const pressScale =
 const swapTransition =
   'transition-[opacity,filter,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none'
 
-// Keeps both icons mounted and cross-fades them so the swap animates in both directions
 function IconSwap({
   active,
   activeIcon,
@@ -105,8 +104,7 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
   const { countries, description, initialCount = 5, title } = props
   const [ascending, setAscending] = useState(false)
   const [expanded, setExpanded] = useState(false)
-  // Bars fill once on first view; after the user interacts, rows render at their final width
-  const [interacted, setInteracted] = useState(false)
+  const [skipBarAnimation, setSkipBarAnimation] = useState(false)
 
   const ranked = [...countries].sort((a, b) => b.visitors - a.visitors)
   const total = ranked.reduce((sum, country) => sum + country.visitors, 0) || 1
@@ -126,7 +124,7 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
             size='icon-sm'
             aria-label={ascending ? 'Sort by most visitors' : 'Sort by fewest visitors'}
             onClick={() => {
-              setInteracted(true)
+              setSkipBarAnimation(true)
               setAscending((value) => !value)
             }}
             className={pressScale}
@@ -162,7 +160,7 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
             return (
               <LeaderboardItem key={country.code}>
                 <LeaderboardBar
-                  animated={!interacted}
+                  animated={!skipBarAnimation}
                   delay={index * 100}
                   value={(country.visitors / max) * 100}
                 />
@@ -192,7 +190,7 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
             size='sm'
             aria-expanded={expanded}
             onClick={() => {
-              setInteracted(true)
+              setSkipBarAnimation(true)
               setExpanded((value) => !value)
             }}
             className={cn(

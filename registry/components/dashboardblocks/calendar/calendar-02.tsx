@@ -46,7 +46,6 @@ const TEAM = [
   { name: 'Jonah Adeyemi' },
 ]
 
-/** Standup every weekday from August 31 to October 30. */
 const standups: CalendarEvent[] = Array.from({ length: 63 }, (_, index) =>
   addDays(new Date(Date.UTC(2026, 7, 30)), index),
 )
@@ -276,7 +275,6 @@ const Calendar2 = (props: Calendar2Props) => {
   } = props
   const today = getDay(now, timeZone)
   const [anchor, setAnchor] = useState(today)
-  // Start with the event in progress, or the next one.
   const [selectedId, setSelectedId] = useState<string | undefined>(
     () =>
       [...events]
@@ -290,7 +288,6 @@ const Calendar2 = (props: Calendar2Props) => {
   const selected = events.find((event) => event.id === selectedId)
 
   const closeDetails = () => {
-    // Return focus to the event the details belonged to.
     container.current
       ?.querySelector<HTMLElement>(`[data-event-id="${selectedId}"]`)
       ?.focus()

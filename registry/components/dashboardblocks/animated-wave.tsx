@@ -33,14 +33,12 @@ export const AnimatedWave = ({
 
   return (
     <div className={cn('relative size-full overflow-hidden text-blue-500', className)}>
-      {/* Wave container */}
       <div
         className='absolute inset-0 transition-[transform] duration-1000 ease-out'
         style={{
           transform: `translateY(${100 - normalized}%)`,
         }}
       >
-        {/* Primary wave */}
         <svg
           className='dashboardblocks-wave absolute top-0 left-0 w-[200%] h-full'
           viewBox='0 0 400 200'
@@ -61,7 +59,6 @@ export const AnimatedWave = ({
           />
         </svg>
 
-        {/* Secondary wave (offset) */}
         <svg
           className='dashboardblocks-wave-secondary absolute top-0 left-0 w-[200%] h-full opacity-60'
           viewBox='0 0 400 200'

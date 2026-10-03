@@ -49,7 +49,6 @@ const exampleProps: Leaderboard03Props = {
   unit: 'commits',
 }
 
-// Podium columns render in rank order for assistive tech and are reordered visually
 const podium = [
   {
     avatar: 'size-12',

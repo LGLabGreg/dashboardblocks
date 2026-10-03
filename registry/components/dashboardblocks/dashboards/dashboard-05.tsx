@@ -54,14 +54,8 @@ const exampleProps: Dashboard5Props = {
 const DAY = 86_400_000
 const HOUR = 3_600_000
 const MINUTE = 60_000
-/** Alerts and deployments are measured back from 3pm today. */
 const NOW_HOURS = 15
 
-/**
- * Each service's share of requests, response time percentiles in ms, and
- * delivery: deploys a day, lead time and time to restore in hours, and the
- * share of deploys that fail.
- */
 const SERVICES = [
   {
     changeFailureRate: 0.06,
@@ -104,7 +98,6 @@ const SERVICES = [
 type Service = (typeof SERVICES)[number]
 type Percentile = keyof Service['latency']
 
-/** Incidents in the last 90 days. They show on the uptime bars and slow responses that day. */
 const INCIDENTS: {
   daysAgo: number
   note: string
@@ -195,7 +188,6 @@ const INCIDENTS: {
   },
 ]
 
-/** Open alerts, newest first, in minutes before 3pm today. */
 const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
   minutesAgo: number
   service: string
@@ -251,7 +243,6 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
   },
 ]
 
-/** The last 30 runs of each pipeline, oldest first: s passed, f failed, r running. */
 const PIPELINES = [
   {
     medianDuration: 412,
@@ -297,7 +288,6 @@ const RUN_STATUS: Record<string, DeployStatus> = {
   s: 'success',
 }
 
-/** Recent deployments, newest first, in minutes before 3pm today. */
 const DEPLOYMENTS: (Omit<Deployment, 'environment' | 'startedAt'> & {
   environment: string
   minutesAgo: number
@@ -400,7 +390,6 @@ interface Query {
 
 const ms = (value: number) => `${Math.round(value)} ms`
 
-/** Weights each service by its share of requests, so the mix adds up to one. */
 function weigh(services: Service[], value: (service: Service) => number) {
   const total = services.reduce((sum, service) => sum + service.share, 0)
   return (
@@ -408,10 +397,6 @@ function weigh(services: Service[], value: (service: Service) => number) {
   )
 }
 
-/**
- * A service's percentile on the day `daysAgo`, or at `hour` of it. Traffic
- * peaks in the afternoon and incidents slow responses down.
- */
 function latencyAt(
   service: Service,
   percentile: Percentile,
@@ -425,17 +410,14 @@ function latencyAt(
     hour === undefined
       ? 1 + Math.sin(daysAgo / 4 + service.share * 10) * 0.07
       : 0.82 + Math.sin(((hour - 8) / 24) * Math.PI * 2) * 0.18
-  // Responses got a little faster over the last quarter.
   const drift = 1 + daysAgo * 0.0012
   return service.latency[percentile] * load * drift * (incident?.slowdown ?? 1)
 }
 
-/** A service's delivery on the day `daysAgo`. Weekends see fewer deploys. */
 function deliveryAt(service: Service, daysAgo: number, today: Date) {
   const weekday = new Date(today.getTime() - daysAgo * DAY).getUTCDay()
   const weekend = weekday === 0 || weekday === 6
   const wobble = Math.sin(daysAgo / 6 + service.share * 7)
-  // Delivery improved over time, so older days are a little slower.
   const drift = 1 + daysAgo * 0.004
   const deploys = service.deploysPerDay * (weekend ? 0.2 : 1.32) * (1 + wobble * 0.15)
   return {
@@ -473,7 +455,6 @@ function doraFor(services: Service[], days: number, shift: number, today: Date) 
   }
 }
 
-/** Ninety days of status for one service, oldest first. */
 function uptimeDays(service: string, today: Date): UptimeDay[] {
   return Array.from({ length: 90 }, (_, index) => {
     const daysAgo = 89 - index
@@ -510,8 +491,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
     p99: Math.round(weigh(services, (item) => latencyAt(item, 'p99', daysAgo, hour))),
   })
   const latency = hourly
-    ? // Hours so far today, up to now.
-      Array.from({ length: NOW_HOURS + 1 }, (_, hour) => ({
+    ? Array.from({ length: NOW_HOURS + 1 }, (_, hour) => ({
         label: `${String(hour).padStart(2, '0')}:00`,
         ...point(0, hour),
       }))
@@ -572,10 +552,6 @@ function buildOpsData({ preset, service }: Query, today: Date) {
   }
 }
 
-/**
- * Throughput for the last 5 minutes, one sample every 5 seconds, on the same
- * scale as the block's simulated samples. Live, so it isn't filtered.
- */
 const THROUGHPUT = Array.from({ length: 60 }, (_, index) => {
   const wave = index % 28 < 14 ? index % 14 : 14 - (index % 14)
   const requests = 780 + wave * 16 + ((index * 37) % 11) * 9
@@ -585,20 +561,19 @@ const THROUGHPUT = Array.from({ length: 60 }, (_, index) => {
 const Dashboard5 = (props: Dashboard5Props) => {
   const { title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '30d', service: null })
-  // The query the blocks currently show. It lags behind while "fetching",
-  // and the blocks stay in place, dimmed, until the new data arrives.
-  const [shown, setShown] = useState(query)
-  const busy = shown !== query
+  const [displayedQuery, setDisplayedQuery] = useState(query)
+  const busy = displayedQuery !== query
 
+  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
-    if (shown === query) return
-    const timer = setTimeout(() => setShown(query), 500)
+    if (displayedQuery === query) return
+    const timer = setTimeout(() => setDisplayedQuery(query), 500)
     return () => clearTimeout(timer)
-  }, [query, shown])
+  }, [query, displayedQuery])
 
   const update = (patch: Partial<Query>) =>
     setQuery((current) => ({ ...current, ...patch }))
-  const data = buildOpsData(shown, today)
+  const data = buildOpsData(displayedQuery, today)
   const range = getDateRange(query.preset, today)
 
   return (
@@ -670,7 +645,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
             description={`Response time percentiles, ${data.scope}`}
             formatter={ms}
             headline='p95'
-            labelHeading={shown.preset === 'today' ? 'Hour' : 'Day'}
+            labelHeading={displayedQuery.preset === 'today' ? 'Hour' : 'Day'}
             percentiles={[
               { key: 'p50', label: 'p50' },
               { key: 'p95', label: 'p95' },
@@ -680,8 +655,6 @@ const Dashboard5 = (props: Dashboard5Props) => {
             trend={data.latencyTrend}
           />
         </div>
-        {/* A long list spans the response time and uptime rows. Acknowledged
-            alerts stay acknowledged when the filter changes, since their ids don't. */}
         <div className={cn('grid', data.alerts.length > 3 && '@4xl:row-span-2')}>
           <Alerts1 alerts={data.alerts} now={data.now} title='Open alerts' />
         </div>
@@ -692,8 +665,6 @@ const Dashboard5 = (props: Dashboard5Props) => {
             title='Uptime'
           />
         </div>
-        {/* With a short alert list, build health moves up beside uptime and
-            deployments take the full width. */}
         <div
           className={cn(
             'grid',

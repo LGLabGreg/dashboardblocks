@@ -97,7 +97,6 @@ function LiveNumber({
   useEffect(() => {
     const start = from.current
     if (start === value) return
-    // With reduced motion, jump straight to the new value on the next frame.
     const length = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? 0
       : duration

@@ -15,11 +15,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/*
- * Links are plain anchors, so the header works with any router. For
- * client-side navigation, wrap your app in `LinkProvider` with your router's link.
- */
-
 /** The top of a page: put a back link, the heading, actions, meta and tabs in it. */
 function PageHeader({
   children,

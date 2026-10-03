@@ -250,7 +250,6 @@ const Forecast1 = (props: Forecast1Props) => {
             { format: formatter, key: 'high', label: `High (${percent})` },
           ]}
           rows={rows.map((row, index) => {
-            // The last actual is where the forecast starts, not a forecast itself.
             const isForecast = index > last
             return {
               actual: row.actual ?? '—',

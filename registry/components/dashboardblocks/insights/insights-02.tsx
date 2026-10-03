@@ -68,7 +68,6 @@ const dayFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   timeZone: 'UTC',
 })
-/** Conversions on the two days checkout payments failed. */
 const OUTAGE: Record<number, number> = { 24: 212, 25: 281 }
 
 const exampleProps: Insights2Props = {
@@ -107,7 +106,6 @@ const SERIES_COLOR = 'var(--chart-1)'
 const BAND_COLOR = 'var(--color-muted-foreground)'
 const ANOMALY_COLOR = insightKindConfig.anomaly.fill
 
-/** Runs of consecutive anomalous readings, as index ranges. */
 function getAnomalyRanges(anomalous: boolean[]) {
   const ranges: Array<{ end: number; start: number }> = []
   anomalous.forEach((isAnomalous, index) => {
@@ -148,7 +146,6 @@ const Insights2 = (props: Insights2Props) => {
   const expectedOf = (point: Reading) => (point.low + point.high) / 2
   const deviation = (point: Reading) =>
     Math.abs(point.value - expectedOf(point)) / expectedOf(point)
-  // The reading furthest from the middle of its expected range.
   const worst = anomalies.reduce<(typeof data)[number] | undefined>(
     (current, point) =>
       !current || deviation(point) > deviation(current) ? point : current,

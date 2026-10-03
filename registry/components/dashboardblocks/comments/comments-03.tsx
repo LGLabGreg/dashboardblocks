@@ -118,11 +118,9 @@ async function saveReply() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }
 
-/** Marks the quoted words of open comments, and marks the active one more strongly. */
 function highlight(paragraph: string, comments: ReviewComment[], activeId?: string) {
   const parts: ReactNode[] = []
   let rest = paragraph
-  // An empty quote would match forever, and each quote is marked once.
   let pending = comments.filter((comment) => comment.quote)
   for (;;) {
     const next = pending
@@ -179,7 +177,6 @@ const Comments3 = (props: Comments3Props) => {
         ? `Resolved. ${open.length - 1} open ${open.length - 1 === 1 ? 'comment' : 'comments'} left.`
         : 'Reopened. It’s under Open.',
     )
-    // The thread leaves this tab, so focus moves to the list it was in.
     requestAnimationFrame(() => listRef.current?.focus())
   }
 

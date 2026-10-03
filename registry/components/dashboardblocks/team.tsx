@@ -44,11 +44,6 @@ const presenceConfig: Record<Presence, PresenceConfig> = {
 /** Most available first. */
 const presenceOrder: Presence[] = ['online', 'away', 'offline']
 
-/*
- * Tinted, opaque backgrounds so stacked avatars don't show through each other,
- * with -800 / -300 initials for AA contrast in both themes. Presence greens and
- * ambers are left out so an avatar is never mistaken for a status.
- */
 const avatarColors = [
   'bg-[color-mix(in_oklab,var(--color-sky-500)_20%,var(--card))] text-sky-800 dark:text-sky-300',
   'bg-[color-mix(in_oklab,var(--color-violet-500)_20%,var(--card))] text-violet-800 dark:text-violet-300',
@@ -60,12 +55,15 @@ const avatarColors = [
   'bg-[color-mix(in_oklab,var(--color-cyan-500)_20%,var(--card))] text-cyan-800 dark:text-cyan-300',
 ]
 
+function fnv1a(text: string) {
+  let hash = 2_166_136_261
+  for (const char of text) hash = Math.imul(hash ^ char.charCodeAt(0), 16_777_619) >>> 0
+  return hash
+}
+
 /** Picks the same colour for the same name every time, on the server and in the browser. */
 function getAvatarColor(name: string) {
-  // FNV-1a, which spreads similar names across the palette.
-  let hash = 2_166_136_261
-  for (const char of name) hash = Math.imul(hash ^ char.charCodeAt(0), 16_777_619) >>> 0
-  return avatarColors[hash % avatarColors.length]
+  return avatarColors[fnv1a(name) % avatarColors.length]
 }
 
 /** "Amara Okafor" → "AO", "Cher" → "C". */

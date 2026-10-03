@@ -83,7 +83,6 @@ const Realtime4 = (props: Realtime4Props) => {
                 : next() > 0.8
                   ? 1
                   : 0
-          // Yesterday keeps pace too, so the comparison stays like-for-like.
           return {
             ...metric,
             today: metric.today + bump,

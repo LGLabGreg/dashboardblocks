@@ -54,7 +54,6 @@ interface Scatter1Props {
   }
 }
 
-/** Deterministic noise for the example, from an integer hash. */
 const noise = (index: number) =>
   ((index * 2_654_435_761) % 4_294_967_296) / 4_294_967_296 - 0.5
 
@@ -90,7 +89,6 @@ const Scatter1 = (props: Scatter1Props) => {
   const xs = points.map((point) => point.x)
   const minX = Math.min(...xs)
   const maxX = Math.max(...xs)
-  // Whole-unit ticks from zero, e.g. 0 s, 1 s, 2 s.
   const xTicks = Array.from({ length: Math.ceil(maxX) + 1 }, (_, index) => index)
   const colorOf = (group: string) =>
     scatterPalette[Math.max(0, groups.indexOf(group)) % scatterPalette.length]

@@ -114,7 +114,6 @@ const exampleProps: ActivityFeed04Props = {
 
 const number = new Intl.NumberFormat('en-US')
 
-/** "+7" or "−16", with the direction for screen readers. Activity isn't good or bad, so it stays neutral. */
 function Change({ previous, value }: { previous: number; value: number }) {
   const difference = value - previous
   if (difference === 0)

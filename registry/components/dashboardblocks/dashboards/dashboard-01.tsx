@@ -64,7 +64,6 @@ const PRODUCTS = [
   { category: 'Audio', name: 'Desk speakers', price: 90, share: 0.05 },
 ]
 
-/** Stock on hand for the products above, with how fast each one sells. */
 const STOCK = [
   {
     dailyDemand: 9,
@@ -101,7 +100,6 @@ const STOCK = [
   },
 ]
 
-/** Revenue each day needs to average for the monthly target. */
 const DAILY_TARGET = 1_750
 
 interface Query {
@@ -110,7 +108,6 @@ interface Query {
   region: string | null
 }
 
-/** Revenue for one day (or hour, with `hourly`), `offset` steps before the end. */
 const revenueAt = (offset: number, region: string | null, hourly: boolean) => {
   const regions = region ? REGIONS.filter((item) => item.name === region) : REGIONS
   return regions.reduce((sum, { phase, share }) => {
@@ -131,7 +128,6 @@ const revenueAt = (offset: number, region: string | null, hourly: boolean) => {
 const aovAt = (offset: number) => 36.5 + Math.sin(offset / 5) * 1.6
 const conversionAt = (offset: number) => 0.031 + Math.sin(offset / 7 + 1) * 0.003
 
-/** Splits a whole-number total by shares, giving the rounding remainder to the last part. */
 const splitTotal = (total: number, shares: number[]) => {
   const parts = shares.map((share) => Math.round(total * share))
   parts[parts.length - 1] =
@@ -151,7 +147,6 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
   const series = (shift: number) =>
     Array.from({ length }, (_, index) => {
       const offset = length - 1 - index + shift
-      // Round once here so every block sums the same values.
       const revenue = Math.round(revenueAt(offset, region, hourly))
       const orders = revenue / aovAt(offset)
       return { offset, orders, revenue, sessions: orders / conversionAt(offset) }
@@ -184,7 +179,6 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
       timeZone: 'UTC',
     })
   }
-  // Month to date: the region applies, the date range doesn't.
   const elapsed = today.getUTCDate()
   const daysInMonth = new Date(
     Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0),
@@ -288,20 +282,19 @@ const Dashboard1 = (props: Dashboard1Props) => {
     preset: '30d',
     region: null,
   })
-  // The query the blocks currently show. It lags behind while "fetching",
-  // and the blocks stay in place, dimmed, until the new data arrives.
-  const [shown, setShown] = useState(query)
-  const busy = shown !== query
+  const [displayedQuery, setDisplayedQuery] = useState(query)
+  const busy = displayedQuery !== query
 
+  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
-    if (shown === query) return
-    const timer = setTimeout(() => setShown(query), 500)
+    if (displayedQuery === query) return
+    const timer = setTimeout(() => setDisplayedQuery(query), 500)
     return () => clearTimeout(timer)
-  }, [query, shown])
+  }, [query, displayedQuery])
 
   const update = (patch: Partial<Query>) =>
     setQuery((current) => ({ ...current, ...patch }))
-  const data = buildStoreData(shown, today)
+  const data = buildStoreData(displayedQuery, today)
   const range = getDateRange(query.preset, today)
 
   return (
@@ -362,7 +355,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
         <div className='@4xl:col-span-3'>
           <StatGroup2
             description={
-              shown.compare
+              displayedQuery.compare
                 ? `${data.scope}, compared with ${data.previousLabel}`
                 : data.scope
             }
@@ -375,13 +368,13 @@ const Dashboard1 = (props: Dashboard1Props) => {
             currentLabel={data.rangeLabel}
             data={data.chart}
             description={
-              shown.compare
+              displayedQuery.compare
                 ? `${data.scope}, compared with ${data.previousLabel}`
                 : data.scope
             }
             formatter={currency}
             previousLabel={data.previousLabel}
-            showPrevious={shown.compare}
+            showPrevious={displayedQuery.compare}
             title='Revenue'
           />
         </div>
@@ -401,7 +394,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
         <Funnel1 description={data.scope} stages={data.funnel} title='Checkout funnel' />
         <Forecast3
           current={data.month.current}
-          description={`Month to date${shown.region ? `, ${shown.region}` : ''}, projected at the daily run-rate`}
+          description={`Month to date${displayedQuery.region ? `, ${displayedQuery.region}` : ''}, projected at the daily run-rate`}
           elapsed={data.month.elapsed}
           formatter={currency}
           target={data.month.target}

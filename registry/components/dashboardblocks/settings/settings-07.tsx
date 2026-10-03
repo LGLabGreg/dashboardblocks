@@ -114,7 +114,6 @@ const themes: { icon: ReactNode; label: string; value: Theme }[] = [
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-/** Larger photos are refused before upload. */
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024
 
 const Settings7 = (props: Settings7Props) => {
@@ -130,7 +129,6 @@ const Settings7 = (props: Settings7Props) => {
   }>({})
   const [status, setStatus] = useState('')
 
-  // Photos chosen here, freed on unmount.
   const objectUrls = useRef<string[]>([])
   useEffect(() => {
     const urls = objectUrls.current

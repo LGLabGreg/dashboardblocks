@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 03d12f8e11ef
+// source-hash: f15a352cfd66
 
 'use client'
 
@@ -71,10 +71,6 @@ interface NavSection {
   label?: string
 }
 
-/**
- * Closes the mobile sidebar when a link in it is clicked. A router's link
- * navigates without reloading the page, so the sheet would otherwise stay open.
- */
 function useCloseMobileSidebar() {
   const { isMobile, setOpenMobile } = useSidebar()
   return () => {
@@ -128,7 +124,6 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const closeMobile = useCloseMobileSidebar()
   const childActive =
     item.items?.some((child) => isActiveHref(child.href, pathname)) ?? false
-  // Open the group when navigation moves into it, which a router does without a remount.
   const [expanded, setExpanded] = useState(childActive)
   const [wasChildActive, setWasChildActive] = useState(childActive)
   if (childActive !== wasChildActive) {
@@ -165,7 +160,6 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
       <SidebarMenuButton
         slot='trigger'
         tooltip={item.title}
-        // A collapsed sidebar hides child links, so open it to show them.
         onPress={() => state === 'collapsed' && setOpen(true)}
       >
         {item.icon}

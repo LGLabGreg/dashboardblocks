@@ -84,6 +84,8 @@ const COLORS = {
   succeeded: 'color-mix(in oklab, var(--muted-foreground) 45%, var(--card))',
 }
 
+const SPIKE_MULTIPLIER = 3
+
 const Security1 = (props: Security1Props) => {
   const { days, description, mfaCoverage, title } = props
   const totals = days.reduce(
@@ -96,10 +98,9 @@ const Security1 = (props: Security1Props) => {
   )
   const attempts = totals.succeeded + totals.failed + totals.blocked
   const failureRate = attempts > 0 ? (totals.failed + totals.blocked) / attempts : 0
-  // A day with over three times the median blocked attempts looks like an attack.
   const sorted = [...days].map((day) => day.blocked).sort((a, b) => a - b)
   const median = sorted[Math.floor(sorted.length / 2)] ?? 0
-  const spikes = days.filter((day) => day.blocked > median * 3)
+  const spikes = days.filter((day) => day.blocked > median * SPIKE_MULTIPLIER)
 
   return (
     <Card className='@container'>

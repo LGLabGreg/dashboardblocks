@@ -114,7 +114,6 @@ const Alerts1 = (props: Alerts1Props) => {
               alerts
                 .filter((alert) => !acknowledged.has(alert.id))
                 .forEach((alert) => onAcknowledge?.(alert.id))
-              // Adds to the set, so alerts not passed in right now stay acknowledged.
               setAcknowledged(
                 (current) => new Set([...current, ...alerts.map((alert) => alert.id)]),
               )

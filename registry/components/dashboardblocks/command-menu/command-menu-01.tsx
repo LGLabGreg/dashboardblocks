@@ -18,7 +18,6 @@ interface CommandMenu1Props {
   onNavigate?: (href: string) => void
 }
 
-// ⌘/ rather than ⌘K here, because ⌘K opens this site's own search.
 const exampleProps: CommandMenu1Props = { shortcutKey: '/' }
 
 const pages: CommandMenuGroup = {

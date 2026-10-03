@@ -71,18 +71,17 @@ const Settings6 = (props: Settings6Props) => {
   const [typed, setTyped] = useState('')
   const buttons = useRef<Record<string, HTMLButtonElement | null>>({})
   const confirmInput = useRef<HTMLInputElement>(null)
-  // Focus moves after the next render, once its target exists.
-  const focusNext = useRef<(() => HTMLElement | null) | null>(null)
+  const focusAfterRender = useRef<(() => HTMLElement | null) | null>(null)
 
   useEffect(() => {
-    focusNext.current?.()?.focus()
-    focusNext.current = null
+    focusAfterRender.current?.()?.focus()
+    focusAfterRender.current = null
   })
 
   const close = (actionId: string) => {
     setConfirming(null)
     setTyped('')
-    focusNext.current = () => buttons.current[actionId]
+    focusAfterRender.current = () => buttons.current[actionId]
   }
 
   const confirm = (event: FormEvent<HTMLFormElement>, actionId: string) => {
@@ -123,7 +122,7 @@ const Settings6 = (props: Settings6Props) => {
                       if (open) return close(item.id)
                       setConfirming(item.id)
                       setTyped('')
-                      focusNext.current = () => confirmInput.current
+                      focusAfterRender.current = () => confirmInput.current
                     }}
                   >
                     {item.action}

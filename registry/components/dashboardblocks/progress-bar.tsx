@@ -24,7 +24,6 @@ export const ProgressBar = ({
 
   useEffect(() => {
     if (isInView) {
-      // Small delay to ensure the initial render happens at 0
       const timer = requestAnimationFrame(() => {
         setWidth(normalized)
       })
@@ -69,7 +68,6 @@ export const SegmentedProgressBar = ({
 
   useEffect(() => {
     if (isInView) {
-      // Small delay to ensure the initial render happens at 0
       const timer = requestAnimationFrame(() => {
         setAnimatedMultiplier(1)
       })

@@ -154,7 +154,6 @@ const Settings4 = (props: Settings4Props) => {
                       key={item.id}
                       className='flex min-w-0 flex-col gap-3 rounded-lg border p-4'
                     >
-                      {/* In a narrow card the status drops under the name rather than over it. */}
                       <div className='flex flex-wrap items-start gap-x-3 gap-y-2'>
                         <span
                           aria-hidden

@@ -48,8 +48,6 @@ function isBusy(status: ChatStatus) {
   return status === 'submitted' || status === 'streaming'
 }
 
-/* Formatting: a small, safe subset of Markdown rendered as React elements. */
-
 type Block =
   | { type: 'code'; code: string; language: string }
   | { type: 'heading'; text: string }
@@ -68,7 +66,6 @@ function parseBlocks(content: string) {
     const line = lines[index]
     const fence = FENCE.exec(line)
     if (fence) {
-      // A fence still streaming in has no end yet: the rest is code.
       const code: string[] = []
       index++
       while (index < lines.length && !/^\s*```\s*$/.test(lines[index])) {
@@ -98,7 +95,6 @@ function parseBlocks(content: string) {
         if (item && (item[1] !== undefined) === ordered) {
           items.push(item[2])
         } else if (items.length > 0 && /^\s{2,}\S/.test(lines[index])) {
-          // An indented line continues the item above it.
           items[items.length - 1] += ` ${lines[index].trim()}`
         } else {
           break
@@ -124,7 +120,6 @@ function parseBlocks(content: string) {
   return blocks
 }
 
-/** `code` and **bold** inside a line. */
 function renderInline(text: string) {
   return text.split(/(`[^`\n]+`|\*\*[^*\n]+\*\*)/g).map((part, index) => {
     if (part.length > 2 && part.startsWith('`') && part.endsWith('`')) {
@@ -148,7 +143,6 @@ function renderInline(text: string) {
   })
 }
 
-/** Message text without formatting marks, for screen reader announcements. */
 function toPlainText(content: string) {
   return content
     .replace(/^\s*```.*$/gm, '')
@@ -157,7 +151,6 @@ function toPlainText(content: string) {
     .trim()
 }
 
-/** Copies text to the clipboard, and says so for two seconds. */
 function useCopyToClipboard(timeout = 2000) {
   const [copied, setCopied] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -179,7 +172,6 @@ function useCopyToClipboard(timeout = 2000) {
   return { copied, copy }
 }
 
-/** An icon button that copies `value`, shows a tick once copied and announces it. */
 function CopyButton({
   className,
   label = 'Copy',
@@ -187,7 +179,6 @@ function CopyButton({
   value,
 }: {
   className?: string
-  /** Names the button, e.g. "Copy code". */
   label?: string
   size?: 'icon-xs' | 'icon-sm'
   value: string
@@ -227,7 +218,6 @@ function CopyButton({
   )
 }
 
-/** A fenced code block with its language and a copy button. */
 function CodeBlock({
   caret,
   code,
@@ -257,7 +247,6 @@ function CodeBlock({
   )
 }
 
-/** A blinking block at the end of a reply while it streams in. */
 function StreamingCaret() {
   return (
     <span
@@ -476,14 +465,13 @@ function ChatMessages({
     scrollToBottom()
   }, [status])
 
-  // Only scrolling up lets go of the bottom: new content arriving before this
-  // event also leaves a gap, and shouldn't.
   function onScroll() {
     const scroller = scrollRef.current
     if (!scroller) return
     const gap = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight
+    const userScrolledUp = scroller.scrollTop < lastScrollTop.current
     if (gap < 24) pinned.current = true
-    else if (scroller.scrollTop < lastScrollTop.current) pinned.current = false
+    else if (userScrolledUp) pinned.current = false
     lastScrollTop.current = scroller.scrollTop
     setAtBottom(pinned.current)
   }
@@ -924,7 +912,6 @@ function ChatComposer({
 
   function send() {
     if (!canSend) return
-    // Nothing to send: back to the text box rather than a disabled button.
     if (!text.trim()) return inner.current?.focus()
     onSubmit(text.trim())
     change('')
@@ -1082,9 +1069,9 @@ function useChatStream({
         return
       }
     }
-    // Stopping keeps the reply so far; a new chat or unmounting drops it.
     const stopped = current.signal.aborted
-    if (stopped && current.signal.reason !== STOPPED) return
+    const keepPartialReply = !stopped || current.signal.reason === STOPPED
+    if (!keepPartialReply) return
     if (!stopped) {
       controller.current = null
       setStatus('ready')

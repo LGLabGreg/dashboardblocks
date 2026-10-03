@@ -119,7 +119,6 @@ const Forecast4 = (props: Forecast4Props) => {
     high: projectGrowth(current, scenarios.high.rate, horizon.length),
     low: projectGrowth(current, scenarios.low.rate, horizon.length),
   }
-  // The scenarios start at the last actual so the lines join.
   const rows = [
     ...actuals.map((point, index) => {
       const isLast = index === actuals.length - 1
@@ -216,7 +215,6 @@ const Forecast4 = (props: Forecast4Props) => {
                   const row = tooltipProps.payload?.[0]?.payload as
                     | (typeof rows)[number]
                     | undefined
-                  // Show the actual where there is one, otherwise the scenarios.
                   const payload = tooltipProps.payload?.filter((item) =>
                     row?.actual !== null
                       ? item.dataKey === 'actual'
@@ -283,7 +281,6 @@ const Forecast4 = (props: Forecast4Props) => {
             })),
           ]}
           rows={rows.map((row, index) => {
-            // The last actual is where the scenarios start, not a scenario itself.
             const isScenario = index >= actuals.length
             return {
               actual: row.actual ?? '—',

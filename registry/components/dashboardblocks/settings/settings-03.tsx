@@ -130,7 +130,6 @@ const Settings3 = (props: Settings3Props) => {
 
   const allEvents = groups.flatMap((group) => group.events)
 
-  /** A channel's column switch: on when every event goes to it. */
   const setChannel = (channelId: string, on: boolean) =>
     update(
       Object.fromEntries(

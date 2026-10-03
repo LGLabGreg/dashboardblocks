@@ -153,7 +153,6 @@ function getNps({ detractors, passives, promoters }: NpsResponses) {
   }
 }
 
-/** Flips to true once the element scrolls into view, after the first paint. */
 function useReveal(animated: boolean) {
   const { isInView, ref } = useInView({ threshold: 0.3 })
   const [revealed, setRevealed] = useState(!animated)
@@ -167,17 +166,14 @@ function useReveal(animated: boolean) {
   return { ref: ref as RefObject<HTMLDivElement>, revealed }
 }
 
-// The arc is drawn in a 100-unit wide viewBox around (50, 50). PAD leaves room
-// for the target marker, which reaches past the track on both sides.
 const CENTER = 50
-const PAD = 4
+const TARGET_MARKER_OVERHANG = 4
 const BAND_GAP = 1.5
 const SCALE_WIDTH = 3
 
 /** Rounded so the server and the browser print the same path. */
 const round = (value: number) => Math.round(value * 100) / 100
 
-/** A point on a circle around the centre, with 0° at 12 o'clock, clockwise. */
 function polar(angle: number, radius: number) {
   const radians = (angle * Math.PI) / 180
   return {
@@ -268,12 +264,12 @@ function Gauge({
 }: GaugeProps) {
   const { ref, revealed } = useReveal(animated)
 
-  const radius = CENTER - PAD - thickness / 2
+  const radius = CENTER - TARGET_MARKER_OVERHANG - thickness / 2
   const startAngle = -sweep / 2
   const endAngle = sweep / 2
   const angleOf = (at: number) => startAngle + getGaugeShare(at, min, max) * sweep
   const end = polar(endAngle, radius)
-  const height = round(Math.max(end.y, CENTER) + thickness / 2 + PAD)
+  const height = round(Math.max(end.y, CENTER) + thickness / 2 + TARGET_MARKER_OVERHANG)
   const track = arcPath(startAngle, endAngle, radius)
 
   const band = getGaugeBand(value, bands)
@@ -291,7 +287,6 @@ function Gauge({
   const dashStart = fillStart + startInset
   const dashLength = Math.max(0, fillLength - startInset - endInset)
 
-  // Bands on the track sit flush with it; as a scale they sit just inside it.
   const bandRadius =
     indicator === 'marker' ? radius : radius - thickness / 2 - 2.5 - SCALE_WIDTH / 2
   const bandWidth = indicator === 'marker' ? thickness : SCALE_WIDTH
@@ -351,8 +346,6 @@ function Gauge({
                 colorByBand && band && gaugeToneConfig[band.tone].stroke,
               )}
               style={colorByBand && band ? undefined : { stroke: color }}
-              // One dash per 200-unit period, shifted to start at `fillStart`. A
-              // positive offset, as some browsers skip dashes with a negative one.
               strokeDasharray={`${round(dashLength)} ${round(200 - dashLength)}`}
               strokeDashoffset={round(200 - dashStart)}
               strokeLinecap='round'

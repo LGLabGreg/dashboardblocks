@@ -53,7 +53,6 @@ const shortMonthFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   timeZone: 'UTC',
 })
-// "Mar '26", so the year doesn't read as a day of the month.
 const formatMonth = (date: Date) =>
   `${shortMonthFormatter.format(date)} '${String(date.getUTCFullYear()).slice(2)}`
 const longMonthFormatter = new Intl.DateTimeFormat('en-US', {
@@ -84,7 +83,6 @@ const Spend4 = (props: Spend4Props) => {
     date.setUTCMonth(date.getUTCMonth() + offset)
     return date
   }
-  // Project month by month until cash runs out, up to two years ahead.
   const ahead = Number.isFinite(runway.months)
     ? Math.min(24, Math.ceil(runway.months))
     : 6
@@ -173,7 +171,6 @@ const Spend4 = (props: Spend4Props) => {
                 content={(tooltipProps) => (
                   <ChartPanelTooltip
                     {...tooltipProps}
-                    // Where the projection starts, show the actual balance only.
                     payload={tooltipProps.payload
                       ?.filter((item) => item.value !== null && item.value !== undefined)
                       .slice(0, 1)}

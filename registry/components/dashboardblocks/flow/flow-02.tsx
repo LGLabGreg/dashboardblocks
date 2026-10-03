@@ -68,7 +68,6 @@ const Flow2 = (props: Flow2Props) => {
   const start = nodes.find((node) => (totals.get(node.id)?.in ?? 0) === 0)
   const entered = start ? (totals.get(start.id)?.out ?? 0) : 0
   const columns = Math.max(0, ...nodes.map((node) => node.column ?? 0))
-  // Visitors who left at each step, as a share of everyone who entered.
   const leftAt = Array.from({ length: columns }, (_, index) =>
     nodes
       .filter((node) => node.kind === 'exit' && node.column === index + 1)

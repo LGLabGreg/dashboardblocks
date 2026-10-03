@@ -50,7 +50,6 @@ interface Settings5Props {
 
 const NOW = new Date(Date.UTC(2026, 8, 26, 16, 0))
 
-/** A seeded run of deliveries, so the example renders the same everywhere. */
 function exampleDeliveries(count: number, failEvery: number, failFrom = count) {
   return Array.from({ length: count }, (_, index) => ({
     at: new Date(NOW.getTime() - (count - index) * 37 * 60_000),

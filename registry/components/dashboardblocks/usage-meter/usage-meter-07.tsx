@@ -42,7 +42,6 @@ const exampleProps: UsageMeter7Props = {
   used: 430,
 }
 
-/** The liquid is what's left, so it drains as usage grows and turns amber, then red. */
 const waveColors: Record<UsageStatus, string> = {
   critical: 'text-red-300 dark:text-red-900',
   ok: 'text-sky-200 dark:text-sky-900',

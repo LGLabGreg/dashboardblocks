@@ -88,7 +88,6 @@ const Feedback4 = (props: Feedback4Props) => {
   const responses = periods.reduce((sum, period) => sum + period.responses, 0)
   const low = Math.min(...rows.map((row) => row.csat), target ?? 1)
   const floor = Math.max(0, Math.floor((low - 0.05) * 20) / 20)
-  // Round ticks: every 5% for a narrow range, every 10% otherwise.
   const step = 1 - floor <= 0.3 ? 0.05 : 0.1
   const ticks = Array.from(
     { length: Math.round((1 - floor) / step) + 1 },

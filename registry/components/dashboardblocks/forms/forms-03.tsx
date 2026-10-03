@@ -118,7 +118,6 @@ const Forms3 = (props: Forms3Props) => {
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    // Enter on an earlier step moves on rather than creating the project.
     if (!last) {
       event.preventDefault()
       next()

@@ -51,17 +51,14 @@ const exampleProps: Dashboard4Props = {
 }
 
 const DAY = 86_400_000
-/** Deal activity is measured back from 5pm today. */
 const NOW_HOURS = 17
 
-/** Leads a day, conversion at each step, deal size and days to close, per segment. */
 const SEGMENTS = [
   { cycle: 24, deal: 9_400, leads: 6, name: 'SMB', rates: [0.36, 0.48, 0.34] },
   { cycle: 48, deal: 36_500, leads: 3.5, name: 'Mid-market', rates: [0.42, 0.54, 0.29] },
   { cycle: 96, deal: 96_000, leads: 3, name: 'Enterprise', rates: [0.5, 0.6, 0.24] },
 ]
 
-/** Days a deal is expected to spend in each stage, and the chance it closes from there. */
 const STAGES: PipelineStage[] = [
   { expectedDays: 7, id: 'lead', label: 'Lead', probability: 0.05 },
   { expectedDays: 10, id: 'qualified', label: 'Qualified', probability: 0.1 },
@@ -70,7 +67,6 @@ const STAGES: PipelineStage[] = [
   { expectedDays: 10, id: 'negotiation', label: 'Negotiation', probability: 0.75 },
 ]
 
-/** Reps, their segment, their share of its closed deals and their quarterly quota. */
 const REPS = [
   { name: 'Luis Romero', quota: 180_000, segment: 'SMB', share: 0.56 },
   { name: 'Aiko Tanaka', quota: 175_000, segment: 'SMB', share: 0.44 },
@@ -79,7 +75,6 @@ const REPS = [
   { name: 'Maya Patel', quota: 1_900_000, segment: 'Enterprise', share: 1 },
 ]
 
-/** Open deals per stage, first to last, in each segment. */
 const OPEN_DEALS: Record<string, number[]> = {
   Enterprise: [4, 3, 3, 2, 2],
   'Mid-market': [9, 7, 5, 4, 3],
@@ -151,7 +146,6 @@ interface DealActivity extends Activity {
   segment: string
 }
 
-/** Recent deal activity, newest first, in minutes before 5pm today. */
 const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
   {
     action: 'moved Keystone Freight to',
@@ -240,10 +234,6 @@ interface Query {
   segment: string | null
 }
 
-/**
- * Leads, qualified leads, proposals, deals won, new business and days to close
- * on the day `offset` days before `today`. Weekends are quiet.
- */
 function dayAt(segment: (typeof SEGMENTS)[number], offset: number, today: Date) {
   const weekday = new Date(today.getTime() - offset * DAY).getUTCDay()
   const weekend = weekday === 0 || weekday === 6
@@ -253,7 +243,6 @@ function dayAt(segment: (typeof SEGMENTS)[number], offset: number, today: Date) 
     (weekend ? 0.3 : 1.25)
   const qualified = leads * segment.rates[0]
   const proposals = qualified * segment.rates[1]
-  // Win rate improves slowly, so the previous period is a little lower.
   const won =
     proposals * segment.rates[2] * (1 + Math.sin(offset / 13) * 0.06 - offset * 0.0008)
   const deal = segment.deal * (1 + Math.sin(offset / 7 + 1) * 0.08)
@@ -269,7 +258,6 @@ function dayAt(segment: (typeof SEGMENTS)[number], offset: number, today: Date) 
 
 type Day = ReturnType<typeof dayAt>
 
-/** Every segment's day added up. Days to close is weighted by deals won. */
 function totalAt(segments: typeof SEGMENTS, offset: number, today: Date): Day {
   const days = segments.map((segment) => dayAt(segment, offset, today))
   const sum = (key: keyof Day) => days.reduce((total, day) => total + day[key], 0)
@@ -284,7 +272,6 @@ function totalAt(segments: typeof SEGMENTS, offset: number, today: Date): Day {
   }
 }
 
-/** The open deals in each segment as of `today`, with an owner and days in stage. */
 function buildOpenDeals(today: Date): (PipelineItem & { segment: string })[] {
   const next = random(42)
   let index = 0
@@ -298,7 +285,6 @@ function buildOpenDeals(today: Date): (PipelineItem & { segment: string })[] {
             (index * 7 + Math.floor(index / COMPANIES.length)) % INDUSTRIES.length
           ]
         index++
-        // Most deals are within their stage's expected days, a few are over.
         const days = Math.floor(next() ** 1.6 * (stage.expectedDays ?? 7) * 1.3)
         const value = Math.round((segment.deal * (0.5 + next() * 1.1)) / 500) * 500
         return {
@@ -330,8 +316,6 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
     )
   const current = series(0)
   const previous = series(days)
-  // A period counts whole leads and deals, so the stats and the funnel agree.
-  // The sparklines keep the fractions, so they stay smooth.
   const totals = (points: Day[], whole = true) => {
     const sum = (key: keyof Day) => points.reduce((total, point) => total + point[key], 0)
     const count = (key: keyof Day) => (whole ? Math.round(sum(key)) : sum(key))
@@ -353,11 +337,9 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
   }
   const now = totals(current)
   const before = totals(previous)
-  // Sparklines show the trailing seven days at each day, so weekends don't read as dips.
   const week = [...previous.slice(-6), ...current]
   const trend = current.map((_, index) => totals(week.slice(index, index + 7), false))
 
-  // Bookings in each of the last twelve full months.
   const monthStart = (back: number) =>
     Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - back, 1)
   const months = Array.from({ length: 12 }, (_, index) => {
@@ -377,7 +359,6 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
     }
   })
 
-  // The quarter so far: each rep's share of their segment's closed deals, plus their open deals.
   const quarter = Math.floor(today.getUTCMonth() / 3)
   const quarterStart = Date.UTC(today.getUTCFullYear(), quarter * 3, 1)
   const quarterEnd = Date.UTC(today.getUTCFullYear(), quarter * 3 + 3, 1)
@@ -477,20 +458,19 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
 const Dashboard4 = (props: Dashboard4Props) => {
   const { title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '90d', segment: null })
-  // The query the blocks currently show. It lags behind while "fetching",
-  // and the blocks stay in place, dimmed, until the new data arrives.
-  const [shown, setShown] = useState(query)
-  const busy = shown !== query
+  const [displayedQuery, setDisplayedQuery] = useState(query)
+  const busy = displayedQuery !== query
 
+  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
-    if (shown === query) return
-    const timer = setTimeout(() => setShown(query), 500)
+    if (displayedQuery === query) return
+    const timer = setTimeout(() => setDisplayedQuery(query), 500)
     return () => clearTimeout(timer)
-  }, [query, shown])
+  }, [query, displayedQuery])
 
   const update = (patch: Partial<Query>) =>
     setQuery((current) => ({ ...current, ...patch }))
-  const data = buildCrmData(shown, today)
+  const data = buildCrmData(displayedQuery, today)
   const range = getDateRange(query.preset, today)
 
   return (

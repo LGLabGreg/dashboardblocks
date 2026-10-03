@@ -81,7 +81,6 @@ const Billing1 = (props: Billing1Props) => {
             formatter={(value) => formatCurrency(value, { compact: true, currency })}
             steps={steps}
           />
-          {/* The chart's legend, with values. The table below reads the same values, with running totals, to screen readers. */}
           <ul
             aria-hidden
             className='grid grid-cols-2 gap-x-2 gap-y-3 @sm:grid-cols-3 @xl:grid-cols-6'

@@ -207,7 +207,6 @@ interface FilterField {
   values: string[]
 }
 
-/** The value of the option that clears a `FilterMenu`. */
 const ALL_OPTIONS = '__all__'
 
 interface FilterMenuProps {

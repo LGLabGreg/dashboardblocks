@@ -54,7 +54,6 @@ const exampleProps: Auth3Props = {
   trustDays: 30,
 }
 
-/** Wrong codes allowed by the stand-in check used when `onVerify` is left out. */
 const EXAMPLE_ATTEMPTS = 5
 
 const Auth3 = (props: Auth3Props) => {
@@ -80,7 +79,6 @@ const Auth3 = (props: Auth3Props) => {
   const [failures, setFailures] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
 
-  // After a failed try, focus the box or field to fix, once it's enabled again.
   useEffect(() => {
     if (failures && !checking)
       formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()

@@ -35,7 +35,6 @@ interface Status5Props {
 const END_DATE = Date.UTC(2026, 8, 25)
 const DAY = 86_400_000
 
-/** Builds 90 days of example data, with overrides keyed by days ago. */
 const exampleDays = (
   events: Record<number, Partial<Omit<UptimeDay, 'label'>>>,
 ): UptimeDay[] =>

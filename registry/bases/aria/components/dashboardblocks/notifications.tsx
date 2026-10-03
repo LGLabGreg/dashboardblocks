@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/notifications.tsx for React Aria
-// source-hash: c53a9d6954f8
+// source-hash: c114c215a660
 
 'use client'
 
@@ -43,7 +43,6 @@ interface NotificationBellProps {
   unreadCount: number
 }
 
-/** A plain click on a link, which navigates in this tab rather than opening a new one. */
 function isLinkClick(event: MouseEvent) {
   return (
     !event.metaKey &&
@@ -92,7 +91,6 @@ function NotificationBell({
       >
         <Dialog aria-label='Notifications' className='flex flex-col outline-none'>
           {({ close }) => (
-            // A router's link doesn't reload the page, so close the panel when one is followed.
             <div
               className='contents'
               onClick={(event) => {

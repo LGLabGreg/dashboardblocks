@@ -31,7 +31,6 @@ interface Deployments4Props {
   title: string
 }
 
-/** Expands a compact pattern like "sssfs" into statuses, for the example. */
 const pattern = (runs: string) =>
   runs
     .split('')

@@ -54,7 +54,6 @@ const OVERAGE_COLOR = 'var(--color-amber-500)'
 
 const currency = new Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' })
 
-/** "$0.50 per 1K events", "$15.00 per seat". */
 function formatPrice(item: MeteredItem) {
   const per = item.per ?? 1
   const unit = per === 1 ? item.unit.replace(/s$/, '') : item.unit

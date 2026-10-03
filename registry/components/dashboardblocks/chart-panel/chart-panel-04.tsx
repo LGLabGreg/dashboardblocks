@@ -101,7 +101,6 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
         </div>
         <ChartPanelFigure className='h-60'>
           <ResponsiveContainer width='100%' height='100%'>
-            {/* The right margin leaves room for the last bar's label, which is centred on it. */}
             <BarChart data={data} margin={{ top: 24, right: 20, bottom: 0, left: 0 }}>
               <CartesianGrid {...chartGridProps} />
               <XAxis {...chartAxisProps} dataKey='label' />

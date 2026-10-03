@@ -247,7 +247,6 @@ function ReactionBar({
   const labelOf = (emoji: string) =>
     choices.find((choice) => choice.emoji === emoji)?.label ?? emoji
 
-  // Opening the picker is a click on its button, so focus follows into it.
   useEffect(() => {
     if (picking) pickerRef.current?.querySelector('button')?.focus()
   }, [picking])
@@ -302,7 +301,6 @@ function ReactionBar({
         ),
       )}
       {onToggle && (
-        // Closes the picker once focus leaves both it and its button.
         <div
           className='flex items-center gap-1'
           onBlur={(event) => {
@@ -503,7 +501,6 @@ function CommentItem({
   )
 }
 
-/** The `@query` typed just before the caret, if any. */
 function findMentionQuery(text: string, caret: number) {
   const match = /(?:^|[\s(])@([\p{L}\p{M}'’.-]*(?: [\p{L}\p{M}'’.-]*)?)$/u.exec(
     text.slice(0, caret),
@@ -590,7 +587,6 @@ function CommentComposer({
   const open = suggestions.length > 0
   const activeIndex = Math.min(active, suggestions.length - 1)
 
-  // Focus follows the click that opened the composer, and the caret goes to the end.
   useEffect(() => {
     const textarea = textareaRef.current
     if (!focusOnMount || !textarea) return
@@ -599,7 +595,6 @@ function CommentComposer({
     setCaret(textarea.value.length)
   }, [focusOnMount])
 
-  // Puts the caret after a mention that was just inserted.
   useLayoutEffect(() => {
     if (pendingCaret.current === null) return
     textareaRef.current?.setSelectionRange(pendingCaret.current, pendingCaret.current)
@@ -625,7 +620,6 @@ function CommentComposer({
     event?.preventDefault()
     const body = text.trim()
     if (isSubmitting) return
-    // Nothing to post: back to the text box rather than a disabled button.
     if (!body) return textareaRef.current?.focus()
     setIsSubmitting(true)
     try {
@@ -805,7 +799,6 @@ function CommentThread({
   const resolved = Boolean(comment.resolved)
   const canReply = Boolean(onReply) && !resolved
 
-  // After Resolve or Reopen, its button is gone: focus the one that replaced it.
   useEffect(() => {
     const target = pendingFocus.current
     if (target && resolved === (target === 'reopen')) {
@@ -841,7 +834,6 @@ function CommentThread({
     focusReply()
   }
 
-  // The menu is hidden while editing: put focus back on it once the editor closes.
   function stopEditing(commentId: string) {
     setEditingId(null)
     requestAnimationFrame(() =>

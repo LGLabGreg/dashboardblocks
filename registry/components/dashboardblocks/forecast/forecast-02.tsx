@@ -78,7 +78,6 @@ const Forecast2 = (props: Forecast2Props) => {
   const deadlineSteps = (deadline.getTime() - lastDate.getTime()) / stepMs
   const forecast = solveForTarget(actuals, target, {
     level,
-    // Look well past the deadline, a day at a time.
     maxSteps: Math.max(52, deadlineSteps * 2),
     resolution: 1 / stepDays,
   })
@@ -98,7 +97,6 @@ const Forecast2 = (props: Forecast2Props) => {
     ? Math.round((deadline.getTime() - expected.getTime()) / DAY)
     : null
 
-  // The timeline runs from today to a little past the later of the deadline and the range.
   const start = now.getTime()
   const finish =
     Math.max(deadline.getTime(), (latest ?? earliest ?? deadline).getTime()) + 14 * DAY

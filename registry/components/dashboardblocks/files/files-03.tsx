@@ -122,7 +122,6 @@ async function deleteFile() {
   await new Promise((resolve) => setTimeout(resolve, 400))
 }
 
-/** Rolls kinds without their own row, such as PDF, into the closest one shown. */
 function breakdownKind(kind: FileKind, shown: FileKind[]): FileKind {
   if (shown.includes(kind)) return kind
   const family: Partial<Record<FileKind, FileKind>> = {
@@ -155,7 +154,6 @@ const Files3 = (props: Files3Props) => {
   const status = getUsageStatus(used, limit)
 
   async function remove(file: StorageFile) {
-    // Ignore a second Delete while the first is still in flight.
     if (deleting.current.has(file.id)) return
     deleting.current.add(file.id)
     setMessage(`Deleting ${file.name}…`)

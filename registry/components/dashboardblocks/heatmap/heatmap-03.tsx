@@ -64,7 +64,6 @@ const monthFormatter = new Intl.DateTimeFormat('en-US', {
 
 const Heatmap3 = (props: Heatmap3Props) => {
   const { daily, description, endDate, title, unit } = props
-  // Columns are weeks starting on Monday; the last column holds `endDate`.
   const endWeekday = (endDate.getUTCDay() + 6) % 7
   const start = endDate.getTime() - ((WEEKS - 1) * 7 + endWeekday) * DAY
   const dateAt = (row: number, column: number) =>
@@ -78,8 +77,6 @@ const Heatmap3 = (props: Heatmap3Props) => {
       return daily[Math.round((time - firstDay) / DAY)] ?? null
     }),
   )
-  // Label the first week of each month, skipping a partial first month
-  // whose label would collide with the next one.
   const startsMonth = (column: number) =>
     column === 0 ||
     dateAt(0, column).getUTCMonth() !== dateAt(0, column - 1).getUTCMonth()

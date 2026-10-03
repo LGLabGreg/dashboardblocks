@@ -40,8 +40,7 @@ function loadLibrary(library: Exclude<IconLibrary, 'lucide'>) {
   return pending[library]
 }
 
-/** While a library loads, shows the fallback if it's loaded, else Lucide. */
-function useIconModule(library: IconLibrary, fallback: IconLibrary) {
+function useIconModule(library: IconLibrary, savedLibrary: IconLibrary) {
   const [, setVersion] = useState(0)
   useEffect(() => {
     if (library === 'lucide' || loaded[library]) return
@@ -52,7 +51,7 @@ function useIconModule(library: IconLibrary, fallback: IconLibrary) {
     }
   }, [library])
   if (loaded[library]) return library
-  return loaded[fallback] ? fallback : 'lucide'
+  return loaded[savedLibrary] ? savedLibrary : 'lucide'
 }
 
 function IconPlaceholder({
@@ -64,7 +63,6 @@ function IconPlaceholder({
   ...props
 }: IconPlaceholderProps) {
   const { iconLibrary } = useCustomizerConfig()
-  // A library previewed on hover may still be loading; keep the saved one until then.
   const library = useIconModule(iconLibrary, useSavedCustomizerConfig().iconLibrary)
   const names: Record<IconLibrary, string> = {
     hugeicons,

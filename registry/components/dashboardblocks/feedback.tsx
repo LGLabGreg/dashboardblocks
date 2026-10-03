@@ -130,7 +130,6 @@ function SentimentBar({
     'h-full transition-[width] duration-700 ease-out motion-reduce:transition-none'
 
   if (variant === 'diverging') {
-    // Width within one half of the bar, which spans `extent` of all mentions.
     const half = (value: number) =>
       `${revealed ? Math.min(100, share(value) / (extent || 1)) : 0}%`
     return (

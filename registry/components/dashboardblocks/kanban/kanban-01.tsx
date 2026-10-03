@@ -249,7 +249,6 @@ const Kanban1 = (props: Kanban1Props) => {
                     <KanbanAssignees names={issue.assignees} />
                   </div>
                   <KanbanCardTitle />
-                  {/* After the title, so it comes second in tab order. */}
                   <KanbanCardMenu className='absolute top-3 right-2' />
                   {issue.labels.length > 0 && <KanbanLabels labels={issue.labels} />}
                   <div className='flex flex-wrap items-center gap-x-3 gap-y-2 empty:hidden'>

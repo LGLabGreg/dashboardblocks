@@ -189,8 +189,6 @@ const Comments1 = (props: Comments1Props) => {
             onDelete={(commentId) => {
               onDelete(commentId)
               setComments((current) => updateComment(current, commentId, () => null))
-              // Deleting a thread's first comment removes the thread: move focus
-              // to the message box rather than losing it.
               if (commentId === comment.id) {
                 requestAnimationFrame(() =>
                   composerRef.current?.querySelector('textarea')?.focus(),

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: a56540a965a6
+// source-hash: 9db71135eab8
 
 'use client'
 
@@ -442,7 +442,6 @@ function InlineEditField({
   }
 
   return (
-    // Sized by its own width, so the label moves beside the value only when both fit.
     <div className={cn('@container py-3', className)}>
       <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-4'>
         <span id={`${id}-label`} className='text-muted-foreground pt-2 text-sm'>

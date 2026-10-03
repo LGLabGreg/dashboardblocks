@@ -24,7 +24,6 @@ interface StatGroup2Props {
   title: string
 }
 
-/** Fourteen days of example values that end on `end`. */
 const exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =>
   Array.from({ length: 14 }, (_, day) =>
     Number((end - (13 - day) * slope + Math.sin(day / 1.3 + phase) * wobble).toFixed(2)),

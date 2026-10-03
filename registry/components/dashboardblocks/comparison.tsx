@@ -57,7 +57,6 @@ function compareProportions(
   }
 }
 
-/** Flips to true once the element scrolls into view, after the first paint. */
 function useReveal(animated: boolean) {
   const { isInView, ref } = useInView({ threshold: 0.3 })
   const [revealed, setRevealed] = useState(!animated)

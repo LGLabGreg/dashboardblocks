@@ -146,7 +146,6 @@ const exampleProps: Schedule4Props = {
   title: 'Week ahead',
 }
 
-/** Events that overlap go on separate lanes, first fit. */
 function assignLanes(events: ScheduleEvent[]) {
   const laneEnds: number[] = []
   return events.map((event) => {
@@ -159,7 +158,6 @@ function assignLanes(events: ScheduleEvent[]) {
   })
 }
 
-/** Minutes booked, counting overlapping events once. */
 function getBookedMinutes(events: ScheduleEvent[]) {
   let total = 0
   let until = -Infinity

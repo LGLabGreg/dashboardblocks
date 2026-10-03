@@ -41,13 +41,10 @@ const exampleProps: Team2Props = {
   unit: 'pts',
 }
 
-// chart-2 rather than chart-1, which is orange in the light theme and too close to the amber overflow.
 const FILL_COLOR = 'var(--chart-2)'
-// Stripes as well as colour, so the part over capacity stands out without colour.
 const OVER_FILL =
   'repeating-linear-gradient(135deg, var(--color-amber-500) 0 3px, color-mix(in oklab, var(--color-amber-500) 45%, var(--card)) 3px 6px)'
 
-/** Assigned against capacity on a scale shared by every row. Decorative: the values are text beside it. */
 function WorkloadBar({
   assigned,
   capacity,
@@ -88,7 +85,6 @@ const Team2 = (props: Team2Props) => {
     1,
     ...people.map((person) => Math.max(person.assigned, person.capacity)),
   )
-  // Most loaded first, so anyone over capacity is at the top.
   const sorted = [...people].sort(
     (a, b) => b.assigned / (b.capacity || 1) - a.assigned / (a.capacity || 1),
   )

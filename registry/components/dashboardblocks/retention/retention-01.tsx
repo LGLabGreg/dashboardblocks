@@ -31,7 +31,6 @@ const COHORT_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'S
 const COHORT_SIZES = [1_184, 1_246, 1_402, 1_318, 1_527, 1_611, 1_489, 1_702, 1_836]
 
 const exampleProps: Retention1Props = {
-  // Retention drops fast, then levels off; newer cohorts level off a little higher.
   cohorts: COHORT_NAMES.map((name, index) => {
     const size = COHORT_SIZES[index]
     const floor = 0.21 + index * 0.012

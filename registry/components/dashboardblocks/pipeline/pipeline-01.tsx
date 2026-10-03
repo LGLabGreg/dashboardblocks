@@ -166,7 +166,6 @@ const Pipeline1 = (props: Pipeline1Props) => {
 
   const move = (item: PipelineItem, stage: PipelineStage) => {
     if (item.stage === stage.id) return
-    // Moved items go to the top of their new column, with the clock reset.
     setItems((current) => [
       { ...item, enteredStageAt: now, stage: stage.id },
       ...current.filter((other) => other.id !== item.id),

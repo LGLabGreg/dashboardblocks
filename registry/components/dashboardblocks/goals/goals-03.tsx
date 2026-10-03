@@ -91,7 +91,6 @@ const Goals3 = (props: Goals3Props) => {
   const rate = daily.length > 0 ? current / daily.length : 0
   const rows = days.map((label, index) => {
     const isActual = index < actual.length
-    // The projection starts at the last actual point so the lines join.
     const isProjected = index >= actual.length - 1
     return {
       actual: isActual ? actual[index] : null,
@@ -102,7 +101,6 @@ const Goals3 = (props: Goals3Props) => {
     }
   })
   const projected = rows[rows.length - 1]?.projected ?? current
-  // Leave room above the higher of the target and the projection.
   const step = 10 ** Math.floor(Math.log10(Math.max(target, projected, 1)))
   const yMax = Math.ceil((Math.max(target, projected) * 1.08) / step) * step
 

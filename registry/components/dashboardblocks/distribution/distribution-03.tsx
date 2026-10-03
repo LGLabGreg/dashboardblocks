@@ -37,7 +37,6 @@ const exampleProps: Distribution3Props = {
     }),
   title: 'Order value',
   unit: 'orders',
-  // Most orders are small, and a long tail of large ones pulls the mean up.
   // Integer hashing, not Math.sin, so the server and the browser agree.
   values: Array.from({ length: 420 }, (_, index) => {
     const u = ((index * 2_654_435_761 + 12_345) % 4_294_967_296) / 4_294_967_296

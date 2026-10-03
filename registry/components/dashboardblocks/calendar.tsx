@@ -39,8 +39,8 @@ interface CalendarEvent extends ScheduleEvent {
 
 const DAY = 86_400_000
 
-/** The rows a short event still takes up in a time grid, so its title fits. */
 const MIN_EVENT_MINUTES = 30
+const HOUR_LABEL_OFFSET_PX = 12
 
 const toKey = (day: Date) => day.toISOString().slice(0, 10)
 const getEnd = (event: ScheduleEvent) => (event.end ?? event.start).getTime()
@@ -286,14 +286,12 @@ function getEventLabel(event: ScheduleEvent, timeZone = 'UTC') {
     .join(', ')
 }
 
-/** "9:30a" and "2p": short enough for a month cell. */
 function formatShortTime(date: Date, timeZone: string) {
   const { hour, minute } = getDateParts(date, timeZone)
   const time = `${hour % 12 || 12}${minute === 0 ? '' : `:${String(minute).padStart(2, '0')}`}`
   return `${time}${hour < 12 ? 'a' : 'p'}`
 }
 
-/** A tint of the event's colour over the card, for bars and blocks. */
 const eventStyle = (event: ScheduleEvent, amount = 28): CSSProperties => ({
   backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} ${amount}%, var(--card))`,
 })
@@ -412,7 +410,6 @@ interface EventBarProps {
   now?: Date
   onSelect?: () => void
   selected?: boolean
-  /** Keeps the title in view, past the hour labels, when the time grid scrolls sideways. */
   stickyTitle?: boolean
   style?: CSSProperties
   tabIndex?: number
@@ -420,7 +417,6 @@ interface EventBarProps {
   timeZone: string
 }
 
-/** An all-day or multi-day event as a tinted bar. */
 function EventBar({
   className,
   continuesAfter,
@@ -540,7 +536,6 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
         ? new Date(today)
         : startOfMonth(month)
   const active = cursor && inMonth(cursor) ? cursor : fallback
-  // Bars use every row but the last, which stays free for "+N more".
   const barRows = Math.max(0, maxRows - 1)
 
   const spanning = events.filter((event) => spansDays(event, timeZone))
@@ -756,7 +751,6 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                         if (slot.type === 'bar') {
                           const { continuesAfter, continuesBefore, event, span, start } =
                             slot.segment
-                          // Tabbable from any day the bar covers, not only its first.
                           const covers =
                             activeColumn >= start && activeColumn < start + span
                           return (
@@ -848,13 +842,10 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
 }
 
 interface TimeGridColumn<T extends ScheduleEvent> {
-  /** The plain day the column shows. */
   day: Date
-  /** Timed events that start and end on `day`. */
   events: T[]
   header: ReactNode
   key: string
-  /** Names the column's events for assistive technology. */
   label: string
 }
 
@@ -907,13 +898,12 @@ function TimeGrid<T extends ScheduleEvent>({
   const template = `3.5rem repeat(${columns.length}, minmax(${minColumnWidth}, 1fr))`
   const percent = (minutes: number) => `${(minutes / (hours * 60)) * 100}%`
 
-  // Scroll the grid itself, never the page: to working hours, and sideways to today.
   useEffect(() => {
     const element = scroller.current
     const content = body.current
     if (!element || !content) return
-    // A little above the hour, so its label isn't cut off under the header.
-    element.scrollTop = (content.offsetHeight * (scrollToHour - startHour)) / hours - 12
+    element.scrollTop =
+      (content.offsetHeight * (scrollToHour - startHour)) / hours - HOUR_LABEL_OFFSET_PX
     const today = content.querySelector<HTMLElement>('[data-today]')
     const gutter = content.firstElementChild as HTMLElement | null
     if (today && gutter) element.scrollLeft = today.offsetLeft - gutter.offsetWidth

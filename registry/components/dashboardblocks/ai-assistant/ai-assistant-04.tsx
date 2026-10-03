@@ -67,7 +67,6 @@ One follow-up is open: alert on certificate expiry for payment processors, owned
 const fallbackReply =
   'This is a demo reply. Pass `onSend` to stream answers from your own model.'
 
-/** Resolves after `ms`, or rejects as soon as `signal` aborts. */
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => {

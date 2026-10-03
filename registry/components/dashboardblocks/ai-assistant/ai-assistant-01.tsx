@@ -140,7 +140,6 @@ Together they're **$10,620** of MRR. Brightline renews first, on Oct 14.`,
 const fallbackReply =
   'This is a demo reply. Pass `onSend` to stream answers from your own model, with the page’s data as context.'
 
-/** Resolves after `ms`, or rejects as soon as `signal` aborts. */
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -195,7 +194,6 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   const { messages, status } = chat
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
-  // Where focus goes after the panel opens or closes; never on load.
   const focusNext = useRef<'composer' | 'toggle' | null>(null)
   const latest = messages.at(-1)
 

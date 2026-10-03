@@ -121,7 +121,6 @@ const Scatter3 = (props: Scatter3Props) => {
   const colorOf = (channel: string) =>
     scatterPalette[Math.max(0, channels.indexOf(channel)) % scatterPalette.length]
   const totalSpend = campaigns.reduce((sum, campaign) => sum + campaign.spend, 0)
-  // Cheapest acquisitions first, as the campaigns to grow.
   const best = [...campaigns].sort((a, b) => a.cpa - b.cpa)[0]
   const worst = [...campaigns].sort((a, b) => b.cpa - a.cpa)[0]
 

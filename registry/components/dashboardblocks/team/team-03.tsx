@@ -54,7 +54,6 @@ const exampleProps: Team3Props = {
   title: 'Who’s online',
 }
 
-/** Solid fills for the share bar, matching each presence dot. */
 const barFill: Record<Presence, string> = {
   away: 'bg-amber-500',
   offline: 'bg-muted-foreground/30',

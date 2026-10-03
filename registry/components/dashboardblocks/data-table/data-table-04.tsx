@@ -81,7 +81,6 @@ const exampleProps: DataTable4Props = {
   title: 'Services',
 }
 
-/** Worst first when sorted high to low. */
 const STATUS_RANK: Record<StatusLevel, number> = {
   major: 5,
   partial: 4,

@@ -352,7 +352,6 @@ const Calendar3 = (props: Calendar3Props) => {
               { label: 'Week', value: 'week' },
             ]}
             onViewChange={(next) => {
-              // The week of the selected day, or the month of the week shown.
               if (next === 'month') setMonth(startOfMonth(anchor))
               setView(next as View)
             }}

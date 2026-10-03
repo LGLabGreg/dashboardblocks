@@ -146,7 +146,6 @@ const exampleProps: Leaderboard04Props = {
   title: 'Top Products',
 }
 
-// Layered transparent shadows give the tile depth without a hard border
 const tileSurface =
   'bg-card text-foreground shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]'
 

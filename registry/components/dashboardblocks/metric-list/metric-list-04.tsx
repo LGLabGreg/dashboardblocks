@@ -54,7 +54,6 @@ const dayFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-/** Thirty days of example values that end on `end`, with a dip at weekends. */
 const exampleDaily = (
   end: number,
   slope: number,
@@ -68,7 +67,6 @@ const exampleDaily = (
     return Number(value.toFixed(digits))
   })
 
-/** The latest value, compared with the first value in the window. */
 const fromHistory = (history: number[]) => ({
   history,
   previous: history[0],
@@ -176,7 +174,6 @@ const MetricList4 = (props: MetricList4Props) => {
                   >
                     {item.label}
                   </span>
-                  {/* The chart beside the list is the text alternative. */}
                   <span aria-hidden>
                     <MetricSparkline
                       animated={false}

@@ -125,7 +125,6 @@ const Pipeline3 = (props: Pipeline3Props) => {
   const { items, noun = 'items', now, stages, title } = props
   const stageById = new Map(stages.map((stage) => [stage.id, stage]))
 
-  // Longest over their limit first, relative to the limit.
   const stuck = items
     .map((item) => {
       const stage = stageById.get(item.stage)

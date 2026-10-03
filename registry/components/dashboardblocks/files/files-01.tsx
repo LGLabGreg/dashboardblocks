@@ -120,7 +120,6 @@ const Files1 = (props: Files1Props) => {
   })
   const summary = summarizeUploads(uploads)
 
-  // Announced as it changes, so it leaves out the running percentage.
   let status = `${summary.done} of ${uploads.length} uploaded`
   if (summary.active > 0) {
     status = `Uploading ${summary.active} ${summary.active === 1 ? 'file' : 'files'}…`

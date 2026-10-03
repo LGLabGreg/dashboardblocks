@@ -139,6 +139,7 @@ interface StatSparklineProps {
 
 const SPARKLINE_WIDTH = 100
 const SPARKLINE_HEIGHT = 32
+const SPARKLINE_INSET = 2
 
 /** A sparkline with a soft fill and a dot on the latest value. Reveals left to right. */
 function StatSparkline({
@@ -162,10 +163,11 @@ function StatSparkline({
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = max - min || 1
-  // Keep a 2px inset so the 2px stroke is never clipped at the extremes.
   const points = data.map((value, index) => ({
     x: (index / (data.length - 1)) * SPARKLINE_WIDTH,
-    y: 2 + (1 - (value - min) / range) * (SPARKLINE_HEIGHT - 4),
+    y:
+      SPARKLINE_INSET +
+      (1 - (value - min) / range) * (SPARKLINE_HEIGHT - 2 * SPARKLINE_INSET),
   }))
   const line = points.map(({ x, y }, index) => `${index ? 'L' : 'M'}${x},${y}`).join('')
   const area = `${line}L${SPARKLINE_WIDTH},${SPARKLINE_HEIGHT}L0,${SPARKLINE_HEIGHT}Z`

@@ -98,7 +98,6 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-/** Whole days from `now` to `due`, comparing calendar days in UTC. */
 function daysUntil(due: Date, now: Date) {
   const start = (date: Date) => Math.floor(date.getTime() / DAY)
   return start(due) - start(now)

@@ -113,13 +113,11 @@ const exampleProps: Billing5Props = {
   title: 'Change plan',
 }
 
-/** What a period costs: the monthly seat price × seats, × 12 when billed yearly. */
 function periodTotal(plan: Plan | undefined, interval: BillingInterval, seats: number) {
   if (!plan?.price) return 0
   return plan.price[interval] * seats * (interval === 'year' ? 12 : 1)
 }
 
-/** Adds a month or a year, keeping the day of the month. */
 function addInterval(date: Date, interval: BillingInterval) {
   const next = new Date(date)
   if (interval === 'year') next.setUTCFullYear(next.getUTCFullYear() + 1)
@@ -160,7 +158,6 @@ const Billing5 = (props: Billing5Props) => {
 
   const unchanged =
     planId === active.planId && interval === active.interval && seats === active.seats
-  // Share of the current period that's left, credited against an upgrade.
   const remaining = Math.min(
     1,
     Math.max(
@@ -179,7 +176,6 @@ const Billing5 = (props: Billing5Props) => {
       : (nextTotal - currentTotal) * remaining
   const startsAt = upgrade ? now : renewsAt
   const nextRenewal = switchesToYearly ? addInterval(now, 'year') : renewsAt
-  // Only a cheaper plan can take features away; upgrades name them differently.
   const isDowngrade =
     !!plan?.price && !!activePlan?.price && plan.price.month < activePlan.price.month
   const lost = isDowngrade
@@ -207,7 +203,6 @@ const Billing5 = (props: Billing5Props) => {
           ? `Upgrade to ${plan?.name}`
           : `Switch to ${plan?.name}`
 
-  // The selected plan's saving, or the best one while a plan without a price is selected.
   const yearlySaving = plan?.price
     ? 1 - plan.price.year / plan.price.month
     : plans.reduce(

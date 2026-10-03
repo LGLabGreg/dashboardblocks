@@ -84,7 +84,6 @@ const Security4 = (props: Security4Props) => {
   const sorted = [...checks].sort((a, b) => ORDER[a.result] - ORDER[b.result])
   const failing = checks.filter((check) => check.result === 'fail').length
   const warnings = checks.filter((check) => check.result === 'warn').length
-  // A text colour class, drawn with currentColor, so it works with any theme.
   const color =
     score >= 80
       ? 'text-emerald-600 dark:text-emerald-500'

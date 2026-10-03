@@ -152,8 +152,7 @@ async function createWorkspace() {
   await new Promise((resolve) => setTimeout(resolve, 900))
 }
 
-/** Only checks the fields up to the current step. */
-function validate(values: NewWorkspace, step: number): FormErrors<NewWorkspace> {
+function validateUpToStep(values: NewWorkspace, step: number): FormErrors<NewWorkspace> {
   const slug = values.slug
   return {
     name: !values.name.trim()
@@ -204,7 +203,7 @@ const Onboarding1 = (props: Onboarding1Props) => {
       const taken = await onCheckSlug(values.slug)
       if (taken) return { slug: taken }
     },
-    validate: (values) => validate(values, step),
+    validate: (values) => validateUpToStep(values, step),
   })
   const { values } = form
   const useCase = useCases.find((option) => option.value === values.useCase)
@@ -413,7 +412,6 @@ const Onboarding1 = (props: Onboarding1Props) => {
           value={invites}
           onValueChange={(next) => {
             setInvites(next)
-            // Once errors are showing, keep them up to date as people fix them.
             if (inviteErrors) setInviteErrors(getInviteErrors(getFilledInvites(next)))
           }}
         />

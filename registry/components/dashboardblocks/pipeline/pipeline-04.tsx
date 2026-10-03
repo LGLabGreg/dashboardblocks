@@ -114,7 +114,6 @@ const Pipeline4 = (props: Pipeline4Props) => {
     )
     return { ...owner, forecast: owner.closed + weighted, weighted }
   })
-  // One scale for every row, so the bars compare across owners.
   const max = Math.max(1, ...rows.flatMap((row) => [row.quota, row.forecast]))
   const teamForecast = rows.reduce((sum, row) => sum + row.forecast, 0)
   const teamQuota = rows.reduce((sum, row) => sum + row.quota, 0)

@@ -39,7 +39,6 @@ interface NotificationBellProps {
   unreadCount: number
 }
 
-/** A plain click on a link, which navigates in this tab rather than opening a new one. */
 function isLinkClick(event: MouseEvent) {
   return (
     !event.metaKey &&
@@ -95,7 +94,6 @@ function NotificationBell({
       <PopoverContent
         align='end'
         className={cn('w-96 max-w-[calc(100vw-2rem)] gap-0 p-0', className)}
-        // A router's link doesn't reload the page, so close the panel when one is followed.
         onClick={(event) => {
           if (isLinkClick(event)) setOpen(false)
         }}

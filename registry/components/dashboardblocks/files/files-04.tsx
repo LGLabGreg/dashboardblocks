@@ -110,7 +110,6 @@ async function deleteFile() {
   await new Promise((resolve) => setTimeout(resolve, 400))
 }
 
-/** The folders from the root to the one with this id. */
 function findPath(root: BrowserFolder, id: string): BrowserFolder[] {
   if (root.id === id) return [root]
   for (const child of root.children) {
@@ -158,7 +157,6 @@ const Files4 = (props: Files4Props) => {
     .filter((item): item is BrowserFile => item.type === 'file')
     .sort((a, b) => b.modified.getTime() - a.modified.getTime())
 
-  // Keeps keyboard focus in the browser when the folder it was on goes away.
   useEffect(() => {
     if (!moved.current) return
     moved.current = false

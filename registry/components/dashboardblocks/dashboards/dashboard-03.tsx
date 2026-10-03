@@ -38,14 +38,12 @@ const exampleProps: Dashboard3Props = {
   today: new Date(Date.UTC(2026, 8, 25)),
 }
 
-/** Each device's share of visitors, page views per visit and bounce rate. */
 const DEVICES = [
   { bounce: 36, name: 'Desktop', pagesPerVisit: 3.4, share: 0.55 },
   { bounce: 52, name: 'Mobile', pagesPerVisit: 2.3, share: 0.39 },
   { bounce: 44, name: 'Tablet', pagesPerVisit: 2.8, share: 0.06 },
 ]
 
-/** Where sessions come from, weighted per device (Desktop, Mobile, Tablet). */
 const SOURCES = [
   { id: 'organic', label: 'Organic search', weights: [0.41, 0.32, 0.38] },
   { id: 'paid', label: 'Paid ads', weights: [0.24, 0.21, 0.22] },
@@ -53,7 +51,6 @@ const SOURCES = [
   { id: 'email', label: 'Email', weights: [0.23, 0.13, 0.16] },
 ]
 
-/** Which landing page each source sends sessions to. */
 const LANDINGS: Record<string, Record<string, number>> = {
   email: { home: 0.32, pricing: 0.68 },
   organic: { blog: 0.36, home: 0.53, pricing: 0.11 },
@@ -61,7 +58,6 @@ const LANDINGS: Record<string, Record<string, number>> = {
   social: { blog: 0.75, home: 0.25 },
 }
 
-/** What sessions do after each landing page, before the device's bounce shift. */
 const PAGES = [
   { browsed: 0.53, id: 'home', label: 'Home', signedUp: 0.12 },
   { browsed: 0.42, id: 'pricing', label: 'Pricing', signedUp: 0.27 },
@@ -94,7 +90,6 @@ const COUNTRIES = [
   { code: 'SG', name: 'Singapore', share: 0.01 },
 ]
 
-/** Browser share per device (Desktop, Mobile, Tablet). The rest is "Other". */
 const BROWSERS = [
   { color: 'var(--chart-1)', label: 'Chrome', shares: [0.63, 0.47, 0.34] },
   { color: 'var(--chart-2)', label: 'Safari', shares: [0.13, 0.43, 0.6] },
@@ -107,7 +102,6 @@ interface Query {
   preset: DateRangePreset
 }
 
-/** Visitors across all devices on the day (or hour, with `hourly`) `offset` steps before the end. */
 const visitorsAt = (offset: number, hourly: boolean) => {
   if (hourly) {
     const hour = 23 - offset
@@ -121,7 +115,6 @@ const visitorsAt = (offset: number, hourly: boolean) => {
   return (trend + wave) * weekend
 }
 
-/** Splits a whole-number total by shares, giving the rounding remainder to the last part. */
 const splitTotal = (total: number, shares: number[]) => {
   const sum = shares.reduce((acc, share) => acc + share, 0)
   const parts = shares.map((share) => Math.round((total * share) / sum))
@@ -141,7 +134,6 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
   const devices = DEVICES.map((item, index) => ({
     ...item,
     index,
-    // With a device filter, only that device's share counts.
     weight: device && item.name !== device ? 0 : item.share,
   }))
   const share = devices.reduce((sum, item) => sum + item.weight, 0)
@@ -151,7 +143,6 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
   const point = (offset: number) => {
     const visitors = Math.round(visitorsAt(offset, hourly) * share)
     return {
-      // Bounce rate has been improving slowly.
       bounceRate: Math.round(
         weighted('bounce') + (hourly ? 0 : offset * 0.04) + Math.cos(offset / 2.3) * 2.5,
       ),
@@ -181,7 +172,6 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
   const now = totals(current)
   const before = totals(previous)
 
-  // Sessions run a little ahead of unique visitors.
   const sessions = Math.round(now.visitors * 1.24)
   const sourceSessions = splitTotal(
     sessions,
@@ -245,7 +235,6 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
         { id: 'bounced', kind: 'exit' as const, label: 'Bounced' },
       ],
     },
-    // The listed pages only cover part of the traffic.
     pages: splitTotal(
       Math.round(now.visitors * TOP_PAGES.reduce((sum, page) => sum + page.share, 0)),
       TOP_PAGES.map((page) => page.share),
@@ -282,20 +271,19 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
 const Dashboard3 = (props: Dashboard3Props) => {
   const { title, today } = props
   const [query, setQuery] = useState<Query>({ device: null, preset: '30d' })
-  // The query the blocks currently show. It lags behind while "fetching",
-  // and the blocks stay in place, dimmed, until the new data arrives.
-  const [shown, setShown] = useState(query)
-  const busy = shown !== query
+  const [displayedQuery, setDisplayedQuery] = useState(query)
+  const busy = displayedQuery !== query
 
+  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
-    if (shown === query) return
-    const timer = setTimeout(() => setShown(query), 500)
+    if (displayedQuery === query) return
+    const timer = setTimeout(() => setDisplayedQuery(query), 500)
     return () => clearTimeout(timer)
-  }, [query, shown])
+  }, [query, displayedQuery])
 
   const update = (patch: Partial<Query>) =>
     setQuery((current) => ({ ...current, ...patch }))
-  const data = buildAnalyticsData(shown, today)
+  const data = buildAnalyticsData(displayedQuery, today)
   const range = getDateRange(query.preset, today)
 
   return (

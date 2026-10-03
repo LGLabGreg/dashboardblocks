@@ -19,13 +19,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/*
- * Documents print with Tailwind's `print:` variants: the toolbar and other
- * screen-only controls hide, the page loses its card chrome and fills the
- * paper, rows and totals don't split across pages, and the theme's colours
- * are swapped for black on white, so dark mode prints like light mode.
- */
-
 interface DocumentLine {
   /** A second line under the description, such as the period or what the work covered. */
   detail?: string
@@ -93,7 +86,6 @@ function getCurrencyDigits(currency = 'USD') {
   return digits
 }
 
-/** An amount in the currency's smallest unit, rounding halves away from zero. */
 function toMinorUnits(value: number, scale: number) {
   // The epsilon keeps 1.005 from rounding down because it's stored as 1.00499…
   return Math.sign(value) * Math.round(Math.abs(value) * scale + 1e-6)
@@ -576,7 +568,6 @@ function LineItemsTable({
   const selected = new Set(selection?.selected)
   const hasSelection = Boolean(selection)
   const edge = 'first:pl-0 last:pr-0'
-  // Hidden on narrow tables, where the description shows them instead.
   const wide = 'hidden @md/line-items:table-cell print:table-cell'
 
   return (
@@ -812,6 +803,7 @@ const code39: Record<string, string> = {
 
 const QUIET_ZONE = 10
 const WIDE = 3
+const INTER_CHARACTER_GAP = 1
 
 /**
  * The bars of a Code 39 barcode, in narrow-bar units, with a quiet zone on
@@ -832,10 +824,13 @@ function getBarcodeBars(value: string) {
       if (index % 2 === 0) bars.push({ width, x })
       x += width
     }
-    // A narrow space between characters.
-    x += 1
+    x += INTER_CHARACTER_GAP
   }
-  return { bars, text: text.join(''), width: x - 1 + QUIET_ZONE }
+  return {
+    bars,
+    text: text.join(''),
+    width: x - INTER_CHARACTER_GAP + QUIET_ZONE,
+  }
 }
 
 /**

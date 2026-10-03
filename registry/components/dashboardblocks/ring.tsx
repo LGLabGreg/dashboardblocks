@@ -33,7 +33,6 @@ export const Ring = ({
 
   useEffect(() => {
     if (isInView) {
-      // Small delay to ensure the initial render happens at 0
       const timer = requestAnimationFrame(() => {
         setValue(percentage)
       })

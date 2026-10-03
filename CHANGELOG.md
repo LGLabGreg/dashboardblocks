@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.2.2
+
+### Patch Changes
+
+- 3c98315: Blocks carry fewer comments: those that only restated the code are gone, and the rest explain browser and library behaviour or mark what to replace with your own data. Data table columns take a new `hideLabelWhenStacked` meta option, for a column of row actions that shouldn't be labelled when the table stacks.
+
 ## 1.2.1
 
 ### Patch Changes

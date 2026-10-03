@@ -138,7 +138,6 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
     setLoading(true)
     timer.current = setTimeout(() => {
       void search(next.trim()).then((groups) => {
-        // Ignore results for a search the user has already changed.
         if (request !== latest.current) return
         setResults(groups)
         setLoading(false)

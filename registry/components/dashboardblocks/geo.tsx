@@ -70,11 +70,6 @@ interface MapPoint {
   y: number
 }
 
-/**
- * Shared hover and keyboard behaviour for maps: one Tab stop, the arrow keys
- * move to the nearest point in that direction, Home and End to the first and
- * last. Hovering, focusing or tapping a point makes it active.
- */
 function useMapReadout(points: MapPoint[]) {
   const [active, setActive] = useState<string | null>(null)
   const [cursor, setCursor] = useState<string | null>(null)
@@ -208,7 +203,6 @@ function GeoTable({
   )
 }
 
-/** The readout line under a map, with the legend beside it. */
 function MapReadout({
   children,
   footer,
@@ -527,14 +521,12 @@ function DotMap({
   nameHeader = 'Location',
   valueHeader = 'Value',
 }: DotMapProps) {
-  // Largest first, so smaller markers sit on top and Home starts at the top location.
   const sorted = [...markers].sort((a, b) => b.value - a.value)
   const positioned = sorted.map((marker) => ({
     ...marker,
     ...projectPoint(marker.lat, marker.lon),
   }))
   const { active, containerProps, getPointProps } = useMapReadout(
-    // Points in pixels-ish units: the map is about 2.6 times wider than tall.
     positioned.map((marker) => ({
       id: marker.id,
       x: marker.x * (LAND_COLUMNS / LAND_ROWS),
@@ -545,7 +537,6 @@ function DotMap({
   const activeMarker = markers.find((marker) => marker.id === active)
 
   return (
-    // A size container, so markers and the legend scale with the map's width.
     <div className={cn('@container flex flex-col gap-3', className)}>
       <div
         {...containerProps}
@@ -609,7 +600,6 @@ function DotMap({
   )
 }
 
-/** The largest 1, 2 or 5 times a power of ten at or below `value`. */
 function niceFloor(value: number) {
   if (value <= 0) return 0
   const power = 10 ** Math.floor(Math.log10(value))
