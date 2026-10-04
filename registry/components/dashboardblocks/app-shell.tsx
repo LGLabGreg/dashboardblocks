@@ -368,7 +368,10 @@ function UserAvatar({ className, user }: { className?: string; user: AppUser }) 
   return (
     <Avatar className={className}>
       {user.avatar && <AvatarImage src={user.avatar} alt='' />}
-      <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+      {/* The style's muted initials miss AA contrast on its muted fill. */}
+      <AvatarFallback className='text-foreground'>
+        {getInitials(user.name)}
+      </AvatarFallback>
     </Avatar>
   )
 }
@@ -519,13 +522,27 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
           const last = index === items.length - 1
           return (
             <Fragment key={`${item.label}-${index}`}>
-              <BreadcrumbItem className={cn(!last && 'hidden md:inline-flex', 'min-w-0')}>
-                {last || !item.href ? (
+              <BreadcrumbItem
+                className={cn(
+                  'min-w-0',
+                  // The current page truncates last.
+                  last ? 'max-w-full shrink-0' : 'hidden md:inline-flex',
+                )}
+              >
+                {last ? (
                   <BreadcrumbPage className='truncate'>{item.label}</BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink render={<Link href={item.href} />}>
+                ) : item.href ? (
+                  <BreadcrumbLink
+                    className='truncate'
+                    title={item.label}
+                    render={<Link href={item.href} />}
+                  >
                     {item.label}
                   </BreadcrumbLink>
+                ) : (
+                  <span className='truncate' title={item.label}>
+                    {item.label}
+                  </span>
                 )}
               </BreadcrumbItem>
               {!last && <BreadcrumbSeparator className='hidden md:inline-flex' />}

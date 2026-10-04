@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.1
+
+### Patch Changes
+
+- 39a9e2b: App Shell's user avatars show their initials in the foreground colour, so they meet AA contrast on the avatar's muted fill. Long breadcrumbs truncate on one line, parents first, with the full text on hover, and a parent without a link is no longer marked as the current page.
+
 ## 1.3.0
 
 ### Minor Changes

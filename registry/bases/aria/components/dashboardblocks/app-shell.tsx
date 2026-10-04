@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: f15a352cfd66
+// source-hash: 79af0ee5afa6
 
 'use client'
 
@@ -360,7 +360,10 @@ function UserAvatar({ className, user }: { className?: string; user: AppUser }) 
   return (
     <Avatar className={className}>
       {user.avatar && <AvatarImage src={user.avatar} alt='' />}
-      <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+      {/* The style's muted initials miss AA contrast on its muted fill. */}
+      <AvatarFallback className='text-foreground'>
+        {getInitials(user.name)}
+      </AvatarFallback>
     </Avatar>
   )
 }
@@ -508,12 +511,23 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
             <BreadcrumbItem
               key={`${item.label}-${index}`}
               id={`${item.label}-${index}`}
-              className={cn(!last && 'hidden md:inline-flex', 'min-w-0')}
+              className={cn(
+                'min-w-0',
+                // The current page truncates last.
+                last ? 'max-w-full shrink-0' : 'hidden md:inline-flex',
+              )}
             >
-              {last || !item.href ? (
+              {last ? (
                 <BreadcrumbPage className='truncate'>{item.label}</BreadcrumbPage>
+              ) : item.href ? (
+                <BreadcrumbLink className='truncate' href={item.href}>
+                  {/* React Aria's Link takes no title. */}
+                  <span title={item.label}>{item.label}</span>
+                </BreadcrumbLink>
               ) : (
-                <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                <span className='truncate' title={item.label}>
+                  {item.label}
+                </span>
               )}
             </BreadcrumbItem>
           )
