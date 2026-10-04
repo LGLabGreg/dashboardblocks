@@ -113,7 +113,7 @@ const Feedback4 = (props: Feedback4Props) => {
               className={cn(
                 'text-xs font-medium tabular-nums',
                 change >= 0
-                  ? 'text-green-700 dark:text-green-400'
+                  ? 'text-emerald-700 dark:text-emerald-400'
                   : 'text-red-700 dark:text-red-400',
               )}
             >
@@ -142,7 +142,7 @@ const Feedback4 = (props: Feedback4Props) => {
         </dl>
         <ChartPanelLegend
           items={[
-            { color: 'var(--chart-1)', label: 'CSAT', shape: 'line' },
+            { color: 'var(--chart-2)', label: 'CSAT', shape: 'line' },
             ...(target !== undefined
               ? [
                   {
@@ -190,9 +190,9 @@ const Feedback4 = (props: Feedback4Props) => {
               <Line
                 activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
                 dataKey='csat'
-                dot={{ fill: 'var(--chart-1)', r: 2.5, strokeWidth: 0 }}
+                dot={{ fill: 'var(--chart-2)', r: 2.5, strokeWidth: 0 }}
                 name='CSAT'
-                stroke='var(--chart-1)'
+                stroke='var(--chart-2)'
                 strokeWidth={2}
                 type='monotone'
               />

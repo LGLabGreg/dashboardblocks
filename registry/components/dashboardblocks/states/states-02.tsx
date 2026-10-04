@@ -74,7 +74,7 @@ const exampleProps: States2Props = {
   title: 'Revenue',
 }
 
-const SERIES_COLOR = 'var(--chart-1)'
+const SERIES_COLOR = 'var(--chart-2)'
 const currency = (value: number) => `$${value.toLocaleString('en-US')}`
 
 const States2 = (props: States2Props) => {

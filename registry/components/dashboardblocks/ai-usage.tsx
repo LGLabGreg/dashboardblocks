@@ -65,18 +65,18 @@ function formatUsd(value: number) {
 
 /** Colours for models in a fixed order, so a model keeps its colour. */
 const modelPalette = [
-  'var(--chart-1)',
   'var(--chart-2)',
   'var(--chart-3)',
   'var(--chart-4)',
   'var(--chart-5)',
+  'var(--chart-1)',
 ]
 
 /** Colours for the parts of a token count. */
 const tokenPartColors = {
-  cached: 'var(--chart-2)',
-  input: 'var(--chart-1)',
-  output: 'var(--chart-3)',
+  cached: 'var(--chart-3)',
+  input: 'var(--chart-2)',
+  output: 'var(--chart-4)',
 } as const
 
 interface TokenSplitBarProps {

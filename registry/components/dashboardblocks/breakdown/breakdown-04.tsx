@@ -42,9 +42,9 @@ const exampleProps: Breakdown4Props = {
   title: 'Channel share shift',
 }
 
-const CURRENT_COLOR = 'var(--chart-1)'
+const CURRENT_COLOR = 'var(--chart-2)'
 const PREVIOUS_COLOR =
-  'color-mix(in oklab, var(--chart-1) 45%, var(--color-muted-foreground))'
+  'color-mix(in oklab, var(--chart-2) 45%, var(--color-muted-foreground))'
 
 const Breakdown4 = (props: Breakdown4Props) => {
   const { currentLabel, description, items, previousLabel, title } = props

@@ -44,11 +44,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  campaigns: { calendar: 'Campaigns', color: 'var(--chart-1)' },
-  content: { calendar: 'Content', color: 'var(--chart-2)' },
-  holidays: { calendar: 'Holidays', color: 'var(--chart-5)' },
-  social: { calendar: 'Social', color: 'var(--chart-4)' },
-  webinars: { calendar: 'Webinars', color: 'var(--chart-3)' },
+  campaigns: { calendar: 'Campaigns', color: 'var(--chart-2)' },
+  content: { calendar: 'Content', color: 'var(--chart-3)' },
+  holidays: { calendar: 'Holidays', color: 'var(--chart-1)' },
+  social: { calendar: 'Social', color: 'var(--chart-5)' },
+  webinars: { calendar: 'Webinars', color: 'var(--chart-4)' },
 }
 
 const exampleProps: Calendar3Props = {

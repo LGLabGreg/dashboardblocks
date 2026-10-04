@@ -135,18 +135,13 @@ function getFileKind(name: string, type?: string): FileKind {
 }
 
 interface FileKindConfig {
-  /** CSS colour for bars and legends. */
-  color: string
   icon: ReactNode
   label: string
-  /** Tinted background with readable text, for icons. */
-  soft: string
 }
 
-/** An icon, a label and a tint per kind. Kind colours only tell kinds apart: say the kind in text too. */
+/** An icon and a label per kind. */
 const fileKindConfig: Record<FileKind, FileKindConfig> = {
   archive: {
-    color: 'var(--color-amber-500)',
     icon: (
       <IconPlaceholder
         lucide='FileArchiveIcon'
@@ -157,10 +152,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Archive',
-    soft: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
   },
   audio: {
-    color: 'var(--color-indigo-500)',
     icon: (
       <IconPlaceholder
         lucide='FileMusicIcon'
@@ -171,10 +164,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Audio',
-    soft: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300',
   },
   code: {
-    color: 'var(--color-cyan-500)',
     icon: (
       <IconPlaceholder
         lucide='FileCodeIcon'
@@ -185,10 +176,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Code',
-    soft: 'bg-cyan-500/10 text-cyan-800 dark:text-cyan-300',
   },
   document: {
-    color: 'var(--color-blue-500)',
     icon: (
       <IconPlaceholder
         lucide='FileTextIcon'
@@ -199,10 +188,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Document',
-    soft: 'bg-blue-500/10 text-blue-700 dark:text-blue-300',
   },
   folder: {
-    color: 'var(--color-sky-500)',
     icon: (
       <IconPlaceholder
         lucide='FolderIcon'
@@ -213,10 +200,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Folder',
-    soft: 'bg-sky-500/10 text-sky-700 dark:text-sky-300',
   },
   image: {
-    color: 'var(--color-violet-500)',
     icon: (
       <IconPlaceholder
         lucide='FileImageIcon'
@@ -227,10 +212,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Image',
-    soft: 'bg-violet-500/10 text-violet-700 dark:text-violet-300',
   },
   other: {
-    color: 'var(--muted-foreground)',
     icon: (
       <IconPlaceholder
         lucide='FileIcon'
@@ -241,10 +224,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'File',
-    soft: 'bg-muted text-muted-foreground',
   },
   pdf: {
-    color: 'var(--color-red-500)',
     icon: (
       <IconPlaceholder
         lucide='FileTextIcon'
@@ -255,10 +236,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'PDF',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
   },
   presentation: {
-    color: 'var(--color-orange-500)',
     icon: (
       <IconPlaceholder
         lucide='PresentationIcon'
@@ -269,10 +248,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Presentation',
-    soft: 'bg-orange-500/10 text-orange-700 dark:text-orange-400',
   },
   spreadsheet: {
-    color: 'var(--color-emerald-500)',
     icon: (
       <IconPlaceholder
         lucide='FileSpreadsheetIcon'
@@ -283,10 +260,8 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Spreadsheet',
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
   },
   video: {
-    color: 'var(--color-pink-500)',
     icon: (
       <IconPlaceholder
         lucide='FileVideoCameraIcon'
@@ -297,7 +272,6 @@ const fileKindConfig: Record<FileKind, FileKindConfig> = {
       />
     ),
     label: 'Video',
-    soft: 'bg-pink-500/10 text-pink-700 dark:text-pink-300',
   },
 }
 
@@ -318,7 +292,7 @@ interface FileKindIconProps {
   type?: string
 }
 
-/** The icon for a kind of file in a tinted square. Decorative: show the name beside it. */
+/** The icon for a kind of file in a muted square. Decorative: show the name beside it. */
 function FileKindIcon({
   className,
   kind,
@@ -332,8 +306,8 @@ function FileKindIcon({
       aria-hidden
       className={cn(
         'flex shrink-0 items-center justify-center',
+        'bg-muted text-muted-foreground',
         fileIconSizes[size],
-        config.soft,
         className,
       )}
     >
@@ -884,7 +858,7 @@ function FileUploadItem({
                 phosphor='CheckCircleIcon'
                 remixicon='RiCheckboxCircleLine'
                 aria-hidden
-                className='text-emerald-600 dark:text-emerald-400'
+                className='text-emerald-700 dark:text-emerald-400'
               />
               Uploaded
             </>

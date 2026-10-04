@@ -133,7 +133,7 @@ const Inventory4 = (props: Inventory4Props) => {
         </dl>
         <ChartPanelLegend
           items={[
-            { color: 'var(--chart-2)', label: 'Projected stock' },
+            { color: 'var(--chart-3)', label: 'Projected stock' },
             { color: 'var(--muted-foreground)', label: 'Reorder point', shape: 'line' },
           ]}
         />
@@ -187,10 +187,10 @@ const Inventory4 = (props: Inventory4Props) => {
               />
               <Area
                 dataKey='stock'
-                fill='var(--chart-2)'
+                fill='var(--chart-3)'
                 fillOpacity={0.2}
                 name='Projected stock'
-                stroke='var(--chart-2)'
+                stroke='var(--chart-3)'
                 strokeWidth={2}
                 type='stepAfter'
               />

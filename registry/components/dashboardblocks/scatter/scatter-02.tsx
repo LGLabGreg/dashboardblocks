@@ -197,7 +197,7 @@ const Scatter2 = (props: Scatter2Props) => {
                   if (!active || !item) return null
                   return (
                     <ScatterTooltipContent
-                      color='var(--chart-1)'
+                      color='var(--chart-2)'
                       rows={[
                         { label: x.label, value: x.format(item.x) },
                         { label: y.label, value: y.format(item.y) },
@@ -211,7 +211,7 @@ const Scatter2 = (props: Scatter2Props) => {
               />
               <Scatter
                 data={items}
-                fill='var(--chart-1)'
+                fill='var(--chart-2)'
                 stroke='var(--color-card)'
                 strokeWidth={2}
               >

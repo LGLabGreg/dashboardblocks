@@ -33,9 +33,9 @@ interface ChartPanel5Props {
 const exampleProps: ChartPanel5Props = {
   description: 'Visitors by source, last 30 days',
   segments: [
-    { color: 'var(--chart-1)', label: 'Organic search', value: 38_420 },
-    { color: 'var(--chart-2)', label: 'Direct', value: 21_760 },
-    { color: 'var(--chart-3)', label: 'Social', value: 12_180 },
+    { color: 'var(--chart-2)', label: 'Organic search', value: 38_420 },
+    { color: 'var(--chart-3)', label: 'Direct', value: 21_760 },
+    { color: 'var(--chart-4)', label: 'Social', value: 12_180 },
     {
       color: 'color-mix(in oklab, var(--muted-foreground) 35%, transparent)',
       label: 'Other',

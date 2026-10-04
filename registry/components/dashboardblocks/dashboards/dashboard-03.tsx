@@ -91,10 +91,10 @@ const COUNTRIES = [
 ]
 
 const BROWSERS = [
-  { color: 'var(--chart-1)', label: 'Chrome', shares: [0.63, 0.47, 0.34] },
-  { color: 'var(--chart-2)', label: 'Safari', shares: [0.13, 0.43, 0.6] },
-  { color: 'var(--chart-3)', label: 'Edge', shares: [0.13, 0.01, 0.01] },
-  { color: 'var(--chart-4)', label: 'Firefox', shares: [0.07, 0.02, 0.01] },
+  { color: 'var(--chart-2)', label: 'Chrome', shares: [0.63, 0.47, 0.34] },
+  { color: 'var(--chart-3)', label: 'Safari', shares: [0.13, 0.43, 0.6] },
+  { color: 'var(--chart-4)', label: 'Edge', shares: [0.13, 0.01, 0.01] },
+  { color: 'var(--chart-5)', label: 'Firefox', shares: [0.07, 0.02, 0.01] },
 ]
 
 interface Query {
@@ -230,8 +230,8 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
       nodes: [
         ...SOURCES.map(({ id, label }) => ({ id, label })),
         ...PAGES.map(({ id, label }) => ({ id, label })),
-        { color: 'var(--chart-2)', id: 'signed-up', label: 'Signed up' },
-        { color: 'var(--chart-4)', id: 'browsed', label: 'Kept browsing' },
+        { color: 'var(--chart-3)', id: 'signed-up', label: 'Signed up' },
+        { color: 'var(--chart-5)', id: 'browsed', label: 'Kept browsing' },
         { id: 'bounced', kind: 'exit' as const, label: 'Bounced' },
       ],
     },

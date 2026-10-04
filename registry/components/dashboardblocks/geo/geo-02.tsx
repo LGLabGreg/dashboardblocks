@@ -107,7 +107,7 @@ const Geo2 = (props: Geo2Props) => {
                   </span>
                 </div>
                 <ShareBar
-                  color={row.code ? 'var(--chart-1)' : 'var(--muted-foreground)'}
+                  color={row.code ? 'var(--chart-2)' : 'var(--muted-foreground)'}
                   value={largest > 0 ? row.value / largest : 0}
                 />
               </div>

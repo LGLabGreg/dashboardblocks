@@ -81,14 +81,14 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
                   dataKey: 'value',
                   dot: false,
                   name: 'Current',
-                  stroke: 'var(--color-chart-1)',
+                  stroke: 'var(--color-chart-2)',
                 },
               ]}
             />
           </KPIChart>
           <div className='text-muted-foreground flex items-center gap-4 text-xs'>
             <span className='inline-flex items-center gap-1.5'>
-              <span aria-hidden className='bg-chart-1 h-0.5 w-3 rounded-full' />
+              <span aria-hidden className='bg-chart-2 h-0.5 w-3 rounded-full' />
               This period
             </span>
             <span className='inline-flex items-center gap-1.5'>

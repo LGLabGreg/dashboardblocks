@@ -172,7 +172,7 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
                   className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'
                 >
                   <span
-                    className='bg-chart-1 block h-full rounded-full'
+                    className='bg-chart-2 block h-full rounded-full'
                     style={{ width: `${(person.count / max) * 100}%` }}
                   />
                 </span>

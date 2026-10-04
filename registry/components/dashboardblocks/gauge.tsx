@@ -198,7 +198,7 @@ interface GaugeProps {
   className?: string
   /**
    * Fill colour, unless `colorByBand` is set.
-   * @default 'var(--chart-1)'
+   * @default 'var(--chart-2)'
    */
   color?: string
   /** Colours the fill with the tone of the band the value falls in. */
@@ -248,7 +248,7 @@ function Gauge({
   bands = [],
   children,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   colorByBand = false,
   formatScale,
   indicator = 'fill',

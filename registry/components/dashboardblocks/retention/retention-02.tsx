@@ -139,7 +139,7 @@ const Retention2 = (props: Retention2Props) => {
         </dl>
         <ChartPanelLegend
           items={[
-            { color: 'var(--chart-1)', label: selected?.label ?? '', shape: 'line' },
+            { color: 'var(--chart-2)', label: selected?.label ?? '', shape: 'line' },
             { color: 'var(--foreground)', label: 'Average', shape: 'line' },
             {
               color: 'color-mix(in oklab, var(--muted-foreground) 45%, transparent)',
@@ -210,9 +210,9 @@ const Retention2 = (props: Retention2Props) => {
               <Line
                 activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
                 dataKey={`c${highlight}`}
-                dot={{ fill: 'var(--chart-1)', r: 2.5, strokeWidth: 0 }}
+                dot={{ fill: 'var(--chart-2)', r: 2.5, strokeWidth: 0 }}
                 name={selected?.label}
-                stroke='var(--chart-1)'
+                stroke='var(--chart-2)'
                 strokeLinecap='round'
                 strokeWidth={2.5}
                 type='monotone'

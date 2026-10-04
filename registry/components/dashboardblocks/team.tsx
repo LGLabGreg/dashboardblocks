@@ -45,14 +45,11 @@ const presenceConfig: Record<Presence, PresenceConfig> = {
 const presenceOrder: Presence[] = ['online', 'away', 'offline']
 
 const avatarColors = [
-  'bg-[color-mix(in_oklab,var(--color-sky-500)_20%,var(--card))] text-sky-800 dark:text-sky-300',
-  'bg-[color-mix(in_oklab,var(--color-violet-500)_20%,var(--card))] text-violet-800 dark:text-violet-300',
-  'bg-[color-mix(in_oklab,var(--color-rose-500)_20%,var(--card))] text-rose-800 dark:text-rose-300',
-  'bg-[color-mix(in_oklab,var(--color-teal-500)_20%,var(--card))] text-teal-800 dark:text-teal-300',
-  'bg-[color-mix(in_oklab,var(--color-indigo-500)_20%,var(--card))] text-indigo-800 dark:text-indigo-300',
-  'bg-[color-mix(in_oklab,var(--color-orange-500)_20%,var(--card))] text-orange-800 dark:text-orange-300',
-  'bg-[color-mix(in_oklab,var(--color-fuchsia-500)_20%,var(--card))] text-fuchsia-800 dark:text-fuchsia-300',
-  'bg-[color-mix(in_oklab,var(--color-cyan-500)_20%,var(--card))] text-cyan-800 dark:text-cyan-300',
+  'bg-[color-mix(in_oklab,var(--chart-2)_25%,var(--card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--chart-3)_25%,var(--card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--chart-4)_25%,var(--card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--chart-5)_25%,var(--card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--chart-1)_25%,var(--card))] text-foreground',
 ]
 
 function fnv1a(text: string) {

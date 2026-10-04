@@ -71,7 +71,7 @@ const AiUsage4 = (props: AiUsage4Props) => {
               <span
                 className={
                   change >= 0
-                    ? 'text-xs font-medium text-green-700 dark:text-green-400'
+                    ? 'text-xs font-medium text-emerald-700 dark:text-emerald-400'
                     : 'text-xs font-medium text-red-700 dark:text-red-400'
                 }
               >
@@ -84,7 +84,7 @@ const AiUsage4 = (props: AiUsage4Props) => {
         <dl className='grid grid-cols-2 gap-4 border-t pt-4'>
           <div className='flex flex-col gap-0.5'>
             <dt className='text-muted-foreground text-xs'>Saved by caching</dt>
-            <dd className='text-2xl font-semibold tracking-tight text-green-700 tabular-nums dark:text-green-400'>
+            <dd className='text-2xl font-semibold tracking-tight text-emerald-700 tabular-nums dark:text-emerald-400'>
               {formatUsd(saved)}
             </dd>
           </div>

@@ -169,8 +169,8 @@ const Timeline4 = (props: Timeline4Props) => {
                           )}
                           style={{
                             background: phase.actual?.end
-                              ? 'var(--chart-1)'
-                              : 'linear-gradient(to right, var(--chart-1) 70%, color-mix(in oklab, var(--chart-1) 25%, transparent))',
+                              ? 'var(--chart-2)'
+                              : 'linear-gradient(to right, var(--chart-2) 70%, color-mix(in oklab, var(--chart-2) 25%, transparent))',
                             left: `${actual.left}%`,
                             width: `${actual.width}%`,
                           }}
@@ -223,7 +223,7 @@ const Timeline4 = (props: Timeline4Props) => {
             Planned
           </li>
           <li className='flex items-center gap-1.5'>
-            <span className='h-2.5 w-4 rounded-sm bg-[var(--chart-1)]' />
+            <span className='h-2.5 w-4 rounded-sm bg-[var(--chart-2)]' />
             Actual
           </li>
           <li className='flex items-center gap-1.5'>
@@ -231,7 +231,7 @@ const Timeline4 = (props: Timeline4Props) => {
               className='h-2.5 w-4 rounded-sm'
               style={{
                 background:
-                  'linear-gradient(to right, var(--chart-1) 50%, color-mix(in oklab, var(--chart-1) 25%, transparent))',
+                  'linear-gradient(to right, var(--chart-2) 50%, color-mix(in oklab, var(--chart-2) 25%, transparent))',
               }}
             />
             Still running

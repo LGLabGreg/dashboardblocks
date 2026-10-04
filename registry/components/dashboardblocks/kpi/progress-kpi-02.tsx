@@ -22,8 +22,8 @@ interface ProgressKPI2Props {
 }
 
 const statusConfig: Record<TaskStatus, { fill: string; label: string }> = {
-  done: { fill: 'bg-emerald-600 dark:bg-emerald-500', label: 'Done' },
-  'in-progress': { fill: 'bg-sky-600 dark:bg-sky-500', label: 'In progress' },
+  done: { fill: 'bg-chart-3', label: 'Done' },
+  'in-progress': { fill: 'bg-chart-2', label: 'In progress' },
   todo: { fill: 'bg-muted-foreground/40', label: 'Not started' },
 }
 

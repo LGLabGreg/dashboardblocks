@@ -92,8 +92,8 @@ const exampleProps: Pipeline4Props = {
   title: 'Weighted pipeline',
 }
 
-const CLOSED_COLOR = 'var(--chart-1)'
-const WEIGHTED_COLOR = 'color-mix(in oklab, var(--chart-1) 50%, var(--card))'
+const CLOSED_COLOR = 'var(--chart-2)'
+const WEIGHTED_COLOR = 'color-mix(in oklab, var(--chart-2) 50%, var(--card))'
 
 const Pipeline4 = (props: Pipeline4Props) => {
   const { description, owners, stages, title } = props

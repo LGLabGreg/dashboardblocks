@@ -44,26 +44,26 @@ const exampleProps: Geo4Props = {
   previousLabel: 'vs Q2',
   regions: [
     {
-      color: 'var(--chart-1)',
+      color: 'var(--chart-2)',
       current: 1_284_600,
       label: 'North America',
       previous: 1_196_300,
     },
-    { color: 'var(--chart-2)', current: 912_400, label: 'Europe', previous: 861_900 },
+    { color: 'var(--chart-3)', current: 912_400, label: 'Europe', previous: 861_900 },
     {
-      color: 'var(--chart-3)',
+      color: 'var(--chart-4)',
       current: 538_700,
       label: 'Asia Pacific',
       previous: 462_100,
     },
     {
-      color: 'var(--chart-4)',
+      color: 'var(--chart-5)',
       current: 186_300,
       label: 'Latin America',
       previous: 191_800,
     },
     {
-      color: 'var(--chart-5)',
+      color: 'var(--chart-1)',
       current: 97_900,
       label: 'Middle East & Africa',
       previous: 84_600,

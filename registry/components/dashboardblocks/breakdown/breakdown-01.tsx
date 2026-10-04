@@ -28,9 +28,9 @@ const exampleProps: Breakdown1Props = {
   description: 'Monthly recurring revenue by plan',
   formatter: (value) => `$${value.toLocaleString()}`,
   segments: [
-    { color: 'var(--chart-1)', label: 'Enterprise', value: 28_400 },
-    { color: 'var(--chart-2)', label: 'Pro', value: 19_750 },
-    { color: 'var(--chart-3)', label: 'Starter', value: 8_320 },
+    { color: 'var(--chart-2)', label: 'Enterprise', value: 28_400 },
+    { color: 'var(--chart-3)', label: 'Pro', value: 19_750 },
+    { color: 'var(--chart-4)', label: 'Starter', value: 8_320 },
     { color: BREAKDOWN_OTHER_COLOR, label: 'Add-ons', value: 2_930 },
   ],
   title: 'Revenue by plan',

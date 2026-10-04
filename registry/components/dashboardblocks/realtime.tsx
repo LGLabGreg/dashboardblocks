@@ -119,7 +119,7 @@ function LiveNumber({
 
 interface RollingBarsProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Draws the newest bar in full colour and the rest lighter. @default true */
   highlightLatest?: boolean
@@ -132,7 +132,7 @@ interface RollingBarsProps {
 /** A strip of bars for a rolling window, newest on the right. Decorative. */
 function RollingBars({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   highlightLatest = true,
   max,
   values,

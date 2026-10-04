@@ -48,8 +48,8 @@ const severityConfig: Record<AlertSeverity, SeverityConfig> = {
       />
     ),
     label: 'Info',
-    soft: 'bg-sky-500/10 text-sky-800 dark:text-sky-300',
-    text: 'text-sky-800 dark:text-sky-300',
+    soft: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
+    text: 'text-sky-700 dark:text-sky-400',
   },
   resolved: {
     fill: 'bg-emerald-600',

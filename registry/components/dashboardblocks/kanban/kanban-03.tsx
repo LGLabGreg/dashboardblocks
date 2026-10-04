@@ -60,11 +60,11 @@ const inMinutes = (minutes: number) => new Date(NOW + minutes * 60_000)
 
 const exampleProps: Kanban3Props = {
   columns: [
-    { color: 'var(--chart-2)', id: 'new', title: 'New' },
-    { color: 'var(--chart-1)', id: 'open', title: 'Open', wipLimit: 5 },
-    { color: 'var(--chart-4)', id: 'waiting', title: 'Waiting on customer' },
+    { color: 'var(--chart-3)', id: 'new', title: 'New' },
+    { color: 'var(--chart-2)', id: 'open', title: 'Open', wipLimit: 5 },
+    { color: 'var(--chart-5)', id: 'waiting', title: 'Waiting on customer' },
     { color: 'var(--destructive)', id: 'escalated', title: 'Escalated', wipLimit: 2 },
-    { color: 'var(--chart-3)', id: 'solved', title: 'Solved' },
+    { color: 'var(--chart-4)', id: 'solved', title: 'Solved' },
   ],
   now: new Date(NOW),
   pausedColumns: ['waiting', 'solved'],

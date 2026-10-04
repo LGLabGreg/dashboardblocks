@@ -130,7 +130,7 @@ function StatChange(props: StatChangeProps) {
 interface StatSparklineProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   data: number[]
   /** Describes the trend for screen readers, for example "Up from $2.1K to $3.4K". */
@@ -145,7 +145,7 @@ const SPARKLINE_INSET = 2
 function StatSparkline({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   data,
   label,
 }: StatSparklineProps) {

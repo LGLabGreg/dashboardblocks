@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: f753652b3cc3
+// source-hash: d6403d8801ed
 
 'use client'
 
@@ -168,7 +168,7 @@ function DataTableCell({
 
 interface DataTableBarProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   max: number
   value: number
@@ -177,7 +177,7 @@ interface DataTableBarProps {
 /** A thin bar showing a value relative to the column's largest. Decorative: keep the value as text. */
 function DataTableBar({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   max,
   value,
 }: DataTableBarProps) {

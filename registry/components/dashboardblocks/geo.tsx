@@ -294,7 +294,7 @@ interface TileMapProps {
   /** Shown under the map when no tile is active, such as the top tile. */
   children?: ReactNode
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Describes a tile, e.g. "California: $412,300". Read on focus and hover. */
   describe: (tile: TileMapTile, value: number | null) => string
@@ -481,7 +481,7 @@ interface DotMapProps {
   /** Shown under the map when no marker is active, such as the top location. */
   children?: ReactNode
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Describes a marker, e.g. "London, UK: 3,420 active users". Read on focus and hover. */
   describe: (marker: DotMapMarker) => string
@@ -510,7 +510,7 @@ interface DotMapProps {
 function DotMap({
   children,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   describe,
   footer,
   format = (value) => value.toLocaleString('en-US'),
@@ -609,7 +609,7 @@ function niceFloor(value: number) {
 
 interface DotMapLegendProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   format?: (value: number) => string
   /** The same `max` and `maxSize` the map uses. */
@@ -625,7 +625,7 @@ interface DotMapLegendProps {
  */
 function DotMapLegend({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   format = formatCompact,
   max,
   maxSize = 28,
@@ -659,7 +659,7 @@ function DotMapLegend({
 interface ShareBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Filled share of the track, 0–1. */
   value: number
@@ -669,7 +669,7 @@ interface ShareBarProps {
 function ShareBar({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   value,
 }: ShareBarProps) {
   const { isInView, ref } = useInView({ threshold: 0.3 })

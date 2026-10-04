@@ -60,7 +60,7 @@ const Goals4 = (props: Goals4Props) => {
                   ariaLabel={`${goal.label}: ${goal.current} of ${goal.target} ${goal.unit}`}
                   className='size-20'
                   percentage={Math.min(100, share * 100)}
-                  ringColor='var(--chart-1)'
+                  ringColor='var(--chart-2)'
                   strokeWidth={10}
                 >
                   <span aria-hidden className='text-sm font-semibold tabular-nums'>

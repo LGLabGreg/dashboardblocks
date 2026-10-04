@@ -36,9 +36,9 @@ interface Breakdown2Props {
 
 const exampleProps: Breakdown2Props = {
   categories: [
-    { color: 'var(--chart-1)', key: 'mobile', label: 'Mobile' },
-    { color: 'var(--chart-2)', key: 'desktop', label: 'Desktop' },
-    { color: 'var(--chart-3)', key: 'tablet', label: 'Tablet' },
+    { color: 'var(--chart-2)', key: 'mobile', label: 'Mobile' },
+    { color: 'var(--chart-3)', key: 'desktop', label: 'Desktop' },
+    { color: 'var(--chart-4)', key: 'tablet', label: 'Tablet' },
   ],
   description: 'Sessions by device, last 30 days',
   groups: [

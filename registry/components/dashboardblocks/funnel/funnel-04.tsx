@@ -31,8 +31,8 @@ interface Funnel4Props {
 const exampleProps: Funnel4Props = {
   description: 'Share of visitors reaching each step, by device',
   segments: [
-    { color: 'var(--chart-1)', key: 'desktop', label: 'Desktop' },
-    { color: 'var(--chart-2)', key: 'mobile', label: 'Mobile' },
+    { color: 'var(--chart-2)', key: 'desktop', label: 'Desktop' },
+    { color: 'var(--chart-3)', key: 'mobile', label: 'Mobile' },
   ],
   stages: [
     { label: 'Viewed product', values: { desktop: 18_400, mobile: 26_900 } },

@@ -51,9 +51,9 @@ const PLANS = [
 ]
 
 const REGIONS = [
-  { color: 'var(--chart-1)', label: 'North America', share: 0.46 },
-  { color: 'var(--chart-2)', label: 'Europe', share: 0.36 },
-  { color: 'var(--chart-3)', label: 'Asia Pacific', share: 0.18 },
+  { color: 'var(--chart-2)', label: 'North America', share: 0.46 },
+  { color: 'var(--chart-3)', label: 'Europe', share: 0.36 },
+  { color: 'var(--chart-4)', label: 'Asia Pacific', share: 0.18 },
 ]
 
 const SEGMENTS: { label: string; value: DateRangePreset }[] = [

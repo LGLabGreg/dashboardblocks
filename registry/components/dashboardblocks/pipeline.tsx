@@ -74,7 +74,7 @@ function getStageSummaries(
  */
 function getStageColor(index: number, count: number) {
   const share = count > 1 ? index / (count - 1) : 1
-  return `color-mix(in oklab, var(--chart-1) ${Math.round(50 + share * 50)}%, var(--card))`
+  return `color-mix(in oklab, var(--chart-2) ${Math.round(50 + share * 50)}%, var(--card))`
 }
 
 // Set both fraction digit limits: engines disagree on the default minimum for

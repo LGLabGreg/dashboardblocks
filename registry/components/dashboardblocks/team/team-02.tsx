@@ -41,7 +41,7 @@ const exampleProps: Team2Props = {
   unit: 'pts',
 }
 
-const FILL_COLOR = 'var(--chart-2)'
+const FILL_COLOR = 'var(--chart-3)'
 const OVER_FILL =
   'repeating-linear-gradient(135deg, var(--color-amber-500) 0 3px, color-mix(in oklab, var(--color-amber-500) 45%, var(--card)) 3px 6px)'
 

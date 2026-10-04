@@ -52,20 +52,17 @@ const exampleProps: Leaderboard03Props = {
 const podium = [
   {
     avatar: 'size-12',
-    block:
-      'h-24 bg-[color-mix(in_oklab,var(--color-amber-500)_20%,var(--card))] text-amber-800 dark:text-amber-400',
+    block: 'h-24 bg-[color-mix(in_oklab,var(--chart-2)_35%,var(--card))] text-foreground',
     order: 'order-2',
   },
   {
     avatar: 'size-10',
-    block:
-      'h-16 bg-[color-mix(in_oklab,var(--color-zinc-500)_20%,var(--card))] text-zinc-700 dark:text-zinc-300',
+    block: 'h-16 bg-[color-mix(in_oklab,var(--chart-2)_20%,var(--card))] text-foreground',
     order: 'order-1',
   },
   {
     avatar: 'size-10',
-    block:
-      'h-12 bg-[color-mix(in_oklab,var(--color-orange-700)_20%,var(--card))] text-orange-800 dark:text-orange-400',
+    block: 'h-12 bg-[color-mix(in_oklab,var(--chart-2)_10%,var(--card))] text-foreground',
     order: 'order-3',
   },
 ]

@@ -74,7 +74,7 @@ const exampleProps: ChartPanel6Props = {
 
 const rampColor = (index: number, count: number) => {
   const strength = count <= 1 ? 100 : Math.round(45 + (55 * index) / (count - 1))
-  return `color-mix(in oklab, var(--chart-1) ${strength}%, var(--color-card))`
+  return `color-mix(in oklab, var(--chart-2) ${strength}%, var(--color-card))`
 }
 
 const ChartPanel6 = (props: ChartPanel6Props) => {

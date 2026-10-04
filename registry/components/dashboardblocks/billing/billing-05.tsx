@@ -445,7 +445,7 @@ const Billing5 = (props: Billing5Props) => {
               phosphor='WarningIcon'
               remixicon='RiErrorWarningLine'
               aria-hidden
-              className='mt-0.5 size-4 shrink-0 text-amber-700 dark:text-amber-400'
+              className='mt-0.5 size-4 shrink-0 text-amber-800 dark:text-amber-400'
             />
             <div className='flex flex-col gap-1'>
               <p className='font-medium'>{plan.name} doesn’t include:</p>

@@ -160,10 +160,10 @@ const Alerts2 = (props: Alerts2Props) => {
               <Area
                 activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
                 dataKey='value'
-                fill='var(--chart-1)'
+                fill='var(--chart-2)'
                 fillOpacity={0.1}
                 name={metric}
-                stroke='var(--chart-1)'
+                stroke='var(--chart-2)'
                 strokeWidth={2}
                 type='monotone'
               />

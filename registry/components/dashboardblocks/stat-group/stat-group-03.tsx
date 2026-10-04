@@ -109,7 +109,7 @@ const exampleProps: StatGroup3Props = {
   title: 'Sales',
 }
 
-const CURRENT_COLOR = 'var(--chart-1)'
+const CURRENT_COLOR = 'var(--chart-2)'
 const PREVIOUS_COLOR = 'color-mix(in oklab, var(--muted-foreground) 55%, transparent)'
 
 const StatGroup3 = (props: StatGroup3Props) => {

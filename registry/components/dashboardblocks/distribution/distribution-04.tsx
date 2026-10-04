@@ -104,7 +104,7 @@ const Distribution4 = (props: Distribution4Props) => {
                   Math.abs(stat.difference) < 1e-9
                     ? 'text-muted-foreground'
                     : stat.better
-                      ? 'text-green-700 dark:text-green-400'
+                      ? 'text-emerald-700 dark:text-emerald-400'
                       : 'text-red-700 dark:text-red-400',
                 )}
               >

@@ -129,7 +129,7 @@ const Timeline2 = (props: Timeline2Props) => {
                       {milestone.status === 'at-risk' && (
                         <span
                           aria-hidden
-                          className='ml-2 text-xs font-medium text-amber-700 dark:text-amber-400'
+                          className='ml-2 text-xs font-medium text-amber-800 dark:text-amber-400'
                         >
                           At risk
                         </span>

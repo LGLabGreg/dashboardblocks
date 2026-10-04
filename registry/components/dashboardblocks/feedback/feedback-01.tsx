@@ -53,7 +53,7 @@ const Feedback1 = (props: Feedback1Props) => {
             <span
               className={
                 change > 0
-                  ? 'text-xs font-medium text-green-700 dark:text-green-400'
+                  ? 'text-xs font-medium text-emerald-700 dark:text-emerald-400'
                   : 'text-xs font-medium text-red-700 dark:text-red-400'
               }
             >
@@ -74,7 +74,7 @@ const Feedback1 = (props: Feedback1Props) => {
                 className='bg-muted h-2 flex-1 overflow-hidden rounded-full'
               >
                 <span
-                  className='block h-full rounded-full bg-amber-500'
+                  className='bg-chart-2 block h-full rounded-full'
                   style={{ width: `${shares[index] * 100}%` }}
                 />
               </span>

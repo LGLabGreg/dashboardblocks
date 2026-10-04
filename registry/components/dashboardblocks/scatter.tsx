@@ -57,11 +57,11 @@ function getMedian(values: number[]) {
 
 /** Categorical colours in a fixed order, so a series keeps its colour. */
 const scatterPalette = [
-  'var(--chart-1)',
   'var(--chart-2)',
   'var(--chart-3)',
   'var(--chart-4)',
   'var(--chart-5)',
+  'var(--chart-1)',
 ]
 
 interface ScatterTooltipRow {
@@ -132,7 +132,7 @@ const riskLevelConfig: Record<RiskLevel, { cell: string; label: string; text: st
     medium: {
       cell: 'bg-amber-400/20 dark:bg-amber-400/20',
       label: 'Medium',
-      text: 'text-amber-700 dark:text-amber-400',
+      text: 'text-amber-800 dark:text-amber-400',
     },
   }
 

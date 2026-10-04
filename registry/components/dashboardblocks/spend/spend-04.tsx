@@ -137,7 +137,7 @@ const Spend4 = (props: Spend4Props) => {
         </dl>
         <ChartPanelLegend
           items={[
-            { color: 'var(--chart-1)', label: 'Cash balance', shape: 'line' },
+            { color: 'var(--chart-2)', label: 'Cash balance', shape: 'line' },
             {
               color: 'var(--muted-foreground)',
               label: 'At the current burn',
@@ -150,8 +150,8 @@ const Spend4 = (props: Spend4Props) => {
             <ComposedChart data={rows} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
               <defs>
                 <linearGradient id='spend-4-fill' x1='0' x2='0' y1='0' y2='1'>
-                  <stop offset='0%' stopColor='var(--chart-1)' stopOpacity={0.3} />
-                  <stop offset='100%' stopColor='var(--chart-1)' stopOpacity={0.02} />
+                  <stop offset='0%' stopColor='var(--chart-2)' stopOpacity={0.3} />
+                  <stop offset='100%' stopColor='var(--chart-2)' stopOpacity={0.02} />
                 </linearGradient>
               </defs>
               <CartesianGrid {...chartGridProps} />
@@ -184,7 +184,7 @@ const Spend4 = (props: Spend4Props) => {
                 dataKey='actual'
                 fill='url(#spend-4-fill)'
                 name='Cash balance'
-                stroke='var(--chart-1)'
+                stroke='var(--chart-2)'
                 strokeWidth={2}
                 type='monotone'
               />

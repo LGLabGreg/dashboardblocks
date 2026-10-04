@@ -169,7 +169,7 @@ function DataTableCell({
 
 interface DataTableBarProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   max: number
   value: number
@@ -178,7 +178,7 @@ interface DataTableBarProps {
 /** A thin bar showing a value relative to the column's largest. Decorative: keep the value as text. */
 function DataTableBar({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   max,
   value,
 }: DataTableBarProps) {

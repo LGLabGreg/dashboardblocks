@@ -131,8 +131,8 @@ const Realtime2 = (props: Realtime2Props) => {
               <AreaChart data={rows} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
                 <defs>
                   <linearGradient id='realtime-2-fill' x1='0' x2='0' y1='0' y2='1'>
-                    <stop offset='0%' stopColor='var(--chart-1)' stopOpacity={0.35} />
-                    <stop offset='100%' stopColor='var(--chart-1)' stopOpacity={0.02} />
+                    <stop offset='0%' stopColor='var(--chart-2)' stopOpacity={0.35} />
+                    <stop offset='100%' stopColor='var(--chart-2)' stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid {...chartGridProps} />
@@ -146,7 +146,7 @@ const Realtime2 = (props: Realtime2Props) => {
                   dataKey='requests'
                   fill='url(#realtime-2-fill)'
                   isAnimationActive={false}
-                  stroke='var(--chart-1)'
+                  stroke='var(--chart-2)'
                   strokeWidth={2}
                   type='monotone'
                 />

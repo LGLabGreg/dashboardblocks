@@ -76,9 +76,9 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
             areas={[
               {
                 dataKey: 'value',
-                fill: 'var(--color-chart-2)',
+                fill: 'var(--color-chart-3)',
                 fillOpacity: 0.3,
-                stroke: 'var(--color-chart-2)',
+                stroke: 'var(--color-chart-3)',
               },
             ]}
             data={data}

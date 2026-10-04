@@ -44,11 +44,11 @@ const exampleProps: UsageMeter5Props = {
 }
 
 const colors = [
-  'var(--color-chart-1)',
   'var(--color-chart-2)',
   'var(--color-chart-3)',
   'var(--color-chart-4)',
   'var(--color-chart-5)',
+  'var(--color-chart-1)',
 ]
 
 const percent = new Intl.NumberFormat('en-US', {

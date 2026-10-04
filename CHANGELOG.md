@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.3.0
+
+### Minor Changes
+
+- 8f9db26: Blocks use colour the same way everywhere. Data and categories take your theme's chart colours, starting at `--chart-2`, the 500 shade in shadcn/create's ramps (`--chart-1`, the lightest, comes last; previous periods stay grey). Progress KPI 02's segments, the liquid usage meters, Files 03's storage breakdown, team avatars, leaderboard ranks, the accent activity tone and anomaly insights now use chart colours instead of fixed Tailwind hues, and file kind icons share one muted tint. Heatmap and retention cells stop at 70% of their colour, so their numbers stay readable with any chart colour. Calendar chips show times and locations in a stronger grey, so they stay readable on every tint. Status keeps fixed colours, with `green` replaced by `emerald` and text shades made the same across blocks.
+  
+  Breaking: `fileKindConfig` no longer has `color` or `soft`, and charts that defaulted to `var(--chart-1)` now default to `var(--chart-2)`.
+
 ## 1.2.2
 
 ### Patch Changes

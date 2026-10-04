@@ -70,10 +70,10 @@ const labels = {
 const exampleProps: Kanban1Props = {
   columns: [
     { color: 'var(--muted-foreground)', id: 'backlog', title: 'Backlog' },
-    { color: 'var(--chart-2)', id: 'todo', title: 'To do' },
-    { color: 'var(--chart-1)', id: 'progress', title: 'In progress', wipLimit: 3 },
-    { color: 'var(--chart-4)', id: 'review', title: 'In review', wipLimit: 2 },
-    { color: 'var(--chart-3)', id: 'done', title: 'Done' },
+    { color: 'var(--chart-3)', id: 'todo', title: 'To do' },
+    { color: 'var(--chart-2)', id: 'progress', title: 'In progress', wipLimit: 3 },
+    { color: 'var(--chart-5)', id: 'review', title: 'In review', wipLimit: 2 },
+    { color: 'var(--chart-4)', id: 'done', title: 'Done' },
   ],
   doneColumn: 'done',
   issues: [

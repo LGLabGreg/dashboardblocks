@@ -32,9 +32,9 @@ const at = (month: number, day: number, hour: number, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-2)' },
-  product: { calendar: 'Product', color: 'var(--chart-1)' },
-  team: { calendar: 'Team', color: 'var(--chart-3)' },
+  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
+  product: { calendar: 'Product', color: 'var(--chart-2)' },
+  team: { calendar: 'Team', color: 'var(--chart-4)' },
 }
 
 const exampleProps: Schedule2Props = {

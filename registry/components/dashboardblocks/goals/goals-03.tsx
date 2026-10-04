@@ -53,8 +53,8 @@ const exampleProps: Goals3Props = {
   title: 'September revenue goal',
 }
 
-const ACTUAL_COLOR = 'var(--chart-1)'
-const PROJECTED_COLOR = 'color-mix(in oklab, var(--chart-1) 55%, var(--card))'
+const ACTUAL_COLOR = 'var(--chart-2)'
+const PROJECTED_COLOR = 'color-mix(in oklab, var(--chart-2) 55%, var(--card))'
 const TARGET_COLOR = 'var(--color-muted-foreground)'
 
 function LegendLine({ color, dash }: { color: string; dash?: string }) {

@@ -122,6 +122,18 @@ async function deleteFile() {
   await new Promise((resolve) => setTimeout(resolve, 400))
 }
 
+const KIND_COLORS = ['--chart-2', '--chart-3', '--chart-4', '--chart-5', '--chart-1']
+
+/** Kinds take the chart colours in order; Other stays grey and skips a colour. */
+function getKindColors(breakdown: StorageKind[]) {
+  let next = 0
+  return breakdown.map((item) =>
+    item.kind === 'other'
+      ? 'var(--muted-foreground)'
+      : `var(${KIND_COLORS[next++ % KIND_COLORS.length]})`,
+  )
+}
+
 function breakdownKind(kind: FileKind, shown: FileKind[]): FileKind {
   if (shown.includes(kind)) return kind
   const family: Partial<Record<FileKind, FileKind>> = {
@@ -151,6 +163,7 @@ const Files3 = (props: Files3Props) => {
   const deleting = useRef(new Set<string>())
 
   const used = breakdown.reduce((sum, item) => sum + item.size, 0)
+  const kindColors = getKindColors(breakdown)
   const status = getUsageStatus(used, limit)
 
   async function remove(file: StorageFile) {
@@ -225,8 +238,8 @@ const Files3 = (props: Files3Props) => {
           <div aria-hidden>
             <SegmentedProgressBar
               className='h-2.5 gap-0.5'
-              segments={breakdown.map((item) => ({
-                color: fileKindConfig[item.kind].color,
+              segments={breakdown.map((item, index) => ({
+                color: kindColors[index],
                 label: item.kind,
                 value: item.size,
               }))}
@@ -234,12 +247,12 @@ const Files3 = (props: Files3Props) => {
             />
           </div>
           <ul className='grid gap-x-4 gap-y-1.5 text-xs @xs/storage:grid-cols-2'>
-            {breakdown.map((item) => (
+            {breakdown.map((item, index) => (
               <li key={item.kind} className='flex min-w-0 items-center gap-2'>
                 <span
                   aria-hidden
                   className='size-2.5 shrink-0 rounded-[3px]'
-                  style={{ backgroundColor: fileKindConfig[item.kind].color }}
+                  style={{ backgroundColor: kindColors[index] }}
                 />
                 <span className='text-muted-foreground truncate'>
                   {item.label ?? fileKindConfig[item.kind].label}

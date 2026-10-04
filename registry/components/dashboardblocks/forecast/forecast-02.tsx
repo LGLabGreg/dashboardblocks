@@ -139,7 +139,7 @@ const Forecast2 = (props: Forecast2Props) => {
               <div className='bg-muted absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full' />
               {earliest && (
                 <div
-                  className='absolute top-1/2 h-4 -translate-y-1/2 rounded-full border border-dashed border-chart-1'
+                  className='absolute top-1/2 h-4 -translate-y-1/2 rounded-full border border-dashed border-chart-2'
                   style={{
                     backgroundColor: forecastColors.band,
                     left: `${position(earliest)}%`,

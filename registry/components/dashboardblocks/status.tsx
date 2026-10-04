@@ -55,8 +55,8 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
       />
     ),
     label: 'Degraded performance',
-    soft: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
-    text: 'text-amber-700 dark:text-amber-400',
+    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
+    text: 'text-amber-800 dark:text-amber-400',
   },
   partial: {
     fill: 'bg-orange-500',

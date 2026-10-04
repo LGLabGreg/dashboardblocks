@@ -47,7 +47,7 @@ const ProgressKPI3 = (props: ProgressKPI3Props) => {
           ariaLabel={`${Math.round(percentage)}% of goal`}
           className='size-28 sm:size-32'
           percentage={percentage}
-          ringColor='var(--color-chart-1)'
+          ringColor='var(--color-chart-2)'
         >
           <AnimatedNumber
             className='text-lg font-semibold tabular-nums'

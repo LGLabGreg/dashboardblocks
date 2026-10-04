@@ -174,7 +174,7 @@ function MetricChange({
 interface MetricSparklineProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   data: number[]
   /** Describes the trend for screen readers. See `describeHistory`. */
@@ -189,7 +189,7 @@ const SPARKLINE_INSET = 2
 function MetricSparkline({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   data,
   label,
 }: MetricSparklineProps) {
@@ -409,7 +409,7 @@ function TargetStatusBadge({
 interface MetricTargetBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /**
    * The range the bar covers. Narrow it for values that sit close together,
@@ -427,7 +427,7 @@ interface MetricTargetBarProps {
 function MetricTargetBar({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   domain,
   target,
   value,

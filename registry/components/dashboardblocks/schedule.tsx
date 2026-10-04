@@ -10,7 +10,7 @@ interface ScheduleEvent {
   allDay?: boolean
   /** A calendar or category name, shown beside its colour so colour never carries it alone. */
   calendar?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Leave out for a point in time, such as a deadline. */
   end?: Date
@@ -194,7 +194,7 @@ function EventSwatch({ className, color }: { className?: string; color?: string 
     <span
       aria-hidden
       className={cn('size-2 shrink-0 rounded-full', className)}
-      style={{ backgroundColor: color ?? 'var(--chart-1)' }}
+      style={{ backgroundColor: color ?? 'var(--chart-2)' }}
     />
   )
 }
@@ -248,7 +248,7 @@ function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowP
       <span
         aria-hidden
         className={cn('w-1 shrink-0 rounded-full', ended && 'opacity-40')}
-        style={{ backgroundColor: event.color ?? 'var(--chart-1)' }}
+        style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
       />
       <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
         <p
@@ -585,7 +585,7 @@ function MonthCalendar({
                             'size-1 rounded-full',
                             isSelected && 'ring-primary-foreground/80 ring-1',
                           )}
-                          style={{ backgroundColor: event.color ?? 'var(--chart-1)' }}
+                          style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
                         />
                       ))}
                     </span>

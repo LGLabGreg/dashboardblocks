@@ -49,9 +49,9 @@ const REGIONS = [
 ]
 
 const CHANNELS = [
-  { color: 'var(--chart-1)', label: 'Organic search', share: 0.38 },
-  { color: 'var(--chart-2)', label: 'Paid search', share: 0.27 },
-  { color: 'var(--chart-3)', label: 'Email', share: 0.17 },
+  { color: 'var(--chart-2)', label: 'Organic search', share: 0.38 },
+  { color: 'var(--chart-3)', label: 'Paid search', share: 0.27 },
+  { color: 'var(--chart-4)', label: 'Email', share: 0.17 },
   { color: BREAKDOWN_OTHER_COLOR, label: 'Other', share: 0.18 },
 ]
 

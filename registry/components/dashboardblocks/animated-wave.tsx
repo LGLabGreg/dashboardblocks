@@ -20,7 +20,7 @@ export const AnimatedWave = ({
   waveHeight = 16,
 }: {
   /**
-   * Sets the wave color through `currentColor`, e.g. `text-blue-300`
+   * Sets the wave color through `currentColor`, e.g. `text-chart-2`
    */
   className?: string
   percentage?: number
@@ -32,7 +32,7 @@ export const AnimatedWave = ({
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
   return (
-    <div className={cn('relative size-full overflow-hidden text-blue-500', className)}>
+    <div className={cn('relative size-full overflow-hidden text-chart-2', className)}>
       <div
         className='absolute inset-0 transition-[transform] duration-1000 ease-out'
         style={{

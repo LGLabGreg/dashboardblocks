@@ -112,7 +112,7 @@ const kindConfig: Record<HistoryKind, { icon: ReactNode; tone: ActivityTone }> =
         remixicon='RiPriceTag3Line'
       />
     ),
-    tone: 'warning',
+    tone: 'accent',
   },
   resolved: {
     icon: (

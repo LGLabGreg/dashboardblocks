@@ -130,7 +130,7 @@ function PaceBadge({ className, status }: { className?: string; status: PaceStat
 interface GoalProgressProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   current: number
   /** Marks where the value should be by now, from `getPace`. */
@@ -147,7 +147,7 @@ interface GoalProgressProps {
 function GoalProgress({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   current,
   expected,
   size = 'md',

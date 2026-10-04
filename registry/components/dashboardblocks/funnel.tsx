@@ -20,10 +20,10 @@ interface FunnelStep extends FunnelStage {
 }
 
 /** Fill for a funnel stage. */
-const FUNNEL_COLOR = 'var(--chart-1)'
+const FUNNEL_COLOR = 'var(--chart-2)'
 
 /** Lighter step of the same hue, for the track behind a stage. */
-const FUNNEL_TRACK_COLOR = 'color-mix(in oklab, var(--chart-1) 14%, transparent)'
+const FUNNEL_TRACK_COLOR = 'color-mix(in oklab, var(--chart-2) 14%, transparent)'
 
 function getFunnelSteps(stages: FunnelStage[]): FunnelStep[] {
   const first = stages[0]?.value ?? 0

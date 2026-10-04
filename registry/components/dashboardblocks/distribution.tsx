@@ -165,7 +165,7 @@ interface HistogramProps {
   /** Shown under the chart when no bar is hovered, such as a summary. */
   children?: ReactNode
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Earlier counts in the same bins, drawn as outlines. Compared as shares. */
   compare?: number[]
@@ -199,7 +199,7 @@ function Histogram({
   bins,
   children,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   compare,
   describe,
   formatEdge = (value) => value.toLocaleString(),
@@ -357,7 +357,7 @@ function Histogram({
 interface BoxPlotProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** The axis range, shared by rows that are compared. */
   domain: [number, number]
@@ -379,7 +379,7 @@ interface BoxPlotProps {
 function BoxPlot({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   domain,
   high,
   low,
@@ -488,7 +488,7 @@ type DistributionKeyShape =
 
 interface DistributionKeyProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   shape: DistributionKeyShape
 }
@@ -496,7 +496,7 @@ interface DistributionKeyProps {
 /** A legend swatch matching a histogram or box plot mark. */
 function DistributionKey({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   shape,
 }: DistributionKeyProps) {
   const base = cn('inline-block shrink-0', className)

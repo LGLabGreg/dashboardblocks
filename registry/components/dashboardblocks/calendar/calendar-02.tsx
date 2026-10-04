@@ -32,11 +32,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-2)' },
-  focus: { calendar: 'Focus', color: 'var(--chart-4)' },
-  away: { calendar: 'Out of office', color: 'var(--chart-5)' },
-  product: { calendar: 'Product', color: 'var(--chart-1)' },
-  team: { calendar: 'Team', color: 'var(--chart-3)' },
+  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
+  focus: { calendar: 'Focus', color: 'var(--chart-5)' },
+  away: { calendar: 'Out of office', color: 'var(--chart-1)' },
+  product: { calendar: 'Product', color: 'var(--chart-2)' },
+  team: { calendar: 'Team', color: 'var(--chart-4)' },
 }
 
 const TEAM = [

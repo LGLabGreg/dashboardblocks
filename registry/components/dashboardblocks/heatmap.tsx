@@ -22,12 +22,12 @@ interface HeatmapCellPosition {
 }
 
 /**
- * One hue from the surface to `color`: light to dark in light mode, dark to
- * bright in dark mode, so cell text can always use the foreground colour.
- * `t` is 0–1.
+ * One hue from the surface towards `color`, stopping at 70% so cell text in
+ * the foreground colour stays readable in both themes, however light or dark
+ * `color` is. `t` is 0–1.
  */
-function getHeatColor(t: number, color = 'var(--chart-1)') {
-  const share = Math.round(8 + Math.min(1, Math.max(0, t)) * 92)
+function getHeatColor(t: number, color = 'var(--chart-2)') {
+  const share = Math.round(8 + Math.min(1, Math.max(0, t)) * 62)
   return `color-mix(in oklab, ${color} ${share}%, var(--muted))`
 }
 
@@ -64,7 +64,7 @@ interface HeatmapGridProps {
   cellClassName?: string
   /** Also draws the formatted value inside each cell. */
   cellLabels?: boolean
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Which column labels to show. Screen readers still get every column. */
   columnLabelEvery?: number
@@ -293,7 +293,7 @@ function HeatmapGrid({
 
 interface HeatmapLegendProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Label for the high end. @default 'More' */
   high?: string

@@ -102,7 +102,7 @@ const exampleProps: Insights2Props = {
   title: 'Unusual drop in checkout conversions',
 }
 
-const SERIES_COLOR = 'var(--chart-1)'
+const SERIES_COLOR = 'var(--chart-2)'
 const BAND_COLOR = 'var(--color-muted-foreground)'
 const ANOMALY_COLOR = insightKindConfig.anomaly.fill
 

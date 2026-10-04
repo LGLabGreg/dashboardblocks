@@ -80,7 +80,7 @@ const timelineStatusConfig: Record<
   { className: string; icon: ReactNode; label: string }
 > = {
   'at-risk': {
-    className: 'text-amber-700 dark:text-amber-400',
+    className: 'text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='TriangleAlertIcon'
@@ -259,7 +259,7 @@ function TimelineToday({
 }
 
 interface TimelineItem {
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   end: Date
   /** Names a group; consecutive items with the same group sit under one heading. */
@@ -351,7 +351,7 @@ function Timeline({
           <ul className='col-span-full row-start-2 grid grid-cols-subgrid'>
             {items.map((item, index) => {
               const heading = item.group && item.group !== items[index - 1]?.group
-              const color = item.color ?? 'var(--chart-1)'
+              const color = item.color ?? 'var(--chart-2)'
               const left = position(item.start)
               const width = Math.max(1.5, position(item.end) - left)
               return (

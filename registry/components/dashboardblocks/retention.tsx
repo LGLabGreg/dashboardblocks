@@ -106,7 +106,7 @@ function RetentionChange({ className, difference, versus }: RetentionChangeProps
     <span
       className={cn(
         'inline-flex items-center gap-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
-        direction === 'up' && 'text-green-700 dark:text-green-400',
+        direction === 'up' && 'text-emerald-700 dark:text-emerald-400',
         direction === 'down' && 'text-red-700 dark:text-red-400',
         direction === 'flat' && 'text-muted-foreground',
         className,
@@ -159,7 +159,7 @@ interface CohortTableProps {
   /** @default 'Cohort' */
   cohortHeader?: string
   cohorts: RetentionCohort[]
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Formats cohort sizes and counts. */
   formatCount?: (value: number) => string
@@ -351,7 +351,7 @@ function CohortTable({
 interface RetentionBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** Marks an earlier value to compare against, 0–1. */
   previous?: number
@@ -366,7 +366,7 @@ interface RetentionBarProps {
 function RetentionBar({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   previous,
   value,
 }: RetentionBarProps) {
@@ -430,8 +430,8 @@ function RetentionBarKey({
 /** Colours for growth accounting: users gained above the axis, lost below it. */
 const growthColors = {
   churned: 'var(--destructive)',
-  new: 'var(--chart-2)',
-  resurrected: 'var(--chart-3)',
+  new: 'var(--chart-3)',
+  resurrected: 'var(--chart-4)',
 } as const
 
 export {

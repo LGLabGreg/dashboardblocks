@@ -139,7 +139,7 @@ const States4 = (props: States4Props) => {
                   />
                   <Bar
                     dataKey='value'
-                    fill='var(--chart-1)'
+                    fill='var(--chart-2)'
                     name={title}
                     radius={[4, 4, 0, 0]}
                   />

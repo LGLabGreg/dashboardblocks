@@ -61,9 +61,9 @@ const exampleProps: ChartPanel3Props = {
   ],
   description: 'New accounts per month, last 12 months',
   series: [
-    { color: 'var(--chart-1)', key: 'free', label: 'Free' },
-    { color: 'var(--chart-2)', key: 'pro', label: 'Pro' },
-    { color: 'var(--chart-3)', key: 'enterprise', label: 'Enterprise' },
+    { color: 'var(--chart-2)', key: 'free', label: 'Free' },
+    { color: 'var(--chart-3)', key: 'pro', label: 'Pro' },
+    { color: 'var(--chart-4)', key: 'enterprise', label: 'Enterprise' },
   ],
   title: 'Signups by plan',
   trend: 9.2,

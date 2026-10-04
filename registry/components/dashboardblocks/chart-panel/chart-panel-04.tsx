@@ -64,7 +64,7 @@ const exampleProps: ChartPanel4Props = {
   title: 'MRR',
 }
 
-const HIGHLIGHT_COLOR = 'var(--chart-1)'
+const HIGHLIGHT_COLOR = 'var(--chart-2)'
 const MUTED_COLOR = 'color-mix(in oklab, var(--muted-foreground) 25%, transparent)'
 
 const ChartPanel4 = (props: ChartPanel4Props) => {

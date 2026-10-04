@@ -85,17 +85,17 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
               areas={[
                 {
                   dataKey: 'revenue',
-                  fill: 'var(--color-chart-1)',
+                  fill: 'var(--color-chart-2)',
                   fillOpacity: 0.2,
                   name: 'Revenue',
-                  stroke: 'var(--color-chart-1)',
+                  stroke: 'var(--color-chart-2)',
                 },
                 {
                   dataKey: 'profit',
-                  fill: 'var(--color-chart-2)',
+                  fill: 'var(--color-chart-3)',
                   fillOpacity: 0.4,
                   name: 'Profit',
-                  stroke: 'var(--color-chart-2)',
+                  stroke: 'var(--color-chart-3)',
                 },
               ]}
               data={data}
@@ -105,11 +105,11 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
           </KPIChart>
           <div className='text-muted-foreground flex items-center gap-4 text-xs'>
             <span className='inline-flex items-center gap-1.5'>
-              <span aria-hidden className='bg-chart-1 size-2.5 rounded-[2px]' />
+              <span aria-hidden className='bg-chart-2 size-2.5 rounded-[2px]' />
               Revenue
             </span>
             <span className='inline-flex items-center gap-1.5'>
-              <span aria-hidden className='bg-chart-2 size-2.5 rounded-[2px]' />
+              <span aria-hidden className='bg-chart-3 size-2.5 rounded-[2px]' />
               Profit
             </span>
           </div>

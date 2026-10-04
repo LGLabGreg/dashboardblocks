@@ -68,7 +68,7 @@ const exampleProps: ChartPanel1Props = {
   title: 'Revenue',
 }
 
-const CURRENT_COLOR = 'var(--chart-1)'
+const CURRENT_COLOR = 'var(--chart-2)'
 const PREVIOUS_COLOR = 'color-mix(in oklab, var(--muted-foreground) 45%, transparent)'
 
 const ChartPanel1 = (props: ChartPanel1Props) => {

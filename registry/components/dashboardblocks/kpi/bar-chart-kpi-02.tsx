@@ -44,8 +44,8 @@ const exampleProps: BarChartKPI2Props = {
 }
 
 const series = [
-  { color: 'var(--color-chart-1)', key: 'value', label: 'Actual' },
-  { color: 'var(--color-chart-2)', key: 'goal', label: 'Goal' },
+  { color: 'var(--color-chart-2)', key: 'value', label: 'Actual' },
+  { color: 'var(--color-chart-3)', key: 'goal', label: 'Goal' },
 ] as const
 
 const BarChartKPI2 = (props: BarChartKPI2Props) => {

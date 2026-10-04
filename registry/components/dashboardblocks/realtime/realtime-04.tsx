@@ -123,7 +123,7 @@ const Realtime4 = (props: Realtime4Props) => {
                   className={cn(
                     'text-xs font-medium tabular-nums',
                     change >= 0
-                      ? 'text-green-700 dark:text-green-400'
+                      ? 'text-emerald-700 dark:text-emerald-400'
                       : 'text-red-700 dark:text-red-400',
                   )}
                 >

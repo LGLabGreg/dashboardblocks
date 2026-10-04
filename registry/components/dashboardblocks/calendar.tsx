@@ -293,7 +293,7 @@ function formatShortTime(date: Date, timeZone: string) {
 }
 
 const eventStyle = (event: ScheduleEvent, amount = 28): CSSProperties => ({
-  backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} ${amount}%, var(--card))`,
+  backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-2)'} ${amount}%, var(--card))`,
 })
 
 const eventFocus =
@@ -451,7 +451,12 @@ function EventBar({
       style={{ ...eventStyle(event, ended ? 14 : 28), ...style }}
     >
       {!event.allDay && !continuesBefore && (
-        <span className='text-muted-foreground shrink-0 tabular-nums'>
+        <span
+          className={cn(
+            'shrink-0 tabular-nums',
+            ended ? 'text-muted-foreground' : 'text-foreground/70',
+          )}
+        >
           {formatShortTime(event.start, timeZone)}
         </span>
       )}
@@ -735,7 +740,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                         <span
                           key={event.id}
                           className='size-1.5 rounded-full'
-                          style={{ backgroundColor: event.color ?? 'var(--chart-1)' }}
+                          style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
                         />
                       ))}
                   </span>
@@ -818,7 +823,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                                 aria-hidden
                                 className='size-1.5 shrink-0 rounded-full'
                                 style={{
-                                  backgroundColor: event.color ?? 'var(--chart-1)',
+                                  backgroundColor: event.color ?? 'var(--chart-2)',
                                 }}
                               />
                               <span className='text-muted-foreground shrink-0 tabular-nums'>
@@ -1055,13 +1060,23 @@ function TimeGrid<T extends ScheduleEvent>({
                             style={eventStyle(event, ended ? 14 : 28)}
                           >
                             <span className='truncate font-medium'>{event.title}</span>
-                            <span className='text-muted-foreground truncate tabular-nums'>
+                            <span
+                              className={cn(
+                                'truncate tabular-nums',
+                                ended ? 'text-muted-foreground' : 'text-foreground/70',
+                              )}
+                            >
                               {short
                                 ? formatShortTime(event.start, timeZone)
                                 : formatTimeRange(event.start, event.end, timeZone)}
                             </span>
                             {!short && minutes >= 90 && event.location && (
-                              <span className='text-muted-foreground truncate'>
+                              <span
+                                className={cn(
+                                  'truncate',
+                                  ended ? 'text-muted-foreground' : 'text-foreground/70',
+                                )}
+                              >
                                 {event.location}
                               </span>
                             )}
@@ -1271,7 +1286,7 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
               <span
                 aria-hidden
                 className={cn('w-1 shrink-0 rounded-full', ended && 'opacity-40')}
-                style={{ backgroundColor: event.color ?? 'var(--chart-1)' }}
+                style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
               />
               <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
                 <span className={cn('font-medium', ended && 'text-muted-foreground')}>
@@ -1313,7 +1328,7 @@ function CalendarEventDetails({
   timeZone = 'UTC',
 }: CalendarEventDetailsProps) {
   const id = useId()
-  const color = event.color ?? 'var(--chart-1)'
+  const color = event.color ?? 'var(--chart-2)'
   return (
     <section
       aria-labelledby={id}

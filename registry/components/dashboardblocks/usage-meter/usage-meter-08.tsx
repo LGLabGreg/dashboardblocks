@@ -55,7 +55,7 @@ const exampleProps: UsageMeter8Props = {
 
 const waveColors: Record<UsageStatus, string> = {
   critical: 'text-red-300 dark:text-red-900',
-  ok: 'text-sky-200 dark:text-sky-900',
+  ok: 'text-[color-mix(in_oklab,var(--chart-2)_25%,var(--card))]',
   over: 'text-red-300 dark:text-red-900',
   warning: 'text-amber-200 dark:text-amber-900',
 }

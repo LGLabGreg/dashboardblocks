@@ -29,7 +29,7 @@ interface Flow3Props {
 }
 
 const COST = 'color-mix(in oklab, var(--destructive) 75%, var(--card))'
-const PROFIT = 'var(--chart-2)'
+const PROFIT = 'var(--chart-3)'
 
 const exampleProps: Flow3Props = {
   description: 'Where revenue went, Q3 2026',

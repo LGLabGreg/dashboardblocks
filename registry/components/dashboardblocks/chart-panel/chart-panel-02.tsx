@@ -70,7 +70,7 @@ const exampleProps: ChartPanel2Props = {
   title: 'Traffic',
 }
 
-const SERIES_COLOR = 'var(--chart-1)'
+const SERIES_COLOR = 'var(--chart-2)'
 
 const ChartPanel2 = (props: ChartPanel2Props) => {
   const { data, metrics, title } = props

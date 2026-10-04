@@ -72,7 +72,7 @@ const kindConfig: Record<LiveEventKind, { className: string; icon: ReactNode }> 
     ),
   },
   refund: {
-    className: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
+    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='Undo2Icon'

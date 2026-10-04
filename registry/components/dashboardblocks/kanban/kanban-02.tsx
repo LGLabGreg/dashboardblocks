@@ -60,7 +60,7 @@ const exampleProps: Kanban2Props = {
     { color: getStageColor(1, 4), id: 'qualified', title: 'Qualified' },
     { color: getStageColor(2, 4), id: 'proposal', title: 'Proposal' },
     { color: getStageColor(3, 4), id: 'negotiation', title: 'Negotiation', wipLimit: 4 },
-    { color: 'var(--chart-2)', id: 'won', title: 'Won' },
+    { color: 'var(--chart-3)', id: 'won', title: 'Won' },
     { color: 'var(--muted-foreground)', id: 'lost', title: 'Lost' },
   ],
   deals: [

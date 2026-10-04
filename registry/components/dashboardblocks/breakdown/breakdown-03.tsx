@@ -26,9 +26,9 @@ interface Breakdown3Props {
 const exampleProps: Breakdown3Props = {
   description: 'Active workspaces by plan',
   segments: [
-    { color: 'var(--chart-1)', label: 'Free', value: 5_840 },
-    { color: 'var(--chart-2)', label: 'Pro', value: 2_310 },
-    { color: 'var(--chart-3)', label: 'Team', value: 1_120 },
+    { color: 'var(--chart-2)', label: 'Free', value: 5_840 },
+    { color: 'var(--chart-3)', label: 'Pro', value: 2_310 },
+    { color: 'var(--chart-4)', label: 'Team', value: 1_120 },
     { color: BREAKDOWN_OTHER_COLOR, label: 'Enterprise', value: 430 },
   ],
   title: 'Plan distribution',

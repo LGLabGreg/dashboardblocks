@@ -97,7 +97,7 @@ const Deployments4 = (props: Deployments4Props) => {
                         rate >= 0.95
                           ? 'text-foreground'
                           : rate >= 0.8
-                            ? 'text-amber-700 dark:text-amber-400'
+                            ? 'text-amber-800 dark:text-amber-400'
                             : 'text-red-700 dark:text-red-400',
                       )}
                     >

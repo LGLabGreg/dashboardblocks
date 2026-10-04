@@ -42,10 +42,10 @@ const at = (day: number, hour: number, minute = 0) =>
   new Date(Date.UTC(2026, 8, 28 + day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-2)' },
-  focus: { calendar: 'Focus', color: 'var(--chart-4)' },
-  product: { calendar: 'Product', color: 'var(--chart-1)' },
-  team: { calendar: 'Team', color: 'var(--chart-3)' },
+  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
+  focus: { calendar: 'Focus', color: 'var(--chart-5)' },
+  product: { calendar: 'Product', color: 'var(--chart-2)' },
+  team: { calendar: 'Team', color: 'var(--chart-4)' },
 }
 
 const exampleProps: Schedule4Props = {
@@ -315,7 +315,7 @@ const Schedule4 = (props: Schedule4Props) => {
                             ended && 'text-muted-foreground opacity-60',
                           )}
                           style={{
-                            backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-1)'} 28%, var(--card))`,
+                            backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-2)'} 28%, var(--card))`,
                             left: `${left}%`,
                             top: `calc(${lane} * 1.5rem + 0.25rem)`,
                             width: `${width}%`,

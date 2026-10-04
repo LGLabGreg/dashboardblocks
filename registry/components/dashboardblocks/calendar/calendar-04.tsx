@@ -49,11 +49,11 @@ const at = (day: number, hour: number, minute = 0) =>
   new Date(Date.UTC(2026, 8, day, hour, minute))
 
 const TEAMS = {
-  design: { calendar: 'Design', color: 'var(--chart-3)' },
-  engineering: { calendar: 'Engineering', color: 'var(--chart-1)' },
-  leadership: { calendar: 'Leadership', color: 'var(--chart-5)' },
-  people: { calendar: 'People', color: 'var(--chart-4)' },
-  sales: { calendar: 'Sales', color: 'var(--chart-2)' },
+  design: { calendar: 'Design', color: 'var(--chart-4)' },
+  engineering: { calendar: 'Engineering', color: 'var(--chart-2)' },
+  leadership: { calendar: 'Leadership', color: 'var(--chart-1)' },
+  people: { calendar: 'People', color: 'var(--chart-5)' },
+  sales: { calendar: 'Sales', color: 'var(--chart-3)' },
 }
 
 const exampleProps: Calendar4Props = {

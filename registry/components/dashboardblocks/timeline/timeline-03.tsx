@@ -80,7 +80,7 @@ const KINDS: { kind: ReleaseKind; label: string }[] = [
 ]
 const markerClass: Record<ReleaseKind, string> = {
   major: 'size-4 bg-foreground ring-2 ring-card',
-  minor: 'size-3 bg-[var(--chart-1)] ring-2 ring-card',
+  minor: 'size-3 bg-[var(--chart-2)] ring-2 ring-card',
   patch: 'size-2 border-[1.5px] border-muted-foreground bg-card',
 }
 

@@ -73,7 +73,7 @@ function useReveal(animated: boolean) {
 interface DivergingBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   /** The largest absolute value on the shared scale. */
   max: number
@@ -87,7 +87,7 @@ interface DivergingBarProps {
 function DivergingBar({
   animated = true,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   max,
   value,
 }: DivergingBarProps) {
@@ -113,7 +113,7 @@ interface DumbbellProps {
   after: number
   before: number
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   max: number
   /** @default 0 */
@@ -128,7 +128,7 @@ function Dumbbell({
   after,
   before,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   max,
   min = 0,
 }: DumbbellProps) {
@@ -165,7 +165,7 @@ function DumbbellLegend({
   afterLabel,
   beforeLabel,
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
 }: {
   afterLabel: string
   beforeLabel: string
@@ -201,7 +201,7 @@ function DumbbellLegend({
 
 interface IntervalBarProps {
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   estimate: number
   high: number
@@ -213,7 +213,7 @@ interface IntervalBarProps {
 /** A point estimate and its interval on an axis centred on zero. Decorative. */
 function IntervalBar({
   className,
-  color = 'var(--chart-1)',
+  color = 'var(--chart-2)',
   estimate,
   extent,
   high,

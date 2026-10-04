@@ -120,7 +120,7 @@ const Deployments3 = (props: Deployments3Props) => {
                     className={cn(
                       'text-xs font-medium tabular-nums',
                       improved
-                        ? 'text-green-700 dark:text-green-400'
+                        ? 'text-emerald-700 dark:text-emerald-400'
                         : 'text-red-700 dark:text-red-400',
                     )}
                   >

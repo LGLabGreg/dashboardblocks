@@ -40,11 +40,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-2)' },
-  holidays: { calendar: 'Holidays', color: 'var(--chart-4)' },
-  launches: { calendar: 'Launches', color: 'var(--chart-1)' },
-  team: { calendar: 'Team', color: 'var(--chart-3)' },
-  travel: { calendar: 'Travel', color: 'var(--chart-5)' },
+  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
+  holidays: { calendar: 'Holidays', color: 'var(--chart-5)' },
+  launches: { calendar: 'Launches', color: 'var(--chart-2)' },
+  team: { calendar: 'Team', color: 'var(--chart-4)' },
+  travel: { calendar: 'Travel', color: 'var(--chart-1)' },
 }
 
 const teamSyncs: CalendarEvent[] = Array.from({ length: 9 }, (_, week) => ({

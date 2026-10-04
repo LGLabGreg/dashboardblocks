@@ -92,7 +92,7 @@ const Flow4 = (props: Flow4Props) => {
                     <span
                       className='block h-full rounded-full'
                       style={{
-                        backgroundColor: 'var(--chart-1)',
+                        backgroundColor: 'var(--chart-2)',
                         width: `${(path.count / widest) * 100}%`,
                       }}
                     />

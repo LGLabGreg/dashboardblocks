@@ -43,7 +43,7 @@ const deployStatusConfig: Record<
   },
   'rolled-back': {
     cell: 'bg-amber-500 dark:bg-amber-400',
-    className: 'text-amber-700 dark:text-amber-400',
+    className: 'text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='Undo2Icon'

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: d7b96cd2dea4
+// source-hash: cd0d57f7ca3a
 
 'use client'
 
@@ -50,7 +50,7 @@ import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
 interface KanbanColumnDef {
-  /** A dot beside the title, such as `var(--chart-2)`. */
+  /** A dot beside the title, such as `var(--chart-3)`. */
   color?: string
   id: string
   title: string
@@ -1222,7 +1222,7 @@ const priorityConfig: Record<
   { className: string; icon: ReactNode; label: string }
 > = {
   high: {
-    className: 'text-amber-700 dark:text-amber-400',
+    className: 'text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='ChevronUpIcon'

@@ -338,9 +338,9 @@ function ForecastBadge({
 
 /** Actuals are solid and forecasts dashed in the same hue, so the two read as one series. */
 const forecastColors = {
-  actual: 'var(--chart-1)',
-  band: 'color-mix(in oklab, var(--chart-1) 20%, transparent)',
-  forecast: 'var(--chart-1)',
+  actual: 'var(--chart-2)',
+  band: 'color-mix(in oklab, var(--chart-2) 20%, transparent)',
+  forecast: 'var(--chart-2)',
   marker: 'var(--color-foreground)',
   target: 'var(--color-muted-foreground)',
 } as const
@@ -455,7 +455,7 @@ function ForecastLegend({
   )
 }
 
-const rangeKeyColor = 'color-mix(in oklab, var(--chart-1) 40%, transparent)'
+const rangeKeyColor = 'color-mix(in oklab, var(--chart-2) 40%, transparent)'
 
 type ForecastTooltipProps = Partial<
   Pick<TooltipContentProps<ValueType, NameType>, 'active' | 'label' | 'payload'>
@@ -526,7 +526,7 @@ function ForecastTooltip({
 interface ProjectionBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-1)' */
+  /** @default 'var(--chart-2)' */
   color?: string
   current: number
   /** The value at the right end. Defaults to the largest of the values. */

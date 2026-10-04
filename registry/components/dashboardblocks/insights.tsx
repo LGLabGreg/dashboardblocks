@@ -28,7 +28,7 @@ interface InsightKindConfig {
 /** Every kind comes with an icon and a label, so colour never carries it alone. */
 const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
   anomaly: {
-    fill: 'var(--color-fuchsia-600)',
+    fill: 'var(--chart-3)',
     icon: (
       <IconPlaceholder
         lucide='ActivityIcon'
@@ -40,8 +40,8 @@ const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
       />
     ),
     label: 'Anomaly',
-    soft: 'bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400',
-    text: 'text-fuchsia-700 dark:text-fuchsia-400',
+    soft: 'bg-chart-3/15 text-foreground',
+    text: 'text-foreground',
   },
   negative: {
     fill: 'var(--color-red-600)',

@@ -146,7 +146,7 @@ const checkResultConfig: Record<
     label: 'Passing',
   },
   warn: {
-    className: 'text-amber-700 dark:text-amber-400',
+    className: 'text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='TriangleAlertIcon'

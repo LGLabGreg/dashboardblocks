@@ -131,7 +131,7 @@ const Inventory2 = (props: Inventory2Props) => {
                     full
                       ? 'font-medium text-red-700 dark:text-red-400'
                       : warning
-                        ? 'font-medium text-amber-700 dark:text-amber-400'
+                        ? 'font-medium text-amber-800 dark:text-amber-400'
                         : 'text-muted-foreground',
                   )}
                 >

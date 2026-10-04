@@ -122,7 +122,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
               of {formatUsage(purchased)} remaining
             </span>
           </div>
-          <UsageBar color='var(--color-chart-2)' limit={purchased} used={balance} />
+          <UsageBar color='var(--color-chart-3)' limit={purchased} used={balance} />
         </div>
         <div className='flex items-end justify-between gap-4'>
           <dl className='grid grid-cols-2 gap-x-6 gap-y-0.5 text-xs'>
@@ -147,7 +147,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
             {dailyUsage.map((value, index) => (
               <span
                 key={index}
-                className='bg-chart-2/60 flex-1 rounded-t-[2px]'
+                className='bg-chart-3/60 flex-1 rounded-t-[2px]'
                 style={{ height: `${Math.max(8, (value / peak) * 100)}%` }}
               />
             ))}
