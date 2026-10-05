@@ -1,3 +1,5 @@
+'use client'
+
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type VariantProps, cva } from 'class-variance-authority'

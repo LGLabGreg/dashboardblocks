@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 79af0ee5afa6
+// source-hash: 7762f3f6373e
 
 'use client'
 
@@ -212,7 +212,7 @@ function AppBrand({ description, href, logo, name }: AppBrandProps) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' href={href} onPress={closeMobile}>
+        <SidebarMenuButton size='lg' tooltip={name} href={href} onPress={closeMobile}>
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -269,7 +269,11 @@ function WorkspaceSwitcher({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenuTrigger>
-          <SidebarMenuButton size='lg' className='aria-expanded:bg-muted'>
+          <SidebarMenuButton
+            size='lg'
+            tooltip={current.name}
+            className='aria-expanded:bg-muted'
+          >
             <BrandMark>{current.logo}</BrandMark>
             <span className='grid flex-1 text-left text-sm leading-tight'>
               <span className='truncate font-medium'>{current.name}</span>
@@ -372,7 +376,7 @@ function UserSummary({ user }: { user: AppUser }) {
   return (
     <span className='grid flex-1 text-left text-sm leading-tight'>
       <span className='truncate font-medium'>{user.name}</span>
-      <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
+      <span className='truncate text-xs'>{user.email}</span>
     </span>
   )
 }
@@ -432,7 +436,11 @@ function SidebarUserMenu(props: UserMenuProps) {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenuTrigger>
-          <SidebarMenuButton size='lg' className='aria-expanded:bg-muted'>
+          <SidebarMenuButton
+            size='lg'
+            tooltip={props.user.name}
+            className='aria-expanded:bg-muted'
+          >
             <UserAvatar user={props.user} />
             <UserSummary user={props.user} />
             <IconPlaceholder

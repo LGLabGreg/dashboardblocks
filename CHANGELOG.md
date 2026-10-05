@@ -1,5 +1,19 @@
 # dashboardblocks
 
+## 1.3.2
+
+### Patch Changes
+
+- ea5cb02: Data Table's facet filter options take an optional `count`. Pass it when your server filters and the table holds one page, so each value shows its count across every row instead of the rows on that page.
+- 6eadf59: Data Table keeps focus in the table: Next on the last page hands focus to Previous (and Previous on the first page to Next), and Reset, Clear filters and the selection bar's Clear move focus to the table instead of the page. Picking another column in the sort menu sorts it in that column's own first direction, as its header does. The Customers example's CSV export writes values that start with `=`, `+`, `-` or `@` as text, so a spreadsheet doesn't run them as formulas, and quotes values with a carriage return. Block State's `BlockBusy` announces its label to screen readers: its status region now sits outside the busy element.
+- 1e8fdcb: Data Table's pagination writes the range with thousands separators: "1–100 of 2,400" instead of "1–100 of 2400".
+- 421c32a: Trend, Leaderboard 01 and Leaderboard 04 are client components, so they render from a Server Component with any icon library. With Phosphor they used to fail to load there. A Server Component can no longer pass Trend a `formatter`: render it from a client component to format the change.
+  
+  App Shell's sidebars work on Radix without a `TooltipProvider` of your own: the navigation, brand, workspace switcher and user menu bring their own. When the sidebar collapses to icons, the brand, workspace switcher and user menu show their name in a tooltip, as the navigation does. The user menu's email meets AA contrast on the open trigger.
+  
+  On Radix, block menus are no longer modal, so an open menu doesn't hide the rest of the page from screen readers. The page behind it now scrolls and takes clicks.
+- 1af0486: Settings' `SettingsRow` breaks a long unbroken word in its description, such as a long workspace name, instead of pushing the page wider than the screen.
+
 ## 1.3.1
 
 ### Patch Changes

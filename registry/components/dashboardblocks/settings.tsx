@@ -123,7 +123,7 @@ function SettingsRow({ children, className, description, id, label }: SettingsRo
         {description && (
           <span
             id={id ? `${id}-description` : undefined}
-            className='text-muted-foreground text-sm'
+            className='text-muted-foreground text-sm break-words'
           >
             {description}
           </span>

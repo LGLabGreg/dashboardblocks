@@ -1,3 +1,5 @@
+'use client'
+
 import { Icon } from '@/registry/components/dashboardblocks/icon'
 import {
   Leaderboard,

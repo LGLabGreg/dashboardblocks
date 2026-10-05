@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/settings.tsx for React Aria
-// source-hash: 7faee9d08e23
+// source-hash: 11a7ed5f9dbc
 
 'use client'
 
@@ -125,7 +125,7 @@ function SettingsRow({ children, className, description, id, label }: SettingsRo
         {description && (
           <span
             id={id ? `${id}-description` : undefined}
-            className='text-muted-foreground text-sm'
+            className='text-muted-foreground text-sm break-words'
           >
             {description}
           </span>

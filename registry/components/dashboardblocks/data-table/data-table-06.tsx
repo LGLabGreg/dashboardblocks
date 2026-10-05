@@ -203,9 +203,14 @@ const CSV_COLUMNS: (keyof CustomerRow)[] = [
   'signedUp',
 ]
 
+// Spreadsheets run a cell that starts with one of these as a formula, and
+// names and emails come from your customers.
+const FORMULA_START = /^[=+\-@\t\r]/
+
 const csvCell = (value: string | number) => {
-  const text = String(value)
-  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
+  const text =
+    typeof value === 'string' && FORMULA_START.test(value) ? `'${value}` : String(value)
+  return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
 }
 
 const downloadCsv = (rows: CustomerRow[]) => {

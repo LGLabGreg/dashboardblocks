@@ -34,7 +34,7 @@ import {
   tableFeatures,
   useTable,
 } from '@tanstack/react-table'
-import type { ComponentProps, ReactNode } from 'react'
+import { type ComponentProps, type ReactNode, useEffect, useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -66,6 +66,7 @@ function DataTable({ className, ...props }: ComponentProps<'table'>) {
   return (
     <table
       role='table'
+      data-slot='data-table'
       className={cn(
         'w-full border-collapse text-sm @max-2xl/data-table:block',
         className,
@@ -463,7 +464,13 @@ function DataTableContent<TData extends RowData>({
   const selectable = columns.some((column) => column.id === SELECT_COLUMN_ID)
 
   return (
-    <DataTable {...props}>
+    <DataTable
+      {...props}
+      className={cn(
+        'focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset',
+        props.className,
+      )}
+    >
       {caption && <caption className='sr-only'>{caption}</caption>}
       <DataTableHeader>
         {table.getHeaderGroups().map((group) => (
@@ -531,6 +538,27 @@ function resetFilters<TData extends RowData>(table: DataTableInstance<TData>) {
   table.resetColumnFilters(true)
 }
 
+/**
+ * Moves focus to the table closest to `control`, within its card, for buttons
+ * that unmount when clicked (Reset, Clear), so focus doesn't drop to the page.
+ */
+function focusTableNear(control: Element) {
+  const card = control.closest("[data-slot='card']")
+  for (let parent = control.parentElement; parent; parent = parent.parentElement) {
+    const table = parent.querySelector<HTMLElement>("[data-slot='data-table']")
+    if (table) {
+      // Focusable only for this, so a click on a cell doesn't focus the table.
+      table.tabIndex = -1
+      table.addEventListener('blur', () => table.removeAttribute('tabindex'), {
+        once: true,
+      })
+      table.focus()
+      return
+    }
+    if (parent === card) return
+  }
+}
+
 function DataTableEmpty<TData extends RowData>({
   table,
 }: {
@@ -541,7 +569,14 @@ function DataTableEmpty<TData extends RowData>({
   return (
     <span className='inline-flex flex-col items-center gap-2'>
       No rows match your filters.
-      <Button variant='outline' size='sm' onClick={() => resetFilters(table)}>
+      <Button
+        variant='outline'
+        size='sm'
+        onClick={(event) => {
+          focusTableNear(event.currentTarget)
+          resetFilters(table)
+        }}
+      >
         Clear filters
       </Button>
     </span>
@@ -577,6 +612,11 @@ function DataTableSearch<TData extends RowData>({
 }
 
 interface DataTableFacetOption {
+  /**
+   * Rows with this value. Defaults to a count of the rows the table holds, so
+   * pass it when the server filters and the table holds one page.
+   */
+  count?: number
   icon?: ReactNode
   label: string
   value: string
@@ -651,7 +691,7 @@ function DataTableFacetFilter<TData extends RowData>({
               {item.icon}
               {item.label}
               <span className='text-muted-foreground ml-auto pl-4 text-xs tabular-nums'>
-                {counts.get(item.value) ?? 0}
+                {item.count ?? counts.get(item.value) ?? 0}
               </span>
             </DropdownMenuCheckboxItem>
           ))}
@@ -686,7 +726,10 @@ function DataTableReset<TData extends RowData>({
       variant='ghost'
       size='sm'
       className={className}
-      onClick={() => resetFilters(table)}
+      onClick={(event) => {
+        focusTableNear(event.currentTarget)
+        resetFilters(table)
+      }}
     >
       Reset
       <IconPlaceholder
@@ -788,7 +831,8 @@ function DataTableSortMenu<TData extends RowData>({
             value={sort?.id ?? ''}
             onValueChange={(id: string) => {
               const column = table.getColumn(id)
-              const desc = sort ? sort.desc : column?.getFirstSortDir() === 'desc'
+              const desc =
+                id === sort?.id ? sort.desc : column?.getFirstSortDir() === 'desc'
               table.setSorting([{ desc, id }])
             }}
           >
@@ -825,6 +869,8 @@ function DataTableSortMenu<TData extends RowData>({
   )
 }
 
+const countFormat = new Intl.NumberFormat('en-US')
+
 interface DataTablePaginationProps<TData extends RowData> {
   className?: string
   /** Offers these page sizes in a menu. */
@@ -844,6 +890,17 @@ function DataTablePagination<TData extends RowData>({
   const from = total === 0 ? 0 : pageIndex * pageSize + 1
   const to = Math.min(total, (pageIndex + 1) * pageSize)
   const selected = table.getSelectedRowModel().rows.length
+  const pageCount = table.getPageCount()
+
+  // Next is disabled on the last page and Previous on the first, which drops
+  // focus to the page: hand it to the other button once it's enabled.
+  const previousRef = useRef<HTMLButtonElement>(null)
+  const nextRef = useRef<HTMLButtonElement>(null)
+  const focusAfterRender = useRef<HTMLButtonElement | null>(null)
+  useEffect(() => {
+    focusAfterRender.current?.focus()
+    focusAfterRender.current = null
+  })
 
   return (
     <div
@@ -856,7 +913,7 @@ function DataTablePagination<TData extends RowData>({
         className='text-muted-foreground text-xs whitespace-nowrap tabular-nums'
         aria-live='polite'
       >
-        {from}–{to} of {total}
+        {countFormat.format(from)}–{countFormat.format(to)} of {countFormat.format(total)}
         {selected > 0 && ` · ${selected} selected`}
       </p>
       <div className='flex flex-wrap items-center gap-2'>
@@ -900,16 +957,25 @@ function DataTablePagination<TData extends RowData>({
           <Button
             variant='outline'
             size='sm'
+            ref={previousRef}
             disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              if (pageIndex === 1) focusAfterRender.current = nextRef.current
+              table.previousPage()
+            }}
           >
             Previous
           </Button>
           <Button
             variant='outline'
             size='sm'
+            ref={nextRef}
             disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              if (pageIndex + 2 === pageCount)
+                focusAfterRender.current = previousRef.current
+              table.nextPage()
+            }}
           >
             Next
           </Button>
@@ -944,7 +1010,14 @@ function DataTableSelectionBar<TData extends RowData>({
       <p className='text-sm font-medium tabular-nums' aria-live='polite'>
         {selected} selected
       </p>
-      <Button variant='ghost' size='sm' onClick={() => table.resetRowSelection(true)}>
+      <Button
+        variant='ghost'
+        size='sm'
+        onClick={(event) => {
+          focusTableNear(event.currentTarget)
+          table.resetRowSelection(true)
+        }}
+      >
         Clear
       </Button>
       <div className='ml-auto flex flex-wrap items-center gap-2'>{children}</div>

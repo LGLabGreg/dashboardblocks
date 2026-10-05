@@ -40,20 +40,23 @@ interface BlockBusyProps {
  */
 function BlockBusy({ busy, children, className, label }: BlockBusyProps) {
   return (
-    <div
-      aria-busy={busy}
-      inert={busy}
-      className={cn(
-        'transition-opacity duration-200 motion-reduce:transition-none',
-        busy && 'opacity-50',
-        className,
-      )}
-    >
-      {children}
+    <>
+      <div
+        aria-busy={busy}
+        inert={busy}
+        className={cn(
+          'transition-opacity duration-200 motion-reduce:transition-none',
+          busy && 'opacity-50',
+          className,
+        )}
+      >
+        {children}
+      </div>
+      {/* Outside the aria-busy element, whose changes screen readers hold back. */}
       <span role='status' className='sr-only'>
         {busy ? `${label}…` : ''}
       </span>
-    </div>
+    </>
   )
 }
 
