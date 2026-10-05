@@ -177,7 +177,7 @@ function ActionsCell({ file }: { file: DriveFile }) {
 const columnHelper = createDataTableColumnHelper<FileRow>()
 
 const columns = columnHelper.columns([
-  createDataTableSelectColumn<FileRow>(),
+  createDataTableSelectColumn<FileRow>({ getRowLabel: (row) => row.name }),
   columnHelper.accessor('name', {
     cell: ({ row }) => (
       <span className='flex min-w-0 items-center gap-3'>

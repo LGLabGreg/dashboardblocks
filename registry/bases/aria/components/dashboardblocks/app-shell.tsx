@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 7762f3f6373e
+// source-hash: 3b320dbe6b63
 
 'use client'
 
@@ -247,7 +247,7 @@ interface Workspace {
 }
 
 interface WorkspaceSwitcherProps {
-  /** Adds a "New workspace" item. */
+  /** Adds a "New workspace…" item. */
   onCreate?: () => void
   onValueChange: (id: string) => void
   value: string
@@ -289,7 +289,7 @@ function WorkspaceSwitcher({
             />
           </SidebarMenuButton>
           <DropdownMenu
-            className='w-auto min-w-56'
+            className='w-auto max-w-72 min-w-56'
             placement={isMobile ? 'bottom start' : 'right top'}
           >
             <DropdownMenuGroup>
@@ -306,14 +306,17 @@ function WorkspaceSwitcher({
                   </BrandMark>
                   {workspace.name}
                   {workspace.id === current.id && (
-                    <IconPlaceholder
-                      lucide='CheckIcon'
-                      tabler='IconCheck'
-                      hugeicons='Tick02Icon'
-                      phosphor='CheckIcon'
-                      remixicon='RiCheckLine'
-                      className='ml-auto'
-                    />
+                    <>
+                      <span className='sr-only'>(current)</span>
+                      <IconPlaceholder
+                        lucide='CheckIcon'
+                        tabler='IconCheck'
+                        hugeicons='Tick02Icon'
+                        phosphor='CheckIcon'
+                        remixicon='RiCheckLine'
+                        className='ml-auto'
+                      />
+                    </>
                   )}
                 </DropdownMenuItem>
               ))}
@@ -321,7 +324,7 @@ function WorkspaceSwitcher({
             {onCreate && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem textValue='New workspace' onAction={onCreate}>
+                <DropdownMenuItem textValue='New workspace…' onAction={onCreate}>
                   <IconPlaceholder
                     lucide='PlusIcon'
                     tabler='IconPlus'
@@ -329,7 +332,7 @@ function WorkspaceSwitcher({
                     phosphor='PlusIcon'
                     remixicon='RiAddLine'
                   />
-                  New workspace
+                  New workspace…
                 </DropdownMenuItem>
               </>
             )}

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 6624f2c865b5
+// source-hash: 8ad7ced184de
 
 'use client'
 
@@ -878,6 +878,11 @@ interface DataTablePaginationProps<TData extends RowData> {
   className?: string
   /** Offers these page sizes in a menu. */
   pageSizeOptions?: number[]
+  /**
+   * The selected row count. Defaults to the rows selected on this page; pass
+   * it when a selection reaches beyond the page, such as every matching row.
+   */
+  selectedCount?: number
   table: DataTableInstance<TData>
 }
 
@@ -885,6 +890,7 @@ interface DataTablePaginationProps<TData extends RowData> {
 function DataTablePagination<TData extends RowData>({
   className,
   pageSizeOptions,
+  selectedCount,
   table,
 }: DataTablePaginationProps<TData>) {
   'use no memo'
@@ -892,7 +898,7 @@ function DataTablePagination<TData extends RowData>({
   const total = table.getRowCount()
   const from = total === 0 ? 0 : pageIndex * pageSize + 1
   const to = Math.min(total, (pageIndex + 1) * pageSize)
-  const selected = table.getSelectedRowModel().rows.length
+  const selected = selectedCount ?? table.getSelectedRowModel().rows.length
   const pageCount = table.getPageCount()
 
   // Next is disabled on the last page and Previous on the first, which drops
@@ -1044,14 +1050,17 @@ function DataTableSelectAll<TData extends RowData>({
 }
 
 function DataTableSelectRow<TData extends RowData>({
+  getRowLabel,
   row,
 }: {
+  getRowLabel?: (row: TData) => string
   row: Row<DataTableFeatures, TData>
 }) {
   'use no memo'
+  const label = getRowLabel?.(row.original)
   return (
     <Checkbox
-      aria-label='Select row'
+      aria-label={label ? `Select ${label}` : 'Select row'}
       isSelected={row.getIsSelected()}
       isDisabled={!row.getCanSelect()}
       onChange={(checked) => row.toggleSelected(checked === true)}
@@ -1062,11 +1071,17 @@ function DataTableSelectRow<TData extends RowData>({
 /**
  * A checkbox column for selecting rows. Put it first. When stacked, the
  * checkbox sits in the row's top corner. Choose which rows can be selected
- * with the `enableRowSelection` option.
+ * with the `enableRowSelection` option. `getRowLabel` names each row's
+ * checkbox ("Select Northwind"), so a screen reader can tell the rows apart.
+ * Without it, or for an empty label, the checkbox reads "Select row".
  */
-function createDataTableSelectColumn<TData extends RowData>(): DataTableColumnDef<TData> {
+function createDataTableSelectColumn<TData extends RowData>({
+  getRowLabel,
+}: {
+  getRowLabel?: (row: TData) => string
+} = {}): DataTableColumnDef<TData> {
   return {
-    cell: ({ row }) => <DataTableSelectRow row={row} />,
+    cell: ({ row }) => <DataTableSelectRow getRowLabel={getRowLabel} row={row} />,
     enableColumnFilter: false,
     enableGlobalFilter: false,
     enableHiding: false,

@@ -27,14 +27,6 @@ npx shadcn@latest add @dashboardblocks/dashboard-01
 
 Visit https://www.dashboardblocks.com/docs to browse all blocks and view the documentation.
 
-## Issues and contributions
-
-Report bugs and request blocks in [Issues](https://github.com/LGLabGreg/dashboardblocks/issues).
-
-The public repository, [LGLabGreg/dashboardblocks](https://github.com/LGLabGreg/dashboardblocks), holds the free registry: the block source and the built files in `public/r`. It's published automatically from a private repository on each release, so pull requests can't be merged there. Accepted changes are ported by hand. Releases are listed in [CHANGELOG.md](./CHANGELOG.md).
-
-The docs site's source used to be in the public repository too. It moved out on the first sync, so a fork that merges from upstream will see it deleted. The mirrored source is for reading: installs use the built files in `public/r`, and `registry/icons/icon-placeholder.tsx` imports generated icon files that aren't published.
-
 ## License
 
 Licensed under the [MIT license](https://github.com/LGLabGreg/dashboardblocks/blob/main/LICENSE.md).

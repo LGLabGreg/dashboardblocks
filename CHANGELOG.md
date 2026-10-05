@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.3.3
+
+### Patch Changes
+
+- 14e5175: App Shell's `WorkspaceSwitcher` names the current workspace's item "(current)" for screen readers, which can't see its check mark, and its create item reads "New workspace…", since it opens a form. In React Aria, its menu stops at 18rem wide, so a long workspace name wraps instead of stretching the menu across the page.
+- e32db22: Data Table's `DataTablePagination` takes an optional `selectedCount`, for a selection that reaches beyond the page, such as every row matching a server query. Without it, the footer counts the rows selected on the page, as before.
+- 8b2f44e: Data Table's `createDataTableSelectColumn` takes an optional `getRowLabel`, which names each row's checkbox after the row ("Select Northwind") so a screen reader can tell the rows apart. Without it, or for a row whose label is empty, the checkbox reads "Select row". The Customers and Files examples pass it.
+
 ## 1.3.2
 
 ### Patch Changes

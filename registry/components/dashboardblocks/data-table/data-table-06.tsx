@@ -232,7 +232,7 @@ const openMailto = (rows: CustomerRow[]) => {
 const columnHelper = createDataTableColumnHelper<CustomerRow>()
 
 const columns = columnHelper.columns([
-  createDataTableSelectColumn<CustomerRow>(),
+  createDataTableSelectColumn<CustomerRow>({ getRowLabel: (row) => row.company }),
   columnHelper.accessor('company', {
     cell: ({ row }) => (
       <>

@@ -272,7 +272,7 @@ interface Workspace {
 }
 
 interface WorkspaceSwitcherProps {
-  /** Adds a "New workspace" item. */
+  /** Adds a "New workspace…" item. */
   onCreate?: () => void
   onValueChange: (id: string) => void
   value: string
@@ -336,14 +336,17 @@ function WorkspaceSwitcher({
                     </BrandMark>
                     {workspace.name}
                     {workspace.id === current.id && (
-                      <IconPlaceholder
-                        lucide='CheckIcon'
-                        tabler='IconCheck'
-                        hugeicons='Tick02Icon'
-                        phosphor='CheckIcon'
-                        remixicon='RiCheckLine'
-                        className='ml-auto'
-                      />
+                      <>
+                        <span className='sr-only'>(current)</span>
+                        <IconPlaceholder
+                          lucide='CheckIcon'
+                          tabler='IconCheck'
+                          hugeicons='Tick02Icon'
+                          phosphor='CheckIcon'
+                          remixicon='RiCheckLine'
+                          className='ml-auto'
+                        />
+                      </>
                     )}
                   </DropdownMenuItem>
                 ))}
@@ -359,7 +362,7 @@ function WorkspaceSwitcher({
                       phosphor='PlusIcon'
                       remixicon='RiAddLine'
                     />
-                    New workspace
+                    New workspace…
                   </DropdownMenuItem>
                 </>
               )}
