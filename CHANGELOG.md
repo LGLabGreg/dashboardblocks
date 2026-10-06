@@ -1,5 +1,12 @@
 # dashboardblocks
 
+## 1.3.4
+
+### Patch Changes
+
+- e1c95ff: Data Table on React Aria: the Columns menu shows and hides a column again when the table's column visibility is kept outside it, such as in the URL. Each pick changed every column one at a time, and the last change undid the others.
+- 687e1ba: `Link` no longer fails `eslint-plugin-react-hooks`' `static-components` rule (in `eslint-config-next`), which took the link component it reads from `LinkProvider` for one created during render.
+
 ## 1.3.3
 
 ### Patch Changes

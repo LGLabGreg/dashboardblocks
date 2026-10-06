@@ -772,10 +772,19 @@ function DataTableViewOptions<TData extends RowData>({
           selectedKeys={columns
             .filter((column) => column.getIsVisible())
             .map((column) => column.id)}
+          // One update for every column: a table whose visibility lives
+          // outside it, such as in the URL, applies each update to the same
+          // old state, so the last of several would undo the rest.
           onSelectionChange={(keys) => {
-            for (const column of columns) {
-              column.toggleVisibility(keys === 'all' || keys.has(column.id))
-            }
+            table.setColumnVisibility((visibility) => ({
+              ...visibility,
+              ...Object.fromEntries(
+                columns.map((column) => [
+                  column.id,
+                  keys === 'all' || keys.has(column.id),
+                ]),
+              ),
+            }))
           }}
         >
           <DropdownMenuLabel>Show columns</DropdownMenuLabel>

@@ -4,6 +4,7 @@ import {
   type ComponentProps,
   type ComponentType,
   createContext,
+  createElement,
   type ReactNode,
   useContext,
 } from 'react'
@@ -33,12 +34,9 @@ function LinkProvider({ children, component }: LinkProviderProps) {
 function Link({ children, href, ...props }: Omit<LinkProps, 'href'> & { href?: string }) {
   const Component = useContext(LinkContext)
   if (href === undefined) return <a {...props}>{children}</a>
-  return (
-    // oxlint-disable-next-line react/static-components -- it comes from context, so it's the same component on every render
-    <Component href={href} {...props}>
-      {children}
-    </Component>
-  )
+  // Not JSX: eslint-plugin-react-hooks reads a component from context as one created
+  // during render (static-components), though it's the same one on every render.
+  return createElement(Component, { href, ...props }, children)
 }
 
 export { Link, LinkProvider }
