@@ -78,6 +78,24 @@ function useCloseMobileSidebar() {
   }
 }
 
+/**
+ * Shows a sidebar tooltip only on the desktop rail. In the mobile sheet a
+ * disabled tooltip trigger still stops the Escape meant for the sheet.
+ */
+function useRailTooltip() {
+  const { isMobile } = useSidebar()
+  return (label: string) => (isMobile ? undefined : label)
+}
+
+/**
+ * React Aria's sheet shows its close button at the top end of the mobile
+ * sidebar, over the end of the header's button, so leave room for it.
+ */
+function useSheetCloseRoom() {
+  const { isMobile } = useSidebar()
+  return isMobile ? 'pe-11' : undefined
+}
+
 /** Whether `href` is the current page or one of its parents. */
 function isActiveHref(href: string, pathname: string) {
   if (href === pathname) return true
@@ -122,6 +140,7 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
 function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const { setOpen, state } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
+  const railTooltip = useRailTooltip()
   const childActive =
     item.items?.some((child) => isActiveHref(child.href, pathname)) ?? false
   const [expanded, setExpanded] = useState(childActive)
@@ -137,7 +156,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
       <SidebarMenuItem>
         <SidebarMenuButton
           isActive={active}
-          tooltip={item.title}
+          tooltip={railTooltip(item.title)}
           href={item.href ?? ''}
           aria-current={item.href === pathname ? 'page' : undefined}
           onPress={closeMobile}
@@ -159,7 +178,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
     >
       <SidebarMenuButton
         slot='trigger'
-        tooltip={item.title}
+        tooltip={railTooltip(item.title)}
         onPress={() => state === 'collapsed' && setOpen(true)}
       >
         {item.icon}
@@ -209,10 +228,16 @@ interface AppBrandProps {
 /** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
   const closeMobile = useCloseMobileSidebar()
+  const railTooltip = useRailTooltip()
   return (
-    <SidebarMenu>
+    <SidebarMenu className={useSheetCloseRoom()}>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' tooltip={name} href={href} onPress={closeMobile}>
+        <SidebarMenuButton
+          size='lg'
+          tooltip={railTooltip(name)}
+          href={href}
+          onPress={closeMobile}
+        >
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -262,16 +287,18 @@ function WorkspaceSwitcher({
   workspaces,
 }: WorkspaceSwitcherProps) {
   const { isMobile } = useSidebar()
+  const railTooltip = useRailTooltip()
+  const sheetCloseRoom = useSheetCloseRoom()
   const current = workspaces.find((workspace) => workspace.id === value) ?? workspaces[0]
   if (!current) return null
 
   return (
-    <SidebarMenu>
+    <SidebarMenu className={sheetCloseRoom}>
       <SidebarMenuItem>
         <DropdownMenuTrigger>
           <SidebarMenuButton
             size='lg'
-            tooltip={current.name}
+            tooltip={railTooltip(current.name)}
             className='aria-expanded:bg-muted'
           >
             <BrandMark>{current.logo}</BrandMark>
@@ -435,13 +462,14 @@ function UserMenuItems({
 function SidebarUserMenu(props: UserMenuProps) {
   const { isMobile } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
+  const railTooltip = useRailTooltip()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenuTrigger>
           <SidebarMenuButton
             size='lg'
-            tooltip={props.user.name}
+            tooltip={railTooltip(props.user.name)}
             className='aria-expanded:bg-muted'
           >
             <UserAvatar user={props.user} />

@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.5
+
+### Patch Changes
+
+- ab818ee: App Shell on React Aria: Escape closes the mobile sidebar again when focus is on a link, the workspace switcher or the user menu, and the brand and workspace switcher leave room for the sheet's close button instead of sitting under it.
+
 ## 1.3.4
 
 ### Patch Changes
