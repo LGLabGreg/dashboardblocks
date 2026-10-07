@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 8ad7ced184de
+// source-hash: a68ff36a841a
 
 'use client'
 
@@ -155,7 +155,7 @@ function DataTableCell({
         'h-12 px-3 py-2 align-middle first:pl-6 last:pr-6 @max-2xl/data-table:flex @max-2xl/data-table:h-auto @max-2xl/data-table:min-w-0 @max-2xl/data-table:flex-col @max-2xl/data-table:items-start @max-2xl/data-table:gap-1 @max-2xl/data-table:p-0 @max-2xl/data-table:text-left @max-2xl/data-table:first:pl-0 @max-2xl/data-table:last:pr-0',
         align === 'end' && 'text-right whitespace-nowrap tabular-nums',
         truncate &&
-          'w-full max-w-0 truncate @max-2xl/data-table:w-auto @max-2xl/data-table:max-w-none @max-2xl/data-table:whitespace-normal',
+          'w-full max-w-0 truncate @max-2xl/data-table:w-auto @max-2xl/data-table:max-w-none @max-2xl/data-table:items-stretch @max-2xl/data-table:whitespace-normal',
         primary && 'font-medium @max-2xl/data-table:col-span-2',
         !primary &&
           label &&
@@ -571,6 +571,7 @@ function DataTableEmpty<TData extends RowData>({
       <Button
         variant='outline'
         size='sm'
+        className='text-foreground'
         onClick={(event) => {
           focusTableNear(event.currentTarget)
           resetFilters(table)
@@ -1099,7 +1100,7 @@ function createDataTableSelectColumn<TData extends RowData>({
     id: SELECT_COLUMN_ID,
     meta: {
       cellClassName:
-        'w-px pr-0 @max-2xl/data-table:absolute @max-2xl/data-table:top-4 @max-2xl/data-table:right-6',
+        'w-px pr-0 @max-2xl/data-table:absolute @max-2xl/data-table:top-4 @max-2xl/data-table:right-6 @max-2xl/data-table:w-auto',
       headerClassName: 'w-px pr-0',
       label: 'Select',
     },

@@ -176,7 +176,7 @@ const Team6 = (props: Team6Props) => {
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className='flex flex-col gap-6'>
-        <form onSubmit={invite} noValidate className='flex flex-col gap-2'>
+        <form method='post' onSubmit={invite} noValidate className='flex flex-col gap-2'>
           <label htmlFor={`${id}-email`} className='sr-only'>
             Add people by email
           </label>

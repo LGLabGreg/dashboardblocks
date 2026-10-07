@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: d67224356ea6
+// source-hash: 9a09f1fd7999
 
 'use client'
 
@@ -62,7 +62,8 @@ function filterCommandGroups(groups: CommandMenuGroup[], query: string) {
 function useCommandMenuShortcut(onOpen: () => void, key = 'k') {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === key && (event.metaKey || event.ctrlKey)) {
+      // Chrome's autofill sends keydown events without a key.
+      if (event.key?.toLowerCase() === key && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
         onOpen()
       }
@@ -199,7 +200,7 @@ function CommandMenuTrigger({
       onClick={onClick}
       aria-label={placeholder}
       className={cn(
-        'text-muted-foreground max-sm:aspect-square max-sm:px-0 sm:w-64 sm:justify-start',
+        'max-sm:aspect-square max-sm:px-0 sm:w-64 sm:justify-start',
         className,
       )}
     >
@@ -211,7 +212,9 @@ function CommandMenuTrigger({
         remixicon='RiSearchLine'
       />
       <span className='truncate max-sm:sr-only'>{placeholder}</span>
-      {shortcut && <Kbd className='ml-auto max-sm:hidden'>{shortcut}</Kbd>}
+      {shortcut && (
+        <Kbd className='text-foreground ml-auto max-sm:hidden'>{shortcut}</Kbd>
+      )}
     </Button>
   )
 }

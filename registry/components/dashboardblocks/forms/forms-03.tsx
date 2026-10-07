@@ -162,7 +162,12 @@ const Forms3 = (props: Forms3Props) => {
 
   return (
     <Card>
-      <form noValidate onSubmit={(event) => void onSubmit(event)} className='contents'>
+      <form
+        method='post'
+        noValidate
+        onSubmit={(event) => void onSubmit(event)}
+        className='contents'
+      >
         <CardHeader>
           <CardTitle>New project</CardTitle>
           <CardDescription>

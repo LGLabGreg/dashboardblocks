@@ -130,6 +130,7 @@ const Settings6 = (props: Settings6Props) => {
                 </SettingsRow>
                 {open && (
                   <form
+                    method='post'
                     id={`${id}-${item.id}-form`}
                     onSubmit={(event) => confirm(event, item.id)}
                     className='bg-destructive/5 border-destructive/30 flex flex-col gap-3 rounded-lg border p-4'

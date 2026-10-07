@@ -271,6 +271,7 @@ const Security5 = (props: Security5Props) => {
 
             {step === 'setup' && (
               <form
+                method='post'
                 onSubmit={(event) => void verify(event)}
                 noValidate
                 aria-labelledby={`${id}-app`}

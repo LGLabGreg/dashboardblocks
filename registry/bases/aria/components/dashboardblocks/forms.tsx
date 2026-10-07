@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 9db71135eab8
+// source-hash: 7db5ce1353ba
 
 'use client'
 
@@ -366,7 +366,12 @@ function FormSheet({
       onOpenChange={onOpenChange}
       className={cn('sm:max-w-md', className)}
     >
-      <form noValidate onSubmit={onSubmit} className='flex min-h-0 flex-1 flex-col'>
+      <form
+        method='post'
+        noValidate
+        onSubmit={onSubmit}
+        className='flex min-h-0 flex-1 flex-col'
+      >
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}

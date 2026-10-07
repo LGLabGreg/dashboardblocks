@@ -223,7 +223,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
         {announcement}
       </p>
       {status.state === 'picking' ? (
-        <form noValidate onSubmit={onSubmit} className='contents'>
+        <form method='post' noValidate onSubmit={onSubmit} className='contents'>
           <CardContent className='flex flex-col gap-4'>
             <div className='flex flex-col gap-2 @md:flex-row'>
               <InputGroup className='@md:flex-1'>

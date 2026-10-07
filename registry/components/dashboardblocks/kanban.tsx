@@ -1474,7 +1474,11 @@ function KanbanAddCard({
   }
 
   return (
-    <form onSubmit={submit} className={cn('flex flex-col gap-2', className)}>
+    <form
+      method='post'
+      onSubmit={submit}
+      className={cn('flex flex-col gap-2', className)}
+    >
       <Input
         ref={inputRef}
         aria-label={label}

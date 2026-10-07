@@ -280,6 +280,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
               ))}
             </ActivityFeed>
             <form
+              method='post'
               onSubmit={(event) => void submit(event)}
               className='flex flex-col gap-2'
             >

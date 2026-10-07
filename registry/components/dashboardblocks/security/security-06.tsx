@@ -180,6 +180,7 @@ const Security6 = (props: Security6Props) => {
         </section>
 
         <form
+          method='post'
           noValidate
           onSubmit={save}
           aria-labelledby={`${id}-idp`}

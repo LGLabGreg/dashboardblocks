@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: 7dd6d1392071
+// source-hash: e4df895a3493
 
 'use client'
 
@@ -60,6 +60,12 @@ interface PageHeaderHeadingProps {
   /** Before the title, such as an avatar or a logo tile. */
   media?: ReactNode
   title: string
+  /**
+   * Lets a long title wrap onto more lines, such as a record's name, where
+   * cutting it short would hide what the page is about.
+   * @default false
+   */
+  wrap?: boolean
 }
 
 /** The page's title as its <h1>, with an optional badge, media and description. */
@@ -69,13 +75,21 @@ function PageHeaderHeading({
   description,
   media,
   title,
+  wrap = false,
 }: PageHeaderHeadingProps) {
   return (
     <div className={cn('flex min-w-0 items-start gap-3', className)}>
       {media}
       <div className='flex min-w-0 flex-col gap-1'>
         <div className='flex min-w-0 flex-wrap items-center gap-2'>
-          <h1 className='truncate text-2xl font-semibold tracking-tight'>{title}</h1>
+          <h1
+            className={cn(
+              'text-2xl font-semibold tracking-tight',
+              wrap ? 'break-words text-balance' : 'truncate',
+            )}
+          >
+            {title}
+          </h1>
           {badge}
         </div>
         {description && (
@@ -145,7 +159,7 @@ function BackLink({
     <Link
       href={href}
       className={cn(
-        'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 inline-flex w-fit items-center gap-1 rounded-md text-sm outline-none focus-visible:ring-[3px] [&_svg]:size-4',
+        'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 inline-flex w-fit items-center gap-1 rounded-md text-sm outline-none focus-visible:ring-[3px] [&_svg]:size-4 [&_svg]:shrink-0',
         className,
       )}
     >

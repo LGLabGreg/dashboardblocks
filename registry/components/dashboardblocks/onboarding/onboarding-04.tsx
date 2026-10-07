@@ -288,7 +288,12 @@ const Onboarding4 = (props: Onboarding4Props) => {
 
   return (
     <Card className='@container'>
-      <form noValidate onSubmit={(event) => void onSubmit(event)} className='contents'>
+      <form
+        method='post'
+        noValidate
+        onSubmit={(event) => void onSubmit(event)}
+        className='contents'
+      >
         <CardHeader>
           <CardTitle>Tell us about your team</CardTitle>
           <CardDescription>

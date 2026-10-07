@@ -97,7 +97,7 @@ const Forms1 = (props: Forms1Props) => {
   const { values } = form
 
   return (
-    <form noValidate onSubmit={(event) => void form.submit(event)}>
+    <form method='post' noValidate onSubmit={(event) => void form.submit(event)}>
       <div className='flex flex-col gap-8'>
         <FormSection title='Profile' description='How you appear to your team.'>
           <Card>

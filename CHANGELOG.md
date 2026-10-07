@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 1.3.6
+
+### Patch Changes
+
+- 39823df: Comments: the initials in an avatar without a picture are easier to read. They were grey on a grey background, below WCAG's 4.5:1 contrast, in styles such as Nova. A long author name cut short shows in full on hover.
+- 78ccc1c: Data Table: Clear filters, in the empty row, now uses the same text colour as other buttons. It was grey, like the message above it, and below WCAG's 4.5:1 contrast in Maia's light theme.
+- 63b56d0: Data Table: when the table restacks in a narrow card, a long name in a truncating column now ends in an ellipsis instead of being cut off mid-word.
+- 5333356: Block forms now have `method='post'`. Submitted before the page hydrates (on a slow connection in Next.js, say), they post to the same page instead of sending a GET, so fields you name when you connect a form to your API stay out of the URL. After hydration they work as before. Error Pages 04's "Notify me" moves focus to the email field when it's empty.
+- 379779c: Page Header: `PageHeaderHeading` takes `wrap`, so a long title such as a record's name wraps onto more lines instead of being cut short. The back link's arrow keeps its size when its label wraps.
+- 059393b: Command Menu and App Shell: the search button's label and ⌘K hint are easier to read. They were grey on a grey background, below WCAG's 4.5:1 contrast, in styles such as Maia and Nova. The ⌘K handler no longer throws on the key events Chrome's autofill sends, which have no key.
+- d54b1bf: Data Table: on narrow screens, where rows stack into cards, the row checkbox lines up with the card's other content. It sat 15px further right, and its tap area reached past the card.
+
 ## 1.3.5
 
 ### Patch Changes

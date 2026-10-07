@@ -117,7 +117,11 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
             Request sent. We’ll email you when {owner.name.split(' ')[0]} replies.
           </p>
         ) : (
-          <form onSubmit={(event) => void request(event)} className='flex flex-col gap-3'>
+          <form
+            method='post'
+            onSubmit={(event) => void request(event)}
+            className='flex flex-col gap-3'
+          >
             <label htmlFor={`${id}-message`} className='text-sm font-medium'>
               Message{' '}
               <span className='text-muted-foreground font-normal'>(optional)</span>

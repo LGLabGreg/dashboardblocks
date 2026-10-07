@@ -200,7 +200,7 @@ const Settings7 = (props: Settings7Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <form noValidate onSubmit={save} className='contents'>
+      <form method='post' noValidate onSubmit={save} className='contents'>
         <CardContent className='flex flex-col gap-6'>
           <div className='flex items-center gap-4'>
             <PersonAvatar

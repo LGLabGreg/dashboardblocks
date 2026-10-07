@@ -605,7 +605,8 @@ interface SearchButtonProps {
 function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchButtonProps) {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+      // Chrome's autofill sends keydown events without a key.
+      if (event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
         onOpen()
       }
@@ -621,7 +622,7 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
       aria-label={placeholder}
       aria-keyshortcuts='Meta+K Control+K'
       className={cn(
-        'text-muted-foreground max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
+        'max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
         className,
       )}
     >
@@ -633,7 +634,7 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         remixicon='RiSearchLine'
       />
       <span className='max-sm:sr-only'>{placeholder}</span>
-      <Kbd className='ml-auto max-sm:hidden'>⌘K</Kbd>
+      <Kbd className='text-foreground ml-auto max-sm:hidden'>⌘K</Kbd>
     </Button>
   )
 }

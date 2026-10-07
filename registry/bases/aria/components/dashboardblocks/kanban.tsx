@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: cd0d57f7ca3a
+// source-hash: 28c5c099bf3b
 
 'use client'
 
@@ -1476,7 +1476,11 @@ function KanbanAddCard({
   }
 
   return (
-    <form onSubmit={submit} className={cn('flex flex-col gap-2', className)}>
+    <form
+      method='post'
+      onSubmit={submit}
+      className={cn('flex flex-col gap-2', className)}
+    >
       <Input
         ref={inputRef}
         aria-label={label}

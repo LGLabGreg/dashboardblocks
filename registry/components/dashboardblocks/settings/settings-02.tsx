@@ -197,6 +197,7 @@ const Settings2 = (props: Settings2Props) => {
       <CardContent className='flex flex-col gap-4'>
         {creating && (
           <form
+            method='post'
             onSubmit={create}
             className='bg-muted/50 flex flex-col gap-3 rounded-lg border p-4'
           >

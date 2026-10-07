@@ -204,6 +204,7 @@ const Auth4 = (props: Auth4Props) => {
       <div ref={formsRef} className='flex flex-col gap-4'>
         {editing ? (
           <form
+            method='post'
             noValidate
             onSubmit={(event) => void saveEmail(event)}
             className='flex flex-col gap-2'
@@ -237,6 +238,7 @@ const Auth4 = (props: Auth4Props) => {
           </form>
         ) : (
           <form
+            method='post'
             noValidate
             onSubmit={(event) => {
               event.preventDefault()

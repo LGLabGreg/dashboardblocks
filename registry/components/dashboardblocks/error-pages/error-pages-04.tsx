@@ -7,6 +7,7 @@ import {
 } from '@/registry/components/dashboardblocks/error-pages'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -86,7 +87,12 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
   const subscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const address = email.trim()
-    if (!EMAIL.test(address)) return setError('Enter an email address.')
+    if (!EMAIL.test(address)) {
+      // The error renders before focus moves, so the field is read with it.
+      flushSync(() => setError('Enter an email address.'))
+      document.getElementById(`${id}-email`)?.focus()
+      return
+    }
     setError(null)
     setSubscribed(true)
     onSubscribe?.(address)
@@ -191,7 +197,12 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
             We’ll email {email.trim()} when everything is back.
           </p>
         ) : (
-          <form noValidate onSubmit={subscribe} className='flex flex-col gap-2 text-left'>
+          <form
+            method='post'
+            noValidate
+            onSubmit={subscribe}
+            className='flex flex-col gap-2 text-left'
+          >
             <label htmlFor={`${id}-email`} className='text-sm font-medium'>
               Get an email when it’s back
             </label>

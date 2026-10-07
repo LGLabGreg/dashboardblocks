@@ -117,7 +117,7 @@ const ErrorPages1 = ({ brand, homeHref, links, onSearch, path }: ErrorPages1Prop
       }
     >
       {onSearch && (
-        <form role='search' onSubmit={search} className='flex gap-2'>
+        <form method='post' role='search' onSubmit={search} className='flex gap-2'>
           <label htmlFor={`${id}-search`} className='sr-only'>
             Search dashboards and reports
           </label>

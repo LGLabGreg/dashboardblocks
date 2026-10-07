@@ -107,7 +107,7 @@ function OnboardingLayout({
       </header>
       <main className='flex flex-1 flex-col px-4 sm:px-6'>
         {onSubmit ? (
-          <form noValidate onSubmit={onSubmit} className={bodyClassName}>
+          <form method='post' noValidate onSubmit={onSubmit} className={bodyClassName}>
             {body}
           </form>
         ) : (

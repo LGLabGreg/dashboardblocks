@@ -926,6 +926,7 @@ function ChatComposer({
 
   return (
     <form
+      method='post'
       className={className}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()

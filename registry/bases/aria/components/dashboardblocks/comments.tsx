@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/comments.tsx for React Aria
-// source-hash: f48c0541f400
+// source-hash: eeded9b1f985
 
 'use client'
 
@@ -184,7 +184,9 @@ function CommentAvatar({
   return (
     <Avatar aria-hidden size={size} className={className}>
       {author.avatar && <AvatarImage src={author.avatar} alt='' />}
-      <AvatarFallback className={cn(size === 'sm' && 'text-[0.625rem]')}>
+      <AvatarFallback
+        className={cn('text-foreground', size === 'sm' && 'text-[0.625rem]')}
+      >
         {initials(author.name)}
       </AvatarFallback>
     </Avatar>
@@ -474,7 +476,11 @@ function CommentItem({
           className={cn('flex items-center gap-2', size === 'sm' ? 'min-h-6' : 'min-h-8')}
         >
           <div className='flex min-w-0 flex-1 flex-wrap items-center gap-x-2'>
-            <span id={`${id}-author`} className='truncate text-sm font-medium'>
+            <span
+              id={`${id}-author`}
+              title={comment.author.name}
+              className='truncate text-sm font-medium'
+            >
               {comment.author.name}
             </span>
             {badge}
@@ -657,6 +663,7 @@ function CommentComposer({
 
   return (
     <form
+      method='post'
       onSubmit={(event) => void submit(event)}
       className={cn('flex flex-col gap-1.5', className)}
     >

@@ -147,7 +147,7 @@ const Settings1 = (props: Settings1Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-6'>
-        <form onSubmit={invite} noValidate className='flex flex-col gap-2'>
+        <form method='post' onSubmit={invite} noValidate className='flex flex-col gap-2'>
           <label htmlFor={emailId} className='text-sm font-medium'>
             Invite by email
           </label>

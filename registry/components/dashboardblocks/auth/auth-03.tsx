@@ -196,7 +196,13 @@ const Auth3 = (props: Auth3Props) => {
         </>
       }
     >
-      <form ref={formRef} noValidate onSubmit={submit} className='flex flex-col gap-4'>
+      <form
+        method='post'
+        ref={formRef}
+        noValidate
+        onSubmit={submit}
+        className='flex flex-col gap-4'
+      >
         {kind === 'app' ? (
           <OtpInput
             aria-label='Code from your authenticator app'

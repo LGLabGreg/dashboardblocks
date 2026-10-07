@@ -356,7 +356,12 @@ function FormSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className={cn('sm:max-w-md', className)}>
-        <form noValidate onSubmit={onSubmit} className='flex min-h-0 flex-1 flex-col'>
+        <form
+          method='post'
+          noValidate
+          onSubmit={onSubmit}
+          className='flex min-h-0 flex-1 flex-col'
+        >
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
