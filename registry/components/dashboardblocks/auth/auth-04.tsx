@@ -285,7 +285,7 @@ const Auth4 = (props: Auth4Props) => {
         )}
         <p
           role='status'
-          className='text-muted-foreground text-center text-sm empty:hidden'
+          className='text-muted-foreground text-center text-sm empty:sr-only'
         >
           {status}
         </p>

@@ -161,10 +161,24 @@ interface CohortTableProps {
   cohorts: RetentionCohort[]
   /** @default 'var(--chart-2)' */
   color?: string
+  /**
+   * Phrases the readout for a hovered cell. `cohort` is `null` on the Average
+   * row. Defaults to "Mar 2026, month 2: 812 of 1,402 (57.9%)".
+   */
+  describeCell?: (cell: {
+    cohort: RetentionCohort | null
+    period: number
+    rate: number
+  }) => string
   /** Formats cohort sizes and counts. */
   formatCount?: (value: number) => string
   /** Shown beside the readout, usually a `HeatmapLegend`. */
   footer?: ReactNode
+  /**
+   * Names the table's scroll region when it scrolls sideways, so a short name
+   * comes before the caption. @default caption
+   */
+  label?: string
   /**
    * Keeps cells legible in narrow cards: below this width the table scrolls
    * sideways. E.g. '36rem'.
@@ -179,6 +193,12 @@ interface CohortTableProps {
    * after period 0, so the later periods aren't washed out by period 0's 100%.
    */
   scaleMax?: number
+  /**
+   * The share that gets the faintest colour, for tables whose shares sit in a
+   * narrow band, such as revenue around 100%. Ignored unless it's below
+   * `scaleMax`. @default 0
+   */
+  scaleMin?: number
   /** @default 'Users' */
   sizeHeader?: string
 }
@@ -196,12 +216,15 @@ function CohortTable({
   cohortHeader = 'Cohort',
   cohorts,
   color,
+  describeCell,
   footer,
   formatCount = (value) => value.toLocaleString(),
+  label = caption,
   minWidth,
   mode = 'percent',
   periodName = 'Period',
   scaleMax: scaleMaxProp,
+  scaleMin: scaleMinProp = 0,
   sizeHeader = 'Users',
 }: CohortTableProps) {
   const [active, setActive] = useState<CohortCell | null>(null)
@@ -211,15 +234,20 @@ function CohortTable({
   const total = cohorts.reduce((sum, cohort) => sum + cohort.size, 0)
   const later = cohorts.flatMap((cohort) => getRetentionRates(cohort).slice(1))
   const scaleMax = scaleMaxProp ?? (later.length > 0 ? Math.max(...later) : 1)
+  const scaleMin = scaleMinProp < scaleMax ? scaleMinProp : 0
+  const scaleRange = scaleMax - scaleMin
   const unit = periodName.toLowerCase()
   const shortName = periodName.charAt(0).toUpperCase()
 
   const describe = ({ period, row }: CohortCell) => {
-    if (row === 'average') {
-      return `Average, ${unit} ${period}: ${formatRetention(averages[period] ?? 0, 1)} retained`
+    const cohort = row === 'average' ? null : cohorts[row]
+    const rate = cohort
+      ? (getRetentionRates(cohort)[period] ?? 0)
+      : (averages[period] ?? 0)
+    if (describeCell) return describeCell({ cohort, period, rate })
+    if (!cohort) {
+      return `Average, ${unit} ${period}: ${formatRetention(rate, 1)} retained`
     }
-    const cohort = cohorts[row]
-    const rate = cohort.size > 0 ? cohort.retained[period] / cohort.size : 0
     return `${cohort.label}, ${unit} ${period}: ${formatCount(cohort.retained[period])} of ${formatCount(cohort.size)} (${formatRetention(rate, 1)})`
   }
 
@@ -241,7 +269,10 @@ function CohortTable({
           isActive && 'ring-foreground ring-2 ring-offset-1',
         )}
         style={{
-          backgroundColor: getHeatColor(scaleMax > 0 ? rate / scaleMax : 0, color),
+          backgroundColor: getHeatColor(
+            scaleRange > 0 ? (rate - scaleMin) / scaleRange : 0,
+            color,
+          ),
         }}
       >
         {label}
@@ -263,7 +294,13 @@ function CohortTable({
   return (
     <div className={cn('flex flex-col gap-3', className)}>
       <div
-        className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
+        role={minWidth ? 'region' : undefined}
+        aria-label={minWidth ? label : undefined}
+        tabIndex={minWidth ? 0 : undefined}
+        className={cn(
+          minWidth &&
+            'focus-visible:ring-ring/50 relative -my-1 overflow-x-auto rounded-sm py-1 outline-none focus-visible:ring-3',
+        )}
         onPointerLeave={() => setActive(null)}
       >
         <table

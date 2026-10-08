@@ -276,7 +276,7 @@ const columns = columnHelper.columns([
     cell: ({ getValue }) => dateFormat.format(new Date(getValue())),
     enableGlobalFilter: false,
     header: 'Signed up',
-    meta: { align: 'end' },
+    meta: { align: 'end', sortLabels: { asc: 'Oldest first', desc: 'Newest first' } },
     sortDescFirst: true,
   }),
 ])

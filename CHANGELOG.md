@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 1.3.7
+
+### Patch Changes
+
+- 69c5885: AI Assistant: in example 01's panel, a welcome taller than the panel now scrolls from its top. It was centred, which cut off the greeting with no way to scroll up to it.
+- e64710a: App Shell: on the collapsed rail, the brand and the workspace switcher no longer show a tooltip. It opened over the header's sidebar toggle, and stayed open while the pointer moved onto it, so the toggle couldn't be clicked. Nav items and the user menu keep theirs.
+  
+  Forms: `FormSheet`'s fields now line up with its title and buttons in every style. The body had a fixed 16px inset, while Maia, Mira, Luma, Rhea and Sera pad the sheet's header and footer by 24px or 32px.
+- 6b853ff: Auth 04: screen readers now announce the status line under the form when it first shows a message. It was hidden while empty, which keeps a status region out of the accessibility tree, so its first message often went unread.
+- aba4a78: Retention: `CohortTable` takes an optional `describeCell` to phrase the readout for a hovered cell, and `scaleMin` to set the share that gets the faintest colour, for tables whose shares sit in a narrow band, such as revenue around 100%. Without them, nothing changes. When it scrolls sideways (with `minWidth`), keyboard users can now focus the table and scroll it; it's named by its caption.
+- 42318b5: Data table: a column's `sortLabels` meta names its orders in the sort menu, such as "Newest first" and "Oldest first" for a date, listed in the column's first sort direction. The "Signed up" column in data-table-06 uses it; it read "A to Z" before. Without it, nothing changes.
+
 ## 1.3.6
 
 ### Patch Changes

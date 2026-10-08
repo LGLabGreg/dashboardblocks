@@ -217,6 +217,12 @@ interface DataTableColumnMeta {
   label?: string
   /** The row's title column: spans the full width when stacked, without a label. */
   primary?: boolean
+  /**
+   * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }`
+   * for dates. The menu lists the column's first sort direction first.
+   * @default A to Z and Z to A for text, high to low and low to high otherwise
+   */
+  sortLabels?: { asc: string; desc: string }
   /** Fills the spare width and truncates long text, in the table layout only. */
   truncate?: boolean
 }
@@ -809,6 +815,14 @@ function DataTableSortMenu<TData extends RowData>({
   const [sort] = table.state.sorting
   const current = columns.find((column) => column.id === sort?.id)
   const text = current?.getAutoSortDir() === 'asc'
+  const customLabels = current?.columnDef.meta?.sortLabels
+  const labels =
+    customLabels ??
+    (text
+      ? { asc: 'A to Z', desc: 'Z to A' }
+      : { asc: 'Low to high', desc: 'High to low' })
+  const first = customLabels ? current.getFirstSortDir() : text ? 'asc' : 'desc'
+  const second = first === 'asc' ? 'desc' : 'asc'
 
   return (
     <DropdownMenu>
@@ -855,11 +869,11 @@ function DataTableSortMenu<TData extends RowData>({
                   table.setSorting([{ desc: direction === 'desc', id: sort.id }])
                 }
               >
-                <DropdownMenuRadioItem value={text ? 'asc' : 'desc'} closeOnClick>
-                  {text ? 'A to Z' : 'High to low'}
+                <DropdownMenuRadioItem value={first} closeOnClick>
+                  {labels[first]}
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value={text ? 'desc' : 'asc'} closeOnClick>
-                  {text ? 'Z to A' : 'Low to high'}
+                <DropdownMenuRadioItem value={second} closeOnClick>
+                  {labels[second]}
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuGroup>

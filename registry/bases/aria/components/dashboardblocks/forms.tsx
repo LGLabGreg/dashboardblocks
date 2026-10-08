@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 7db5ce1353ba
+// source-hash: b6f80d49edd2
 
 'use client'
 
@@ -10,6 +10,7 @@ import {
   type FormEvent,
   type KeyboardEvent,
   type ReactNode,
+  useCallback,
   useId,
   useState,
 } from 'react'
@@ -360,6 +361,12 @@ function FormSheet({
   open,
   title,
 }: FormSheetProps) {
+  // Each style pads the header differently; the body matches it to line up with the title.
+  const [bodyInset, setBodyInset] = useState<string>()
+  const measureHeader = useCallback((header: HTMLDivElement | null) => {
+    if (header) setBodyInset(getComputedStyle(header).paddingInlineStart)
+  }, [])
+
   return (
     <Sheet
       isOpen={open}
@@ -372,11 +379,16 @@ function FormSheet({
         onSubmit={onSubmit}
         className='flex min-h-0 flex-1 flex-col'
       >
-        <SheetHeader>
+        <SheetHeader ref={measureHeader}>
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
-        <div className='min-h-0 flex-1 overflow-y-auto px-4 py-2'>{children}</div>
+        <div
+          className='min-h-0 flex-1 overflow-y-auto px-4 py-2'
+          style={{ paddingInline: bodyInset }}
+        >
+          {children}
+        </div>
         <SheetFooter>{footer}</SheetFooter>
       </form>
     </Sheet>

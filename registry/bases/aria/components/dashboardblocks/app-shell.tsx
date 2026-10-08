@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: b946c3c40700
+// source-hash: aa25140f2854
 
 'use client'
 
@@ -228,16 +228,10 @@ interface AppBrandProps {
 /** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
   const closeMobile = useCloseMobileSidebar()
-  const railTooltip = useRailTooltip()
   return (
     <SidebarMenu className={useSheetCloseRoom()}>
       <SidebarMenuItem>
-        <SidebarMenuButton
-          size='lg'
-          tooltip={railTooltip(name)}
-          href={href}
-          onPress={closeMobile}
-        >
+        <SidebarMenuButton size='lg' href={href} onPress={closeMobile}>
           <BrandMark>{logo}</BrandMark>
           <span className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>{name}</span>
@@ -287,7 +281,6 @@ function WorkspaceSwitcher({
   workspaces,
 }: WorkspaceSwitcherProps) {
   const { isMobile } = useSidebar()
-  const railTooltip = useRailTooltip()
   const sheetCloseRoom = useSheetCloseRoom()
   const current = workspaces.find((workspace) => workspace.id === value) ?? workspaces[0]
   if (!current) return null
@@ -296,11 +289,7 @@ function WorkspaceSwitcher({
     <SidebarMenu className={sheetCloseRoom}>
       <SidebarMenuItem>
         <DropdownMenuTrigger>
-          <SidebarMenuButton
-            size='lg'
-            tooltip={railTooltip(current.name)}
-            className='aria-expanded:bg-muted'
-          >
+          <SidebarMenuButton size='lg' className='aria-expanded:bg-muted'>
             <BrandMark>{current.logo}</BrandMark>
             <span className='grid flex-1 text-left text-sm leading-tight'>
               <span className='truncate font-medium'>{current.name}</span>

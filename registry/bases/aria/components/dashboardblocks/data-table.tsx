@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: a68ff36a841a
+// source-hash: df0f7860a45c
 
 'use client'
 
@@ -216,6 +216,12 @@ interface DataTableColumnMeta {
   label?: string
   /** The row's title column: spans the full width when stacked, without a label. */
   primary?: boolean
+  /**
+   * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }`
+   * for dates. The menu lists the column's first sort direction first.
+   * @default A to Z and Z to A for text, high to low and low to high otherwise
+   */
+  sortLabels?: { asc: string; desc: string }
   /** Fills the spare width and truncates long text, in the table layout only. */
   truncate?: boolean
 }
@@ -817,6 +823,14 @@ function DataTableSortMenu<TData extends RowData>({
   const [sort] = table.state.sorting
   const current = columns.find((column) => column.id === sort?.id)
   const text = current?.getAutoSortDir() === 'asc'
+  const customLabels = current?.columnDef.meta?.sortLabels
+  const labels =
+    customLabels ??
+    (text
+      ? { asc: 'A to Z', desc: 'Z to A' }
+      : { asc: 'Low to high', desc: 'High to low' })
+  const first = customLabels ? current.getFirstSortDir() : text ? 'asc' : 'desc'
+  const second = first === 'asc' ? 'desc' : 'asc'
 
   return (
     <DropdownMenuTrigger>
@@ -868,12 +882,8 @@ function DataTableSortMenu<TData extends RowData>({
               }}
             >
               <DropdownMenuLabel>Order</DropdownMenuLabel>
-              <DropdownMenuItem id={text ? 'asc' : 'desc'}>
-                {text ? 'A to Z' : 'High to low'}
-              </DropdownMenuItem>
-              <DropdownMenuItem id={text ? 'desc' : 'asc'}>
-                {text ? 'Z to A' : 'Low to high'}
-              </DropdownMenuItem>
+              <DropdownMenuItem id={first}>{labels[first]}</DropdownMenuItem>
+              <DropdownMenuItem id={second}>{labels[second]}</DropdownMenuItem>
             </DropdownMenuGroup>
           </>
         )}

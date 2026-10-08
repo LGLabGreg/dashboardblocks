@@ -339,8 +339,9 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
             }
           />
           {messages.length === 0 ? (
-            <div className='flex min-h-0 flex-1 flex-col justify-center overflow-y-auto p-4'>
+            <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
               <ChatWelcome
+                className='m-auto'
                 title='How can I help?'
                 description='Ask about revenue, customers or churn on this page.'
               >

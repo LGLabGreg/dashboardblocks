@@ -227,25 +227,18 @@ interface AppBrandProps {
 /** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
   const closeMobile = useCloseMobileSidebar()
-  const railTooltip = useRailTooltip()
   return (
-    <TooltipProvider>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton
-            size='lg'
-            tooltip={railTooltip(name)}
-            render={<Link href={href} onClick={closeMobile} />}
-          >
-            <BrandMark>{logo}</BrandMark>
-            <span className='grid flex-1 text-left text-sm leading-tight'>
-              <span className='truncate font-medium'>{name}</span>
-              {description && <span className='truncate text-xs'>{description}</span>}
-            </span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </TooltipProvider>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton size='lg' render={<Link href={href} onClick={closeMobile} />}>
+          <BrandMark>{logo}</BrandMark>
+          <span className='grid flex-1 text-left text-sm leading-tight'>
+            <span className='truncate font-medium'>{name}</span>
+            {description && <span className='truncate text-xs'>{description}</span>}
+          </span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarMenu>
   )
 }
 
@@ -287,90 +280,81 @@ function WorkspaceSwitcher({
   workspaces,
 }: WorkspaceSwitcherProps) {
   const { isMobile } = useSidebar()
-  const railTooltip = useRailTooltip()
   const current = workspaces.find((workspace) => workspace.id === value) ?? workspaces[0]
   if (!current) return null
 
   return (
-    <TooltipProvider>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <SidebarMenuButton
-                  size='lg'
-                  tooltip={railTooltip(current.name)}
-                  className='aria-expanded:bg-muted'
-                />
-              }
-            >
-              <BrandMark>{current.logo}</BrandMark>
-              <span className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{current.name}</span>
-                {current.plan && <span className='truncate text-xs'>{current.plan}</span>}
-              </span>
-              <IconPlaceholder
-                lucide='ChevronsUpDownIcon'
-                tabler='IconSelector'
-                hugeicons='UnfoldMoreIcon'
-                phosphor='CaretUpDownIcon'
-                remixicon='RiArrowUpDownLine'
-                className='ml-auto'
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className='min-w-56'
-              align='start'
-              side={isMobile ? 'bottom' : 'right'}
-            >
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
-                {workspaces.map((workspace) => (
-                  <DropdownMenuItem
-                    key={workspace.id}
-                    onClick={() => onValueChange(workspace.id)}
-                  >
-                    <BrandMark className='size-6 rounded-md [&_svg]:size-3.5'>
-                      {workspace.logo}
-                    </BrandMark>
-                    {workspace.name}
-                    {workspace.id === current.id && (
-                      <>
-                        <span className='sr-only'>(current)</span>
-                        <IconPlaceholder
-                          lucide='CheckIcon'
-                          tabler='IconCheck'
-                          hugeicons='Tick02Icon'
-                          phosphor='CheckIcon'
-                          remixicon='RiCheckLine'
-                          className='ml-auto'
-                        />
-                      </>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuGroup>
-              {onCreate && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={onCreate}>
-                    <IconPlaceholder
-                      lucide='PlusIcon'
-                      tabler='IconPlus'
-                      hugeicons='PlusSignIcon'
-                      phosphor='PlusIcon'
-                      remixicon='RiAddLine'
-                    />
-                    New workspace…
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </TooltipProvider>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={<SidebarMenuButton size='lg' className='aria-expanded:bg-muted' />}
+          >
+            <BrandMark>{current.logo}</BrandMark>
+            <span className='grid flex-1 text-left text-sm leading-tight'>
+              <span className='truncate font-medium'>{current.name}</span>
+              {current.plan && <span className='truncate text-xs'>{current.plan}</span>}
+            </span>
+            <IconPlaceholder
+              lucide='ChevronsUpDownIcon'
+              tabler='IconSelector'
+              hugeicons='UnfoldMoreIcon'
+              phosphor='CaretUpDownIcon'
+              remixicon='RiArrowUpDownLine'
+              className='ml-auto'
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className='min-w-56'
+            align='start'
+            side={isMobile ? 'bottom' : 'right'}
+          >
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
+              {workspaces.map((workspace) => (
+                <DropdownMenuItem
+                  key={workspace.id}
+                  onClick={() => onValueChange(workspace.id)}
+                >
+                  <BrandMark className='size-6 rounded-md [&_svg]:size-3.5'>
+                    {workspace.logo}
+                  </BrandMark>
+                  {workspace.name}
+                  {workspace.id === current.id && (
+                    <>
+                      <span className='sr-only'>(current)</span>
+                      <IconPlaceholder
+                        lucide='CheckIcon'
+                        tabler='IconCheck'
+                        hugeicons='Tick02Icon'
+                        phosphor='CheckIcon'
+                        remixicon='RiCheckLine'
+                        className='ml-auto'
+                      />
+                    </>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+            {onCreate && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={onCreate}>
+                  <IconPlaceholder
+                    lucide='PlusIcon'
+                    tabler='IconPlus'
+                    hugeicons='PlusSignIcon'
+                    phosphor='PlusIcon'
+                    remixicon='RiAddLine'
+                  />
+                  New workspace…
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
   )
 }
 
