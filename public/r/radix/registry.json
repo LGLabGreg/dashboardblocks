@@ -11,7 +11,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed.tsx"
         }
       ]
     },
@@ -23,7 +24,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-usage.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-usage.tsx"
         }
       ]
     },
@@ -35,7 +37,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/alerts.tsx"
         }
       ]
     },
@@ -50,7 +53,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/animated-number.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/animated-number.tsx"
         }
       ]
     },
@@ -62,7 +66,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/animated-wave.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/animated-wave.tsx"
         }
       ]
     },
@@ -85,11 +90,13 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/app-shell.tsx"
         },
         {
           "path": "registry/hooks/use-mobile.ts",
-          "type": "registry:hook"
+          "type": "registry:hook",
+          "target": "@hooks/use-mobile.ts"
         }
       ]
     },
@@ -104,7 +111,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart.tsx"
         }
       ]
     },
@@ -120,7 +128,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/auth.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth.tsx"
         }
       ]
     },
@@ -135,7 +144,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing.tsx"
         }
       ]
     },
@@ -147,7 +157,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/block-state.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/block-state.tsx"
         }
       ]
     },
@@ -162,7 +173,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/breakdown.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/breakdown.tsx"
         }
       ]
     },
@@ -177,7 +189,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel.tsx"
         }
       ]
     },
@@ -189,7 +202,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/checklist.tsx"
         }
       ]
     },
@@ -210,7 +224,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table.tsx"
         }
       ]
     },
@@ -227,7 +242,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/command-menu.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/command-menu.tsx"
         }
       ]
     },
@@ -242,7 +258,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comparison.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comparison.tsx"
         }
       ]
     },
@@ -259,7 +276,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboard-header.tsx"
         }
       ]
     },
@@ -271,7 +289,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/deployments.tsx"
         }
       ]
     },
@@ -286,7 +305,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/distribution.tsx"
         }
       ]
     },
@@ -298,7 +318,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages.tsx"
         }
       ]
     },
@@ -313,7 +334,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/feedback.tsx"
         }
       ]
     },
@@ -325,7 +347,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/flow.tsx"
         }
       ]
     },
@@ -344,7 +367,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forecast.tsx"
         }
       ]
     },
@@ -361,7 +385,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms.tsx"
         }
       ]
     },
@@ -376,7 +401,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/funnel.tsx"
         }
       ]
     },
@@ -391,7 +417,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/gauge.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/gauge.tsx"
         }
       ]
     },
@@ -407,7 +434,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/geo.tsx"
         }
       ]
     },
@@ -422,7 +450,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/goals.tsx"
         }
       ]
     },
@@ -434,7 +463,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/heatmap.tsx"
         }
       ]
     },
@@ -449,7 +479,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/icon.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/icon.tsx"
         }
       ]
     },
@@ -461,7 +492,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/insights.tsx"
         }
       ]
     },
@@ -476,7 +508,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/inventory.tsx"
         }
       ]
     },
@@ -493,7 +526,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi.tsx"
         }
       ]
     },
@@ -511,7 +545,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard.tsx"
         }
       ]
     },
@@ -523,7 +558,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/link.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/link.tsx"
         }
       ]
     },
@@ -539,7 +575,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/metric-list.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/metric-list.tsx"
         }
       ]
     },
@@ -557,7 +594,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/notifications.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/notifications.tsx"
         }
       ]
     },
@@ -574,7 +612,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/page-header.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/page-header.tsx"
         }
       ]
     },
@@ -586,7 +625,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/pipeline.tsx"
         }
       ]
     },
@@ -601,7 +641,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/progress-bar.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/progress-bar.tsx"
         }
       ]
     },
@@ -613,7 +654,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/realtime.tsx"
         }
       ]
     },
@@ -625,7 +667,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/record-detail.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/record-detail.tsx"
         }
       ]
     },
@@ -641,7 +684,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/retention.tsx"
         }
       ]
     },
@@ -656,7 +700,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ring.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ring.tsx"
         }
       ]
     },
@@ -668,7 +713,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/scatter.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/scatter.tsx"
         }
       ]
     },
@@ -680,7 +726,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/schedule.tsx"
         }
       ]
     },
@@ -692,7 +739,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security.tsx"
         }
       ]
     },
@@ -708,7 +756,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings.tsx"
         }
       ]
     },
@@ -723,7 +772,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/spend.tsx"
         }
       ]
     },
@@ -739,7 +789,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group.tsx"
         }
       ]
     },
@@ -751,7 +802,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status.tsx"
         }
       ]
     },
@@ -766,7 +818,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team.tsx"
         }
       ]
     },
@@ -778,7 +831,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/timeline.tsx"
         }
       ]
     },
@@ -796,7 +850,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/trend.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/trend.tsx"
         }
       ]
     },
@@ -811,7 +866,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter.tsx"
         }
       ]
     },
@@ -832,7 +888,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kanban.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kanban.tsx"
         }
       ]
     },
@@ -851,7 +908,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comments.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comments.tsx"
         }
       ]
     },
@@ -870,7 +928,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/calendar.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/calendar.tsx"
         }
       ]
     },
@@ -886,7 +945,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/files.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/files.tsx"
         }
       ]
     },
@@ -902,7 +962,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-assistant.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-assistant.tsx"
         }
       ]
     },
@@ -921,7 +982,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/invoice.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/invoice.tsx"
         }
       ]
     },
@@ -942,7 +1004,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/onboarding.tsx"
         }
       ]
     },
@@ -956,7 +1019,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/kpi-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/kpi-01.tsx"
         }
       ]
     },
@@ -970,7 +1034,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/kpi-02.tsx"
         }
       ]
     },
@@ -984,7 +1049,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/kpi-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/kpi-03.tsx"
         }
       ]
     },
@@ -999,7 +1065,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/progress-kpi-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/progress-kpi-01.tsx"
         }
       ]
     },
@@ -1015,7 +1082,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/progress-kpi-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/progress-kpi-02.tsx"
         }
       ]
     },
@@ -1031,7 +1099,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/progress-kpi-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/progress-kpi-03.tsx"
         }
       ]
     },
@@ -1049,7 +1118,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/bar-chart-kpi-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/bar-chart-kpi-01.tsx"
         }
       ]
     },
@@ -1067,7 +1137,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/bar-chart-kpi-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/bar-chart-kpi-02.tsx"
         }
       ]
     },
@@ -1085,7 +1156,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/line-chart-kpi-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/line-chart-kpi-01.tsx"
         }
       ]
     },
@@ -1103,7 +1175,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/area-chart-kpi-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/area-chart-kpi-01.tsx"
         }
       ]
     },
@@ -1121,7 +1194,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kpi/area-chart-kpi-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/area-chart-kpi-02.tsx"
         }
       ]
     },
@@ -1137,7 +1211,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed/activity-feed-01.tsx"
         }
       ]
     },
@@ -1151,7 +1226,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed/activity-feed-02.tsx"
         }
       ]
     },
@@ -1168,7 +1244,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed/activity-feed-03.tsx"
         }
       ]
     },
@@ -1183,7 +1260,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed/activity-feed-04.tsx"
         }
       ]
     },
@@ -1201,7 +1279,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed/activity-feed-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/activity-feed/activity-feed-05.tsx"
         }
       ]
     },
@@ -1216,7 +1295,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-01.tsx"
         }
       ]
     },
@@ -1232,7 +1312,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-02.tsx"
         }
       ]
     },
@@ -1246,7 +1327,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-03.tsx"
         }
       ]
     },
@@ -1263,7 +1345,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-04.tsx"
         }
       ]
     },
@@ -1278,7 +1361,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-05.tsx"
         }
       ]
     },
@@ -1294,7 +1378,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-06.tsx"
         }
       ]
     },
@@ -1312,7 +1397,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-07.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-07.tsx"
         }
       ]
     },
@@ -1330,7 +1416,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/usage-meter/usage-meter-08.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/usage-meter/usage-meter-08.tsx"
         }
       ]
     },
@@ -1345,7 +1432,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard/leaderboard-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard/leaderboard-01.tsx"
         }
       ]
     },
@@ -1361,7 +1449,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard/leaderboard-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard/leaderboard-02.tsx"
         }
       ]
     },
@@ -1377,7 +1466,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard/leaderboard-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard/leaderboard-03.tsx"
         }
       ]
     },
@@ -1392,7 +1482,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard/leaderboard-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard/leaderboard-04.tsx"
         }
       ]
     },
@@ -1407,7 +1498,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/leaderboard/leaderboard-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/leaderboard/leaderboard-05.tsx"
         }
       ]
     },
@@ -1425,7 +1517,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-01.tsx"
         }
       ]
     },
@@ -1444,7 +1537,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-02.tsx"
         }
       ]
     },
@@ -1462,7 +1556,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-03.tsx"
         }
       ]
     },
@@ -1480,7 +1575,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-04.tsx"
         }
       ]
     },
@@ -1497,7 +1593,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-05.tsx"
         }
       ]
     },
@@ -1515,7 +1612,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/chart-panel/chart-panel-06.tsx"
         }
       ]
     },
@@ -1529,7 +1627,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/breakdown/breakdown-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/breakdown/breakdown-01.tsx"
         }
       ]
     },
@@ -1543,7 +1642,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/breakdown/breakdown-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/breakdown/breakdown-02.tsx"
         }
       ]
     },
@@ -1557,7 +1657,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/breakdown/breakdown-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/breakdown/breakdown-03.tsx"
         }
       ]
     },
@@ -1571,7 +1672,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/breakdown/breakdown-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/breakdown/breakdown-04.tsx"
         }
       ]
     },
@@ -1585,7 +1687,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel/funnel-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/funnel/funnel-01.tsx"
         }
       ]
     },
@@ -1599,7 +1702,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel/funnel-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/funnel/funnel-02.tsx"
         }
       ]
     },
@@ -1614,7 +1718,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel/funnel-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/funnel/funnel-03.tsx"
         }
       ]
     },
@@ -1628,7 +1733,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/funnel/funnel-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/funnel/funnel-04.tsx"
         }
       ]
     },
@@ -1642,7 +1748,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status/status-01.tsx"
         }
       ]
     },
@@ -1656,7 +1763,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status/status-02.tsx"
         }
       ]
     },
@@ -1671,7 +1779,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status/status-03.tsx"
         }
       ]
     },
@@ -1685,7 +1794,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status/status-04.tsx"
         }
       ]
     },
@@ -1699,7 +1809,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/status/status-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/status/status-05.tsx"
         }
       ]
     },
@@ -1713,7 +1824,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group/stat-group-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group/stat-group-01.tsx"
         }
       ]
     },
@@ -1727,7 +1839,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group/stat-group-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group/stat-group-02.tsx"
         }
       ]
     },
@@ -1746,7 +1859,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group/stat-group-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group/stat-group-03.tsx"
         }
       ]
     },
@@ -1760,7 +1874,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group/stat-group-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group/stat-group-04.tsx"
         }
       ]
     },
@@ -1774,7 +1889,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/stat-group/stat-group-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/stat-group/stat-group-05.tsx"
         }
       ]
     },
@@ -1787,7 +1903,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboard-header/dashboard-header-01.tsx"
         }
       ]
     },
@@ -1800,7 +1917,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboard-header/dashboard-header-02.tsx"
         }
       ]
     },
@@ -1815,7 +1933,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboard-header/dashboard-header-03.tsx"
         }
       ]
     },
@@ -1829,7 +1948,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboard-header/dashboard-header-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboard-header/dashboard-header-04.tsx"
         }
       ]
     },
@@ -1843,7 +1963,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-01.tsx"
         }
       ]
     },
@@ -1857,7 +1978,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-02.tsx"
         }
       ]
     },
@@ -1873,7 +1995,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-03.tsx"
         }
       ]
     },
@@ -1888,7 +2011,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-04.tsx"
         }
       ]
     },
@@ -1903,7 +2027,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-05.tsx"
         }
       ]
     },
@@ -1918,7 +2043,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/data-table/data-table-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/data-table/data-table-06.tsx"
         }
       ]
     },
@@ -1932,7 +2058,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap/heatmap-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/heatmap/heatmap-01.tsx"
         }
       ]
     },
@@ -1946,7 +2073,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap/heatmap-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/heatmap/heatmap-02.tsx"
         }
       ]
     },
@@ -1960,7 +2088,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap/heatmap-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/heatmap/heatmap-03.tsx"
         }
       ]
     },
@@ -1974,7 +2103,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/heatmap/heatmap-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/heatmap/heatmap-04.tsx"
         }
       ]
     },
@@ -1990,7 +2120,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/states/states-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/states/states-01.tsx"
         }
       ]
     },
@@ -2009,7 +2140,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/states/states-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/states/states-02.tsx"
         }
       ]
     },
@@ -2026,7 +2158,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/states/states-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/states/states-03.tsx"
         }
       ]
     },
@@ -2045,7 +2178,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/states/states-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/states/states-04.tsx"
         }
       ]
     },
@@ -2068,7 +2202,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboards/dashboard-01.tsx"
         }
       ]
     },
@@ -2092,7 +2227,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboards/dashboard-02.tsx"
         }
       ]
     },
@@ -2114,7 +2250,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboards/dashboard-03.tsx"
         }
       ]
     },
@@ -2140,7 +2277,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboards/dashboard-04.tsx"
         }
       ]
     },
@@ -2165,7 +2303,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/dashboards/dashboard-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/dashboards/dashboard-05.tsx"
         }
       ]
     },
@@ -2179,7 +2318,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals/goals-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/goals/goals-01.tsx"
         }
       ]
     },
@@ -2193,7 +2333,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals/goals-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/goals/goals-02.tsx"
         }
       ]
     },
@@ -2211,7 +2352,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals/goals-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/goals/goals-03.tsx"
         }
       ]
     },
@@ -2225,7 +2367,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/goals/goals-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/goals/goals-04.tsx"
         }
       ]
     },
@@ -2241,7 +2384,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comparison/comparison-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comparison/comparison-01.tsx"
         }
       ]
     },
@@ -2255,7 +2399,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comparison/comparison-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comparison/comparison-02.tsx"
         }
       ]
     },
@@ -2269,7 +2414,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comparison/comparison-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comparison/comparison-03.tsx"
         }
       ]
     },
@@ -2284,7 +2430,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comparison/comparison-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comparison/comparison-04.tsx"
         }
       ]
     },
@@ -2299,7 +2446,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/alerts/alerts-01.tsx"
         }
       ]
     },
@@ -2318,7 +2466,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/alerts/alerts-02.tsx"
         }
       ]
     },
@@ -2334,7 +2483,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/alerts/alerts-03.tsx"
         }
       ]
     },
@@ -2349,7 +2499,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/alerts/alerts-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/alerts/alerts-04.tsx"
         }
       ]
     },
@@ -2364,7 +2515,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo/geo-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/geo/geo-01.tsx"
         }
       ]
     },
@@ -2378,7 +2530,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo/geo-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/geo/geo-02.tsx"
         }
       ]
     },
@@ -2392,7 +2545,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo/geo-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/geo/geo-03.tsx"
         }
       ]
     },
@@ -2408,7 +2562,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo/geo-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/geo/geo-04.tsx"
         }
       ]
     },
@@ -2423,7 +2578,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing/billing-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing/billing-01.tsx"
         }
       ]
     },
@@ -2438,7 +2594,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing/billing-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing/billing-02.tsx"
         }
       ]
     },
@@ -2454,7 +2611,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing/billing-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing/billing-03.tsx"
         }
       ]
     },
@@ -2469,7 +2627,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing/billing-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing/billing-04.tsx"
         }
       ]
     },
@@ -2486,7 +2645,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/billing/billing-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/billing/billing-05.tsx"
         }
       ]
     },
@@ -2501,7 +2661,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights/insights-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/insights/insights-01.tsx"
         }
       ]
     },
@@ -2520,7 +2681,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights/insights-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/insights/insights-02.tsx"
         }
       ]
     },
@@ -2535,7 +2697,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights/insights-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/insights/insights-03.tsx"
         }
       ]
     },
@@ -2550,7 +2713,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/insights/insights-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/insights/insights-04.tsx"
         }
       ]
     },
@@ -2566,7 +2730,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline/pipeline-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/pipeline/pipeline-01.tsx"
         }
       ]
     },
@@ -2583,7 +2748,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline/pipeline-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/pipeline/pipeline-02.tsx"
         }
       ]
     },
@@ -2598,7 +2764,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline/pipeline-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/pipeline/pipeline-03.tsx"
         }
       ]
     },
@@ -2613,7 +2780,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/pipeline/pipeline-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/pipeline/pipeline-04.tsx"
         }
       ]
     },
@@ -2627,7 +2795,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule/schedule-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/schedule/schedule-01.tsx"
         }
       ]
     },
@@ -2642,7 +2811,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule/schedule-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/schedule/schedule-02.tsx"
         }
       ]
     },
@@ -2656,7 +2826,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule/schedule-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/schedule/schedule-03.tsx"
         }
       ]
     },
@@ -2670,7 +2841,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/schedule/schedule-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/schedule/schedule-04.tsx"
         }
       ]
     },
@@ -2685,7 +2857,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-01.tsx"
         }
       ]
     },
@@ -2699,7 +2872,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-02.tsx"
         }
       ]
     },
@@ -2713,7 +2887,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-03.tsx"
         }
       ]
     },
@@ -2729,7 +2904,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-04.tsx"
         }
       ]
     },
@@ -2744,7 +2920,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-05.tsx"
         }
       ]
     },
@@ -2762,7 +2939,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/team/team-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/team/team-06.tsx"
         }
       ]
     },
@@ -2778,7 +2956,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist/checklist-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/checklist/checklist-01.tsx"
         }
       ]
     },
@@ -2793,7 +2972,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist/checklist-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/checklist/checklist-02.tsx"
         }
       ]
     },
@@ -2809,7 +2989,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist/checklist-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/checklist/checklist-03.tsx"
         }
       ]
     },
@@ -2824,7 +3005,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/checklist/checklist-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/checklist/checklist-04.tsx"
         }
       ]
     },
@@ -2839,7 +3021,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/gauge/gauge-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/gauge/gauge-01.tsx"
         }
       ]
     },
@@ -2853,7 +3036,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/gauge/gauge-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/gauge/gauge-02.tsx"
         }
       ]
     },
@@ -2867,7 +3051,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/gauge/gauge-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/gauge/gauge-03.tsx"
         }
       ]
     },
@@ -2882,7 +3067,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/gauge/gauge-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/gauge/gauge-04.tsx"
         }
       ]
     },
@@ -2896,7 +3082,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/metric-list/metric-list-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/metric-list/metric-list-01.tsx"
         }
       ]
     },
@@ -2910,7 +3097,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/metric-list/metric-list-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/metric-list/metric-list-02.tsx"
         }
       ]
     },
@@ -2924,7 +3112,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/metric-list/metric-list-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/metric-list/metric-list-03.tsx"
         }
       ]
     },
@@ -2942,7 +3131,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/metric-list/metric-list-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/metric-list/metric-list-04.tsx"
         }
       ]
     },
@@ -2960,7 +3150,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast/forecast-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forecast/forecast-01.tsx"
         }
       ]
     },
@@ -2974,7 +3165,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast/forecast-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forecast/forecast-02.tsx"
         }
       ]
     },
@@ -2988,7 +3180,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast/forecast-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forecast/forecast-03.tsx"
         }
       ]
     },
@@ -3007,7 +3200,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forecast/forecast-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forecast/forecast-04.tsx"
         }
       ]
     },
@@ -3022,7 +3216,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention/retention-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/retention/retention-01.tsx"
         }
       ]
     },
@@ -3040,7 +3235,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention/retention-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/retention/retention-02.tsx"
         }
       ]
     },
@@ -3054,7 +3250,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention/retention-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/retention/retention-03.tsx"
         }
       ]
     },
@@ -3072,7 +3269,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/retention/retention-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/retention/retention-04.tsx"
         }
       ]
     },
@@ -3087,7 +3285,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/distribution/distribution-01.tsx"
         }
       ]
     },
@@ -3102,7 +3301,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/distribution/distribution-02.tsx"
         }
       ]
     },
@@ -3116,7 +3316,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/distribution/distribution-03.tsx"
         }
       ]
     },
@@ -3131,7 +3332,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/distribution/distribution-04.tsx"
         }
       ]
     },
@@ -3146,7 +3348,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/spend/spend-01.tsx"
         }
       ]
     },
@@ -3161,7 +3364,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/spend/spend-02.tsx"
         }
       ]
     },
@@ -3180,7 +3384,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/spend/spend-03.tsx"
         }
       ]
     },
@@ -3199,7 +3404,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/spend/spend-04.tsx"
         }
       ]
     },
@@ -3214,7 +3420,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/flow/flow-01.tsx"
         }
       ]
     },
@@ -3229,7 +3436,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/flow/flow-02.tsx"
         }
       ]
     },
@@ -3245,7 +3453,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/flow/flow-03.tsx"
         }
       ]
     },
@@ -3259,7 +3468,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/flow/flow-04.tsx"
         }
       ]
     },
@@ -3273,7 +3483,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline/timeline-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/timeline/timeline-01.tsx"
         }
       ]
     },
@@ -3287,7 +3498,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline/timeline-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/timeline/timeline-02.tsx"
         }
       ]
     },
@@ -3301,7 +3513,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline/timeline-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/timeline/timeline-03.tsx"
         }
       ]
     },
@@ -3315,7 +3528,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/timeline/timeline-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/timeline/timeline-04.tsx"
         }
       ]
     },
@@ -3329,7 +3543,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime/realtime-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/realtime/realtime-01.tsx"
         }
       ]
     },
@@ -3347,7 +3562,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime/realtime-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/realtime/realtime-02.tsx"
         }
       ]
     },
@@ -3362,7 +3578,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime/realtime-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/realtime/realtime-03.tsx"
         }
       ]
     },
@@ -3376,7 +3593,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/realtime/realtime-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/realtime/realtime-04.tsx"
         }
       ]
     },
@@ -3390,7 +3608,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback/feedback-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/feedback/feedback-01.tsx"
         }
       ]
     },
@@ -3404,7 +3623,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback/feedback-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/feedback/feedback-02.tsx"
         }
       ]
     },
@@ -3419,7 +3639,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback/feedback-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/feedback/feedback-03.tsx"
         }
       ]
     },
@@ -3436,7 +3657,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/feedback/feedback-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/feedback/feedback-04.tsx"
         }
       ]
     },
@@ -3451,7 +3673,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments/deployments-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/deployments/deployments-01.tsx"
         }
       ]
     },
@@ -3465,7 +3688,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments/deployments-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/deployments/deployments-02.tsx"
         }
       ]
     },
@@ -3479,7 +3703,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments/deployments-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/deployments/deployments-03.tsx"
         }
       ]
     },
@@ -3493,7 +3718,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/deployments/deployments-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/deployments/deployments-04.tsx"
         }
       ]
     },
@@ -3511,7 +3737,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/scatter/scatter-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/scatter/scatter-01.tsx"
         }
       ]
     },
@@ -3529,7 +3756,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/scatter/scatter-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/scatter/scatter-02.tsx"
         }
       ]
     },
@@ -3547,7 +3775,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/scatter/scatter-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/scatter/scatter-03.tsx"
         }
       ]
     },
@@ -3561,7 +3790,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/scatter/scatter-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/scatter/scatter-04.tsx"
         }
       ]
     },
@@ -3578,7 +3808,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-01.tsx"
         }
       ]
     },
@@ -3593,7 +3824,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-02.tsx"
         }
       ]
     },
@@ -3608,7 +3840,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-03.tsx"
         }
       ]
     },
@@ -3623,7 +3856,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-04.tsx"
         }
       ]
     },
@@ -3639,7 +3873,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-05.tsx"
         }
       ]
     },
@@ -3658,7 +3893,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/security/security-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/security/security-06.tsx"
         }
       ]
     },
@@ -3672,7 +3908,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory/inventory-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/inventory/inventory-01.tsx"
         }
       ]
     },
@@ -3685,7 +3922,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory/inventory-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/inventory/inventory-02.tsx"
         }
       ]
     },
@@ -3700,7 +3938,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory/inventory-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/inventory/inventory-03.tsx"
         }
       ]
     },
@@ -3718,7 +3957,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/inventory/inventory-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/inventory/inventory-04.tsx"
         }
       ]
     },
@@ -3736,7 +3976,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-usage/ai-usage-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-usage/ai-usage-01.tsx"
         }
       ]
     },
@@ -3750,7 +3991,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-usage/ai-usage-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-usage/ai-usage-02.tsx"
         }
       ]
     },
@@ -3764,7 +4006,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-usage/ai-usage-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-usage/ai-usage-03.tsx"
         }
       ]
     },
@@ -3779,7 +4022,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-usage/ai-usage-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-usage/ai-usage-04.tsx"
         }
       ]
     },
@@ -3796,7 +4040,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-01.tsx"
         }
       ]
     },
@@ -3813,7 +4058,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-02.tsx"
         }
       ]
     },
@@ -3827,7 +4073,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-03.tsx"
         }
       ]
     },
@@ -3844,7 +4091,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-04.tsx"
         }
       ]
     },
@@ -3861,7 +4109,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-05.tsx"
         }
       ]
     },
@@ -3877,7 +4126,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-06.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-06.tsx"
         }
       ]
     },
@@ -3894,7 +4144,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/settings/settings-07.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/settings/settings-07.tsx"
         }
       ]
     },
@@ -3909,7 +4160,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell/app-shell-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/app-shell/app-shell-01.tsx"
         }
       ]
     },
@@ -3925,7 +4177,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell/app-shell-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/app-shell/app-shell-02.tsx"
         }
       ]
     },
@@ -3940,7 +4193,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell/app-shell-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/app-shell/app-shell-03.tsx"
         }
       ]
     },
@@ -3954,7 +4208,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/app-shell/app-shell-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/app-shell/app-shell-04.tsx"
         }
       ]
     },
@@ -3974,7 +4229,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms/forms-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-01.tsx"
         }
       ]
     },
@@ -3994,7 +4250,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms/forms-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-02.tsx"
         }
       ]
     },
@@ -4014,7 +4271,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms/forms-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-03.tsx"
         }
       ]
     },
@@ -4028,7 +4286,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/forms/forms-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-04.tsx"
         }
       ]
     },
@@ -4046,7 +4305,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/record-detail/record-detail-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/record-detail/record-detail-01.tsx"
         }
       ]
     },
@@ -4064,7 +4324,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/record-detail/record-detail-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/record-detail/record-detail-02.tsx"
         }
       ]
     },
@@ -4084,7 +4345,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/record-detail/record-detail-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/record-detail/record-detail-03.tsx"
         }
       ]
     },
@@ -4098,7 +4360,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/page-header/page-header-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/page-header/page-header-01.tsx"
         }
       ]
     },
@@ -4113,7 +4376,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/page-header/page-header-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/page-header/page-header-02.tsx"
         }
       ]
     },
@@ -4129,7 +4393,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/page-header/page-header-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/page-header/page-header-03.tsx"
         }
       ]
     },
@@ -4145,7 +4410,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/page-header/page-header-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/page-header/page-header-04.tsx"
         }
       ]
     },
@@ -4160,7 +4426,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/notifications/notifications-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/notifications/notifications-01.tsx"
         }
       ]
     },
@@ -4175,7 +4442,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/notifications/notifications-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/notifications/notifications-02.tsx"
         }
       ]
     },
@@ -4192,7 +4460,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/notifications/notifications-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/notifications/notifications-03.tsx"
         }
       ]
     },
@@ -4205,7 +4474,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/command-menu/command-menu-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/command-menu/command-menu-01.tsx"
         }
       ]
     },
@@ -4218,7 +4488,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/command-menu/command-menu-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/command-menu/command-menu-02.tsx"
         }
       ]
     },
@@ -4232,7 +4503,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kanban/kanban-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kanban/kanban-01.tsx"
         }
       ]
     },
@@ -4247,7 +4519,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kanban/kanban-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kanban/kanban-02.tsx"
         }
       ]
     },
@@ -4261,7 +4534,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/kanban/kanban-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kanban/kanban-03.tsx"
         }
       ]
     },
@@ -4275,7 +4549,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comments/comments-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comments/comments-01.tsx"
         }
       ]
     },
@@ -4292,7 +4567,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comments/comments-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comments/comments-02.tsx"
         }
       ]
     },
@@ -4308,7 +4584,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comments/comments-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comments/comments-03.tsx"
         }
       ]
     },
@@ -4324,7 +4601,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/comments/comments-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/comments/comments-04.tsx"
         }
       ]
     },
@@ -4339,7 +4617,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/calendar/calendar-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/calendar/calendar-01.tsx"
         }
       ]
     },
@@ -4354,7 +4633,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/calendar/calendar-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/calendar/calendar-02.tsx"
         }
       ]
     },
@@ -4369,7 +4649,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/calendar/calendar-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/calendar/calendar-03.tsx"
         }
       ]
     },
@@ -4384,7 +4665,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/calendar/calendar-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/calendar/calendar-04.tsx"
         }
       ]
     },
@@ -4399,7 +4681,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/files/files-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/files/files-01.tsx"
         }
       ]
     },
@@ -4417,7 +4700,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/files/files-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/files/files-02.tsx"
         }
       ]
     },
@@ -4434,7 +4718,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/files/files-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/files/files-03.tsx"
         }
       ]
     },
@@ -4449,7 +4734,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/files/files-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/files/files-04.tsx"
         }
       ]
     },
@@ -4464,7 +4750,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-assistant/ai-assistant-01.tsx"
         }
       ]
     },
@@ -4478,7 +4765,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-assistant/ai-assistant-02.tsx"
         }
       ]
     },
@@ -4493,7 +4781,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-assistant/ai-assistant-03.tsx"
         }
       ]
     },
@@ -4507,7 +4796,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/ai-assistant/ai-assistant-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/ai-assistant/ai-assistant-04.tsx"
         }
       ]
     },
@@ -4523,7 +4813,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/invoice/invoice-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/invoice/invoice-01.tsx"
         }
       ]
     },
@@ -4539,7 +4830,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/invoice/invoice-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/invoice/invoice-02.tsx"
         }
       ]
     },
@@ -4555,7 +4847,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/invoice/invoice-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/invoice/invoice-03.tsx"
         }
       ]
     },
@@ -4571,7 +4864,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/invoice/invoice-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/invoice/invoice-04.tsx"
         }
       ]
     },
@@ -4592,7 +4886,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding/onboarding-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/onboarding/onboarding-01.tsx"
         }
       ]
     },
@@ -4612,7 +4907,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding/onboarding-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/onboarding/onboarding-02.tsx"
         }
       ]
     },
@@ -4633,7 +4929,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding/onboarding-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/onboarding/onboarding-03.tsx"
         }
       ]
     },
@@ -4650,7 +4947,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/onboarding/onboarding-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/onboarding/onboarding-04.tsx"
         }
       ]
     },
@@ -4665,7 +4963,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages/error-pages-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages/error-pages-01.tsx"
         }
       ]
     },
@@ -4681,7 +4980,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages/error-pages-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages/error-pages-02.tsx"
         }
       ]
     },
@@ -4696,7 +4996,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages/error-pages-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages/error-pages-03.tsx"
         }
       ]
     },
@@ -4711,7 +5012,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages/error-pages-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages/error-pages-04.tsx"
         }
       ]
     },
@@ -4725,7 +5027,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/error-pages/error-pages-05.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/error-pages/error-pages-05.tsx"
         }
       ]
     },
@@ -4740,7 +5043,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/auth/auth-01.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-01.tsx"
         }
       ]
     },
@@ -4755,7 +5059,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/auth/auth-02.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-02.tsx"
         }
       ]
     },
@@ -4771,7 +5076,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/auth/auth-03.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-03.tsx"
         }
       ]
     },
@@ -4786,7 +5092,8 @@
       "files": [
         {
           "path": "registry/components/dashboardblocks/auth/auth-04.tsx",
-          "type": "registry:component"
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-04.tsx"
         }
       ]
     },
@@ -4801,7 +5108,8 @@
       "files": [
         {
           "path": "registry/hooks/use-animated-number.tsx",
-          "type": "registry:hook"
+          "type": "registry:hook",
+          "target": "@hooks/use-animated-number.tsx"
         }
       ]
     },
@@ -4813,7 +5121,8 @@
       "files": [
         {
           "path": "registry/hooks/use-in-view.tsx",
-          "type": "registry:hook"
+          "type": "registry:hook",
+          "target": "@hooks/use-in-view.tsx"
         }
       ]
     }

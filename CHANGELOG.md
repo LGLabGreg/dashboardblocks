@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.9
+
+### Patch Changes
+
+- 63ba697: Blocks now install into their own folders on Windows. The shadcn CLI used to write every block file straight into `components/`, so `activity-feed-01.tsx` landed at `components/activity-feed-01.tsx` instead of `components/dashboardblocks/activity-feed/activity-feed-01.tsx`. The blocks still worked, because the CLI rewrote their imports. Each block file now names its folder, so the CLI writes it to the same place on every system. This needs version 4.7 of the shadcn CLI or later.
+
 ## 1.3.8
 
 ### Patch Changes

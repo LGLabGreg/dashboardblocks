@@ -7,7 +7,8 @@
     {
       "path": "registry/components/dashboardblocks/link.tsx",
       "content": "'use client'\n\nimport {\n  type ComponentProps,\n  type ComponentType,\n  createContext,\n  createElement,\n  type ReactNode,\n  useContext,\n} from 'react'\n\ntype LinkProps = ComponentProps<'a'> & { href: string }\n\n/** A link that takes anchor props with a string `href`, such as Next.js's `Link`. */\ntype LinkComponent = ComponentType<LinkProps>\n\nconst LinkContext = createContext<LinkComponent | 'a'>('a')\n\ninterface LinkProviderProps {\n  children: ReactNode\n  /** Your router's link. Wrap one that takes `to` so it takes `href`. */\n  component: LinkComponent\n}\n\n/** Sets the link every dashboardblocks primitive inside it renders. */\nfunction LinkProvider({ children, component }: LinkProviderProps) {\n  return <LinkContext.Provider value={component}>{children}</LinkContext.Provider>\n}\n\n/**\n * An in-app link: the provider's component, or a plain anchor without one.\n * Without `href` it's an anchor that goes nowhere, as `<a>` without one is.\n */\nfunction Link({ children, href, ...props }: Omit<LinkProps, 'href'> & { href?: string }) {\n  const Component = useContext(LinkContext)\n  if (href === undefined) return <a {...props}>{children}</a>\n  // Not JSX: eslint-plugin-react-hooks reads a component from context as one created\n  // during render (static-components), though it's the same one on every render.\n  return createElement(Component, { href, ...props }, children)\n}\n\nexport { Link, LinkProvider }\n\nexport type { LinkComponent, LinkProps, LinkProviderProps }\n",
-      "type": "registry:component"
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/link.tsx"
     }
   ],
   "type": "registry:component"

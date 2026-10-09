@@ -9,7 +9,8 @@
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
       "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI2Props {\n  /** What the change is measured against, e.g. \"vs last week\". */\n  comparison: string\n  format?: KPIFormat\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI2Props = {\n  comparison: 'vs last week',\n  format: 'number',\n  previous: 2_151,\n  title: 'Active users',\n  value: 2_420,\n}\n\nconst KPI2 = (props: KPI2Props) => {\n  const { comparison, format, previous, title, value } = props\n\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <div className='flex items-center justify-between gap-2'>\n          <CardDescription>{title}</CardDescription>\n          <KPIChange comparison={comparison} previous={previous} value={value} />\n        </div>\n        <KPIValue value={value} format={format} animated />\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI2, exampleProps as kpi2ExampleProps, type KPI2Props }\n",
-      "type": "registry:component"
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/kpi/kpi-02.tsx"
     }
   ],
   "type": "registry:component"
