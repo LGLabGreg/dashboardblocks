@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: e4df895a3493
+// source-hash: 36cb7150486a
 
 'use client'
 
@@ -211,7 +211,7 @@ function PageTabs({
             >
               {item.title}
               {item.badge !== undefined && (
-                <span className='bg-muted text-muted-foreground rounded-full px-1.5 text-xs tabular-nums'>
+                <span className='bg-muted text-foreground rounded-full px-1.5 text-xs tabular-nums'>
                   {item.badge}
                 </span>
               )}

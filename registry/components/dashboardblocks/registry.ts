@@ -89,6 +89,11 @@ export const components: Registry['items'] = [
         path: 'registry/components/dashboardblocks/app-shell.tsx',
         type: 'registry:component',
       },
+      // Replaces the sidebar's own hooks/use-mobile.ts, which fails react-hooks/set-state-in-effect.
+      {
+        path: 'registry/hooks/use-mobile.ts',
+        type: 'registry:hook',
+      },
     ],
   },
   {
@@ -860,14 +865,7 @@ export const components: Registry['items'] = [
     title: 'Invoice',
     description:
       'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
-    registryDependencies: [
-      'badge',
-      'button',
-      'card',
-      'checkbox',
-      'table',
-      registryUrl('billing'),
-    ],
+    registryDependencies: ['badge', 'button', 'card', 'checkbox', registryUrl('billing')],
     files: [
       {
         path: 'registry/components/dashboardblocks/invoice.tsx',

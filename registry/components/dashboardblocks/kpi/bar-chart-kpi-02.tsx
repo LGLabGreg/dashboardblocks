@@ -88,6 +88,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
               .join(', ')}`}
           >
             <TinyBarChart
+              accessibilityLayer={false}
               bars={series.map((item) => ({
                 dataKey: item.key,
                 fill: item.color,

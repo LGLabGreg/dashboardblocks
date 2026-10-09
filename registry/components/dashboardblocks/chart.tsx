@@ -68,6 +68,12 @@ const ChartTooltipContent = ({
 }
 
 export interface TinyBarChartProps {
+  /**
+   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
+   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
+   * that a screen reader announces as nothing.
+   */
+  accessibilityLayer?: boolean
   bars: BarProps[]
   className?: string
   data: unknown[]
@@ -76,6 +82,7 @@ export interface TinyBarChartProps {
 }
 
 export const TinyBarChart = ({
+  accessibilityLayer = true,
   bars,
   className = '',
   data,
@@ -88,7 +95,7 @@ export const TinyBarChart = ({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
-        <BarChart data={safeData}>
+        <BarChart accessibilityLayer={accessibilityLayer} data={safeData}>
           <Tooltip
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />
@@ -117,6 +124,12 @@ export const TinyBarChart = ({
 }
 
 export interface TinyLineChartProps {
+  /**
+   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
+   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
+   * that a screen reader announces as nothing.
+   */
+  accessibilityLayer?: boolean
   className?: string
   data: unknown[]
   formatter?: ValueFormatter
@@ -125,6 +138,7 @@ export interface TinyLineChartProps {
 }
 
 export const TinyLineChart = ({
+  accessibilityLayer = true,
   className = '',
   data,
   formatter,
@@ -137,7 +151,7 @@ export const TinyLineChart = ({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
-        <LineChart data={safeData}>
+        <LineChart accessibilityLayer={accessibilityLayer} data={safeData}>
           <Tooltip
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />
@@ -169,6 +183,12 @@ export const TinyLineChart = ({
 }
 
 export interface TinyAreaChartProps {
+  /**
+   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
+   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
+   * that a screen reader announces as nothing.
+   */
+  accessibilityLayer?: boolean
   areas: AreaProps[]
   className?: string
   data: unknown[]
@@ -177,6 +197,7 @@ export interface TinyAreaChartProps {
 }
 
 export const TinyAreaChart = ({
+  accessibilityLayer = true,
   areas,
   className = '',
   data,
@@ -189,7 +210,7 @@ export const TinyAreaChart = ({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width='100%' height='100%'>
-        <AreaChart data={safeData}>
+        <AreaChart accessibilityLayer={accessibilityLayer} data={safeData}>
           <Tooltip
             content={(props) => (
               <ChartTooltipContent {...props} valueFormatter={formatter} />

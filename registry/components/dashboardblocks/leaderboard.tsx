@@ -25,7 +25,7 @@ const rankVariants = cva(
   {
     variants: {
       variant: {
-        badge: 'size-6 rounded-full bg-muted text-muted-foreground',
+        badge: 'size-6 rounded-full bg-muted text-foreground',
         plain: 'w-5 text-muted-foreground',
       },
     },

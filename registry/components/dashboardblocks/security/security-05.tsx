@@ -275,7 +275,7 @@ const Security5 = (props: Security5Props) => {
                 onSubmit={(event) => void verify(event)}
                 noValidate
                 aria-labelledby={`${id}-app`}
-                className='bg-muted/50 flex flex-col gap-4 rounded-lg border p-4 @md:flex-row'
+                className='flex flex-col gap-4 rounded-lg border p-4 @md:flex-row'
               >
                 <div className='size-36 shrink-0 self-center overflow-hidden rounded-md border bg-white p-1 @md:self-start [&_svg]:size-full'>
                   {setup.qrCode}

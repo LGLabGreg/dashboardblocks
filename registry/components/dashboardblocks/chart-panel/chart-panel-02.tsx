@@ -85,6 +85,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
       >
         <TabsList
           aria-label={title}
+          // Not the primitive's colour: the strip is the card's own header band, drawn flat
           className='h-auto w-full items-stretch group-data-horizontal/tabs:h-auto gap-0 rounded-none border-b bg-transparent p-0'
         >
           {metrics.map((metric) => {

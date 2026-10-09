@@ -26,15 +26,6 @@ import type { ReactNode } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 
 interface LineItem {
   name: string
@@ -159,6 +150,9 @@ const exampleProps: RecordDetail2Props = {
   },
 }
 
+const head = 'h-10 px-2 font-medium whitespace-nowrap'
+const amount = 'p-2 text-end whitespace-nowrap tabular-nums'
+
 const RecordDetail2 = (props: RecordDetail2Props) => {
   const {
     customer,
@@ -248,65 +242,75 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
             <CardTitle>Items</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead className='text-right'>Qty</TableHead>
-                  <TableHead className='text-right'>Price</TableHead>
-                  <TableHead className='text-right'>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items.map((item) => (
-                  <TableRow key={item.sku}>
-                    <TableCell>
-                      <span className='block font-medium'>{item.name}</span>
-                      <span className='text-muted-foreground text-xs'>{item.sku}</span>
-                    </TableCell>
-                    <TableCell className='text-right tabular-nums'>
-                      {item.quantity}
-                    </TableCell>
-                    <TableCell className='text-right tabular-nums'>
-                      {currency.format(item.price)}
-                    </TableCell>
-                    <TableCell className='text-right tabular-nums'>
-                      {currency.format(item.price * item.quantity)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={3}>Subtotal</TableCell>
-                  <TableCell className='text-right tabular-nums'>
-                    {currency.format(subtotal)}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell colSpan={3}>Shipping</TableCell>
-                  <TableCell className='text-right tabular-nums'>
-                    {currency.format(order.shipping)}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell colSpan={3}>
-                    Tax ({Math.round(order.taxRate * 100)}%)
-                  </TableCell>
-                  <TableCell className='text-right tabular-nums'>
-                    {currency.format(tax)}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell colSpan={3} className='font-semibold'>
-                    Total
-                  </TableCell>
-                  <TableCell className='text-right font-semibold tabular-nums'>
-                    {currency.format(subtotal + order.shipping + tax)}
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+            <div
+              role='region'
+              aria-label='Items'
+              // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+              tabIndex={0}
+              className='focus-visible:ring-ring/50 w-full overflow-x-auto outline-none focus-visible:ring-3'
+            >
+              <table className='w-full text-sm'>
+                <thead>
+                  <tr className='border-b'>
+                    <th scope='col' className={`${head} text-start`}>
+                      Product
+                    </th>
+                    <th scope='col' className={`${head} text-end`}>
+                      Qty
+                    </th>
+                    <th scope='col' className={`${head} text-end`}>
+                      Price
+                    </th>
+                    <th scope='col' className={`${head} text-end`}>
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item) => (
+                    <tr key={item.sku} className='border-b last:border-0'>
+                      <td className='p-2 whitespace-nowrap'>
+                        <span className='block font-medium'>{item.name}</span>
+                        <span className='text-muted-foreground text-xs'>{item.sku}</span>
+                      </td>
+                      <td className={amount}>{item.quantity}</td>
+                      <td className={amount}>{currency.format(item.price)}</td>
+                      <td className={amount}>
+                        {currency.format(item.price * item.quantity)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className='bg-muted/50 border-t font-medium'>
+                  <tr className='border-b'>
+                    <td colSpan={3} className='p-2'>
+                      Subtotal
+                    </td>
+                    <td className={amount}>{currency.format(subtotal)}</td>
+                  </tr>
+                  <tr className='border-b'>
+                    <td colSpan={3} className='p-2'>
+                      Shipping
+                    </td>
+                    <td className={amount}>{currency.format(order.shipping)}</td>
+                  </tr>
+                  <tr className='border-b'>
+                    <td colSpan={3} className='p-2'>
+                      Tax ({Math.round(order.taxRate * 100)}%)
+                    </td>
+                    <td className={amount}>{currency.format(tax)}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={3} className='p-2 font-semibold'>
+                      Total
+                    </td>
+                    <td className={`${amount} font-semibold`}>
+                      {currency.format(subtotal + order.shipping + tax)}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </CardContent>
         </Card>
         <Card>

@@ -182,9 +182,7 @@ function CommentAvatar({
   return (
     <Avatar aria-hidden size={size} className={className}>
       {author.avatar && <AvatarImage src={author.avatar} alt='' />}
-      <AvatarFallback
-        className={cn('text-foreground', size === 'sm' && 'text-[0.625rem]')}
-      >
+      <AvatarFallback className={cn(size === 'sm' && 'text-[0.625rem]')}>
         {initials(author.name)}
       </AvatarFallback>
     </Avatar>
@@ -318,7 +316,6 @@ function ReactionBar({
             aria-label='Add reaction'
             aria-expanded={picking}
             aria-controls={picking ? `${id}-picker` : undefined}
-            className='text-muted-foreground'
             onClick={() => setPicking(!picking)}
           >
             <IconPlaceholder
@@ -391,14 +388,7 @@ function CommentMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            variant='ghost'
-            size='icon-xs'
-            aria-label={label}
-            className='text-muted-foreground'
-          />
-        }
+        render={<Button variant='ghost' size='icon-xs' aria-label={label} />}
       >
         <IconPlaceholder
           lucide='EllipsisIcon'
@@ -944,7 +934,6 @@ function CommentThread({
                 type='button'
                 variant='ghost'
                 size='xs'
-                className='text-muted-foreground'
                 aria-label={isReply ? `Reply to ${item.author.name}` : undefined}
                 onClick={() => startReply(isReply ? item.author : undefined)}
               >
@@ -964,7 +953,6 @@ function CommentThread({
                 type='button'
                 variant='ghost'
                 size='xs'
-                className='text-muted-foreground'
                 onClick={() => resolve(true)}
               >
                 <IconPlaceholder

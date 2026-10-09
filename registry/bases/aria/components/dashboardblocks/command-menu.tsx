@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: 9a09f1fd7999
+// source-hash: d99791cde799
 
 'use client'
 
@@ -212,9 +212,7 @@ function CommandMenuTrigger({
         remixicon='RiSearchLine'
       />
       <span className='truncate max-sm:sr-only'>{placeholder}</span>
-      {shortcut && (
-        <Kbd className='text-foreground ml-auto max-sm:hidden'>{shortcut}</Kbd>
-      )}
+      {shortcut && <Kbd className='ml-auto max-sm:hidden'>{shortcut}</Kbd>}
     </Button>
   )
 }

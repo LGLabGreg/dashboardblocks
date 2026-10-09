@@ -215,6 +215,7 @@ const columns = columnHelper.columns([
     enableGlobalFilter: false,
     header: 'Modified',
     id: 'modified',
+    meta: { sortLabels: { asc: 'Oldest first', desc: 'Newest first' } },
     sortDescFirst: true,
   }),
   columnHelper.accessor('size', {

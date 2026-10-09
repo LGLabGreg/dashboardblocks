@@ -64,6 +64,7 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
         </div>
         <KPIChart label={describeSeries(`${title} by day`, data, format)}>
           <TinyBarChart
+            accessibilityLayer={false}
             bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
             data={data}
             formatter={getKPIFormatter(format)}

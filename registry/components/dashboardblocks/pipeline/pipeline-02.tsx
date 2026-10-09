@@ -80,7 +80,7 @@ const Pipeline2 = (props: Pipeline2Props) => {
               <Button
                 key={option.value}
                 aria-pressed={measure === option.value}
-                className='aria-pressed:bg-muted aria-pressed:text-foreground text-muted-foreground'
+                className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
                 onClick={() => setMeasure(option.value)}
                 size='sm'
                 variant='outline'

@@ -220,7 +220,7 @@ interface DataTableColumnMeta {
   /**
    * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }`
    * for dates. The menu lists the column's first sort direction first.
-   * @default A to Z and Z to A for text, high to low and low to high otherwise
+   * @default Oldest first and Newest first for a `Date` or ISO date string (a date held as a timestamp number needs these), A to Z and Z to A for text, high to low and low to high otherwise
    */
   sortLabels?: { asc: string; desc: string }
   /** Fills the spare width and truncates long text, in the table layout only. */
@@ -578,6 +578,7 @@ function DataTableEmpty<TData extends RowData>({
       <Button
         variant='outline'
         size='sm'
+        // Not the primitive's colour: undoes the muted text the empty cell passes down
         className='text-foreground'
         onClick={(event) => {
           focusTableNear(event.currentTarget)
@@ -798,6 +799,21 @@ function DataTableViewOptions<TData extends RowData>({
   )
 }
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
+
+/** A `Date`, or an ISO date string, in the column's first filled row. */
+function isDateColumn<TData extends RowData>(
+  table: DataTableInstance<TData>,
+  columnId: string,
+) {
+  for (const row of table.getCoreRowModel().rows) {
+    const value: unknown = row.getValue(columnId)
+    if (value == null || value === '') continue
+    return value instanceof Date || (typeof value === 'string' && ISO_DATE.test(value))
+  }
+  return false
+}
+
 interface DataTableSortMenuProps<TData extends RowData> {
   className?: string
   table: DataTableInstance<TData>
@@ -816,12 +832,15 @@ function DataTableSortMenu<TData extends RowData>({
   const current = columns.find((column) => column.id === sort?.id)
   const text = current?.getAutoSortDir() === 'asc'
   const customLabels = current?.columnDef.meta?.sortLabels
+  const dates = current && isDateColumn(table, current.id)
   const labels =
     customLabels ??
-    (text
-      ? { asc: 'A to Z', desc: 'Z to A' }
-      : { asc: 'Low to high', desc: 'High to low' })
-  const first = customLabels ? current.getFirstSortDir() : text ? 'asc' : 'desc'
+    (dates
+      ? { asc: 'Oldest first', desc: 'Newest first' }
+      : text
+        ? { asc: 'A to Z', desc: 'Z to A' }
+        : { asc: 'Low to high', desc: 'High to low' })
+  const first = customLabels || dates ? current.getFirstSortDir() : text ? 'asc' : 'desc'
   const second = first === 'asc' ? 'desc' : 'asc'
 
   return (

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/comments.tsx for React Aria
-// source-hash: eeded9b1f985
+// source-hash: d7b0d4561a24
 
 'use client'
 
@@ -184,9 +184,7 @@ function CommentAvatar({
   return (
     <Avatar aria-hidden size={size} className={className}>
       {author.avatar && <AvatarImage src={author.avatar} alt='' />}
-      <AvatarFallback
-        className={cn('text-foreground', size === 'sm' && 'text-[0.625rem]')}
-      >
+      <AvatarFallback className={cn(size === 'sm' && 'text-[0.625rem]')}>
         {initials(author.name)}
       </AvatarFallback>
     </Avatar>
@@ -320,7 +318,6 @@ function ReactionBar({
             aria-label='Add reaction'
             aria-expanded={picking}
             aria-controls={picking ? `${id}-picker` : undefined}
-            className='text-muted-foreground'
             onClick={() => setPicking(!picking)}
           >
             <IconPlaceholder
@@ -392,12 +389,7 @@ function CommentMenu({
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
     <DropdownMenuTrigger>
-      <Button
-        variant='ghost'
-        size='icon-xs'
-        aria-label={label}
-        className='text-muted-foreground'
-      >
+      <Button variant='ghost' size='icon-xs' aria-label={label}>
         <IconPlaceholder
           lucide='EllipsisIcon'
           tabler='IconDots'
@@ -946,7 +938,6 @@ function CommentThread({
                 type='button'
                 variant='ghost'
                 size='xs'
-                className='text-muted-foreground'
                 aria-label={isReply ? `Reply to ${item.author.name}` : undefined}
                 onClick={() => startReply(isReply ? item.author : undefined)}
               >
@@ -966,7 +957,6 @@ function CommentThread({
                 type='button'
                 variant='ghost'
                 size='xs'
-                className='text-muted-foreground'
                 onClick={() => resolve(true)}
               >
                 <IconPlaceholder

@@ -20,14 +20,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 
 interface CustomerOrder {
   date: string
@@ -81,6 +73,8 @@ const exampleProps: RecordDetail1Props = {
     { label: 'Last order', value: '3 days ago' },
   ],
 }
+
+const head = 'h-10 px-2 font-medium whitespace-nowrap'
 
 const statusVariant = {
   Delivered: 'secondary',
@@ -183,34 +177,51 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
             <CardTitle>Recent orders</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className='text-right'>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className='font-medium'>
-                      <a href={order.href} className='underline-offset-4 hover:underline'>
-                        {order.id}
-                      </a>
-                    </TableCell>
-                    <TableCell className='text-muted-foreground'>{order.date}</TableCell>
-                    <TableCell>
-                      <Badge variant={statusVariant[order.status]}>{order.status}</Badge>
-                    </TableCell>
-                    <TableCell className='text-right tabular-nums'>
-                      {currency.format(order.total)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <div className='w-full overflow-x-auto'>
+              <table className='w-full text-sm'>
+                <thead>
+                  <tr className='border-b'>
+                    <th scope='col' className={`${head} text-start`}>
+                      Order
+                    </th>
+                    <th scope='col' className={`${head} text-start`}>
+                      Date
+                    </th>
+                    <th scope='col' className={`${head} text-start`}>
+                      Status
+                    </th>
+                    <th scope='col' className={`${head} text-end`}>
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id} className='border-b last:border-0'>
+                      <td className='p-2 font-medium whitespace-nowrap'>
+                        <a
+                          href={order.href}
+                          className='underline-offset-4 hover:underline'
+                        >
+                          {order.id}
+                        </a>
+                      </td>
+                      <td className='text-muted-foreground p-2 whitespace-nowrap'>
+                        {order.date}
+                      </td>
+                      <td className='p-2'>
+                        <Badge variant={statusVariant[order.status]}>
+                          {order.status}
+                        </Badge>
+                      </td>
+                      <td className='p-2 text-end whitespace-nowrap tabular-nums'>
+                        {currency.format(order.total)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </CardContent>
         </Card>
       </RecordLayout>

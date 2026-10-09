@@ -73,6 +73,7 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
           label={describeSeries(`${title} by day`, data, format)}
         >
           <TinyAreaChart
+            accessibilityLayer={false}
             areas={[
               {
                 dataKey: 'value',

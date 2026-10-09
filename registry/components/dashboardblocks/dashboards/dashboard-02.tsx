@@ -242,7 +242,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
               <Button
                 key={segment.value}
                 aria-pressed={query.preset === segment.value}
-                className='aria-pressed:bg-muted aria-pressed:text-foreground text-muted-foreground'
+                className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
                 onClick={() => update({ preset: segment.value })}
                 variant='outline'
               >

@@ -65,6 +65,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
         <div className='flex flex-col gap-2'>
           <KPIChart label={describeSeries(`${title} by day`, data, format)}>
             <TinyLineChart
+              accessibilityLayer={false}
               data={data}
               formatter={getKPIFormatter(format)}
               height={height}

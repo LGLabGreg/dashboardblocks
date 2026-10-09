@@ -152,10 +152,7 @@ const Comments4 = (props: Comments4Props) => {
     if (kind === 'customer') return <Badge variant='outline'>Customer</Badge>
     if (kind === 'note')
       return (
-        <Badge
-          variant='outline'
-          className='border-amber-500/30 text-amber-800 dark:text-amber-400'
-        >
+        <Badge variant='outline'>
           {lockIcon}
           Internal
         </Badge>

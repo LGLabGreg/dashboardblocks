@@ -519,7 +519,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
   const matches = (item: { service: string }) => !service || item.service === service
 
   return {
-    alerts: ALERTS.filter(matches).map(({ minutesAgo, service: _service, ...alert }) => ({
+    alerts: ALERTS.filter(matches).map(({ minutesAgo, ...alert }) => ({
       ...alert,
       firedAt: new Date(now.getTime() - minutesAgo * MINUTE),
     })),

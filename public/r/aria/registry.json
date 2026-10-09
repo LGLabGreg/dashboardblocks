@@ -86,6 +86,10 @@
         {
           "path": "registry/components/dashboardblocks/app-shell.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "registry/hooks/use-mobile.ts",
+          "type": "registry:hook"
         }
       ]
     },
@@ -912,7 +916,6 @@
         "button",
         "card",
         "checkbox",
-        "table",
         "https://www.dashboardblocks.com/r/aria/billing.json"
       ],
       "files": [
@@ -4037,7 +4040,6 @@
         "badge",
         "button",
         "card",
-        "table",
         "https://www.dashboardblocks.com/r/aria/page-header.json",
         "https://www.dashboardblocks.com/r/aria/record-detail.json"
       ],
@@ -4055,7 +4057,6 @@
         "badge",
         "button",
         "card",
-        "table",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/page-header.json",
         "https://www.dashboardblocks.com/r/aria/record-detail.json"

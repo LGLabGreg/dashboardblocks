@@ -670,7 +670,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                 if (segment.lane < barRows) slots[segment.lane] = { segment, type: 'bar' }
               }
               const queue = [...timed]
-              let hidden = covering.filter((segment) => segment.lane >= barRows).length
+              const hidden = covering.filter((segment) => segment.lane >= barRows).length
               for (let row = 0; row < maxRows; row++) {
                 if (slots[row]) continue
                 const remaining = queue.length + hidden

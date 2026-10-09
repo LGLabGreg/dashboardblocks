@@ -86,7 +86,10 @@ const Funnel1 = (props: Funnel1Props) => {
           </tbody>
         </table>
       </CardContent>
-      <CardFooter className='text-muted-foreground justify-between border-t text-sm'>
+      <CardFooter
+        // Not the primitive's colour: the footer's style sets no text colour
+        className='text-muted-foreground justify-between border-t text-sm'
+      >
         <span>Overall conversion</span>
         <span className='text-foreground font-semibold tabular-nums'>
           {last ? formatRate(last.fromStart, 2) : '—'}

@@ -382,10 +382,7 @@ function UserAvatar({ className, user }: { className?: string; user: AppUser }) 
   return (
     <Avatar className={className}>
       {user.avatar && <AvatarImage src={user.avatar} alt='' />}
-      {/* The style's muted initials miss AA contrast on its muted fill. */}
-      <AvatarFallback className='text-foreground'>
-        {getInitials(user.name)}
-      </AvatarFallback>
+      <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
     </Avatar>
   )
 }
@@ -408,7 +405,7 @@ function UserMenuItems({
   return (
     <>
       <DropdownMenuGroup>
-        <DropdownMenuLabel className='flex items-center gap-2 font-normal text-foreground'>
+        <DropdownMenuLabel className='flex items-center gap-2 font-normal'>
           <UserAvatar user={user} />
           <UserSummary user={user} />
         </DropdownMenuLabel>
@@ -618,7 +615,7 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         remixicon='RiSearchLine'
       />
       <span className='max-sm:sr-only'>{placeholder}</span>
-      <Kbd className='text-foreground ml-auto max-sm:hidden'>⌘K</Kbd>
+      <Kbd className='ml-auto max-sm:hidden'>⌘K</Kbd>
     </Button>
   )
 }
@@ -719,7 +716,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
           >
             {item.title}
             {item.badge !== undefined && (
-              <span className='bg-muted text-muted-foreground rounded-full px-1.5 text-xs tabular-nums'>
+              <span className='bg-muted text-foreground rounded-full px-1.5 text-xs tabular-nums'>
                 {item.badge}
               </span>
             )}

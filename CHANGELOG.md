@@ -1,5 +1,18 @@
 # dashboardblocks
 
+## 1.3.8
+
+### Patch Changes
+
+- 175edd1: Page Header, App Shell, Pipeline, Geo and Leaderboard: small counts, initials and rank labels on a muted background now use the foreground colour, so they pass colour contrast in the light theme. Team: the "+N" circle in an avatar stack does too.
+- 17f9c07: Security 05's code step and Settings 02's new-key panel no longer tint the box around their error text, so the red text meets contrast in light themes.
+- cd74c74: Kanban: the board's scrolling region now holds its columns' screen-reader labels, so the card no longer has hidden room to scroll sideways (784px at 360px in Kanban 01). Animated wave: the wave is `aria-hidden` and ignores the pointer, as a decorative layer should. Neither changes how they look.
+- 30fea13: The KPI chart blocks no longer leave a tab stop that screen readers can't see. Each chart is labelled as one image, but Recharts made it focusable inside that image by default. `TinyBarChart`, `TinyLineChart` and `TinyAreaChart` take an `accessibilityLayer` prop, and the KPI blocks turn it off. Hover tooltips still work.
+- a5a8b8e: Blocks now pass `eslint .` in a new Vite project, as they do in Next.js: Calendar, Geo and Dashboard 05 had small lint errors, fixed without changing what they do. App Shell installs its own `hooks/use-mobile.ts`, which replaces the one that comes with the sidebar and no longer sets state in an effect.
+- 8f9e496: Blocks no longer change the colours of your shadcn components, so they match the same components elsewhere in your app. Avatar initials, keyboard hints, icon buttons and badges use your style's own colours. Data Table 05 and 06 show failed and past-due rows as a destructive badge. Settings 02 marks unused keys with an amber dot, Settings 06 drops the red ring around the danger zone, and Comments 04's internal badge is plain.
+- e0bc829: Record detail 01 and 02 and the invoice's line items table now show their rows with React Aria. They used the shadcn `Table`, which in React Aria is a grid that renders no rows without a row header column. They're plain tables now, and look the same. Record detail 01 and 03's avatar initials also meet colour contrast, and record detail 02's items and the line items table scroll as a named region you can reach with Tab.
+- 0462c18: Data table: the sort menu names a date column's orders "Oldest first" and "Newest first", where it said "A to Z" and "Z to A" for ISO date strings and "High to low" for `Date` values. A date held as a number, or a column you want worded differently, takes `meta.sortLabels`.
+
 ## 1.3.7
 
 ### Patch Changes

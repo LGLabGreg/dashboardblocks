@@ -170,7 +170,11 @@ interface KPIChartProps {
   label: string
 }
 
-/** Wraps a small chart as a single image with a text alternative. */
+/**
+ * Wraps a small chart as a single image with a text alternative. Its children
+ * are hidden from assistive tech, so turn off the chart's keyboard layer
+ * (`accessibilityLayer={false}`), or it leaves a tab stop that reads as nothing.
+ */
 function KPIChart({ children, className, label }: KPIChartProps) {
   return (
     <div role='img' aria-label={label} className={cn('w-full', className)}>

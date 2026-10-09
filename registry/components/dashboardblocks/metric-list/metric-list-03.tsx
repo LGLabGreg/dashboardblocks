@@ -132,7 +132,10 @@ const MetricList3 = (props: MetricList3Props) => {
           })}
         </MetricList>
       </CardContent>
-      <CardFooter className='text-muted-foreground flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t text-xs'>
+      <CardFooter
+        // Not the primitive's colour: the footer's style sets no text colour
+        className='text-muted-foreground flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t text-xs'
+      >
         <MetricTargetKey />
         <span>
           {met} of {metrics.length} on target

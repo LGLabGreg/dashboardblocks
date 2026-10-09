@@ -101,7 +101,7 @@ function useMapReadout(points: MapPoint[]) {
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!current) return
-    let next: MapPoint | null | undefined = null
+    let next: MapPoint | null | undefined
     switch (event.key) {
       case 'ArrowRight':
         next = nearest(1, 0)

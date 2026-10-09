@@ -121,6 +121,7 @@ const Leaderboard03 = (props: Leaderboard03Props) => {
                   style={{ transitionDelay: delay }}
                 >
                   <Avatar
+                    // Not the primitive's colour: the style sets no outline, so this one is the block's own
                     className={cn(
                       'outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10',
                       step.avatar,
@@ -160,7 +161,10 @@ const Leaderboard03 = (props: Leaderboard03Props) => {
             {rest.map((contributor, index) => (
               <LeaderboardItem key={contributor.id} className='px-0'>
                 <LeaderboardRank rank={index + 4} />
-                <Avatar className='size-7 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
+                <Avatar
+                  // Not the primitive's colour: the style sets no outline, so this one is the block's own
+                  className='size-7 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'
+                >
                   <AvatarImage src={contributor.avatar} alt='' />
                   <AvatarFallback className='text-[10px]'>
                     {getInitials(contributor.name)}

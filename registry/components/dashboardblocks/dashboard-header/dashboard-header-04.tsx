@@ -69,13 +69,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
             <span aria-live='polite'>
               {refreshing ? 'Refreshing…' : `Updated ${updated}`}
             </span>
-            <Button
-              className='text-muted-foreground'
-              disabled={refreshing}
-              onClick={refresh}
-              size='xs'
-              variant='ghost'
-            >
+            <Button disabled={refreshing} onClick={refresh} size='xs' variant='ghost'>
               <IconPlaceholder
                 lucide='RefreshCwIcon'
                 tabler='IconRefresh'

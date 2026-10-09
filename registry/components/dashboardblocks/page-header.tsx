@@ -209,7 +209,7 @@ function PageTabs({
             >
               {item.title}
               {item.badge !== undefined && (
-                <span className='bg-muted text-muted-foreground rounded-full px-1.5 text-xs tabular-nums'>
+                <span className='bg-muted text-foreground rounded-full px-1.5 text-xs tabular-nums'>
                   {item.badge}
                 </span>
               )}

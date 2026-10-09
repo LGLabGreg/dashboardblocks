@@ -143,7 +143,7 @@ const Geo1 = (props: Geo1Props) => {
               >
                 <span
                   aria-hidden
-                  className='bg-muted text-muted-foreground w-7 shrink-0 rounded-[3px] py-0.5 text-center text-[10px] font-medium'
+                  className='bg-muted text-foreground w-7 shrink-0 rounded-[3px] py-0.5 text-center text-[10px] font-medium'
                 >
                   {tile.code}
                 </span>

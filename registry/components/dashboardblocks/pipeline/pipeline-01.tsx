@@ -263,12 +263,7 @@ function MoveMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            aria-label={`Move ${item.title}`}
-            className='text-muted-foreground'
-            size='icon-xs'
-            variant='ghost'
-          />
+          <Button aria-label={`Move ${item.title}`} size='icon-xs' variant='ghost' />
         }
       >
         <IconPlaceholder

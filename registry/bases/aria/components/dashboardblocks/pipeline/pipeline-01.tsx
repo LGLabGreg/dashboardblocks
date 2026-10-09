@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/pipeline/pipeline-01.tsx for React Aria
-// source-hash: 314d22bbd438
+// source-hash: e4e3447d155b
 
 'use client'
 
@@ -262,12 +262,7 @@ function MoveMenu({
 }) {
   return (
     <DropdownMenuTrigger>
-      <Button
-        aria-label={`Move ${item.title}`}
-        className='text-muted-foreground'
-        size='icon-xs'
-        variant='ghost'
-      >
+      <Button aria-label={`Move ${item.title}`} size='icon-xs' variant='ghost'>
         <IconPlaceholder
           lucide='EllipsisIcon'
           tabler='IconDots'

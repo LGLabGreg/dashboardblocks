@@ -92,7 +92,7 @@ const Settings6 = (props: Settings6Props) => {
   }
 
   return (
-    <Card className='ring-destructive/30 @container'>
+    <Card className='@container'>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

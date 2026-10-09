@@ -77,7 +77,7 @@ const DashboardHeader3 = (props: DashboardHeader3Props) => {
             <Button
               key={segment.value}
               aria-pressed={preset === segment.value}
-              className='aria-pressed:bg-muted aria-pressed:text-foreground text-muted-foreground flex-1 @md:flex-none'
+              className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground flex-1 @md:flex-none'
               onClick={() => setPreset(segment.value)}
               variant='outline'
             >

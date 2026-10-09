@@ -130,12 +130,14 @@ const StatGroup3 = (props: StatGroup3Props) => {
       >
         <TabsList
           aria-label={`${title} metrics`}
+          // Not the primitive's colour: the 1px gaps between cells show this background as dividers
           className='bg-border grid h-auto w-full grid-cols-2 items-stretch gap-px rounded-none border-b p-0 group-data-horizontal/tabs:h-auto @[44rem]:grid-cols-4'
         >
           {metrics.map((metric) => (
             <TabsTrigger
               key={metric.key}
               value={metric.key}
+              // Not the primitive's colour: each metric is a cell of the block's own grid, on the card's surface
               className='bg-card data-active:bg-card dark:data-active:bg-card h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none border-0 px-4 py-4 text-left font-normal whitespace-normal hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] data-active:shadow-[inset_0_-2px_0_var(--color-foreground)]! dark:data-active:border-transparent @md:px-6 @md:py-5 @[44rem]:px-5'
             >
               <span className='text-muted-foreground text-sm'>{metric.label}</span>

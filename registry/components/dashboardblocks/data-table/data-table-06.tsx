@@ -115,7 +115,7 @@ const exampleProps: DataTable6Props = {
 
 const STATUS_CONFIG: Record<
   CustomerStatus,
-  { className?: string; icon: React.ReactNode; label: string }
+  { destructive?: boolean; icon: React.ReactNode; label: string }
 > = {
   active: {
     icon: (
@@ -131,7 +131,6 @@ const STATUS_CONFIG: Record<
     label: 'Active',
   },
   churned: {
-    className: 'text-muted-foreground',
     icon: (
       <IconPlaceholder
         lucide='CircleXIcon'
@@ -145,7 +144,7 @@ const STATUS_CONFIG: Record<
     label: 'Churned',
   },
   'past-due': {
-    className: 'text-destructive',
+    destructive: true,
     icon: (
       <IconPlaceholder
         lucide='ClockIcon'
@@ -250,7 +249,7 @@ const columns = columnHelper.columns([
     cell: ({ getValue }) => {
       const status = STATUS_CONFIG[getValue()]
       return (
-        <Badge variant='outline' className={status.className}>
+        <Badge variant={status.destructive ? 'destructive' : 'outline'}>
           {status.icon}
           {status.label}
         </Badge>

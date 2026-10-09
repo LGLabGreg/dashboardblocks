@@ -116,12 +116,16 @@ function PersonAvatar({
     <Avatar aria-hidden size={size} className={className}>
       {person.avatar && <AvatarImage src={person.avatar} alt='' />}
       <AvatarFallback
+        // Not the primitive's colour: each person's initials take their own chart tint
         className={cn('font-medium', initialsSize[size], getAvatarColor(person.name))}
       >
         {getInitials(person.name)}
       </AvatarFallback>
       {showPresence && person.presence && (
-        <AvatarBadge className={cn('ring-card', presenceConfig[person.presence].dot)} />
+        <AvatarBadge
+          // Not the primitive's colour: the presence dot is the block's own, coloured for status, and its ring cuts it out of the card behind it
+          className={cn('ring-card', presenceConfig[person.presence].dot)}
+        />
       )}
     </Avatar>
   )
@@ -195,7 +199,7 @@ function AvatarStack({
       {hidden > 0 && (
         <li
           className={cn(
-            'bg-muted text-muted-foreground ring-card relative flex shrink-0 items-center justify-center rounded-full font-medium tabular-nums ring-2',
+            'bg-muted text-foreground ring-card relative flex shrink-0 items-center justify-center rounded-full font-medium tabular-nums ring-2',
             stackCountSize[size],
           )}
         >

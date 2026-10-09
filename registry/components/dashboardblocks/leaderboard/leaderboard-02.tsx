@@ -107,7 +107,10 @@ const Leaderboard02 = (props: Leaderboard02Props) => {
           {reps.map((rep, index) => (
             <LeaderboardItem key={rep.id} size='lg' className='px-0'>
               <LeaderboardRank rank={index + 1} variant='badge' medal />
-              <Avatar className='size-9 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'>
+              <Avatar
+                // Not the primitive's colour: the style sets no outline, so this one is the block's own
+                className='size-9 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'
+              >
                 <AvatarImage src={rep.avatar} alt='' />
                 <AvatarFallback className='text-xs'>
                   {getInitials(rep.name)}

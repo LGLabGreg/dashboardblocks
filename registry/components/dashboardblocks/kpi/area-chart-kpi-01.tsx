@@ -82,6 +82,7 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
               .join('; ')}`}
           >
             <TinyAreaChart
+              accessibilityLayer={false}
               areas={[
                 {
                   dataKey: 'revenue',

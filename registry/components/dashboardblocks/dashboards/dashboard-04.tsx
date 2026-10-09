@@ -492,7 +492,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
               <Button
                 key={option.value}
                 aria-pressed={query.preset === option.value}
-                className='aria-pressed:bg-muted aria-pressed:text-foreground text-muted-foreground'
+                className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
                 onClick={() => update({ preset: option.value })}
                 variant='outline'
               >

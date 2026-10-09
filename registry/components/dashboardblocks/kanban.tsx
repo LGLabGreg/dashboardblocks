@@ -677,7 +677,7 @@ function KanbanBoard({
           // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
           tabIndex={0}
           className={cn(
-            'focus-visible:ring-ring/50 @container flex snap-x snap-proximity items-start gap-3 overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
+            'focus-visible:ring-ring/50 @container relative flex snap-x snap-proximity items-start gap-3 overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
             className,
           )}
         >
@@ -814,7 +814,6 @@ function KanbanColumn({
     <Button
       aria-expanded={!collapsed}
       aria-label={`${collapsed ? 'Expand' : 'Collapse'} ${column.title}`}
-      className='text-muted-foreground'
       size='icon-xs'
       variant='ghost'
       onClick={() => onCollapsedChange(!collapsed)}
@@ -1045,7 +1044,7 @@ function KanbanCardMenu({ className }: { className?: string }) {
         render={
           <Button
             aria-label={`Move ${item.title}`}
-            className={cn('text-muted-foreground', className)}
+            className={className}
             size='icon-xs'
             variant='ghost'
           />
@@ -1164,7 +1163,14 @@ function KanbanAssignees({
             <AvatarFallback>{getInitials(name)}</AvatarFallback>
           </Avatar>
         ))}
-        {rest > 0 && <AvatarGroupCount className='ring-card'>+{rest}</AvatarGroupCount>}
+        {rest > 0 && (
+          <AvatarGroupCount
+            // Not the primitive's colour: the ring cuts the count out of the card behind it
+            className='ring-card'
+          >
+            +{rest}
+          </AvatarGroupCount>
+        )}
       </AvatarGroup>
       <span className='sr-only'>Assigned to {listFormat.format(names)}</span>
     </span>
@@ -1458,7 +1464,7 @@ function KanbanAddCard({
         ref={buttonRef}
         variant='ghost'
         size='sm'
-        className={cn('text-muted-foreground justify-start', className)}
+        className={cn('justify-start', className)}
         onClick={() => setOpen(true)}
       >
         <IconPlaceholder
@@ -1490,6 +1496,7 @@ function KanbanAddCard({
           event.preventDefault()
           close()
         }}
+        // Not the primitive's colour: the input replaces a card's title in place, so it takes the card's surface
         className='bg-card'
       />
       <p role='status' className='sr-only'>

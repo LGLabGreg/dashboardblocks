@@ -67,10 +67,10 @@ const exampleProps: DataTable5Props = {
 
 const STATE_CONFIG: Record<
   OrderState,
-  { className?: string; icon: React.ReactNode; label: string }
+  { destructive?: boolean; icon: React.ReactNode; label: string }
 > = {
   failed: {
-    className: 'text-destructive',
+    destructive: true,
     icon: (
       <IconPlaceholder
         lucide='CircleXIcon'
@@ -154,7 +154,7 @@ const columns = columnHelper.columns([
     cell: ({ getValue }) => {
       const state = STATE_CONFIG[getValue()]
       return (
-        <Badge variant='outline' className={state.className}>
+        <Badge variant={state.destructive ? 'destructive' : 'outline'}>
           {state.icon}
           {state.label}
         </Badge>

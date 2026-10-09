@@ -188,7 +188,7 @@ function PipelineOwner({
       <span
         aria-hidden
         title={name}
-        className='bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-medium'
+        className='bg-muted text-foreground flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-medium'
       >
         {getInitials(name)}
       </span>
@@ -226,7 +226,7 @@ function PipelineStageHeader({
           style={{ backgroundColor: color }}
         />
         <span className='truncate'>{label}</span>
-        <span className='bg-muted text-muted-foreground ml-auto rounded-full px-2 py-0.5 text-xs tabular-nums'>
+        <span className='bg-muted text-foreground ml-auto rounded-full px-2 py-0.5 text-xs tabular-nums'>
           {count}
           <span className='sr-only'> {count === 1 ? 'item' : 'items'}</span>
         </span>

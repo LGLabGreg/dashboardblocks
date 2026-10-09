@@ -8,14 +8,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 
 import { cn } from '@/lib/utils'
 
@@ -567,104 +559,127 @@ function LineItemsTable({
 }: LineItemsTableProps) {
   const selected = new Set(selection?.selected)
   const hasSelection = Boolean(selection)
-  const edge = 'first:pl-0 last:pr-0'
+  const edge = 'first:ps-0 last:pe-0'
   const wide = 'hidden @md/line-items:table-cell print:table-cell'
+  const head = 'h-10 px-2 text-start align-middle font-medium whitespace-nowrap'
+  const cell = 'p-2 align-middle whitespace-nowrap'
 
   return (
     <div className={cn('@container/line-items print:*:overflow-visible', className)}>
-      <Table>
-        <caption className='sr-only'>{caption}</caption>
-        <TableHeader>
-          <TableRow className='hover:bg-transparent'>
-            {hasSelection && (
-              <TableHead className={cn(edge, 'w-8')}>
-                <span className='sr-only'>Selected</span>
-              </TableHead>
-            )}
-            <TableHead className={edge}>Description</TableHead>
-            <TableHead className={cn(edge, 'text-right', !hidePrices && wide)}>
-              Qty
-            </TableHead>
-            {!hidePrices && (
-              <>
-                <TableHead className={cn(edge, wide, 'text-right')}>Unit price</TableHead>
-                <TableHead className={cn(edge, 'text-right')}>Amount</TableHead>
-              </>
-            )}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {lines.map((line) => {
-            const isSelectable = selection && (selection.isSelectable?.(line) ?? true)
-            const isExcluded = isSelectable && line.optional && !selected.has(line.id)
-            const quantity = `${line.quantity}${line.unit ? ` ${line.unit}` : ''}`
-            return (
-              <TableRow key={line.id} className='break-inside-avoid hover:bg-transparent'>
-                {hasSelection && (
-                  <TableCell className={cn(edge, 'align-top')}>
-                    {isSelectable && (
-                      <Checkbox
-                        aria-label={selection.label(line)}
-                        checked={selected.has(line.id)}
-                        onCheckedChange={(checked) =>
-                          selection.onChange(line.id, checked === true)
-                        }
-                        className='mt-0.5 print:bg-transparent! print:[&_svg]:text-black!'
-                      />
-                    )}
-                  </TableCell>
-                )}
-                <TableCell className={cn(edge, 'align-top whitespace-normal')}>
-                  <span className='flex flex-wrap items-center gap-x-2 gap-y-1'>
-                    <span className='font-medium'>{line.description}</span>
-                    {line.optional && <Badge variant='outline'>Optional</Badge>}
-                  </span>
-                  {(line.sku || line.detail) && (
-                    <span className='text-muted-foreground mt-0.5 block text-xs'>
-                      {line.sku && <span className='font-mono'>{line.sku}</span>}
-                      {line.sku && line.detail && ' · '}
-                      {line.detail}
-                    </span>
-                  )}
-                  {!hidePrices && (
-                    <span className='text-muted-foreground mt-0.5 block text-xs tabular-nums @md/line-items:hidden print:hidden'>
-                      {quantity} × {formatDocumentAmount(line.unitPrice, currency)}
-                    </span>
-                  )}
-                </TableCell>
-                <TableCell
-                  className={cn(
-                    edge,
-                    'text-right align-top tabular-nums',
-                    !hidePrices && wide,
-                  )}
-                >
-                  {quantity}
-                </TableCell>
-                {!hidePrices && (
-                  <>
-                    <TableCell
-                      className={cn(edge, wide, 'text-right align-top tabular-nums')}
-                    >
-                      {formatDocumentAmount(line.unitPrice, currency)}
-                    </TableCell>
-                    <TableCell
-                      className={cn(
-                        edge,
-                        'text-right align-top font-medium tabular-nums',
-                        isExcluded && 'text-muted-foreground font-normal',
+      <div
+        role='region'
+        aria-label={caption}
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+        tabIndex={0}
+        className='focus-visible:ring-ring/50 w-full overflow-x-auto outline-none focus-visible:ring-3'
+      >
+        <table className='w-full text-sm'>
+          <caption className='sr-only'>{caption}</caption>
+          <thead>
+            <tr className='border-b'>
+              {hasSelection && (
+                <th scope='col' className={cn(head, edge, 'w-8 pe-0')}>
+                  <span className='sr-only'>Selected</span>
+                </th>
+              )}
+              <th scope='col' className={cn(head, edge)}>
+                Description
+              </th>
+              <th scope='col' className={cn(head, edge, 'text-end', !hidePrices && wide)}>
+                Qty
+              </th>
+              {!hidePrices && (
+                <>
+                  <th scope='col' className={cn(head, edge, wide, 'text-end')}>
+                    Unit price
+                  </th>
+                  <th scope='col' className={cn(head, edge, 'text-end')}>
+                    Amount
+                  </th>
+                </>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {lines.map((line) => {
+              const isSelectable = selection && (selection.isSelectable?.(line) ?? true)
+              const isExcluded = isSelectable && line.optional && !selected.has(line.id)
+              const quantity = `${line.quantity}${line.unit ? ` ${line.unit}` : ''}`
+              return (
+                <tr key={line.id} className='break-inside-avoid border-b last:border-0'>
+                  {hasSelection && (
+                    <td className={cn(cell, edge, 'pe-0 align-top')}>
+                      {isSelectable && (
+                        <Checkbox
+                          aria-label={selection.label(line)}
+                          checked={selected.has(line.id)}
+                          onCheckedChange={(checked) =>
+                            selection.onChange(line.id, checked === true)
+                          }
+                          className='mt-0.5 print:bg-transparent! print:[&_svg]:text-black!'
+                        />
                       )}
-                    >
-                      {formatDocumentAmount(getLineAmount(line, currency), currency)}
-                      {isExcluded && <span className='sr-only'>, not included</span>}
-                    </TableCell>
-                  </>
-                )}
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+                    </td>
+                  )}
+                  <td className={cn(cell, edge, 'align-top whitespace-normal')}>
+                    <span className='flex flex-wrap items-center gap-x-2 gap-y-1'>
+                      <span className='font-medium'>{line.description}</span>
+                      {line.optional && <Badge variant='outline'>Optional</Badge>}
+                    </span>
+                    {(line.sku || line.detail) && (
+                      <span className='text-muted-foreground mt-0.5 block text-xs'>
+                        {line.sku && <span className='font-mono'>{line.sku}</span>}
+                        {line.sku && line.detail && ' · '}
+                        {line.detail}
+                      </span>
+                    )}
+                    {!hidePrices && (
+                      <span className='text-muted-foreground mt-0.5 block text-xs tabular-nums @md/line-items:hidden print:hidden'>
+                        {quantity} × {formatDocumentAmount(line.unitPrice, currency)}
+                      </span>
+                    )}
+                  </td>
+                  <td
+                    className={cn(
+                      cell,
+                      edge,
+                      'text-end align-top tabular-nums',
+                      !hidePrices && wide,
+                    )}
+                  >
+                    {quantity}
+                  </td>
+                  {!hidePrices && (
+                    <>
+                      <td
+                        className={cn(
+                          cell,
+                          edge,
+                          wide,
+                          'text-end align-top tabular-nums',
+                        )}
+                      >
+                        {formatDocumentAmount(line.unitPrice, currency)}
+                      </td>
+                      <td
+                        className={cn(
+                          cell,
+                          edge,
+                          'text-end align-top font-medium tabular-nums',
+                          isExcluded && 'text-muted-foreground font-normal',
+                        )}
+                      >
+                        {formatDocumentAmount(getLineAmount(line, currency), currency)}
+                        {isExcluded && <span className='sr-only'>, not included</span>}
+                      </td>
+                    </>
+                  )}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

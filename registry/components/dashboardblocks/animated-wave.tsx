@@ -32,7 +32,13 @@ export const AnimatedWave = ({
   const normalized = Math.min(100, Math.max(0, safePercentage))
 
   return (
-    <div className={cn('relative size-full overflow-hidden text-chart-2', className)}>
+    <div
+      aria-hidden
+      className={cn(
+        'pointer-events-none relative size-full overflow-hidden text-chart-2',
+        className,
+      )}
+    >
       <div
         className='absolute inset-0 transition-[transform] duration-1000 ease-out'
         style={{

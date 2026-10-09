@@ -193,10 +193,7 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
               setSkipBarAnimation(true)
               setExpanded((value) => !value)
             }}
-            className={cn(
-              'w-full text-muted-foreground aria-expanded:bg-transparent aria-expanded:text-muted-foreground aria-expanded:hover:bg-muted aria-expanded:hover:text-foreground',
-              pressScale,
-            )}
+            className={cn('w-full', pressScale)}
           >
             {expanded ? 'Show less' : `Show all ${countries.length}`}
             <IconSwap

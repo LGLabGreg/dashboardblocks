@@ -96,7 +96,7 @@ const Funnel3 = (props: Funnel3Props) => {
                         {step.dropped.toLocaleString()} dropped
                       </span>
                       {isBiggestDrop && (
-                        <Badge variant='outline' className='text-foreground'>
+                        <Badge variant='outline'>
                           <IconPlaceholder
                             lucide='TrendingDownIcon'
                             tabler='IconTrendingDown'

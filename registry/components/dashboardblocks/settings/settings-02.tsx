@@ -199,7 +199,7 @@ const Settings2 = (props: Settings2Props) => {
           <form
             method='post'
             onSubmit={create}
-            className='bg-muted/50 flex flex-col gap-3 rounded-lg border p-4'
+            className='flex flex-col gap-3 rounded-lg border p-4'
           >
             <div className='flex flex-col gap-2'>
               <label htmlFor={`${id}-name`} className='text-sm font-medium'>
@@ -316,10 +316,11 @@ const Settings2 = (props: Settings2Props) => {
                       <span className='truncate text-sm font-medium'>{key.name}</span>
                       <Badge variant='outline'>{scopeLabel[key.scope]}</Badge>
                       {stale && (
-                        <Badge
-                          variant='outline'
-                          className='text-amber-800 dark:text-amber-400'
-                        >
+                        <Badge variant='outline'>
+                          <span
+                            aria-hidden
+                            className='size-1.5 shrink-0 rounded-full bg-amber-500'
+                          />
                           Unused {idle} days
                         </Badge>
                       )}

@@ -198,9 +198,7 @@ function CommandMenuTrigger({
         remixicon='RiSearchLine'
       />
       <span className='truncate max-sm:sr-only'>{placeholder}</span>
-      {shortcut && (
-        <Kbd className='text-foreground ml-auto max-sm:hidden'>{shortcut}</Kbd>
-      )}
+      {shortcut && <Kbd className='ml-auto max-sm:hidden'>{shortcut}</Kbd>}
     </Button>
   )
 }
