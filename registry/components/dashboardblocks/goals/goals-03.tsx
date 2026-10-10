@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/card'
 
 interface Goals3Props {
-  /** Daily values so far, oldest first. The chart accumulates them. */
+  /** Daily values so far, oldest first. */
   daily: number[]
   description: string
   /** Day labels for the whole period, including days still to come. */

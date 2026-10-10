@@ -23,16 +23,13 @@ import {
 } from '@/components/ui/card'
 
 interface UsageMeter4Props {
-  /** Credits left. */
   balance: number
-  /** Credits used each day, oldest first. The average sets the burn rate. */
+  /** Credits used each day, oldest first. */
   dailyUsage: number[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onTopUp?: () => void
-  /** Credits in the last top-up, the top of the bar. */
   purchased: number
-  /** Time zone for dates. @default 'UTC' */
   timeZone?: string
   title: string
 }

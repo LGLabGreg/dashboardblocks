@@ -20,7 +20,6 @@ import { cn } from '@/lib/utils'
 
 interface Task {
   done?: boolean
-  /** The day the task is due. Only the date part is used. */
   due: Date
   id: string
   owner?: string
@@ -34,7 +33,6 @@ interface TaskGroup {
 
 interface Checklist4Props {
   groups: TaskGroup[]
-  /** Today, for due and overdue dates. */
   now: Date
   onToggle?: (id: string, done: boolean) => void
   title: string

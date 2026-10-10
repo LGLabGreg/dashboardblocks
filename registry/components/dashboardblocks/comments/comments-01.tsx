@@ -25,15 +25,12 @@ interface Comments1Props {
   currentUser: CommentAuthor
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Deletes one of the current user's comments. */
   onDelete?: (commentId: string) => void
-  /** Saves an edit. Resolve once it's saved. */
   onEdit?: (commentId: string, body: string) => Promise<void>
   onReact?: (commentId: string, emoji: string) => void
   onResolve?: (commentId: string, resolved: boolean) => void
-  /** Posts a comment, or a reply when `parentId` is set. Resolve once it's saved. */
+  /** Posts a comment, or a reply when `parentId` is set. */
   onSubmit?: (body: string, options: { parentId?: string }) => Promise<void>
-  /** People to suggest after @. */
   people: CommentAuthor[]
   title: string
 }
@@ -104,7 +101,6 @@ const exampleProps: Comments1Props = {
   title: 'Q3 revenue review',
 }
 
-/** Stands in for a request to your API. */
 async function save() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

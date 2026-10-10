@@ -21,11 +21,6 @@ interface HeatmapCellPosition {
   row: number
 }
 
-/**
- * One hue from the surface towards `color`, stopping at 70% so cell text in
- * the foreground colour stays readable in both themes, however light or dark
- * `color` is. `t` is 0–1.
- */
 function getHeatColor(t: number, color = 'var(--chart-2)') {
   const share = Math.round(8 + Math.min(1, Math.max(0, t)) * 62)
   return `color-mix(in oklab, ${color} ${share}%, var(--muted))`
@@ -44,7 +39,6 @@ function getExtent(values: HeatmapValue[][]) {
   return min === Infinity ? { max: 0, min: 0 } : { max, min }
 }
 
-/** The position and value of the largest cell, for a default readout. */
 function getPeak(values: HeatmapValue[][]) {
   let peak: (HeatmapCellPosition & { value: number }) | null = null
   values.forEach((row, rowIndex) =>
@@ -58,48 +52,31 @@ function getPeak(values: HeatmapValue[][]) {
 }
 
 interface HeatmapGridProps {
-  /** Shown under the grid when no cell is active, such as the busiest cell. */
   children?: ReactNode
   className?: string
   cellClassName?: string
-  /** Also draws the formatted value inside each cell. */
   cellLabels?: boolean
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Which column labels to show. Screen readers still get every column. */
   columnLabelEvery?: number
   columns: string[]
-  /** Describes a cell, e.g. "Tue, 14:00–15:00: 1,284 sessions". Read on focus and hover. */
   describe: (position: HeatmapCellPosition, value: HeatmapValue) => string
-  /** Shown beside the readout, usually a `HeatmapLegend`. */
   footer?: ReactNode
   format?: HeatmapFormatter
-  /** Names the grid for assistive technology. */
   label: string
-  /** Fixes the colour scale. Defaults to the values' extent. */
+  /** Fixes the colour scale. */
   max?: number
   min?: number
-  /**
-   * Keeps cells legible in narrow cards: below this width the grid scrolls
-   * sideways, starting at the end (the most recent columns). E.g. '40rem'.
-   */
+  /** Keeps cells legible in narrow cards: below this width the grid scrolls sideways, starting at the end (the most recent columns). */
   minWidth?: string
-  /** Names the row label column, e.g. "Day". */
   rowHeader: string
   rowLabelClassName?: string
-  /** Row labels. An empty label hides it visually; `rowNames` still names the row. */
   rows: string[]
   /** Full row names for assistive technology, when `rows` are abbreviated or blank. */
   rowNames?: string[]
   values: HeatmapValue[][]
 }
 
-/**
- * A grid of cells coloured by value, built as an ARIA grid: Tab moves into
- * it, the arrow keys, Home and End move between cells, and each cell is read
- * with its full description. Hovering a cell shows the same description in
- * the line under the grid.
- */
 function HeatmapGrid({
   cellClassName,
   cellLabels = false,
@@ -295,9 +272,7 @@ interface HeatmapLegendProps {
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Label for the high end. @default 'More' */
   high?: string
-  /** Label for the low end. @default 'Less' */
   low?: string
   /** @default 5 */
   steps?: number

@@ -42,7 +42,6 @@ interface ChartPanel6Props {
   description: string
   formatter?: ChartValueFormatter
   headline: string
-  /** Heads the label column of the data table. @default 'Hour' */
   labelHeading?: string
   percentiles: Percentile[]
   title: string

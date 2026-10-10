@@ -25,22 +25,17 @@ type Platform = 'slack' | 'github'
 interface SocialMessage {
   replies?: number
   reactions?: number
-  /** Channels or labels shown above the message. */
   tags?: string[]
   text: string
 }
 
 interface SocialEvent {
-  /** A button under the event, e.g. "Start review". */
   action?: string
   author: Pick<Person, 'avatar' | 'name'>
   at: Date
-  /** The channel or repository, shown in bold. */
   channel: string
-  /** "created pull request #278 in". */
   description: string
   id: string
-  /** A message quoted under the event. */
   message?: SocialMessage
   platform: Platform
 }
@@ -53,7 +48,6 @@ interface ActivityFeed05Props {
   now: Date
   onAction?: (event: SocialEvent) => void
   onViewAll?: () => void
-  /** Time zone for times. @default 'UTC' */
   timeZone?: string
   title: string
 }

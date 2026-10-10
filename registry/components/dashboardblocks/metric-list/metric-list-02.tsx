@@ -17,7 +17,6 @@ interface MetricSection {
 }
 
 interface MetricList2Props {
-  /** Read after each change by screen readers, for example "vs August". */
   comparison?: string
   description: string
   sections: MetricSection[]

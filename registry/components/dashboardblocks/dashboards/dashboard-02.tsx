@@ -26,13 +26,6 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 
-/*
- * A SaaS dashboard: the date range and plan filter scope the metrics,
- * activity, MRR by region and MRR movement below. Retention compares the latest
- * monthly cohorts on the chosen plan. Service status is live, so it isn't
- * filtered. Swap `buildSaasData` for your own queries.
- */
-
 interface Dashboard2Props {
   title: string
   /** The last day of every date range. */
@@ -76,7 +69,6 @@ const accountsAt = (offset: number, share: number) =>
   share *
   (5_400 - offset * 6 + Math.sin(offset / 4.3) * 140 - ((offset + 2) % 7 < 2 ? 520 : 0))
 
-/** Everything the blocks show for one query. Replace with your own data fetching. */
 function buildSaasData({ plan, preset }: Query, today: Date) {
   const days = getPreset(preset).days
   const range = getDateRange(preset, today)
@@ -211,7 +203,6 @@ const Dashboard2 = (props: Dashboard2Props) => {
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
 
-  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
     if (displayedQuery === query) return
     const timer = setTimeout(() => setDisplayedQuery(query), 500)

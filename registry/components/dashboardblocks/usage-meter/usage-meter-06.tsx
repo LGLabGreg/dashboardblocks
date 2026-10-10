@@ -26,7 +26,6 @@ interface PlanLimit {
   icon: ReactNode
   limit: number
   name: string
-  /** Shown after the numbers, e.g. "GB". */
   unit?: string
   used: number
 }

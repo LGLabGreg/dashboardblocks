@@ -31,7 +31,6 @@ const iconVariants = cva('flex items-center justify-center bg-muted aspect-squar
 
 interface IconProps extends VariantProps<typeof iconVariants> {
   className?: string
-  /** The icon element, e.g. `<DatabaseIcon />`. Sized by `size`. */
   icon: React.ReactNode
 }
 

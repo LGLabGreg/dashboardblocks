@@ -6,22 +6,18 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 interface PipelineStage {
-  /** Days an item is expected to spend in this stage. Longer counts as stuck. */
   expectedDays?: number
   id: string
   label: string
-  /** Chance that an item in this stage closes, 0–1. Used for weighted value. */
+  /** Chance that an item in this stage closes, 0–1. */
   probability?: number
 }
 
 interface PipelineItem {
-  /** When the item entered its current stage. */
   enteredStageAt: Date
   id: string
   owner?: string
-  /** The id of the item's current stage. */
   stage: string
-  /** A second line, such as the company or the role. */
   subtitle?: string
   title: string
   value?: number
@@ -29,16 +25,13 @@ interface PipelineItem {
 
 interface StageSummary extends PipelineStage {
   count: number
-  /** Items over the stage's expected days. */
   stuck: number
   value: number
-  /** Value × stage probability. */
   weighted: number
 }
 
 const DAY = 86_400_000
 
-/** Whole days since `date`. Pass a fixed `now` to render the same on server and client. */
 function getDaysInStage(date: Date, now: Date) {
   return Math.max(0, Math.floor((now.getTime() - date.getTime()) / DAY))
 }
@@ -47,7 +40,6 @@ function isStuck(days: number, expectedDays?: number) {
   return expectedDays !== undefined && days > expectedDays
 }
 
-/** Count, value, weighted value and stuck items per stage, in stage order. */
 function getStageSummaries(
   stages: PipelineStage[],
   items: PipelineItem[],
@@ -68,17 +60,12 @@ function getStageSummaries(
   })
 }
 
-/**
- * Fill for the stage at `index` of `count`. Stages are ordered, so they share
- * one hue that deepens towards the last stage instead of unrelated colours.
- */
 function getStageColor(index: number, count: number) {
   const share = count > 1 ? index / (count - 1) : 1
   return `color-mix(in oklab, var(--chart-2) ${Math.round(50 + share * 50)}%, var(--card))`
 }
 
-// Set both fraction digit limits: engines disagree on the default minimum for
-// compact currency, which would render "$42K" on the server and "$42.0K" in the browser.
+// Set both fraction digit limits: engines disagree on the default minimum for compact currency, which would render "$42K" on the server and "$42.0K" in the browser.
 const compactCurrency = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   maximumFractionDigits: 1,
@@ -94,15 +81,10 @@ const fullCurrency = new Intl.NumberFormat('en-US', {
   style: 'currency',
 })
 
-/** "$48K", "$1.2M", or "$48,200" with `compact: false`. */
 function formatCurrency(value: number, { compact = true } = {}) {
   return (compact ? compactCurrency : fullCurrency).format(value)
 }
 
-/**
- * Days up to four weeks, then weeks, then months: "12d", "5w", "4mo", or
- * "12 days", "5 weeks", "4 months" with `style: 'long'`.
- */
 function formatAge(days: number, style: 'short' | 'long' = 'short') {
   const [amount, unit] =
     days < 28
@@ -115,7 +97,6 @@ function formatAge(days: number, style: 'short' | 'long' = 'short') {
   return `${amount} ${word}${amount === 1 ? '' : 's'}`
 }
 
-/** Days in stage with a clock icon. Over the expected days it turns amber and the icon changes. */
 function PipelineAge({
   className,
   days,
@@ -173,7 +154,6 @@ function getInitials(name: string) {
     .join('')
 }
 
-/** The owner's initials in a circle, with the full name for screen readers or beside it. */
 function PipelineOwner({
   className,
   name,
@@ -199,7 +179,6 @@ function PipelineOwner({
   )
 }
 
-/** A stage's name, item count and total value, for the top of a board column. */
 function PipelineStageHeader({
   className,
   color,
@@ -214,7 +193,6 @@ function PipelineStageHeader({
   /** Lets the column's list point at the heading with `aria-labelledby`. */
   id?: string
   label: string
-  /** The formatted total value. */
   total?: string
 }) {
   return (
@@ -242,7 +220,6 @@ function PipelineStageHeader({
 }
 
 interface PipelineCardProps {
-  /** A button or menu in the top corner, such as a move action. */
   action?: ReactNode
   className?: string
   days: number
@@ -250,11 +227,9 @@ interface PipelineCardProps {
   owner?: string
   subtitle?: string
   title: string
-  /** The formatted value. */
   value?: string
 }
 
-/** An item on a board: title, subtitle, value, days in stage and owner. */
 function PipelineCard({
   action,
   className,

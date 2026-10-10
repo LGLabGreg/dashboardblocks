@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils'
 interface DashboardHeader4Props {
   defaultPreset?: DateRangePreset
   description: string
-  /** When the data was last updated, for example "5 min ago". */
   lastUpdated: string
   onExport?: (format: string) => void
   onRefresh?: () => Promise<void>

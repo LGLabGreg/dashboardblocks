@@ -19,7 +19,6 @@ import {
 
 interface Goals1Props {
   current: number
-  /** The last day of the period. */
   end: Date
   formatter?: (value: number) => string
   start: Date

@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card'
 
 interface RetentionMilestone {
-  /** e.g. "Day 7". */
   label: string
   /** Share of the current cohort still active, 0–1. */
   current: number
@@ -27,7 +26,6 @@ interface RetentionMilestone {
 interface Retention3Props {
   description: string
   milestones: RetentionMilestone[]
-  /** Names the cohort compared against. @default 'Previous cohort' */
   previousLabel?: string
   title: string
 }

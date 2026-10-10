@@ -30,7 +30,6 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { cn } from '@/lib/utils'
 
 interface Goal extends ChoiceCardOption {
-  /** The dashboard set up for people who pick this goal. */
   dashboard: { description: string; href: string; title: string }
 }
 
@@ -42,7 +41,6 @@ type Answers = {
 
 interface Onboarding4Props {
   goals: Goal[]
-  /** The most goals people can pick. @default 3 */
   maxGoals?: number
   onSave?: (answers: Answers) => Promise<void>
   roles: { label: string; value: string }[]
@@ -183,7 +181,6 @@ const exampleProps: Onboarding4Props = {
   ],
 }
 
-/** Stands in for a request to your API. */
 async function saveAnswers() {
   await new Promise((resolve) => setTimeout(resolve, 800))
 }

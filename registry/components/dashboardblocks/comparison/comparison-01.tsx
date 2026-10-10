@@ -15,7 +15,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 
 interface ComparedMetric {
   current: number
-  /** Formats the absolute difference, e.g. percentage points for rates. Defaults to `formatter`. */
   differenceFormatter?: (value: number) => string
   formatter?: (value: number) => string
   /** Use `down` for metrics like churn or latency, where a decrease is good. */

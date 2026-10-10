@@ -43,7 +43,6 @@ interface Invoice1Props {
   /** A share off the subtotal, 0.05 for 5%. */
   discountRate?: number
   dueDate: Date
-  /** Small print, such as the legal name and tax ID. */
   footer: string
   from: DocumentParty
   issueDate: Date
@@ -54,12 +53,9 @@ interface Invoice1Props {
   number: string
   onDownload?: () => void
   onSendReminder?: () => Promise<void>
-  /** Paid so far, such as a deposit. */
   paid?: number
-  /** Where the client pays online. */
   payUrl: string
   poNumber?: string
-  /** Who the invoice was sent to. */
   sentTo: string
   taxRate?: number
   terms: string

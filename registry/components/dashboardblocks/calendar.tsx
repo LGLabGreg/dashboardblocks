@@ -30,7 +30,6 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 
 interface CalendarEvent extends ScheduleEvent {
-  /** People invited, listed in the event's details. */
   attendees?: { avatar?: string; name: string }[]
   description?: string
   /** The `id` of the room or person the event is booked on, for `CalendarResourceView`. */
@@ -45,21 +44,15 @@ const HOUR_LABEL_OFFSET_PX = 12
 const toKey = (day: Date) => day.toISOString().slice(0, 10)
 const getEnd = (event: ScheduleEvent) => (event.end ?? event.start).getTime()
 
-/** The seven plain days of the week that `day` (a plain day from `getDay`) falls in. */
 function getWeekDays(day: Date, weekStartsOn: 0 | 1 = 0) {
   const start = addDays(day, -((day.getUTCDay() - weekStartsOn + 7) % 7))
   return Array.from({ length: 7 }, (_, index) => addDays(start, index))
 }
 
-/** The first day of the month `day` falls in, or of the month `months` later. */
 function startOfMonth(day: Date, months = 0) {
   return new Date(Date.UTC(day.getUTCFullYear(), day.getUTCMonth() + months, 1))
 }
 
-/**
- * A period's title from its first and last plain days: "October 4–10, 2026",
- * "Sep 27 – Oct 3, 2026" or "Dec 27, 2026 – Jan 2, 2027".
- */
 function formatDayRange(first: Date, last: Date) {
   const year = last.getUTCFullYear()
   if (first.getUTCFullYear() !== year) {
@@ -77,11 +70,6 @@ function formatDayRange(first: Date, last: Date) {
   return `${formatDay(first, options)} – ${formatDay(last, options)}, ${year}`
 }
 
-/**
- * The first and last plain days an event covers in `timeZone`. `end` is
- * exclusive: an event ending at midnight, or an all-day event on the 30th
- * that ends on the 1st, stops on the day before.
- */
 function getEventDays(event: ScheduleEvent, timeZone = 'UTC') {
   const first = getDay(event.start, timeZone)
   if (!event.end || event.end <= event.start) return { first, last: first }
@@ -89,10 +77,6 @@ function getEventDays(event: ScheduleEvent, timeZone = 'UTC') {
   return { first, last: last < first ? first : last }
 }
 
-/**
- * All-day events and events that run past midnight. Calendars draw these as
- * bars across days, rather than at a time of day.
- */
 function spansDays(event: ScheduleEvent, timeZone = 'UTC') {
   if (event.allDay) return true
   const { first, last } = getEventDays(event, timeZone)
@@ -120,23 +104,14 @@ function getEventsForDay<T extends ScheduleEvent>(
 }
 
 interface EventSegment<T extends ScheduleEvent = CalendarEvent> {
-  /** Carries on after the last day shown. */
   continuesAfter: boolean
-  /** Began before the first day shown. */
   continuesBefore: boolean
   event: T
-  /** The row it sits on, from 0. */
   lane: number
-  /** The number of days it covers. */
   span: number
-  /** The index of the first day it covers. */
   start: number
 }
 
-/**
- * Bars for events across consecutive plain `days`, such as a week, each on
- * the first lane free for all of its days. Pass the events that `spansDays`.
- */
 function layoutSegments<T extends ScheduleEvent>(
   events: T[],
   days: Date[],
@@ -176,21 +151,11 @@ function layoutSegments<T extends ScheduleEvent>(
 
 interface EventLayout<T extends ScheduleEvent = CalendarEvent> {
   event: T
-  /** Its lane, from 0. */
   lane: number
-  /** Lanes in its group of overlapping events. */
   lanes: number
-  /** Lanes it widens across, when the ones to its right are free. */
   span: number
 }
 
-/**
- * Side-by-side lanes for one day's timed events. Events that overlap share the
- * width of their group, first fit. Each widens into lanes to its right that
- * are free, or whose events start at least 30 minutes later: those are drawn
- * over it and leave its title showing. Events shorter than 30 minutes count
- * as 30, the height they're drawn at.
- */
 function layoutEvents<T extends ScheduleEvent>(events: T[]): EventLayout<T>[] {
   const sorted = [...events].sort(
     (a, b) => a.start.getTime() - b.start.getTime() || getEnd(b) - getEnd(a),
@@ -259,10 +224,6 @@ function getEventWhen(
   ]
 }
 
-/**
- * When an event happens: "Mon, Sep 28 · 9:30–10:30 AM", "Wed, Sep 30 · All day",
- * or "Wed, Sep 30 – Fri, Oct 2" across days. `'long'` spells out the day and month.
- */
 function formatEventDate(
   event: ScheduleEvent,
   timeZone = 'UTC',
@@ -271,10 +232,6 @@ function formatEventDate(
   return getEventWhen(event, timeZone, style).join(' · ')
 }
 
-/**
- * An event's accessible name: "Roadmap review, Monday, September 28, 9:30–10:30 AM,
- * Product, Room 4B".
- */
 function getEventLabel(event: ScheduleEvent, timeZone = 'UTC') {
   return [
     event.title,
@@ -300,31 +257,20 @@ const eventFocus =
   'outline-none focus-visible:z-20 focus-visible:ring-[3px] focus-visible:ring-ring/50'
 
 interface CalendarToolbarProps {
-  /** Actions on the right, such as a button to add an event. */
   children?: ReactNode
   className?: string
-  /** A line under the title, such as how many events the period holds. */
   description?: ReactNode
-  /** Names the next button, e.g. "Next month". @default 'Next' */
   nextLabel?: string
   onNext: () => void
   onPrevious: () => void
   onToday: () => void
   onViewChange?: (view: string) => void
-  /** Names the previous button, e.g. "Previous month". @default 'Previous' */
   previousLabel?: string
-  /** The period shown, such as "September 2026". Announced when it changes. */
   title: ReactNode
-  /** The selected view, one of `views`. */
   view?: string
-  /** Views to switch between, such as Month and Week. Leave out for none. */
   views?: { label: string; value: string }[]
 }
 
-/**
- * The period shown as a heading, with today, previous, next and an optional
- * switch between views. The controls wrap under the heading in narrow containers.
- */
 function CalendarToolbar({
   children,
   className,
@@ -470,26 +416,21 @@ function EventBar({
 interface CalendarMonthViewProps<T extends ScheduleEvent = CalendarEvent> {
   className?: string
   events: T[]
-  /** Names the grid for assistive technology, e.g. "September 2026". */
   label: string
-  /** Rows of events a day shows, counting "+N more". @default 3 */
+  /** Rows of events a day shows, counting "+N more". */
   maxRows?: number
   /** The month shown, as a plain day from `getDay`. */
   month: Date
-  /** Marks today and dims events that have ended. */
   now: Date
-  /** Called when the keyboard moves into another month. */
   onMonthChange: (month: Date) => void
   onSelectDay?: (day: Date) => void
   onSelectEvent?: (event: T) => void
-  /** Called by a day's "+N more". @default onSelectDay */
   onShowMore?: (day: Date) => void
-  /** The selected plain day. */
   selectedDay?: Date
   selectedEventId?: string
   /** @default 'UTC' */
   timeZone?: string
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 
@@ -498,17 +439,6 @@ type MonthSlot<T extends ScheduleEvent> =
   | { event: T; type: 'event' }
   | { count: number; type: 'more' }
 
-/**
- * A month as an ARIA grid of days, each listing its events: timed events as
- * chips with their start time, all-day and multi-day events as bars across
- * the days they cover, and "+N more" once a day is full. In containers under
- * 42rem wide, days show up to three dots instead, so pair it with a list of
- * the selected day's events.
- *
- * Tab moves into the grid, then through the focused day's events. The arrow
- * keys move by day and week, Home and End to the start and end of the week,
- * and Page Up and Page Down by month.
- */
 function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
   className,
   events,
@@ -610,7 +540,6 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
   }
 
   return (
-    // Focus goes to the days inside, with a roving tabindex, not to the grid itself.
     // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
     <div
       ref={grid}
@@ -855,20 +784,18 @@ interface TimeGridColumn<T extends ScheduleEvent> {
 }
 
 interface CalendarTimeGridProps<T extends ScheduleEvent = CalendarEvent> {
-  /** Sets the height of the scrolling area. @default 'h-[32rem]' */
+  /** Sets the height of the scrolling area. */
   className?: string
-  /** Last hour shown, 1–24. @default 24 */
+  /** Last hour shown, 1–24. */
   endHour?: number
   events: T[]
-  /** How narrow a column gets before the grid scrolls sideways. @default '6rem' */
+  /** How narrow a column gets before the grid scrolls sideways. */
   minColumnWidth?: string
-  /** Draws a line at the current time and dims events that have ended. */
   now: Date
   onSelectEvent?: (event: T) => void
-  /** The hour scrolled to at first. @default 8 */
   scrollToHour?: number
   selectedEventId?: string
-  /** First hour shown, 0–23. @default 0 */
+  /** First hour shown, 0–23. */
   startHour?: number
   /** @default 'UTC' */
   timeZone?: string
@@ -1107,17 +1034,10 @@ function TimeGrid<T extends ScheduleEvent>({
 interface CalendarWeekViewProps<
   T extends ScheduleEvent = CalendarEvent,
 > extends CalendarTimeGridProps<T> {
-  /** Consecutive plain days, such as `getWeekDays(day)`. Pass one day for a day view. */
+  /** Consecutive plain days, such as `getWeekDays(day)`. */
   days: Date[]
 }
 
-/**
- * Days as columns on an hour axis that scrolls, starting at `scrollToHour`.
- * All-day and multi-day events sit in a row at the top; timed events are
- * placed by start and end, with overlapping ones side by side. A line marks
- * the current time. In narrow containers the columns keep `minColumnWidth`
- * and the grid scrolls sideways, starting at today.
- */
 function CalendarWeekView<T extends ScheduleEvent = CalendarEvent>({
   days,
   events,
@@ -1166,7 +1086,6 @@ function CalendarWeekView<T extends ScheduleEvent = CalendarEvent>({
 }
 
 interface CalendarResource {
-  /** A second line, such as capacity or whether it's free now. */
   description?: ReactNode
   id: string
   name: string
@@ -1177,14 +1096,9 @@ interface CalendarResourceViewProps<
 > extends CalendarTimeGridProps<T> {
   /** The plain day shown. */
   day: Date
-  /** Rooms, people or equipment, one column each. Events join by `resource`. */
   resources: CalendarResource[]
 }
 
-/**
- * One day with a column per room or person, on the same hour axis as
- * `CalendarWeekView`. Each event goes in the column its `resource` names.
- */
 function CalendarResourceView<T extends CalendarEvent = CalendarEvent>({
   day,
   events,
@@ -1230,11 +1144,9 @@ function CalendarResourceView<T extends CalendarEvent = CalendarEvent>({
 
 interface CalendarEventListProps<T extends ScheduleEvent = CalendarEvent> {
   className?: string
-  /** Shown when there are no events. @default 'Nothing scheduled.' */
   emptyLabel?: string
   /** In order, such as from `getEventsForDay`. */
   events: T[]
-  /** Dims events that have ended. */
   now?: Date
   onSelectEvent: (event: T) => void
   selectedEventId?: string
@@ -1242,11 +1154,6 @@ interface CalendarEventListProps<T extends ScheduleEvent = CalendarEvent> {
   timeZone?: string
 }
 
-/**
- * Events as a list of buttons with their start time, colour, title, calendar
- * and location. Pair it with `CalendarMonthView` in narrow containers, where
- * days show dots, to list the selected day.
- */
 function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
   className,
   emptyLabel = 'Nothing scheduled.',
@@ -1305,7 +1212,6 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
 }
 
 interface CalendarEventDetailsProps {
-  /** Buttons at the bottom, such as Join or Edit. */
   actions?: ReactNode
   className?: string
   event: CalendarEvent
@@ -1315,11 +1221,6 @@ interface CalendarEventDetailsProps {
   timeZone?: string
 }
 
-/**
- * An event's details, inline rather than in a popover: its title, when it
- * happens, its calendar, location, attendees and description. Event buttons
- * in the views carry `data-event-id`, so closing can return focus to one.
- */
 function CalendarEventDetails({
   actions,
   className,
@@ -1441,18 +1342,12 @@ function CalendarEventDetails({
 interface CalendarLegendProps {
   calendars: { color: string; name: string }[]
   className?: string
-  /** Names of the calendars whose events are hidden. */
   hidden?: string[]
-  /** Names the list. @default 'Calendars' */
   label?: string
   /** Makes each calendar a toggle that shows or hides its events. */
   onToggle?: (name: string) => void
 }
 
-/**
- * Each calendar's colour beside its name, so colour never carries it alone.
- * With `onToggle`, each is a toggle button with a check in its colour.
- */
 function CalendarLegend({
   calendars,
   className,

@@ -16,7 +16,6 @@ interface StockInput {
   reorderPoint: number
 }
 
-/** Out of stock, low (at or below the reorder point), in stock or overstocked. */
 function getStockStatus({ maxStock, onHand, reorderPoint }: StockInput): StockStatus {
   if (onHand <= 0) return 'out'
   if (onHand <= reorderPoint) return 'low'
@@ -31,19 +30,12 @@ function getDaysOfCover(onHand: number, dailyDemand: number) {
 
 interface ReorderInput {
   dailyDemand: number
-  /** Days from ordering to arrival. */
   leadTimeDays: number
   onHand: number
-  /** Already ordered and on the way. @default 0 */
   onOrder?: number
-  /** Days of stock to hold once the order arrives. @default 30 */
   targetDays?: number
 }
 
-/**
- * How much to order now to cover the lead time plus `targetDays`, less what's
- * on hand and on order. 0 when no order is needed.
- */
 function getReorderQuantity({
   dailyDemand,
   leadTimeDays,
@@ -59,18 +51,12 @@ function getReorderQuantity({
 
 interface ProjectionInput {
   dailyDemand: number
-  /** Days ahead to project. */
   days: number
   /** Orders arriving, by days from today. */
   incoming?: { day: number; quantity: number }[]
   onHand: number
 }
 
-/**
- * Stock at the end of each day from today (day 0) to `days`: demand comes
- * off, incoming orders land. Levels go below zero once stock runs out; the
- * first such day is `stockoutDay`, or `null` if it doesn't run out.
- */
 function projectStock({ dailyDemand, days, incoming = [], onHand }: ProjectionInput) {
   const levels = [onHand]
   for (let day = 1; day <= days; day++) {
@@ -149,7 +135,6 @@ const stockStatusConfig: Record<
   },
 }
 
-/** The stock status with its icon and label. */
 function StockStatusBadge({
   className,
   status,
@@ -175,14 +160,9 @@ function StockStatusBadge({
 interface StockBarProps extends StockInput {
   animated?: boolean
   className?: string
-  /** The top of the scale, e.g. shelf capacity. Defaults to the largest value shown. */
   capacity?: number
 }
 
-/**
- * Stock on hand as a bar in its status colour, with a tick at the reorder
- * point. Decorative: show the numbers as text beside it.
- */
 function StockBar({
   animated = true,
   capacity,
@@ -227,7 +207,6 @@ function StockBar({
   )
 }
 
-/** A legend entry for the `StockBar` reorder point tick. */
 function ReorderPointKey({ className }: { className?: string }) {
   return (
     <span

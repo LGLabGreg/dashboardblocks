@@ -23,11 +23,8 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 
 interface Pipeline3Props {
   items: PipelineItem[]
-  /** What the items are called, such as "candidates". */
   noun?: string
-  /** The time days in stage are measured from. */
   now: Date
-  /** Stages with the days an item is expected to spend in each. */
   stages: PipelineStage[]
   title: string
 }

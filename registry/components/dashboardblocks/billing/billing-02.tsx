@@ -22,20 +22,16 @@ import { cn } from '@/lib/utils'
 
 interface PaymentMethod {
   brand: string
-  /** Month and year, e.g. "08/2028". */
   expires: string
   last4: string
 }
 
 interface Billing2Props {
-  /** The subscription ends at the renewal date instead of renewing. */
   cancelsAtPeriodEnd?: boolean
   /** @default 'USD' */
   currency?: string
   interval: 'month' | 'year'
-  /** The amount of the next invoice, if it differs from the plan price. */
   nextInvoiceAmount?: number
-  /** The time the renewal countdown is measured from. */
   now: Date
   onManage?: () => void
   onUpdatePaymentMethod?: () => void
@@ -43,7 +39,6 @@ interface Billing2Props {
   plan: string
   price: number
   renewsAt: Date
-  /** e.g. "12 seats" or "Up to 50,000 events a month". */
   summary?: string
   title: string
 }

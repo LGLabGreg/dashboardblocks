@@ -22,13 +22,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/*
- * Provider-agnostic: messages, `status` and the callbacks have the same shapes
- * as the Vercel AI SDK's `useChat`, so its values plug straight in. Map each
- * message's text parts to `content`. Any other API works the same way, or use
- * `useChatStream` below with a function that streams text.
- */
-
 type ChatRole = 'user' | 'assistant'
 
 /** `submitted` waits for the first words of a reply, `streaming` while they arrive. */
@@ -37,7 +30,6 @@ type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error'
 type ChatFeedback = 'up' | 'down'
 
 interface ChatMessageData {
-  /** Plain text. Paragraphs, lists, **bold**, `code` and fenced code blocks are formatted. */
   content: string
   createdAt?: Date
   id: string
@@ -256,17 +248,12 @@ function StreamingCaret() {
   )
 }
 
-/**
- * Message text with light formatting: paragraphs and line breaks, bullet and
- * numbered lists, headings, **bold**, `code` and fenced code blocks. Renders
- * elements, never HTML, so replies can't inject markup.
- */
+/** Message text with light formatting: paragraphs and line breaks, bullet and numbered lists, headings, **bold**, `code` and fenced code blocks. */
 function MessageContent({
   caret,
   className,
   content,
 }: {
-  /** Placed after the last word, such as a streaming caret. */
   caret?: ReactNode
   className?: string
   content: string
@@ -332,7 +319,6 @@ function MessageContent({
   )
 }
 
-/** The assistant's round mark, a sparkle by default. */
 function AssistantAvatar({ className, icon }: { className?: string; icon?: ReactNode }) {
   return (
     <span
@@ -355,7 +341,6 @@ function AssistantAvatar({ className, icon }: { className?: string; icon?: React
   )
 }
 
-/** The top of a chat: the assistant's mark, a title and description, and actions. */
 function ChatHeader({
   actions,
   className,
@@ -363,11 +348,9 @@ function ChatHeader({
   icon,
   title = 'Assistant',
 }: {
-  /** Buttons such as New chat and Close. */
   actions?: ReactNode
   className?: string
   description?: ReactNode
-  /** Replaces the sparkle in the avatar. */
   icon?: ReactNode
   /** @default 'Assistant' */
   title?: string
@@ -389,7 +372,6 @@ function ChatHeader({
 interface ChatMessagesProps {
   children: ReactNode
   className?: string
-  /** Around the messages inside the scrolling area, such as padding to line up with a card. */
   contentClassName?: string
   /** @default 'Conversation' */
   label?: string
@@ -399,14 +381,6 @@ interface ChatMessagesProps {
   status?: ChatStatus
 }
 
-/**
- * The scrolling log of messages. It follows new content while it's scrolled to
- * the bottom, and stays put when the reader scrolls up, with a button back to
- * the latest message. It scrolls itself, never the page.
- *
- * Streaming text isn't announced as it arrives: screen readers hear that the
- * assistant is thinking, then the whole reply once it's done.
- */
 function ChatMessages({
   children,
   className,
@@ -432,9 +406,7 @@ function ChatMessages({
     }
   }
 
-  // Mounted with a question already on its way, such as the first one after a
-  // welcome screen: announce it once the empty status region is in the page,
-  // since a region that mounts with its text isn't read.
+  // Mounted with a question already on its way, such as the first one after a welcome screen: announce it once the empty status region is in the page, since a region that mounts with its text isn't read.
   const mountedStatus = useRef(status)
   useEffect(() => {
     if (mountedStatus.current !== 'submitted') return
@@ -520,21 +492,15 @@ function ChatMessages({
 }
 
 interface ChatMessageProps {
-  /** Under the message, such as `ChatMessageActions`. */
   actions?: ReactNode
-  /** Replaces the assistant's sparkle avatar. */
   avatar?: ReactNode
   className?: string
-  /** Under an assistant reply, above its actions, such as tokens and cost. */
   footer?: ReactNode
   message: ChatMessageData
-  /** Who's speaking, for screen readers. Defaults to "You" and "Assistant". */
   name?: string
-  /** Shows a caret after the last word while the reply streams in. */
   streaming?: boolean
 }
 
-/** One message: the user's in a bubble on the right, the assistant's beside its avatar. */
 function ChatMessage({
   actions,
   avatar,
@@ -573,17 +539,14 @@ function ChatMessage({
 
 interface ChatMessageActionsProps {
   className?: string
-  /** The text the copy button copies. */
   content: string
-  /** The rating given, shown as a pressed thumb. */
   feedback?: ChatFeedback | null
-  /** Shows thumbs up and down. Called with `null` when a rating is taken back. */
+  /** Shows thumbs up and down. */
   onFeedback?: (feedback: ChatFeedback | null) => void
   /** Shows a regenerate button, usually on the last reply only. */
   onRegenerate?: () => void
 }
 
-/** Copy, regenerate and thumbs up and down under a reply. */
 function ChatMessageActions({
   className,
   content,
@@ -656,7 +619,6 @@ function ChatMessageActions({
   )
 }
 
-/** Three pulsing dots beside the avatar while the assistant works on a reply. */
 function TypingIndicator({
   className,
   label = 'Assistant is thinking',
@@ -691,15 +653,12 @@ interface SuggestedPrompt {
 
 interface SuggestedPromptsProps {
   className?: string
-  /** Names the list for screen readers. @default 'Suggested prompts' */
   label?: string
   onSelect: (prompt: string) => void
   prompts: SuggestedPrompt[]
-  /** `chips` wrap in a row, `list` stacks full-width rows. @default 'chips' */
   variant?: 'chips' | 'list'
 }
 
-/** Questions to start from. Choosing one sends it. */
 function SuggestedPrompts({
   className,
   label = 'Suggested prompts',
@@ -717,7 +676,6 @@ function SuggestedPrompts({
     >
       {prompts.map((prompt) => (
         <li key={prompt.label} className='flex max-w-full'>
-          {/* Not a Button: long questions wrap instead of being cut off. */}
           <button
             type='button'
             onClick={() => onSelect(prompt.prompt ?? prompt.label)}
@@ -737,14 +695,12 @@ function SuggestedPrompts({
   )
 }
 
-/** The empty state: the assistant's mark, a greeting and what it can help with. */
 function ChatWelcome({
   children,
   className,
   description,
   title,
 }: {
-  /** Under the text, such as `SuggestedPrompts`. */
   children?: ReactNode
   className?: string
   description?: ReactNode
@@ -764,7 +720,6 @@ function ChatWelcome({
   )
 }
 
-/** A failed reply, with a button to try again. */
 function ChatError({
   className,
   message = 'Something went wrong. Try again.',
@@ -811,7 +766,6 @@ function ChatError({
   )
 }
 
-/** Something the assistant will look at, such as the current page or a file, with a remove button. */
 function ChatContextChip({
   className,
   icon,
@@ -856,32 +810,21 @@ function ChatContextChip({
 
 interface ChatComposerProps {
   className?: string
-  /** Above the text, such as `ChatContextChip`s for the page or files in view. */
   context?: ReactNode
-  /** Turns the composer off, e.g. while the assistant is unavailable. */
   disabled?: boolean
-  /** Names the text box. @default 'Message' */
   label?: string
-  /** Stops the reply. While one streams, the send button becomes Stop. */
   onStop?: () => void
   onSubmit: (text: string) => void
-  /** Controlled text. Leave out to let the composer keep it. */
   onValueChange?: (value: string) => void
   /** @default 'Ask anything…' */
   placeholder?: string
   /** Sending waits until the status is `ready` or `error`. */
   status?: ChatStatus
-  /** The text box, to focus it after an action such as opening the panel. */
   textareaRef?: Ref<HTMLTextAreaElement>
-  /** Left of the send button, such as an attach button or a model picker. */
   tools?: ReactNode
   value?: string
 }
 
-/**
- * The message box. It grows with its text; Enter sends and Shift+Enter adds a
- * line. While a reply is on its way, sending waits and the send button stops it.
- */
 function ChatComposer({
   className,
   context,
@@ -1002,26 +945,17 @@ function ChatComposer({
 const STOPPED = 'stopped'
 
 interface UseChatStreamOptions {
-  /** A failed request to show on load, such as one saved with the conversation. */
   initialError?: string
   initialMessages?: ChatMessageData[]
-  /** Runs when a reply ends, whether it finished or was stopped. `messages` ends with it. */
+  /** Runs when a reply ends, whether it finished or was stopped. */
   onFinish?: (
     message: ChatMessageData,
     info: { messages: ChatMessageData[]; stopped: boolean },
   ) => void
-  /**
-   * Streams the reply to the conversation so far as chunks of text, such as
-   * from `fetch` with a streamed body. Stopping aborts `signal`.
-   */
+  /** Streams the reply to the conversation so far as chunks of text, such as from `fetch` with a streamed body. */
   onSend: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
 }
 
-/**
- * Messages, status and actions for a chat, from any function that streams
- * text. Like the AI SDK's `useChat`, without the SDK: use `useChat` instead if
- * you already have it.
- */
 function useChatStream({
   initialError,
   initialMessages = [],
@@ -1083,7 +1017,6 @@ function useChatStream({
     }
   }
 
-  /** Sends a message from the user. Waits while a reply is on its way. */
   function send(text: string) {
     if (controller.current) return
     void run([
@@ -1097,7 +1030,6 @@ function useChatStream({
     ])
   }
 
-  /** Asks again for the last reply, or retries a failed one. */
   function regenerate() {
     if (controller.current) return
     const conversation = [...history.current]
@@ -1105,14 +1037,12 @@ function useChatStream({
     if (conversation.length > 0) void run(conversation)
   }
 
-  /** Stops the reply, keeping what has arrived. */
   function stop() {
     controller.current?.abort(STOPPED)
     controller.current = null
     setStatus('ready')
   }
 
-  /** Starts a new chat. */
   function reset() {
     controller.current?.abort()
     controller.current = null

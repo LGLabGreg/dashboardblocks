@@ -21,12 +21,9 @@ import {
 import { cn } from '@/lib/utils'
 
 interface DistributionGroup {
-  /** How many values the summary covers. */
   count: number
-  /** Upper whisker, e.g. the 95th percentile. */
   high: number
   label: string
-  /** Lower whisker, e.g. the 5th percentile. */
   low: number
   median: number
   q1: number
@@ -37,9 +34,7 @@ interface Distribution2Props {
   description: string
   formatter?: (value: number) => string
   groups: DistributionGroup[]
-  /** Formats the axis ticks, which are round numbers. Defaults to `formatter`. */
   tickFormatter?: (value: number) => string
-  /** Names the whiskers. @default '5th–95th percentile' */
   whiskerLabel?: string
   title: string
   /** @default 'tickets' */

@@ -17,7 +17,6 @@ interface Notifications1Props {
   notifications: AppNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** The page listing every notification. */
   viewAllHref: string
 }
 

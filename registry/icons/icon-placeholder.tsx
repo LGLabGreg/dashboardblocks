@@ -12,14 +12,6 @@ import type { IconLibrary } from '@/lib/customizer'
 
 import * as lucide from './generated/lucide'
 
-/**
- * Renders an icon from the icon library picked in the site customizer.
- *
- * Only used on this site: when a block is installed, the shadcn CLI rewrites every
- * `<IconPlaceholder />` into the icon library from the user's components.json and
- * removes this import. Every usage must name the icon for all five libraries.
- */
-
 type IconPlaceholderProps = Record<IconLibrary, string> &
   Omit<React.ComponentProps<'svg'>, 'ref'>
 

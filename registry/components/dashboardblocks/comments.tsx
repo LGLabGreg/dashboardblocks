@@ -36,7 +36,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface CommentAuthor {
-  /** An image URL. Initials show while it loads or when it's missing. */
   avatar?: string
   name: string
 }
@@ -44,28 +43,22 @@ interface CommentAuthor {
 interface CommentReaction {
   count: number
   emoji: string
-  /** Whether the current user is one of `count`. */
   reacted: boolean
 }
 
 interface ThreadComment {
   at: Date
   author: CommentAuthor
-  /** Plain text. Line breaks are kept, and `@Name` renders as a mention. */
   body: string
-  /** Shows "(edited)" beside the time. */
   edited?: boolean
   id: string
   reactions?: CommentReaction[]
-  /** Replies, oldest first. One level deep: replies don't have replies. */
   replies?: ThreadComment[]
-  /** Collapses the thread to a summary. Top-level comments only. */
   resolved?: boolean
 }
 
 interface ReactionChoice {
   emoji: string
-  /** Read by screen readers, such as "Thumbs up". */
   label: string
 }
 
@@ -78,7 +71,6 @@ const defaultReactions: ReactionChoice[] = [
   { emoji: '🚀', label: 'Rocket' },
 ]
 
-/** Adds the current user's reaction, or takes it back if they already reacted. */
 function toggleReaction(reactions: CommentReaction[] = [], emoji: string) {
   if (!reactions.some((reaction) => reaction.emoji === emoji)) {
     return [...reactions, { count: 1, emoji, reacted: true }]
@@ -96,11 +88,6 @@ function toggleReaction(reactions: CommentReaction[] = [], emoji: string) {
     .filter((reaction) => reaction.count > 0)
 }
 
-/**
- * Returns `comments` with one comment, top-level or reply, replaced by what
- * `update` returns, or removed when it returns `null`. Spread the comment
- * into the result to keep fields of your own.
- */
 function updateComment<T extends ThreadComment>(
   comments: T[],
   id: string,
@@ -117,7 +104,6 @@ function updateComment<T extends ThreadComment>(
 }
 
 interface MentionSegment {
-  /** The name mentioned. Leave out for plain text. */
   mention?: string
   text: string
 }
@@ -126,10 +112,6 @@ function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-/**
- * Splits text into plain runs and `@Name` mentions. Pass the names people can
- * mention so names with spaces match; without them, `@word` matches.
- */
 function parseMentions(text: string, names?: string[]) {
   const name = names?.length
     ? [...names]
@@ -149,7 +131,6 @@ function parseMentions(text: string, names?: string[]) {
   return segments
 }
 
-/** The names mentioned in text, once each, in order. */
 function getMentions(text: string, names?: string[]) {
   return [
     ...new Set(
@@ -168,7 +149,6 @@ function initials(name: string) {
     .join('')
 }
 
-/** A person's picture, or their initials. Hidden from screen readers: show the name beside it. */
 function CommentAvatar({
   author,
   className,
@@ -176,7 +156,6 @@ function CommentAvatar({
 }: {
   author: CommentAuthor
   className?: string
-  /** `sm` for replies. @default 'default' */
   size?: 'default' | 'sm'
 }) {
   return (
@@ -189,7 +168,6 @@ function CommentAvatar({
   )
 }
 
-/** A comment's text, with line breaks kept and mentions highlighted. */
 function CommentBody({
   body,
   className,
@@ -197,7 +175,6 @@ function CommentBody({
 }: {
   body: string
   className?: string
-  /** People who can be mentioned, so names with spaces are highlighted whole. */
   people?: CommentAuthor[]
 }) {
   return (
@@ -222,18 +199,12 @@ function CommentBody({
 }
 
 interface ReactionBarProps {
-  /** The emoji in the picker. @default defaultReactions */
   choices?: ReactionChoice[]
   className?: string
-  /** Adds or takes back the current user's reaction. Leave out to show reactions read-only. */
   onToggle?: (emoji: string) => void
   reactions: CommentReaction[]
 }
 
-/**
- * Reactions with their counts, each a toggle for the current user, and a
- * button that opens a row of emoji to add one.
- */
 function ReactionBar({
   choices = defaultReactions,
   className,
@@ -335,8 +306,7 @@ function ReactionBar({
               aria-label='Reactions'
               className='bg-popover text-popover-foreground ring-foreground/10 flex items-center gap-0.5 rounded-md p-0.5 shadow-xs ring-1'
               onKeyDown={onPickerKeyDown}
-              // Safari doesn't focus a button on click, so pressing one would blur
-              // the picker and close it before the click lands. Keep focus put.
+              // Safari doesn't focus a button on click, so pressing one would blur the picker and close it before the click lands.
               onMouseDown={(event) => event.preventDefault()}
             >
               {choices.map((choice) => (
@@ -371,17 +341,14 @@ interface CommentMenuItem {
   icon?: ReactNode
   label: string
   onSelect: () => void
-  /** Red, for actions like delete. Put these last. */
   variant?: 'default' | 'destructive'
 }
 
-/** A "More actions" button with a menu, such as Edit and Delete, for one comment. */
 function CommentMenu({
   items,
   label = 'More actions',
 }: {
   items: CommentMenuItem[]
-  /** Names the button for screen readers. @default 'More actions' */
   label?: string
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
@@ -414,29 +381,21 @@ function CommentMenu({
 }
 
 interface CommentItemProps {
-  /** After the reactions, such as Reply and Resolve buttons. */
   actions?: ReactNode
-  /** Beside the author's name, such as an "Internal" badge. */
   badge?: ReactNode
   className?: string
   comment: ThreadComment
-  /** Shown in place of the body and reactions, such as a composer to edit it. */
   editor?: ReactNode
-  /** In the top corner, such as a CommentMenu. */
   menu?: ReactNode
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Adds or takes back the current user's reaction. Leave out to show reactions read-only. */
   onReact?: (emoji: string) => void
-  /** People who can be mentioned, so their names are highlighted in the body. */
   people?: CommentAuthor[]
-  /** `sm` for replies. @default 'default' */
   size?: 'default' | 'sm'
   /** @default 'UTC' */
   timeZone?: string
 }
 
-/** One comment: avatar, author, relative time, body, reactions and actions. */
 function CommentItem({
   actions,
   badge,
@@ -506,40 +465,24 @@ function findMentionQuery(text: string, caret: number) {
 }
 
 interface CommentComposerProps {
-  /**
-   * Moves focus into the text box when it appears. Only for a composer the
-   * user just opened, such as a reply or an edit, never on page load.
-   */
   focusOnMount?: boolean
   className?: string
-  /** The text to start from, such as the comment being edited. */
   defaultValue?: string
-  /** Left of the buttons, such as a hint or who will be notified. */
   footer?: ReactNode
-  /** Names the text box for screen readers. @default 'Comment' */
   label?: string
   /** Shows a Cancel button, and Escape cancels too. */
   onCancel?: () => void
-  /** Saves the text. Resolve once it's saved; reject to keep the text and show an error. */
   onSubmit: (body: string) => void | Promise<void>
-  /** Runs as the text changes. */
   onValueChange?: (value: string) => void
-  /** On the submit button while saving. @default 'Posting…' */
   pendingLabel?: string
-  /** People suggested after typing @. */
   people?: CommentAuthor[]
   /** @default 'Leave a comment…' */
   placeholder?: string
   /** @default 'Comment' */
   submitLabel?: string
-  /** Controls the text. Leave out to let the composer manage it. */
   value?: string
 }
 
-/**
- * A text box for a comment. Typing @ suggests people: Up and Down choose,
- * Enter or Tab inserts, Escape closes the list. ⌘ or Ctrl + Enter submits.
- */
 function CommentComposer({
   className,
   defaultValue = '',
@@ -683,7 +626,6 @@ function CommentComposer({
             className='w-full border-t p-1'
           >
             {suggestions.map((person, index) => (
-              // Keys are handled on the text box, which keeps focus while the list is open.
               // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
               <div
                 key={person.name}
@@ -739,36 +681,22 @@ function CommentComposer({
 
 interface CommentThreadProps {
   className?: string
-  /** A top-level comment and its replies. */
   comment: ThreadComment
-  /** Who is writing. Their own comments get Edit and Delete. */
   currentUser: CommentAuthor
-  /** Above the first comment, such as the text a review comment is about. */
   header?: ReactNode
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Deletes one of the current user's comments. Adds Delete to its menu. */
   onDelete?: (commentId: string) => void
-  /** Saves an edit to one of the current user's comments. Adds Edit to its menu. */
   onEdit?: (commentId: string, body: string) => Promise<void> | void
-  /** Adds or takes back the current user's reaction to a comment. */
   onReact?: (commentId: string, emoji: string) => void
-  /** Posts a reply. Adds Reply buttons. Resolve once it's saved. */
   onReply?: (body: string) => Promise<void> | void
-  /** Resolves or reopens the thread. Adds a Resolve button. */
   onResolve?: (resolved: boolean) => void
-  /** People suggested after @ and highlighted as mentions. */
   people?: CommentAuthor[]
-  /** Beside each author's name, such as a role or an "Internal" badge. */
   renderBadge?: (comment: ThreadComment) => ReactNode
   /** @default 'UTC' */
   timeZone?: string
 }
 
-/**
- * A comment with one level of replies, joined by a line, and a reply box.
- * A resolved thread collapses to a summary with Show and Reopen.
- */
 function CommentThread({
   className,
   comment,
@@ -974,7 +902,6 @@ function CommentThread({
   const showComposer = replying && canReply
   const connected = replies.length > 0 || showComposer
 
-  /** The line from the comment above into this row's avatar, carried on to the next row. */
   function connector(isLast: boolean) {
     return (
       <>

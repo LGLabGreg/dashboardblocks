@@ -23,9 +23,7 @@ import {
 
 interface States1Props {
   description: string
-  /** Fetches the metrics. The skeleton shows until it resolves. */
   load: () => Promise<StatMetric[]>
-  /** How many placeholders to show while loading. */
   placeholders?: number
   title: string
 }

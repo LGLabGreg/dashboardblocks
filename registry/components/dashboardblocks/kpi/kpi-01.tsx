@@ -11,7 +11,6 @@ import {
 import { CardDescription } from '@/components/ui/card'
 
 interface KPI1Props {
-  /** What the change is measured against, e.g. "vs last month". */
   comparison: string
   format?: KPIFormat
   previous: number

@@ -18,9 +18,7 @@ interface StageTotal {
 }
 
 interface Pipeline2Props {
-  /** What the items are called, such as "deals". */
   noun?: string
-  /** Stages in order, first to last. */
   stages: StageTotal[]
   title: string
 }

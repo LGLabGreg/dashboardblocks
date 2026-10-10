@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/dashboard-header.tsx for React Aria
-// source-hash: 50da9870edce
+// source-hash: 6edc91ad546e
 
 'use client'
 
@@ -39,13 +39,11 @@ function getPreset(preset: DateRangePreset) {
   return DATE_RANGE_PRESETS.find((item) => item.value === preset) ?? DATE_RANGE_PRESETS[0]
 }
 
-/** The preset's range, ending on (and including) `today`. */
 function getDateRange(preset: DateRangePreset, today: Date): DateRange {
   const { days } = getPreset(preset)
   return { end: today, start: new Date(today.getTime() - (days - 1) * DAY) }
 }
 
-/** The range of the same length that ends the day before `range` starts. */
 function getPreviousRange(range: DateRange): DateRange {
   const length = range.end.getTime() - range.start.getTime()
   const end = new Date(range.start.getTime() - DAY)
@@ -58,7 +56,6 @@ const rangeFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-/** "Sep 19 – 25" or "Aug 27 – Sep 25". */
 function formatDateRange(range: DateRange) {
   return rangeFormatter.formatRange(range.start, range.end)
 }
@@ -66,12 +63,10 @@ function formatDateRange(range: DateRange) {
 interface DateRangePickerProps {
   className?: string
   onValueChange: (value: DateRangePreset) => void
-  /** The last day of every preset. */
   today: Date
   value: DateRangePreset
 }
 
-/** A menu of date range presets. Each row shows the dates it covers. */
 function DateRangePicker({
   className,
   onValueChange,
@@ -143,7 +138,6 @@ interface CompareToggleProps {
   onCheckedChange: (checked: boolean) => void
 }
 
-/** A switch with a visible label for comparing against the previous period. */
 function CompareToggle({
   checked,
   className,
@@ -171,7 +165,6 @@ interface FilterChipProps {
   value: string
 }
 
-/** An active filter, such as "Region: Europe", with a button to remove it. */
 function FilterChip({ className, field, onRemove, value }: FilterChipProps) {
   return (
     <span
@@ -214,20 +207,15 @@ interface FilterField {
 const ALL_OPTIONS = '__all__'
 
 interface FilterMenuProps {
-  /** The option that clears the filter, such as "All regions". */
   allLabel: string
-  /** The trigger's content. */
   children: ReactNode
   className?: string
-  /** The heading above the options. */
   label: string
   onValueChange: (value: string | null) => void
   options: string[]
-  /** The selected option, or `null` for all. */
   value: string | null
 }
 
-/** A menu that filters by one field, with an option to clear it. */
 function FilterMenu({
   allLabel,
   children,
@@ -268,12 +256,10 @@ function FilterMenu({
 }
 
 interface AddFilterMenuProps {
-  /** The trigger's content. */
   children: ReactNode
   className?: string
   fields: FilterField[]
   onFilterChange: (filter: Filter, active: boolean) => void
-  /** The active filters. */
   value: Filter[]
 }
 
@@ -281,7 +267,6 @@ const isSameFilter = (a: Filter, b: Filter) => a.field === b.field && a.value ==
 
 const filterKey = (filter: Filter) => JSON.stringify([filter.field, filter.value])
 
-/** A menu of every field and its values. Each value toggles a filter. */
 function AddFilterMenu({
   children,
   className,

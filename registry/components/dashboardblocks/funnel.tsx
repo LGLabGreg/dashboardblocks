@@ -11,7 +11,6 @@ interface FunnelStage {
 }
 
 interface FunnelStep extends FunnelStage {
-  /** Users lost since the previous stage. */
   dropped: number
   /** Share of the first stage that reached this one (0–1). */
   fromStart: number
@@ -19,10 +18,8 @@ interface FunnelStep extends FunnelStage {
   fromPrevious: number
 }
 
-/** Fill for a funnel stage. */
 const FUNNEL_COLOR = 'var(--chart-2)'
 
-/** Lighter step of the same hue, for the track behind a stage. */
 const FUNNEL_TRACK_COLOR = 'color-mix(in oklab, var(--chart-2) 14%, transparent)'
 
 function getFunnelSteps(stages: FunnelStage[]): FunnelStep[] {
@@ -42,7 +39,6 @@ function formatRate(rate: number, fractionDigits = 1) {
   return `${(rate * 100).toFixed(fractionDigits)}%`
 }
 
-/** Index of the step with the lowest conversion from the previous stage. */
 function getBiggestDropIndex(steps: FunnelStep[]) {
   let index = -1
   for (let i = 1; i < steps.length; i++) {

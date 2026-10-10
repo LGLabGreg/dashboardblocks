@@ -23,16 +23,11 @@ type BillingInterval = 'month' | 'year'
 
 interface Plan {
   description: string
-  /** What the plan includes. Anything on the current plan that's missing here is listed as lost on a downgrade. */
   features: string[]
-  /** e.g. "Most popular". */
   highlight?: string
   id: string
   name: string
-  /**
-   * The price per seat per month, billed monthly and billed yearly.
-   * Leave out for plans sold by the sales team.
-   */
+  /** The price per seat per month, billed monthly and billed yearly. */
   price?: Record<BillingInterval, number>
 }
 
@@ -51,11 +46,9 @@ interface Billing5Props {
   now: Date
   onConfirm?: (change: PlanChange) => void
   onContactSales?: (planId: string) => void
-  /** When the current billing period started. */
   periodStart: Date
   plans: Plan[]
   renewsAt: Date
-  /** Seats taken by members and invites. Seats can't go below this. */
   seatsInUse: number
   title: string
 }

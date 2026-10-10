@@ -21,7 +21,6 @@ interface Flow1Props {
   links: FlowLink[]
   /** Sources first, then each step, then outcomes. */
   nodes: FlowNode[]
-  /** The outcome node that counts as a conversion. */
   goal: string
   title: string
   /** @default 'sessions' */

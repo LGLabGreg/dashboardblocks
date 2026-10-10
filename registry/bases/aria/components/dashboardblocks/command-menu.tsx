@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: d99791cde799
+// source-hash: dc8eb3cbfaf0
 
 'use client'
 
@@ -22,18 +22,14 @@ import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
 interface CommandMenuItem {
-  /** A second line, such as an email or an order total. */
   description?: string
-  /** Where the item goes. Leave out when `onSelect` does the work. */
   href?: string
   icon?: ReactNode
   /** Unique across every group. */
   id: string
-  /** Other words that should find this item, such as "billing" for Invoices. */
   keywords?: string[]
   label: string
   onSelect?: () => void
-  /** Shown on the right, such as "⌘N". Displayed only: bind the keys yourself. */
   shortcut?: string
 }
 
@@ -42,7 +38,6 @@ interface CommandMenuGroup {
   items: CommandMenuItem[]
 }
 
-/** The groups with only the items that match `query`, by label, description or keyword. */
 function filterCommandGroups(groups: CommandMenuGroup[], query: string) {
   const needle = query.trim().toLowerCase()
   if (!needle) return groups
@@ -58,7 +53,6 @@ function filterCommandGroups(groups: CommandMenuGroup[], query: string) {
     .filter((group) => group.items.length > 0)
 }
 
-/** Runs `onOpen` on ⌘K, or Ctrl+K on Windows and Linux. */
 function useCommandMenuShortcut(onOpen: () => void, key = 'k') {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -77,29 +71,19 @@ interface CommandMenuProps {
   /** @default 'No results found.' */
   emptyMessage?: string
   groups: CommandMenuGroup[]
-  /** Shows "Searching…" while results load. */
   loading?: boolean
-  /**
-   * Opens an item's `href`. Pass your router's navigate function for
-   * client-side navigation. @default window.location.assign
-   */
   onNavigate?: (href: string) => void
   onOpenChange: (open: boolean) => void
-  /**
-   * Fetch results yourself: the menu shows `groups` as they are, without
-   * filtering. Leave out to filter `groups` as the user types.
-   */
+  /** Fetch results yourself: the menu shows `groups` as they are, without filtering. */
   onQueryChange?: (query: string) => void
   open: boolean
   /** @default 'Search…' */
   placeholder?: string
   /** The search text, when you pass `onQueryChange`. */
   query?: string
-  /** Names the dialog for screen readers. @default 'Search' */
   title?: string
 }
 
-/** A search dialog of pages, actions and records, opened from a button or ⌘K. */
 function CommandMenu({
   emptyMessage = 'No results found.',
   groups,
@@ -180,7 +164,6 @@ function CommandMenu({
   )
 }
 
-/** A search field that opens the command menu. Collapses to an icon on small screens. */
 function CommandMenuTrigger({
   className,
   onClick,
@@ -191,7 +174,6 @@ function CommandMenuTrigger({
   onClick: () => void
   /** @default 'Search…' */
   placeholder?: string
-  /** The keys shown on the button, or null when none open the menu. @default '⌘K' */
   shortcut?: string | null
 }) {
   return (

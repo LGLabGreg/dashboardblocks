@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: ecc7101ef6b2
+// source-hash: 5a86ba7d3748
 
 'use client'
 
@@ -50,33 +50,24 @@ import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
 interface KanbanColumnDef {
-  /** A dot beside the title, such as `var(--chart-3)`. */
   color?: string
   id: string
   title: string
-  /** The most cards the column should hold. Shown as "3 / 4" beside the title. */
   wipLimit?: number
 }
 
-/** A card's data. Extend it with whatever your cards show. */
 interface KanbanItem {
-  /** The id of the column the card is in. Cards keep the array's order within a column. */
   column: string
   id: string
-  /** Names the card in announcements and its menu. */
   title: string
 }
 
-/**
- * `warn` lets cards into a column at its WIP limit and flags the column when
- * it goes over. `block` refuses them.
- */
+/** `warn` lets cards into a column at its WIP limit and flags the column when it goes over. */
 type KanbanWipLimitMode = 'block' | 'warn'
 
 interface KanbanTarget {
   blocked?: boolean
   column: string
-  /** The position in the column, counted without the card being moved. */
   index: number
 }
 
@@ -87,7 +78,6 @@ interface KanbanDrag {
   target: KanbanTarget | null
 }
 
-/** Cards in `column`, in board order, leaving out the card with id `without`. */
 function getColumnItems<T extends KanbanItem>(
   items: T[],
   column: string,
@@ -96,10 +86,6 @@ function getColumnItems<T extends KanbanItem>(
   return items.filter((item) => item.column === column && item.id !== without)
 }
 
-/**
- * Moves a card to `index` in `column` and returns a new array. `index` counts
- * the column's cards without the moved one, as `onMove` reports it.
- */
 function moveItem<T extends KanbanItem>(
   items: T[],
   id: string,
@@ -222,28 +208,14 @@ interface KanbanBoardProps {
   children: ReactNode
   className?: string
   columns: KanbanColumnDef[]
-  /** What a card is, in counts and empty columns. @default { one: 'card', other: 'cards' } */
   itemName?: KanbanItemName
-  /** Every card on the board. Cards keep the array's order within a column. */
   items: KanbanItem[]
-  /** Names the board for screen readers, such as "Sprint 24". */
   label: string
-  /**
-   * Called when a card is dropped somewhere new, by dragging, with the keyboard
-   * or from its menu. `index` counts the column's cards without the moved one;
-   * pass the arguments to `moveItem` to update your array.
-   */
   onMove: (id: string, column: string, index: number) => void
   /** @default 'warn' */
   wipLimitMode?: KanbanWipLimitMode
 }
 
-/**
- * A row of columns that scrolls sideways when they don't fit. Drag cards with a
- * mouse, or press and hold on touch screens. With a keyboard, Space or Enter
- * picks a card up, the arrow keys move it and Space or Enter drops it. Every
- * step is announced to screen readers.
- */
 function KanbanBoard({
   children,
   className,
@@ -321,7 +293,6 @@ function KanbanBoard({
   }
 
   function announce(text: string) {
-    // A repeat of the last message wouldn't be read again, so vary it.
     setAnnouncement((current) => (current === text ? `${text}\u00a0` : text))
   }
 
@@ -434,8 +405,6 @@ function KanbanBoard({
   }
 
   function onHandleClick(event: MouseEvent<HTMLButtonElement>, cardId: string) {
-    // Space and Enter click a button with `detail` 0, as do screen readers.
-    // Mouse and touch clicks are left to dragging.
     if (event.detail !== 0) return
     event.preventDefault()
     const current = dragRef.current
@@ -714,7 +683,6 @@ function KanbanBoard({
   )
 }
 
-/** "3" or, with a WIP limit, "3 / 4": amber at the limit and red with an icon over it. */
 function KanbanCount({
   className,
   count,
@@ -769,25 +737,18 @@ function KanbanCount({
 }
 
 interface KanbanColumnProps {
-  /** Buttons at the end of the header, such as an add button. */
   action?: ReactNode
-  /** The column's `KanbanCard`s, in board order. */
   children?: ReactNode
   className?: string
-  /** Shows the column as a narrow strip with its title and count. Cards dropped on it go to the top. */
   collapsed?: boolean
   column: KanbanColumnDef
-  /** Shown when the column has no cards. @default 'No cards' */
   empty?: ReactNode
-  /** Under the cards, such as a `KanbanAddCard`. */
   footer?: ReactNode
   /** Adds a button that collapses and expands the column. */
   onCollapsedChange?: (collapsed: boolean) => void
-  /** Under the title, such as the column's total value. */
   summary?: ReactNode
 }
 
-/** One column: a header with its title, count and WIP limit, its cards, and an optional footer. */
 function KanbanColumn({
   action,
   children,
@@ -939,16 +900,11 @@ function DropIndicator({ edge, over }: { edge: 'after' | 'before'; over: boolean
 }
 
 interface KanbanCardProps {
-  /** The card's content. Include a `KanbanCardTitle`: it's what picks the card up. */
   children: ReactNode
   className?: string
   item: KanbanItem
 }
 
-/**
- * A card that drags from anywhere on it. Buttons and links inside it work on
- * their own and don't start a drag.
- */
 function KanbanCard({ children, className, item }: KanbanCardProps) {
   const { drag, exceedsLimit: exceeds, items, onPointerDown } = useKanban()
   const lifted = drag?.id === item.id ? drag.mode : undefined
@@ -1001,10 +957,6 @@ function KanbanCard({ children, className, item }: KanbanCardProps) {
   )
 }
 
-/**
- * The card's title, as the button keyboard and screen reader users move the
- * card with: Space or Enter picks it up. Every card needs one.
- */
 function KanbanCardTitle({
   children,
   className,
@@ -1034,7 +986,6 @@ function KanbanCardTitle({
   )
 }
 
-/** A menu that moves the card to another column, or up and down its own. Works with touch and screen readers. */
 function KanbanCardMenu({ className }: { className?: string }) {
   const item = useKanbanCard()
   const { canDrop: canMoveTo, columns, items, moveFromMenu } = useKanban()
@@ -1107,7 +1058,6 @@ interface KanbanLabelDef {
   tone?: ActivityTone
 }
 
-/** Tinted labels in a row that wraps. */
 function KanbanLabels({
   className,
   labels,
@@ -1143,7 +1093,6 @@ function getInitials(name: string) {
 
 const listFormat = new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' })
 
-/** Assignees' initials in overlapping avatars, with "+2" past `max`. */
 function KanbanAssignees({
   className,
   max = 3,
@@ -1179,10 +1128,6 @@ function KanbanAssignees({
   )
 }
 
-/**
- * A due date named relative to `now`: "Today", "Tomorrow", "Yesterday" or "Sep 28",
- * red once overdue, amber today and within `soonDays`.
- */
 function KanbanDueDate({
   className,
   date,
@@ -1193,7 +1138,6 @@ function KanbanDueDate({
 }: {
   className?: string
   date: Date
-  /** Shows the date without urgency, such as for finished work. */
   done?: boolean
   /** Pass a fixed date, so the label renders the same on the server and in the browser. */
   now: Date
@@ -1285,7 +1229,6 @@ const priorityConfig: Record<
   },
 }
 
-/** A priority icon, with its name beside it or for screen readers only. */
 function KanbanPriority({
   className,
   priority,
@@ -1314,7 +1257,6 @@ function KanbanPriority({
   )
 }
 
-/** A small icon and number, such as comments or attachments. `label` is read instead of the number. */
 function KanbanCardStat({
   className,
   icon,
@@ -1323,7 +1265,6 @@ function KanbanCardStat({
 }: {
   className?: string
   icon: ReactNode
-  /** The whole stat for screen readers, such as "3 comments". */
   label: string
   value: ReactNode
 }) {
@@ -1341,7 +1282,6 @@ function KanbanCardStat({
   )
 }
 
-/** Comment count with a speech bubble. */
 function KanbanComments({ className, count }: { className?: string; count: number }) {
   return (
     <KanbanCardStat
@@ -1362,7 +1302,6 @@ function KanbanComments({ className, count }: { className?: string; count: numbe
   )
 }
 
-/** Attachment count with a paperclip. */
 function KanbanAttachments({ className, count }: { className?: string; count: number }) {
   return (
     <KanbanCardStat
@@ -1383,7 +1322,6 @@ function KanbanAttachments({ className, count }: { className?: string; count: nu
   )
 }
 
-/** Subtasks done out of the total, "3/5", turning green when all are done. */
 function KanbanSubtasks({
   className,
   done,
@@ -1420,13 +1358,12 @@ interface KanbanAddCardProps {
   className?: string
   /** @default 'Add card' */
   label?: string
-  /** Called with the trimmed title. The form stays open to add another. */
+  /** Called with the trimmed title. */
   onAdd: (title: string) => void
   /** @default 'Title' */
   placeholder?: string
 }
 
-/** An "Add card" button that opens a one-line form in place. Escape closes it. */
 function KanbanAddCard({
   className,
   label = 'Add card',

@@ -20,7 +20,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ReviewComment extends ThreadComment {
-  /** The words in the document the comment is about. */
   quote: string
 }
 
@@ -39,9 +38,7 @@ interface Comments3Props {
   now: Date
   onReact?: (commentId: string, emoji: string) => void
   onResolve?: (commentId: string, resolved: boolean) => void
-  /** Posts a reply to `parentId`. Resolve once it's saved. */
   onSubmit?: (body: string, options: { parentId: string }) => Promise<void>
-  /** People to suggest after @. */
   people: CommentAuthor[]
 }
 
@@ -113,7 +110,6 @@ const exampleProps: Comments3Props = {
   people: [priya, lena, mateo, jonas, { name: 'Sofia Rossi' }],
 }
 
-/** Stands in for a request to your API. */
 async function saveReply() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

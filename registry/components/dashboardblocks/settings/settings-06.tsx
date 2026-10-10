@@ -14,12 +14,8 @@ import {
 import { Input } from '@/components/ui/input'
 
 interface DangerAction {
-  /** The button's label, e.g. "Transfer". */
   action: string
-  /**
-   * Asks the person to type the workspace name before the action runs.
-   * Use it for anything that can't be undone.
-   */
+  /** Asks the person to type the workspace name before the action runs. */
   confirm?: boolean
   description: string
   id: string
@@ -31,7 +27,6 @@ interface Settings6Props {
   description: string
   onAction?: (id: string) => void
   title: string
-  /** What people type to confirm, usually the workspace name or slug. */
   workspace: string
 }
 

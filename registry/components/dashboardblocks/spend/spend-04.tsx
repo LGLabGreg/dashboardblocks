@@ -35,9 +35,8 @@ interface Spend4Props {
   /** @default 'USD' */
   currency?: string
   description: string
-  /** The month of the last balance. */
   lastMonth: Date
-  /** Months of change to average for the burn. @default 3 */
+  /** Months of change to average for the burn. */
   trailing?: number
   title: string
 }

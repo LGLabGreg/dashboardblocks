@@ -17,14 +17,11 @@ import { cn } from '@/lib/utils'
 
 interface AppNotification {
   at: Date
-  /** A second line, such as a quote from a comment. */
   body?: string
-  /** Where opening the notification goes. Leave out to only mark it read. */
   href?: string
   icon: ReactNode
   id: string
   read: boolean
-  /** One sentence saying what happened. */
   title: ReactNode
   /** @default 'neutral' */
   tone?: ActivityTone
@@ -33,7 +30,6 @@ interface AppNotification {
 interface NotificationBellProps {
   children: ReactNode
   className?: string
-  /** Controls whether the panel is open. Leave out to let the bell manage it. */
   open?: boolean
   onOpenChange?: (open: boolean) => void
   unreadCount: number
@@ -50,7 +46,6 @@ function isLinkClick(event: MouseEvent) {
   )
 }
 
-/** A bell button with a count of unread notifications, opening a panel of them. */
 function NotificationBell({
   children,
   className,
@@ -104,7 +99,6 @@ function NotificationBell({
   )
 }
 
-/** A title and an action, such as "Mark all as read", at the top of a list of notifications. */
 function NotificationsHeader({
   action,
   className,
@@ -123,7 +117,6 @@ function NotificationsHeader({
   )
 }
 
-/** The list of notifications. */
 function NotificationList({
   children,
   className,
@@ -142,22 +135,15 @@ function NotificationList({
 }
 
 interface NotificationItemProps {
-  /** Buttons under the text, such as Accept and Decline. */
   actions?: ReactNode
   className?: string
   notification: AppNotification
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Runs when the notification is opened, such as to mark it read. */
   onOpen: (notification: AppNotification) => void
-  /** Beside the time, such as a menu or a mark-as-read button. */
   trailing?: ReactNode
 }
 
-/**
- * One notification. The whole row opens it; buttons in `actions` and
- * `trailing` sit above that and work on their own.
- */
 function NotificationItem({
   actions,
   className,

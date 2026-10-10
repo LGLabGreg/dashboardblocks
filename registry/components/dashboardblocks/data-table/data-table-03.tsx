@@ -18,9 +18,7 @@ interface CampaignRow {
   /** Daily conversions for the last 14 days, oldest first. */
   conversions: number[]
   name: string
-  /** Conversions in the previous 14 days. */
   previousConversions: number
-  /** Cost per conversion in the previous 14 days. */
   previousCost: number
   spend: number
 }

@@ -7,21 +7,17 @@ import { type RefObject, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface CurrencyFormatOptions {
-  /** "$182.4K" instead of "$182,400". */
   compact?: boolean
   /** @default 'USD' */
   currency?: string
-  /** Fixed number of decimals. Defaults to 0 for whole amounts, 2 otherwise, and 1 at most when compact. */
   fractionDigits?: number
   /** @default 'en-US' */
   locale?: string
-  /** Show a + for positive amounts and a true minus sign for negative ones. */
   signed?: boolean
 }
 
 const currencyFormatters = new Map<string, Intl.NumberFormat>()
 
-/** Formats an amount of money. Formatters are cached, so it's cheap to call per cell. */
 function formatCurrency(value: number, options: CurrencyFormatOptions = {}) {
   const {
     compact = false,
@@ -54,33 +50,25 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 })
 
-/** "Oct 14, 2026", in UTC so server and client render the same day. */
 function formatBillingDate(date: Date) {
   return dateFormatter.format(date)
 }
 
-/** Whole days from `now` until `date`, negative once it has passed. */
 function getDaysUntil(date: Date, now: Date) {
   return Math.ceil((date.getTime() - now.getTime()) / 86_400_000)
 }
 
 interface MrrMovementInput {
-  /** Lost from downgrades. A positive amount. */
   contraction: number
-  /** Lost from cancelled subscriptions. A positive amount. */
   churn: number
-  /** Gained from upgrades and add-ons. */
   expansion: number
-  /** Gained from new customers. */
   newBusiness: number
-  /** MRR at the start of the period. */
   starting: number
 }
 
 type MrrStepName = 'starting' | 'new' | 'expansion' | 'contraction' | 'churn' | 'ending'
 
 interface MrrStep {
-  /** The running total before and after this step. Totals run from 0. */
   from: number
   key: MrrStepName
   kind: 'total' | 'increase' | 'decrease'
@@ -90,7 +78,6 @@ interface MrrStep {
   value: number
 }
 
-/** Starting MRR + new + expansion − contraction − churn = ending MRR, step by step. */
 function getMrrMovement(input: MrrMovementInput) {
   const { churn, contraction, expansion, newBusiness, starting } = input
   const changes: [MrrStepName, string, number][] = [
@@ -132,10 +119,6 @@ function getMrrMovement(input: MrrMovementInput) {
   return { ending: running, net: running - starting, steps }
 }
 
-/**
- * Share of starting MRR kept after expansion, contraction and churn, ignoring
- * new customers. Above 1 means existing customers grew revenue on their own.
- */
 function getNetRevenueRetention(
   input: Pick<MrrMovementInput, 'churn' | 'contraction' | 'expansion' | 'starting'>,
 ) {
@@ -144,16 +127,10 @@ function getNetRevenueRetention(
   return (starting + expansion - Math.abs(contraction) - Math.abs(churn)) / starting
 }
 
-/** ARR is MRR × 12. ARPU is MRR per paying customer. */
 function getRevenueMetrics({ customers, mrr }: { customers: number; mrr: number }) {
   return { arpu: customers > 0 ? mrr / customers : 0, arr: mrr * 12 }
 }
 
-/**
- * The value axis for a waterfall. Movements are small next to the totals, so
- * the axis starts below the lowest running total rather than at zero. The
- * total bars then show a break, and `floor` should be labelled.
- */
 function getWaterfallScale(steps: MrrStep[]) {
   const levels = steps.flatMap((step) =>
     step.kind === 'total' ? [step.to] : [step.from, step.to],
@@ -173,7 +150,6 @@ const stepColor: Record<MrrStep['kind'], string> = {
   total: 'bg-muted-foreground',
 }
 
-/** A legend swatch in the colour of a step's bar. */
 function MrrStepSwatch({
   className,
   kind,
@@ -196,16 +172,10 @@ function MrrStepSwatch({
 interface MrrWaterfallProps {
   animated?: boolean
   className?: string
-  /** Formats the axis floor note. */
   formatter?: (value: number) => string
   steps: MrrStep[]
 }
 
-/**
- * Totals stand on the axis, movements float between the running totals before
- * and after them, joined by dashed connectors. Decorative: list the steps as
- * text or in a table beside it.
- */
 function MrrWaterfall({
   animated = true,
   className,
@@ -289,7 +259,6 @@ interface InvoiceStatusConfig {
   label: string
 }
 
-/** Every status has an icon and a label, so colour never carries it alone. */
 const invoiceStatusConfig: Record<InvoiceStatus, InvoiceStatusConfig> = {
   due: {
     className: 'bg-muted text-muted-foreground',

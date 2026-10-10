@@ -30,9 +30,8 @@ interface Comments2Props {
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onReact?: (updateId: string, emoji: string) => void
-  /** Posts an update and notifies the people it mentions. Resolve once it's saved. */
+  /** Posts an update and notifies the people it mentions. */
   onSubmit?: (body: string, options: { mentions: string[] }) => Promise<void>
-  /** People to suggest after @. */
   people: CommentAuthor[]
   project: string
   updates: ThreadComment[]
@@ -73,7 +72,6 @@ const exampleProps: Comments2Props = {
   ],
 }
 
-/** Stands in for a request to your API. */
 async function saveUpdate() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

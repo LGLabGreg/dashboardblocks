@@ -25,13 +25,10 @@ import {
 import { cn } from '@/lib/utils'
 
 interface OnboardingStep {
-  /** The label of the button that starts the step. */
   action?: string
   description: string
-  /** Roughly how long the step takes, such as "2 min". */
   duration?: string
   id: string
-  /** Optional steps can be skipped. */
   optional?: boolean
   state: StepState
   title: string

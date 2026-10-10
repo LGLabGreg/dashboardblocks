@@ -32,7 +32,6 @@ interface StockItem {
 interface Inventory1Props {
   description: string
   items: StockItem[]
-  /** Days of stock to hold once an order arrives. @default 30 */
   targetDays?: number
   title: string
 }

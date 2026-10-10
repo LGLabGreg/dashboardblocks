@@ -24,15 +24,11 @@ interface Forecast2Props {
   actuals: number[]
   deadline: Date
   formatter?: (value: number) => string
-  /** The date of the last actual. */
   lastDate: Date
   /** @default 0.8 */
   level?: ConfidenceLevel
-  /** What the target counts, in the plural. */
   metric: string
-  /** Where the timeline starts. */
   now: Date
-  /** Days between values. @default 7 */
   stepDays?: number
   target: number
   title: string

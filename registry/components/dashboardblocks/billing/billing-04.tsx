@@ -17,7 +17,6 @@ import {
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface RevenueSnapshot {
-  /** Paying customers at the end of the period. */
   customers: number
   mrr: number
   /** Trailing twelve months, as a fraction: 1.08 is 108%. */

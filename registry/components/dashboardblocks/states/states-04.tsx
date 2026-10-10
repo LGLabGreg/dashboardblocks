@@ -39,7 +39,6 @@ interface WeeklyPoint {
 
 interface States4Props {
   description: string
-  /** Fetches the series. A rejected promise shows the error state with a retry button. */
   load: () => Promise<WeeklyPoint[]>
   title: string
 }
@@ -48,7 +47,6 @@ let exampleAttempts = 0
 
 const exampleProps: States4Props = {
   description: 'New accounts per week, last 8 weeks',
-  // Fails the first time so the error state shows, then succeeds on retry.
   load: () => {
     const attempt = exampleAttempts++
     return new Promise((resolve, reject) =>

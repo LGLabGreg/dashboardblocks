@@ -9,15 +9,11 @@ type AlertSeverity = 'critical' | 'warning' | 'info' | 'resolved'
 interface SeverityConfig {
   icon: React.ReactNode
   label: string
-  /** Tinted background with readable text, for badges. */
   soft: string
-  /** Text colour for icons and inline labels. */
   text: string
-  /** Solid fill, for bars and dots. */
   fill: string
 }
 
-/** Severity colours are for alerts only, and always come with an icon and a label. */
 const severityConfig: Record<AlertSeverity, SeverityConfig> = {
   critical: {
     fill: 'bg-red-600',
@@ -85,7 +81,6 @@ const severityConfig: Record<AlertSeverity, SeverityConfig> = {
   },
 }
 
-/** Most severe first. */
 const severityOrder: AlertSeverity[] = ['critical', 'warning', 'info', 'resolved']
 
 function SeverityBadge({
@@ -112,7 +107,6 @@ function SeverityBadge({
   )
 }
 
-/** The severity icon in a tinted circle. Pair it with the severity in text nearby. */
 function SeverityIcon({
   className,
   severity,
@@ -140,7 +134,6 @@ const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
   style: 'short',
 })
 
-/** "5 min ago", "2 hr ago", "yesterday". Pass a fixed `now` to render the same on server and client. */
 function formatRelativeTime(date: Date, now: Date) {
   const seconds = Math.round((date.getTime() - now.getTime()) / 1000)
   const minutes = Math.round(seconds / 60)

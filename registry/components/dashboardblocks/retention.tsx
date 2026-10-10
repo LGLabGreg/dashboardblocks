@@ -8,27 +8,16 @@ import { type ReactNode, type RefObject, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface RetentionCohort {
-  /** Names the cohort, e.g. "Mar 2026". */
   label: string
-  /** How many joined in this cohort. */
   size: number
-  /**
-   * How many were still active in each period since joining, starting with
-   * period 0. Newer cohorts have fewer periods.
-   */
+  /** How many were still active in each period since joining, starting with period 0. */
   retained: number[]
 }
 
-/** Each period's retained count as a share of the cohort, 0–1. */
 function getRetentionRates(cohort: RetentionCohort) {
   return cohort.retained.map((count) => (cohort.size > 0 ? count / cohort.size : 0))
 }
 
-/**
- * Retention in each period across the cohorts that have reached it, weighted
- * by cohort size: the retained counts over the cohort sizes. Periods no
- * cohort has reached are `null`.
- */
 function getAverageRetention(cohorts: RetentionCohort[]) {
   const periods = Math.max(0, ...cohorts.map((cohort) => cohort.retained.length))
   return Array.from({ length: periods }, (_, period) => {
@@ -43,10 +32,6 @@ function getAverageRetention(cohorts: RetentionCohort[]) {
   })
 }
 
-/**
- * The first period after which retention drops by less than `threshold` per
- * period, i.e. where the curve levels off. `null` if it hasn't yet.
- */
 function getPlateau(rates: (number | null)[], threshold = 0.02) {
   for (let period = 1; period < rates.length - 1; period++) {
     const rate = rates[period]
@@ -58,29 +43,20 @@ function getPlateau(rates: (number | null)[], threshold = 0.02) {
 }
 
 interface GrowthAccountingInput {
-  /** Active last period, not this one. */
   churned: number
-  /** Active for the first time this period. */
   new: number
-  /** Active this period after sitting out the last one. */
   resurrected: number
 }
 
-/**
- * Users gained (new and resurrected) over users lost (churned). Above 1 the
- * active base grows; `Infinity` when nobody churned.
- */
 function getQuickRatio({ churned, new: added, resurrected }: GrowthAccountingInput) {
   const gained = added + resurrected
   return churned > 0 ? gained / churned : gained > 0 ? Infinity : 0
 }
 
-/** Formats a 0–1 share as a percentage, e.g. "42%". */
 function formatRetention(rate: number, digits = 0) {
   return `${(rate * 100).toFixed(digits)}%`
 }
 
-/** Formats the difference between two 0–1 shares in percentage points. */
 function formatPoints(difference: number, digits = 1) {
   const points = Math.abs(difference * 100).toFixed(digits)
   if (Number(points) === 0) return `0 pts`
@@ -89,16 +65,11 @@ function formatPoints(difference: number, digits = 1) {
 
 interface RetentionChangeProps {
   className?: string
-  /** The difference between two 0–1 shares, e.g. 0.021 for 2.1 points. */
+  /** The difference between two 0–1 shares, e.g. */
   difference: number
-  /** What the change is against, for screen readers, e.g. "the previous cohort". */
   versus?: string
 }
 
-/**
- * A change in percentage points, coloured and with an arrow. Retention going
- * up is good; the direction is also in the text, so colour never carries it alone.
- */
 function RetentionChange({ className, difference, versus }: RetentionChangeProps) {
   const rounded = Math.round(difference * 1000) / 1000
   const direction = rounded > 0 ? 'up' : rounded < 0 ? 'down' : 'flat'
@@ -151,9 +122,7 @@ interface CohortCell {
 interface CohortTableProps {
   /** Shown under the table when no cell is hovered, such as a summary. */
   children?: ReactNode
-  /** Adds a size-weighted average row. @default true */
   average?: boolean
-  /** Names the table for assistive technology. */
   caption: string
   className?: string
   /** @default 'Cohort' */
@@ -161,53 +130,25 @@ interface CohortTableProps {
   cohorts: RetentionCohort[]
   /** @default 'var(--chart-2)' */
   color?: string
-  /**
-   * Phrases the readout for a hovered cell. `cohort` is `null` on the Average
-   * row. Defaults to "Mar 2026, month 2: 812 of 1,402 (57.9%)".
-   */
   describeCell?: (cell: {
     cohort: RetentionCohort | null
     period: number
     rate: number
   }) => string
-  /** Formats cohort sizes and counts. */
   formatCount?: (value: number) => string
-  /** Shown beside the readout, usually a `HeatmapLegend`. */
   footer?: ReactNode
-  /**
-   * Names the table's scroll region when it scrolls sideways, so a short name
-   * comes before the caption. @default caption
-   */
   label?: string
-  /**
-   * Keeps cells legible in narrow cards: below this width the table scrolls
-   * sideways. E.g. '36rem'.
-   */
+  /** Keeps cells legible in narrow cards: below this width the table scrolls sideways. */
   minWidth?: string
-  /** Shows each cell as a share of the cohort or as a count. @default 'percent' */
   mode?: 'percent' | 'count'
-  /** The period unit, e.g. "Month". Column headers read "M0", "M1"… @default 'Period' */
   periodName?: string
-  /**
-   * The share that gets the strongest colour. Defaults to the highest share
-   * after period 0, so the later periods aren't washed out by period 0's 100%.
-   */
   scaleMax?: number
-  /**
-   * The share that gets the faintest colour, for tables whose shares sit in a
-   * narrow band, such as revenue around 100%. Ignored unless it's below
-   * `scaleMax`. @default 0
-   */
+  /** The share that gets the faintest colour, for tables whose shares sit in a narrow band, such as revenue around 100%. */
   scaleMin?: number
   /** @default 'Users' */
   sizeHeader?: string
 }
 
-/**
- * A cohort retention triangle as a table: one row per cohort, one column per
- * period since joining, each cell shaded by the share still active. Hovering a
- * cell reads it out under the table. Screen readers navigate it as a table.
- */
 function CohortTable({
   average = true,
   caption,
@@ -396,10 +337,6 @@ interface RetentionBarProps {
   value: number
 }
 
-/**
- * A share retained as a bar, with an optional tick at an earlier value.
- * Decorative: show the values as text beside it.
- */
 function RetentionBar({
   animated = true,
   className,
@@ -443,7 +380,6 @@ function RetentionBar({
   )
 }
 
-/** A short legend for the `RetentionBar` tick. */
 function RetentionBarKey({
   className,
   label = 'Previous cohort',
@@ -464,7 +400,6 @@ function RetentionBarKey({
   )
 }
 
-/** Colours for growth accounting: users gained above the axis, lost below it. */
 const growthColors = {
   churned: 'var(--destructive)',
   new: 'var(--chart-3)',

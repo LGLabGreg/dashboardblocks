@@ -15,21 +15,16 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
 interface AuthLayoutProps {
-  /** Top right, such as the signed-in email and a sign-out link. */
   aside?: ReactNode
-  /** Your logo and product name, top left. */
   brand: ReactNode
   children: ReactNode
   className?: string
   description?: ReactNode
-  /** Under the content, such as "Use another account". */
   footer?: ReactNode
-  /** Above the title, such as a workspace logo. */
   media?: ReactNode
   title: ReactNode
 }
 
-/** A full-page frame for signing in and joining: your brand, then one narrow, centred column. */
 function AuthLayout({
   aside,
   brand,
@@ -87,7 +82,6 @@ const workspaceAvatarSize: Record<WorkspaceAvatarSize, string> = {
   sm: 'size-6 rounded-md text-[10px]',
 }
 
-/** A square logo for a workspace, or its initials in a colour picked from the name. Decorative. */
 function WorkspaceAvatar({
   className,
   logo,
@@ -95,7 +89,6 @@ function WorkspaceAvatar({
   size = 'default',
 }: {
   className?: string
-  /** An image URL. */
   logo?: string
   name: string
   /** @default 'default' */
@@ -128,13 +121,11 @@ function WorkspaceAvatar({
 }
 
 interface OtpInputProps {
-  /** Names the group, such as "Verification code". */
   'aria-label'?: string
   'aria-describedby'?: string
   focusOnMount?: boolean
   className?: string
   disabled?: boolean
-  /** Marks the boxes to fix as invalid: the empty ones, or every box of a full code. */
   invalid?: boolean
   /** @default 6 */
   length?: number
@@ -149,11 +140,6 @@ function resolveTypedDigits(current: string, entered: string) {
   return entered.startsWith(current) ? entered[1] : entered[0]
 }
 
-/**
- * One box per digit. Typing moves to the next box, Backspace to the previous
- * one, and pasting a code fills every box. Browsers can fill it from a text
- * message, through `autocomplete="one-time-code"` on the first box.
- */
 function OtpInput({
   'aria-describedby': describedBy,
   'aria-label': label = 'Verification code',
@@ -245,7 +231,6 @@ function OtpInput({
   )
 }
 
-/** "a•••@acme.co": enough of an address to recognise it without showing all of it. */
 function maskEmail(email: string) {
   const [name, domain] = email.split('@')
   if (!domain) return email

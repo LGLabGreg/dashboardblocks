@@ -25,7 +25,6 @@ interface TodayMetric {
   id: string
   label: string
   today: number
-  /** The same metric yesterday, up to the same time of day. */
   yesterday: number
 }
 
@@ -33,10 +32,8 @@ interface Realtime4Props {
   description: string
   /** Orders (or any count) per hour so far today, from midnight. */
   hourly: number[]
-  /** Names what `hourly` counts. @default 'Orders' */
   hourlyLabel?: string
   metrics: TodayMetric[]
-  /** Makes up updates every few seconds, for demos. Replace with your own feed. */
   simulate?: boolean
   title: string
 }

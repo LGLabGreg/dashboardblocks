@@ -55,7 +55,6 @@ const auditSeverityConfig: Record<
   },
 }
 
-/** The severity as an icon in a tinted circle, with its label for screen readers. */
 function AuditSeverityIcon({
   className,
   severity,
@@ -80,7 +79,6 @@ function AuditSeverityIcon({
 
 type DeviceKind = 'desktop' | 'mobile'
 
-/** A desktop or phone icon for a session's device. Decorative. */
 function DeviceIcon({ className, kind }: { className?: string; kind: DeviceKind }) {
   return (
     <span
@@ -161,7 +159,6 @@ const checkResultConfig: Record<
   },
 }
 
-/** A check result as an icon, with its label shown or for screen readers. */
 function CheckResultLabel({
   className,
   result,
@@ -186,10 +183,6 @@ function CheckResultLabel({
   )
 }
 
-/**
- * A 0–100 score from weighted checks: passing counts in full, needing
- * attention counts half, failing counts nothing.
- */
 function getSecurityScore(checks: { result: CheckResult; weight?: number }[]) {
   const total = checks.reduce((sum, check) => sum + (check.weight ?? 1), 0)
   const earned = checks.reduce(
@@ -204,7 +197,6 @@ function getSecurityScore(checks: { result: CheckResult; weight?: number }[]) {
 
 const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
 
-/** "just now", "5 minutes ago", "yesterday", from `date` to `now`. */
 function formatSince(date: Date, now: Date) {
   const minutes = Math.round((now.getTime() - date.getTime()) / 60_000)
   if (minutes < 1) return 'just now'

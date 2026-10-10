@@ -5,12 +5,9 @@ import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface FlowNode {
-  /** Overrides the colour picked from the node's position. */
   color?: string
-  /** Which column the node sits in. Defaults to its longest path from a source. */
   column?: number
   id: string
-  /** Drop-offs, such as "Exit", are drawn muted. */
   kind?: 'default' | 'exit'
   label: string
 }
@@ -32,25 +29,20 @@ interface FlowLayoutNode extends FlowNode {
 
 interface FlowLayoutLink extends FlowLink {
   index: number
-  /** Top of the band where it leaves the source. */
   sy: number
   thickness: number
-  /** Top of the band where it enters the target. */
   ty: number
 }
 
 interface FlowLayoutOptions {
   /**
-   * 'source' keeps each source's colour downstream, for flows that split
-   * from several sources. 'target' colours each node by its position and each
-   * band by where it goes, for a single source splitting into outcomes.
+   * 'source' keeps each source's colour downstream, for flows that split from several sources.
    * @default 'source'
    */
   colorBy?: 'source' | 'target'
   height: number
   /** @default 8 */
   nodeWidth?: number
-  /** Vertical gap between nodes in a column. @default 12 */
   nodePadding?: number
   width: number
 }
@@ -64,7 +56,6 @@ const flowPalette = [
 ]
 const exitColor = 'var(--muted-foreground)'
 
-/** Each node's in and out totals; a node's value is the larger of the two. */
 function getFlowTotals(nodes: FlowNode[], links: FlowLink[]) {
   const totals = new Map(nodes.map((node) => [node.id, { in: 0, out: 0 }]))
   for (const link of links) {
@@ -76,11 +67,6 @@ function getFlowTotals(nodes: FlowNode[], links: FlowLink[]) {
   return totals
 }
 
-/**
- * Places nodes in columns and links as bands between them. Nodes keep the
- * order they're given within a column; links leave and enter nodes in the
- * order of the nodes at their other end, so bands don't cross needlessly.
- */
 function layoutFlow(
   nodes: FlowNode[],
   links: FlowLink[],
@@ -191,7 +177,6 @@ function layoutFlow(
   return { lastColumn, links: laidOut, nodes: [...placed.values()] }
 }
 
-/** A band from source to target, as a filled path with curved edges. */
 function getFlowPath(x0: number, x1: number, sy: number, ty: number, thickness: number) {
   const xm = (x0 + x1) / 2
   return [
@@ -206,37 +191,25 @@ function getFlowPath(x0: number, x1: number, sy: number, ty: number, thickness: 
 type FlowActive = { link: number } | { node: string } | null
 
 interface FlowChartProps {
-  /** Shown under the chart when nothing is hovered, such as a summary. */
   children?: ReactNode
   className?: string
   /** @default 'source' */
   colorBy?: FlowLayoutOptions['colorBy']
-  /** Describes a hovered link for the readout. */
   describeLink?: (
     link: FlowLink,
     source: FlowLayoutNode,
     target: FlowLayoutNode,
   ) => string
-  /** Describes a hovered node for the readout. */
   describeNode?: (node: FlowLayoutNode) => string
   format?: (value: number) => string
   /** @default 280 */
   height?: number
   links: FlowLink[]
-  /**
-   * Keeps labels legible in narrow cards: below this width the chart scrolls
-   * sideways. E.g. '36rem'.
-   */
+  /** Keeps labels legible in narrow cards: below this width the chart scrolls sideways. */
   minWidth?: string
   nodes: FlowNode[]
 }
 
-/**
- * A Sankey diagram: nodes in columns, joined by bands as wide as the flow
- * between them. Hovering a node or band highlights what it connects and
- * reads it out under the chart. Decorative for assistive technology: pair it
- * with a table of the links.
- */
 function FlowChart({
   children,
   className,
@@ -411,7 +384,6 @@ interface FlowPathStep {
   label: string
 }
 
-/** A path of steps as chips joined by arrows, wrapping as needed. */
 function FlowPathSteps({
   className,
   steps,

@@ -15,15 +15,13 @@ import { useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 
 interface Calendar2Props {
-  /** Calendars to explain in the legend. */
   calendars: { color: string; name: string }[]
   events: CalendarEvent[]
-  /** Marks today, draws the current time and picks the first event to show. */
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
   /** @default 'UTC' */
   timeZone?: string
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 

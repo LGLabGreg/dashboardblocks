@@ -89,7 +89,6 @@ const deployStatusConfig: Record<
   },
 }
 
-/** The status icon with its label, shown or for screen readers only. */
 function DeployStatusLabel({
   className,
   showLabel = true,
@@ -114,7 +113,6 @@ function DeployStatusLabel({
   )
 }
 
-/** "45s", "3m 12s", "1h 04m". */
 function formatDuration(seconds: number) {
   const whole = Math.max(0, Math.round(seconds))
   if (whole < 60) return `${whole}s`
@@ -123,7 +121,6 @@ function formatDuration(seconds: number) {
   return `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`
 }
 
-/** The first 7 characters of a commit hash. */
 function shortSha(sha: string) {
   return sha.slice(0, 7)
 }
@@ -133,7 +130,6 @@ type DoraLevel = 'elite' | 'high' | 'medium' | 'low'
 interface DoraInput {
   /** Share of deployments causing a failure in production, 0–1. */
   changeFailureRate: number
-  /** Deployments per day. */
   deploysPerDay: number
   /** Median hours from commit to production. */
   leadTimeHours: number
@@ -141,10 +137,6 @@ interface DoraInput {
   restoreHours: number
 }
 
-/**
- * Rates each of the four DORA metrics against the widely used bands: elite,
- * high, medium or low. Bands vary between reports; adjust them to yours.
- */
 function getDoraLevels({
   changeFailureRate,
   deploysPerDay,
@@ -200,7 +192,6 @@ const doraLevelConfig: Record<DoraLevel, { className: string; label: string }> =
   },
 }
 
-/** The DORA band as a labelled badge. */
 function DoraBadge({ className, level }: { className?: string; level: DoraLevel }) {
   const config = doraLevelConfig[level]
   return (
@@ -222,10 +213,6 @@ interface DeployHistoryProps {
   runs: { id: string; status: DeployStatus }[]
 }
 
-/**
- * One cell per run, oldest on the left, coloured by status: a failed run
- * reads at a glance. Decorative: give the counts as text beside it.
- */
 function DeployHistory({ className, runs }: DeployHistoryProps) {
   return (
     <span aria-hidden className={cn('flex h-5 items-stretch gap-0.5', className)}>

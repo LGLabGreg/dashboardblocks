@@ -20,7 +20,6 @@ interface Heatmap3Props {
   description: string
   endDate: Date
   title: string
-  /** Unit for the readout, e.g. "deploys". */
   unit: string
 }
 

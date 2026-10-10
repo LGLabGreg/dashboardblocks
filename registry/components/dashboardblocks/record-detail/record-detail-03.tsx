@@ -31,7 +31,6 @@ interface TicketEvent {
   at: Date
   author: string
   id: string
-  /** A comment's text. Leave out for a change, described by `text`. */
   comment?: string
   text: string
 }
@@ -43,7 +42,6 @@ interface RecordDetail3Props {
   now: Date
   onAssignToMe?: () => void
   onClose?: () => void
-  /** Saves a comment. Resolve once it's saved. */
   onComment?: (text: string) => Promise<void>
   ticket: {
     assignee: string
@@ -104,7 +102,6 @@ const exampleProps: RecordDetail3Props = {
   },
 }
 
-/** Stands in for a request to your API. */
 async function saveComment() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

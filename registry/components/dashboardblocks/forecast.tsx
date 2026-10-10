@@ -18,21 +18,17 @@ import { cn } from '@/lib/utils'
 
 type ConfidenceLevel = 0.8 | 0.9 | 0.95
 
-/** Two-sided z-scores from the normal distribution. */
 const zScores: Record<ConfidenceLevel, number> = { 0.8: 1.2816, 0.9: 1.6449, 0.95: 1.96 }
 
 interface LinearFit {
   intercept: number
   meanX: number
   n: number
-  /** Spread of the actuals around the line. */
   residualSd: number
-  /** Change per step. */
   slope: number
   sxx: number
 }
 
-/** Least-squares straight line through `values`, with the index as x. */
 function fitLinear(values: number[]): LinearFit {
   const n = values.length
   const meanX = (n - 1) / 2
@@ -59,11 +55,6 @@ interface Prediction {
   value: number
 }
 
-/**
- * The fitted value at `x`, with a prediction interval that widens the further
- * `x` is from the actuals. A normal approximation: good enough to show
- * uncertainty on a dashboard, not to plan capacity on.
- */
 function predictLinear(fit: LinearFit, x: number, level: ConfidenceLevel = 0.8) {
   const value = fit.intercept + fit.slope * x
   const leverage = fit.sxx > 0 ? (x - fit.meanX) ** 2 / fit.sxx : 0
@@ -81,11 +72,6 @@ interface ForecastRow {
   low: number | null
 }
 
-/**
- * The actuals followed by `horizon` forecast steps on a straight-line fit.
- * The forecast starts at the last actual with no width, so the dashed line
- * and the band join the actuals.
- */
 function buildForecast(values: number[], horizon: number, level: ConfidenceLevel = 0.8) {
   const fit = fitLinear(values)
   const last = values.length - 1
@@ -106,10 +92,7 @@ interface TargetForecast {
   earliest: number | null
   /** Steps after the last actual when the fitted line reaches the target. */
   expected: number | null
-  /**
-   * Steps after the last actual when the whole interval has reached the
-   * target. `null` if that doesn't happen within `maxSteps`.
-   */
+  /** Steps after the last actual when the whole interval has reached the target. */
   latest: number | null
   reached: boolean
 }
@@ -119,13 +102,12 @@ interface SolveForTargetOptions {
   direction?: 'up' | 'down'
   /** @default 0.8 */
   level?: ConfidenceLevel
-  /** How far ahead to look for the interval, in steps. @default 104 */
+  /** How far ahead to look for the interval, in steps. */
   maxSteps?: number
-  /** The precision of `earliest` and `latest`, in steps. @default 0.1 */
+  /** The precision of `earliest` and `latest`, in steps. */
   resolution?: number
 }
 
-/** When the trend in `values` reaches `target`, in steps after the last actual. */
 function solveForTarget(
   values: number[],
   target: number,
@@ -163,25 +145,19 @@ function solveForTarget(
 }
 
 interface RunRate {
-  /** The period total if the rate so far holds. */
   projected: number
-  /** Average per unit so far, such as per day. */
   rate: number
   remaining: number
-  /** The rate needed over what's left to reach the target. */
   required: number | null
 }
 
 interface RunRateInput {
   current: number
-  /** Units of the period that have passed, such as days. */
   elapsed: number
   target?: number
-  /** Units in the whole period. */
   total: number
 }
 
-/** Projects the period total from the average rate so far. */
 function getRunRate({ current, elapsed, target, total }: RunRateInput): RunRate {
   const rate = elapsed > 0 ? current / elapsed : 0
   const remaining = Math.max(0, total - elapsed)
@@ -196,16 +172,10 @@ function getRunRate({ current, elapsed, target, total }: RunRateInput): RunRate 
   }
 }
 
-/** Values after compounding `start` by `rate` per step, for scenarios. */
 function projectGrowth(start: number, rate: number, steps: number) {
   return Array.from({ length: steps }, (_, index) => start * (1 + rate) ** (index + 1))
 }
 
-/**
- * A y-axis domain and evenly spaced ticks on round numbers that fit every
- * value, ignoring nulls. Forecast charts rarely start at zero, so the axis
- * hugs the data.
- */
 function getForecastAxis(values: (number | null)[], tickCount = 5) {
   const numbers = values.filter((value): value is number => value !== null)
   const min = numbers.length > 0 ? Math.min(...numbers) : 0
@@ -223,10 +193,6 @@ function getForecastAxis(values: (number | null)[], tickCount = 5) {
 
 type ForecastStatus = 'reached' | 'on-track' | 'at-risk' | 'off-track'
 
-/**
- * On track when even the conservative date meets the deadline, at risk when
- * only the expected date does, off track otherwise.
- */
 function getDeadlineStatus(forecast: TargetForecast, deadline: number): ForecastStatus {
   if (forecast.reached) return 'reached'
   if (forecast.latest !== null && forecast.latest <= deadline) return 'on-track'
@@ -234,7 +200,6 @@ function getDeadlineStatus(forecast: TargetForecast, deadline: number): Forecast
   return 'off-track'
 }
 
-/** On track at or above the target, at risk within `tolerance` of it. */
 function getProjectionStatus(projected: number, target: number, tolerance = 0.05) {
   const status: ForecastStatus =
     projected >= target
@@ -311,7 +276,6 @@ const forecastStatusConfig: Record<
   },
 }
 
-/** The forecast status with its icon and label. Colour never carries it alone. */
 function ForecastBadge({
   className,
   label,
@@ -336,7 +300,6 @@ function ForecastBadge({
   )
 }
 
-/** Actuals are solid and forecasts dashed in the same hue, so the two read as one series. */
 const forecastColors = {
   actual: 'var(--chart-2)',
   band: 'color-mix(in oklab, var(--chart-2) 20%, transparent)',
@@ -345,7 +308,6 @@ const forecastColors = {
   target: 'var(--color-muted-foreground)',
 } as const
 
-/** Dash patterns, so forecasts and targets differ from actuals without colour. */
 const forecastDash = { forecast: '5 4', target: '2 3' } as const
 
 type ForecastKeyShape =
@@ -358,7 +320,6 @@ type ForecastKeyShape =
   | 'bar'
   | 'striped'
 
-/** A striped fill for projected amounts in bars. */
 function stripes(color: string) {
   return `repeating-linear-gradient(-45deg, ${color} 0 2px, color-mix(in oklab, ${color} 25%, transparent) 2px 5px)`
 }
@@ -466,7 +427,6 @@ type ForecastTooltipProps = Partial<
   valueFormatter?: ChartValueFormatter
 }
 
-/** The chart panel tooltip for a `buildForecast` row: the actual, or the forecast with its range. */
 function ForecastTooltip({
   active,
   formatLabel,
@@ -529,16 +489,11 @@ interface ProjectionBarProps {
   /** @default 'var(--chart-2)' */
   color?: string
   current: number
-  /** The value at the right end. Defaults to the largest of the values. */
   max?: number
   projected: number
   target?: number
 }
 
-/**
- * The value so far as a solid bar, the projected rest as a striped bar and
- * the target as a tick. Decorative: show the values as text beside it.
- */
 function ProjectionBar({
   animated = true,
   className,

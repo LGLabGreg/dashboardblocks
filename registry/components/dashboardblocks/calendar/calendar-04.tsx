@@ -28,17 +28,12 @@ interface Room {
 }
 
 interface Calendar4Props {
-  /** Bookings, each naming its room in `resource`. */
   bookings: CalendarEvent[]
-  /** Last hour shown. @default 19 */
   endHour?: number
-  /** Marks today, draws the current time and says which rooms are free. */
   now: Date
   onSelectBooking?: (booking: CalendarEvent) => void
   rooms: Room[]
-  /** First hour shown. @default 7 */
   startHour?: number
-  /** Teams to explain in the legend. */
   teams: { color: string; name: string }[]
   /** @default 'UTC' */
   timeZone?: string

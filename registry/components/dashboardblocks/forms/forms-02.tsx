@@ -24,7 +24,6 @@ import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Textarea } from '@/components/ui/textarea'
 
-// A type, not an interface, so it fits useSimpleForm's Record<string, …> constraint.
 type NewCustomer = {
   company: string
   email: string
@@ -41,7 +40,6 @@ interface Customer {
 
 interface Forms2Props {
   customers: Customer[]
-  /** Creates the customer. Return errors from the server to show them on their fields. */
   onCreate?: (values: NewCustomer) => Promise<FormErrors<NewCustomer> | void>
   plans: string[]
 }
@@ -55,7 +53,6 @@ const exampleProps: Forms2Props = {
   plans: ['Free', 'Pro', 'Enterprise'],
 }
 
-/** Stands in for a request to your API. One address is taken, to show a server error. */
 async function createCustomer(values: NewCustomer) {
   await new Promise((resolve) => setTimeout(resolve, 800))
   if (values.email.toLowerCase() === 'taken@example.com') {

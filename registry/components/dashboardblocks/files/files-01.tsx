@@ -22,17 +22,13 @@ import {
 interface Files1Props {
   /** File types the picker offers, as in an input's `accept`. */
   accept: string
-  /** The accepted types and the size limit, in words. */
   acceptHint: string
   description: string
-  /** Files already attached. */
   initialUploads?: FileUpload[]
-  /** Most files in one selection. */
   maxFiles: number
   /** Largest file in bytes. */
   maxSize: number
   title: string
-  /** Sends one file. Defaults to a simulated upload that fails every third file once. */
   upload?: UploadFn
 }
 
@@ -77,7 +73,6 @@ const exampleProps: Files1Props = {
 
 let simulatedUploads = 0
 
-/** Advances with timers, faster for small files. Every third upload fails once, to show retry. */
 const simulateUpload: UploadFn = (file, { onProgress, signal }) => {
   const fails = simulatedUploads++ % 3 === 1
   const duration = Math.min(6_000, 1_200 + (file.size / MB) * 400)
@@ -141,7 +136,6 @@ const Files1 = (props: Files1Props) => {
           maxSize={maxSize}
           onFiles={add}
         />
-        {/* Always mounted, so the first status after adding files is announced. */}
         <p aria-live='polite' className='sr-only'>
           {uploads.length > 0 && status}
         </p>

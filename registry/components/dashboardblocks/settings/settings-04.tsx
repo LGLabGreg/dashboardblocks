@@ -22,10 +22,8 @@ import { cn } from '@/lib/utils'
 interface Integration {
   category: string
   description: string
-  /** A detail under the status, e.g. "Token expired" or "Syncing #alerts". */
   detail?: string
   id: string
-  /** Your own logo element. Without one, the tile shows the first letter. */
   logo?: ReactNode
   name: string
   status: ConnectionStatus

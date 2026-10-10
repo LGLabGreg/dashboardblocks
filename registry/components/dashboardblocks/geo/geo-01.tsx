@@ -15,7 +15,6 @@ interface Geo1Props {
   description: string
   formatter?: (value: number) => string
   title: string
-  /** Heads the value column of the data table, e.g. "Revenue". */
   valueLabel: string
   /** By two-letter state code, including DC. */
   values: Record<string, number>

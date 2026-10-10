@@ -26,7 +26,6 @@ interface Variant {
 interface Comparison2Props {
   control: Variant
   description: string
-  /** The conversion the test measures, e.g. "Checkout conversion". */
   metric: string
   title: string
   variant: Variant

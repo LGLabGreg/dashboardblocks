@@ -24,7 +24,6 @@ import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
-// A type, not an interface, so it fits useSimpleForm's Record<string, …> constraint.
 type WorkspaceSettings = {
   bio: string
   email: string
@@ -37,9 +36,7 @@ type WorkspaceSettings = {
 
 interface Forms1Props {
   defaultValues: WorkspaceSettings
-  /** Where the workspace lives, shown before its URL name. */
   domain: string
-  /** Saves the settings. Return errors from the server to show them on their fields. */
   onSubmit?: (values: WorkspaceSettings) => Promise<FormErrors<WorkspaceSettings> | void>
   timezones: { label: string; value: string }[]
 }
@@ -66,7 +63,6 @@ const exampleProps: Forms1Props = {
   ],
 }
 
-/** Stands in for a request to your API. "acme" is taken, to show a server error. */
 async function saveSettings(values: WorkspaceSettings) {
   await new Promise((resolve) => setTimeout(resolve, 800))
   if (values.slug === 'acme') return { slug: 'That URL is already taken.' }

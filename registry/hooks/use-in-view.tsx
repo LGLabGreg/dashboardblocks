@@ -15,10 +15,6 @@ interface UseInViewOptions {
   rootMargin?: string
 }
 
-/**
- * A hook that tracks whether an element is visible in the viewport using IntersectionObserver.
- * @returns An object containing a ref to attach to the element and an isInView boolean state.
- */
 export function useInView(options: UseInViewOptions = {}) {
   const { rootMargin = '0px', threshold = 1.0 } = options
 

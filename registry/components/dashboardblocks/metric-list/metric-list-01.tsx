@@ -17,7 +17,6 @@ import {
 interface MetricList1Props {
   description: string
   metrics: Metric[]
-  /** Names the sparklines' period for screen readers. */
   period: string
   title: string
 }

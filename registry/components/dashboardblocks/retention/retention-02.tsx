@@ -35,13 +35,9 @@ import {
 } from '@/components/ui/card'
 
 interface Retention2Props {
-  /** Oldest first. `retained[0]` is period 0, usually the whole cohort. */
+  /** Oldest first. */
   cohorts: RetentionCohort[]
   description: string
-  /**
-   * The cohort to highlight against the average. Defaults to the newest
-   * cohort with at least two periods.
-   */
   highlight?: number
   /** @default 'Month' */
   periodName?: string

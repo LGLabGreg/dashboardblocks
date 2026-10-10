@@ -21,7 +21,6 @@ interface CustomerDetails {
 
 interface Forms4Props {
   defaultValues: CustomerDetails
-  /** Saves one field. Return an error message to keep it open and show the message. */
   onSave?: (field: keyof CustomerDetails, value: string) => Promise<string | void>
 }
 
@@ -35,7 +34,6 @@ const exampleProps: Forms4Props = {
   },
 }
 
-/** Stands in for a request to your API. */
 async function saveField() {
   await new Promise((resolve) => setTimeout(resolve, 600))
 }

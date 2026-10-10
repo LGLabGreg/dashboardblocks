@@ -35,16 +35,14 @@ interface Realtime2Props {
   description: string
   /** One sample per interval, oldest first. */
   samples: ThroughputSample[]
-  /** Seconds between samples. @default 5 */
+  /** Seconds between samples. */
   interval?: number
-  /** Makes up a new sample every interval, for demos. Replace with your own feed. */
   simulate?: boolean
   title: string
 }
 
 const seed = createRandom(11)
 const makeSample = (random: () => number, index: number): ThroughputSample => {
-  // A slow triangle wave, not Math.sin, so the server and browser agree.
   const wave = index % 28 < 14 ? index % 14 : 14 - (index % 14)
   const requests = Math.round(780 + wave * 16 + random() * 90)
   const spike = random() > 0.93
@@ -74,7 +72,6 @@ const Realtime2 = (props: Realtime2Props) => {
         pushWindow(values, makeSample(random.current, tick.current), values.length),
       )
     },
-    // Faster than real time in the demo, so the change is visible.
     simulate ? 1_500 : null,
   )
 

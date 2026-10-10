@@ -11,15 +11,11 @@ import { Textarea } from '@/components/ui/textarea'
 interface ErrorPages2Props {
   brand?: ReactNode
   homeHref: string
-  /** Called with the message when access is requested. Reject to show an error. */
   onRequestAccess?: (message: string) => void | Promise<void>
-  /** Who can grant access. */
   owner: { avatar?: string; name: string }
   /** Starts in the sent state, when a request is already waiting. */
   requested?: boolean
-  /** What they tried to open, such as "the Revenue overview dashboard". */
   resource: string
-  /** The account they're signed in with, so they can spot the wrong one. */
   signedInAs: string
   switchAccountHref: string
 }

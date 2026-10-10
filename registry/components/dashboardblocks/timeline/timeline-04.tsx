@@ -22,7 +22,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Phase {
-  /** When it actually ran. Leave `end` out while it's still running. */
   actual?: { end?: Date; start: Date }
   id: string
   label: string
@@ -83,7 +82,6 @@ const Timeline4 = (props: Timeline4Props) => {
   const { description, end, now, phases, start, title } = props
   const position = getTimelineScale(start, end)
   const ticks = getTimelineTicks(start, end, 'month')
-  // How late each phase finishes (or will, if running now) against its plan.
   const slips = phases.map((phase) => {
     if (!phase.actual) return null
     const finish = phase.actual.end ?? (now > phase.planned.end ? now : null)
@@ -119,7 +117,6 @@ const Timeline4 = (props: Timeline4Props) => {
         </p>
         <div className='-my-1 overflow-x-auto py-1'>
           <div className='grid min-w-[34rem] grid-cols-[7rem_minmax(0,1fr)_4rem] gap-x-3'>
-            {/* Placed explicitly: the today line below is, and explicit items go first. */}
             <span className='bg-card sticky left-0 z-20 col-start-1 row-start-1' />
             <TimelineAxis
               className='col-start-2 row-start-1'

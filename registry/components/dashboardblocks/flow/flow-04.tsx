@@ -11,16 +11,13 @@ import {
 } from '@/components/ui/card'
 
 interface FlowPath {
-  /** How many of them reached the goal. */
   converted: number
-  /** How many took this path. */
   count: number
   steps: string[]
 }
 
 interface Flow4Props {
   description: string
-  /** Names the goal, e.g. "Signed up". */
   goal: string
   paths: FlowPath[]
   title: string

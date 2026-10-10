@@ -16,9 +16,7 @@ interface Review {
   date: Date
   id: string
   rating: number
-  /** Whether the team has replied. Low ratings without a reply are flagged. */
   replied?: boolean
-  /** Where it was posted, e.g. "App Store". */
   source: string
   text: string
 }

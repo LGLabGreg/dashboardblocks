@@ -27,7 +27,6 @@ interface Region {
 interface Geo4Props {
   description: string
   formatter?: (value: number) => string
-  /** Names the previous period in the change column, e.g. "vs Q2". */
   previousLabel: string
   regions: Region[]
   title: string

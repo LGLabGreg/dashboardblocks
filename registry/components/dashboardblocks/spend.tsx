@@ -14,8 +14,7 @@ interface BudgetPaceInput {
   elapsed: number
   spent: number
   /**
-   * How far over the budget the projection can land and still count as on
-   * track, and how far under it counts as under budget.
+   * How far over the budget the projection can land and still count as on track, and how far under it counts as under budget.
    * @default 0.05
    */
   tolerance?: number
@@ -23,9 +22,7 @@ interface BudgetPaceInput {
 
 interface BudgetPace {
   budget: number
-  /** Where spend should be by now, spending evenly. */
   expected: number
-  /** The period total if spending continues at the current rate. */
   projected: number
   /** Budget left, negative once over. */
   remaining: number
@@ -33,7 +30,6 @@ interface BudgetPace {
   status: BudgetStatus
 }
 
-/** Compares spend so far with an even spend of the budget over the period. */
 function getBudgetPace({
   budget,
   elapsed,
@@ -56,25 +52,18 @@ function getBudgetPace({
   }
 }
 
-/** Share of the period between `start` and `end` that has passed at `now`. */
 function getElapsed(start: Date, end: Date, now: Date) {
   const total = end.getTime() - start.getTime()
   return total > 0 ? (now.getTime() - start.getTime()) / total : 1
 }
 
 interface RunwayInput {
-  /** Cash on hand. */
   cash: number
   /** Cash in minus cash out per month; negative while burning. */
   monthlyNet: number
-  /** Where the runway starts. */
   now: Date
 }
 
-/**
- * Months until cash runs out at the current net burn, and the date it does.
- * `Infinity` months and no date while cash isn't falling.
- */
 function getRunway({ cash, monthlyNet, now }: RunwayInput) {
   if (monthlyNet >= 0 || cash <= 0) {
     return { date: null, months: cash <= 0 ? 0 : Infinity }
@@ -149,7 +138,6 @@ const budgetStatusConfig: Record<
   },
 }
 
-/** The budget status with its icon and label. Colour never carries it alone. */
 function BudgetStatusBadge({
   className,
   status,
@@ -172,16 +160,11 @@ function BudgetStatusBadge({
   )
 }
 
-/**
- * Spend uses the primary colour rather than a chart colour: some themes'
- * chart colours are orange or red, too close to the overspend red.
- */
 const spendColors = {
   over: 'var(--destructive)',
   spent: 'var(--primary)',
 } as const
 
-/** A striped fill for projected spend, in the spent colour. */
 function projectedFill(color: string) {
   return `repeating-linear-gradient(-45deg, color-mix(in oklab, ${color} 55%, transparent) 0 2px, color-mix(in oklab, ${color} 18%, transparent) 2px 5px)`
 }
@@ -192,7 +175,6 @@ interface BudgetBarProps {
   className?: string
   /** @default 'var(--primary)' */
   color?: string
-  /** Adds a striped segment from spent to the projected total. */
   projected?: number
   /** @default 'md' */
   size?: 'sm' | 'md'
@@ -201,11 +183,6 @@ interface BudgetBarProps {
 
 const SCALE_HEADROOM = 1.04
 
-/**
- * Spend against a budget: the bar fills to what's spent, turns red past the
- * budget line, and a striped segment runs on to the projected total.
- * Decorative: show the values as text beside it.
- */
 function BudgetBar({
   animated = true,
   budget,
@@ -272,7 +249,6 @@ function BudgetBar({
 
 type SpendKeyShape = 'spent' | 'projected' | 'over' | 'budget'
 
-/** A legend swatch matching a `BudgetBar` mark. */
 function SpendKey({
   className,
   color = spendColors.spent,

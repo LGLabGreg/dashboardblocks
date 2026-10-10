@@ -33,9 +33,7 @@ import {
 
 interface Pipeline1Props {
   items: PipelineItem[]
-  /** The time days in stage are measured from. */
   now: Date
-  /** Called when an item is moved with its menu. There is no drag and drop. */
   onMove?: (id: string, stage: string) => void
   stages: PipelineStage[]
   title: string

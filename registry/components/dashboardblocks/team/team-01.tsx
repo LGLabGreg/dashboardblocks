@@ -19,14 +19,12 @@ import {
 } from '@/components/ui/card'
 
 interface Member extends Person {
-  /** When they were last seen. Ignored while online. */
   lastActive?: Date
   role: string
 }
 
 interface Team1Props {
   members: Member[]
-  /** The time relative times are measured from. */
   now: Date
   onInvite?: () => void
   title: string

@@ -25,9 +25,7 @@ interface DistributionSummary {
   mean: number
   median: number
   min: number
-  /** 25th percentile. */
   q1: number
-  /** 75th percentile. */
   q3: number
 }
 
@@ -40,7 +38,6 @@ function quantile(sorted: number[], p: number) {
   return sorted[lower] + (sorted[upper] - sorted[lower]) * (index - lower)
 }
 
-/** Count, mean and the five-number summary of raw values. */
 function summarize(values: number[]): DistributionSummary {
   const sorted = [...values].sort((a, b) => a - b)
   const count = sorted.length
@@ -55,11 +52,6 @@ function summarize(values: number[]): DistributionSummary {
   }
 }
 
-/**
- * Counts raw values into bins between consecutive `edges`. Values below the
- * first edge count in the first bin and values from the last edge up count
- * in the last, so nothing is dropped.
- */
 function binValues(values: number[], edges: number[]): DistributionBin[] {
   const bins = edges
     .slice(0, -1)
@@ -73,10 +65,7 @@ function binValues(values: number[], edges: number[]): DistributionBin[] {
   return bins
 }
 
-/**
- * The `p` (0–1) quantile from binned counts, such as histogram buckets from a
- * metrics backend, assuming values are spread evenly within each bin.
- */
+/** The `p` (0–1) quantile from binned counts, such as histogram buckets from a metrics backend, assuming values are spread evenly within each bin. */
 function quantileFromBins(bins: DistributionBin[], p: number) {
   const total = bins.reduce((sum, bin) => sum + bin.count, 0)
   if (total === 0) return bins[0]?.x0 ?? 0
@@ -91,7 +80,6 @@ function quantileFromBins(bins: DistributionBin[], p: number) {
   return bins[bins.length - 1].x1
 }
 
-/** The mean from binned counts, taking each bin's midpoint. */
 function meanFromBins(bins: DistributionBin[]) {
   const total = bins.reduce((sum, bin) => sum + bin.count, 0)
   if (total === 0) return 0
@@ -110,7 +98,6 @@ function getShareAbove(bins: DistributionBin[], limit: number) {
   return above / total
 }
 
-/** Round, evenly spaced ticks (1, 2 or 5 × a power of ten) covering `min` to `max`. */
 function getNiceTicks(min: number, max: number, count = 5) {
   const span = max - min || Math.abs(max) || 1
   const rough = span / Math.max(1, count - 1)
@@ -125,10 +112,7 @@ function getNiceTicks(min: number, max: number, count = 5) {
   return ticks
 }
 
-/**
- * Where `value` falls across bins drawn at equal widths, 0–1. Within a bin the
- * position is linear, so uneven (e.g. doubling) bins read like a log scale.
- */
+/** Where `value` falls across bins drawn at equal widths, 0–1. */
 function getBinPosition(bins: DistributionBin[], value: number) {
   if (bins.length === 0) return 0
   let index = bins.findIndex((bin) => value < bin.x1)
@@ -162,22 +146,16 @@ interface HistogramMarker {
 interface HistogramProps {
   animated?: boolean
   bins: DistributionBin[]
-  /** Shown under the chart when no bar is hovered, such as a summary. */
   children?: ReactNode
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Earlier counts in the same bins, drawn as outlines. Compared as shares. */
+  /** Earlier counts in the same bins, drawn as outlines. */
   compare?: number[]
-  /** Describes a bin for the readout, e.g. "200–300 ms: 1,204 requests (18%)". */
   describe: (index: number) => string
-  /** Formats the bin edges on the axis. */
   formatEdge?: (value: number) => string
-  /** Labelled vertical lines, such as percentiles. */
   markers?: HistogramMarker[]
-  /** Label every nth edge. @default 1 */
   tickEvery?: number
-  /** Bars from this value up use `thresholdColor`, with a labelled line. */
   threshold?: HistogramMarker
   /** @default a muted red from --destructive */
   thresholdColor?: string
@@ -189,11 +167,6 @@ function estimateLabelWidth(text: string) {
 
 const defaultThresholdColor = 'color-mix(in oklab, var(--destructive) 70%, var(--card))'
 
-/**
- * A histogram built from bins, drawn at equal widths. Markers and the
- * threshold are labelled lines; hovering a bin reads it out under the chart.
- * Decorative for assistive technology: pair it with a table of the bins.
- */
 function Histogram({
   animated = true,
   bins,
@@ -359,23 +332,15 @@ interface BoxPlotProps {
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** The axis range, shared by rows that are compared. */
   domain: [number, number]
-  /** Whisker ends, e.g. the minimum and maximum or the 5th and 95th percentiles. */
   high: number
   low: number
-  /** Adds a dot at the mean. */
   mean?: number
   median: number
   q1: number
   q3: number
 }
 
-/**
- * A horizontal box and whiskers: the box spans the middle half, the line in
- * it is the median and the whiskers reach `low` and `high`. Decorative: show
- * the values as text beside it.
- */
 function BoxPlot({
   animated = true,
   className,
@@ -441,7 +406,6 @@ interface DistributionAxisProps {
   ticks: number[]
 }
 
-/** Tick labels under box plots that share `domain`. */
 function DistributionAxis({
   className,
   domain,
@@ -493,7 +457,6 @@ interface DistributionKeyProps {
   shape: DistributionKeyShape
 }
 
-/** A legend swatch matching a histogram or box plot mark. */
 function DistributionKey({
   className,
   color = 'var(--chart-2)',

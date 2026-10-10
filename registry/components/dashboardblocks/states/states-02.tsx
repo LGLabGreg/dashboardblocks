@@ -42,7 +42,6 @@ interface DailyPoint {
 
 interface States2Props {
   description: string
-  /** Fetches the series. While it refreshes, the previous chart stays in place, dimmed. */
   load: () => Promise<DailyPoint[]>
   title: string
 }

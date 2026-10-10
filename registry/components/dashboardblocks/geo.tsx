@@ -15,7 +15,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/** "GB" → 🇬🇧. Returns an empty string for anything that isn't a two-letter code. */
 function countryFlag(code: string) {
   if (!/^[a-z]{2}$/i.test(code)) return ''
   const upper = code.toUpperCase()
@@ -25,11 +24,6 @@ function countryFlag(code: string) {
   )
 }
 
-/**
- * A country's flag as an emoji, or a globe without a code. Decorative: show
- * the country's name beside it. Some platforms, such as Windows, draw the two
- * letters instead of a flag.
- */
 function CountryFlag({ className, code }: { className?: string; code?: string }) {
   const flag = code ? countryFlag(code) : ''
   return (
@@ -59,7 +53,6 @@ const compactFormatter = new Intl.NumberFormat('en-US', {
   notation: 'compact',
 })
 
-/** "1.2K", "3.4M". */
 function formatCompact(value: number) {
   return compactFormatter.format(value)
 }
@@ -161,11 +154,6 @@ interface GeoTableRow {
   value: number | null
 }
 
-/**
- * The map's data as a table for assistive technology, largest first. The
- * wrapper, not the table, is visually hidden: a table can't shrink below its
- * content width.
- */
 function GeoTable({
   caption,
   format,
@@ -223,17 +211,14 @@ function MapReadout({
 }
 
 interface TileMapTile {
-  /** Short label drawn on the tile, e.g. "CA". */
   code: string
   /** Column and row on the grid, from 0. */
   column: number
   id: string
-  /** Full name for the readout and assistive technology. */
   name: string
   row: number
 }
 
-/** The 50 states and DC as a square tile grid, 11 columns by 8 rows. */
 const US_STATE_TILES: TileMapTile[] = (
   [
     ['AK', 'Alaska', 0, 0],
@@ -291,40 +276,26 @@ const US_STATE_TILES: TileMapTile[] = (
 ).map(([code, name, column, row]) => ({ code, column, id: code, name, row }))
 
 interface TileMapProps {
-  /** Shown under the map when no tile is active, such as the top tile. */
   children?: ReactNode
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Describes a tile, e.g. "California: $412,300". Read on focus and hover. */
   describe: (tile: TileMapTile, value: number | null) => string
-  /** Shown beside the readout, usually a `HeatmapLegend`. */
   footer?: ReactNode
   format?: (value: number) => string
-  /** Names the map and its data table for assistive technology. */
   label: string
-  /** Fixes the colour scale. Defaults to the values' extent. */
+  /** Fixes the colour scale. */
   max?: number
   min?: number
-  /** Heads the name column of the data table. @default 'Region' */
   nameHeader?: string
-  /**
-   * `sqrt` spreads out skewed values, such as counts that follow population,
-   * so the smaller tiles don't all look the same. @default 'linear'
-   */
+  /** `sqrt` spreads out skewed values, such as counts that follow population, so the smaller tiles don't all look the same. */
   scale?: 'linear' | 'sqrt'
   tiles: TileMapTile[]
-  /** Heads the value column of the data table. @default 'Value' */
   valueHeader?: string
-  /** By tile id. Missing tiles are drawn dashed, as no data. */
+  /** By tile id. */
   values: Record<string, number | null | undefined>
 }
 
-/**
- * A tile grid map: one equal square per region, coloured by value, so small
- * regions are as visible as large ones. Hover, focus or tap a tile to read it
- * under the map; screen readers also get the data as a table.
- */
 function TileMap({
   children,
   className,
@@ -411,11 +382,6 @@ function TileMap({
   )
 }
 
-/**
- * Land on a 2.5° grid from 84°N to 56°S, one bit per cell, row by row from
- * the north-west, base64 encoded (about 1.3 KB). Rasterised from Natural
- * Earth's 1:110m land, which is in the public domain.
- */
 const LAND_MASK =
   'AAAAAB////8AAAAAAAAAAAAAAAAAAH/////gD+AQAAcAAAAAAAAAk3/f//8AB8AAAADgAAAAAAABff8A//8AAAAD4D/8AfAAAAAD/f/Af/8AAAAGG///8PAAgf8/fv/4P/4AAfgG///////v5/////9+P/gAB///////////9/////7+H8PAD/3/////////E/////f8HwAAP///////////B////+ByBgAAP3////////z4AOB///B+AAAGPv///////4OAAYAf//7/gAAPH////////gOAAAAf////wAAP/////////8MAAAAH////wAAD/////////8AAAAAD///84AAD/////////4AAAAAD////AAAB//f//////oAAAAAD///wAAAP7/Tv/////MAAAAAD///gAAAPF//3////8IAAAAAB///AAAAPNP/3////sYAAAAAB///AAAAH+Gf/////PwAAAAAAf/8AAAAP/MP/////jAAAAAAAf/8AAAAP////////gAAAAAAAP8EAAAA/////////gAAAAAAAH4EAAAA///37////AAAAAAAAB4OAAAB/////H//+gAAAAAAAA9hQAAB///7/D+f4AAAAAAAAA/gYAAB////+B8fwgAAAAAAAAH4AAAB////4BwHwgAAAAAAAAA4AAAB////gAwHwQAAAAAAAAAb/AAA////4AwFgQAAAAAAAAAH/gAAf///wAIEAYAAAAAAAAAB/4AAPv//wAALDAAAAAAAAAAB/8AAAH//gAAHOAAAAAAAAAAD/+AAAH//AAAHfEAAAAAAAAAH//wAAH/+AAADPn4AAAAAAAAH//8AAD/8AAABhB/gAAAAAAAD//8AAB/8AAAA8AeIAAAAAAAD//8AAB/8AAAAB4JCAAAAAAAB//4AAB/+AAAAADsAAAAAAAAB//4AAB/+QAAAAPsAAAAAAAAAf/4AAD/9wAAAAf+ABAAAAAAAP/wAAB/xwAAAB/+AAAAAAAAAP/wAAB/5wAAAH//AAAAAAAAAf/AAAA/xgAAAH//gAAAAAAAAf+AAAA/gAAAAH//wAAAAAAAAf8AAAA/gAAAAD//wAAAAAAAAf8AAAAfAAAAAD//gAAAAAAAAf4AAAAYAAAAADg/gEAAAAAAA/wAAAAAAAAAAAAPACAAAAAAA+AAAAAAAAAAAAAAAGAAAAAAA+AAAAAAAAAAAAADAMAAAAAAA8AAAAAAAAAAAAAAAYAAAAAAA8AAAAAAAAAAAAAAAQAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAA4gAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAA'
 const LAND_COLUMNS = 144
@@ -425,10 +391,6 @@ const LAND_STEP = 2.5
 
 let landPath: string | null = null
 
-/**
- * The land mask as one SVG path of horizontal runs, one unit per cell. Drawn
- * with round caps and a `0 1` dash, each run becomes a row of dots.
- */
 function getLandPath() {
   if (landPath !== null) return landPath
   const bytes = atob(LAND_MASK)
@@ -462,51 +424,34 @@ interface DotMapMarker {
   id: string
   lat: number
   lon: number
-  /** Full name for the readout and assistive technology, e.g. "London, UK". */
   name: string
   value: number
 }
 
-/**
- * Marker diameter as a CSS length: area follows the value, with an 8px floor.
- * The largest marker is `maxSize` pixels, or 7% of the map's width on narrow
- * maps. Resolves against the `DotMap`, so use it inside one.
- */
+/** Marker diameter as a CSS length: area follows the value, with an 8px floor. */
 function getMarkerSize(value: number, max: number, maxSize: number) {
   const scale = Math.sqrt(max > 0 ? Math.max(0, value) / max : 0)
   return `max(8px, min(${maxSize}px, 7cqw) * ${scale.toFixed(3)})`
 }
 
 interface DotMapProps {
-  /** Shown under the map when no marker is active, such as the top location. */
   children?: ReactNode
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Describes a marker, e.g. "London, UK: 3,420 active users". Read on focus and hover. */
   describe: (marker: DotMapMarker) => string
-  /** Shown beside the readout, usually a `DotMapLegend`. */
   footer?: ReactNode
   format?: (value: number) => string
-  /** Names the map and its data table for assistive technology. */
   label: string
   markers: DotMapMarker[]
-  /** Fixes the size scale, so maps can be compared. Defaults to the largest value. */
+  /** Fixes the size scale, so maps can be compared. */
   max?: number
-  /** Diameter of the largest marker, in pixels. Narrow maps shrink it. @default 28 */
+  /** Diameter of the largest marker, in pixels. */
   maxSize?: number
-  /** Heads the name column of the data table. @default 'Location' */
   nameHeader?: string
-  /** Heads the value column of the data table. @default 'Value' */
   valueHeader?: string
 }
 
-/**
- * A dotted world map with markers sized by value. The land is a tiny
- * embedded mask, so there are no map libraries or data files to load.
- * Hover, focus or tap a marker to read it under the map; screen readers also
- * get the data as a table.
- */
 function DotMap({
   children,
   className,
@@ -618,11 +563,6 @@ interface DotMapLegendProps {
   maxSize?: number
 }
 
-/**
- * Two reference markers at round values, on the map's size scale. Smaller
- * values would all hit the 8px floor on narrow maps. Pass it as the map's
- * `footer`.
- */
 function DotMapLegend({
   className,
   color = 'var(--chart-2)',
@@ -665,7 +605,6 @@ interface ShareBarProps {
   value: number
 }
 
-/** A thin bar for a share, revealed once in view. Decorative: show the value as text. */
 function ShareBar({
   animated = true,
   className,

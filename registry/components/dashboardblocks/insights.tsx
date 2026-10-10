@@ -5,27 +5,18 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/**
- * Whether the insight is good news, bad news, worth knowing or out of the
- * ordinary. It's about the outcome, not the direction: churn falling is positive.
- */
 type InsightKind = 'positive' | 'negative' | 'neutral' | 'anomaly'
 
-/** The colour of a highlighted metric. Say the direction in its text as well. */
 type InsightTone = 'positive' | 'negative' | 'neutral'
 
 interface InsightKindConfig {
   icon: React.ReactNode
   label: string
-  /** Tinted background with readable text, for badges. */
   soft: string
-  /** Text colour for icons and inline labels. */
   text: string
-  /** Solid fill, for dots and chart marks. */
   fill: string
 }
 
-/** Every kind comes with an icon and a label, so colour never carries it alone. */
 const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
   anomaly: {
     fill: 'var(--chart-3)',
@@ -123,7 +114,6 @@ function InsightBadge({
   )
 }
 
-/** The kind's icon in a tinted circle. Pair it with the kind in text nearby. */
 function InsightIcon({ className, kind }: { className?: string; kind: InsightKind }) {
   const config = insightKindConfig[kind]
   return (
@@ -140,14 +130,12 @@ function InsightIcon({ className, kind }: { className?: string; kind: InsightKin
   )
 }
 
-/** A metric called out inside a sentence, such as "up 24%". */
 interface InsightMetric {
   text: string
   /** @default 'neutral' */
   tone?: InsightTone
 }
 
-/** Plain text, or a highlighted metric. */
 type InsightSegment = string | InsightMetric
 
 function InsightHighlight({
@@ -172,7 +160,6 @@ function InsightHighlight({
   )
 }
 
-/** A sentence with its metrics highlighted. */
 function InsightText({
   as: Component = 'p',
   className,
@@ -198,14 +185,12 @@ function InsightText({
   )
 }
 
-/** The sentence as plain text, for accessible names. */
 function insightToString(segments: InsightSegment[]) {
   return segments
     .map((segment) => (typeof segment === 'string' ? segment : segment.text))
     .join('')
 }
 
-/** Something that contributed to the change, with its effect already formatted. */
 interface InsightDriver {
   label: string
   /** Include the sign, such as "+812" or "−14%". */
@@ -214,7 +199,6 @@ interface InsightDriver {
   tone?: InsightTone
 }
 
-/** A short "Why" line listing what drove the insight. */
 function InsightDrivers({
   className,
   drivers,
@@ -243,13 +227,11 @@ function InsightDrivers({
   )
 }
 
-/** "+1,284" or "−312", with a true minus sign. */
 function formatSigned(value: number, formatter: (value: number) => string) {
   const sign = value > 0 ? '+' : value < 0 ? '−' : ''
   return `${sign}${formatter(Math.abs(value))}`
 }
 
-/** Whether a change is good news, given which direction is good for the metric. */
 function getChangeTone(value: number, goodDirection: 'up' | 'down' = 'up'): InsightTone {
   if (value === 0) return 'neutral'
   return value > 0 === (goodDirection === 'up') ? 'positive' : 'negative'

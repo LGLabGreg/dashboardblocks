@@ -16,7 +16,6 @@ import { Button } from '@/components/ui/button'
 interface PageHeader2Props {
   description: string
   onInvite?: () => void
-  /** The current path, used to mark the active tab. */
   pathname: string
   status: string
   tabs: PageTab[]

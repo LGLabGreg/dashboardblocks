@@ -26,12 +26,10 @@ import {
 
 interface AiAssistant2Props {
   description: string
-  /** Follow-up questions offered under the last reply. */
   followUps: SuggestedPrompt[]
   messages: ChatMessageData[]
-  /** Records a rating, such as for evaluating replies. */
   onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
-  /** Streams the reply to the conversation as chunks of text. Defaults to canned demo replies. */
+  /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
   title: string
 }
@@ -145,7 +143,6 @@ function wait(ms: number, signal: AbortSignal) {
   })
 }
 
-/** Stands in for your model: streams a canned answer word by word. */
 async function* simulateStream(messages: ChatMessageData[], signal: AbortSignal) {
   const question = messages.at(-1)?.content ?? ''
   const reply =

@@ -10,7 +10,6 @@ type ChartPanelKeyShape = 'line' | 'rect'
 
 type ChartValueFormatter = (value: number) => string
 
-/** Recessive axes: no rules or ticks, muted 12px labels. */
 const chartAxisProps = {
   axisLine: false,
   tickLine: false,
@@ -18,10 +17,8 @@ const chartAxisProps = {
   tick: { fill: 'var(--color-muted-foreground)', fontSize: 12 },
 } as const
 
-/** Room for compact value labels up to "999.9K" beside the value axis. */
 const chartValueAxisWidth = 48
 
-/** Solid hairline gridlines on the value axis only. */
 const chartGridProps = {
   stroke: 'var(--color-border)',
   vertical: false,
@@ -90,7 +87,6 @@ type ChartPanelTooltipProps = Partial<
   valueFormatter?: ChartValueFormatter
 }
 
-/** Tooltip content for Recharts: the value leads, the series name follows. */
 function ChartPanelTooltip({
   active,
   label,
@@ -144,10 +140,6 @@ interface ChartPanelTableProps<T extends object> {
   rows: T[]
 }
 
-/**
- * The chart's data as a table for assistive technology. The wrapper, not the
- * table, is visually hidden: a table can't shrink below its content width.
- */
 function ChartPanelTable<T extends object>({
   caption,
   columns,
@@ -196,7 +188,6 @@ interface ChartPanelFigureProps {
   className?: string
 }
 
-/** Wraps a chart so axis ticks and tooltips use tabular figures. */
 function ChartPanelFigure({ children, className }: ChartPanelFigureProps) {
   return <div className={cn('w-full tabular-nums', className)}>{children}</div>
 }

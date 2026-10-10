@@ -26,7 +26,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 type MessageKind = 'customer' | 'reply' | 'note'
 
 interface TicketMessage extends ThreadComment {
-  /** From the customer, a reply sent to them, or a note only the team sees. */
   kind: MessageKind
 }
 
@@ -39,9 +38,7 @@ interface Comments4Props {
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onReact?: (messageId: string, emoji: string) => void
-  /** Sends a reply to the customer, or saves an internal note. Resolve once it's saved. */
   onSubmit?: (body: string, options: { internal: boolean }) => Promise<void>
-  /** Teammates to suggest after @ in internal notes. */
   people: CommentAuthor[]
   ticketId: string
 }
@@ -104,7 +101,6 @@ const exampleProps: Comments4Props = {
   ticketId: 'TCK-381',
 }
 
-/** Stands in for a request to your API. */
 async function saveMessage() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

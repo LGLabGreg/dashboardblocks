@@ -26,10 +26,8 @@ interface Shift {
 
 interface Team4Props {
   description: string
-  /** The time the current shift is found from. */
   now: Date
   onPage?: (person: Person) => void
-  /** Consecutive shifts in order. Past shifts are skipped. */
   shifts: Shift[]
   /**
    * The time zone handover times are shown in.

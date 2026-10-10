@@ -25,36 +25,27 @@ import { Textarea } from '@/components/ui/textarea'
 interface SsoConnection {
   /** The identity provider's signing certificate, in PEM. */
   certificate: string
-  /** The identity provider's entity ID, or issuer. */
   issuer: string
   provider: string
-  /** Where people are sent to sign in. */
   signInUrl: string
 }
 
 interface SsoDomain {
   domain: string
   id: string
-  /** The TXT record that proves the domain is yours. */
   txtRecord: string
   verified: boolean
 }
 
 interface Security6Props {
-  /** Your service provider details, for the identity provider. */
   acsUrl: string
   connection: SsoConnection
   description: string
   domains: SsoDomain[]
   entityId: string
-  /** Everyone at a verified domain must sign in with SSO. */
   enforced: boolean
   onEnforcedChange?: (enforced: boolean) => void
   onSave?: (connection: SsoConnection) => void
-  /**
-   * Checks a domain's TXT record. Return `false` when it isn't found yet.
-   * Without it, domains always verify.
-   */
   onVerifyDomain?: (id: string) => boolean | Promise<boolean>
   providers: string[]
   status: ConnectionStatus

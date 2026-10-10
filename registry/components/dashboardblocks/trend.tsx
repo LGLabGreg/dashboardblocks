@@ -79,8 +79,7 @@ interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction
   className?: string
   formatter?: (value: number) => string
   /**
-   * Which direction is good. Use `down` for metrics like latency or churn,
-   * so a decrease is colored as positive.
+   * Which direction is good.
    * @default 'up'
    */
   goodDirection?: 'up' | 'down'

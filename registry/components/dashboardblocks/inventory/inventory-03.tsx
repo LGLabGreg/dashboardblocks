@@ -17,15 +17,12 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Inventory3Props {
-  /** How many SKUs are in each status. */
   counts: Record<StockStatus, number>
   /** @default 'USD' */
   currency?: string
   description: string
-  /** Cost of goods sold over the last 12 months, for turnover. */
   annualCogs?: number
   title: string
-  /** Value of stock on hand, at cost. */
   value: number
 }
 

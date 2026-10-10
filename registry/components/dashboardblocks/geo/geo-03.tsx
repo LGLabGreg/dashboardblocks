@@ -19,7 +19,6 @@ interface Geo3Props {
   description: string
   locations: DotMapMarker[]
   title: string
-  /** Unit for the readout, e.g. "active users". */
   unit: string
 }
 

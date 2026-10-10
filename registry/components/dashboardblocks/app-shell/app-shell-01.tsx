@@ -30,13 +30,11 @@ import {
 
 interface AppShell1Props {
   breadcrumbs: Crumb[]
-  /** The page. Leave out to show placeholders. */
   children?: ReactNode
   notificationCount: number
   onNotificationsClick?: () => void
   onSearch?: () => void
   onSignOut?: () => void
-  /** The current path, used to mark the active link. */
   pathname: string
   sections: NavSection[]
   user: AppUser

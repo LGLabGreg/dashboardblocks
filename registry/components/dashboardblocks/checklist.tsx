@@ -8,14 +8,11 @@ import { cn } from '@/lib/utils'
 type StepState = 'done' | 'current' | 'todo' | 'skipped'
 
 interface StepStateConfig {
-  /** A standalone icon, for inline use next to the label. */
   icon: React.ReactNode
   label: string
-  /** Text colour for the label. */
   text: string
 }
 
-/** Every state has its own icon shape and a label, so colour never carries it alone. */
 const stepStateConfig: Record<StepState, StepStateConfig> = {
   current: {
     icon: (
@@ -77,19 +74,13 @@ const stepStateConfig: Record<StepState, StepStateConfig> = {
 
 interface ChecklistProgress {
   done: number
-  /** Steps still to do, including the current one. */
   remaining: number
   skipped: number
-  /** Steps that count towards progress: every step except skipped ones. */
   total: number
   /** `done` as a share of `total`, 0–100. */
   percentage: number
 }
 
-/**
- * Counts done, skipped and remaining steps. Skipped steps are left out of the
- * total, so skipping an optional step doesn't hold progress back.
- */
 function getChecklistProgress(steps: { state: StepState }[]): ChecklistProgress {
   const done = steps.filter((step) => step.state === 'done').length
   const skipped = steps.filter((step) => step.state === 'skipped').length
@@ -100,7 +91,6 @@ function getChecklistProgress(steps: { state: StepState }[]): ChecklistProgress 
   return { done, percentage, remaining: total - done, skipped, total }
 }
 
-/** The step in progress, or else the first step still to do. */
 function getNextStep<T extends { state: StepState }>(steps: T[]): T | undefined {
   return (
     steps.find((step) => step.state === 'current') ??
@@ -108,10 +98,6 @@ function getNextStep<T extends { state: StepState }>(steps: T[]): T | undefined 
   )
 }
 
-/**
- * Marks a step skipped. If it was the current step, the next step still to do
- * becomes current.
- */
 function skipStep<T extends { id: string; state: StepState }>(
   steps: T[],
   id: string,
@@ -128,16 +114,10 @@ function skipStep<T extends { id: string; state: StepState }>(
 
 interface StepIndicatorProps {
   className?: string
-  /** Shows the step number on current and to-do steps. */
   index?: number
   state: StepState
 }
 
-/**
- * A round step marker: a check when done, a thick ring when current, a thin
- * ring when to do and a dashed ring when skipped. Decorative: pair it with the
- * state label in text.
- */
 function StepIndicator({ className, index, state }: StepIndicatorProps) {
   return (
     <span
@@ -179,10 +159,6 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
   )
 }
 
-/**
- * A native checkbox styled to match the other form controls. Pass `id` and
- * point a `<label htmlFor>` at it.
- */
 function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'type'>) {
   return (
     <span className={cn('relative inline-flex size-4 shrink-0', className)}>

@@ -44,10 +44,6 @@ interface UseAnimatedNumberOptions {
    * @default 0
    */
   delay?: number
-  /**
-   * Whether to re-animate when element comes back into view
-   * @default false
-   */
   reanimateOnView?: boolean
 }
 

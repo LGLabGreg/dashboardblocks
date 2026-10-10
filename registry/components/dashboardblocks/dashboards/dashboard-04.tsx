@@ -31,14 +31,6 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 
-/*
- * A CRM dashboard: the segment filter scopes every block. The date range
- * scopes the sales stats and lead conversion. Bookings by month cover the last
- * twelve full months, and the open pipeline, quarter forecast, deal activity and
- * stuck deals are as of today, so the date range doesn't apply to them. Swap
- * `buildCrmData` for your own queries.
- */
-
 interface Dashboard4Props {
   title: string
   /** The last day of every date range. */
@@ -131,7 +123,6 @@ const INDUSTRIES = [
   'Software',
 ]
 
-/** A seeded random number generator, so the example renders the same on the server and in the browser. */
 function random(seed: number) {
   let state = seed
   return () => {
@@ -302,7 +293,6 @@ function buildOpenDeals(today: Date): (PipelineItem & { segment: string })[] {
   })
 }
 
-/** Everything the blocks show for one query. Replace with your own data fetching. */
 function buildCrmData({ preset, segment }: Query, today: Date) {
   const days = getPreset(preset).days
   const range = getDateRange(preset, today)
@@ -461,7 +451,6 @@ const Dashboard4 = (props: Dashboard4Props) => {
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
 
-  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
     if (displayedQuery === query) return
     const timer = setTimeout(() => setDisplayedQuery(query), 500)

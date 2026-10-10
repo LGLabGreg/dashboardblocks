@@ -35,15 +35,11 @@ interface BrowserFolder {
 type BrowserItem = BrowserFile | BrowserFolder
 
 interface Files4Props {
-  /** Copies a link to the file. Defaults to copying `href` to the clipboard. */
   onCopyLink?: (file: BrowserFile) => Promise<void>
-  /** Deletes a file. Resolve once it's gone. Defaults to a short wait. */
   onDelete?: (file: BrowserFile) => Promise<void>
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** The top folder. Its name starts the path. */
   root: BrowserFolder
-  /** Time zone for dates. @default 'UTC' */
   timeZone?: string
 }
 

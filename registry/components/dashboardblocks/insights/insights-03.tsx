@@ -16,7 +16,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-/** How much one segment added to or took away from the change. Contributions add up to the net change. */
 interface Contribution {
   label: string
   value: number
@@ -27,12 +26,11 @@ interface Insights3Props {
   description: string
   formatter?: (value: number) => string
   /**
-   * Which direction is good for the metric. Use `down` for metrics like churn.
+   * Which direction is good for the metric.
    * @default 'up'
    */
   goodDirection?: 'up' | 'down'
   metric: string
-  /** The metric's value in the previous period. */
   previous: number
   title: string
 }

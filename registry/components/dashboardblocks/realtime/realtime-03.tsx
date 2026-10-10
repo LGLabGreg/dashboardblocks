@@ -35,11 +35,9 @@ interface Realtime3Props {
   description: string
   /** Newest first. */
   events: LiveEvent[]
-  /** How many events to keep. @default 6 */
   limit?: number
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  /** Makes up new events, for demos. Replace with your own feed. */
   simulate?: boolean
   title: string
 }

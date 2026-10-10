@@ -20,12 +20,10 @@ import {
 } from '@/components/ui/card'
 
 interface Activity {
-  /** "commented on", "invited", "moved … to Done". */
   action: string
   actor: Pick<Person, 'avatar' | 'name'>
   at: Date
   id: string
-  /** What the action was on, shown in bold. */
   target?: string
 }
 
@@ -37,7 +35,6 @@ interface ActivityFeed01Props {
   now: Date
   onViewAll?: () => void
   title: string
-  /** Time zone for days and times. @default 'UTC' */
   timeZone?: string
 }
 

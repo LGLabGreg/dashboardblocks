@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 
 type ActivityTone = 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'accent'
 
-/** Tinted, readable in both themes. Pair a tone with an icon and text, never alone. */
 const activityToneClasses: Record<ActivityTone, string> = {
   accent: 'bg-chart-2/15 text-foreground',
   danger: 'bg-red-500/10 text-red-700 dark:text-red-400',
@@ -16,10 +15,6 @@ const activityToneClasses: Record<ActivityTone, string> = {
   warning: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
 }
 
-/**
- * A list of activity, newest or oldest first. Set the marker size with
- * `--activity-marker` so `ActivityFeedItem` connectors line up with it.
- */
 function ActivityFeed({ className, ...props }: ComponentProps<'ol'>) {
   return (
     <ol className={cn('flex flex-col [--activity-marker:2rem]', className)} {...props} />
@@ -27,11 +22,6 @@ function ActivityFeed({ className, ...props }: ComponentProps<'ol'>) {
 }
 
 interface ActivityFeedItemProps extends ComponentProps<'li'> {
-  /**
-   * Draws a line from this item's marker down to the next one. The first
-   * child should be the marker, `--activity-marker` wide.
-   * @default false
-   */
   connector?: boolean
 }
 
@@ -61,7 +51,6 @@ function ActivityFeedItem({
   )
 }
 
-/** The icon for a kind of activity in a tinted circle. Say what it means in text nearby. */
 function ActivityIcon({
   className,
   icon,
@@ -86,7 +75,6 @@ function ActivityIcon({
   )
 }
 
-/** A dot for unread items, with "Unread" for screen readers. */
 function UnreadDot({ className }: { className?: string }) {
   return (
     <span className={cn('bg-primary size-2 shrink-0 rounded-full', className)}>
@@ -104,7 +92,6 @@ const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
   style: 'short',
 })
 
-/** "2026-09-26", the calendar day in a time zone. */
 function getDayKey(date: Date, timeZone = 'UTC') {
   return new Intl.DateTimeFormat('en-CA', {
     day: '2-digit',
@@ -114,10 +101,6 @@ function getDayKey(date: Date, timeZone = 'UTC') {
   }).format(date)
 }
 
-/**
- * "just now", "5 min ago", "3 hr ago", "yesterday", then "Sep 21" after a
- * week. Pass a fixed `now`, so it renders the same on the server and in the browser.
- */
 function formatActivityTime(date: Date, now: Date, timeZone = 'UTC') {
   const elapsed = now.getTime() - date.getTime()
   if (elapsed < MINUTE) return 'just now'
@@ -139,7 +122,6 @@ function formatActivityTime(date: Date, now: Date, timeZone = 'UTC') {
   }).format(date)
 }
 
-/** "Today", "Yesterday", then "Monday, Sep 21". */
 function formatActivityDay(date: Date, now: Date, timeZone = 'UTC') {
   const days = Math.round(
     (Date.parse(getDayKey(now, timeZone)) - Date.parse(getDayKey(date, timeZone))) / DAY,
@@ -154,7 +136,6 @@ function formatActivityDay(date: Date, now: Date, timeZone = 'UTC') {
   }).format(date)
 }
 
-/** Groups items by calendar day in their current order, labelled "Today", "Yesterday" and so on. */
 function groupActivityByDay<T extends { at: Date }>(
   items: T[],
   now: Date,
@@ -184,7 +165,6 @@ interface ActivityTimeProps {
   timeZone?: string
 }
 
-/** A relative time with the full date and time on hover. */
 function ActivityTime({ className, date, now, timeZone = 'UTC' }: ActivityTimeProps) {
   return (
     <time

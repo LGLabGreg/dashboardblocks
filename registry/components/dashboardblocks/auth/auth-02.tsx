@@ -15,7 +15,6 @@ interface PickerWorkspace {
   logo?: string
   members: number
   name: string
-  /** Such as "Owner" or "Member". */
   role: string
 }
 
@@ -32,7 +31,6 @@ interface Auth2Props {
   email: string
   invites: PendingInvite[]
   onAcceptInvite?: (id: string) => void | Promise<void>
-  /** Signs out, so they can sign in with another account. */
   signOutHref: string
   workspaces: PickerWorkspace[]
 }

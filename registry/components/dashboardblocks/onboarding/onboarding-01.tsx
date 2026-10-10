@@ -39,7 +39,6 @@ import {
   InputGroupText,
 } from '@/components/ui/input-group'
 
-// A type, not an interface, so it fits useSimpleForm's Record<string, …> constraint.
 type NewWorkspace = {
   name: string
   slug: string
@@ -47,18 +46,13 @@ type NewWorkspace = {
 }
 
 interface Onboarding1Props {
-  /** The role new invites start with. */
   defaultRole: string
-  /** Where workspaces live, shown before the URL name. */
   domain: string
-  /** Checks the URL name is free. Return a message when it isn't. */
   onCheckSlug?: (slug: string) => Promise<string | void>
-  /** Creates the workspace and sends the invites. */
   onComplete?: (workspace: NewWorkspace, invites: Invite[]) => Promise<void>
   product: string
   roles: { label: string; value: string }[]
   useCases: ChoiceCardOption[]
-  /** The signed-in person, shown top right. */
   userEmail: string
 }
 
@@ -141,13 +135,11 @@ const STEPS: FormStep[] = [
 
 const RESERVED = ['admin', 'api', 'app', 'help', 'settings', 'www']
 
-/** Stands in for a request to your API. "acme" is taken, to show a server error. */
 async function checkSlug(slug: string) {
   await new Promise((resolve) => setTimeout(resolve, 600))
   if (slug === 'acme') return 'That URL is taken. Try another.'
 }
 
-/** Stands in for a request to your API. */
 async function createWorkspace() {
   await new Promise((resolve) => setTimeout(resolve, 900))
 }

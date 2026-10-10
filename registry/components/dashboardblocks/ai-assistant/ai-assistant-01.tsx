@@ -35,17 +35,12 @@ interface Account {
 
 interface AiAssistant1Props {
   accounts: Account[]
-  /** What the assistant can see, shown as a chip in the message box. */
   context: string
-  /** Open the assistant on load. */
   defaultOpen?: boolean
   description: string
   messages: ChatMessageData[]
   metrics: Metric[]
-  /**
-   * Streams the reply to the conversation as chunks of text. `context` is the
-   * page's label while its chip is in the message box. Defaults to canned demo replies.
-   */
+  /** Streams the reply to the conversation as chunks of text. */
   onSend?: (
     messages: ChatMessageData[],
     signal: AbortSignal,
@@ -154,7 +149,6 @@ function wait(ms: number, signal: AbortSignal) {
   })
 }
 
-/** Stands in for your model: streams a canned answer word by word. */
 async function* simulateStream(
   messages: ChatMessageData[],
   signal: AbortSignal,

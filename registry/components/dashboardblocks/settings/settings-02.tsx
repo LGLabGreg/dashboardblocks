@@ -27,21 +27,16 @@ type KeyScope = 'read' | 'write'
 
 interface ApiKey {
   createdAt: Date
-  /** Who created the key. */
   createdBy: string
   id: string
   lastUsedAt?: Date
-  /** The masked key, e.g. from `maskSecret`. Never the full secret. */
   masked: string
   name: string
   scope: KeyScope
 }
 
 interface Settings2Props {
-  /**
-   * Creates a key and returns it with its secret, which is shown once.
-   * Wire this to your API; the example makes one up.
-   */
+  /** Creates a key and returns it with its secret, which is shown once. */
   createKey: (name: string, scope: KeyScope) => { key: ApiKey; secret: string }
   description: string
   keys: ApiKey[]
@@ -61,7 +56,6 @@ const daysAgo = (days: number) => new Date(NOW.getTime() - days * 86_400_000)
 
 const exampleProps: Settings2Props = {
   createKey: (name, scope) => {
-    // A made-up key seeded from the name. Real keys come from your server.
     let seed = 2_166_136_261
     for (const char of name + scope)
       seed = Math.imul(seed ^ char.charCodeAt(0), 16_777_619)
@@ -151,7 +145,6 @@ const Settings2 = (props: Settings2Props) => {
     event.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) {
-      // The error renders before focus moves, so the field is read with it.
       flushSync(() => setNameError('Enter a name for the key, such as where it’s used.'))
       return nameInput.current?.focus()
     }

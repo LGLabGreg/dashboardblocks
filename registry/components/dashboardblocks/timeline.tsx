@@ -9,7 +9,6 @@ const DAY = 86_400_000
 
 type TimelineUnit = 'week' | 'month' | 'quarter'
 
-/** Maps dates between `start` and `end` to 0–100%, all in UTC. */
 function getTimelineScale(start: Date, end: Date) {
   const from = start.getTime()
   const span = Math.max(DAY, end.getTime() - from)
@@ -17,7 +16,6 @@ function getTimelineScale(start: Date, end: Date) {
     Math.min(100, Math.max(0, ((date.getTime() - from) / span) * 100))
 }
 
-/** The start of each week (Monday), month or quarter between `start` and `end`, in UTC. */
 function getTimelineTicks(start: Date, end: Date, unit: TimelineUnit) {
   const ticks: Date[] = []
   let cursor: Date
@@ -50,7 +48,6 @@ function getTimelineTicks(start: Date, end: Date, unit: TimelineUnit) {
   return ticks
 }
 
-/** Whole days from `from` to `to`, in UTC; negative when `to` is earlier. */
 function getDaysBetween(from: Date, to: Date) {
   const utc = (date: Date) =>
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
@@ -63,12 +60,10 @@ const dayFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-/** "Sep 26", in UTC. */
 function formatTimelineDate(date: Date) {
   return dayFormatter.format(date)
 }
 
-/** "Jul 6 – Sep 30", in UTC. */
 function formatTimelineRange(start: Date, end: Date) {
   return `${dayFormatter.format(start)} – ${dayFormatter.format(end)}`
 }
@@ -137,7 +132,6 @@ const timelineStatusConfig: Record<
   },
 }
 
-/** The status icon, with its label for screen readers or shown beside it. */
 function TimelineStatusLabel({
   className,
   showLabel = false,
@@ -176,7 +170,6 @@ const monthFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-/** Tick labels along the top of a timeline track. */
 function TimelineAxis({
   className,
   end,
@@ -206,7 +199,6 @@ function TimelineAxis({
   )
 }
 
-/** Faint vertical lines at each tick, behind a track. */
 function TimelineGridLines({
   end,
   start,
@@ -230,7 +222,6 @@ function TimelineGridLines({
   )
 }
 
-/** A vertical line at `now`, labelled at the top. */
 function TimelineToday({
   end,
   label = 'Today',
@@ -276,15 +267,11 @@ interface TimelineProps {
   /** Shown under the chart when nothing is hovered. */
   children?: ReactNode
   className?: string
-  /** Describes a hovered item for the readout. */
   describe?: (item: TimelineItem) => string
   end: Date
   formatTick?: (date: Date) => string
   items: TimelineItem[]
-  /**
-   * Keeps bars legible in narrow cards: below this width the track scrolls
-   * sideways. E.g. '40rem'.
-   */
+  /** Keeps bars legible in narrow cards: below this width the track scrolls sideways. */
   minWidth?: string
   now?: Date
   start: Date
@@ -292,12 +279,6 @@ interface TimelineProps {
   unit?: TimelineUnit
 }
 
-/**
- * A Gantt-style timeline: one row per item, a bar from start to end filled
- * to its progress, grouped under headings, with a today line. Hovering a bar
- * reads it out under the chart. Rows are a list for screen readers, each
- * with its dates, status and progress.
- */
 function Timeline({
   children,
   className,
@@ -333,7 +314,6 @@ function Timeline({
           style={{ minWidth }}
           onPointerLeave={() => setActive(null)}
         >
-          {/* Placed explicitly: the today line below is, and explicit items go first. */}
           <span
             aria-hidden
             className={cn(

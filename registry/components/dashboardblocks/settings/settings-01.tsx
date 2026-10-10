@@ -50,7 +50,6 @@ interface Settings1Props {
   onResendInvite?: (id: string) => void
   onRevokeInvite?: (id: string) => void
   onRoleChange?: (id: string, role: Role) => void
-  /** Seats on the plan. Leave out for unlimited. */
   seats?: number
   title: string
 }
@@ -108,7 +107,6 @@ const Settings1 = (props: Settings1Props) => {
   )
 
   const fail = (message: string) => {
-    // The error renders before focus moves, so the field is read with it.
     flushSync(() => setError(message))
     document.getElementById(emailId)?.focus()
   }

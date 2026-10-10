@@ -10,17 +10,12 @@ type GaugeTone = 'positive' | 'caution' | 'critical' | 'neutral'
 
 interface GaugeToneConfig {
   icon: React.ReactNode
-  /** Tinted background with readable text, for badges. */
   soft: string
-  /** Stroke colour for arcs. */
   stroke: string
-  /** Solid fill, for legend swatches and bars. */
   swatch: string
-  /** Text colour for icons and inline labels. */
   text: string
 }
 
-/** Band colours always come with an icon and a label, never colour alone. */
 const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
   caution: {
     icon: (
@@ -88,7 +83,6 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
   },
 }
 
-/** A labelled range on the scale, such as "Fair" from 40 to 70. */
 interface GaugeBand {
   from: number
   label: string
@@ -103,11 +97,6 @@ function getGaugeShare(value: number, min: number, max: number) {
   return Math.min(1, Math.max(0, (value - min) / range))
 }
 
-/**
- * The band `value` falls in. Each band includes its `from` and excludes its
- * `to`, except the last, which includes both. Values off the scale take the
- * nearest band.
- */
 function getGaugeBand(value: number, bands: GaugeBand[]) {
   if (bands.length === 0) return undefined
   const found = bands.find(
@@ -119,7 +108,6 @@ function getGaugeBand(value: number, bands: GaugeBand[]) {
   return value < bands[0].from ? bands[0] : bands[bands.length - 1]
 }
 
-/** Average of `score` weighted by `weight`. Weights don't need to add up to 1. */
 function getWeightedScore(items: { score: number; weight: number }[]) {
   const total = items.reduce((sum, item) => sum + item.weight, 0)
   if (total <= 0) return 0
@@ -171,7 +159,6 @@ const TARGET_MARKER_OVERHANG = 4
 const BAND_GAP = 1.5
 const SCALE_WIDTH = 3
 
-/** Rounded so the server and the browser print the same path. */
 const round = (value: number) => Math.round(value * 100) / 100
 
 function polar(angle: number, radius: number) {
@@ -193,7 +180,6 @@ interface GaugeProps {
   animated?: boolean
   /** Labelled ranges on the scale, in order from `min` to `max`. */
   bands?: GaugeBand[]
-  /** Shown in the middle of the arc, usually the value. Hidden from screen readers, so put everything in `valueText`. */
   children?: ReactNode
   className?: string
   /**
@@ -201,31 +187,24 @@ interface GaugeProps {
    * @default 'var(--chart-2)'
    */
   color?: string
-  /** Colours the fill with the tone of the band the value falls in. */
   colorByBand?: boolean
-  /** Formats the labels under the ends of the arc. Leave out to hide them. */
   formatScale?: (value: number) => string
   /**
-   * `fill` draws the value as an arc from `origin`, with any bands as a thin
-   * scale inside the track. `marker` draws the bands as the track and marks
-   * the value with a knob.
+   * `fill` draws the value as an arc from `origin`, with any bands as a thin scale inside the track.
    * @default 'fill'
    */
   indicator?: 'fill' | 'marker'
-  /** Names the meter for assistive technology, e.g. "Net Promoter Score". */
   label: string
   /** @default 100 */
   max?: number
   /** @default 0 */
   min?: number
-  /** Where the fill starts. Use 0 on a scale that goes below zero. Defaults to `min`. */
   origin?: number
   /**
    * 180 for a semicircle, 270 for a three-quarter arc.
    * @default 180
    */
   sweep?: 180 | 270
-  /** Draws a tick across the track at this value. */
   target?: number
   /**
    * Track thickness, in hundredths of the gauge's width.
@@ -233,16 +212,9 @@ interface GaugeProps {
    */
   thickness?: number
   value: number
-  /** How screen readers read the value, e.g. "68 out of 100, fair". Defaults to the number. */
   valueText?: string
 }
 
-/**
- * A radial gauge on a scale from `min` to `max`, with optional bands and a
- * target tick. Built as a `meter`: the SVG is decorative, and screen readers
- * get the label, the range and `valueText`. The fill animates in once, and
- * not at all when reduced motion is on.
- */
 function Gauge({
   animated = true,
   bands = [],
@@ -278,9 +250,6 @@ function Gauge({
   const shown = revealed ? valueShare : originShare
   const fillStart = Math.min(originShare, shown) * 100
   const fillLength = Math.abs(shown - originShare) * 100
-  // Round caps reach past each end of the dash by half the thickness. Pull in
-  // the ends inside the scale so the fill stops at the value, not past it;
-  // at the scale's own ends the track's caps reach just as far.
   const cap = (thickness / 2 / ((radius * sweep * Math.PI) / 180)) * 100
   const startInset = fillStart > 0 ? cap : 0
   const endInset = fillStart + fillLength < 100 ? cap : 0
@@ -421,7 +390,6 @@ function Gauge({
   )
 }
 
-/** A band's tone with its icon and label. */
 function GaugeToneBadge({
   className,
   label,
@@ -446,7 +414,6 @@ function GaugeToneBadge({
   )
 }
 
-/** The bands as a list: a swatch, the label and the range. */
 function GaugeLegend({
   bands,
   className,
@@ -479,7 +446,6 @@ function GaugeLegend({
   )
 }
 
-/** A short legend for the target tick. */
 function GaugeTargetKey({
   className,
   label = 'Target',

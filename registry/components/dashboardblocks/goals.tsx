@@ -9,11 +9,9 @@ import { cn } from '@/lib/utils'
 type PaceStatus = 'ahead' | 'on-track' | 'behind' | 'met'
 
 interface Pace {
-  /** Where the value should be by now, assuming steady progress. */
   expected: number
   /** Share of the period that has passed, 0–1. */
   elapsed: number
-  /** The value at the end of the period if progress continues at the current rate. */
   projected: number
   status: PaceStatus
 }
@@ -30,7 +28,6 @@ interface PaceInput {
   tolerance?: number
 }
 
-/** Compares progress with a straight line from zero to the target. */
 function getPace({ current, elapsed, target, tolerance = 0.05 }: PaceInput): Pace {
   const clamped = Math.min(1, Math.max(0, elapsed))
   const expected = target * clamped
@@ -42,7 +39,6 @@ function getPace({ current, elapsed, target, tolerance = 0.05 }: PaceInput): Pac
   return { elapsed: clamped, expected, projected, status }
 }
 
-/** Share of the period between `start` and `end` that has passed at `now`. */
 function getElapsed(start: Date, end: Date, now: Date) {
   const total = end.getTime() - start.getTime()
   return total > 0 ? (now.getTime() - start.getTime()) / total : 1
@@ -110,7 +106,6 @@ const paceConfig: Record<
   },
 }
 
-/** The pace status with its icon and label. Colour never carries it alone. */
 function PaceBadge({ className, status }: { className?: string; status: PaceStatus }) {
   const config = paceConfig[status]
   return (
@@ -133,17 +128,12 @@ interface GoalProgressProps {
   /** @default 'var(--chart-2)' */
   color?: string
   current: number
-  /** Marks where the value should be by now, from `getPace`. */
   expected?: number
   /** @default 'md' */
   size?: 'sm' | 'md'
   target: number
 }
 
-/**
- * Progress towards a target, with an optional tick where the value should be
- * by now. Decorative: show the values as text beside it.
- */
 function GoalProgress({
   animated = true,
   className,
@@ -188,7 +178,6 @@ function GoalProgress({
   )
 }
 
-/** A short legend for the expected-by-now tick. */
 function GoalProgressKey({
   className,
   label = 'Expected by today',

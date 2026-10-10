@@ -22,27 +22,22 @@ import { cn } from '@/lib/utils'
 type Theme = 'light' | 'dark' | 'system'
 
 interface Profile {
-  /** An image URL. Without one, the avatar shows initials. */
   avatar?: string
   email: string
   name: string
   theme: Theme
-  /** An IANA time zone, e.g. "Europe/London". */
+  /** An IANA time zone, e.g. */
   timeZone: string
 }
 
 interface TimeZoneOption {
-  /** e.g. "London (GMT+1)". */
   label: string
   value: string
 }
 
 interface Settings7Props {
   description: string
-  /**
-   * Called with the chosen image, or `null` when the photo is removed.
-   * Upload it, then pass the new URL back as `profile.avatar`.
-   */
+  /** Called with the chosen image, or `null` when the photo is removed. */
   onAvatarChange?: (file: File | null) => void
   onSave?: (profile: Profile) => void
   profile: Profile
@@ -177,7 +172,6 @@ const Settings7 = (props: Settings7Props) => {
       email: EMAIL.test(email) ? undefined : 'Enter an email address.',
       name: name ? undefined : 'Enter your name.',
     }
-    // Errors render before focus moves, so the field is read with its error.
     flushSync(() => setErrors((current) => ({ ...current, ...next })))
     if (next.name) return document.getElementById(`${id}-name`)?.focus()
     if (next.email) return document.getElementById(`${id}-email`)?.focus()

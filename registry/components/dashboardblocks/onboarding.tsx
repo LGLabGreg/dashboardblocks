@@ -22,32 +22,19 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { cn } from '@/lib/utils'
 
 interface OnboardingLayoutProps {
-  /** Top right, such as the signed-in email and a sign-out link. */
   aside?: ReactNode
-  /** Your logo and product name, top left. */
   brand: ReactNode
   children: ReactNode
   className?: string
   description?: ReactNode
-  /** Under the content, pinned to the bottom while the step scrolls. Usually OnboardingActions. */
   footer?: ReactNode
   /** Wraps the content and footer in a form, so Enter and a submit button in the footer run it. */
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void
-  /** Above the title, such as FormSteps. */
   progress?: ReactNode
-  /**
-   * The current step. When it changes, focus moves to the new step's title,
-   * so keyboard and screen reader users start from the top.
-   */
   step?: number | string
   title: ReactNode
 }
 
-/**
- * A full-page frame for first-run setup: your brand, the step's progress,
- * title and content, and its actions. The actions stay in reach at the bottom
- * of small screens.
- */
 function OnboardingLayout({
   aside,
   brand,
@@ -128,7 +115,7 @@ interface OnboardingActionsProps {
   onBack?: () => void
   /** Leave out to make Continue submit the form. */
   onContinue?: () => void
-  /** Leave out to hide Skip. Offer it on optional steps. */
+  /** Leave out to hide Skip. */
   onSkip?: () => void
   /** Disables the buttons and shows `pendingLabel` while the step saves. */
   pending?: boolean
@@ -138,7 +125,6 @@ interface OnboardingActionsProps {
   skipLabel?: string
 }
 
-/** Back on the left, and Skip and Continue on the right. */
 function OnboardingActions({
   backLabel = 'Back',
   className,
@@ -186,11 +172,9 @@ function OnboardingActions({
 }
 
 interface ChoiceCardOption {
-  /** Beside the title, such as a "Popular" badge. */
   badge?: ReactNode
   description?: ReactNode
   disabled?: boolean
-  /** An icon or logo element, shown in a tile before the title. */
   icon?: ReactNode
   title: string
   value: string
@@ -205,7 +189,6 @@ interface ChoiceCardsBaseProps {
   className?: string
   /** Given to the first option's input, so a label or validation can focus it. */
   id?: string
-  /** The inputs' name. Leave out to generate one. */
   name?: string
   options: ChoiceCardOption[]
 }
@@ -225,11 +208,6 @@ interface MultipleChoiceCardsProps extends ChoiceCardsBaseProps {
 
 type ChoiceCardsProps = SingleChoiceCardsProps | MultipleChoiceCardsProps
 
-/**
- * Large selectable cards with an icon, a title and a description. Built on
- * native radio buttons or checkboxes, so Tab reaches the group and the arrow
- * keys move between radio options. Name the group with `aria-labelledby`.
- */
 function ChoiceCards(props: ChoiceCardsProps) {
   const { className, id, name, options } = props
   const generatedName = useId()
@@ -342,7 +320,6 @@ function ChoiceIndicator({ multiple }: { multiple: boolean }) {
 interface Invite {
   email: string
   id: string
-  /** One of the `roles` values. */
   role: string
 }
 
@@ -350,11 +327,9 @@ interface InviteListProps {
   /** @default 'Add another' */
   addLabel?: string
   className?: string
-  /** An error per invite id, such as from getInviteErrors or your API. */
   errors?: Partial<Record<string, string>>
   /** Starts each email input's id, `${id}-${invite.id}`, so validation can focus a row. */
   id?: string
-  /** The most rows. @default 10 */
   max?: number
   onValueChange: (invites: Invite[]) => void
   /** @default 'name@company.com' */
@@ -364,10 +339,6 @@ interface InviteListProps {
   value: Invite[]
 }
 
-/**
- * Rows of an email address and a role, to invite people. Pasting a list of
- * addresses into an email field fills a row for each one.
- */
 function InviteList({
   addLabel = 'Add another',
   className,
@@ -537,13 +508,9 @@ function InviteList({
   )
 }
 
-/**
- * An error per invite: a valid address, not added twice and not already a
- * member. Blank rows are fine; drop them with getFilledInvites.
- */
 function getInviteErrors(
   invites: Invite[],
-  { members = [] }: { /** Emails already in the workspace. */ members?: string[] } = {},
+  { members = [] }: { members?: string[] } = {},
 ) {
   const errors: Partial<Record<string, string>> = {}
   const memberEmails = new Set(members.map((email) => email.toLowerCase()))
@@ -563,7 +530,6 @@ function getInviteErrors(
   return errors
 }
 
-/** The invites with an email address, trimmed. */
 function getFilledInvites(invites: Invite[]) {
   return invites
     .map((invite) => ({ ...invite, email: invite.email.trim() }))
@@ -571,20 +537,16 @@ function getFilledInvites(invites: Invite[]) {
 }
 
 interface ActionCardProps {
-  /** Beside the title, such as a "Recommended" badge. */
   badge?: ReactNode
   className?: string
   description?: ReactNode
-  /** Where the card goes. Leave out and pass `onClick` for a button. */
   href?: string
   icon?: ReactNode
-  /** Under the description, such as "About 2 minutes". */
   meta?: ReactNode
   onClick?: () => void
   title: string
 }
 
-/** A large card that starts a task, such as importing data. The whole card is the link or button. */
 function ActionCard({
   badge,
   className,

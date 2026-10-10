@@ -16,13 +16,9 @@ interface ErrorPageLink {
 
 interface ErrorPages1Props {
   brand?: ReactNode
-  /** Where the main button goes, usually the home dashboard. */
   homeHref: string
-  /** Places people usually look for, shown under the search. */
   links: ErrorPageLink[]
-  /** Called with the search. Leave out to hide the search box. */
   onSearch?: (query: string) => void
-  /** The path that wasn't found, shown so people can spot a typo. */
   path?: string
 }
 

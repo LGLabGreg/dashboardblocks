@@ -19,10 +19,8 @@ import {
 } from '@/components/ui/card'
 
 interface Schedule1Props {
-  /** How many days ahead to show, starting today. @default 7 */
   days?: number
   events: ScheduleEvent[]
-  /** The time days and countdowns are measured from. */
   now: Date
   /** @default 'UTC' */
   timeZone?: string

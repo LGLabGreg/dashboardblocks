@@ -18,9 +18,7 @@ import {
 } from '@/components/ui/card'
 
 interface Session {
-  /** e.g. "Chrome on macOS". */
   client: string
-  /** Marks the session this page is open in. */
   current?: boolean
   device: DeviceKind
   id: string
@@ -32,7 +30,6 @@ interface Security3Props {
   description: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  /** Called with a session's id when it's signed out. */
   onSignOut?: (id: string) => void
   sessions: Session[]
   title: string

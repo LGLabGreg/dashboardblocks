@@ -89,7 +89,6 @@ export const components: Registry['items'] = [
         path: 'registry/components/dashboardblocks/app-shell.tsx',
         type: 'registry:component',
       },
-      // Replaces the sidebar's own hooks/use-mobile.ts, which fails react-hooks/set-state-in-effect.
       {
         path: 'registry/hooks/use-mobile.ts',
         type: 'registry:hook',

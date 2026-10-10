@@ -132,11 +132,8 @@ function DataTableHead({ align = 'start', className, ...props }: DataTableHeadPr
 
 interface DataTableCellProps extends Omit<ComponentProps<'td'>, 'align'> {
   align?: Align
-  /** Shown above the value when the table is stacked. */
   label?: string
-  /** The row's title cell: spans the full width when stacked, without a label. */
   primary?: boolean
-  /** Fills the spare width and truncates long text, in the table layout only. */
   truncate?: boolean
 }
 
@@ -176,7 +173,6 @@ interface DataTableBarProps {
   value: number
 }
 
-/** A thin bar showing a value relative to the column's largest. Decorative: keep the value as text. */
 function DataTableBar({
   className,
   color = 'var(--chart-2)',
@@ -200,30 +196,19 @@ function DataTableBar({
   )
 }
 
-/** Column options read by the data table components. Set them in a column's `meta`. */
 interface DataTableColumnMeta {
   /** @default 'start' */
   align?: Align
-  /** Classes for the column's cells. */
   cellClassName?: string
-  /** Classes for the column's header. */
   headerClassName?: string
-  /** Leaves its values without a label when the table is stacked, such as a column of row actions. */
   hideLabelWhenStacked?: boolean
-  /**
-   * Names the column in menus and labels its values when the table is stacked.
-   * Defaults to the column's `header` when that is a string, then its id.
-   */
   label?: string
-  /** The row's title column: spans the full width when stacked, without a label. */
   primary?: boolean
   /**
-   * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }`
-   * for dates. The menu lists the column's first sort direction first.
+   * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }` for dates.
    * @default Oldest first and Newest first for a `Date` or ISO date string (a date held as a timestamp number needs these), A to Z and Z to A for text, high to low and low to high otherwise
    */
   sortLabels?: { asc: string; desc: string }
-  /** Fills the spare width and truncates long text, in the table layout only. */
   truncate?: boolean
 }
 
@@ -266,16 +251,6 @@ type DataTableColumnDef<
 
 type DataTableColumn<TData extends RowData> = Column<DataTableFeatures, TData, CellData>
 
-/**
- * A column helper typed for `useDataTable`.
- *
- * @example
- * const columnHelper = createDataTableColumnHelper<Order>()
- * const columns = columnHelper.columns([
- *   columnHelper.accessor('customer', { header: 'Customer', meta: { primary: true } }),
- *   columnHelper.accessor('amount', { header: 'Amount', meta: { align: 'end' } }),
- * ])
- */
 function createDataTableColumnHelper<TData extends RowData>() {
   return createColumnHelper<DataTableFeatures, TData>()
 }
@@ -284,27 +259,9 @@ type UseDataTableOptions<TData extends RowData> = Omit<
   TableOptions<DataTableFeatures, TData>,
   'features'
 > & {
-  /**
-   * Rows per page. Without it, or pagination in `initialState` or `state`,
-   * the table shows every row.
-   */
   pageSize?: number
 }
 
-/**
- * Creates a TanStack Table instance with sorting, filtering, search,
- * pagination, row selection and column visibility.
- *
- * Takes every TanStack Table option: seed state with `initialState`, or control
- * it with `state` and the matching `on[State]Change`. For server-side data, pass
- * `manualSorting`, `manualFiltering` and `manualPagination` with `rowCount`.
- * Keep `data` and `columns` stable between renders, for example at module scope
- * or in `useMemo`.
- *
- * Defaults that differ from TanStack Table: sorting a column toggles between
- * its two directions without clearing, columns filter with `oneOf`, and the
- * search matches text in any column.
- */
 function useDataTable<TData extends RowData>({
   initialState,
   pageSize,
@@ -332,7 +289,6 @@ function useDataTable<TData extends RowData>({
   })
 }
 
-/** The column's name for menus and stacked labels. */
 function getColumnLabel<TData extends RowData>(column: DataTableColumn<TData>) {
   const { header, meta } = column.columnDef
   return meta?.label ?? (typeof header === 'string' ? header : column.id)
@@ -345,7 +301,6 @@ interface DataTableSortButtonProps<TData extends RowData> {
   column: DataTableColumn<TData>
 }
 
-/** Sorts by the column. Click again to reverse, and Shift-click to add it to the sort. */
 function DataTableSortButton<TData extends RowData>({
   className,
   column,
@@ -408,10 +363,6 @@ interface DataTableColumnHeadProps<TData extends RowData> extends Omit<
   header: Header<DataTableFeatures, TData, CellData>
 }
 
-/**
- * A header cell for a TanStack column. Sortable columns with a text header get
- * a sort button, and announce their direction through `aria-sort`.
- */
 function DataTableColumnHead<TData extends RowData>({
   className,
   header,
@@ -449,15 +400,10 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
 > {
   /** Read by screen readers only. */
   caption?: ReactNode
-  /** Replaces the message shown when no rows match. */
   empty?: ReactNode
   table: DataTableInstance<TData>
 }
 
-/**
- * Renders a table from `useDataTable`: sortable headers, cells laid out from
- * each column's `meta`, and a message when nothing matches.
- */
 function DataTableContent<TData extends RowData>({
   caption,
   empty,
@@ -544,16 +490,11 @@ function resetFilters<TData extends RowData>(table: DataTableInstance<TData>) {
   table.resetColumnFilters(true)
 }
 
-/**
- * Moves focus to the table closest to `control`, within its card, for buttons
- * that unmount when clicked (Reset, Clear), so focus doesn't drop to the page.
- */
 function focusTableNear(control: Element) {
   const card = control.closest("[data-slot='card']")
   for (let parent = control.parentElement; parent; parent = parent.parentElement) {
     const table = parent.querySelector<HTMLElement>("[data-slot='data-table']")
     if (table) {
-      // Focusable only for this, so a click on a cell doesn't focus the table.
       table.tabIndex = -1
       table.addEventListener('blur', () => table.removeAttribute('tabindex'), {
         once: true,
@@ -598,7 +539,6 @@ interface DataTableSearchProps<TData extends RowData> extends Omit<
   table: DataTableInstance<TData>
 }
 
-/** Searches every column that holds text or numbers. */
 function DataTableSearch<TData extends RowData>({
   className,
   placeholder = 'Search…',
@@ -620,10 +560,6 @@ function DataTableSearch<TData extends RowData>({
 }
 
 interface DataTableFacetOption {
-  /**
-   * Rows with this value. Defaults to a count of the rows the table holds, so
-   * pass it when the server filters and the table holds one page.
-   */
   count?: number
   icon?: ReactNode
   label: string
@@ -639,7 +575,6 @@ interface DataTableFacetFilterProps<TData extends RowData> {
   title?: string
 }
 
-/** Filters a column to one or more values, with the number of rows for each. */
 function DataTableFacetFilter<TData extends RowData>({
   className,
   column,
@@ -722,7 +657,6 @@ interface DataTableResetProps<TData extends RowData> {
   table: DataTableInstance<TData>
 }
 
-/** Clears the search and column filters. Renders nothing while none are set. */
 function DataTableReset<TData extends RowData>({
   className,
   table,
@@ -756,7 +690,6 @@ interface DataTableViewOptionsProps<TData extends RowData> {
   table: DataTableInstance<TData>
 }
 
-/** Shows and hides columns. Lists every column with an accessor that can be hidden. */
 function DataTableViewOptions<TData extends RowData>({
   className,
   table,
@@ -801,7 +734,6 @@ function DataTableViewOptions<TData extends RowData>({
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
 
-/** A `Date`, or an ISO date string, in the column's first filled row. */
 function isDateColumn<TData extends RowData>(
   table: DataTableInstance<TData>,
   columnId: string,
@@ -819,7 +751,6 @@ interface DataTableSortMenuProps<TData extends RowData> {
   table: DataTableInstance<TData>
 }
 
-/** Sort controls for the stacked layout, where column headers are hidden. */
 function DataTableSortMenu<TData extends RowData>({
   className,
   table,
@@ -907,17 +838,11 @@ const countFormat = new Intl.NumberFormat('en-US')
 
 interface DataTablePaginationProps<TData extends RowData> {
   className?: string
-  /** Offers these page sizes in a menu. */
   pageSizeOptions?: number[]
-  /**
-   * The selected row count. Defaults to the rows selected on this page; pass
-   * it when a selection reaches beyond the page, such as every matching row.
-   */
   selectedCount?: number
   table: DataTableInstance<TData>
 }
 
-/** The visible range, the selected row count, and previous and next page buttons. */
 function DataTablePagination<TData extends RowData>({
   className,
   pageSizeOptions,
@@ -932,8 +857,6 @@ function DataTablePagination<TData extends RowData>({
   const selected = selectedCount ?? table.getSelectedRowModel().rows.length
   const pageCount = table.getPageCount()
 
-  // Next is disabled on the last page and Previous on the first, which drops
-  // focus to the page: hand it to the other button once it's enabled.
   const previousRef = useRef<HTMLButtonElement>(null)
   const nextRef = useRef<HTMLButtonElement>(null)
   const focusAfterRender = useRef<HTMLButtonElement | null>(null)
@@ -1026,17 +949,11 @@ function DataTablePagination<TData extends RowData>({
 }
 
 interface DataTableSelectionBarProps<TData extends RowData> {
-  /** Actions for the selected rows. Read them with `table.getSelectedRowModel()`. */
   children?: ReactNode
   className?: string
   table: DataTableInstance<TData>
 }
 
-/**
- * The number of selected rows, actions for them and a button to clear the
- * selection. Renders nothing while no rows are selected, so it can take the
- * place of the toolbar.
- */
 function DataTableSelectionBar<TData extends RowData>({
   children,
   className,
@@ -1100,13 +1017,6 @@ function DataTableSelectRow<TData extends RowData>({
   )
 }
 
-/**
- * A checkbox column for selecting rows. Put it first. When stacked, the
- * checkbox sits in the row's top corner. Choose which rows can be selected
- * with the `enableRowSelection` option. `getRowLabel` names each row's
- * checkbox ("Select Northwind"), so a screen reader can tell the rows apart.
- * Without it, or for an empty label, the checkbox reads "Select row".
- */
 function createDataTableSelectColumn<TData extends RowData>({
   getRowLabel,
 }: {

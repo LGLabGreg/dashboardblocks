@@ -12,16 +12,11 @@ import { Button, buttonVariants } from '@/components/ui/button'
 
 interface ErrorPages3Props {
   brand?: ReactNode
-  /** The error's technical message, shown under Details for support. */
   details?: string
-  /** An id support can look up, such as a request or trace id. */
   errorId: string
-  /** When it happened. */
   occurredAt: Date
-  /** Retries the failed request. Reject to show that it failed again. */
   onRetry?: () => void | Promise<void>
   statusHref?: string
-  /** An email address. The error id goes in the subject. */
   supportEmail?: string
 }
 

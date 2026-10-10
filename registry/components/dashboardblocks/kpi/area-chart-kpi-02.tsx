@@ -20,14 +20,11 @@ interface DailyValue {
 }
 
 interface AreaChartKPI2Props {
-  /** What the change is measured against, e.g. "vs last week". */
   comparison: string
-  /** One point per period, drawn behind the value. The headline is their total. */
   data: DailyValue[]
   format?: KPIFormat
   /** @default 96 */
   height?: number
-  /** The total for the previous period. */
   previous: number
   title: string
 }

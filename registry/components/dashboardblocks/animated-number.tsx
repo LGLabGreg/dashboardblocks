@@ -4,9 +4,6 @@ import { useAnimatedNumber } from '@/registry/hooks/use-animated-number'
 import type { ReactNode } from 'react'
 
 interface AnimatedNumberProps {
-  /**
-   * The target value to animate to
-   */
   value: number
   /**
    * Duration of the animation in milliseconds
@@ -28,20 +25,10 @@ interface AnimatedNumberProps {
    * @default 0
    */
   delay?: number
-  /**
-   * Custom formatter function
-   */
   formatter?: (value: number) => ReactNode
-  /**
-   * Additional className for the wrapper span
-   */
   className?: string
 }
 
-/**
- * A component that animates a number from a start value to an end value,
- * with viewport detection to only animate when visible.
- */
 export function AnimatedNumber({
   className,
   delay = 0,

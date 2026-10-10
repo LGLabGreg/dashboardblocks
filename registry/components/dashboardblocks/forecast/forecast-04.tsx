@@ -51,7 +51,6 @@ import { cn } from '@/lib/utils'
 type ScenarioKey = 'low' | 'base' | 'high'
 
 interface Scenario {
-  /** What the scenario assumes, in a few words. */
   note: string
   /** Growth per step, as a fraction. */
   rate: number
@@ -62,7 +61,6 @@ interface Forecast4Props {
   actuals: { label: string; value: number }[]
   description: string
   formatter?: (value: number) => string
-  /** Labels for the steps after the last actual. */
   horizon: string[]
   scenarios: Record<ScenarioKey, Scenario>
   target?: number

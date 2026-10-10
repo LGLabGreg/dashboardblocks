@@ -5,7 +5,6 @@ import { type RefObject, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/** Change from `previous` to `current`, as a difference and a percentage. */
 function getDelta(current: number, previous: number) {
   const difference = current - previous
   const percent = previous === 0 ? 0 : (difference / Math.abs(previous)) * 100
@@ -23,14 +22,9 @@ interface ProportionTest {
   low: number
   rateA: number
   rateB: number
-  /** True when the 95% interval excludes zero. */
   significant: boolean
 }
 
-/**
- * Compares two conversion rates with a normal approximation. Good enough to
- * summarise a result on a dashboard; use a stats library to decide one.
- */
 function compareProportions(
   a: { conversions: number; visitors: number },
   b: { conversions: number; visitors: number },
@@ -75,15 +69,10 @@ interface DivergingBarProps {
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** The largest absolute value on the shared scale. */
   max: number
   value: number
 }
 
-/**
- * A bar that grows left of the centre line for negative values and right for
- * positive ones. Decorative: show the value as text beside it.
- */
 function DivergingBar({
   animated = true,
   className,
@@ -120,10 +109,6 @@ interface DumbbellProps {
   min?: number
 }
 
-/**
- * Two values on one scale, joined by a line: a hollow dot for before and a
- * filled dot for after, so the shapes differ as well as the fill.
- */
 function Dumbbell({
   after,
   before,
@@ -160,7 +145,6 @@ function Dumbbell({
   )
 }
 
-/** Legend keys for `Dumbbell`. */
 function DumbbellLegend({
   afterLabel,
   beforeLabel,
@@ -210,7 +194,6 @@ interface IntervalBarProps {
   extent: number
 }
 
-/** A point estimate and its interval on an axis centred on zero. Decorative. */
 function IntervalBar({
   className,
   color = 'var(--chart-2)',

@@ -28,7 +28,6 @@ import {
 } from '@/components/ui/card'
 
 interface SignInDay {
-  /** Blocked outright, e.g. by rate limits or a blocked IP. */
   blocked: number
   failed: number
   label: string

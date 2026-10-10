@@ -20,12 +20,10 @@ type MetricFormat =
 
 interface Metric {
   /**
-   * How the change is measured. Use `points` for rates, so 2.1% → 1.8%
-   * reads as −0.3 pts instead of −14.3%.
+   * How the change is measured.
    * @default 'percent'
    */
   changeType?: 'percent' | 'points'
-  /** A named format or a formatter of your own. @default 'number' */
   format?: MetricFormat | MetricFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
   goodDirection?: 'up' | 'down'
@@ -56,7 +54,6 @@ const currencyCompactFormatter = new Intl.NumberFormat('en-US', {
 })
 const percentFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 })
 
-/** "42s", "3m 05s", "1h 12m". Takes seconds. */
 function formatDuration(seconds: number) {
   const total = Math.round(Math.abs(seconds))
   const hours = Math.floor(total / 3600)
@@ -67,10 +64,6 @@ function formatDuration(seconds: number) {
   return `${rest}s`
 }
 
-/**
- * Named formats, all in en-US so the server and the browser render the same.
- * `percent` takes a value that is already a percentage (3.4 → "3.4%").
- */
 const metricFormats: Record<MetricFormat, MetricFormatter> = {
   compact: (value) => compactFormatter.format(value),
   currency: (value) => currencyFormatter.format(value),
@@ -91,7 +84,6 @@ function formatMetricValue(metric: Pick<Metric, 'format'>, value: number) {
 
 const round = (value: number) => Math.round(value * 10) / 10
 
-/** Change vs the previous value, in percent or percentage points. */
 function getMetricChange({
   changeType = 'percent',
   previous,
@@ -106,7 +98,6 @@ function getMetricChange({
 const formatChange = (unit: '%' | ' pts') => (value: number) =>
   `${value > 0 ? '+' : ''}${numberFormatter.format(value)}${unit}`
 
-/** "Visitors, last 14 days: up from 1,620 to 1,910", for the sparkline's text alternative. */
 function describeHistory(
   metric: Pick<Metric, 'format' | 'history' | 'label'>,
   period = '',
@@ -133,7 +124,6 @@ function useReveal(animated: boolean) {
   return { ref: ref as RefObject<HTMLDivElement>, revealed }
 }
 
-/** A list of metrics. Rows are divided by hairlines and share their column widths. */
 function MetricList({ className, ...props }: ComponentProps<'ul'>) {
   return <ul className={cn('flex flex-col divide-y', className)} {...props} />
 }
@@ -141,14 +131,9 @@ function MetricList({ className, ...props }: ComponentProps<'ul'>) {
 interface MetricChangeProps {
   className?: string
   metric: Pick<Metric, 'changeType' | 'goodDirection' | 'previous' | 'value'>
-  /** Read after the change by screen readers. @default 'vs previous period' */
   comparison?: string
 }
 
-/**
- * The change vs the previous value with an arrow. Green and red follow
- * `goodDirection`, so a drop in latency reads as good.
- */
 function MetricChange({
   className,
   comparison = 'vs previous period',
@@ -177,7 +162,6 @@ interface MetricSparklineProps {
   /** @default 'var(--chart-2)' */
   color?: string
   data: number[]
-  /** Describes the trend for screen readers. See `describeHistory`. */
   label: string
 }
 
@@ -185,7 +169,6 @@ const SPARKLINE_WIDTH = 64
 const SPARKLINE_HEIGHT = 24
 const SPARKLINE_INSET = 2
 
-/** A small line with a dot on the latest value, sized to sit in a row. Reveals left to right. */
 function MetricSparkline({
   animated = true,
   className,
@@ -252,20 +235,14 @@ function MetricSparkline({
 }
 
 interface MetricRowProps extends Omit<ComponentProps<'li'>, 'children'> {
-  /** Read after the change by screen readers. */
   comparison?: string
   metric: Metric
-  /** Names the sparkline's period for screen readers, for example "last 14 days". */
   period?: string
   /** @default true when the metric has a history */
   showSparkline?: boolean
   sparklineColor?: string
 }
 
-/**
- * One metric: label, sparkline, value and change. On narrow cards the value
- * and change stack at the end of the row; from `@md` each gets its own column.
- */
 function MetricRow({
   className,
   comparison,
@@ -312,7 +289,7 @@ function MetricRow({
 type TargetStatus = 'met' | 'near' | 'missed'
 
 interface TargetInput {
-  /** Use `down` when the target is a ceiling, like churn or latency. @default 'up' */
+  /** Use `down` when the target is a ceiling, like churn or latency. */
   goodDirection?: 'up' | 'down'
   target: number
   /**
@@ -323,7 +300,6 @@ interface TargetInput {
   value: number
 }
 
-/** Whether the value meets its target, is within `tolerance` of it, or misses it. */
 function getTargetStatus({
   goodDirection = 'up',
   target,
@@ -383,7 +359,6 @@ const targetStatusConfig: Record<
   },
 }
 
-/** The target status with its icon and label. Colour never carries it alone. */
 function TargetStatusBadge({
   className,
   status,
@@ -411,19 +386,11 @@ interface MetricTargetBarProps {
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /**
-   * The range the bar covers. Narrow it for values that sit close together,
-   * like uptime. @default [0, 1.25 × the larger of value and target]
-   */
   domain?: [number, number]
   target: number
   value: number
 }
 
-/**
- * A thin bar for the value with a tick at the target. Decorative: show the
- * value, the target and the status as text beside it.
- */
 function MetricTargetBar({
   animated = true,
   className,
@@ -456,7 +423,6 @@ function MetricTargetBar({
   )
 }
 
-/** A short legend for the target tick. */
 function MetricTargetKey({
   className,
   label = 'Target',

@@ -95,7 +95,6 @@ const exampleProps: Settings5Props = {
 
 const isSuccess = (delivery: Delivery) => delivery.status >= 200 && delivery.status < 300
 
-/** Failing when the last three deliveries failed. */
 function getEndpointStatus(endpoint: WebhookEndpoint): ConnectionStatus {
   if (!endpoint.enabled) return 'paused'
   const recent = endpoint.deliveries.slice(-3)

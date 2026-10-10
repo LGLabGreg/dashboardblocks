@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 interface Auth4Props {
-  /** Focuses the first box on mount. Turn it on when the page is a route. */
   focusOnMount?: boolean
   brand: ReactNode
   email: string
@@ -17,13 +16,8 @@ interface Auth4Props {
    * @default 60
    */
   resendAfter?: number
-  /** Called with the corrected address. The code is sent again to it. */
   onChangeEmail?: (email: string) => void | Promise<void>
   onResend?: () => void | Promise<void>
-  /**
-   * Checks the code from the email. Without it, `123456` is accepted, for
-   * trying the block out.
-   */
   onVerify?: (code: string) => boolean | Promise<boolean>
   onVerified?: () => void
 }

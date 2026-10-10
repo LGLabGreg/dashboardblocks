@@ -29,7 +29,7 @@ interface Deployments2Props {
   /** How many commits each environment is ahead of the next, in order. */
   ahead: number[]
   description: string
-  /** In promotion order, e.g. development, staging, production. */
+  /** In promotion order, e.g. */
   environments: Environment[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date

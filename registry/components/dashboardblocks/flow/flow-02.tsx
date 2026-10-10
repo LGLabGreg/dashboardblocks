@@ -19,7 +19,6 @@ import {
 interface Flow2Props {
   description: string
   links: FlowLink[]
-  /** One column per step. Give pages a distinct id in each step, e.g. "pricing-2". */
   nodes: FlowNode[]
   title: string
   /** @default 'visitors' */

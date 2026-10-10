@@ -26,28 +26,15 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/*
- * Form state without a form library: values, validation on blur and submit,
- * errors returned by the server, and dirty and submitting flags. To use React
- * Hook Form or TanStack Form instead, keep the layout and swap `useSimpleForm`
- * for the library's hook.
- */
-
 type FormValues = Record<string, string | boolean>
 
-/** An error message per invalid field. Leave valid fields out. */
 type FormErrors<T extends FormValues> = Partial<Record<keyof T & string, string>>
 
 type SubmitResult<T extends FormValues> = void | FormErrors<T>
 
 interface UseSimpleFormOptions<T extends FormValues> {
   defaultValues: T
-  /**
-   * Saves the values. Return errors, such as "email already in use" from the
-   * server, to show them on their fields.
-   */
   onSubmit: (values: T) => SubmitResult<T> | Promise<SubmitResult<T>>
-  /** Checks the values. Runs when a field with a value loses focus, and on submit. */
   validate?: (values: T) => FormErrors<T>
 }
 
@@ -80,7 +67,6 @@ function useSimpleForm<T extends FormValues>({
 
   const getId = (name: keyof T & string) => `${formId}-${name}`
 
-  /** Focuses the invalid field that comes first on the page, not first in `values`. */
   function focusFirst(invalid: (keyof T & string)[]) {
     const elements = invalid
       .map((name) => document.getElementById(getId(name)))
@@ -96,9 +82,7 @@ function useSimpleForm<T extends FormValues>({
     setServerErrors((current) => ({ ...current, [name]: undefined }))
   }
 
-  /** Shows the errors for `fields` and says whether they're valid, such as before a wizard's next step. */
   function validateFields(fields: (keyof T & string)[]) {
-    // Errors render before focus moves, so the field is read with its error.
     flushSync(() =>
       setTouched((current) => ({
         ...current,
@@ -110,7 +94,6 @@ function useSimpleForm<T extends FormValues>({
     return invalid.length === 0
   }
 
-  /** Props for an Input, Textarea or NativeSelect that edits a text value. */
   function field(name: keyof T & string) {
     const id = getId(name)
     return {
@@ -121,10 +104,6 @@ function useSimpleForm<T extends FormValues>({
       onBlur: (
         event: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
       ) => {
-        // An empty field waits for submit, and so does one left for the submit
-        // button: an error shown now would move the button down under the pointer
-        // and lose the click. Browsers that don't focus a clicked button (Safari)
-        // only get the first case.
         const next = event.relatedTarget
         if (
           !event.currentTarget.value.trim() ||
@@ -142,7 +121,6 @@ function useSimpleForm<T extends FormValues>({
     }
   }
 
-  /** Props for a field's FieldError, so its input can point to it. */
   function error(name: keyof T & string) {
     return { children: errors[name], id: `${getId(name)}-error` }
   }
@@ -172,7 +150,6 @@ function useSimpleForm<T extends FormValues>({
     }
   }
 
-  /** Puts back the last saved values, or starts over from `next`. */
   function reset(next: T = savedValues) {
     setValues(next)
     setSavedValues(next)
@@ -203,7 +180,6 @@ interface FormSectionProps {
   title: string
 }
 
-/** A group of fields with its title and description beside them on wide screens. */
 function FormSection({ children, className, description, title }: FormSectionProps) {
   return (
     <section className={cn('@container', className)}>
@@ -231,10 +207,6 @@ interface SaveBarProps {
   saveLabel?: string
 }
 
-/**
- * A bar that sticks to the bottom of the form while there are unsaved changes.
- * Put it inside the <form>: its save button submits it.
- */
 function SaveBar({
   className,
   isDirty,
@@ -273,12 +245,10 @@ interface FormStep {
 
 interface FormStepsProps {
   className?: string
-  /** The index of the current step. */
   current: number
   steps: FormStep[]
 }
 
-/** Numbered steps for a multi-step form, with done steps ticked. */
 function FormSteps({ className, current, steps }: FormStepsProps) {
   return (
     <ol className={cn('flex gap-2', className)}>
@@ -335,7 +305,6 @@ interface FormSheetProps {
   children: ReactNode
   className?: string
   description?: ReactNode
-  /** The buttons, such as cancel and a submit button. */
   footer: ReactNode
   onOpenChange: (open: boolean) => void
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
@@ -343,7 +312,6 @@ interface FormSheetProps {
   title: string
 }
 
-/** A form in a panel that slides in from the side, for creating or editing a record. */
 function FormSheet({
   children,
   className,
@@ -354,7 +322,6 @@ function FormSheet({
   open,
   title,
 }: FormSheetProps) {
-  // Each style pads the header differently; the body matches it to line up with the title.
   const [bodyInset, setBodyInset] = useState<string>()
   const measureHeader = useCallback((header: HTMLDivElement | null) => {
     if (header) setBodyInset(getComputedStyle(header).paddingInlineStart)
@@ -387,23 +354,15 @@ function FormSheet({
 }
 
 interface InlineEditFieldProps {
-  /** Styles the wrapper, which is a size container; the label and value sit in a grid inside it. */
   className?: string
-  /** Shown when the value is empty. @default 'Not set' */
   emptyLabel?: string
   label: string
-  /** Saves the value. Return an error message to keep editing and show it. */
   onSave: (value: string) => string | void | Promise<string | void>
   type?: 'email' | 'tel' | 'text' | 'url'
-  /** Returns an error message when the value is invalid. */
   validate?: (value: string) => string | undefined
   value: string
 }
 
-/**
- * A label and value that turns into an input to edit it. Enter saves and
- * Escape cancels.
- */
 function InlineEditField({
   className,
   emptyLabel = 'Not set',
@@ -459,7 +418,6 @@ function InlineEditField({
           <div className='flex flex-col gap-1.5'>
             <div className='flex gap-2'>
               <Input
-                // Focus moves into the field the user just asked to edit.
                 // oxlint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
                 type={type}
@@ -515,7 +473,6 @@ function InlineEditField({
   )
 }
 
-/** A loose email check: something@something.something. */
 function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }

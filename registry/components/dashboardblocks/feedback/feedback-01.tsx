@@ -17,7 +17,6 @@ interface Feedback1Props {
   /** How many 1, 2, 3, 4 and 5-star ratings. */
   counts: number[]
   description: string
-  /** The average for the period before, to show the change. */
   previousAverage?: number
   title: string
 }

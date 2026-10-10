@@ -32,7 +32,6 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
-// A type, not an interface, so it fits useSimpleForm's Record<string, …> constraint.
 type NewProject = {
   description: string
   environment: string
@@ -48,7 +47,6 @@ interface Option {
 
 interface Forms3Props {
   environments: Option[]
-  /** Creates the project. Return errors from the server to show them on their fields. */
   onCreate?: (values: NewProject) => Promise<FormErrors<NewProject> | void>
   regions: Option[]
 }
@@ -77,7 +75,6 @@ const STEPS: (FormStep & { fields: (keyof NewProject)[] })[] = [
   { description: 'Check and create', fields: [], title: 'Review' },
 ]
 
-/** Stands in for a request to your API. */
 async function createProject() {
   await new Promise((resolve) => setTimeout(resolve, 800))
 }
@@ -260,7 +257,6 @@ const Forms3 = (props: Forms3Props) => {
           >
             Back
           </Button>
-          {/* Keys keep React from turning the clicked Next button into a submit button mid-click. */}
           {last ? (
             <Button key='create' type='submit' disabled={form.isSubmitting}>
               {form.isSubmitting ? 'Creating…' : 'Create project'}

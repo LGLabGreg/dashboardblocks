@@ -24,19 +24,16 @@ import { cn } from '@/lib/utils'
 interface SecurityKey {
   addedAt: Date
   id: string
-  /** e.g. "YubiKey 5C" or "MacBook Touch ID". */
   name: string
 }
 
 interface AuthenticatorSetup {
   /** The QR code for the authenticator app, rendered by your server or a QR library. */
   qrCode: ReactNode
-  /** The same secret as text, for typing in by hand. */
   secret: string
 }
 
 interface Security5Props {
-  /** When the authenticator app was added. Leave out when it isn't set up. */
   authenticatorAddedAt?: Date
   description: string
   onAddSecurityKey?: () => void
@@ -44,14 +41,8 @@ interface Security5Props {
   onRemoveSecurityKey?: (id: string) => void
   /** Called when new recovery codes are shown, so the old ones can be revoked. */
   onRegenerateRecoveryCodes?: () => void
-  /**
-   * Checks a code from the authenticator app. Return `false` to show an error.
-   * Without it, any six digits are accepted.
-   */
   onVerify?: (code: string) => boolean | Promise<boolean>
-  /** Codes to show once, after setup or when regenerated. */
   recoveryCodes: string[]
-  /** Unused recovery codes left. */
   recoveryCodesLeft: number
   /** Stops the last method being removed, when the workspace requires two-factor. */
   required?: boolean
@@ -60,7 +51,6 @@ interface Security5Props {
   title: string
 }
 
-/** A stand-in QR code for the example. Pass a real one from your server. */
 function ExampleQrCode() {
   const size = 21
   const finder = (x: number, y: number) => {

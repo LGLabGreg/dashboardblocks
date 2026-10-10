@@ -11,12 +11,10 @@ interface ScatterPoint {
 
 interface LineFit {
   intercept: number
-  /** Pearson correlation, −1 to 1. */
   r: number
   slope: number
 }
 
-/** Least-squares line through the points, with the correlation coefficient. */
 function fitLine(points: ScatterPoint[]): LineFit {
   const n = points.length
   if (n < 2) return { intercept: points[0]?.y ?? 0, r: 0, slope: 0 }
@@ -38,7 +36,6 @@ function fitLine(points: ScatterPoint[]): LineFit {
   }
 }
 
-/** Describes a correlation coefficient in words, e.g. "strong positive". */
 function describeCorrelation(r: number) {
   const size = Math.abs(r)
   const strength =
@@ -47,7 +44,6 @@ function describeCorrelation(r: number) {
   return `${strength} ${r > 0 ? 'positive' : 'negative'}`
 }
 
-/** The middle value, averaging the two middle ones for an even count. */
 function getMedian(values: number[]) {
   if (values.length === 0) return 0
   const sorted = [...values].sort((a, b) => a - b)
@@ -55,7 +51,6 @@ function getMedian(values: number[]) {
   return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2
 }
 
-/** Categorical colours in a fixed order, so a series keeps its colour. */
 const scatterPalette = [
   'var(--chart-2)',
   'var(--chart-3)',
@@ -69,7 +64,6 @@ interface ScatterTooltipRow {
   value: string
 }
 
-/** Tooltip content for one point: its name, then labelled values. */
 function ScatterTooltipContent({
   color,
   rows,
@@ -103,7 +97,6 @@ function ScatterTooltipContent({
 
 type RiskLevel = 'low' | 'medium' | 'high' | 'critical'
 
-/** A risk level from likelihood and impact, each 1–5, by their product. */
 function getRiskLevel(likelihood: number, impact: number): RiskLevel {
   const score = likelihood * impact
   if (score >= 15) return 'critical'
@@ -136,7 +129,6 @@ const riskLevelConfig: Record<RiskLevel, { cell: string; label: string; text: st
     },
   }
 
-/** The risk level as a label in its colour. */
 function RiskLevelLabel({ className, level }: { className?: string; level: RiskLevel }) {
   const config = riskLevelConfig[level]
   return (

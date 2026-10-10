@@ -26,10 +26,8 @@ import {
 import { cn } from '@/lib/utils'
 
 interface QuickStart {
-  /** Such as "Recommended". */
   badge?: string
   description: string
-  /** Roughly how long it takes, such as "About 2 min". */
   duration?: string
   href: string
   icon: ReactNode
@@ -57,9 +55,7 @@ interface Onboarding2Props {
   help: HelpLink[]
   quickStarts: QuickStart[]
   tasks: SetupTask[]
-  /** Where the empty dashboards list points, such as a template gallery. */
   templatesHref: string
-  /** A video or guided tour. */
   tourHref: string
   workspace: string
 }

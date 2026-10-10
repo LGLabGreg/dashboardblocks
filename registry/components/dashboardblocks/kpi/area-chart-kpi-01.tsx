@@ -20,13 +20,11 @@ interface DailyProfit {
 }
 
 interface AreaChartKPI1Props {
-  /** What the change is measured against, e.g. "vs last week". */
   comparison: string
   data: DailyProfit[]
   format?: KPIFormat
   /** @default 120 */
   height?: number
-  /** Total profit for the previous period. */
   previous: number
   title: string
 }

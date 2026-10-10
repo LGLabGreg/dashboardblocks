@@ -30,7 +30,6 @@ interface Takeaway {
 }
 
 interface Insights4Props {
-  /** @default null */
   defaultFeedback?: DigestFeedback | null
   headline: string
   /** Called with `null` when the reader takes their feedback back. */

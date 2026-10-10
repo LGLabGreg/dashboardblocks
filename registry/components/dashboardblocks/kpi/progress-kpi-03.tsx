@@ -10,7 +10,6 @@ interface ProgressKPI3Props {
   current: number
   goal: number
   title: string
-  /** Counted items, e.g. "sales". */
   unit: string
 }
 

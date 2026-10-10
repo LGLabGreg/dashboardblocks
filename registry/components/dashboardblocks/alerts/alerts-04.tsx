@@ -14,10 +14,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
 interface Alerts4Props {
-  /** Open alerts by severity. */
   counts: Partial<Record<Exclude<AlertSeverity, 'resolved'>, number>>
   latest?: { firedAt: Date; severity: AlertSeverity; source: string; title: string }
-  /** The time relative times are measured from. */
   now: Date
   onViewAll?: () => void
 }

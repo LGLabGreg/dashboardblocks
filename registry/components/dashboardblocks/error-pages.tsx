@@ -5,30 +5,18 @@ import { type ReactNode, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ErrorPageLayoutProps {
-  /**
-   * Moves focus to the title on mount, so screen readers announce the error
-   * after a client-side navigation. Turn it on when the page is a route.
-   */
+  /** Moves focus to the title on mount, so screen readers announce the error after a client-side navigation. */
   focusOnMount?: boolean
-  /** Below the message, such as buttons, a search box or a form. */
   children?: ReactNode
   className?: string
-  /** Your logo and product name, top left. Leave out inside an app shell. */
   brand?: ReactNode
-  /** Such as "404" or "Error 500". Shown above the title. */
   code?: string
   description?: ReactNode
-  /** Bottom of the page, such as links to help and the status page. */
   footer?: ReactNode
-  /** A decorative icon in a tile above the title. */
   icon?: ReactNode
   title: ReactNode
 }
 
-/**
- * A full-page frame for errors and interruptions: your brand, a centred
- * message and what to do next.
- */
 function ErrorPageLayout({
   focusOnMount = false,
   brand,
@@ -108,7 +96,6 @@ function formatTime(date: Date) {
   return timeFormatter.format(date)
 }
 
-/** "about 25 minutes", "about 2 hours", "less than a minute". */
 function formatDuration(milliseconds: number) {
   const minutes = Math.round(milliseconds / 60_000)
   if (minutes < 1) return 'less than a minute'

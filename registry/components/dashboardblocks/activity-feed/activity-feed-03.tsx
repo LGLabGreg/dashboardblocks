@@ -20,14 +20,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface Notification {
-  /** "mentioned you in", "assigned you". */
   action: string
   actor: Pick<Person, 'avatar' | 'name'>
   at: Date
   id: string
-  /** Mentions get their own tab. */
   mention?: boolean
-  /** A line of the comment or message. */
   preview?: string
   read?: boolean
   target: string
@@ -38,9 +35,7 @@ interface ActivityFeed03Props {
   notifications: Notification[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  /** Called with the ids marked read. */
   onRead?: (ids: string[]) => void
-  /** Time zone for times. @default 'UTC' */
   timeZone?: string
   title: string
 }

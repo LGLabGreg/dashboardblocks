@@ -20,7 +20,6 @@ import { cn } from '@/lib/utils'
 
 interface Team3Props {
   description: string
-  /** Everyone on the team. People without a presence count as offline. */
   people: Person[]
   title: string
 }

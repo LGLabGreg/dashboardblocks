@@ -42,15 +42,11 @@ interface Forecast1Props {
   actuals: number[]
   description: string
   formatter?: (value: number) => string
-  /** Steps to forecast after the last actual. */
   horizon: number
-  /** The date of the last actual. */
   lastDate: Date
   /** @default 0.8 */
   level?: ConfidenceLevel
-  /** Where the today marker goes. */
   now: Date
-  /** Days between values. @default 7 */
   stepDays?: number
   title: string
 }

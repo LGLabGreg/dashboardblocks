@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card'
 
 interface MeteredItem {
-  /** Units included in the plan. */
   included: number
   name: string
   /** Price of each block of `per` units past what's included. */

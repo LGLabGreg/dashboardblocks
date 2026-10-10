@@ -11,7 +11,6 @@ interface BreakdownSegment {
   value: number
 }
 
-/** Neutral fill for an "Other" segment that folds the long tail. */
 const BREAKDOWN_OTHER_COLOR =
   'color-mix(in oklab, var(--muted-foreground) 35%, transparent)'
 
@@ -24,7 +23,6 @@ function formatShare(value: number, total: number, fractionDigits = 0) {
   return `${((value / total) * 100).toFixed(fractionDigits)}%`
 }
 
-/** Flips to true once the element scrolls into view, after the first paint. */
 function useReveal<T extends HTMLElement>(animated: boolean) {
   const { isInView, ref } = useInView({ threshold: 0.3 })
   const [revealed, setRevealed] = useState(!animated)
@@ -44,7 +42,6 @@ interface BreakdownBarProps {
   segments: BreakdownSegment[]
 }
 
-/** A 100% bar split into segments, separated by 2px surface gaps. */
 function BreakdownBar({ animated = true, className, segments }: BreakdownBarProps) {
   const { ref, revealed } = useReveal<HTMLDivElement>(animated)
   const total = getTotal(segments)

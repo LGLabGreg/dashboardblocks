@@ -21,7 +21,6 @@ interface DailyGoal {
 }
 
 interface BarChartKPI2Props {
-  /** One pair of bars per period: the actual value and its goal. */
   data: DailyGoal[]
   format?: KPIFormat
   /** @default 160 */

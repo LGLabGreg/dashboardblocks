@@ -19,7 +19,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Distribution4Props {
-  /** Counts per bin now. */
   current: number[]
   /** @default 'This week' */
   currentLabel?: string
@@ -27,9 +26,7 @@ interface Distribution4Props {
   /** Bin edges, one more than the counts. */
   edges: number[]
   formatter?: (value: number) => string
-  /** Whether lower values are better, as for load times. @default true */
   lowerIsBetter?: boolean
-  /** Counts per bin before, in the same bins. */
   previous: number[]
   /** @default 'Last week' */
   previousLabel?: string

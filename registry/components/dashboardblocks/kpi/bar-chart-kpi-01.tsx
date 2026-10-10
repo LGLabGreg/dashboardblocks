@@ -20,14 +20,11 @@ interface DailyValue {
 }
 
 interface BarChartKPI1Props {
-  /** What the change is measured against, e.g. "vs last week". */
   comparison: string
-  /** One bar per period. The headline is their total. */
   data: DailyValue[]
   format?: KPIFormat
   /** @default 160 */
   height?: number
-  /** The total for the previous period. */
   previous: number
   title: string
 }

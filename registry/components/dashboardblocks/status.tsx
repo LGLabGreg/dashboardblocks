@@ -14,17 +14,13 @@ type StatusLevel =
   | 'unknown'
 
 interface StatusConfig {
-  /** Solid fill for dots and uptime bars. */
   fill: string
   icon: React.ReactNode
   label: string
-  /** Tinted background with readable foreground, for badges. */
   soft: string
-  /** Readable foreground on the card surface. */
   text: string
 }
 
-/** Reserved status colors. Always shown with an icon or label, never color alone. */
 const statusConfig: Record<StatusLevel, StatusConfig> = {
   operational: {
     fill: 'bg-emerald-500',
@@ -143,13 +139,11 @@ function getWorstStatus(statuses: StatusLevel[]): StatusLevel {
 
 interface StatusIndicatorProps {
   className?: string
-  /** Hide the label visually but keep it for assistive technology. */
   hideLabel?: boolean
   label?: string
   status: StatusLevel
 }
 
-/** A status dot with its label. */
 function StatusIndicator({
   className,
   hideLabel = false,
@@ -173,7 +167,6 @@ interface StatusBadgeProps {
   status: StatusLevel
 }
 
-/** A tinted pill with the status icon and label. */
 function StatusBadge({ className, label, status }: StatusBadgeProps) {
   const config = statusConfig[status]
   return (
@@ -224,7 +217,6 @@ interface UptimeDay {
   uptime?: number
 }
 
-/** Average uptime across days that have data, as a percentage. */
 function getUptime(days: UptimeDay[]) {
   const measured = days.filter((day) => day.status !== 'unknown')
   if (measured.length === 0) return 0
@@ -254,13 +246,9 @@ function describeDay(day: UptimeDay | undefined) {
 interface UptimeBarProps {
   className?: string
   days: UptimeDay[]
-  /** Names the service for assistive technology. */
   label: string
 }
 
-/**
- * One bar per day, colored by status. Hover or use the arrow keys to read a day.
- */
 function UptimeBar({ className, days, label }: UptimeBarProps) {
   const [active, setActive] = useState<number | null>(null)
   const ref = useRef<HTMLDivElement>(null)

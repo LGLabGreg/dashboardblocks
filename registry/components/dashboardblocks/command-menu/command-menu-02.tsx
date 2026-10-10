@@ -9,11 +9,8 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useRef, useState } from 'react'
 
 interface CommandMenu2Props {
-  /** Shown before the user types, such as recently viewed records. */
   recent: CommandMenuGroup
-  /** Finds records for a search. The menu waits 250 ms after typing stops. */
   search?: (query: string) => Promise<CommandMenuGroup[]>
-  /** Opens a record. Pass your router's navigate function. */
   onNavigate?: (href: string) => void
 }
 
@@ -74,7 +71,6 @@ const exampleProps: CommandMenu2Props = {
   },
 }
 
-/** Stands in for a request to your search API. */
 async function searchRecords(query: string): Promise<CommandMenuGroup[]> {
   await new Promise((resolve) => setTimeout(resolve, 400))
   const needle = query.toLowerCase()
@@ -125,7 +121,6 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const latest = useRef(0)
 
-  // Add useCommandMenuShortcut(() => setOpen(true)) to open it on ⌘K as well.
   function changeQuery(next: string) {
     setQuery(next)
     clearTimeout(timer.current)

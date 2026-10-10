@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/card'
 
 interface ModelUsage {
-  /** Cost over the whole period. */
   cost: number
   id: string
   label: string
@@ -40,14 +39,12 @@ interface ModelUsage {
 
 interface UsageDay {
   label: string
-  /** Tokens per model id. */
   tokens: Record<string, number>
 }
 
 interface AiUsage1Props {
   days: UsageDay[]
   description: string
-  /** In legend order; each keeps its colour. */
   models: ModelUsage[]
   title: string
 }

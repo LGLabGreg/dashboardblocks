@@ -35,7 +35,6 @@ interface StorageFile {
   href: string
   id: string
   kind: FileKind
-  /** Where it lives, such as the folder. */
   location: string
   name: string
   /** In bytes. */
@@ -57,11 +56,9 @@ interface Files3Props {
   largestFiles: StorageFile[]
   /** In bytes. */
   limit: number
-  /** Deletes a file. Resolve once it's gone. Defaults to a short wait. */
   onDelete?: (file: StorageFile) => Promise<void>
   plan: string
   title: string
-  /** In the footer, until an action has news. */
   upgradeHint: string
   upgradeHref: string
 }
@@ -124,7 +121,6 @@ async function deleteFile() {
 
 const KIND_COLORS = ['--chart-2', '--chart-3', '--chart-4', '--chart-5', '--chart-1']
 
-/** Kinds take the chart colours in order; Other stays grey and skips a colour. */
 function getKindColors(breakdown: StorageKind[]) {
   let next = 0
   return breakdown.map((item) =>

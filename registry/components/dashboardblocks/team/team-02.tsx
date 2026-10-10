@@ -23,7 +23,6 @@ interface Team2Props {
   description: string
   people: Assignee[]
   title: string
-  /** Appended to amounts, e.g. "pts" or "h". */
   unit: string
 }
 

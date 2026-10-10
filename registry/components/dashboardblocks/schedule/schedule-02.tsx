@@ -17,13 +17,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Schedule2Props {
   events: ScheduleEvent[]
-  /** Marks today and selects it at first. */
   now: Date
   onSelect?: (day: Date) => void
   /** @default 'UTC' */
   timeZone?: string
   title: string
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 

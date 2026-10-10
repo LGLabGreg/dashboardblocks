@@ -26,9 +26,7 @@ type ReleaseKind = 'major' | 'minor' | 'patch'
 interface Release {
   date: Date
   kind: ReleaseKind
-  /** e.g. "v2.4.0". */
   version: string
-  /** One line on what shipped. */
   summary?: string
 }
 

@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils'
 interface Deployments3Props {
   current: DoraInput
   description: string
-  /** The period before, to show which way each metric moved. */
   previous?: DoraInput
   title: string
 }

@@ -20,7 +20,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Resource {
-  /** e.g. "25.0 of 32 GB". */
   detail: string
   label: string
   /** Percent used, 0–100. */

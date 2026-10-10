@@ -21,19 +21,15 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Deadline {
-  /** The date it's due, renews or expires. */
   due: Date
   id: string
-  /** E.g. "Contract renewal" or "$12,480 / year". */
   detail?: string
   title: string
 }
 
 interface Schedule3Props {
   deadlines: Deadline[]
-  /** The time countdowns are measured from. */
   now: Date
-  /** Days ahead that count as due soon. @default 7 */
   soonDays?: number
   /** @default 'UTC' */
   timeZone?: string

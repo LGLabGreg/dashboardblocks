@@ -22,16 +22,14 @@ import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
 interface Calendar1Props {
-  /** Calendars to explain in the legend. */
   calendars: { color: string; name: string }[]
   events: CalendarEvent[]
-  /** Marks today and selects it at first. */
   now: Date
   onSelectDay?: (day: Date) => void
   onSelectEvent?: (event: CalendarEvent) => void
   /** @default 'UTC' */
   timeZone?: string
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 

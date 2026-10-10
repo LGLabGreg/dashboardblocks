@@ -17,7 +17,6 @@ interface KPI3Props {
    * @default 'percent'
    */
   changeType?: 'percent' | 'points'
-  /** What the change is measured against, e.g. "last month". */
   comparison: string
   format?: KPIFormat
   /** Use `down` for metrics like churn, where a decrease is good. */

@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/card'
 
 interface IncomingOrder {
-  /** Days from today until it arrives. */
   day: number
   quantity: number
 }
@@ -40,7 +39,6 @@ interface IncomingOrder {
 interface Inventory4Props {
   dailyDemand: number
   description: string
-  /** How many days ahead to project. @default 30 */
   horizon?: number
   incoming: IncomingOrder[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */

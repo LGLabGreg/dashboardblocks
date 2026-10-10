@@ -11,27 +11,20 @@ import { cn } from '@/lib/utils'
 
 interface InviteWorkspace {
   logo?: string
-  /** A few members, shown as avatars. */
   members: { avatar?: string; id: string; name: string }[]
-  /** Everyone in the workspace, for "and 21 others". */
   memberCount: number
   name: string
 }
 
 interface Auth1Props {
   brand: ReactNode
-  /** The address the invite was sent to. */
   email: string
-  /** The invite can no longer be used. */
   expired?: boolean
   invitedBy: { avatar?: string; name: string }
   onAccept?: () => void | Promise<void>
   onDecline?: () => void
-  /** What the role can do, such as "Member · create and edit dashboards". */
   role: string
-  /** The account they're signed in with. Leave out when signed out. */
   signedInAs?: string
-  /** Signs out, so they can sign in with the invited address. */
   switchAccountHref: string
   workspace: InviteWorkspace
 }

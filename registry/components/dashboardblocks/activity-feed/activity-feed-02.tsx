@@ -28,13 +28,10 @@ type HistoryKind =
   | 'resolved'
 
 interface HistoryEvent {
-  /** "opened this ticket", "changed the status". */
   action: string
   actor: string
   at: Date
-  /** A value that changed, shown as from → to. */
   change?: { from: string; to: string }
-  /** The text of a comment. */
   comment?: string
   id: string
   kind: HistoryKind
@@ -46,9 +43,7 @@ interface ActivityFeed02Props {
   events: HistoryEvent[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  /** The record's current state, e.g. "Resolved". */
   status: string
-  /** Time zone for times. @default 'UTC' */
   timeZone?: string
   title: string
 }

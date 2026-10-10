@@ -18,12 +18,9 @@ import {
 } from '@/components/ui/card'
 
 interface Distribution1Props {
-  /** Counts per bucket, e.g. from a metrics backend. Buckets can be uneven. */
   bins: DistributionBin[]
   description: string
-  /** Formats a value in the unit, e.g. 240 → "240 ms". */
   formatter?: (value: number) => string
-  /** A target the slowest requests are measured against. */
   limit?: { label: string; value: number }
   title: string
   /** @default 'requests' */

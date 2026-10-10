@@ -17,10 +17,9 @@ import {
 } from '@/components/ui/card'
 
 interface Retention1Props {
-  /** Oldest first. `retained[0]` is period 0, usually the whole cohort. */
+  /** Oldest first. */
   cohorts: RetentionCohort[]
   description: string
-  /** Shows each cell as a share of the cohort or as a count. @default 'percent' */
   mode?: 'percent' | 'count'
   /** @default 'Month' */
   periodName?: string

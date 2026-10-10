@@ -41,7 +41,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-/** One reading with the range it was expected to fall in. Outside the range counts as an anomaly. */
 interface Reading {
   high: number
   label: string

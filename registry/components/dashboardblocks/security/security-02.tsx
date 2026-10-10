@@ -18,15 +18,12 @@ import {
 } from '@/components/ui/card'
 
 interface AuditEvent {
-  /** Who did it. */
   actor: string
-  /** What they did, e.g. "changed the role of". */
   action: string
   at: Date
   id: string
   ip?: string
   severity: AuditSeverity
-  /** What it was done to, e.g. "Dana Kim to Admin". */
   target?: string
 }
 

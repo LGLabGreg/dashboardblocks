@@ -42,7 +42,6 @@ interface Team6Props {
   people: SharePerson[]
   title: string
   url: string
-  /** Names the workspace in the link setting, e.g. "Anyone at Acme". */
   workspace: string
 }
 
@@ -134,7 +133,6 @@ const Team6 = (props: Team6Props) => {
   const { copied, copy } = useCopyToClipboard()
 
   const fail = (message: string) => {
-    // The error renders before focus moves, so the field is read with it.
     flushSync(() => setError(message))
     document.getElementById(`${id}-email`)?.focus()
   }

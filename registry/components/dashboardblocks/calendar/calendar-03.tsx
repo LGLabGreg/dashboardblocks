@@ -25,17 +25,15 @@ import { Card, CardContent } from '@/components/ui/card'
 type View = 'month' | 'week'
 
 interface Calendar3Props {
-  /** Calendars to filter by. */
   calendars: { color: string; name: string }[]
   events: CalendarEvent[]
-  /** Marks today and draws the current time. */
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
   /** @default 'UTC' */
   timeZone?: string
   /** @default 'month' */
   view?: View
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 

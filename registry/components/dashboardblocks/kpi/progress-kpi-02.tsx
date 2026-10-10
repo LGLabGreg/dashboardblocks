@@ -17,7 +17,6 @@ interface TaskCount {
 interface ProgressKPI2Props {
   counts: TaskCount[]
   title: string
-  /** Counted items, e.g. "tasks". */
   unit: string
 }
 

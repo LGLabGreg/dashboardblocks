@@ -31,7 +31,6 @@ interface InsightItem {
   id: string
   kind: InsightKind
   segments: InsightSegment[]
-  /** What the insight is about, such as a metric or a team. */
   topic: string
 }
 

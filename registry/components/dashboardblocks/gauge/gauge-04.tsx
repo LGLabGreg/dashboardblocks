@@ -18,16 +18,13 @@ import {
 
 interface Gauge4Props {
   description: string
-  /** How the score is measured, shown under the numbers. */
   footnote?: string
   formatter?: (value: number) => string
   /** @default 100 */
   max?: number
   /** @default 0 */
   min?: number
-  /** Last period's score. */
   previous: number
-  /** Formats the ends of the scale. Defaults to `formatter`. */
   scaleFormatter?: (value: number) => string
   target: number
   title: string

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/settings.tsx for React Aria
-// source-hash: 11a7ed5f9dbc
+// source-hash: 4125914626aa
 
 'use client'
 
@@ -26,23 +26,20 @@ const roleConfig: Record<Role, { description: string; label: string }> = {
   viewer: { description: 'View dashboards only', label: 'Viewer' },
 }
 
-/** Most access first. */
 const roleOrder: Role[] = ['owner', 'admin', 'member', 'viewer']
 
 interface RoleMenuProps {
   className?: string
-  /** Names the trigger for assistive technology, e.g. "Role for Amara Okafor". */
   label: string
   onValueChange: (role: Role) => void
   /**
-   * The roles to offer. Leave out `owner` to keep ownership changes out of the menu.
+   * The roles to offer.
    * @default ['admin', 'member', 'viewer']
    */
   roles?: Role[]
   value: Role
 }
 
-/** A menu that picks a role, with what each role can do. */
 function RoleMenu({
   className,
   label,
@@ -106,10 +103,6 @@ interface SettingsRowProps {
   label: ReactNode
 }
 
-/**
- * A setting with its label and description beside the control, stacking in
- * narrow containers. Put it inside an `@container`.
- */
 function SettingsRow({ children, className, description, id, label }: SettingsRowProps) {
   return (
     <div
@@ -200,14 +193,12 @@ const connectionStatusConfig: Record<
   },
 }
 
-/** A connection's status as an icon and a label, so colour never carries it alone. */
 function ConnectionStatusLabel({
   className,
   label,
   status,
 }: {
   className?: string
-  /** Replaces the default label, e.g. "Failing". */
   label?: string
   status: ConnectionStatus
 }) {
@@ -226,13 +217,11 @@ function ConnectionStatusLabel({
   )
 }
 
-/** "sk_live_51Hx…9f2a": the prefix and the last four characters, so a key can be recognised but not used. */
 function maskSecret(secret: string, prefixLength = 8) {
   if (secret.length <= prefixLength + 4) return '••••'
   return `${secret.slice(0, prefixLength)}…${secret.slice(-4)}`
 }
 
-/** Copies text to the clipboard, and says so for two seconds. */
 function useCopyToClipboard(timeout = 2000) {
   const [copied, setCopied] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -254,14 +243,12 @@ function useCopyToClipboard(timeout = 2000) {
   return { copied, copy }
 }
 
-/** An icon button that copies `value`, shows a tick once copied and announces it. */
 function CopyButton({
   className,
   label = 'Copy',
   value,
 }: {
   className?: string
-  /** Names the button, e.g. "Copy API key". */
   label?: string
   value: string
 }) {
@@ -302,7 +289,6 @@ function CopyButton({
 
 const relativeFormatter = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
 
-/** "just now", "3 hours ago", "yesterday", "5 months ago". Pass a fixed `now` to render the same on server and client. */
 function formatRelative(date: Date, now: Date) {
   const seconds = Math.round((date.getTime() - now.getTime()) / 1000)
   const minutes = Math.round(seconds / 60)
@@ -324,12 +310,10 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 })
 
-/** "Sep 26, 2026", in UTC so it renders the same on server and client. */
 function formatDate(date: Date) {
   return dateFormatter.format(date)
 }
 
-/** Whole days between two dates. */
 function daysBetween(from: Date, to: Date) {
   return Math.floor((to.getTime() - from.getTime()) / 86_400_000)
 }

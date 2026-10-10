@@ -28,7 +28,6 @@ interface Permission {
   description?: string
   id: string
   label: string
-  /** Another permission this one needs. Granting this grants it, and revoking it revokes this. */
   requires?: string
 }
 

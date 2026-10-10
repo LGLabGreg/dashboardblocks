@@ -19,9 +19,7 @@ export const AnimatedWave = ({
   waveColorSecondary = 'currentColor',
   waveHeight = 16,
 }: {
-  /**
-   * Sets the wave color through `currentColor`, e.g. `text-chart-2`
-   */
+  /** Sets the wave color through `currentColor`, e.g. */
   className?: string
   percentage?: number
   waveColor?: string

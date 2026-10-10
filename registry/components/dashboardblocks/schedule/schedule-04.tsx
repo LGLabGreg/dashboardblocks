@@ -23,14 +23,12 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Schedule4Props {
-  /** Calendars to explain in the legend. */
   calendars: { color: string; name: string }[]
-  /** Last hour on the axis, 1–24. @default 18 */
+  /** Last hour on the axis, 1–24. */
   endHour?: number
   events: ScheduleEvent[]
-  /** The first day shown, and where the now line is drawn. */
   now: Date
-  /** First hour on the axis, 0–23. @default 8 */
+  /** First hour on the axis, 0–23. */
   startHour?: number
   /** @default 'UTC' */
   timeZone?: string

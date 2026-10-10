@@ -16,7 +16,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 type Decision = 'approved' | 'declined'
 
 interface ActionableNotification extends AppNotification {
-  /** Asks for a decision, with these labels on its buttons. */
   request?: { approve: string; decline: string }
 }
 
@@ -24,7 +23,6 @@ interface Notifications2Props {
   notifications: ActionableNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Saves a decision. Resolve once it's saved. */
   onDecide?: (id: string, decision: Decision) => Promise<void>
 }
 
@@ -97,7 +95,6 @@ const exampleProps: Notifications2Props = {
   now: exampleNow,
 }
 
-/** Stands in for a request to your API. */
 async function saveDecision() {
   await new Promise((resolve) => setTimeout(resolve, 500))
 }

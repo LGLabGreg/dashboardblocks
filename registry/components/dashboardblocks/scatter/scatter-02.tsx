@@ -43,7 +43,6 @@ interface Scatter2Props {
   /** Names for the four quadrants: top left, top right, bottom left, bottom right. */
   quadrants: [string, string, string, string]
   title: string
-  /** Where to split. Defaults to the medians. */
   split?: { x: number; y: number }
   x: {
     domain: [number, number]

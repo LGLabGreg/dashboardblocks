@@ -19,19 +19,17 @@ import {
 interface ActivityCount {
   icon: ReactNode
   label: string
-  /** The count for the period before. */
   previous: number
   tone?: ActivityTone
   value: number
 }
 
 interface Contributor extends Pick<Person, 'avatar' | 'name'> {
-  /** Actions this period. */
   count: number
 }
 
 interface ActivityFeed04Props {
-  /** Most active first. Shows the first five. */
+  /** Most active first. */
   contributors: Contributor[]
   counts: ActivityCount[]
   description: string

@@ -32,7 +32,6 @@ interface AlertItem {
 
 interface Alerts1Props {
   alerts: AlertItem[]
-  /** The time relative times are measured from. */
   now: Date
   onAcknowledge?: (id: string) => void
   title: string

@@ -14,16 +14,12 @@ type SessionEndReason =
 
 interface ErrorPages5Props {
   brand?: ReactNode
-  /** The account that was signed in, so they sign back in with the same one. */
   email?: string
   /** Minutes of inactivity before sign-out, for the `inactive` reason. */
   idleMinutes?: number
   reason: SessionEndReason
-  /** Where they were, so signing in takes them back. */
   returnTo?: string
-  /** Changes and filters saved as a draft before sign-out. */
   savedDraft?: boolean
-  /** The sign-in page. `returnTo` is added as a query parameter. */
   signInHref: string
 }
 

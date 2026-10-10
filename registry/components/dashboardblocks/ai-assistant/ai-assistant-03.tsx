@@ -35,15 +35,12 @@ import {
 interface AiAssistant3Props {
   description: string
   messages: ChatMessageData[]
-  /** Streams the reply to the conversation as chunks of text. Defaults to canned demo replies. */
+  /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
-  /** What the assistant's own model charges, to price each reply. */
   prices: TokenPrices
   suggestions: SuggestedPrompt[]
   title: string
-  /** The usage the card reports on. */
   tokens: TokenCounts
-  /** Tokens each reply used, by message id. Pass your provider's usage. */
   usage: Record<string, TokenCounts>
 }
 
@@ -106,7 +103,6 @@ function wait(ms: number, signal: AbortSignal) {
   })
 }
 
-/** Stands in for your model: streams a canned answer word by word. */
 async function* simulateStream(messages: ChatMessageData[], signal: AbortSignal) {
   const question = messages.at(-1)?.content ?? ''
   const reply = cannedReplies[question] ?? fallbackReply
@@ -117,10 +113,6 @@ async function* simulateStream(messages: ChatMessageData[], signal: AbortSignal)
   }
 }
 
-/**
- * A rough count for the demo, about four characters a token, with a cached
- * system prompt. Use the usage your provider returns instead.
- */
 function estimateUsage(conversation: ChatMessageData[]): TokenCounts {
   const reply = conversation.at(-1)?.content ?? ''
   const characters = conversation.reduce(

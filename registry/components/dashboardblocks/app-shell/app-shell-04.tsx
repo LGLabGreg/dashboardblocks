@@ -15,14 +15,12 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
 interface AppShell4Props {
-  /** The page. Leave out to show placeholders. */
   children?: ReactNode
   links: NavLink[]
   notificationCount: number
   onNotificationsClick?: () => void
   onSearch?: () => void
   onSignOut?: () => void
-  /** The current path, used to mark the active link. */
   pathname: string
   title: string
   user: AppUser

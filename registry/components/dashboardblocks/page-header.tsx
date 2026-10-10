@@ -15,7 +15,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/** The top of a page: put a back link, the heading, actions, meta and tabs in it. */
 function PageHeader({
   children,
   className,
@@ -30,7 +29,6 @@ function PageHeader({
   )
 }
 
-/** The heading beside its actions on wide headers, above them on narrow ones. */
 function PageHeaderRow({
   children,
   className,
@@ -51,22 +49,14 @@ function PageHeaderRow({
 }
 
 interface PageHeaderHeadingProps {
-  /** Beside the title, such as a status badge or a count. */
   badge?: ReactNode
   className?: string
   description?: ReactNode
-  /** Before the title, such as an avatar or a logo tile. */
   media?: ReactNode
   title: string
-  /**
-   * Lets a long title wrap onto more lines, such as a record's name, where
-   * cutting it short would hide what the page is about.
-   * @default false
-   */
   wrap?: boolean
 }
 
-/** The page's title as its <h1>, with an optional badge, media and description. */
 function PageHeaderHeading({
   badge,
   className,
@@ -98,7 +88,6 @@ function PageHeaderHeading({
   )
 }
 
-/** Buttons for the page, the main one last. They wrap on narrow headers. */
 function PageHeaderActions({
   children,
   className,
@@ -118,7 +107,6 @@ interface PageHeaderMetaItem {
   label: ReactNode
 }
 
-/** Facts about the page's subject in a row, each with an icon. */
 function PageHeaderMeta({
   className,
   items,
@@ -143,7 +131,6 @@ function PageHeaderMeta({
   )
 }
 
-/** A link back to the parent page, above the heading. */
 function BackLink({
   children,
   className,
@@ -174,13 +161,11 @@ function BackLink({
 }
 
 interface PageTab {
-  /** A count or short label after the title. */
   badge?: ReactNode
   href: string
   title: string
 }
 
-/** Links to the page's sections, under the heading. Scrolls sideways on small screens. */
 function PageTabs({
   className,
   items,
@@ -189,9 +174,7 @@ function PageTabs({
 }: {
   className?: string
   items: PageTab[]
-  /** Names the navigation for screen readers. @default 'Sections' */
   label?: string
-  /** The current path, used to mark the active tab. */
   pathname: string
 }) {
   return (
@@ -225,11 +208,9 @@ interface ActionsMenuItem {
   icon?: ReactNode
   label: string
   onSelect: () => void
-  /** Red, for actions like delete. Put these last. */
   variant?: 'default' | 'destructive'
 }
 
-/** A "More actions" button with a menu of the page's less common actions. */
 function ActionsMenu({
   items,
   label = 'More actions',

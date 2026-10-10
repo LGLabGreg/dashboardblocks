@@ -22,7 +22,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface SetupStage {
-  /** A short summary, such as the choice made in a finished stage. */
   detail?: string
   id: string
   state: StepState

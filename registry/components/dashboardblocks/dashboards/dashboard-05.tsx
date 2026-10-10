@@ -32,14 +32,6 @@ import { useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/*
- * A DevOps dashboard: the service filter scopes every block but live
- * throughput, which covers all services. The date range scopes delivery
- * performance and response times. Uptime covers the last 90 days, and alerts,
- * builds and deployments are as of now, so the date range doesn't apply to
- * them. Swap `buildOpsData` for your own queries.
- */
-
 interface Dashboard5Props {
   title: string
   /** The last day of every date range. */
@@ -428,11 +420,6 @@ function deliveryAt(service: Service, daysAgo: number, today: Date) {
   }
 }
 
-/**
- * The four DORA metrics over `days` days, ending `shift` days ago. Lead time
- * and time to restore are deploy-weighted means, standing in for the medians
- * a real query would return.
- */
 function doraFor(services: Service[], days: number, shift: number, today: Date) {
   let deploys = 0
   let failures = 0
@@ -475,7 +462,6 @@ function uptimeDays(service: string, today: Date): UptimeDay[] {
   })
 }
 
-/** Everything the blocks show for one query. Replace with your own data fetching. */
 function buildOpsData({ preset, service }: Query, today: Date) {
   const hourly = preset === 'today'
   const days = getPreset(preset).days
@@ -564,7 +550,6 @@ const Dashboard5 = (props: Dashboard5Props) => {
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
 
-  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
     if (displayedQuery === query) return
     const timer = setTimeout(() => setDisplayedQuery(query), 500)

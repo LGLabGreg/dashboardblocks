@@ -5,10 +5,7 @@ import { type RefObject, useEffect, useId, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/**
- * The average and share of each rating from counts, where `counts[0]` is the
- * number of 1-star ratings. Works for any scale, e.g. 1–5 or 1–10.
- */
+/** The average and share of each rating from counts, where `counts[0]` is the number of 1-star ratings. */
 function getRatingSummary(counts: number[]) {
   const total = counts.reduce((sum, count) => sum + count, 0)
   const average =
@@ -22,10 +19,7 @@ function getRatingSummary(counts: number[]) {
   }
 }
 
-/**
- * Customer satisfaction: the share of ratings in the top two of a 1–5 scale
- * (4 and 5), as usually reported.
- */
+/** Customer satisfaction: the share of ratings in the top two of a 1–5 scale (4 and 5), as usually reported. */
 function getCsat(counts: number[]) {
   const total = counts.reduce((sum, count) => sum + count, 0)
   const satisfied = counts.slice(-2).reduce((sum, count) => sum + count, 0)
@@ -51,11 +45,10 @@ interface StarRatingProps {
   className?: string
   /** @default 5 */
   max?: number
-  /** Fractions fill part of a star, e.g. 4.3. */
+  /** Fractions fill part of a star, e.g. */
   value: number
 }
 
-/** Stars filled to `value`, with the rating as text for screen readers. */
 function StarRating({ className, max = 5, value }: StarRatingProps) {
   const id = useId()
   return (
@@ -92,22 +85,15 @@ interface SentimentBarProps {
   animated?: boolean
   className?: string
   counts: SentimentCounts
-  /**
-   * For 'diverging': the share of mentions each half of the bar spans. Pass
-   * the largest side of all rows (negative plus half the neutral, or positive
-   * plus half the neutral), so rows share one scale. @default 1
-   */
+  /** For 'diverging': the share of mentions each half of the bar spans. */
   extent?: number
   /**
-   * 'stacked' fills one bar with negative, neutral and positive. 'diverging'
-   * puts negative left and positive right of a centre line, with neutral split
-   * across it, so rows line up on the centre.
+   * 'stacked' fills one bar with negative, neutral and positive.
    * @default 'stacked'
    */
   variant?: 'stacked' | 'diverging'
 }
 
-/** Negative, neutral and positive shares as a bar. Decorative. */
 function SentimentBar({
   animated = true,
   className,
@@ -188,7 +174,6 @@ function SentimentBar({
   )
 }
 
-/** A legend swatch for a sentiment. */
 function SentimentKey({
   className,
   sentiment,

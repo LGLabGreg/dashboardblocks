@@ -29,10 +29,8 @@ interface UsageMeter1Props {
   limit: number
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  /** When the quota resets. */
   periodEnd: Date
   periodStart: Date
-  /** Time zone for dates. @default 'UTC' */
   timeZone?: string
   title: string
   unit: string

@@ -21,12 +21,6 @@ import { Realtime1 } from '@/registry/components/dashboardblocks/realtime/realti
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
 
-/*
- * A web analytics dashboard: the date range and device filter scope traffic,
- * sources, pages, countries and browsers. "Right now" is live, so it isn't
- * filtered. Swap `buildAnalyticsData` for your own queries.
- */
-
 interface Dashboard3Props {
   title: string
   /** The last day of every date range. */
@@ -126,7 +120,6 @@ const splitTotal = (total: number, shares: number[]) => {
 const percentChange = (current: number, previous: number) =>
   Number((((current - previous) / (previous || 1)) * 100).toFixed(1))
 
-/** Everything the blocks show for one query. Replace with your own data fetching. */
 function buildAnalyticsData({ device, preset }: Query, today: Date) {
   const hourly = preset === 'today'
   const length = hourly ? 24 : getPreset(preset).days
@@ -274,7 +267,6 @@ const Dashboard3 = (props: Dashboard3Props) => {
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
 
-  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
     if (displayedQuery === query) return
     const timer = setTimeout(() => setDisplayedQuery(query), 500)

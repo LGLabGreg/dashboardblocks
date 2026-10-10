@@ -9,7 +9,6 @@ function subscribe(onChange: () => void) {
   return () => mql.removeEventListener('change', onChange)
 }
 
-/** shadcn's `useIsMobile`, read with `useSyncExternalStore` instead of state set in an effect. */
 export function useIsMobile() {
   return React.useSyncExternalStore(
     subscribe,

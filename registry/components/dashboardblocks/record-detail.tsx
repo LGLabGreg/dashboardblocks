@@ -2,10 +2,6 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/**
- * A record's page: the main content, and a narrower column of details beside it
- * on wide screens or below it on narrow ones.
- */
 function RecordLayout({
   aside,
   children,
@@ -25,7 +21,6 @@ function RecordLayout({
   )
 }
 
-/** Labels and values, one pair per row. */
 function PropertyList({
   children,
   className,
@@ -36,7 +31,6 @@ function PropertyList({
   return <dl className={cn('grid gap-3 text-sm', className)}>{children}</dl>
 }
 
-/** One label and value in a PropertyList. */
 function Property({
   children,
   className,
@@ -58,12 +52,10 @@ function Property({
 
 interface RecordStat {
   label: string
-  /** A second line, such as a change or a comparison. */
   note?: ReactNode
   value: ReactNode
 }
 
-/** Headline numbers for the record, in a row that wraps. */
 function RecordStats({ className, items }: { className?: string; items: RecordStat[] }) {
   return (
     <dl

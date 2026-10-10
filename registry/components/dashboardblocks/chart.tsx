@@ -68,11 +68,7 @@ const ChartTooltipContent = ({
 }
 
 export interface TinyBarChartProps {
-  /**
-   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
-   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
-   * that a screen reader announces as nothing.
-   */
+  /** Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are hidden from assistive tech, so the chart's keyboard layer would be a tab stop that a screen reader announces as nothing. */
   accessibilityLayer?: boolean
   bars: BarProps[]
   className?: string
@@ -124,11 +120,7 @@ export const TinyBarChart = ({
 }
 
 export interface TinyLineChartProps {
-  /**
-   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
-   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
-   * that a screen reader announces as nothing.
-   */
+  /** Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are hidden from assistive tech, so the chart's keyboard layer would be a tab stop that a screen reader announces as nothing. */
   accessibilityLayer?: boolean
   className?: string
   data: unknown[]
@@ -183,11 +175,7 @@ export const TinyLineChart = ({
 }
 
 export interface TinyAreaChartProps {
-  /**
-   * Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are
-   * hidden from assistive tech, so the chart's keyboard layer would be a tab stop
-   * that a screen reader announces as nothing.
-   */
+  /** Turn off inside a `role='img'` wrapper, such as `KPIChart`: its children are hidden from assistive tech, so the chart's keyboard layer would be a tab stop that a screen reader announces as nothing. */
   accessibilityLayer?: boolean
   areas: AreaProps[]
   className?: string

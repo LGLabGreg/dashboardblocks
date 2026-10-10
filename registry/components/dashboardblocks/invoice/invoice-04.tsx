@@ -26,17 +26,14 @@ import { Button } from '@/components/ui/button'
 interface Invoice4Props {
   billTo: DocumentParty
   brand: { name: string; website: string }
-  /** Small print, such as the returns address. */
   footer: string
-  /** A note from the customer to print on the slip. */
   giftMessage?: string
   /** Put the bin or shelf in `detail`. */
   lines: DocumentLine[]
   onMarkPacked?: () => Promise<void>
   orderDate: Date
-  /** Printed as a Code 39 barcode, so keep to digits, capitals and - . $ / + % */
+  /** Printed as a Code 39 barcode, so keep to digits, capitals and - . */
   orderNumber: string
-  /** Such as "2 boxes · 6.4 kg". */
   packages: string
   returnsUrl: string
   shipBy: Date

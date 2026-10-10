@@ -16,12 +16,10 @@ import {
 } from '@/components/ui/card'
 
 interface SecurityCheck {
-  /** What passing looks like, or what to do. */
   detail: string
   id: string
   label: string
   result: CheckResult
-  /** How much the check counts towards the score. @default 1 */
   weight?: number
 }
 

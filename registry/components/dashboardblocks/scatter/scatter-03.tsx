@@ -32,7 +32,6 @@ import {
 
 interface Campaign {
   channel: string
-  /** Cost per acquisition. */
   cpa: number
   /** Conversion rate, 0–1. */
   conversion: number
@@ -42,7 +41,6 @@ interface Campaign {
 
 interface Scatter3Props {
   campaigns: Campaign[]
-  /** In legend order; each keeps its colour. */
   channels: string[]
   description: string
   title: string

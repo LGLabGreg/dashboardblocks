@@ -10,23 +10,15 @@ import { Switch } from '@/components/ui/switch'
 
 interface VerifyResult {
   ok: boolean
-  /** Tries left before the account is locked for a while. */
   attemptsLeft?: number
 }
 
 interface Auth3Props {
-  /** Focuses the first box on mount. Turn it on when the page is a route. */
   focusOnMount?: boolean
   brand: ReactNode
   email: string
-  /** Signs out and goes back to the sign-in page. */
   signOutHref: string
-  /** Days a trusted device skips this step. Leave out to hide the option. */
   trustDays?: number
-  /**
-   * Checks a 6-digit code or a recovery code. Without it, `123456` and any
-   * recovery code with a dash are accepted, for trying the block out.
-   */
   onVerify?: (
     code: string,
     options: { kind: 'app' | 'recovery'; trustDevice: boolean },
@@ -89,7 +81,6 @@ const Auth3 = (props: Auth3Props) => {
     setFailures((count) => count + 1)
   }
 
-  /** Stands in for your server when `onVerify` is left out. */
   const tryExampleCode = (value: string): VerifyResult => {
     const ok = kind === 'app' ? value === '123456' : /^\w{4}-\w{4}$/.test(value)
     const left = ok ? exampleAttempts : Math.max(0, exampleAttempts - 1)

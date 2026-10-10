@@ -27,7 +27,7 @@ interface ModelPerformance {
 
 interface AiUsage3Props {
   description: string
-  /** Error rate above which a model is flagged, 0–1. @default 0.01 */
+  /** Error rate above which a model is flagged, 0–1. */
   errorThreshold?: number
   models: ModelPerformance[]
   title: string

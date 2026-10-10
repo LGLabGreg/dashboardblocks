@@ -28,7 +28,6 @@ import {
 interface Invoice {
   amount: number
   date: Date
-  /** What the invoice covers, e.g. the plan and period. */
   description: string
   id: string
   number: string

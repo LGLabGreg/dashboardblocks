@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/pipeline/pipeline-01.tsx for React Aria
-// source-hash: e4e3447d155b
+// source-hash: cc9504ef333f
 
 'use client'
 
@@ -34,9 +34,7 @@ import {
 
 interface Pipeline1Props {
   items: PipelineItem[]
-  /** The time days in stage are measured from. */
   now: Date
-  /** Called when an item is moved with its menu. There is no drag and drop. */
   onMove?: (id: string, stage: string) => void
   stages: PipelineStage[]
   title: string

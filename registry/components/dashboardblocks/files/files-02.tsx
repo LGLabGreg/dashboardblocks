@@ -48,13 +48,9 @@ interface Files2Props {
   files: DriveFile[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  /** Copies a link to the file. Defaults to copying `href` to the clipboard. */
   onCopyLink?: (file: DriveFile) => Promise<void>
-  /** Deletes the files. Resolve once they're gone. Defaults to a short wait. */
   onDelete?: (files: DriveFile[]) => Promise<void>
-  /** Downloads the files. Defaults to doing nothing, as the example files don't exist. */
   onDownload?: (files: DriveFile[]) => void
-  /** Time zone for dates. @default 'UTC' */
   timeZone?: string
   title: string
 }

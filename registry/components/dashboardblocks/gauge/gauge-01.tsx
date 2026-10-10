@@ -20,7 +20,6 @@ import { cn } from '@/lib/utils'
 
 interface Gauge1Props {
   description: string
-  /** Last period's score, for the change. */
   previous?: number
   responses: NpsResponses
   title: string

@@ -11,13 +11,11 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Warehouse {
-  /** Units it can hold. */
   capacity: number
   /** Units arriving in the next 7 days. */
   inbound?: number
   location: string
   name: string
-  /** Units held now. */
   stored: number
 }
 
@@ -25,7 +23,7 @@ interface Inventory2Props {
   description: string
   title: string
   warehouses: Warehouse[]
-  /** Utilisation at which a warehouse is getting full, 0–1. @default 0.85 */
+  /** Utilisation at which a warehouse is getting full, 0–1. */
   warnAt?: number
 }
 

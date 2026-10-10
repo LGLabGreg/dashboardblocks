@@ -41,14 +41,12 @@ interface CorrelationPoint {
 
 interface Scatter1Props {
   description: string
-  /** Groups in legend order; each keeps its colour. */
   groups: string[]
   points: CorrelationPoint[]
   title: string
   x: { format: (value: number) => string; label: string }
   y: {
     format: (value: number) => string
-    /** Formats the trend, a change in y, e.g. in percentage points. Defaults to `format`. */
     formatChange?: (value: number) => string
     label: string
   }

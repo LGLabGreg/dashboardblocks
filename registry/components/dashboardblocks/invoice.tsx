@@ -12,41 +12,34 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 
 interface DocumentLine {
-  /** A second line under the description, such as the period or what the work covered. */
   detail?: string
   description: string
   id: string
-  /** Marked as optional, such as an add-on on a quote. */
   optional?: boolean
   quantity: number
-  /** Shown before the detail in monospace. */
   sku?: string
-  /** This line's tax rate, 0.2 for 20%, instead of the document's. 0 for exempt lines. */
+  /** This line's tax rate, 0.2 for 20%, instead of the document's. */
   taxRate?: number
-  /** After the quantity, such as "hrs" or "seats". */
   unit?: string
   unitPrice: number
 }
 
 interface DocumentTotalsOptions {
-  /** Amounts round to its smallest unit, cents for USD. @default 'USD' */
+  /** Amounts round to its smallest unit, cents for USD. */
   currency?: string
-  /** An amount off the subtotal. */
   discount?: number
-  /** A share off the subtotal, 0.1 for 10%. Ignored when `discount` is set. */
+  /** A share off the subtotal, 0.1 for 10%. */
   discountRate?: number
-  /** Already paid, such as a deposit. */
   paid?: number
-  /** Added after tax and not taxed. Add it as a line if yours is taxed. */
+  /** Added after tax and not taxed. */
   shipping?: number
-  /** The rate for lines without their own, 0.2 for 20%. @default 0 */
+  /** The rate for lines without their own, 0.2 for 20%. */
   taxRate?: number
 }
 
 interface DocumentTax {
   amount: number
   rate: number
-  /** The lines at this rate, less their share of the discount. */
   taxable: number
 }
 
@@ -57,7 +50,6 @@ interface DocumentAmounts {
   paid: number
   shipping: number
   subtotal: number
-  /** All taxes together. */
   tax: number
   /** One entry per rate above zero, in the order the rates first appear. */
   taxes: DocumentTax[]
@@ -66,7 +58,6 @@ interface DocumentAmounts {
 
 const currencyDigits = new Map<string, number>()
 
-/** Decimals in the currency's smallest unit: 2 for USD, 0 for JPY. */
 function getCurrencyDigits(currency = 'USD') {
   let digits = currencyDigits.get(currency)
   if (digits === undefined) {
@@ -83,12 +74,10 @@ function toMinorUnits(value: number, scale: number) {
   return Math.sign(value) * Math.round(Math.abs(value) * scale + 1e-6)
 }
 
-/** A document amount with the currency's usual decimals: "$1,200.00", "¥1,200". */
 function formatDocumentAmount(value: number, currency = 'USD') {
   return formatCurrency(value, { currency, fractionDigits: getCurrencyDigits(currency) })
 }
 
-/** Quantity × unit price, rounded to the currency's smallest unit. */
 function getLineAmount(
   line: Pick<DocumentLine, 'quantity' | 'unitPrice'>,
   currency = 'USD',
@@ -97,12 +86,6 @@ function getLineAmount(
   return toMinorUnits(line.quantity * line.unitPrice, scale) / scale
 }
 
-/**
- * Subtotal, discount, tax, shipping, total and balance due. Works in the
- * currency's smallest unit, so the rows always add up to the total. The
- * discount is shared across tax rates in proportion to their lines, and tax is
- * rounded once per rate.
- */
 function getDocumentTotals(
   lines: Pick<DocumentLine, 'quantity' | 'taxRate' | 'unitPrice'>[],
   options: DocumentTotalsOptions = {},
@@ -136,7 +119,6 @@ function getDocumentTotals(
   let tax = 0
   const entries = [...groups]
   entries.forEach(([rate, base], index) => {
-    // The last rate takes what rounding left over, so the shares add up.
     const share =
       index === entries.length - 1
         ? discountTotal - allocated
@@ -171,16 +153,12 @@ const rateFormatter = new Intl.NumberFormat('en-US', {
   style: 'percent',
 })
 
-/** "8.875%" from 0.08875. */
 function formatRate(rate: number) {
   return rateFormatter.format(rate)
 }
 
 interface DocumentTotalRow {
-  /**
-   * `total` rules a line above the row. `due` also makes it larger: use it
-   * once, for what's left to pay.
-   */
+  /** `total` rules a line above the row. */
   emphasis?: 'due' | 'total'
   id: string
   label: ReactNode
@@ -197,17 +175,12 @@ interface DocumentTotalLabels {
   paid?: string
   /** @default 'Shipping' */
   shipping?: string
-  /** Followed by the rate. @default 'Tax' */
+  /** Followed by the rate. */
   tax?: string
   /** @default 'Total' */
   total?: string
 }
 
-/**
- * The usual rows for DocumentTotals: subtotal, then discount, tax per rate and
- * shipping when there are any, the total, and amount paid and balance due once
- * something has been paid.
- */
 function getTotalRows(amounts: DocumentAmounts, labels: DocumentTotalLabels = {}) {
   const rows: DocumentTotalRow[] = [
     { id: 'subtotal', label: 'Subtotal', value: amounts.subtotal },
@@ -260,7 +233,6 @@ function getTotalRows(amounts: DocumentAmounts, labels: DocumentTotalLabels = {}
   return rows
 }
 
-/** Screen width and spacing for a toolbar above a DocumentPage. Paper width in print. */
 function DocumentLayout({
   children,
   className,
@@ -280,7 +252,6 @@ function DocumentLayout({
   )
 }
 
-/** Actions for the document, such as print and download. Hidden in print. */
 function DocumentToolbar({
   children,
   className,
@@ -288,7 +259,6 @@ function DocumentToolbar({
 }: {
   children: ReactNode
   className?: string
-  /** Before the actions, such as when the document was sent. */
   description?: ReactNode
 }) {
   return (
@@ -308,7 +278,6 @@ function DocumentToolbar({
   )
 }
 
-/** Opens the browser's print dialog, which can also save a PDF. */
 function PrintButton({
   children = 'Print',
   className,
@@ -339,18 +308,9 @@ function PrintButton({
   )
 }
 
-/*
- * Paper is white whatever the theme, so in print the page redefines the
- * colours its content uses. Backgrounds don't print by default, so nothing
- * may rely on one to be readable.
- */
 const printColors =
   'print:[color-scheme:light] print:[--background:#fff] print:[--border:#d4d4d4] print:[--card-foreground:#000] print:[--card:#fff] print:[--foreground:#000] print:[--input:#a3a3a3] print:[--muted-foreground:#525252] print:[--muted:#f5f5f5] print:[--primary-foreground:#fff] print:[--primary:#000]'
 
-/**
- * The sheet of paper: a card on screen, the full page in print. Its width
- * decides the layout of the parts inside it.
- */
 function DocumentPage({
   children,
   className,
@@ -376,7 +336,6 @@ function DocumentPage({
   )
 }
 
-/** A logo beside the name of whoever issued the document. */
 function DocumentBrand({
   className,
   detail,
@@ -384,7 +343,6 @@ function DocumentBrand({
   name,
 }: {
   className?: string
-  /** Under the name, such as a tagline or website. */
   detail?: ReactNode
   /** Print-safe: an SVG or image, not a coloured background with light text. */
   logo?: ReactNode
@@ -401,10 +359,6 @@ function DocumentBrand({
   )
 }
 
-/**
- * The brand, then the document type as the page's <h1>, its number and a
- * status. The brand and title sit side by side on wide pages and in print.
- */
 function DocumentHeader({
   brand,
   children,
@@ -414,11 +368,9 @@ function DocumentHeader({
   title,
 }: {
   brand: ReactNode
-  /** Under the number, such as a barcode. */
   children?: ReactNode
   className?: string
   number: string
-  /** A badge. It prints as outlined black text. */
   status?: ReactNode
   title: string
 }) {
@@ -448,12 +400,10 @@ function DocumentHeader({
 
 interface DocumentMetaItem {
   label: string
-  /** Under the value, such as "7 days overdue". */
   note?: ReactNode
   value: ReactNode
 }
 
-/** Dates, reference numbers and the amount due, in a row that wraps. */
 function DocumentMeta({
   className,
   items,
@@ -480,14 +430,11 @@ function DocumentMeta({
 }
 
 interface DocumentParty {
-  /** Such as "From", "Bill to" or "Ship to". */
   label: string
-  /** Address lines, then contact details. */
   lines: string[]
   name: string
 }
 
-/** Who the document is from and for, side by side on wide pages and in print. */
 function DocumentParties({
   className,
   parties,
@@ -520,35 +467,22 @@ function DocumentParties({
 }
 
 interface LineSelection {
-  /** Lines that get a checkbox. @default every line */
   isSelectable?: (line: DocumentLine) => boolean
-  /** Names each checkbox, such as "Include Data migration". */
   label: (line: DocumentLine) => string
   onChange: (id: string, selected: boolean) => void
   selected: string[]
 }
 
 interface LineItemsTableProps {
-  /** Names the table for screen readers. @default 'Line items' */
   caption?: string
   className?: string
   /** @default 'USD' */
   currency?: string
-  /** Leave out prices and amounts, as on a packing slip. */
   hidePrices?: boolean
   lines: DocumentLine[]
-  /**
-   * A checkbox before each line, such as optional items to include in a
-   * quote, or items picked for a shipment. They print as tick boxes.
-   */
   selection?: LineSelection
 }
 
-/**
- * Description, quantity, unit price and amount per line. On narrow tables the
- * quantity and unit price move under the description. Rows don't split across
- * printed pages, and the header repeats on each one.
- */
 function LineItemsTable({
   caption = 'Line items',
   className,
@@ -684,7 +618,6 @@ function LineItemsTable({
   )
 }
 
-/** Subtotal to balance due, right-aligned under the line items. */
 function DocumentTotals({
   className,
   currency = 'USD',
@@ -721,7 +654,6 @@ function DocumentTotals({
   )
 }
 
-/** A titled block, such as payment details, notes or terms. Kept on one printed page. */
 function DocumentSection({
   children,
   className,
@@ -745,7 +677,6 @@ function DocumentSection({
   )
 }
 
-/** Small print at the end of the page, such as registration numbers. */
 function DocumentFooter({
   children,
   className,
@@ -765,10 +696,6 @@ function DocumentFooter({
   )
 }
 
-/*
- * Code 39, as bars (1) and spaces (0) from left to right, with 1 wide and 0
- * narrow: five bars and four spaces per character, three of them wide.
- */
 const code39: Record<string, string> = {
   ' ': '011000100',
   $: '010101000',
@@ -820,11 +747,6 @@ const QUIET_ZONE = 10
 const WIDE = 3
 const INTER_CHARACTER_GAP = 1
 
-/**
- * The bars of a Code 39 barcode, in narrow-bar units, with a quiet zone on
- * each side. Letters are uppercased, and characters Code 39 can't encode are
- * left out.
- */
 function getBarcodeBars(value: string) {
   const text = value
     .toUpperCase()
@@ -848,17 +770,13 @@ function getBarcodeBars(value: string) {
   }
 }
 
-/**
- * A scannable Code 39 barcode with the value printed under it, such as an
- * order number on a packing slip. Digits, capital letters, space and - . $ / + %.
- */
 function Barcode({
   className,
   moduleWidth = 1.5,
   value,
 }: {
   className?: string
-  /** The width of a narrow bar in pixels. @default 1.5 */
+  /** The width of a narrow bar in pixels. */
   moduleWidth?: number
   value: string
 }) {

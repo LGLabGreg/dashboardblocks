@@ -36,11 +36,9 @@ interface WatchedMetric extends Metric {
 }
 
 interface MetricList4Props {
-  /** Read after each change, for example "vs 30 days ago". */
   comparison: string
   defaultSelected?: string
   description: string
-  /** Labels for the chart's x-axis, one per history value. */
   labels: string[]
   metrics: WatchedMetric[]
   onSelectedChange?: (key: string) => void

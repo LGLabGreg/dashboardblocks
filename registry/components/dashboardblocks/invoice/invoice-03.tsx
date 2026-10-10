@@ -36,12 +36,10 @@ interface Invoice3Props {
   brand: { name: string; website: string }
   /** @default 'USD' */
   currency?: string
-  /** Optional lines included to begin with. */
   defaultSelected?: string[]
   /** A share off the subtotal, 0.1 for 10%. */
   discountRate?: number
   expiresAt: Date
-  /** Small print, such as the legal name and address. */
   footer: string
   from: DocumentParty
   issueDate: Date

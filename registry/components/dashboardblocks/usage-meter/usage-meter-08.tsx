@@ -25,7 +25,6 @@ import {
 import { cn } from '@/lib/utils'
 
 interface UsageMeter8Props {
-  /** Days until the quota resets. */
   daysLeft?: number
   icon: ReactNode
   limit: number

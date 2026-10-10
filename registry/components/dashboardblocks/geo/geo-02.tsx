@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card'
 
 interface CountryRow {
-  /** ISO 3166-1 alpha-2 code, e.g. "GB", for the flag. */
+  /** ISO 3166-1 alpha-2 code, e.g. */
   code: string
   name: string
   value: number
@@ -21,10 +21,8 @@ interface Geo2Props {
   countries: CountryRow[]
   description: string
   formatter?: (value: number) => string
-  /** How many countries to list. The rest are summed into "Other countries". @default 8 */
   limit?: number
   title: string
-  /** Total across all countries. Defaults to the sum of `countries`. */
   total?: number
 }
 

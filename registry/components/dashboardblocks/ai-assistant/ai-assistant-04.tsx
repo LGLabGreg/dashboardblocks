@@ -22,10 +22,9 @@ import {
 
 interface AiAssistant4Props {
   description: string
-  /** Why the last request failed, when the conversation is loaded with one. */
   error?: string
   messages: ChatMessageData[]
-  /** Streams the reply to the conversation as chunks of text. Defaults to canned demo replies. */
+  /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
   title: string
 }
@@ -81,7 +80,6 @@ function wait(ms: number, signal: AbortSignal) {
   })
 }
 
-/** Stands in for your model: streams a canned answer word by word. */
 async function* simulateStream(messages: ChatMessageData[], signal: AbortSignal) {
   const question = messages.at(-1)?.content ?? ''
   const reply = cannedReplies[question] ?? fallbackReply

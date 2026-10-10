@@ -46,13 +46,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 
 import { cn } from '@/lib/utils'
 
-/*
- * Links are plain anchors, so the shell works with any router. For client-side
- * navigation, wrap your app in `LinkProvider` with your router's link.
- */
-
 interface NavLink {
-  /** A count or short label after the title, such as unread items. */
   badge?: ReactNode
   href: string
   title: string
@@ -63,7 +57,6 @@ interface NavItem {
   /** Leave out when the item only groups `items`. */
   href?: string
   icon: ReactNode
-  /** Child links, shown in a collapsible list under the item. */
   items?: NavLink[]
   title: string
 }
@@ -80,13 +73,11 @@ function useCloseMobileSidebar() {
   }
 }
 
-/** Whether `href` is the current page or one of its parents. */
 function isActiveHref(href: string, pathname: string) {
   if (href === pathname) return true
   return href !== '/' && pathname.startsWith(`${href.replace(/\/$/, '')}/`)
 }
 
-/** The first two initials of a name, for avatar fallbacks. */
 function getInitials(name: string) {
   return name
     .split(/\s+/)
@@ -98,12 +89,10 @@ function getInitials(name: string) {
 
 interface AppNavProps {
   className?: string
-  /** The current path, used to mark the active item. */
   pathname: string
   sections: NavSection[]
 }
 
-/** Sidebar navigation in labelled sections, with badges and collapsible child links. */
 function AppNav({ className, pathname, sections }: AppNavProps) {
   return (
     <TooltipProvider>
@@ -121,10 +110,6 @@ function AppNav({ className, pathname, sections }: AppNavProps) {
   )
 }
 
-/**
- * Shows a sidebar tooltip only on the desktop rail. In the mobile sheet a
- * hidden tooltip still opens on focus and takes the Escape meant for the sheet.
- */
 function useRailTooltip() {
   const { isMobile } = useSidebar()
   return (label: string) => (isMobile ? undefined : label)
@@ -217,14 +202,12 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
 }
 
 interface AppBrandProps {
-  /** A second line under the name, such as the plan or environment. */
   description?: ReactNode
   href: string
   logo: ReactNode
   name: string
 }
 
-/** The product's logo and name at the top of the sidebar, linking home. */
 function AppBrand({ description, href, logo, name }: AppBrandProps) {
   const closeMobile = useCloseMobileSidebar()
   return (
@@ -242,7 +225,6 @@ function AppBrand({ description, href, logo, name }: AppBrandProps) {
   )
 }
 
-/** A square tile for a logo or workspace icon. */
 function BrandMark({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <span
@@ -260,7 +242,6 @@ interface Workspace {
   id: string
   logo: ReactNode
   name: string
-  /** Shown under the name, such as "Pro plan". */
   plan?: string
 }
 
@@ -272,7 +253,6 @@ interface WorkspaceSwitcherProps {
   workspaces: Workspace[]
 }
 
-/** The current workspace at the top of the sidebar, with a menu to switch to another. */
 function WorkspaceSwitcher({
   onCreate,
   onValueChange,
@@ -359,7 +339,6 @@ function WorkspaceSwitcher({
 }
 
 interface AppUser {
-  /** An image URL. Initials show while it loads or when it's missing. */
   avatar?: string
   email: string
   name: string
@@ -372,7 +351,6 @@ interface UserMenuLink {
 }
 
 interface UserMenuProps {
-  /** Account, billing and similar pages. */
   links: UserMenuLink[]
   onSignOut: () => void
   user: AppUser
@@ -441,7 +419,6 @@ function UserMenuItems({
   )
 }
 
-/** The signed-in user at the bottom of the sidebar, with account links and sign out. */
 function SidebarUserMenu(props: UserMenuProps) {
   const { isMobile } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
@@ -485,7 +462,6 @@ function SidebarUserMenu(props: UserMenuProps) {
   )
 }
 
-/** The signed-in user's avatar, for a top bar, with account links and sign out. */
 function UserMenu(props: UserMenuProps) {
   return (
     <DropdownMenu>
@@ -513,7 +489,6 @@ interface AppHeaderProps {
   className?: string
 }
 
-/** The bar above the page: put the sidebar trigger, breadcrumbs and actions in it. */
 function AppHeader({ children, className }: AppHeaderProps) {
   return (
     <header
@@ -533,7 +508,6 @@ interface Crumb {
   label: string
 }
 
-/** Where the page sits. Only the current page shows on small screens. */
 function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb[] }) {
   return (
     <Breadcrumb className={cn('min-w-0', className)}>
@@ -545,7 +519,6 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
               <BreadcrumbItem
                 className={cn(
                   'min-w-0',
-                  // The current page truncates last.
                   last ? 'max-w-full shrink-0' : 'hidden md:inline-flex',
                 )}
               >
@@ -576,13 +549,11 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
 
 interface SearchButtonProps {
   className?: string
-  /** Opens your search, such as a command menu. Also runs on ⌘K or Ctrl+K. */
   onOpen: () => void
   /** @default 'Search…' */
   placeholder?: string
 }
 
-/** A search field that opens search on click or ⌘K. Collapses to an icon on small screens. */
 function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchButtonProps) {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -622,12 +593,10 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
 
 interface NotificationsButtonProps {
   className?: string
-  /** Unread notifications. A dot shows when there are any. */
   count: number
   onClick: () => void
 }
 
-/** A bell with a dot for unread notifications. */
 function NotificationsButton({ className, count, onClick }: NotificationsButtonProps) {
   return (
     <Button
@@ -654,7 +623,6 @@ function NotificationsButton({ className, count, onClick }: NotificationsButtonP
 interface PlanUsageProps {
   action?: { href: string; label: string }
   limit: number
-  /** What's being counted, such as "events". */
   unit: string
   title: string
   used: number
@@ -662,7 +630,6 @@ interface PlanUsageProps {
 
 const countFormatter = new Intl.NumberFormat('en-US')
 
-/** Usage against the plan's limit, in the sidebar footer, inside `SidebarProvider`. Hidden when the sidebar collapses to icons. */
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
@@ -694,7 +661,6 @@ interface TopNavProps {
   pathname: string
 }
 
-/** Page links in a row under a top bar. Scrolls sideways on small screens. */
 function TopNav({ className, items, pathname }: TopNavProps) {
   return (
     <nav

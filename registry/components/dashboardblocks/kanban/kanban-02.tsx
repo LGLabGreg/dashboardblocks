@@ -29,9 +29,7 @@ import {
 } from '@/components/ui/card'
 
 interface Deal extends KanbanItem {
-  /** What the deal is for, such as "Enterprise plan, 400 seats". */
   description: string
-  /** The next thing to do to move the deal on. */
   nextStep: string
   nextStepAt: Date
   owner: string
@@ -39,13 +37,11 @@ interface Deal extends KanbanItem {
 }
 
 interface Kanban2Props {
-  /** The columns for closed deals. They're left out of the open pipeline, and Lost starts collapsed. */
   closedColumns: { lost: string; won: string }
   columns: KanbanColumnDef[]
   deals: Deal[]
   /** Pass a fixed date, so next-step dates render the same on the server and in the browser. */
   now: Date
-  /** Called after a deal is moved. `index` counts the column's deals without it. */
   onMove?: (id: string, column: string, index: number) => void
   title: string
 }

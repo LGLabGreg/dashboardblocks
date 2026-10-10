@@ -15,11 +15,8 @@ import { CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
 interface ProgressKPI1Props {
-  /** What the change is measured against, e.g. "vs last month". */
   comparison: string
-  /** Days of the period so far, for the pace. */
   daysElapsed: number
-  /** Days in the whole period. */
   daysInPeriod: number
   format?: KPIFormat
   previous: number

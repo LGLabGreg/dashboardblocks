@@ -15,7 +15,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-/** A goal that accumulates over the period, such as a count or a sum. Rates don't pace linearly. */
 interface Goal {
   current: number
   formatter?: (value: number) => string

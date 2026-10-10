@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 type Presence = 'online' | 'away' | 'offline'
 
 interface Person {
-  /** An image URL. Without one, or until it loads, the avatar shows initials. */
   avatar?: string
   id: string
   name: string
@@ -15,14 +14,11 @@ interface Person {
 }
 
 interface PresenceConfig {
-  /** The dot: filled for online and away, hollow for offline, so shape tells them apart too. */
   dot: string
   label: string
-  /** Text colour for inline labels. */
   text: string
 }
 
-/** Presence colours are for presence only, and always come with a label. */
 const presenceConfig: Record<Presence, PresenceConfig> = {
   away: {
     dot: 'bg-amber-500',
@@ -41,7 +37,6 @@ const presenceConfig: Record<Presence, PresenceConfig> = {
   },
 }
 
-/** Most available first. */
 const presenceOrder: Presence[] = ['online', 'away', 'offline']
 
 const avatarColors = [
@@ -58,12 +53,10 @@ function fnv1a(text: string) {
   return hash
 }
 
-/** Picks the same colour for the same name every time, on the server and in the browser. */
 function getAvatarColor(name: string) {
   return avatarColors[fnv1a(name) % avatarColors.length]
 }
 
-/** "Amara Okafor" → "AO", "Cher" → "C". */
 function getInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean)
   if (parts.length === 0) return '?'
@@ -77,7 +70,6 @@ const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
   style: 'short',
 })
 
-/** "just now", "12 min ago", "3 days ago". Pass a fixed `now` to render the same on server and client. */
 function formatLastActive(date: Date, now: Date) {
   const minutes = Math.round((date.getTime() - now.getTime()) / 60_000)
   const hours = Math.round(minutes / 60)
@@ -99,7 +91,6 @@ const initialsSize: Record<AvatarSize, string> = {
 interface PersonAvatarProps {
   className?: string
   person: Pick<Person, 'avatar' | 'name' | 'presence'>
-  /** Adds a presence dot. Show the presence as text nearby too. */
   showPresence?: boolean
   /** @default 'default' */
   size?: AvatarSize
@@ -131,14 +122,12 @@ function PersonAvatar({
   )
 }
 
-/** The presence dot with its label. */
 function PresenceIndicator({
   className,
   label,
   presence,
 }: {
   className?: string
-  /** Replaces the default label, e.g. "Away · in a meeting". */
   label?: string
   presence: Presence
 }) {
@@ -165,7 +154,6 @@ const stackCountSize: Record<AvatarSize, string> = {
 
 interface AvatarStackProps {
   className?: string
-  /** Names the list for assistive technology, e.g. "Online now". */
   label: string
   /**
    * How many avatars to show before "+N".
@@ -177,7 +165,6 @@ interface AvatarStackProps {
   size?: AvatarSize
 }
 
-/** Overlapping avatars with a "+N" for the rest. Each avatar keeps its name for screen readers and on hover. */
 function AvatarStack({
   className,
   label,

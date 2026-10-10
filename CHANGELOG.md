@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.10
+
+### Patch Changes
+
+- 2ac9934: Trim comments in the blocks' source.
+
 ## 1.3.9
 
 ### Patch Changes

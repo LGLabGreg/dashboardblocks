@@ -24,7 +24,6 @@ interface StorageCategory {
 }
 
 interface UsageMeter5Props {
-  /** Largest first reads best. Each takes the next chart colour. */
   categories: StorageCategory[]
   limit: number
   title: string

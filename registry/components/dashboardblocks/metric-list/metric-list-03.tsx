@@ -20,11 +20,9 @@ import {
 } from '@/components/ui/card'
 
 interface TargetMetric extends Omit<Metric, 'history' | 'previous'> {
-  /** The range the bar covers. Narrow it for values that sit close together, like uptime. */
   domain?: [number, number]
   /** A floor when `goodDirection` is `up` (the default), a ceiling when it is `down`. */
   target: number
-  /** How far short of the target, as a share of it, still counts as near. */
   tolerance?: number
 }
 

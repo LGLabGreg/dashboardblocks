@@ -12,7 +12,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/** A placeholder shape for content that is still loading. Pulses unless reduced motion is on. */
 function Skeleton({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
@@ -30,14 +29,9 @@ interface BlockBusyProps {
   busy: boolean
   children: ReactNode
   className?: string
-  /** Announced while busy, e.g. "Updating revenue". */
   label: string
 }
 
-/**
- * Keeps the previous content in place while it refreshes, dimmed and inert,
- * so the layout doesn't jump. Announces the update to screen readers.
- */
 function BlockBusy({ busy, children, className, label }: BlockBusyProps) {
   return (
     <>
@@ -60,7 +54,6 @@ function BlockBusy({ busy, children, className, label }: BlockBusyProps) {
   )
 }
 
-/** A small spinner with a visible label, for a card header while it updates. */
 function BlockBusyIndicator({
   className,
   label = 'Updating',
@@ -95,11 +88,9 @@ interface BlockMessageProps {
   description?: ReactNode
   icon?: ReactNode
   title: string
-  /** `error` tints the icon. The title and description carry the meaning. */
   tone?: 'default' | 'error'
 }
 
-/** The body of an empty or error state: an icon, a title, a description and an action. */
 function BlockMessage({
   action,
   className,
@@ -141,11 +132,6 @@ function BlockMessage({
 
 type LoadStatus = 'idle' | 'loading' | 'refreshing' | 'success' | 'error'
 
-/**
- * Runs `load` on mount and on `reload`. Keeps the last data while it
- * refreshes (status `refreshing`), and only shows `loading` when there is no
- * data yet, so callers can pick a skeleton or a dimmed frame.
- */
 function useBlockData<T>(load: () => Promise<T>, { keepData = true } = {}) {
   const [data, setData] = useState<T | undefined>(undefined)
   const [error, setError] = useState<unknown>(undefined)
@@ -179,8 +165,6 @@ function useBlockData<T>(load: () => Promise<T>, { keepData = true } = {}) {
     [keepData],
   )
 
-  // Load once on mount. The ref stops Strict Mode's second effect run from
-  // sending a duplicate request.
   const started = useRef(false)
   useEffect(() => {
     if (started.current) return

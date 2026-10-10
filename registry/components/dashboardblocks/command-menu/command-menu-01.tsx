@@ -10,11 +10,9 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, useCallback, useState } from 'react'
 
 interface CommandMenu1Props {
-  /** Opens the menu with ⌘ or Ctrl and this key. @default 'k' */
+  /** Opens the menu with ⌘ or Ctrl and this key. */
   shortcutKey?: string
-  /** Runs an action by its id, such as "new-order". */
   onAction?: (id: string) => void
-  /** Opens a page. Pass your router's navigate function. */
   onNavigate?: (href: string) => void
 }
 

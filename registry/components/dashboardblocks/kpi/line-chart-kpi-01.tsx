@@ -16,15 +16,12 @@ import { CardDescription } from '@/components/ui/card'
 
 interface DailyComparison {
   label: string
-  /** The same day in the previous period. */
   previous: number
   value: number
 }
 
 interface LineChartKPI1Props {
-  /** What the change is measured against, e.g. "vs last week". */
   comparison: string
-  /** One point per period. The headline is their total. */
   data: DailyComparison[]
   format?: KPIFormat
   /** @default 120 */

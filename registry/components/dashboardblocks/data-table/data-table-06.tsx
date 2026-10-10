@@ -38,9 +38,7 @@ interface CustomerRow {
 
 interface DataTable6Props {
   description: string
-  /** Called with the selected customers. Defaults to a mailto link to their billing emails. */
   onEmail?: (rows: CustomerRow[]) => void
-  /** Called with the selected customers. Defaults to downloading them as CSV. */
   onExport?: (rows: CustomerRow[]) => void
   pageSize?: number
   rows: CustomerRow[]
@@ -202,8 +200,7 @@ const CSV_COLUMNS: (keyof CustomerRow)[] = [
   'signedUp',
 ]
 
-// Spreadsheets run a cell that starts with one of these as a formula, and
-// names and emails come from your customers.
+// Spreadsheets run a cell that starts with one of these as a formula, and names and emails come from your customers.
 const FORMULA_START = /^[=+\-@\t\r]/
 
 const csvCell = (value: string | number) => {

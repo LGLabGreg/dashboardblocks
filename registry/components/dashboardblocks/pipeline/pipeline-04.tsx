@@ -20,9 +20,7 @@ import {
 import { cn } from '@/lib/utils'
 
 interface OwnerPipeline {
-  /** Won so far this period. */
   closed: number
-  /** Open deals: their value and the id of their stage. */
   deals: { stage: string; value: number }[]
   name: string
   quota: number
@@ -31,7 +29,6 @@ interface OwnerPipeline {
 interface Pipeline4Props {
   description: string
   owners: OwnerPipeline[]
-  /** Stages with the chance that a deal in each one closes. */
   stages: PipelineStage[]
   title: string
 }

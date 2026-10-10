@@ -19,7 +19,6 @@ interface Heatmap1Props {
   /** Seven rows, Monday first, of 24 hourly values. */
   values: number[][]
   title: string
-  /** Unit for the readout, e.g. "sessions". */
   unit: string
 }
 

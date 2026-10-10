@@ -32,7 +32,6 @@ import { Button } from '@/components/ui/button'
 interface Refund {
   amount: number
   date: Date
-  /** What was refunded, such as a returned item. */
   reason: string
 }
 
@@ -40,9 +39,7 @@ interface Invoice2Props {
   brand: { name: string; website: string }
   /** @default 'USD' */
   currency?: string
-  /** Who the receipt was emailed to. */
   email: string
-  /** Small print, such as the legal name and address. */
   footer: string
   lines: DocumentLine[]
   number: string
@@ -50,13 +47,10 @@ interface Invoice2Props {
   onEmail?: () => Promise<void>
   orderNumber: string
   paidAt: Date
-  /** Such as "Visa •••• 4242". */
   paymentMethod: string
   refunds: Refund[]
   shipping?: number
-  /** Such as "USPS Priority Mail". */
   shippingMethod: string
-  /** Where to get help with the order. */
   supportEmail: string
   taxRate?: number
 }
@@ -150,7 +144,6 @@ const Invoice2 = (props: Invoice2Props) => {
   } = props
   const [emailState, setEmailState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, shipping, taxRate })
-  // Sum in the currency's smallest unit, so refunds of 10.10 and 20.20 make 30.30.
   const unit = 10 ** getCurrencyDigits(currency)
   const refunded =
     refunds.reduce((sum, refund) => sum + Math.round(refund.amount * unit), 0) / unit

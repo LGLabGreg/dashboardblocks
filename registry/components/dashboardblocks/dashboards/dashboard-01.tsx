@@ -24,13 +24,6 @@ import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/sta
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useEffect, useState } from 'react'
 
-/*
- * A store dashboard: the header's date range, compare switch and region
- * filter scope every block below it. Month-to-date revenue follows the region
- * but not the date range, and stock is current. Swap `buildStoreData` for
- * your own queries; the blocks only need their props.
- */
-
 interface Dashboard1Props {
   title: string
   /** The last day of every date range. */
@@ -137,7 +130,6 @@ const splitTotal = (total: number, shares: number[]) => {
 
 const currency = (value: number) => `$${Math.round(value).toLocaleString('en-US')}`
 
-/** Everything the blocks show for one query. Replace with your own data fetching. */
 function buildStoreData({ compare, preset, region }: Query, today: Date) {
   const hourly = preset === 'today'
   const length = hourly ? 24 : getPreset(preset).days
@@ -285,7 +277,6 @@ const Dashboard1 = (props: Dashboard1Props) => {
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
 
-  // Stands in for a request's delay: the blocks stay dimmed until it ends.
   useEffect(() => {
     if (displayedQuery === query) return
     const timer = setTimeout(() => setDisplayedQuery(query), 500)

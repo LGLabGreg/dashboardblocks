@@ -31,11 +31,9 @@ import { cn } from '@/lib/utils'
 interface Ticket extends KanbanItem {
   assignee?: string
   channel: 'chat' | 'email'
-  /** Who raised the ticket. Leave out for one added on the board. */
   customer?: string
   number: number
   priority: KanbanPriorityLevel
-  /** When the ticket breaches its service level agreement. */
   slaDueAt: Date
 }
 
@@ -43,13 +41,9 @@ interface Kanban3Props {
   columns: KanbanColumnDef[]
   /** Pass a fixed date, so SLA times render the same on the server and in the browser. */
   now: Date
-  /** Called after a ticket is added. Resolve once it's saved. */
   onAdd?: (ticket: Ticket) => Promise<void>
-  /** Called after a ticket is moved. `index` counts the column's tickets without it. */
   onMove?: (id: string, column: string, index: number) => void
-  /** Columns where the SLA clock is paused or stopped. */
   pausedColumns: string[]
-  /** Hours to the SLA on tickets added from the board. */
   slaHours: number
   tickets: Ticket[]
   title: string
@@ -171,7 +165,6 @@ const exampleProps: Kanban3Props = {
   title: 'Support queue',
 }
 
-/** Stands in for a request to your API. */
 async function saveTicket() {
   await new Promise((resolve) => setTimeout(resolve, 300))
 }

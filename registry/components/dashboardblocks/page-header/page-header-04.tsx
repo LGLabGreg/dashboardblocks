@@ -17,7 +17,6 @@ interface PageHeader4Props {
   count: number
   description: string
   onCreate?: () => void
-  /** Runs as the search changes. Debounce it if it calls your API. */
   onSearch?: (query: string) => void
   title: string
 }

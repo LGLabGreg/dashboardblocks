@@ -30,16 +30,12 @@ import {
 
 interface AppShell2Props {
   breadcrumbs: Crumb[]
-  /** The page. Leave out to show placeholders. */
   children?: ReactNode
-  /** Start collapsed to icons. */
   defaultCollapsed?: boolean
   onCreate?: () => void
   onSearch?: () => void
   onSignOut?: () => void
-  /** The current path, used to mark the active link and open its section. */
   pathname: string
-  /** Pinned to the bottom of the sidebar, such as help and settings. */
   secondarySections: NavSection[]
   sections: NavSection[]
   user: AppUser

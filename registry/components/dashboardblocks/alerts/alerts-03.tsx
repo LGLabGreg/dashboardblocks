@@ -29,7 +29,6 @@ interface AlertRule {
 }
 
 interface Alerts3Props {
-  /** The time relative times are measured from. */
   now: Date
   onEnabledChange?: (id: string, enabled: boolean) => void
   rules: AlertRule[]

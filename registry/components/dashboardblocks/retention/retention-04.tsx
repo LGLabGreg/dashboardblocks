@@ -35,7 +35,6 @@ import {
 } from '@/components/ui/card'
 
 interface GrowthAccountingPeriod extends GrowthAccountingInput {
-  /** e.g. "Sep 21". */
   label: string
 }
 
@@ -43,7 +42,6 @@ interface Retention4Props {
   description: string
   /** Oldest first. */
   periods: GrowthAccountingPeriod[]
-  /** The period each row covers. @default 'week' */
   periodName?: string
   title: string
   /** @default 'users' */

@@ -25,14 +25,11 @@ interface ActivePage {
 }
 
 interface Realtime1Props {
-  /** Users active in the last few minutes. */
   activeUsers: number
   description: string
-  /** Page views per second, oldest first, e.g. the last 60 seconds. */
+  /** Page views per second, oldest first, e.g. */
   pageViews: number[]
-  /** Pages with the most active users, largest first. */
   pages: ActivePage[]
-  /** Makes up updates every second, for demos. Replace with your own feed. */
   simulate?: boolean
   title: string
 }

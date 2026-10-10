@@ -21,12 +21,10 @@ import {
 import { cn } from '@/lib/utils'
 
 interface HealthFactor {
-  /** What drives the score, e.g. "312 of 350 seats active". */
   detail: string
   label: string
   /** 0–100. */
   score: number
-  /** Share of the overall score. Weights are normalised, so they don't need to add up to 1. */
   weight: number
 }
 

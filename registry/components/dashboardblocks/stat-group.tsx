@@ -10,8 +10,7 @@ type StatFormatter = (value: number) => string
 
 interface StatMetric {
   /**
-   * How the change is measured. Use `points` for rates, so 2.1% → 1.8%
-   * reads as −0.3 pts instead of −14.3%.
+   * How the change is measured.
    * @default 'percent'
    */
   changeType?: 'percent' | 'points'
@@ -31,7 +30,6 @@ const formatPoints: StatFormatter = (value) =>
 
 const round = (value: number) => Math.round(value * 10) / 10
 
-/** Change vs the previous value, in percent or percentage points. */
 function getStatChange({
   changeType = 'percent',
   previous,
@@ -47,7 +45,6 @@ function formatStatValue(metric: Pick<StatMetric, 'formatter' | 'value'>) {
   return (metric.formatter ?? defaultFormatter)(metric.value)
 }
 
-/** A grid of stats. The 1px gaps show the border colour, so dividers follow any layout. */
 function StatGroup({ className, ...props }: ComponentProps<'dl'>) {
   return <dl className={cn('bg-border grid gap-px', className)} {...props} />
 }
@@ -82,11 +79,9 @@ interface StatChangeProps {
    * @default true
    */
   showPrevious?: boolean
-  /** Badge style for the change. */
   variant?: 'default' | 'badge'
 }
 
-/** The change vs the previous period, with an arrow, and optionally the previous value. */
 function StatChangeContent({
   className,
   metric,
@@ -133,7 +128,6 @@ interface StatSparklineProps {
   /** @default 'var(--chart-2)' */
   color?: string
   data: number[]
-  /** Describes the trend for screen readers, for example "Up from $2.1K to $3.4K". */
   label: string
 }
 
@@ -141,7 +135,6 @@ const SPARKLINE_WIDTH = 100
 const SPARKLINE_HEIGHT = 32
 const SPARKLINE_INSET = 2
 
-/** A sparkline with a soft fill and a dot on the latest value. Reveals left to right. */
 function StatSparkline({
   animated = true,
   className,

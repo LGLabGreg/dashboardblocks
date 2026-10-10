@@ -31,9 +31,7 @@ import { cn } from '@/lib/utils'
 
 interface CsatPeriod {
   label: string
-  /** Survey responses in the period. */
   responses: number
-  /** Responses rating 4 or 5 out of 5. */
   satisfied: number
 }
 

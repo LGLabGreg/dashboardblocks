@@ -35,7 +35,6 @@ interface SprintIssue extends KanbanItem {
   attachments?: number
   comments?: number
   due?: Date
-  /** The issue's key, such as "WEB-142". */
   key: string
   labels: KanbanLabelDef[]
   priority: KanbanPriorityLevel
@@ -49,7 +48,6 @@ interface Kanban1Props {
   issues: SprintIssue[]
   /** Pass a fixed date, so due dates render the same on the server and in the browser. */
   now: Date
-  /** Called after an issue is moved. `index` counts the column's issues without it. */
   onMove?: (id: string, column: string, index: number) => void
   subtitle: string
   title: string

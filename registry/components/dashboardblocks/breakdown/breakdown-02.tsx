@@ -29,7 +29,6 @@ interface Breakdown2Props {
   categories: CompositionCategory[]
   description: string
   groups: CompositionGroup[]
-  /** The category whose share is labelled at the end of each row. */
   highlight: string
   title: string
 }

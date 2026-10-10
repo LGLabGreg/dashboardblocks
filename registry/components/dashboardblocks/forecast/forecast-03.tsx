@@ -18,15 +18,12 @@ import {
 } from '@/components/ui/card'
 
 interface Forecast3Props {
-  /** The total so far this period. */
   current: number
   description: string
-  /** Days of the period that have passed. */
   elapsed: number
   formatter?: (value: number) => string
   target: number
   title: string
-  /** Days in the period. */
   total: number
 }
 

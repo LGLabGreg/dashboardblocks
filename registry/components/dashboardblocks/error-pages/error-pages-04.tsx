@@ -20,18 +20,14 @@ interface MaintenanceUpdate {
 
 interface ErrorPages4Props {
   brand?: ReactNode
-  /** When the work is expected to finish. */
   endsAt: Date
   /** Pass a fixed date, so the page renders the same on the server and in the browser. */
   now: Date
-  /** Called with an email address to tell when it's back. Leave out to hide the form. */
   onSubscribe?: (email: string) => void
-  /** When the work started. */
   startsAt: Date
   statusHref?: string
   /** Newest first. */
   updates: MaintenanceUpdate[]
-  /** What's being done, in a sentence. */
   work: string
 }
 
@@ -88,7 +84,6 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
     event.preventDefault()
     const address = email.trim()
     if (!EMAIL.test(address)) {
-      // The error renders before focus moves, so the field is read with it.
       flushSync(() => setError('Enter an email address.'))
       document.getElementById(`${id}-email`)?.focus()
       return

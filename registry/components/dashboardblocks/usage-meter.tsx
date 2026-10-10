@@ -9,19 +9,17 @@ import { cn } from '@/lib/utils'
 type UsageStatus = 'ok' | 'warning' | 'critical' | 'over'
 
 interface UsageThresholds {
-  /** Share of the limit, in percent, from which usage is critical. @default 95 */
+  /** Share of the limit, in percent, from which usage is critical. */
   critical?: number
-  /** Share of the limit, in percent, from which usage is nearing it. @default 80 */
+  /** Share of the limit, in percent, from which usage is nearing it. */
   warning?: number
 }
 
-/** Used over the limit, in percent. Not capped, so overage reads as over 100. */
 function getUsageShare(used: number, limit: number) {
   if (!Number.isFinite(used) || !Number.isFinite(limit) || limit <= 0) return 0
   return (Math.max(0, used) / limit) * 100
 }
 
-/** Within limit, nearing it, critical or over it. */
 function getUsageStatus(
   used: number,
   limit: number,
@@ -35,23 +33,17 @@ function getUsageStatus(
 }
 
 interface UsageProjectionInput {
-  /** Days of the billing period so far. */
   daysElapsed: number
-  /** Days in the whole billing period. */
   daysInPeriod: number
   used: number
 }
 
-/** Usage by the end of the period at the average daily rate so far. */
 function projectUsage({ daysElapsed, daysInPeriod, used }: UsageProjectionInput) {
   if (daysElapsed <= 0) return used
   return (used / daysElapsed) * daysInPeriod
 }
 
-/**
- * Days until a balance runs out at a daily burn; `Infinity` with no burn.
- * Use it for prepaid credits, or with `limit - used` for a quota.
- */
+/** Days until a balance runs out at a daily burn; `Infinity` with no burn. */
 function getDaysLeft(remaining: number, dailyBurn: number) {
   return dailyBurn > 0 ? Math.max(0, remaining) / dailyBurn : Infinity
 }
@@ -62,27 +54,19 @@ const compactFormatter = new Intl.NumberFormat('en-US', {
   notation: 'compact',
 })
 
-/**
- * "7,234" or, with `compact`, "7.2K". Adds the unit when given: "78 GB".
- * In en-US, so the server and the browser render the same.
- */
 function formatUsage(value: number, unit?: string, { compact = false } = {}) {
   const number = (compact ? compactFormatter : numberFormatter).format(value)
   return unit ? `${number} ${unit}` : number
 }
 
 interface UsageStatusConfig {
-  /** CSS colour for bars and rings. */
   color: string
   icon: ReactNode
   label: string
-  /** Tinted background with readable text, for badges. */
   soft: string
-  /** Text colour for inline labels. */
   text: string
 }
 
-/** Status colours are for usage status only, and always come with an icon and a label. */
 const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
   critical: {
     color: 'var(--destructive)',
@@ -150,14 +134,12 @@ const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
   },
 }
 
-/** The usage status with its icon and label. */
 function UsageStatusBadge({
   className,
   label,
   status,
 }: {
   className?: string
-  /** Replaces the default label, e.g. "3 days left". */
   label?: string
   status: UsageStatus
 }) {
@@ -176,7 +158,6 @@ function UsageStatusBadge({
   )
 }
 
-/** A striped fill for projected usage, in the given colour. */
 function projectedFill(color: string) {
   return `repeating-linear-gradient(-45deg, color-mix(in oklab, ${color} 55%, transparent) 0 2px, color-mix(in oklab, ${color} 18%, transparent) 2px 5px)`
 }
@@ -184,23 +165,15 @@ function projectedFill(color: string) {
 interface UsageBarProps extends UsageThresholds {
   animated?: boolean
   className?: string
-  /** Replaces the status colour of the fill. */
   color?: string
   limit: number
-  /** Colour of usage past the limit. @default 'var(--destructive)' */
   overColor?: string
-  /** Adds a striped segment from used to the projected total. */
   projected?: number
   /** @default 'md' */
   size?: 'sm' | 'md'
   used: number
 }
 
-/**
- * Usage against a limit, filled in its status colour. Usage or a projection
- * past the limit extends the scale and marks the limit with a tick.
- * Decorative: show the values as text beside it.
- */
 function UsageBar({
   animated = true,
   className,
@@ -274,7 +247,6 @@ function UsageBar({
 
 type UsageKeyShape = 'used' | 'projected' | 'over' | 'limit'
 
-/** A legend swatch matching a `UsageBar` mark. */
 function UsageKey({
   className,
   color = 'var(--primary)',

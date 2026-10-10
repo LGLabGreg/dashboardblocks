@@ -27,18 +27,14 @@ interface DataSource {
   category: string
   description: string
   id: string
-  /** Your own logo element. Without one, the tile shows the first letter. */
   logo?: ReactNode
   name: string
   popular?: boolean
 }
 
 interface Onboarding3Props {
-  /** Connects the source, such as through its OAuth flow. Throw an Error to show its message. */
   onConnect?: (id: string) => Promise<void>
-  /** Runs from the connected state, such as to go to the next setup step. */
   onContinue?: (id: string) => void
-  /** Where people ask for a source that isn't listed. */
   requestHref: string
   sources: DataSource[]
 }
@@ -105,7 +101,6 @@ const exampleProps: Onboarding3Props = {
   ],
 }
 
-/** Stands in for your OAuth flow or API. Snowflake fails, to show the error state. */
 async function connectSource(id: string) {
   await new Promise((resolve) => setTimeout(resolve, 1500))
   if (id === 'snowflake') {

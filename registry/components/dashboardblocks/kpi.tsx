@@ -30,10 +30,6 @@ const currencyCompactFormatter = new Intl.NumberFormat('en-US', {
 })
 const percentFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 })
 
-/**
- * Named formats, all in en-US so the server and the browser render the same.
- * `percent` takes a value that is already a percentage (3.4 → "3.4%").
- */
 const kpiFormats: Record<KPIFormat, KPIFormatter> = {
   compact: (value) => compactFormatter.format(value),
   currency: (value) => currencyFormatter.format(value),
@@ -48,8 +44,7 @@ function getKPIFormatter(format: KPIFormat | KPIFormatter = 'number'): KPIFormat
 
 interface KPIChangeInput {
   /**
-   * How the change is measured. Use `points` for rates, so 3.4% → 3.2%
-   * reads as −0.2 pts instead of −5.9%.
+   * How the change is measured.
    * @default 'percent'
    */
   changeType?: 'percent' | 'points'
@@ -59,7 +54,6 @@ interface KPIChangeInput {
 
 const round = (value: number) => Math.round(value * 10) / 10
 
-/** Change vs the previous value, in percent or percentage points. */
 function getKPIChange({ changeType = 'percent', previous, value }: KPIChangeInput) {
   if (previous === undefined) return undefined
   if (changeType === 'points') return round(value - previous)
@@ -70,12 +64,10 @@ function getKPIChange({ changeType = 'percent', previous, value }: KPIChangeInpu
 const formatChange = (unit: '%' | ' pts') => (value: number) =>
   `${value > 0 ? '+' : ''}${numberFormatter.format(value)}${unit}`
 
-/** The card. Pass `className` for the card, and put `KPIContent` inside. */
 function KPI(props: ComponentProps<typeof Card>) {
   return <Card {...props} />
 }
 
-/** Stacks the label, value and extras, pushing the last child to the bottom. */
 function KPIContent({ className, ...props }: ComponentProps<typeof CardContent>) {
   return (
     <CardContent
@@ -86,10 +78,8 @@ function KPIContent({ className, ...props }: ComponentProps<typeof CardContent>)
 }
 
 interface KPIValueProps {
-  /** Counts up from zero once in view. Screen readers get the final value. */
   animated?: boolean
   className?: string
-  /** A named format or a formatter of your own. @default 'number' */
   format?: KPIFormat | KPIFormatter
   value: number
 }
@@ -115,23 +105,14 @@ function KPIValue({ animated = false, className, format, value }: KPIValueProps)
 
 interface KPIChangeProps extends KPIChangeInput {
   className?: string
-  /** What the change is measured against, e.g. "vs last month". */
   comparison: string
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
   goodDirection?: 'up' | 'down'
-  /**
-   * Shows the comparison next to the change. Hidden, it's still read out.
-   * @default false
-   */
   showComparison?: boolean
   /** @default 'badge' */
   variant?: 'default' | 'badge'
 }
 
-/**
- * The change vs the previous value, with an arrow and a sign, so colour never
- * carries it alone. Green and red follow `goodDirection`.
- */
 function KPIChange({
   className,
   comparison,
@@ -166,15 +147,9 @@ function KPIChange({
 interface KPIChartProps {
   children: ReactNode
   className?: string
-  /** Describes the chart for screen readers. See `describeSeries`. */
   label: string
 }
 
-/**
- * Wraps a small chart as a single image with a text alternative. Its children
- * are hidden from assistive tech, so turn off the chart's keyboard layer
- * (`accessibilityLayer={false}`), or it leaves a tab stop that reads as nothing.
- */
 function KPIChart({ children, className, label }: KPIChartProps) {
   return (
     <div role='img' aria-label={label} className={cn('w-full', className)}>
@@ -183,10 +158,6 @@ function KPIChart({ children, className, label }: KPIChartProps) {
   )
 }
 
-/**
- * "Revenue by day: from $3,200 on Mon to $5,700 on Sun, highest $6,100 on Fri",
- * for a chart's text alternative.
- */
 function describeSeries(
   title: string,
   points: { label: string; value: number }[],

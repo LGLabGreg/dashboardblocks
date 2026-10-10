@@ -4,7 +4,7 @@ import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-/** Calls `callback` every `delay` ms; `null` pauses it. Always calls the latest callback. */
+/** Calls `callback` every `delay` ms; `null` pauses it. */
 function useInterval(callback: () => void, delay: number | null) {
   const saved = useRef(callback)
 
@@ -19,10 +19,6 @@ function useInterval(callback: () => void, delay: number | null) {
   }, [delay])
 }
 
-/**
- * A seeded pseudo-random generator (mulberry32), returning 0–1. Integer maths,
- * so it gives the same sequence in every engine; use it for demo data.
- */
 function createRandom(seed: number) {
   let state = seed >>> 0
   return () => {
@@ -34,7 +30,6 @@ function createRandom(seed: number) {
   }
 }
 
-/** Appends `value` and keeps the last `size` values, for a rolling window. */
 function pushWindow<T>(values: T[], value: T, size: number) {
   const next = [...values, value]
   return next.length > size ? next.slice(next.length - size) : next
@@ -44,11 +39,9 @@ interface LiveBadgeProps {
   className?: string
   /** @default 'Live' */
   label?: string
-  /** Shows a still, muted dot and "Paused". */
   paused?: boolean
 }
 
-/** A pulsing dot and "Live". The pulse stops for reduced motion. */
 function LiveBadge({ className, label = 'Live', paused = false }: LiveBadgeProps) {
   return (
     <span
@@ -81,10 +74,6 @@ interface LiveNumberProps {
   value: number
 }
 
-/**
- * A number that counts from its last value to the new one. It renders the
- * value as is on the server and for reduced motion.
- */
 function LiveNumber({
   className,
   duration = 600,
@@ -121,15 +110,12 @@ interface RollingBarsProps {
   className?: string
   /** @default 'var(--chart-2)' */
   color?: string
-  /** Draws the newest bar in full colour and the rest lighter. @default true */
   highlightLatest?: boolean
-  /** Fixes the top of the scale. Defaults to the largest value. */
   max?: number
   /** Oldest first; the newest bar is on the right. */
   values: number[]
 }
 
-/** A strip of bars for a rolling window, newest on the right. Decorative. */
 function RollingBars({
   className,
   color = 'var(--chart-2)',
@@ -162,7 +148,6 @@ const relativeTime = new Intl.RelativeTimeFormat('en-US', {
   style: 'narrow',
 })
 
-/** "now", "12s ago", "3 min. ago" for how long before `now` `date` was. */
 function formatAgo(date: Date, now: Date) {
   const seconds = Math.max(0, Math.round((now.getTime() - date.getTime()) / 1000))
   if (seconds < 5) return 'now'

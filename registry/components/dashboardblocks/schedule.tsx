@@ -6,9 +6,7 @@ import { type KeyboardEvent, type ReactNode, useEffect, useRef, useState } from 
 import { cn } from '@/lib/utils'
 
 interface ScheduleEvent {
-  /** Shows the event as "All day" instead of a time range. */
   allDay?: boolean
-  /** A calendar or category name, shown beside its colour so colour never carries it alone. */
   calendar?: string
   /** @default 'var(--chart-2)' */
   color?: string
@@ -24,11 +22,6 @@ const DAY = 86_400_000
 
 const partsFormatters = new Map<string, Intl.DateTimeFormat>()
 
-/**
- * The calendar date and time of `date` in `timeZone`. Every helper here takes
- * an explicit time zone, so the server and the browser agree on which day an
- * event falls on.
- */
 function getDateParts(date: Date, timeZone = 'UTC') {
   let formatter = partsFormatters.get(timeZone)
   if (!formatter) {
@@ -56,33 +49,25 @@ function getDateParts(date: Date, timeZone = 'UTC') {
   }
 }
 
-/**
- * The calendar day of `date` in `timeZone`, as midnight UTC. Use it as a plain
- * date: add days to it and format it with `timeZone: 'UTC'`.
- */
 function getDay(date: Date, timeZone = 'UTC') {
   const { day, month, year } = getDateParts(date, timeZone)
   return new Date(Date.UTC(year, month, day))
 }
 
-/** "2026-09-28". A stable key for grouping events by day. */
 function getDayKey(date: Date, timeZone = 'UTC') {
   return getDay(date, timeZone).toISOString().slice(0, 10)
 }
 
-/** A plain day from `getDay` moved by whole days. */
 function addDays(day: Date, days: number) {
   return new Date(day.getTime() + days * DAY)
 }
 
-/** Calendar days from `now` to `date`: 0 is today, 1 tomorrow, -1 yesterday. */
 function getDayOffset(date: Date, now: Date, timeZone = 'UTC') {
   return Math.round(
     (getDay(date, timeZone).getTime() - getDay(now, timeZone).getTime()) / DAY,
   )
 }
 
-/** Formats a plain day from `getDay`, e.g. "Mon, Sep 28". */
 function formatDay(
   day: Date,
   options: Intl.DateTimeFormatOptions = {
@@ -94,10 +79,6 @@ function formatDay(
   return day.toLocaleDateString('en-US', { ...options, timeZone: 'UTC' })
 }
 
-/**
- * Names a plain day relative to `today` (both from `getDay`): "Today",
- * "Tomorrow", a weekday within the week ahead, then "Mon, Oct 12".
- */
 function formatRelativeDay(day: Date, today: Date) {
   const offset = Math.round((day.getTime() - today.getTime()) / DAY)
   if (offset === 0) return 'Today'
@@ -107,19 +88,16 @@ function formatRelativeDay(day: Date, today: Date) {
   return formatDay(day)
 }
 
-/** The day `date` falls on in `timeZone`, named relative to `now`. See `formatRelativeDay`. */
 function formatDayLabel(date: Date, now: Date, timeZone = 'UTC') {
   return formatRelativeDay(getDay(date, timeZone), getDay(now, timeZone))
 }
 
-/** "9:30 AM". Built from parts so the space before AM/PM is the same everywhere. */
 function formatTime(date: Date, timeZone = 'UTC') {
   const { hour, minute } = getDateParts(date, timeZone)
   const hour12 = hour % 12 || 12
   return `${hour12}:${String(minute).padStart(2, '0')} ${hour < 12 ? 'AM' : 'PM'}`
 }
 
-/** "9:00–10:30 AM", or "11:30 AM–1:00 PM" when it crosses noon. */
 function formatTimeRange(start: Date, end: Date | undefined, timeZone = 'UTC') {
   const from = formatTime(start, timeZone)
   if (!end) return from
@@ -128,7 +106,6 @@ function formatTimeRange(start: Date, end: Date | undefined, timeZone = 'UTC') {
   return `${from}–${to}`
 }
 
-/** "30 min", "1 hr 30 min", "2 hr". */
 function formatDuration(start: Date, end: Date) {
   const minutes = Math.max(0, Math.round((end.getTime() - start.getTime()) / 60_000))
   const hours = Math.floor(minutes / 60)
@@ -139,11 +116,6 @@ function formatDuration(start: Date, end: Date) {
 
 const relativeFormatter = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
 
-/**
- * "in 45 minutes" and "in 3 hours" later today, then "tomorrow" and "in 3 days"
- * by calendar day, and "yesterday" or "2 days ago" once past. Pass a fixed
- * `now` to render the same on server and client.
- */
 function formatCountdown(date: Date, now: Date, timeZone = 'UTC') {
   const offset = getDayOffset(date, now, timeZone)
   if (offset !== 0) return relativeFormatter.format(offset, 'day')
@@ -154,15 +126,12 @@ function formatCountdown(date: Date, now: Date, timeZone = 'UTC') {
 }
 
 interface ScheduleDay<T extends ScheduleEvent> {
-  /** The plain day, from `getDay`. */
   day: Date
   events: T[]
   key: string
-  /** "Today", "Tomorrow", "Wednesday"… */
   label: string
 }
 
-/** Events sorted by start and grouped by calendar day in `timeZone`. */
 function groupByDay<T extends ScheduleEvent>(events: T[], now: Date, timeZone = 'UTC') {
   const days = new Map<string, ScheduleDay<T>>()
   for (const event of [...events].sort((a, b) => a.start.getTime() - b.start.getTime())) {
@@ -179,7 +148,6 @@ function groupByDay<T extends ScheduleEvent>(events: T[], now: Date, timeZone = 
   return [...days.values()]
 }
 
-/** Six weeks of plain days covering `month` (a plain day from `getDay`). */
 function getMonthWeeks(month: Date, weekStartsOn: 0 | 1 = 0) {
   const first = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth(), 1))
   const start = addDays(first, -((first.getUTCDay() - weekStartsOn + 7) % 7))
@@ -188,7 +156,6 @@ function getMonthWeeks(month: Date, weekStartsOn: 0 | 1 = 0) {
   )
 }
 
-/** A small swatch in the event's colour. Decorative: show the calendar name in text nearby. */
 function EventSwatch({ className, color }: { className?: string; color?: string }) {
   return (
     <span
@@ -200,7 +167,6 @@ function EventSwatch({ className, color }: { className?: string; color?: string 
 }
 
 interface EventRowProps {
-  /** Shown on the right, such as a join button or a countdown. */
   action?: ReactNode
   className?: string
   event: ScheduleEvent
@@ -210,10 +176,6 @@ interface EventRowProps {
   timeZone?: string
 }
 
-/**
- * One event as a list item: its time, a bar in its calendar's colour, the
- * title and the calendar and location in text. Render inside a `ul` or `ol`.
- */
 function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowProps) {
   const ended = now !== undefined && (event.end ?? event.start) <= now
   const live =
@@ -278,7 +240,6 @@ function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowP
 
 type Urgency = 'overdue' | 'today' | 'soon' | 'later'
 
-/** Urgency colours always come with an icon and a label. */
 const urgencyConfig: Record<
   Urgency,
   { icon: React.ReactNode; label: string; soft: string; text: string }
@@ -345,10 +306,7 @@ const urgencyConfig: Record<
   },
 }
 
-/**
- * How pressing a deadline is by calendar day: overdue, today, within `soonDays`
- * (default 7) or later.
- */
+/** How pressing a deadline is by calendar day: overdue, today, within `soonDays` (default 7) or later. */
 function getUrgency(date: Date, now: Date, timeZone = 'UTC', soonDays = 7): Urgency {
   const offset = getDayOffset(date, now, timeZone)
   if (offset < 0) return 'overdue'
@@ -384,28 +342,19 @@ interface MonthCalendarProps {
   className?: string
   /** Events to mark with dots, up to three per day. */
   events: ScheduleEvent[]
-  /** Names the grid for assistive technology, e.g. "September 2026". */
   label: string
   /** The month shown, as a plain day from `getDay`. */
   month: Date
   onMonthChange: (month: Date) => void
   onSelect: (day: Date) => void
-  /** Marks today. */
   now: Date
-  /** The selected plain day. */
   selected?: Date
   /** @default 'UTC' */
   timeZone?: string
-  /** 0 for Sunday, 1 for Monday. @default 0 */
+  /** 0 for Sunday, 1 for Monday. */
   weekStartsOn?: 0 | 1
 }
 
-/**
- * A month as an ARIA grid built on a table. Tab moves into it; the arrow keys
- * move by day and week, Home and End to the start and end of the week, Page Up
- * and Page Down by month; Enter or Space selects. Days with events get dots,
- * and each day's name includes its event count.
- */
 function MonthCalendar({
   className,
   events,
