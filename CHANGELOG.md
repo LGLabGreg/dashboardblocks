@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.12
+
+### Patch Changes
+
+- a4a6eaa: The settings block's copy button no longer submits a form it sits in.
+
 ## 1.3.11
 
 ### Patch Changes

@@ -253,6 +253,7 @@ function CopyButton({
   const { copied, copy } = useCopyToClipboard()
   return (
     <Button
+      type='button'
       variant='ghost'
       size='icon-sm'
       className={className}

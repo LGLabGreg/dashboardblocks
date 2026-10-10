@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/settings.tsx for React Aria
-// source-hash: 4125914626aa
+// source-hash: 05942d83c210
 
 'use client'
 
@@ -255,6 +255,7 @@ function CopyButton({
   const { copied, copy } = useCopyToClipboard()
   return (
     <Button
+      type='button'
       variant='ghost'
       size='icon-sm'
       className={className}
