@@ -41,7 +41,7 @@ const exampleProps: ActivityFeed04Props = {
     { count: 64, name: 'Kenji Mori' },
     { count: 51, name: 'Priya Nair' },
     { count: 38, name: 'Mei Tanaka' },
-    { count: 22, name: 'Tomás Rivera' },
+    { count: 22, name: 'Kenji Watanabe' },
     { count: 17, name: 'Amara Okafor' },
   ],
   counts: [

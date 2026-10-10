@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.3.11
+
+### Patch Changes
+
+- b00614f: Replace placeholder names in the app shell, command menu, notifications and activity feed examples.
+
 ## 1.3.10
 
 ### Patch Changes

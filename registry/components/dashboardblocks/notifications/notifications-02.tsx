@@ -47,7 +47,7 @@ const exampleProps: Notifications2Props = {
       request: { approve: 'Approve', decline: 'Decline' },
       title: (
         <>
-          <span className='font-medium'>Sam Rivera</span> asked to join Acme Store
+          <span className='font-medium'>Priya Nair</span> asked to join Acme Store
         </>
       ),
       tone: 'accent',

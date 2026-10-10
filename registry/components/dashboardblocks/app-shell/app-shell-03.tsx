@@ -148,7 +148,7 @@ const exampleProps: AppShell3Props = {
     unit: 'events',
     used: 8_420,
   },
-  user: { email: 'sam@relay.dev', name: 'Sam Rivera' },
+  user: { email: 'priya@relay.dev', name: 'Priya Nair' },
   userLinks: [
     {
       href: '/account',

@@ -38,14 +38,14 @@ const customers = [
   { email: 'jonas@northwind.io', id: 'c1', name: 'Jonas Weber' },
   { email: 'priya@lumen.dev', id: 'c2', name: 'Priya Nair' },
   { email: 'mateo@fieldnote.co', id: 'c3', name: 'Mateo Silva' },
-  { email: 'sam@relay.dev', id: 'c4', name: 'Sam Rivera' },
+  { email: 'priya@relay.dev', id: 'c4', name: 'Priya Nair' },
   { email: 'lena@northwind.io', id: 'c5', name: 'Lena Fischer' },
 ]
 
 const orders = [
   { customer: 'Jonas Weber', id: '1042', total: '$652.22' },
   { customer: 'Priya Nair', id: '1041', total: '$89.00' },
-  { customer: 'Sam Rivera', id: '1038', total: '$1,210.00' },
+  { customer: 'Priya Nair', id: '1038', total: '$1,210.00' },
   { customer: 'Mateo Silva', id: '1031', total: '$94.50' },
 ]
 

@@ -52,7 +52,7 @@ const exampleProps: ActivityFeed01Props = {
     },
     {
       action: 'invited',
-      actor: { name: 'Tomás Rivera' },
+      actor: { name: 'Kenji Watanabe' },
       at: minutesAgo(38),
       id: 'a2',
       target: 'mei@example.com',

@@ -56,7 +56,7 @@ const exampleProps: ActivityFeed03Props = {
     },
     {
       action: 'assigned you',
-      actor: { name: 'Tomás Rivera' },
+      actor: { name: 'Kenji Watanabe' },
       at: minutesAgo(26),
       id: 'n2',
       target: 'Fix invoice rounding',
