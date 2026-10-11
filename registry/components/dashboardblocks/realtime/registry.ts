@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Active users now, page views per second over the last minute and the pages with the most people on them.',
+      size: 'compact',
+      usedWith: ['chart-panel-02', 'geo-03'],
+    },
   },
   {
     name: 'realtime-02',
@@ -25,6 +31,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.',
+      size: 'full',
+      usedWith: ['status-02', 'alerts-01', 'deployments-03'],
+    },
   },
   {
     name: 'realtime-03',
@@ -36,6 +48,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.',
+      size: 'half',
+      usedWith: ['realtime-04', 'activity-feed-01'],
+    },
   },
   {
     name: 'realtime-04',
@@ -47,5 +65,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Running totals since midnight against yesterday at the same time, with orders per hour.',
+      size: 'half',
+      usedWith: ['realtime-03', 'chart-panel-01'],
+    },
   },
 ]

@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A sprint board of issues in columns with labels, assignees, due dates and priorities, and warnings when a column passes its limit.',
+      size: 'full',
+      usedWith: ['comments-04', 'calendar-01'],
+    },
   },
   {
     name: 'kanban-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A sales board of deals in columns, each column showing its total value and each deal its next step.',
+      size: 'full',
+      usedWith: ['pipeline-01', 'funnel-01'],
+    },
   },
   {
     name: 'kanban-03',
@@ -35,5 +47,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.',
+      size: 'full',
+      usedWith: ['comments-04', 'status-01'],
+    },
   },
 ]

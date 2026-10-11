@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/comparison/comparison-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
+    "size": "half",
+    "usedWith": [
+      "comparison-01",
+      "funnel-01",
+      "kpi-03"
+    ],
+    "component": "Comparison2",
+    "props": "{ control: { conversions: number; label: string; visitors: number }; description: string; metric: string; title: string; variant: { conversions: number; label: string; visitors: number } }"
+  },
   "type": "registry:component"
 }

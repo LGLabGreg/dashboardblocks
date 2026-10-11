@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/scatter/scatter-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.",
+    "size": "full",
+    "usedWith": [
+      "alerts-01",
+      "data-table-04"
+    ],
+    "component": "Scatter4",
+    "props": "{ description: string; risks: { id: string; impact: number; likelihood: number; owner?: string; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

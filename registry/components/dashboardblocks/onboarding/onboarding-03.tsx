@@ -7,7 +7,15 @@ import {
   ChoiceCards,
 } from '@/registry/components/dashboardblocks/onboarding'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
+import {
+  type FormEvent,
+  type ReactNode,
+  startTransition,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -166,15 +174,18 @@ const Onboarding3 = (props: Onboarding3Props) => {
     setStatus({ id: sourceId, state: 'connecting' })
     try {
       await onConnect(sourceId)
-      if (current === attempt.current) setStatus({ id: sourceId, state: 'connected' })
+      if (current === attempt.current)
+        startTransition(() => setStatus({ id: sourceId, state: 'connected' }))
     } catch (caught) {
       if (current !== attempt.current) return
-      setStatus({
-        id: sourceId,
-        message:
-          caught instanceof Error ? caught.message : 'Something went wrong. Try again.',
-        state: 'failed',
-      })
+      startTransition(() =>
+        setStatus({
+          id: sourceId,
+          message:
+            caught instanceof Error ? caught.message : 'Something went wrong. Try again.',
+          state: 'failed',
+        }),
+      )
     }
   }
 

@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/page-header/page-header-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A page title and description with a secondary action and a main action.",
+    "size": "full",
+    "usedWith": [
+      "data-table-02",
+      "forms-01"
+    ],
+    "component": "PageHeader1",
+    "props": "{ description: string; onCreate?: () => void; onExport?: () => void; title: string }"
+  },
   "type": "registry:component"
 }

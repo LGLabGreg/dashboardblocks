@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/calendar/calendar-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A content calendar that switches between month and week, with each calendar toggled from a sidebar.",
+    "size": "full",
+    "usedWith": [
+      "calendar-01",
+      "kanban-01"
+    ],
+    "component": "Calendar3",
+    "props": "{ calendars: { color: string; name: string }[]; events: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelectEvent?: (event: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; timeZone?: string; view?: \"month\" | \"week\"; weekStartsOn?: 0 | 1 }"
+  },
   "type": "registry:component"
 }

@@ -23,5 +23,12 @@
       "target": "@components/dashboardblocks/dashboards/dashboard-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A full SaaS dashboard with metric tabs, an activity heatmap, revenue by region, billing movement, retention and service status.",
+    "size": "page",
+    "usedWith": [],
+    "component": "Dashboard2",
+    "props": "{ title: string; today: Date }"
+  },
   "type": "registry:block"
 }

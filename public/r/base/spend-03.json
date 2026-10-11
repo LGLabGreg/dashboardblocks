@@ -18,5 +18,15 @@
       "target": "@components/dashboardblocks/spend/spend-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
+    "size": "full",
+    "usedWith": [
+      "spend-01",
+      "spend-02"
+    ],
+    "component": "Spend3",
+    "props": "{ currency?: string; description: string; periods: { budget: number; label: string; spent: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

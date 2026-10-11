@@ -18,5 +18,16 @@
       "target": "@components/dashboardblocks/alerts/alerts-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A metric over the last hour against its threshold line, with the current value, the peak and actions to take.",
+    "size": "half",
+    "usedWith": [
+      "alerts-01",
+      "chart-panel-01",
+      "status-02"
+    ],
+    "component": "Alerts2",
+    "props": "{ description: string; formatter?: (value: number) => string; metric: string; readings: { label: string; value: number }[]; runbookHref?: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; threshold: number; title: string }"
+  },
   "type": "registry:component"
 }

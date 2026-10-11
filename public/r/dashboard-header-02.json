@@ -12,5 +12,15 @@
       "target": "@components/dashboardblocks/dashboard-header/dashboard-header-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A short dashboard header with a title, a date range menu and an export button.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-01",
+      "chart-panel-01"
+    ],
+    "component": "DashboardHeader2",
+    "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+  },
   "type": "registry:component"
 }

@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.',
+      size: 'half',
+      usedWith: ['schedule-02', 'calendar-01', 'team-04'],
+    },
   },
   {
     name: 'schedule-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A month calendar with a dot on each day that has events, and a list of the events on the selected day.',
+      size: 'full',
+      usedWith: ['schedule-01', 'schedule-03'],
+    },
   },
   {
     name: 'schedule-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Deadlines and renewals in date order, each with a countdown and an urgency badge.',
+      size: 'half',
+      usedWith: ['schedule-01', 'billing-01', 'checklist-04'],
+    },
   },
   {
     name: 'schedule-04',
@@ -46,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.',
+      size: 'full',
+      usedWith: ['schedule-01', 'team-02'],
+    },
   },
 ]

@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/kpi/bar-chart-kpi-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
+    "size": "compact",
+    "usedWith": [
+      "goals-02",
+      "progress-kpi-01",
+      "chart-panel-01"
+    ],
+    "component": "BarChartKPI2",
+    "props": "{ data: { goal: number; label: string; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; title: string }"
+  },
   "type": "registry:component"
 }

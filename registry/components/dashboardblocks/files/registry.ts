@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
+      size: 'half',
+      usedWith: ['files-02', 'files-03'],
+    },
   },
   {
     name: 'files-02',
@@ -31,6 +37,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A table of files with type, owner, last change and size, with search, type filter, sorting and bulk download or delete.',
+      size: 'full',
+      usedWith: ['files-01', 'files-03'],
+    },
   },
   {
     name: 'files-03',
@@ -48,6 +60,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Storage used against the plan, split by kind of file, with the largest files listed to delete.',
+      size: 'half',
+      usedWith: ['files-02', 'usage-meter-01'],
+    },
   },
   {
     name: 'files-04',
@@ -59,5 +77,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Folders and files in a grid with a path back to the top, and a menu on each file.',
+      size: 'full',
+      usedWith: ['files-01', 'files-02'],
+    },
   },
 ]

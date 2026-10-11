@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/ai-usage/ai-usage-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Requests, time to first token, output speed and error rate for each model.",
+    "size": "full",
+    "usedWith": [
+      "ai-usage-01",
+      "ai-usage-02"
+    ],
+    "component": "AiUsage3",
+    "props": "{ description: string; errorThreshold?: number; models: { errorRate: number; label: string; outputSpeed: number; requests: number; ttftP50: number; ttftP95: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -6,7 +6,14 @@ import {
   ChoiceCards,
 } from '@/registry/components/dashboardblocks/onboarding'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, useEffect, useId, useRef, useState } from 'react'
+import {
+  type FormEvent,
+  startTransition,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -234,9 +241,9 @@ const Onboarding4 = (props: Onboarding4Props) => {
     setSaving(true)
     try {
       await onSave(answers)
-      setSaved(true)
+      startTransition(() => setSaved(true))
     } finally {
-      setSaving(false)
+      startTransition(() => setSaving(false))
     }
   }
 

@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/feedback/feedback-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.",
+    "size": "half",
+    "usedWith": [
+      "feedback-01",
+      "feedback-03"
+    ],
+    "component": "Feedback4",
+    "props": "{ description: string; periods: { label: string; responses: number; satisfied: number }[]; target?: number; title: string }"
+  },
   "type": "registry:component"
 }

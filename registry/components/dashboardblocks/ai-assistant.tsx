@@ -970,7 +970,15 @@ function useChatStream({
   const [status, setStatus] = useState<ChatStatus>(initialError ? 'error' : 'ready')
   const [error, setError] = useState(initialError)
 
-  useEffect(() => () => controller.current?.abort(), [])
+  useEffect(
+    () => () => {
+      if (!controller.current) return
+      controller.current.abort(STOPPED)
+      controller.current = null
+      setStatus('ready')
+    },
+    [],
+  )
 
   function setMessages(next: ChatMessageData[]) {
     history.current = next

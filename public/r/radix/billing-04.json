@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/billing/billing-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Monthly and annual recurring revenue, revenue per account and net revenue retention, each with its change from the previous month.",
+    "size": "full",
+    "usedWith": [
+      "billing-01",
+      "chart-panel-01",
+      "retention-03"
+    ],
+    "component": "Billing4",
+    "props": "{ currency?: string; current: { customers: number; mrr: number; netRevenueRetention: number }; description: string; previous: { customers: number; mrr: number; netRevenueRetention: number }; title: string }"
+  },
   "type": "registry:component"
 }

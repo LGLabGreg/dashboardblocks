@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/gauge/gauge-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "CPU, memory and disk as small gauges, each in the colour of its band with warning and critical thresholds marked.",
+    "size": "half",
+    "usedWith": [
+      "realtime-01",
+      "status-02",
+      "alerts-01"
+    ],
+    "component": "Gauge3",
+    "props": "{ description: string; resources: { detail: string; label: string; value: number }[]; thresholds: { critical: number; warning: number }; title: string }"
+  },
   "type": "registry:component"
 }

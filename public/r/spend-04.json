@@ -18,5 +18,15 @@
       "target": "@components/dashboardblocks/spend/spend-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
+    "size": "half",
+    "usedWith": [
+      "forecast-02",
+      "billing-04"
+    ],
+    "component": "Spend4",
+    "props": "{ balances: number[]; currency?: string; description: string; lastMonth: Date; trailing?: number; title: string }"
+  },
   "type": "registry:component"
 }

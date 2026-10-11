@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/heatmap/heatmap-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
+    "size": "full",
+    "usedWith": [
+      "retention-02",
+      "retention-04"
+    ],
+    "component": "Heatmap2",
+    "props": "{ cohorts: { label: string; retention: number[]; size: number }[]; description: string; title: string; weeks: number }"
+  },
   "type": "registry:component"
 }

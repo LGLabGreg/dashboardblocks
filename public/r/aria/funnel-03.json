@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/funnel/funnel-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A vertical stepper through the stages that calls out the step with the biggest drop-off.",
+    "size": "half",
+    "usedWith": [
+      "chart-panel-04",
+      "data-table-03"
+    ],
+    "component": "Funnel3",
+    "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

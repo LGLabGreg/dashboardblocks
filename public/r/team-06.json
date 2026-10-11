@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/team/team-06.tsx"
     }
   ],
+  "meta": {
+    "shows": "A share panel for inviting people with view or edit access, changing or removing it, and choosing who the link works for.",
+    "size": "half",
+    "usedWith": [
+      "team-01",
+      "settings-01"
+    ],
+    "component": "Team6",
+    "props": "{ currentPersonId: string; description?: string; linkAccess: \"restricted\" | \"workspace\" | \"anyone\"; onAccessChange?: (id: string, access: null | \"edit\" | \"view\") => void; onInvite?: (email: string, access: \"edit\" | \"view\") => void; onLinkAccessChange?: (access: \"restricted\" | \"workspace\" | \"anyone\") => void; people: { avatar?: string; email: string; id: string; name?: string; access: \"owner\" | \"edit\" | \"view\" }[]; title: string; url: string; workspace: string }"
+  },
   "type": "registry:component"
 }

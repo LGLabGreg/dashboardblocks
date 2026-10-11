@@ -22,5 +22,12 @@
       "target": "@components/dashboardblocks/dashboards/dashboard-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A full store dashboard with revenue, sales channels, top products, a checkout funnel and low stock, scoped by header filters.",
+    "size": "page",
+    "usedWith": [],
+    "component": "Dashboard1",
+    "props": "{ title: string; today: Date }"
+  },
   "type": "registry:block"
 }

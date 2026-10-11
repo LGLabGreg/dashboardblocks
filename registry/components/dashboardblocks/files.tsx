@@ -566,8 +566,17 @@ function useFileUploads({
   useEffect(() => {
     const running = controllers.current
     return () => {
+      if (running.size === 0) return
+      const aborted = new Set(running.keys())
       for (const controller of running.values()) controller.abort()
       running.clear()
+      setUploads((current) =>
+        current.map((item) =>
+          aborted.has(item.id) && item.status === 'uploading'
+            ? { ...item, progress: 0, status: 'queued' }
+            : item,
+        ),
+      )
     }
   }, [])
 

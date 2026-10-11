@@ -14,5 +14,14 @@
       "target": "@components/dashboardblocks/ai-assistant/ai-assistant-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.",
+    "size": "page",
+    "usedWith": [
+      "ai-assistant-02"
+    ],
+    "component": "AiAssistant1",
+    "props": "{ accounts: { mrr: string; name: string; plan: string }[]; context: string; defaultOpen?: boolean; description: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; metrics: { change: string; label: string; value: string }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal, context: string) => AsyncIterable<string, any, any>; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

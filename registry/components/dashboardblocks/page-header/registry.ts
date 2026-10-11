@@ -13,6 +13,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'A page title and description with a secondary action and a main action.',
+      size: 'full',
+      usedWith: ['data-table-02', 'forms-01'],
+    },
   },
   {
     name: 'page-header-02',
@@ -24,6 +29,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "A page title with a status badge and links to the page's sections, each with a count.",
+      size: 'full',
+      usedWith: ['data-table-02', 'record-detail-01'],
+    },
   },
   {
     name: 'page-header-03',
@@ -35,6 +46,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.',
+      size: 'full',
+      usedWith: ['record-detail-01', 'record-detail-02', 'record-detail-03'],
+    },
   },
   {
     name: 'page-header-04',
@@ -46,5 +63,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A page title with a count beside it, and search and the main action on the same row.',
+      size: 'full',
+      usedWith: ['data-table-02', 'forms-02'],
+    },
   },
 ]

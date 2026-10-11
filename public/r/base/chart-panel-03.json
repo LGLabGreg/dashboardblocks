@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/chart-panel/chart-panel-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Monthly totals as stacked bars split by category, with a legend.",
+    "size": "full",
+    "usedWith": [
+      "breakdown-02",
+      "data-table-02",
+      "stat-group-01"
+    ],
+    "component": "ChartPanel3",
+    "props": "{ data: Record<string, string | number> & { label: string; }[]; description: string; series: { color: string; key: string; label: string }[]; title: string; trend: number }"
+  },
   "type": "registry:component"
 }

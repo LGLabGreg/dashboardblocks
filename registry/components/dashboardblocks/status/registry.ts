@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Each service with its current status, and an overall badge showing the worst one.',
+      size: 'half',
+      usedWith: ['status-03', 'alerts-01', 'data-table-04'],
+    },
   },
   {
     name: 'status-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Ninety days of daily status for each service as a row of bars, with a tooltip for any day.',
+      size: 'full',
+      usedWith: ['status-01', 'status-03', 'alerts-01'],
+    },
   },
   {
     name: 'status-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'An active incident with its severity, affected components and a timeline of updates.',
+      size: 'half',
+      usedWith: ['status-01', 'status-02', 'alerts-01'],
+    },
   },
   {
     name: 'status-04',
@@ -46,6 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'A grid of regions, each with its status, latency and error rate.',
+      size: 'half',
+      usedWith: ['status-01', 'status-02', 'alerts-01'],
+    },
   },
   {
     name: 'status-05',
@@ -57,5 +80,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
+      size: 'full',
+      usedWith: ['status-02', 'status-03', 'alerts-01'],
+    },
   },
 ]

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/geo/geo-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Revenue by US state as a tile map on a single-hue scale, with the total and the top five states.",
+    "size": "full",
+    "usedWith": [
+      "geo-02",
+      "chart-panel-01"
+    ],
+    "component": "Geo1",
+    "props": "{ description: string; formatter?: (value: number) => string; title: string; valueLabel: string; values: Record<string, number> }"
+  },
   "type": "registry:component"
 }

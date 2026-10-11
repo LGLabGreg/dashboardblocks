@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/team/team-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "How many people are online, shown as avatars, with the team split by presence.",
+    "size": "half",
+    "usedWith": [
+      "team-01",
+      "team-04"
+    ],
+    "component": "Team3",
+    "props": "{ description: string; people: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

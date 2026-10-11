@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/kanban/kanban-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A sales board of deals in columns, each column showing its total value and each deal its next step.",
+    "size": "full",
+    "usedWith": [
+      "pipeline-01",
+      "funnel-01"
+    ],
+    "component": "Kanban2",
+    "props": "{ closedColumns: { lost: string; won: string }; columns: { color?: string; id: string; title: string; wipLimit?: number }[]; deals: { description: string; nextStep: string; nextStepAt: Date; owner: string; value: number; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; title: string }"
+  },
   "type": "registry:component"
 }

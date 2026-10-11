@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/activity-feed/activity-feed-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.",
+    "size": "half",
+    "usedWith": [
+      "activity-feed-01",
+      "alerts-01"
+    ],
+    "component": "ActivityFeed03",
+    "props": "{ notifications: { action: string; actor: { avatar?: string; name: string }; at: Date; id: string; mention?: boolean; preview?: string; read?: boolean; target: string }[]; now: Date; onRead?: (ids: string[]) => void; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
+    "size": "compact",
+    "usedWith": [
+      "billing-02",
+      "usage-meter-01",
+      "ai-usage-02"
+    ],
+    "component": "UsageMeter4",
+    "props": "{ balance: number; dailyUsage: number[]; now: Date; onTopUp?: () => void; purchased: number; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

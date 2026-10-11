@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The latest builds, each with its commit, environment, author, duration and status.',
+      size: 'full',
+      usedWith: ['deployments-02', 'deployments-04', 'activity-feed-05'],
+    },
   },
   {
     name: 'deployments-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'What each environment is running, and how many commits are waiting to be promoted to the next one.',
+      size: 'half',
+      usedWith: ['deployments-01', 'deployments-04', 'status-01'],
+    },
   },
   {
     name: 'deployments-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The four DORA delivery metrics, each with its performance band and the change on the previous period.',
+      size: 'full',
+      usedWith: ['deployments-01', 'deployments-04', 'chart-panel-01'],
+    },
   },
   {
     name: 'deployments-04',
@@ -46,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The latest runs of each pipeline as a strip of results, with the pass rate and median duration.',
+      size: 'half',
+      usedWith: ['deployments-01', 'deployments-03'],
+    },
   },
 ]

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/pipeline/pipeline-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Closed and open deals weighted by the chance each stage closes, per owner, against their quota.",
+    "size": "full",
+    "usedWith": [
+      "pipeline-02",
+      "forecast-03",
+      "leaderboard-01"
+    ],
+    "component": "Pipeline4",
+    "props": "{ description: string; owners: { closed: number; deals: { stage: string; value: number }[]; name: string; quota: number }[]; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

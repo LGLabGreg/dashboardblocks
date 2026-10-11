@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/ai-assistant/ai-assistant-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A failed assistant reply kept in the conversation with a button to try again.",
+    "size": "half",
+    "usedWith": [
+      "ai-assistant-02",
+      "states-01"
+    ],
+    "component": "AiAssistant4",
+    "props": "{ description: string; error?: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; title: string }"
+  },
   "type": "registry:component"
 }

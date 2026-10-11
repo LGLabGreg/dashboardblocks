@@ -18,5 +18,16 @@
       "target": "@components/dashboardblocks/stat-group/stat-group-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A row of metrics where picking one charts it against the previous period.",
+    "size": "full",
+    "usedWith": [
+      "heatmap-01",
+      "geo-04",
+      "billing-01"
+    ],
+    "component": "StatGroup3",
+    "props": "{ currentLabel?: string; metrics: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; previousLabel?: string; title: string }"
+  },
   "type": "registry:component"
 }

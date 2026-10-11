@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/spend/spend-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
+    "size": "half",
+    "usedWith": [
+      "spend-03",
+      "forecast-03"
+    ],
+    "component": "Spend1",
+    "props": "{ budget: number; currency?: string; description: string; now: Date; periodEnd: Date; periodStart: Date; spent: number; title: string }"
+  },
   "type": "registry:component"
 }

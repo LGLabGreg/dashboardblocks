@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/pipeline/pipeline-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+    "size": "full",
+    "usedWith": [
+      "pipeline-02",
+      "pipeline-03",
+      "funnel-01"
+    ],
+    "component": "Pipeline1",
+    "props": "{ items: { enteredStageAt: Date; id: string; owner?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

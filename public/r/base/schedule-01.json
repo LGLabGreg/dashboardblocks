@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/schedule/schedule-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.",
+    "size": "half",
+    "usedWith": [
+      "schedule-02",
+      "calendar-01",
+      "team-04"
+    ],
+    "component": "Schedule1",
+    "props": "{ days?: number; events: { allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

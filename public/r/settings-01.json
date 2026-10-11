@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/settings/settings-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
+    "size": "full",
+    "usedWith": [
+      "team-05",
+      "billing-01",
+      "team-01"
+    ],
+    "component": "Settings1",
+    "props": "{ currentMemberId: string; description: string; invites: { email: string; id: string; role: \"owner\" | \"admin\" | \"member\" | \"viewer\"; sentAt: Date }[]; members: { avatar?: string; email: string; id: string; name: string; role: \"owner\" | \"admin\" | \"member\" | \"viewer\" }[]; now: Date; onInvite?: (email: string, role: \"owner\" | \"admin\" | \"member\" | \"viewer\") => void; onRemoveMember?: (id: string) => void; onResendInvite?: (id: string) => void; onRevokeInvite?: (id: string) => void; onRoleChange?: (id: string, role: \"owner\" | \"admin\" | \"member\" | \"viewer\") => void; seats?: number; title: string }"
+  },
   "type": "registry:component"
 }

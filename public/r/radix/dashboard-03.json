@@ -21,5 +21,12 @@
       "target": "@components/dashboardblocks/dashboards/dashboard-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A full web analytics dashboard with traffic over time, visitors right now, a traffic flow, top pages, countries and browsers.",
+    "size": "page",
+    "usedWith": [],
+    "component": "Dashboard3",
+    "props": "{ title: string; today: Date }"
+  },
   "type": "registry:block"
 }

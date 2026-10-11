@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/states/states-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-02",
+      "states-04"
+    ],
+    "component": "States1",
+    "props": "{ description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]>; placeholders?: number; title: string }"
+  },
   "type": "registry:component"
 }

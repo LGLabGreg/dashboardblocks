@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/checklist/checklist-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
+    "size": "half",
+    "usedWith": [
+      "checklist-03",
+      "onboarding-01"
+    ],
+    "component": "Checklist1",
+    "props": "{ onAction?: (id: string) => void; onSkip?: (id: string) => void; steps: { action?: string; description: string; duration?: string; id: string; optional?: boolean; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

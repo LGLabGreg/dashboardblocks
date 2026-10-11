@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/retention/retention-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Users gained above the axis and lost below it, with the net change and the quick ratio.",
+    "size": "full",
+    "usedWith": [
+      "retention-01",
+      "stat-group-02"
+    ],
+    "component": "Retention4",
+    "props": "{ description: string; periods: { label: string; churned: number; new: number; resurrected: number }[]; periodName?: string; title: string; unit?: string }"
+  },
   "type": "registry:component"
 }

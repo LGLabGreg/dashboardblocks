@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/billing/billing-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "Plans side by side, monthly or yearly, with seats, what is due today and what a downgrade takes away.",
+    "size": "full",
+    "usedWith": [
+      "billing-02",
+      "billing-03",
+      "usage-meter-01"
+    ],
+    "component": "Billing5",
+    "props": "{ currency?: string; current: { interval: \"month\" | \"year\"; planId: string; seats: number }; description: string; now: Date; onConfirm?: (change: { interval: \"month\" | \"year\"; planId: string; seats: number }) => void; onContactSales?: (planId: string) => void; periodStart: Date; plans: { description: string; features: string[]; highlight?: string; id: string; name: string; price?: { month: number; year: number } }[]; renewsAt: Date; seatsInUse: number; title: string }"
+  },
   "type": "registry:component"
 }

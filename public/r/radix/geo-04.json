@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/geo/geo-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Revenue split across regions, each with its share and its change on the previous quarter.",
+    "size": "half",
+    "usedWith": [
+      "heatmap-01",
+      "billing-01"
+    ],
+    "component": "Geo4",
+    "props": "{ description: string; formatter?: (value: number) => string; previousLabel: string; regions: { color: string; current: number; label: string; previous: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

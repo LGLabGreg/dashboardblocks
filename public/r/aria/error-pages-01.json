@@ -14,5 +14,14 @@
       "target": "@components/dashboardblocks/error-pages/error-pages-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A not found page that shows the missing path, a search and the places people usually look.",
+    "size": "page",
+    "usedWith": [
+      "error-pages-02"
+    ],
+    "component": "ErrorPages1",
+    "props": "{ brand?: ReactNode; homeHref: string; links: { description: string; href: string; icon: ReactNode; title: string }[]; onSearch?: (query: string) => void; path?: string }"
+  },
   "type": "registry:component"
 }

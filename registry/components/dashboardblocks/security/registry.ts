@@ -14,6 +14,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.',
+      size: 'full',
+      usedWith: ['security-02', 'security-04', 'alerts-01'],
+    },
   },
   {
     name: 'security-02',
@@ -25,6 +31,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Changes to access, keys and settings, newest first, with a switch to show warnings only.',
+      size: 'full',
+      usedWith: ['security-01', 'security-03', 'activity-feed-01'],
+    },
   },
   {
     name: 'security-03',
@@ -36,6 +48,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The devices signed in to an account, with where and when each was last active, and buttons to sign them out.',
+      size: 'half',
+      usedWith: ['security-05', 'security-02'],
+    },
   },
   {
     name: 'security-04',
@@ -47,6 +65,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A security score built from workspace checks, with failing checks first and what to do about each.',
+      size: 'half',
+      usedWith: ['security-05', 'security-06', 'security-01'],
+    },
   },
   {
     name: 'security-05',
@@ -58,6 +82,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Setting up two-factor sign-in with an authenticator app, security keys and passkeys, and recovery codes shown once.',
+      size: 'half',
+      usedWith: ['security-03', 'security-04'],
+    },
   },
   {
     name: 'security-06',
@@ -77,5 +107,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.',
+      size: 'half',
+      usedWith: ['security-04', 'team-05', 'settings-01'],
+    },
   },
 ]

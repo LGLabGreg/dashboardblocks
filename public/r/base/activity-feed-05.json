@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/activity-feed/activity-feed-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.",
+    "size": "half",
+    "usedWith": [
+      "activity-feed-01",
+      "deployments-01"
+    ],
+    "component": "ActivityFeed05",
+    "props": "{ description: string; events: { action?: string; author: { avatar?: string; name: string }; at: Date; channel: string; description: string; id: string; message?: { replies?: number; reactions?: number; tags?: string[]; text: string }; platform: \"slack\" | \"github\" }[]; now: Date; onAction?: (event: { action?: string; author: { avatar?: string; name: string }; at: Date; channel: string; description: string; id: string; message?: { replies?: number; reactions?: number; tags?: string[]; text: string }; platform: \"slack\" | \"github\" }) => void; onViewAll?: () => void; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

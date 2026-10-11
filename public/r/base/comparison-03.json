@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/comparison/comparison-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
+    "size": "half",
+    "usedWith": [
+      "comparison-01",
+      "breakdown-01",
+      "data-table-01"
+    ],
+    "component": "Comparison3",
+    "props": "{ description: string; formatter?: (value: number) => string; segments: { current: number; label: string; previous: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

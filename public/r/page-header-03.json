@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/page-header/page-header-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
+    "size": "full",
+    "usedWith": [
+      "record-detail-01",
+      "record-detail-02",
+      "record-detail-03"
+    ],
+    "component": "PageHeader3",
+    "props": "{ back: { href: string; label: string }; customer: { email: string; initials: string; location: string; name: string; orders: number; since: string; status: string }; onArchive?: () => void; onDelete?: () => void; onDuplicate?: () => void; onEdit?: () => void; onMessage?: () => void }"
+  },
   "type": "registry:component"
 }

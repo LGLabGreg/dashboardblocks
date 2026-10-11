@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/data-table/data-table-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A table of recent orders split into pages of five, with controls to move between them.",
+    "size": "full",
+    "usedWith": [
+      "data-table-06",
+      "billing-03"
+    ],
+    "component": "DataTable5",
+    "props": "{ description: string; pageSize?: number; rows: { amount: number; customer: string; date: string; email: string; id: string; state: \"failed\" | \"paid\" | \"pending\" | \"refunded\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

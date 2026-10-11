@@ -19,5 +19,15 @@
       "target": "@components/dashboardblocks/forms/forms-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
+    "size": "half",
+    "usedWith": [
+      "page-header-01",
+      "forms-04"
+    ],
+    "component": "Forms1",
+    "props": "{ defaultValues: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; bio?: string; email?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; timezones: { label: string; value: string }[] }"
+  },
   "type": "registry:component"
 }

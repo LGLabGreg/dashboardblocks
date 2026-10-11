@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/scatter/scatter-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.",
+    "size": "half",
+    "usedWith": [
+      "data-table-03",
+      "distribution-01"
+    ],
+    "component": "Scatter1",
+    "props": "{ description: string; groups: string[]; points: { group: string; label: string; x: number; y: number }[]; title: string; x: { format: (value: number) => string; label: string }; y: { format: (value: number) => string; formatChange?: (value: number) => string; label: string } }"
+  },
   "type": "registry:component"
 }

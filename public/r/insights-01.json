@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/insights/insights-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.",
+    "size": "half",
+    "usedWith": [
+      "insights-02",
+      "insights-03",
+      "stat-group-02"
+    ],
+    "component": "Insights1",
+    "props": "{ description: string; insights: { actionLabel?: string; drivers?: { label: string; value: string; tone?: \"neutral\" | \"positive\" | \"negative\" }[]; href?: string; id: string; kind: \"neutral\" | \"positive\" | \"negative\" | \"anomaly\"; segments: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[]; topic: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

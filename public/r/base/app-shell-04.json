@@ -13,5 +13,14 @@
       "target": "@components/dashboardblocks/app-shell/app-shell-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "An app shell with no sidebar: page links sit under the top bar and scroll sideways on small screens.",
+    "size": "page",
+    "usedWith": [
+      "app-shell-01"
+    ],
+    "component": "AppShell4",
+    "props": "{ children?: ReactNode; links: { badge?: ReactNode; href: string; title: string }[]; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; title: string; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
+  },
   "type": "registry:component"
 }

@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/stat-group/stat-group-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
+    "size": "full",
+    "usedWith": [
+      "chart-panel-03",
+      "kpi-01",
+      "breakdown-01"
+    ],
+    "component": "StatGroup5",
+    "props": "{ description: string; metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

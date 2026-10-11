@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/alerts/alerts-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A slim strip with open alerts by severity and the latest one, for the top of a dashboard.",
+    "size": "full",
+    "usedWith": [
+      "alerts-01",
+      "stat-group-02",
+      "status-01"
+    ],
+    "component": "Alerts4",
+    "props": "{ counts: { info?: number; warning?: number; critical?: number }; latest?: { firedAt: Date; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; source: string; title: string }; now: Date; onViewAll?: () => void }"
+  },
   "type": "registry:component"
 }

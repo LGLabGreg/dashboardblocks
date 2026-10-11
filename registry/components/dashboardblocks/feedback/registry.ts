@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The average rating as stars, the number of ratings and the share of each star, with the change on the last period.',
+      size: 'half',
+      usedWith: ['feedback-03', 'feedback-04'],
+    },
   },
   {
     name: 'feedback-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.',
+      size: 'half',
+      usedWith: ['feedback-03', 'feedback-01'],
+    },
   },
   {
     name: 'feedback-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The latest reviews with their rating and source, flagging low ratings still waiting for a reply.',
+      size: 'half',
+      usedWith: ['feedback-01', 'feedback-02'],
+    },
   },
   {
     name: 'feedback-04',
@@ -47,5 +65,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.',
+      size: 'half',
+      usedWith: ['feedback-01', 'feedback-03'],
+    },
   },
 ]

@@ -12,5 +12,15 @@
       "target": "@components/dashboardblocks/command-menu/command-menu-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A command palette that shows recent records, then searches customers and orders as you type.",
+    "size": "half",
+    "usedWith": [
+      "command-menu-01",
+      "data-table-02"
+    ],
+    "component": "CommandMenu2",
+    "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
+  },
   "type": "registry:component"
 }

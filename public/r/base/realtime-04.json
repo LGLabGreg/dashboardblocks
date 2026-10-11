@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/realtime/realtime-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Running totals since midnight against yesterday at the same time, with orders per hour.",
+    "size": "half",
+    "usedWith": [
+      "realtime-03",
+      "chart-panel-01"
+    ],
+    "component": "Realtime4",
+    "props": "{ description: string; hourly: number[]; hourlyLabel?: string; metrics: { format?: (value: number) => string; id: string; label: string; today: number; yesterday: number }[]; simulate?: boolean; title: string }"
+  },
   "type": "registry:component"
 }

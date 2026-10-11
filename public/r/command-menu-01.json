@@ -12,5 +12,15 @@
       "target": "@components/dashboardblocks/command-menu/command-menu-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A command palette to jump to a page or run an action, with shortcuts shown beside each action.",
+    "size": "half",
+    "usedWith": [
+      "app-shell-01",
+      "command-menu-02"
+    ],
+    "component": "CommandMenu1",
+    "props": "{ shortcutKey?: string; onAction?: (id: string) => void; onNavigate?: (href: string) => void }"
+  },
   "type": "registry:component"
 }

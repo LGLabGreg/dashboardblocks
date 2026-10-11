@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/kpi/area-chart-kpi-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
+    "size": "compact",
+    "usedWith": [
+      "stat-group-02",
+      "kpi-01",
+      "chart-panel-01"
+    ],
+    "component": "AreaChartKPI2",
+    "props": "{ comparison: string; data: { label: string; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; previous: number; title: string }"
+  },
   "type": "registry:component"
 }

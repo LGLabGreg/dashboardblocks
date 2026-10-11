@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "An API quota with its status, when it resets and the usage it is on pace for, with the date it would hit the limit.",
+    "size": "compact",
+    "usedWith": [
+      "usage-meter-06",
+      "billing-01",
+      "ai-usage-01"
+    ],
+    "component": "UsageMeter1",
+    "props": "{ limit: number; now: Date; periodEnd: Date; periodStart: Date; timeZone?: string; title: string; unit: string; used: number }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/retention/retention-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
+    "size": "full",
+    "usedWith": [
+      "retention-02",
+      "heatmap-02"
+    ],
+    "component": "Retention1",
+    "props": "{ cohorts: { label: string; size: number; retained: number[] }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string }"
+  },
   "type": "registry:component"
 }

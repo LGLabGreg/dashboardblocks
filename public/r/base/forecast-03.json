@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/forecast/forecast-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.",
+    "size": "half",
+    "usedWith": [
+      "goals-01",
+      "goals-03",
+      "progress-kpi-01"
+    ],
+    "component": "Forecast3",
+    "props": "{ current: number; description: string; elapsed: number; formatter?: (value: number) => string; target: number; title: string; total: number }"
+  },
   "type": "registry:component"
 }

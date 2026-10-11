@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/data-table/data-table-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Revenue by product, each with a bar scaled to the top product and its share of the total.",
+    "size": "full",
+    "usedWith": [
+      "chart-panel-01",
+      "breakdown-01",
+      "leaderboard-01"
+    ],
+    "component": "DataTable2",
+    "props": "{ description: string; rows: { category: string; name: string; revenue: number; units: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

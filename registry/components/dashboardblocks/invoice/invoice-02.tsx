@@ -24,7 +24,7 @@ import {
   getTotalRows,
 } from '@/registry/components/dashboardblocks/invoice'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -172,9 +172,9 @@ const Invoice2 = (props: Invoice2Props) => {
     setEmailState('sending')
     try {
       await onEmail()
-      setEmailState('sent')
+      startTransition(() => setEmailState('sent'))
     } catch {
-      setEmailState('idle')
+      startTransition(() => setEmailState('idle'))
     }
   }
 

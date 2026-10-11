@@ -23,7 +23,7 @@ import {
   getFileKind,
 } from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { createContext, useContext, useState } from 'react'
+import { createContext, startTransition, useContext, useState } from 'react'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -256,13 +256,15 @@ const Files2 = (props: Files2Props) => {
       `Deleting ${targets.length === 1 ? targets[0].name : plural(targets.length)}…`,
     )
     await onDelete(targets)
-    setRows((current) => current.filter((row) => !ids.has(row.id)))
-    table.setRowSelection((current) =>
-      Object.fromEntries(Object.entries(current).filter(([id]) => !ids.has(id))),
-    )
-    setMessage(
-      `Deleted ${targets.length === 1 ? targets[0].name : plural(targets.length)}`,
-    )
+    startTransition(() => {
+      setRows((current) => current.filter((row) => !ids.has(row.id)))
+      table.setRowSelection((current) =>
+        Object.fromEntries(Object.entries(current).filter(([id]) => !ids.has(id))),
+      )
+      setMessage(
+        `Deleted ${targets.length === 1 ? targets[0].name : plural(targets.length)}`,
+      )
+    })
   }
 
   function download(targets: DriveFile[]) {
@@ -275,9 +277,9 @@ const Files2 = (props: Files2Props) => {
   async function share(file: DriveFile) {
     try {
       await onCopyLink(file)
-      setMessage(`Copied a link to ${file.name}`)
+      startTransition(() => setMessage(`Copied a link to ${file.name}`))
     } catch {
-      setMessage(`Couldn't copy a link to ${file.name}`)
+      startTransition(() => setMessage(`Couldn't copy a link to ${file.name}`))
     }
   }
 

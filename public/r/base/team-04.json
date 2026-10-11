@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/team/team-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Who is on call now and until when, who is next, and the rest of the rota.",
+    "size": "half",
+    "usedWith": [
+      "schedule-01",
+      "alerts-01",
+      "team-03"
+    ],
+    "component": "Team4",
+    "props": "{ description: string; now: Date; onPage?: (person: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }) => void; shifts: { end: Date; person: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }; start: Date }[]; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

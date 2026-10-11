@@ -14,6 +14,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Weekly actuals continuing into a dashed forecast, with a shaded 80% range and a marker for today.',
+      size: 'full',
+      usedWith: ['forecast-04', 'chart-panel-01', 'stat-group-01'],
+    },
   },
   {
     name: 'forecast-02',
@@ -25,6 +31,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The date the trend reaches a target, with an 80% range of dates, against the deadline.',
+      size: 'half',
+      usedWith: ['forecast-01', 'goals-01', 'progress-kpi-01'],
+    },
   },
   {
     name: 'forecast-03',
@@ -36,6 +48,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.',
+      size: 'half',
+      usedWith: ['goals-01', 'goals-03', 'progress-kpi-01'],
+    },
   },
   {
     name: 'forecast-04',
@@ -53,5 +71,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.',
+      size: 'full',
+      usedWith: ['forecast-01', 'forecast-02', 'goals-03'],
+    },
   },
 ]

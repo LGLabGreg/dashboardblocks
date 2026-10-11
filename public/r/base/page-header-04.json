@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/page-header/page-header-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A page title with a count beside it, and search and the main action on the same row.",
+    "size": "full",
+    "usedWith": [
+      "data-table-02",
+      "forms-02"
+    ],
+    "component": "PageHeader4",
+    "props": "{ count: number; description: string; onCreate?: () => void; onSearch?: (query: string) => void; title: string }"
+  },
   "type": "registry:component"
 }

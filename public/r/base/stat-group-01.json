@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/stat-group/stat-group-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Three metrics side by side, each with its change and previous value.",
+    "size": "full",
+    "usedWith": [
+      "chart-panel-01",
+      "kpi-01",
+      "comparison-01"
+    ],
+    "component": "StatGroup1",
+    "props": "{ metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[] }"
+  },
   "type": "registry:component"
 }

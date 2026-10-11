@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/timeline/timeline-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
+    "size": "full",
+    "usedWith": [
+      "deployments-01",
+      "deployments-03"
+    ],
+    "component": "Timeline3",
+    "props": "{ description: string; end: Date; now: Date; releases: { date: Date; kind: \"major\" | \"minor\" | \"patch\"; version: string; summary?: string }[]; start: Date; title: string }"
+  },
   "type": "registry:component"
 }

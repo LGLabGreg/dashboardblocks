@@ -18,6 +18,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Each metric this period and last, with the difference and the change, coloured by whether a rise is good.',
+      size: 'full',
+      usedWith: ['stat-group-01', 'line-chart-kpi-01', 'comparison-03'],
+    },
   },
   {
     name: 'comparison-02',
@@ -29,6 +35,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The lift of a variant over the control, with a 95% confidence interval drawn against zero.',
+      size: 'half',
+      usedWith: ['comparison-01', 'funnel-01', 'kpi-03'],
+    },
   },
   {
     name: 'comparison-03',
@@ -40,6 +52,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.',
+      size: 'half',
+      usedWith: ['comparison-01', 'breakdown-01', 'data-table-01'],
+    },
   },
   {
     name: 'comparison-04',
@@ -51,5 +69,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.',
+      size: 'half',
+      usedWith: ['comparison-01', 'comparison-03', 'metric-list-03'],
+    },
   },
 ]

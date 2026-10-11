@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/spend/spend-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "One budget bar per service, each with its own status, and the total underneath.",
+    "size": "half",
+    "usedWith": [
+      "spend-01",
+      "data-table-04"
+    ],
+    "component": "Spend2",
+    "props": "{ currency?: string; description: string; elapsed: number; lines: { budget: number; label: string; spent: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

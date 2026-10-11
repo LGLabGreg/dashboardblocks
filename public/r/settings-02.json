@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/settings/settings-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.",
+    "size": "full",
+    "usedWith": [
+      "settings-05",
+      "security-02"
+    ],
+    "component": "Settings2",
+    "props": "{ createKey: (name: string, scope: \"read\" | \"write\") => { key: { createdAt: Date; createdBy: string; id: string; lastUsedAt?: Date; masked: string; name: string; scope: \"read\" | \"write\" }; secret: string }; description: string; keys: { createdAt: Date; createdBy: string; id: string; lastUsedAt?: Date; masked: string; name: string; scope: \"read\" | \"write\" }[]; now: Date; onRevoke?: (id: string) => void; staleAfterDays?: number; title: string }"
+  },
   "type": "registry:component"
 }

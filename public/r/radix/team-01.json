@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/team/team-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A list of members with their role, whether they are online and when they were last active.",
+    "size": "half",
+    "usedWith": [
+      "team-05",
+      "team-06",
+      "settings-01"
+    ],
+    "component": "Team1",
+    "props": "{ members: { lastActive?: Date; role: string; avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; now: Date; onInvite?: () => void; title: string }"
+  },
   "type": "registry:component"
 }

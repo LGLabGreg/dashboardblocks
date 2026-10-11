@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/feedback/feedback-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The latest reviews with their rating and source, flagging low ratings still waiting for a reply.",
+    "size": "half",
+    "usedWith": [
+      "feedback-01",
+      "feedback-02"
+    ],
+    "component": "Feedback3",
+    "props": "{ description: string; now: Date; reviews: { author: string; date: Date; id: string; rating: number; replied?: boolean; source: string; text: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

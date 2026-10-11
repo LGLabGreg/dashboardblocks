@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/schedule/schedule-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Deadlines and renewals in date order, each with a countdown and an urgency badge.",
+    "size": "half",
+    "usedWith": [
+      "schedule-01",
+      "billing-01",
+      "checklist-04"
+    ],
+    "component": "Schedule3",
+    "props": "{ deadlines: { due: Date; id: string; detail?: string; title: string }[]; now: Date; soonDays?: number; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/security/security-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A security score built from workspace checks, with failing checks first and what to do about each.",
+    "size": "half",
+    "usedWith": [
+      "security-05",
+      "security-06",
+      "security-01"
+    ],
+    "component": "Security4",
+    "props": "{ checks: { detail: string; id: string; label: string; result: \"pass\" | \"warn\" | \"fail\"; weight?: number }[]; description: string; title: string }"
+  },
   "type": "registry:component"
 }

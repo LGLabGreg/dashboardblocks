@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/realtime/realtime-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.",
+    "size": "half",
+    "usedWith": [
+      "realtime-04",
+      "activity-feed-01"
+    ],
+    "component": "Realtime3",
+    "props": "{ description: string; events: { at: Date; detail: string; id: string; kind: \"order\" | \"signup\" | \"refund\" | \"message\"; label: string }[]; limit?: number; now: Date; simulate?: boolean; title: string }"
+  },
   "type": "registry:component"
 }

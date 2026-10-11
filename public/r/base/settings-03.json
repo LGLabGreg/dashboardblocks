@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/settings/settings-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.",
+    "size": "full",
+    "usedWith": [
+      "notifications-01",
+      "settings-07"
+    ],
+    "component": "Settings3",
+    "props": "{ channels: { id: string; label: string }[]; description: string; groups: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void; preferences: {  }; title: string }"
+  },
   "type": "registry:component"
 }

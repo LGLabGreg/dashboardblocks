@@ -1,7 +1,7 @@
 'use client'
 
 import { InlineEditField, isEmail } from '@/registry/components/dashboardblocks/forms'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import {
   Card,
@@ -46,7 +46,7 @@ const Forms4 = (props: Forms4Props) => {
     return async (value: string) => {
       const error = await onSave(field, value)
       if (error) return error
-      setDetails((current) => ({ ...current, [field]: value }))
+      startTransition(() => setDetails((current) => ({ ...current, [field]: value })))
     }
   }
 

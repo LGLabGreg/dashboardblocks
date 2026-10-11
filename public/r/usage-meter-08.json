@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-08.tsx"
     }
   ],
+  "meta": {
+    "shows": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
+    "size": "compact",
+    "usedWith": [
+      "usage-meter-07",
+      "billing-01",
+      "usage-meter-06"
+    ],
+    "component": "UsageMeter8",
+    "props": "{ daysLeft?: number; icon: ReactNode; limit: number; onUpgrade?: () => void; title: string; unit: string; used: number }"
+  },
   "type": "registry:component"
 }

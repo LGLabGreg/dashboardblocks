@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/metric-list/metric-list-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A list of metrics where picking one charts it in the same card.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-03",
+      "metric-list-01",
+      "chart-panel-01"
+    ],
+    "component": "MetricList4",
+    "props": "{ comparison: string; defaultSelected?: string; description: string; labels: string[]; metrics: { history: number[]; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; onSelectedChange?: (key: string) => void; title: string }"
+  },
   "type": "registry:component"
 }

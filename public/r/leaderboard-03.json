@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/leaderboard/leaderboard-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The top three on a podium, with the rest of the field listed below.",
+    "size": "half",
+    "usedWith": [
+      "leaderboard-02",
+      "team-02",
+      "chart-panel-01"
+    ],
+    "component": "Leaderboard03",
+    "props": "{ contributors: { avatar: string; id: number; name: string; value: number }[]; description: string; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

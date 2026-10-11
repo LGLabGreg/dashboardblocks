@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/checklist/checklist-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
+    "size": "half",
+    "usedWith": [
+      "schedule-03",
+      "kanban-01",
+      "team-02"
+    ],
+    "component": "Checklist4",
+    "props": "{ groups: { name: string; tasks: { done?: boolean; due: Date; id: string; owner?: string; title: string }[] }[]; now: Date; onToggle?: (id: string, done: boolean) => void; title: string }"
+  },
   "type": "registry:component"
 }

@@ -12,5 +12,15 @@
       "target": "@components/dashboardblocks/inventory/inventory-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.",
+    "size": "half",
+    "usedWith": [
+      "inventory-01",
+      "inventory-03"
+    ],
+    "component": "Inventory2",
+    "props": "{ description: string; title: string; warehouses: { capacity: number; inbound?: number; location: string; name: string; stored: number }[]; warnAt?: number }"
+  },
   "type": "registry:component"
 }

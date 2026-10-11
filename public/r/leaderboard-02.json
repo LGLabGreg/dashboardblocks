@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/leaderboard/leaderboard-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "People ranked by revenue with badges for the top three and the change since the last period.",
+    "size": "half",
+    "usedWith": [
+      "team-01",
+      "leaderboard-04",
+      "chart-panel-01"
+    ],
+    "component": "Leaderboard02",
+    "props": "{ currency?: string; description: string; reps: { avatar: string; deals: number; id: number; name: string; revenue: number; trend: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

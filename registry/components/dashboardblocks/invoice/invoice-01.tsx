@@ -30,7 +30,7 @@ import {
   PropertyList,
 } from '@/registry/components/dashboardblocks/record-detail'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 
@@ -193,9 +193,9 @@ const Invoice1 = (props: Invoice1Props) => {
     setReminder('sending')
     try {
       await onSendReminder()
-      setReminder('sent')
+      startTransition(() => setReminder('sent'))
     } catch {
-      setReminder('idle')
+      startTransition(() => setReminder('idle'))
     }
   }
 

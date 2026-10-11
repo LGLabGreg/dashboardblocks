@@ -8,7 +8,7 @@ import {
   ExportMenu,
 } from '@/registry/components/dashboardblocks/dashboard-header'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 
@@ -53,9 +53,9 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
     setRefreshing(true)
     try {
       await onRefresh()
-      setUpdated('just now')
+      startTransition(() => setUpdated('just now'))
     } finally {
-      setRefreshing(false)
+      startTransition(() => setRefreshing(false))
     }
   }
 

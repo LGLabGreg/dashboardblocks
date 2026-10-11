@@ -19,5 +19,15 @@
       "target": "@components/dashboardblocks/forms/forms-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A form in steps that checks each step before moving on and reviews everything on the last one.",
+    "size": "half",
+    "usedWith": [
+      "onboarding-01",
+      "checklist-02"
+    ],
+    "component": "Forms3",
+    "props": "{ environments: { label: string; value: string }[]; onCreate?: (values: { description: string; environment: string; isPublic: boolean; name: string; region: string }) => Promise<void | { name?: string; region?: string; description?: string; environment?: string; isPublic?: string }>; regions: { label: string; value: string }[] }"
+  },
   "type": "registry:component"
 }

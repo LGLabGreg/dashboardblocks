@@ -23,6 +23,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.',
+      size: 'page',
+      usedWith: ['onboarding-02'],
+    },
   },
   {
     name: 'onboarding-02',
@@ -43,6 +49,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.',
+      size: 'page',
+      usedWith: ['onboarding-01'],
+    },
   },
   {
     name: 'onboarding-03',
@@ -64,6 +76,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A searchable, filterable list of data sources to pick from, then follow through connecting to connected, with an error state.',
+      size: 'full',
+      usedWith: ['onboarding-04', 'checklist-01'],
+    },
   },
   {
     name: 'onboarding-04',
@@ -81,5 +99,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.',
+      size: 'half',
+      usedWith: ['onboarding-03', 'checklist-01'],
+    },
   },
 ]

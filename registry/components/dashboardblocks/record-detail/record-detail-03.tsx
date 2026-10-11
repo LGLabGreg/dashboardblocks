@@ -19,7 +19,7 @@ import {
   RecordLayout,
 } from '@/registry/components/dashboardblocks/record-detail'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, startTransition, useId, useState } from 'react'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -147,19 +147,21 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
     setIsSaving(true)
     try {
       await onComment(text)
-      setEvents((current) => [
-        ...current,
-        {
-          at: now,
-          author: currentUser,
-          comment: text,
-          id: `${Date.now()}`,
-          text: 'commented',
-        },
-      ])
-      setDraft('')
+      startTransition(() => {
+        setEvents((current) => [
+          ...current,
+          {
+            at: now,
+            author: currentUser,
+            comment: text,
+            id: `${Date.now()}`,
+            text: 'commented',
+          },
+        ])
+        setDraft('')
+      })
     } finally {
-      setIsSaving(false)
+      startTransition(() => setIsSaving(false))
     }
   }
 

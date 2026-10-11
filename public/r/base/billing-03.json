@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/billing/billing-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
+    "size": "half",
+    "usedWith": [
+      "billing-02",
+      "billing-05"
+    ],
+    "component": "Billing3",
+    "props": "{ currency?: string; invoices: { amount: number; date: Date; description: string; id: string; number: string; status: \"failed\" | \"paid\" | \"due\" | \"overdue\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string }"
+  },
   "type": "registry:component"
 }

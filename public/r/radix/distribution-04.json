@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/distribution/distribution-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
+    "size": "half",
+    "usedWith": [
+      "distribution-01",
+      "stat-group-02"
+    ],
+    "component": "Distribution4",
+    "props": "{ current: number[]; currentLabel?: string; description: string; edges: number[]; formatter?: (value: number) => string; lowerIsBetter?: boolean; previous: number[]; previousLabel?: string; title: string }"
+  },
   "type": "registry:component"
 }

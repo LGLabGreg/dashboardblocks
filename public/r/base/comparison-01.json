@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/comparison/comparison-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-01",
+      "line-chart-kpi-01",
+      "comparison-03"
+    ],
+    "component": "Comparison1",
+    "props": "{ currentLabel: string; description: string; metrics: { current: number; differenceFormatter?: (value: number) => string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; label: string; previous: number }[]; previousLabel: string; title: string }"
+  },
   "type": "registry:component"
 }

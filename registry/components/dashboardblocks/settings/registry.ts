@@ -19,6 +19,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
+      size: 'full',
+      usedWith: ['team-05', 'billing-01', 'team-01'],
+    },
   },
   {
     name: 'settings-02',
@@ -30,6 +36,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.',
+      size: 'full',
+      usedWith: ['settings-05', 'security-02'],
+    },
   },
   {
     name: 'settings-03',
@@ -41,6 +53,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.',
+      size: 'full',
+      usedWith: ['notifications-01', 'settings-07'],
+    },
   },
   {
     name: 'settings-04',
@@ -58,6 +76,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.',
+      size: 'half',
+      usedWith: ['settings-05', 'settings-02'],
+    },
   },
   {
     name: 'settings-05',
@@ -69,6 +93,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.',
+      size: 'full',
+      usedWith: ['settings-02', 'settings-04', 'status-01'],
+    },
   },
   {
     name: 'settings-06',
@@ -80,6 +110,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.',
+      size: 'half',
+      usedWith: ['settings-01', 'security-06'],
+    },
   },
   {
     name: 'settings-07',
@@ -97,5 +133,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.',
+      size: 'half',
+      usedWith: ['security-05', 'settings-03'],
+    },
   },
 ]

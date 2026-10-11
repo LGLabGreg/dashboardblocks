@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/billing/billing-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
+    "size": "full",
+    "usedWith": [
+      "billing-04",
+      "chart-panel-01",
+      "retention-03"
+    ],
+    "component": "Billing1",
+    "props": "{ currency?: string; description: string; movement: { contraction: number; churn: number; expansion: number; newBusiness: number; starting: number }; title: string }"
+  },
   "type": "registry:component"
 }

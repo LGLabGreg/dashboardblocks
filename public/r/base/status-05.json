@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/status/status-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
+    "size": "full",
+    "usedWith": [
+      "status-02",
+      "status-03",
+      "alerts-01"
+    ],
+    "component": "Status5",
+    "props": "{ days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; description: string; downtime: string; incidents: { date: string; duration: string; severity: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -7,8 +7,11 @@ import {
   type FormEvent,
   type KeyboardEvent,
   type ReactNode,
+  startTransition,
   useCallback,
+  useEffect,
   useId,
+  useRef,
   useState,
 } from 'react'
 import { flushSync } from 'react-dom'
@@ -38,6 +41,16 @@ interface UseSimpleFormOptions<T extends FormValues> {
   validate?: (values: T) => FormErrors<T>
 }
 
+function focusFirstOf(ids: string[]) {
+  const elements = ids
+    .map((id) => document.getElementById(id))
+    .filter((element) => element !== null)
+  elements.sort((a, b) =>
+    a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+  )
+  elements[0]?.focus()
+}
+
 function hasErrors(errors: Record<string, string | undefined>) {
   return Object.values(errors).some(Boolean)
 }
@@ -54,6 +67,14 @@ function useSimpleForm<T extends FormValues>({
   const [submitted, setSubmitted] = useState(false)
   const [serverErrors, setServerErrors] = useState<FormErrors<T>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [refusedIds, setRefusedIds] = useState<string[] | null>(null)
+  const focusedRefusal = useRef<string[] | null>(null)
+
+  useEffect(() => {
+    if (!refusedIds || refusedIds === focusedRefusal.current) return
+    focusedRefusal.current = refusedIds
+    focusFirstOf(refusedIds)
+  }, [refusedIds])
 
   const names = Object.keys(defaultValues) as (keyof T & string)[]
   const clientErrors: FormErrors<T> = validate?.(values) ?? {}
@@ -68,13 +89,7 @@ function useSimpleForm<T extends FormValues>({
   const getId = (name: keyof T & string) => `${formId}-${name}`
 
   function focusFirst(invalid: (keyof T & string)[]) {
-    const elements = invalid
-      .map((name) => document.getElementById(getId(name)))
-      .filter((element) => element !== null)
-    elements.sort((a, b) =>
-      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
-    )
-    elements[0]?.focus()
+    focusFirstOf(invalid.map(getId))
   }
 
   function setValue<K extends keyof T & string>(name: K, value: T[K]) {
@@ -137,16 +152,20 @@ function useSimpleForm<T extends FormValues>({
     try {
       const result = await onSubmit(values)
       if (result && hasErrors(result)) {
-        flushSync(() => setServerErrors(result))
-        focusFirst(names.filter((name) => result[name]))
+        startTransition(() => {
+          setServerErrors(result)
+          setRefusedIds(names.filter((name) => result[name]).map(getId))
+        })
         return false
       }
-      setSavedValues(values)
-      setSubmitted(false)
-      setTouched({})
+      startTransition(() => {
+        setSavedValues(values)
+        setSubmitted(false)
+        setTouched({})
+      })
       return true
     } finally {
-      setIsSubmitting(false)
+      startTransition(() => setIsSubmitting(false))
     }
   }
 
@@ -391,10 +410,12 @@ function InlineEditField({
     setIsSaving(true)
     try {
       const failed = await onSave(draft)
-      if (failed) setError(failed)
-      else cancel()
+      startTransition(() => {
+        if (failed) setError(failed)
+        else cancel()
+      })
     } finally {
-      setIsSaving(false)
+      startTransition(() => setIsSaving(false))
     }
   }
 

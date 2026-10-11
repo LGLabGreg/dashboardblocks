@@ -18,5 +18,15 @@
       "target": "@components/dashboardblocks/states/states-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A card that says what went wrong when loading fails and offers to try again.",
+    "size": "half",
+    "usedWith": [
+      "states-01",
+      "alerts-01"
+    ],
+    "component": "States4",
+    "props": "{ description: string; load: () => Promise<{ label: string; value: number }[]>; title: string }"
+  },
   "type": "registry:component"
 }

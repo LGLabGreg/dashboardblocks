@@ -2,7 +2,15 @@
 
 import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
+import {
+  type FormEvent,
+  type ReactNode,
+  startTransition,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -99,25 +107,26 @@ const Auth3 = (props: Auth3Props) => {
       const result = onVerify
         ? await onVerify(value.trim(), { kind, trustDevice })
         : tryExampleCode(value.trim())
-      if (result.ok) {
-        setVerified(true)
-        onVerified?.()
-        return
-      }
-      if (result.attemptsLeft === 0) {
-        setLocked(true)
-        return setError('Too many tries. Wait 15 minutes, then try again.')
-      }
-      setCode('')
-      fail(
-        kind === 'app'
-          ? `That code didn’t work.${result.attemptsLeft ? ` ${result.attemptsLeft} tries left.` : ''} Codes change every 30 seconds, so use the newest one.`
-          : 'That recovery code didn’t work, or it has been used.',
-      )
+      startTransition(() => {
+        if (result.ok) {
+          setVerified(true)
+          onVerified?.()
+        } else if (result.attemptsLeft === 0) {
+          setLocked(true)
+          setError('Too many tries. Wait 15 minutes, then try again.')
+        } else {
+          setCode('')
+          fail(
+            kind === 'app'
+              ? `That code didn’t work.${result.attemptsLeft ? ` ${result.attemptsLeft} tries left.` : ''} Codes change every 30 seconds, so use the newest one.`
+              : 'That recovery code didn’t work, or it has been used.',
+          )
+        }
+      })
     } catch {
-      fail('We couldn’t check the code. Try again.')
+      startTransition(() => fail('We couldn’t check the code. Try again.'))
     } finally {
-      setChecking(false)
+      startTransition(() => setChecking(false))
     }
   }
 

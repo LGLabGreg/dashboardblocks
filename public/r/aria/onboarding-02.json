@@ -19,5 +19,14 @@
       "target": "@components/dashboardblocks/onboarding/onboarding-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.",
+    "size": "page",
+    "usedWith": [
+      "onboarding-01"
+    ],
+    "component": "Onboarding2",
+    "props": "{ firstName: string; help: { description: string; href: string; icon: ReactNode; id: string; title: string }[]; quickStarts: { badge?: string; description: string; duration?: string; href: string; icon: ReactNode; id: string; title: string }[]; tasks: { href?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; templatesHref: string; tourHref: string; workspace: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/team/team-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
+    "size": "full",
+    "usedWith": [
+      "team-01",
+      "settings-01",
+      "security-02"
+    ],
+    "component": "Team5",
+    "props": "{ description: string; grants: {  }; groups: { id: string; label: string; permissions: { description?: string; id: string; label: string; requires?: string }[] }[]; onSave?: (grants: {  }) => void; roles: { id: string; locked?: boolean; members: number; name: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

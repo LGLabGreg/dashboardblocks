@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/goals/goals-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Small daily goals as rings, with a check mark once a goal is met.",
+    "size": "half",
+    "usedWith": [
+      "progress-kpi-03",
+      "goals-02",
+      "checklist-01"
+    ],
+    "component": "Goals4",
+    "props": "{ description: string; goals: { current: number; label: string; target: number; unit: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

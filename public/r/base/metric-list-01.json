@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/metric-list/metric-list-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A list of metrics with their change and a 14-day sparkline each.",
+    "size": "half",
+    "usedWith": [
+      "stat-group-02",
+      "metric-list-02",
+      "chart-panel-01"
+    ],
+    "component": "MetricList1",
+    "props": "{ description: string; metrics: { changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; history?: number[]; key: string; label: string; previous?: number; value: number }[]; period: string; title: string }"
+  },
   "type": "registry:component"
 }

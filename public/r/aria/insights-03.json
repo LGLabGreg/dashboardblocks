@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/insights/insights-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "What contributed to a change, as bars either side of zero, with a sentence naming the biggest driver and the biggest drag.",
+    "size": "half",
+    "usedWith": [
+      "insights-02",
+      "chart-panel-01",
+      "breakdown-01"
+    ],
+    "component": "Insights3",
+    "props": "{ contributions: { label: string; value: number }[]; description: string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; metric: string; previous: number; title: string }"
+  },
   "type": "registry:component"
 }

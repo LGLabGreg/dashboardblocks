@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/heatmap/heatmap-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "When visitors arrive, as a grid of weekday by hour, darker where there are more.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-03",
+      "geo-04",
+      "retention-03"
+    ],
+    "component": "Heatmap1",
+    "props": "{ description: string; values: number[][]; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

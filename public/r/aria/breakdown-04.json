@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/breakdown/breakdown-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "How each category's share of a total moved between two periods.",
+    "size": "half",
+    "usedWith": [
+      "chart-panel-03",
+      "data-table-03"
+    ],
+    "component": "Breakdown4",
+    "props": "{ currentLabel: string; description: string; items: { current: number; label: string; previous: number }[]; previousLabel: string; title: string }"
+  },
   "type": "registry:component"
 }

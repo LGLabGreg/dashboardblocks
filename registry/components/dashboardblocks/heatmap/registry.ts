@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'When visitors arrive, as a grid of weekday by hour, darker where there are more.',
+      size: 'full',
+      usedWith: ['stat-group-03', 'geo-04', 'retention-03'],
+    },
   },
   {
     name: 'heatmap-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The share of each weekly signup cohort still active in each week after signup, as a shaded grid.',
+      size: 'full',
+      usedWith: ['retention-02', 'retention-04'],
+    },
   },
   {
     name: 'heatmap-03',
@@ -35,6 +47,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'A year of daily values as a calendar grid, darker on busier days.',
+      size: 'full',
+      usedWith: ['chart-panel-01', 'stat-group-01'],
+    },
   },
   {
     name: 'heatmap-04',
@@ -46,5 +63,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The p95 latency of each endpoint by hour over the last day, darker where it is slower.',
+      size: 'full',
+      usedWith: ['alerts-02', 'status-04'],
+    },
   },
 ]

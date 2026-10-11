@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/retention/retention-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
+    "size": "full",
+    "usedWith": [
+      "retention-01",
+      "retention-04"
+    ],
+    "component": "Retention2",
+    "props": "{ cohorts: { label: string; size: number; retained: number[] }[]; description: string; highlight?: number; periodName?: string; title: string }"
+  },
   "type": "registry:component"
 }

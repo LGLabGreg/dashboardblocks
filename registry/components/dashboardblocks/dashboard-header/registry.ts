@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.',
+      size: 'full',
+      usedWith: ['stat-group-02', 'chart-panel-01'],
+    },
   },
   {
     name: 'dashboard-header-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A short dashboard header with a title, a date range menu and an export button.',
+      size: 'full',
+      usedWith: ['stat-group-01', 'chart-panel-01'],
+    },
   },
   {
     name: 'dashboard-header-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.',
+      size: 'full',
+      usedWith: ['stat-group-02', 'chart-panel-02'],
+    },
   },
   {
     name: 'dashboard-header-04',
@@ -46,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.',
+      size: 'full',
+      usedWith: ['realtime-01', 'stat-group-02'],
+    },
   },
 ]

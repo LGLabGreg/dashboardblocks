@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/pipeline/pipeline-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
+    "size": "full",
+    "usedWith": [
+      "pipeline-01",
+      "funnel-01",
+      "stat-group-02"
+    ],
+    "component": "Pipeline2",
+    "props": "{ noun?: string; stages: { count: number; label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

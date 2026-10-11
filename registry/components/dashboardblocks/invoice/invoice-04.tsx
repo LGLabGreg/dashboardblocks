@@ -18,7 +18,7 @@ import {
   PrintButton,
 } from '@/registry/components/dashboardblocks/invoice'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -155,9 +155,9 @@ const Invoice4 = (props: Invoice4Props) => {
     setPacking('saving')
     try {
       await onMarkPacked()
-      setPacking('packed')
+      startTransition(() => setPacking('packed'))
     } catch {
-      setPacking('idle')
+      startTransition(() => setPacking('idle'))
     }
   }
 

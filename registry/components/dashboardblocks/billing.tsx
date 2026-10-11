@@ -80,11 +80,11 @@ interface MrrStep {
 
 function getMrrMovement(input: MrrMovementInput) {
   const { churn, contraction, expansion, newBusiness, starting } = input
-  const changes: [MrrStepName, string, number][] = [
-    ['new', 'New', newBusiness],
-    ['expansion', 'Expansion', expansion],
-    ['contraction', 'Contraction', -Math.abs(contraction)],
-    ['churn', 'Churn', -Math.abs(churn)],
+  const changes: [MrrStepName, string, number, MrrStep['kind']][] = [
+    ['new', 'New', newBusiness, 'increase'],
+    ['expansion', 'Expansion', expansion, 'increase'],
+    ['contraction', 'Contraction', -Math.abs(contraction), 'decrease'],
+    ['churn', 'Churn', -Math.abs(churn), 'decrease'],
   ]
   const steps: MrrStep[] = [
     {
@@ -97,11 +97,11 @@ function getMrrMovement(input: MrrMovementInput) {
     },
   ]
   let running = starting
-  for (const [key, label, value] of changes) {
+  for (const [key, label, value, kind] of changes) {
     steps.push({
       from: running,
       key,
-      kind: value < 0 ? 'decrease' : 'increase',
+      kind,
       label,
       to: running + value,
       value,

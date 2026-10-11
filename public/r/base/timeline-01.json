@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/timeline/timeline-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Projects grouped by team, each a bar from start to end filled to its progress, with a line for today.",
+    "size": "full",
+    "usedWith": [
+      "timeline-02",
+      "timeline-04",
+      "pipeline-01"
+    ],
+    "component": "Timeline1",
+    "props": "{ description: string; end: Date; items: { color?: string; end: Date; group?: string; id: string; label: string; progress?: number; start: Date; status?: \"done\" | \"in-progress\" | \"planned\" | \"at-risk\" }[]; now: Date; start: Date; title: string }"
+  },
   "type": "registry:component"
 }

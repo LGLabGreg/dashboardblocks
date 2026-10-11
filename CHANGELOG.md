@@ -1,5 +1,22 @@
 # dashboardblocks
 
+## 1.4.0
+
+### Minor Changes
+
+- 9a22fe6: Block catalog: every block's registry item now has a `meta` field saying what it shows, its size, the blocks it's often used with, the component to import and the props it takes. All of it is also in one file, `/r/catalog.json`, for coding agents that build dashboards from the blocks.
+
+### Patch Changes
+
+- ae8de94: App Shell 01, 02 and 03: a wide header or table no longer makes the whole page scroll sideways. In App Shell 02, "New report" shows as an icon when the content area is narrow, so the page fits at tablet widths with the sidebar open.
+- d76a918: Dashboard Header, Goals 01 and Forecast 02: date ranges render the same text on the server and in every browser, so server-rendered pages no longer fail hydration in browsers whose date formatting spaces the dash differently. Ranges now use plain spaces around the dash ("Sep 10 – Oct 9").
+  
+  Dashboard Header: a filter chip's field name is no longer muted, so it meets contrast on the chip's background.
+- 3741faa: Blocks that wait on a callback (sending a reminder, posting a comment, deleting a file, verifying a code, saving a field) now show the result in a transition. When you pass a Server Action, the result shows together with the page's refreshed data instead of just before it.
+- ccf10a6: Billing: in the MRR movement waterfall, a contraction or churn of $0 keeps its red swatch instead of turning green.
+- 7add9f5: AI Assistant and Files: leaving a page in the middle of a reply or an upload no longer leaves it stuck when you come back, in apps that keep visited pages (Next.js with `cacheComponents`). The assistant keeps the reply so far, as Stop does, and you can send again. An upload starts again.
+- 75b0b4d: Trend and KPI: an unchanged value's badge is readable in every style's light theme, a badge no longer wraps onto two lines in a narrow card, and a tiny fall shows as 0% rather than -0%.
+
 ## 1.3.12
 
 ### Patch Changes

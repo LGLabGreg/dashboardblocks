@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/timeline/timeline-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A launch plan as a list on a rail, with the next milestone highlighted and how soon or how late each one is.",
+    "size": "half",
+    "usedWith": [
+      "timeline-01",
+      "checklist-01"
+    ],
+    "component": "Timeline2",
+    "props": "{ description: string; milestones: { date: Date; description?: string; id: string; label: string; status: \"done\" | \"in-progress\" | \"planned\" | \"at-risk\" }[]; now: Date; title: string }"
+  },
   "type": "registry:component"
 }

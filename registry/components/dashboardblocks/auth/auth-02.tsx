@@ -2,7 +2,7 @@
 
 import { AuthLayout, WorkspaceAvatar } from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useId, useState } from 'react'
+import { type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -83,22 +83,24 @@ const Auth2 = (props: Auth2Props) => {
     setError(null)
     try {
       await onAcceptInvite?.(invite.id)
-      setInvites((current) => current.filter((item) => item.id !== invite.id))
-      setWorkspaces((current) => [
-        ...current,
-        {
-          href: '#',
-          id: invite.id,
-          logo: invite.logo,
-          members: 0,
-          name: invite.name,
-          role: 'Member',
-        },
-      ])
+      startTransition(() => {
+        setInvites((current) => current.filter((item) => item.id !== invite.id))
+        setWorkspaces((current) => [
+          ...current,
+          {
+            href: '#',
+            id: invite.id,
+            logo: invite.logo,
+            members: 0,
+            name: invite.name,
+            role: 'Member',
+          },
+        ])
+      })
     } catch {
-      setError(`Couldn’t join ${invite.name}. Try again.`)
+      startTransition(() => setError(`Couldn’t join ${invite.name}. Try again.`))
     } finally {
-      setJoining(null)
+      startTransition(() => setJoining(null))
     }
   }
 

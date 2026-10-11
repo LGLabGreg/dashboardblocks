@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/settings/settings-07.tsx"
     }
   ],
+  "meta": {
+    "shows": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
+    "size": "half",
+    "usedWith": [
+      "security-05",
+      "settings-03"
+    ],
+    "component": "Settings7",
+    "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void; profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; timeZones: { label: string; value: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

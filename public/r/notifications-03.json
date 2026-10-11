@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/notifications/notifications-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.",
+    "size": "full",
+    "usedWith": [
+      "notifications-01",
+      "notifications-02"
+    ],
+    "component": "Notifications3",
+    "props": "{ notifications: { mention?: boolean; at: Date; body?: string; href?: string; icon: ReactNode; id: string; read: boolean; title: ReactNode; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; now: Date; timeZone?: string }"
+  },
   "type": "registry:component"
 }

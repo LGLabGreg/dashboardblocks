@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/security/security-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Changes to access, keys and settings, newest first, with a switch to show warnings only.",
+    "size": "full",
+    "usedWith": [
+      "security-01",
+      "security-03",
+      "activity-feed-01"
+    ],
+    "component": "Security2",
+    "props": "{ description: string; events: { actor: string; action: string; at: Date; id: string; ip?: string; severity: \"info\" | \"warning\" | \"critical\"; target?: string }[]; now: Date; title: string }"
+  },
   "type": "registry:component"
 }

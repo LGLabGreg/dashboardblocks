@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/breakdown/breakdown-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A single 100% bar splitting a total into categories, with each value and share listed below.",
+    "size": "half",
+    "usedWith": [
+      "chart-panel-01",
+      "stat-group-02"
+    ],
+    "component": "Breakdown1",
+    "props": "{ description: string; formatter?: (value: number) => string; segments: { color: string; label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

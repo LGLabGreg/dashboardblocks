@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/alerts/alerts-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Open alerts, most recent first, each with a button to acknowledge it.",
+    "size": "half",
+    "usedWith": [
+      "alerts-04",
+      "status-01",
+      "activity-feed-01"
+    ],
+    "component": "Alerts1",
+    "props": "{ alerts: { acknowledged?: boolean; firedAt: Date; id: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; source: string; title: string }[]; now: Date; onAcknowledge?: (id: string) => void; title: string }"
+  },
   "type": "registry:component"
 }

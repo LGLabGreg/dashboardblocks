@@ -16,7 +16,7 @@ import {
   getUsageStatus,
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useId, useRef, useState } from 'react'
+import { startTransition, useId, useRef, useState } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -175,13 +175,17 @@ const Files3 = (props: Files3Props) => {
       file.kind,
       breakdown.map((item) => item.kind),
     )
-    setFiles((current) => current.filter((item) => item.id !== file.id))
-    setBreakdown((current) =>
-      current.map((item) =>
-        item.kind === kind ? { ...item, size: Math.max(0, item.size - file.size) } : item,
-      ),
-    )
-    setMessage(`Deleted ${file.name}, freeing ${formatFileSize(file.size)}`)
+    startTransition(() => {
+      setFiles((current) => current.filter((item) => item.id !== file.id))
+      setBreakdown((current) =>
+        current.map((item) =>
+          item.kind === kind
+            ? { ...item, size: Math.max(0, item.size - file.size) }
+            : item,
+        ),
+      )
+      setMessage(`Deleted ${file.name}, freeing ${formatFileSize(file.size)}`)
+    })
   }
 
   const actionsFor = (file: StorageFile): FileAction[] => [

@@ -18,6 +18,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.',
+      size: 'half',
+      usedWith: ['checklist-03', 'onboarding-01'],
+    },
   },
   {
     name: 'checklist-02',
@@ -29,6 +35,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.',
+      size: 'full',
+      usedWith: ['checklist-01', 'onboarding-02'],
+    },
   },
   {
     name: 'checklist-03',
@@ -45,6 +57,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A small card with how many setup steps are done and the next one, to bring people back to finish.',
+      size: 'compact',
+      usedWith: ['checklist-01', 'kpi-01'],
+    },
   },
   {
     name: 'checklist-04',
@@ -56,5 +74,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.',
+      size: 'half',
+      usedWith: ['schedule-03', 'kanban-01', 'team-02'],
+    },
   },
 ]

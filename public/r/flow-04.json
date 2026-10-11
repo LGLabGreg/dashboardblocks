@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/flow/flow-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.",
+    "size": "full",
+    "usedWith": [
+      "flow-02",
+      "funnel-03"
+    ],
+    "component": "Flow4",
+    "props": "{ description: string; goal: string; paths: { converted: number; count: number; steps: string[] }[]; title: string; total: number; unit?: string }"
+  },
   "type": "registry:component"
 }

@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/chart-panel/chart-panel-06.tsx"
     }
   ],
+  "meta": {
+    "shows": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
+    "size": "full",
+    "usedWith": [
+      "alerts-01",
+      "status-02",
+      "deployments-01"
+    ],
+    "component": "ChartPanel6",
+    "props": "{ data: Record<string, string | number> & { label: string; }[]; description: string; formatter?: (value: number) => string; headline: string; labelHeading?: string; percentiles: { key: string; label: string }[]; title: string; trend: number }"
+  },
   "type": "registry:component"
 }

@@ -7,7 +7,7 @@ import {
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -87,12 +87,14 @@ const Forms2 = (props: Forms2Props) => {
     onSubmit: async (values) => {
       const errors = await onCreate(values)
       if (errors) return errors
-      setCustomers((current) => [
-        { email: values.email, name: values.name, plan: values.plan },
-        ...current,
-      ])
-      setOpen(false)
-      form.reset(emptyValues)
+      startTransition(() => {
+        setCustomers((current) => [
+          { email: values.email, name: values.name, plan: values.plan },
+          ...current,
+        ])
+        setOpen(false)
+        form.reset(emptyValues)
+      })
     },
     validate,
   })

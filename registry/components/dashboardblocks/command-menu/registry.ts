@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A command palette to jump to a page or run an action, with shortcuts shown beside each action.',
+      size: 'half',
+      usedWith: ['app-shell-01', 'command-menu-02'],
+    },
   },
   {
     name: 'command-menu-02',
@@ -24,5 +30,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A command palette that shows recent records, then searches customers and orders as you type.',
+      size: 'half',
+      usedWith: ['command-menu-01', 'data-table-02'],
+    },
   },
 ]

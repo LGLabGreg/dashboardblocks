@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/gauge/gauge-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A net promoter score on its full −100 to 100 scale, with the split of promoters, passives and detractors.",
+    "size": "compact",
+    "usedWith": [
+      "feedback-01",
+      "gauge-04",
+      "chart-panel-01"
+    ],
+    "component": "Gauge1",
+    "props": "{ description: string; previous?: number; responses: { detractors: number; passives: number; promoters: number }; title: string }"
+  },
   "type": "registry:component"
 }

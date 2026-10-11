@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/leaderboard/leaderboard-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Products ranked by revenue with how far each moved in the ranking since the last period.",
+    "size": "half",
+    "usedWith": [
+      "leaderboard-01",
+      "breakdown-01",
+      "chart-panel-01"
+    ],
+    "component": "Leaderboard04",
+    "props": "{ currency?: string; description: string; products: { category: string; change: number | \"new\"; icon: ReactNode; id: number; name: string; revenue: number; unitsSold: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

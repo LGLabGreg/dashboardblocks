@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/scatter/scatter-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.",
+    "size": "half",
+    "usedWith": [
+      "leaderboard-01",
+      "data-table-02"
+    ],
+    "component": "Scatter2",
+    "props": "{ description: string; items: { label: string; x: number; y: number }[]; quadrants: [string, string, string, string]; title: string; split?: { x: number; y: number }; x: { domain: [number, number]; format: (value: number) => string; label: string; ticks?: number[] }; y: { domain: [number, number]; format: (value: number) => string; label: string; ticks?: number[] } }"
+  },
   "type": "registry:component"
 }

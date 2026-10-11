@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/kpi/progress-kpi-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The share of work done, with a bar for each status.",
+    "size": "compact",
+    "usedWith": [
+      "progress-kpi-03",
+      "pipeline-01",
+      "kanban-01"
+    ],
+    "component": "ProgressKPI2",
+    "props": "{ counts: { count: number; status: \"done\" | \"in-progress\" | \"todo\" }[]; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/retention/retention-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
+    "size": "compact",
+    "usedWith": [
+      "heatmap-01",
+      "retention-01",
+      "funnel-01"
+    ],
+    "component": "Retention3",
+    "props": "{ description: string; milestones: { label: string; current: number; previous: number }[]; previousLabel?: string; title: string }"
+  },
   "type": "registry:component"
 }

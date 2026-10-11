@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/security/security-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.",
+    "size": "full",
+    "usedWith": [
+      "security-02",
+      "security-04",
+      "alerts-01"
+    ],
+    "component": "Security1",
+    "props": "{ days: { blocked: number; failed: number; label: string; succeeded: number }[]; description: string; mfaCoverage?: number; title: string }"
+  },
   "type": "registry:component"
 }

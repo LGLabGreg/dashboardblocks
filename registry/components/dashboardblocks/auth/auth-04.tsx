@@ -2,7 +2,15 @@
 
 import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react'
+import {
+  type FormEvent,
+  type ReactNode,
+  startTransition,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -88,16 +96,19 @@ const Auth4 = (props: Auth4Props) => {
     setError(null)
     try {
       const ok = onVerify ? await onVerify(value) : value === '123456'
-      if (!ok) {
-        setCode('')
-        return fail('That code didn’t work. Check the newest email, or send a new code.')
-      }
-      setVerified(true)
-      onVerified?.()
+      startTransition(() => {
+        if (ok) {
+          setVerified(true)
+          onVerified?.()
+        } else {
+          setCode('')
+          fail('That code didn’t work. Check the newest email, or send a new code.')
+        }
+      })
     } catch {
-      fail('We couldn’t check the code. Try again.')
+      startTransition(() => fail('We couldn’t check the code. Try again.'))
     } finally {
-      setChecking(false)
+      startTransition(() => setChecking(false))
     }
   }
 
@@ -105,10 +116,14 @@ const Auth4 = (props: Auth4Props) => {
     setError(null)
     try {
       await onResend?.()
-      setCooldown(resendAfter)
-      setStatus(`We sent a new code to ${email}.`)
+      startTransition(() => {
+        setCooldown(resendAfter)
+        setStatus(`We sent a new code to ${email}.`)
+      })
     } catch {
-      setError('We couldn’t send the email. Try again in a moment.')
+      startTransition(() =>
+        setError('We couldn’t send the email. Try again in a moment.'),
+      )
     }
   }
 
@@ -119,13 +134,15 @@ const Auth4 = (props: Auth4Props) => {
     setError(null)
     try {
       await onChangeEmail?.(address)
-      setEmail(address)
-      setEditing(false)
-      setCode('')
-      setCooldown(resendAfter)
-      setStatus(`We sent a code to ${address}.`)
+      startTransition(() => {
+        setEmail(address)
+        setEditing(false)
+        setCode('')
+        setCooldown(resendAfter)
+        setStatus(`We sent a code to ${address}.`)
+      })
     } catch {
-      fail('We couldn’t change the address. Try again.')
+      startTransition(() => fail('We couldn’t change the address. Try again.'))
     }
   }
 

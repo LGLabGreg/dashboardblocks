@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/kpi/kpi-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A value with its change shown as a badge beside the label.",
+    "size": "compact",
+    "usedWith": [
+      "kpi-01",
+      "chart-panel-02",
+      "stat-group-04"
+    ],
+    "component": "KPI2",
+    "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

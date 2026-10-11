@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/kanban/kanban-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.",
+    "size": "full",
+    "usedWith": [
+      "comments-04",
+      "status-01"
+    ],
+    "component": "Kanban3",
+    "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; now: Date; onAdd?: (ticket: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }) => Promise<void>; onMove?: (id: string, column: string, index: number) => void; pausedColumns: string[]; slaHours: number; tickets: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

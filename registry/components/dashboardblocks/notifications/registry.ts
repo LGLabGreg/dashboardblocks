@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.',
+      size: 'half',
+      usedWith: ['notifications-03', 'app-shell-01'],
+    },
   },
   {
     name: 'notifications-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Notifications that ask for a decision, such as a request to join or a refund, with a tab for the ones still waiting.',
+      size: 'half',
+      usedWith: ['notifications-03', 'activity-feed-01'],
+    },
   },
   {
     name: 'notifications-03',
@@ -41,5 +53,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.',
+      size: 'full',
+      usedWith: ['notifications-01', 'notifications-02'],
+    },
   },
 ]

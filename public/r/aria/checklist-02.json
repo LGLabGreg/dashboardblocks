@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/checklist/checklist-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
+    "size": "full",
+    "usedWith": [
+      "checklist-01",
+      "onboarding-02"
+    ],
+    "component": "Checklist2",
+    "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages: { detail?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

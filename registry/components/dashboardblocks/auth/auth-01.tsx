@@ -3,7 +3,7 @@
 import { AuthLayout, WorkspaceAvatar } from '@/registry/components/dashboardblocks/auth'
 import { AvatarStack, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 
@@ -90,11 +90,11 @@ const Auth1 = (props: Auth1Props) => {
     setError(null)
     try {
       await onAccept?.()
-      setOutcome('accepted')
+      startTransition(() => setOutcome('accepted'))
     } catch {
-      setError('Couldn’t join the workspace. Try again.')
+      startTransition(() => setError('Couldn’t join the workspace. Try again.'))
     } finally {
-      setJoining(false)
+      startTransition(() => setJoining(false))
     }
   }
 

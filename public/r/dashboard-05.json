@@ -24,5 +24,12 @@
       "target": "@components/dashboardblocks/dashboards/dashboard-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A full DevOps dashboard with live throughput, delivery performance, response times, open alerts, uptime and recent deployments.",
+    "size": "page",
+    "usedWith": [],
+    "component": "Dashboard5",
+    "props": "{ title: string; today: Date }"
+  },
   "type": "registry:block"
 }

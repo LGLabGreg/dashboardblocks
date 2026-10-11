@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/deployments/deployments-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "What each environment is running, and how many commits are waiting to be promoted to the next one.",
+    "size": "half",
+    "usedWith": [
+      "deployments-01",
+      "deployments-04",
+      "status-01"
+    ],
+    "component": "Deployments2",
+    "props": "{ ahead: number[]; description: string; environments: { deployedAt: Date; deployedBy: string; id: string; name: string; sha: string; status: \"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\"; version: string }[]; now: Date; title: string }"
+  },
   "type": "registry:component"
 }

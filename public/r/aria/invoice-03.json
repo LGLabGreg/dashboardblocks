@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/invoice/invoice-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A quote with optional items to tick before accepting, totals that follow and an expiry date.",
+    "size": "full",
+    "usedWith": [
+      "invoice-01",
+      "billing-01"
+    ],
+    "component": "Invoice3",
+    "props": "{ brand: { name: string; website: string }; currency?: string; defaultSelected?: string[]; discountRate?: number; expiresAt: Date; footer: string; from: { label: string; lines: string[]; name: string }; issueDate: Date; lines: { detail?: string; description: string; id: string; optional?: boolean; quantity: number; sku?: string; taxRate?: number; unit?: string; unitPrice: number }[]; notes: string; now: Date; number: string; onAccept?: (selected: string[]) => Promise<void>; onDecline?: () => Promise<void>; preparedBy: string; preparedFor: { label: string; lines: string[]; name: string }; terms: string }"
+  },
   "type": "registry:component"
 }

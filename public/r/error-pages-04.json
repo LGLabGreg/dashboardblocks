@@ -14,5 +14,14 @@
       "target": "@components/dashboardblocks/error-pages/error-pages-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.",
+    "size": "page",
+    "usedWith": [
+      "error-pages-03"
+    ],
+    "component": "ErrorPages4",
+    "props": "{ brand?: ReactNode; endsAt: Date; now: Date; onSubscribe?: (email: string) => void; startsAt: Date; statusHref?: string; updates: { at: Date; id: string; text: string }[]; work: string }"
+  },
   "type": "registry:component"
 }

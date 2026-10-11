@@ -56,6 +56,25 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
+const yearFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+  year: 'numeric',
+})
+
+function formatDateRange(start: Date, end: Date) {
+  if (start.getUTCFullYear() !== end.getUTCFullYear()) {
+    return `${yearFormatter.format(start)} – ${yearFormatter.format(end)}`
+  }
+  const first = dateFormatter.format(start)
+  if (start.getUTCMonth() !== end.getUTCMonth()) {
+    return `${first} – ${dateFormatter.format(end)}`
+  }
+  if (start.getUTCDate() !== end.getUTCDate()) return `${first} – ${end.getUTCDate()}`
+  return first
+}
+
 const Forecast2 = (props: Forecast2Props) => {
   const {
     actuals,
@@ -190,7 +209,7 @@ const Forecast2 = (props: Forecast2Props) => {
             <dd className='text-sm font-medium'>
               {earliest
                 ? latest
-                  ? dateFormatter.formatRange(earliest, latest)
+                  ? formatDateRange(earliest, latest)
                   : `${dateFormatter.format(earliest)} or later`
                 : 'Not in view'}
             </dd>

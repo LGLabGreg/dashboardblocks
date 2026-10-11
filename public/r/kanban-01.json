@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/kanban/kanban-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A sprint board of issues in columns with labels, assignees, due dates and priorities, and warnings when a column passes its limit.",
+    "size": "full",
+    "usedWith": [
+      "comments-04",
+      "calendar-01"
+    ],
+    "component": "Kanban1",
+    "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; doneColumn: string; issues: { assignees: string[]; attachments?: number; comments?: number; due?: Date; key: string; labels: { name: string; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; subtasks?: { done: number; total: number }; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; subtitle: string; title: string }"
+  },
   "type": "registry:component"
 }

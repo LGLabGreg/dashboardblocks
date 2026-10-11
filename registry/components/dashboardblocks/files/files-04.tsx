@@ -9,7 +9,7 @@ import {
   formatFileSize,
 } from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useEffect, useRef, useState } from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 
@@ -168,16 +168,18 @@ const Files4 = (props: Files4Props) => {
   async function remove(target: BrowserFile) {
     setMessage(`Deleting ${target.name}…`)
     await onDelete(target)
-    setRoot((currentRoot) => removeItem(currentRoot, target.id))
-    setMessage(`Deleted ${target.name}`)
+    startTransition(() => {
+      setRoot((currentRoot) => removeItem(currentRoot, target.id))
+      setMessage(`Deleted ${target.name}`)
+    })
   }
 
   async function share(target: BrowserFile) {
     try {
       await onCopyLink(target)
-      setMessage(`Copied a link to ${target.name}`)
+      startTransition(() => setMessage(`Copied a link to ${target.name}`))
     } catch {
-      setMessage(`Couldn't copy a link to ${target.name}`)
+      startTransition(() => setMessage(`Couldn't copy a link to ${target.name}`))
     }
   }
 

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/dashboard-header/dashboard-header-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-02",
+      "chart-panel-02"
+    ],
+    "component": "DashboardHeader3",
+    "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/gauge/gauge-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A satisfaction score on an arc with a target tick, the change since last period and the gap to target.",
+    "size": "half",
+    "usedWith": [
+      "gauge-01",
+      "feedback-02",
+      "goals-01"
+    ],
+    "component": "Gauge4",
+    "props": "{ description: string; footnote?: string; formatter?: (value: number) => string; max?: number; min?: number; previous: number; scaleFormatter?: (value: number) => string; target: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

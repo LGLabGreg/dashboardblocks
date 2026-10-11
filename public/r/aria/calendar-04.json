@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/calendar/calendar-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A day of meeting room bookings with a column per room and whether each is free right now.",
+    "size": "full",
+    "usedWith": [
+      "calendar-02",
+      "schedule-01"
+    ],
+    "component": "Calendar4",
+    "props": "{ bookings: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; endHour?: number; now: Date; onSelectBooking?: (booking: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; rooms: { id: string; name: string; seats: number }[]; startHour?: number; teams: { color: string; name: string }[]; timeZone?: string }"
+  },
   "type": "registry:component"
 }

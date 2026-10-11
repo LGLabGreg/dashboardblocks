@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/leaderboard/leaderboard-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A ranked list that can be reversed and expanded to show every entry.",
+    "size": "half",
+    "usedWith": [
+      "leaderboard-01",
+      "data-table-01",
+      "breakdown-01"
+    ],
+    "component": "Leaderboard05",
+    "props": "{ countries: { code: string; name: string; visitors: number }[]; description: string; initialCount?: number; title: string }"
+  },
   "type": "registry:component"
 }

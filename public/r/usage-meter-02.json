@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Storage used as a ring in its status colour, with the space that is free.",
+    "size": "compact",
+    "usedWith": [
+      "usage-meter-05",
+      "files-01",
+      "usage-meter-06"
+    ],
+    "component": "UsageMeter2",
+    "props": "{ limit: number; title: string; unit: string; used: number }"
+  },
   "type": "registry:component"
 }

@@ -25,5 +25,12 @@
       "target": "@components/dashboardblocks/dashboards/dashboard-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
+    "size": "page",
+    "usedWith": [],
+    "component": "Dashboard4",
+    "props": "{ title: string; today: Date }"
+  },
   "type": "registry:block"
 }

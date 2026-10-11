@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/metric-list/metric-list-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Metrics against their targets, each with a bar, a tick at the target and a status.",
+    "size": "half",
+    "usedWith": [
+      "goals-02",
+      "gauge-02",
+      "metric-list-01"
+    ],
+    "component": "MetricList3",
+    "props": "{ description: string; metrics: { domain?: [number, number]; target: number; tolerance?: number; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

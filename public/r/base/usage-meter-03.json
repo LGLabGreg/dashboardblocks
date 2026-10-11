@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Usage against what the plan includes, with the overage past the limit and what it will cost.",
+    "size": "half",
+    "usedWith": [
+      "billing-01",
+      "usage-meter-06",
+      "spend-01"
+    ],
+    "component": "UsageMeter3",
+    "props": "{ description: string; items: { included: number; name: string; price: number; per?: number; unit: string; used: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

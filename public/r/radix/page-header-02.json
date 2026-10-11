@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/page-header/page-header-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A page title with a status badge and links to the page's sections, each with a count.",
+    "size": "full",
+    "usedWith": [
+      "data-table-02",
+      "record-detail-01"
+    ],
+    "component": "PageHeader2",
+    "props": "{ description: string; onInvite?: () => void; pathname: string; status: string; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

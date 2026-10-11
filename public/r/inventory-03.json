@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/inventory/inventory-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Every SKU by stock status, with the value of stock on hand and how many times a year it turns over.",
+    "size": "full",
+    "usedWith": [
+      "inventory-01",
+      "inventory-02",
+      "stat-group-02"
+    ],
+    "component": "Inventory3",
+    "props": "{ counts: { low: number; out: number; ok: number; over: number }; currency?: string; description: string; annualCogs?: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

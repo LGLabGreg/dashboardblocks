@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/data-table/data-table-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-02",
+      "chart-panel-01",
+      "comparison-01"
+    ],
+    "component": "DataTable3",
+    "props": "{ description: string; rows: { channel: string; conversions: number[]; name: string; previousConversions: number; previousCost: number; spend: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

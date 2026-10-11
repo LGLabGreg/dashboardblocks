@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/team/team-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Work assigned to each person against their capacity on a shared scale, with anyone over capacity flagged and listed first.",
+    "size": "half",
+    "usedWith": [
+      "team-03",
+      "kanban-01",
+      "leaderboard-02"
+    ],
+    "component": "Team2",
+    "props": "{ description: string; people: { assigned: number; capacity: number; role?: string; avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

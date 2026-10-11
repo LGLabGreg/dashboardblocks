@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-07.tsx"
     }
   ],
+  "meta": {
+    "shows": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+    "size": "compact",
+    "usedWith": [
+      "usage-meter-02",
+      "billing-01",
+      "usage-meter-06"
+    ],
+    "component": "UsageMeter7",
+    "props": "{ icon: ReactNode; limit: number; onUpgrade?: () => void; title: string; unit: string; used: number }"
+  },
   "type": "registry:component"
 }

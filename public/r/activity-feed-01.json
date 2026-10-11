@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/activity-feed/activity-feed-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "What people did across a workspace, newest first and grouped by day.",
+    "size": "half",
+    "usedWith": [
+      "activity-feed-03",
+      "team-01"
+    ],
+    "component": "ActivityFeed01",
+    "props": "{ activities: { action: string; actor: { avatar?: string; name: string }; at: Date; id: string; target?: string }[]; description: string; now: Date; onViewAll?: () => void; title: string; timeZone?: string }"
+  },
   "type": "registry:component"
 }

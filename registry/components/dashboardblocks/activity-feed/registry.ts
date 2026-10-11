@@ -18,6 +18,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'What people did across a workspace, newest first and grouped by day.',
+      size: 'half',
+      usedWith: ['activity-feed-03', 'team-01'],
+    },
   },
   {
     name: 'activity-feed-02',
@@ -29,6 +34,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.',
+      size: 'half',
+      usedWith: ['activity-feed-01', 'comments-01'],
+    },
   },
   {
     name: 'activity-feed-03',
@@ -46,6 +57,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.',
+      size: 'half',
+      usedWith: ['activity-feed-01', 'alerts-01'],
+    },
   },
   {
     name: 'activity-feed-04',
@@ -57,6 +74,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A week of activity by kind with the change on the week before, and the most active people.',
+      size: 'half',
+      usedWith: ['activity-feed-01', 'stat-group-02', 'leaderboard-01'],
+    },
   },
   {
     name: 'activity-feed-05',
@@ -75,5 +98,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.',
+      size: 'half',
+      usedWith: ['activity-feed-01', 'deployments-01'],
+    },
   },
 ]

@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/metric-list/metric-list-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Metrics grouped into sections, each with a header and a count of how many improved.",
+    "size": "half",
+    "usedWith": [
+      "metric-list-01",
+      "stat-group-01",
+      "comparison-01"
+    ],
+    "component": "MetricList2",
+    "props": "{ comparison?: string; description: string; sections: { key: string; label: string; metrics: { changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; history?: number[]; key: string; label: string; previous?: number; value: number }[] }[]; title: string }"
+  },
   "type": "registry:component"
 }

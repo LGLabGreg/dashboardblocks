@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/funnel/funnel-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each stage as a bar sized against the first, with the conversion at each step and overall.",
+    "size": "half",
+    "usedWith": [
+      "stat-group-02",
+      "data-table-02",
+      "chart-panel-01"
+    ],
+    "component": "Funnel1",
+    "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

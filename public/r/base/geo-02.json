@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/geo/geo-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The leading countries with flags, values and shares, and the rest summed into one row.",
+    "size": "half",
+    "usedWith": [
+      "geo-03",
+      "chart-panel-02",
+      "breakdown-01"
+    ],
+    "component": "Geo2",
+    "props": "{ countries: { code: string; name: string; value: number }[]; description: string; formatter?: (value: number) => string; limit?: number; title: string; total?: number }"
+  },
   "type": "registry:component"
 }

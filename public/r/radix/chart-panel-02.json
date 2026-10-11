@@ -18,5 +18,16 @@
       "target": "@components/dashboardblocks/chart-panel/chart-panel-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A chart with tabs for related metrics, each tab showing its total and change.",
+    "size": "full",
+    "usedWith": [
+      "realtime-01",
+      "leaderboard-01",
+      "geo-02"
+    ],
+    "component": "ChartPanel2",
+    "props": "{ data: Record<string, string | number> & { label: string; }[]; metrics: { formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; total: number; trend: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "Storage split into categories as one segmented bar, with each category's size and share.",
+    "size": "compact",
+    "usedWith": [
+      "usage-meter-02",
+      "files-01",
+      "breakdown-01"
+    ],
+    "component": "UsageMeter5",
+    "props": "{ categories: { label: string; value: number }[]; limit: number; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

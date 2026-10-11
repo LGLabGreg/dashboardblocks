@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/security/security-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The devices signed in to an account, with where and when each was last active, and buttons to sign them out.",
+    "size": "half",
+    "usedWith": [
+      "security-05",
+      "security-02"
+    ],
+    "component": "Security3",
+    "props": "{ description: string; now: Date; onSignOut?: (id: string) => void; sessions: { client: string; current?: boolean; device: \"desktop\" | \"mobile\"; id: string; lastActive: Date; location: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/pipeline/pipeline-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Items that have been in a stage longer than expected, longest first, with how long they have waited and who owns them.",
+    "size": "full",
+    "usedWith": [
+      "pipeline-01",
+      "pipeline-02"
+    ],
+    "component": "Pipeline3",
+    "props": "{ items: { enteredStageAt: Date; id: string; owner?: string; stage: string; subtitle?: string; title: string; value?: number }[]; noun?: string; now: Date; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

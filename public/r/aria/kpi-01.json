@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/kpi/kpi-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A single value with its change and what it is compared with.",
+    "size": "compact",
+    "usedWith": [
+      "kpi-02",
+      "stat-group-01",
+      "chart-panel-01"
+    ],
+    "component": "KPI1",
+    "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

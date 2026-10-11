@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/alerts/alerts-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A table of alert rules with their conditions, severities and channels, and a switch to pause or resume each one.",
+    "size": "full",
+    "usedWith": [
+      "alerts-01",
+      "alerts-04"
+    ],
+    "component": "Alerts3",
+    "props": "{ now: Date; onEnabledChange?: (id: string, enabled: boolean) => void; rules: { channels: string[]; condition: string; enabled: boolean; id: string; lastTriggered?: Date; name: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

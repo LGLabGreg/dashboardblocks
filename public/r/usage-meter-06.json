@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/usage-meter/usage-meter-06.tsx"
     }
   ],
+  "meta": {
+    "shows": "Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.",
+    "size": "compact",
+    "usedWith": [
+      "billing-01",
+      "usage-meter-01",
+      "usage-meter-03"
+    ],
+    "component": "UsageMeter6",
+    "props": "{ limits: { icon: ReactNode; limit: number; name: string; unit?: string; used: number }[]; onUpgrade?: () => void; plan: string }"
+  },
   "type": "registry:component"
 }

@@ -13,5 +13,14 @@
       "target": "@components/dashboardblocks/error-pages/error-pages-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
+    "size": "page",
+    "usedWith": [
+      "auth-03"
+    ],
+    "component": "ErrorPages5",
+    "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"inactive\" | \"signed-out-elsewhere\" | \"password-changed\" | \"revoked\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
+  },
   "type": "registry:component"
 }

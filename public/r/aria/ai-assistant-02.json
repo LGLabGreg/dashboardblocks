@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/ai-assistant/ai-assistant-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.",
+    "size": "half",
+    "usedWith": [
+      "ai-assistant-01",
+      "ai-assistant-04"
+    ],
+    "component": "AiAssistant2",
+    "props": "{ description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; title: string }"
+  },
   "type": "registry:component"
 }

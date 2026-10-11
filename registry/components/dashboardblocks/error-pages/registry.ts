@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A not found page that shows the missing path, a search and the places people usually look.',
+      size: 'page',
+      usedWith: ['error-pages-02'],
+    },
   },
   {
     name: 'error-pages-02',
@@ -29,6 +35,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A no access page naming who can grant access, with a request form and the account you are signed in with.',
+      size: 'page',
+      usedWith: ['error-pages-01'],
+    },
   },
   {
     name: 'error-pages-03',
@@ -40,6 +52,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A failure page with a retry button and count, a copyable error ID for support and the technical details folded away.',
+      size: 'page',
+      usedWith: ['error-pages-04'],
+    },
   },
   {
     name: 'error-pages-04',
@@ -51,6 +69,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.',
+      size: 'page',
+      usedWith: ['error-pages-03'],
+    },
   },
   {
     name: 'error-pages-05',
@@ -62,5 +86,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.',
+      size: 'page',
+      usedWith: ['auth-03'],
+    },
   },
 ]

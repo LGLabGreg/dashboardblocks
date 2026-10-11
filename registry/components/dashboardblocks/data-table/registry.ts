@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.',
+      size: 'full',
+      usedWith: ['data-table-06', 'stat-group-02'],
+    },
   },
   {
     name: 'data-table-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Revenue by product, each with a bar scaled to the top product and its share of the total.',
+      size: 'full',
+      usedWith: ['chart-panel-01', 'breakdown-01', 'leaderboard-01'],
+    },
   },
   {
     name: 'data-table-03',
@@ -40,6 +52,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.',
+      size: 'full',
+      usedWith: ['stat-group-02', 'chart-panel-01', 'comparison-01'],
+    },
   },
   {
     name: 'data-table-04',
@@ -51,6 +69,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Services in a table with their status, latency and error rate, worst status first.',
+      size: 'full',
+      usedWith: ['status-01', 'alerts-01', 'deployments-01'],
+    },
   },
   {
     name: 'data-table-05',
@@ -62,6 +86,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A table of recent orders split into pages of five, with controls to move between them.',
+      size: 'full',
+      usedWith: ['data-table-06', 'billing-03'],
+    },
   },
   {
     name: 'data-table-06',
@@ -73,5 +103,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.',
+      size: 'full',
+      usedWith: ['data-table-05', 'stat-group-02'],
+    },
   },
 ]

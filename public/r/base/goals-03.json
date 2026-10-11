@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/goals/goals-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
+    "size": "full",
+    "usedWith": [
+      "goals-01",
+      "forecast-03",
+      "stat-group-01"
+    ],
+    "component": "Goals3",
+    "props": "{ daily: number[]; description: string; days: string[]; formatter?: (value: number) => string; target: number; title: string }"
+  },
   "type": "registry:component"
 }

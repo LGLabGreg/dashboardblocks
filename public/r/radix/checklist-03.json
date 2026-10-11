@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/checklist/checklist-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
+    "size": "compact",
+    "usedWith": [
+      "checklist-01",
+      "kpi-01"
+    ],
+    "component": "Checklist3",
+    "props": "{ continueLabel?: string; onContinue?: () => void; steps: { duration?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

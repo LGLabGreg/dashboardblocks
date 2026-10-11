@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/deployments/deployments-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "The latest builds, each with its commit, environment, author, duration and status.",
+    "size": "full",
+    "usedWith": [
+      "deployments-02",
+      "deployments-04",
+      "activity-feed-05"
+    ],
+    "component": "Deployments1",
+    "props": "{ deployments: { author: string; duration: number; environment: string; id: string; message: string; sha: string; startedAt: Date; status: \"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\" }[]; description: string; now: Date; title: string }"
+  },
   "type": "registry:component"
 }

@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/kpi/line-chart-kpi-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "This week against the same days last week, drawn as a solid and a dashed line.",
+    "size": "compact",
+    "usedWith": [
+      "bar-chart-kpi-01",
+      "comparison-01",
+      "chart-panel-02"
+    ],
+    "component": "LineChartKPI1",
+    "props": "{ comparison: string; data: { label: string; previous: number; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; title: string }"
+  },
   "type": "registry:component"
 }

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/dashboard-header.tsx for React Aria
-// source-hash: 6edc91ad546e
+// source-hash: 78549ace052d
 
 'use client'
 
@@ -26,7 +26,11 @@ interface DateRange {
   start: Date
 }
 
-const DATE_RANGE_PRESETS: { days: number; label: string; value: DateRangePreset }[] = [
+const DATE_RANGE_PRESETS: {
+  days: number
+  label: string
+  value: DateRangePreset
+}[] = [
   { days: 1, label: 'Today', value: 'today' },
   { days: 7, label: 'Last 7 days', value: '7d' },
   { days: 30, label: 'Last 30 days', value: '30d' },
@@ -50,14 +54,29 @@ function getPreviousRange(range: DateRange): DateRange {
   return { end, start: new Date(end.getTime() - length) }
 }
 
-const rangeFormatter = new Intl.DateTimeFormat('en-US', {
+const dayFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   month: 'short',
   timeZone: 'UTC',
 })
 
-function formatDateRange(range: DateRange) {
-  return rangeFormatter.formatRange(range.start, range.end)
+const yearFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+  year: 'numeric',
+})
+
+function formatDateRange({ start, end }: DateRange) {
+  if (start.getUTCFullYear() !== end.getUTCFullYear()) {
+    return `${yearFormatter.format(start)} – ${yearFormatter.format(end)}`
+  }
+  const first = dayFormatter.format(start)
+  if (start.getUTCMonth() !== end.getUTCMonth()) {
+    return `${first} – ${dayFormatter.format(end)}`
+  }
+  if (start.getUTCDate() !== end.getUTCDate()) return `${first} – ${end.getUTCDate()}`
+  return first
 }
 
 interface DateRangePickerProps {
@@ -173,7 +192,7 @@ function FilterChip({ className, field, onRemove, value }: FilterChipProps) {
         className,
       )}
     >
-      <span className='text-muted-foreground'>{field}:</span>
+      <span>{field}:</span>
       <span className='font-medium'>{value}</span>
       <button
         type='button'

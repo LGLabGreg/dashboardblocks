@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/heatmap/heatmap-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A year of daily values as a calendar grid, darker on busier days.",
+    "size": "full",
+    "usedWith": [
+      "chart-panel-01",
+      "stat-group-01"
+    ],
+    "component": "Heatmap3",
+    "props": "{ daily: number[]; description: string; endDate: Date; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/distribution/distribution-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The median, mean and percentiles of a set of values, with a note when a long tail pulls the mean away.",
+    "size": "half",
+    "usedWith": [
+      "distribution-01",
+      "stat-group-01"
+    ],
+    "component": "Distribution3",
+    "props": "{ description: string; formatter?: (value: number) => string; title: string; unit?: string; values: number[] }"
+  },
   "type": "registry:component"
 }

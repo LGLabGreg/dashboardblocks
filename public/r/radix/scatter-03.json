@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/scatter/scatter-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
+    "size": "full",
+    "usedWith": [
+      "data-table-03",
+      "spend-02"
+    ],
+    "component": "Scatter3",
+    "props": "{ campaigns: { channel: string; cpa: number; conversion: number; label: string; spend: number }[]; channels: string[]; description: string; title: string }"
+  },
   "type": "registry:component"
 }

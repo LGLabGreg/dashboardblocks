@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/ai-assistant/ai-assistant-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Questions about an AI usage card, with the tokens and cost shown for each answer.",
+    "size": "half",
+    "usedWith": [
+      "ai-usage-01",
+      "ai-assistant-02"
+    ],
+    "component": "AiAssistant3",
+    "props": "{ description: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; tokens: { cached?: number; input: number; output: number }; usage: Record<string, { cached?: number; input: number; output: number }> }"
+  },
   "type": "registry:component"
 }

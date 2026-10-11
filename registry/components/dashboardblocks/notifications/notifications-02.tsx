@@ -8,7 +8,7 @@ import {
   NotificationsHeader,
 } from '@/registry/components/dashboardblocks/notifications'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -122,10 +122,12 @@ const Notifications2 = (props: Notifications2Props) => {
     setPending(id)
     try {
       await onDecide(id, decision)
-      setDecisions((current) => ({ ...current, [id]: decision }))
-      markRead(id)
+      startTransition(() => {
+        setDecisions((current) => ({ ...current, [id]: decision }))
+        markRead(id)
+      })
     } finally {
-      setPending(null)
+      startTransition(() => setPending(null))
     }
   }
 

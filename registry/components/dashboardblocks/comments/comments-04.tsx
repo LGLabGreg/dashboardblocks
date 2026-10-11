@@ -10,7 +10,7 @@ import {
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -137,11 +137,13 @@ const Comments4 = (props: Comments4Props) => {
 
   async function send(body: string, kind: Mode) {
     await onSubmit(body, { internal: kind === 'note' })
-    setMessages((current) => [
-      ...current,
-      { at: now, author: currentUser, body, id: `${Date.now()}`, kind },
-    ])
-    setStatus(kind === 'note' ? 'Note added' : `Reply sent to ${customer.name}`)
+    startTransition(() => {
+      setMessages((current) => [
+        ...current,
+        { at: now, author: currentUser, body, id: `${Date.now()}`, kind },
+      ])
+      setStatus(kind === 'note' ? 'Note added' : `Reply sent to ${customer.name}`)
+    })
   }
 
   function badge(kind: MessageKind) {

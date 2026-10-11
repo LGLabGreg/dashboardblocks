@@ -3,7 +3,7 @@
 import { ErrorPageLayout } from '@/registry/components/dashboardblocks/error-pages'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -65,11 +65,11 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
     setError(null)
     try {
       await onRequestAccess?.(message.trim())
-      setSent(true)
+      startTransition(() => setSent(true))
     } catch {
-      setError('The request didn’t send. Try again.')
+      startTransition(() => setError('The request didn’t send. Try again.'))
     } finally {
-      setSending(false)
+      startTransition(() => setSending(false))
     }
   }
 

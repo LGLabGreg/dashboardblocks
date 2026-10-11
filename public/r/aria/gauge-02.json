@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/gauge/gauge-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
+    "size": "half",
+    "usedWith": [
+      "status-01",
+      "metric-list-03",
+      "alerts-01"
+    ],
+    "component": "Gauge2",
+    "props": "{ bands: { from: number; label: string; to: number; tone: \"neutral\" | \"critical\" | \"positive\" | \"caution\" }[]; description: string; factors: { detail: string; label: string; score: number; weight: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

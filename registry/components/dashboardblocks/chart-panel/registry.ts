@@ -14,6 +14,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "This period's line against the previous period's, muted, so the current trend leads.",
+      size: 'full',
+      usedWith: ['stat-group-02', 'breakdown-01', 'data-table-02'],
+    },
   },
   {
     name: 'chart-panel-02',
@@ -25,6 +31,12 @@ export const examples: Registry['items'] = [
       registryUrl('chart-panel'),
       registryUrl('trend'),
     ],
+    meta: {
+      shows:
+        'A chart with tabs for related metrics, each tab showing its total and change.',
+      size: 'full',
+      usedWith: ['realtime-01', 'leaderboard-01', 'geo-02'],
+    },
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel/chart-panel-02.tsx',
@@ -43,6 +55,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'Monthly totals as stacked bars split by category, with a legend.',
+      size: 'full',
+      usedWith: ['breakdown-02', 'data-table-02', 'stat-group-01'],
+    },
   },
   {
     name: 'chart-panel-04',
@@ -55,6 +72,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'A single series of bars with the latest period highlighted and labelled.',
+      size: 'full',
+      usedWith: ['stat-group-02', 'funnel-03', 'activity-feed-01'],
+    },
   },
   {
     name: 'chart-panel-05',
@@ -67,6 +89,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A donut splitting a total into parts, with each value and share listed beside it.',
+      size: 'half',
+      usedWith: ['breakdown-01', 'leaderboard-01'],
+    },
   },
   {
     name: 'chart-panel-06',
@@ -79,5 +107,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.',
+      size: 'full',
+      usedWith: ['alerts-01', 'status-02', 'deployments-01'],
+    },
   },
 ]

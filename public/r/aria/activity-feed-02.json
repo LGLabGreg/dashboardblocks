@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/activity-feed/activity-feed-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.",
+    "size": "half",
+    "usedWith": [
+      "activity-feed-01",
+      "comments-01"
+    ],
+    "component": "ActivityFeed02",
+    "props": "{ description: string; events: { action: string; actor: string; at: Date; change?: { from: string; to: string }; comment?: string; id: string; kind: \"created\" | \"assigned\" | \"changed\" | \"labelled\" | \"commented\" | \"resolved\" }[]; now: Date; status: string; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

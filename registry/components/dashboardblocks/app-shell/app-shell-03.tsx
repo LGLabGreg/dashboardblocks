@@ -246,7 +246,7 @@ const AppShell3 = (props: AppShell3Props) => {
           <SidebarUserMenu links={userLinks} onSignOut={onSignOut} user={user} />
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className='min-w-0'>
         <AppHeader className='md:rounded-t-xl'>
           <SidebarTrigger className='-ml-1' />
           <Separator

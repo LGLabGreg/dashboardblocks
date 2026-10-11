@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/realtime/realtime-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.",
+    "size": "full",
+    "usedWith": [
+      "status-02",
+      "alerts-01",
+      "deployments-03"
+    ],
+    "component": "Realtime2",
+    "props": "{ description: string; samples: { errors: number; requests: number }[]; interval?: number; simulate?: boolean; title: string }"
+  },
   "type": "registry:component"
 }

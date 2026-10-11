@@ -1022,7 +1022,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/kpi-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A single value with its change and what it is compared with.",
+        "size": "compact",
+        "usedWith": [
+          "kpi-02",
+          "stat-group-01",
+          "chart-panel-01"
+        ],
+        "component": "KPI1",
+        "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; title: string; value: number }"
+      }
     },
     {
       "name": "kpi-02",
@@ -1037,7 +1048,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/kpi-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A value with its change shown as a badge beside the label.",
+        "size": "compact",
+        "usedWith": [
+          "kpi-01",
+          "chart-panel-02",
+          "stat-group-04"
+        ],
+        "component": "KPI2",
+        "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; title: string; value: number }"
+      }
     },
     {
       "name": "kpi-03",
@@ -1052,7 +1074,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/kpi-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A rate with its previous value underneath and the change in percentage points.",
+        "size": "compact",
+        "usedWith": [
+          "kpi-02",
+          "funnel-01",
+          "chart-panel-01"
+        ],
+        "component": "KPI3",
+        "props": "{ changeType?: \"percent\" | \"points\"; comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; goodDirection?: \"up\" | \"down\"; previous: number; title: string; value: number }"
+      }
     },
     {
       "name": "progress-kpi-01",
@@ -1068,7 +1101,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/progress-kpi-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
+        "size": "compact",
+        "usedWith": [
+          "goals-01",
+          "forecast-03",
+          "kpi-01"
+        ],
+        "component": "ProgressKPI1",
+        "props": "{ comparison: string; daysElapsed: number; daysInPeriod: number; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; target: number; title: string; value: number }"
+      }
     },
     {
       "name": "progress-kpi-02",
@@ -1085,7 +1129,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/progress-kpi-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The share of work done, with a bar for each status.",
+        "size": "compact",
+        "usedWith": [
+          "progress-kpi-03",
+          "pipeline-01",
+          "kanban-01"
+        ],
+        "component": "ProgressKPI2",
+        "props": "{ counts: { count: number; status: \"done\" | \"in-progress\" | \"todo\" }[]; title: string; unit: string }"
+      }
     },
     {
       "name": "progress-kpi-03",
@@ -1102,7 +1157,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/progress-kpi-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A count against a goal as a ring, with how many are left to go.",
+        "size": "compact",
+        "usedWith": [
+          "progress-kpi-01",
+          "goals-04",
+          "kpi-01"
+        ],
+        "component": "ProgressKPI3",
+        "props": "{ current: number; goal: number; title: string; unit: string }"
+      }
     },
     {
       "name": "bar-chart-kpi-01",
@@ -1121,7 +1187,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/bar-chart-kpi-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The week's total with a bar for each day and the change on the week before.",
+        "size": "compact",
+        "usedWith": [
+          "kpi-01",
+          "line-chart-kpi-01",
+          "chart-panel-01"
+        ],
+        "component": "BarChartKPI1",
+        "props": "{ comparison: string; data: { label: string; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; previous: number; title: string }"
+      }
     },
     {
       "name": "bar-chart-kpi-02",
@@ -1140,7 +1217,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/bar-chart-kpi-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
+        "size": "compact",
+        "usedWith": [
+          "goals-02",
+          "progress-kpi-01",
+          "chart-panel-01"
+        ],
+        "component": "BarChartKPI2",
+        "props": "{ data: { goal: number; label: string; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; title: string }"
+      }
     },
     {
       "name": "line-chart-kpi-01",
@@ -1159,7 +1247,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/line-chart-kpi-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "This week against the same days last week, drawn as a solid and a dashed line.",
+        "size": "compact",
+        "usedWith": [
+          "bar-chart-kpi-01",
+          "comparison-01",
+          "chart-panel-02"
+        ],
+        "component": "LineChartKPI1",
+        "props": "{ comparison: string; data: { label: string; previous: number; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; title: string }"
+      }
     },
     {
       "name": "area-chart-kpi-01",
@@ -1178,7 +1277,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/area-chart-kpi-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Gross profit with its margin, and revenue and profit by day as stacked areas.",
+        "size": "compact",
+        "usedWith": [
+          "spend-01",
+          "chart-panel-04",
+          "stat-group-02"
+        ],
+        "component": "AreaChartKPI1",
+        "props": "{ comparison: string; data: { label: string; profit: number; revenue: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; previous: number; title: string }"
+      }
     },
     {
       "name": "area-chart-kpi-02",
@@ -1197,7 +1307,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kpi/area-chart-kpi-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
+        "size": "compact",
+        "usedWith": [
+          "stat-group-02",
+          "kpi-01",
+          "chart-panel-01"
+        ],
+        "component": "AreaChartKPI2",
+        "props": "{ comparison: string; data: { label: string; value: number }[]; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; height?: number; previous: number; title: string }"
+      }
     },
     {
       "name": "activity-feed-01",
@@ -1214,7 +1335,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/activity-feed/activity-feed-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "What people did across a workspace, newest first and grouped by day.",
+        "size": "half",
+        "usedWith": [
+          "activity-feed-03",
+          "team-01"
+        ],
+        "component": "ActivityFeed01",
+        "props": "{ activities: { action: string; actor: { avatar?: string; name: string }; at: Date; id: string; target?: string }[]; description: string; now: Date; onViewAll?: () => void; title: string; timeZone?: string }"
+      }
     },
     {
       "name": "activity-feed-02",
@@ -1229,7 +1360,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/activity-feed/activity-feed-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.",
+        "size": "half",
+        "usedWith": [
+          "activity-feed-01",
+          "comments-01"
+        ],
+        "component": "ActivityFeed02",
+        "props": "{ description: string; events: { action: string; actor: string; at: Date; change?: { from: string; to: string }; comment?: string; id: string; kind: \"created\" | \"assigned\" | \"changed\" | \"labelled\" | \"commented\" | \"resolved\" }[]; now: Date; status: string; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "activity-feed-03",
@@ -1247,7 +1388,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/activity-feed/activity-feed-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.",
+        "size": "half",
+        "usedWith": [
+          "activity-feed-01",
+          "alerts-01"
+        ],
+        "component": "ActivityFeed03",
+        "props": "{ notifications: { action: string; actor: { avatar?: string; name: string }; at: Date; id: string; mention?: boolean; preview?: string; read?: boolean; target: string }[]; now: Date; onRead?: (ids: string[]) => void; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "activity-feed-04",
@@ -1263,7 +1414,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/activity-feed/activity-feed-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A week of activity by kind with the change on the week before, and the most active people.",
+        "size": "half",
+        "usedWith": [
+          "activity-feed-01",
+          "stat-group-02",
+          "leaderboard-01"
+        ],
+        "component": "ActivityFeed04",
+        "props": "{ contributors: { count: number; avatar?: string; name: string }[]; counts: { icon: ReactNode; label: string; previous: number; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"; value: number }[]; description: string; title: string }"
+      }
     },
     {
       "name": "activity-feed-05",
@@ -1282,7 +1444,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/activity-feed/activity-feed-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.",
+        "size": "half",
+        "usedWith": [
+          "activity-feed-01",
+          "deployments-01"
+        ],
+        "component": "ActivityFeed05",
+        "props": "{ description: string; events: { action?: string; author: { avatar?: string; name: string }; at: Date; channel: string; description: string; id: string; message?: { replies?: number; reactions?: number; tags?: string[]; text: string }; platform: \"slack\" | \"github\" }[]; now: Date; onAction?: (event: { action?: string; author: { avatar?: string; name: string }; at: Date; channel: string; description: string; id: string; message?: { replies?: number; reactions?: number; tags?: string[]; text: string }; platform: \"slack\" | \"github\" }) => void; onViewAll?: () => void; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "usage-meter-01",
@@ -1298,7 +1470,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An API quota with its status, when it resets and the usage it is on pace for, with the date it would hit the limit.",
+        "size": "compact",
+        "usedWith": [
+          "usage-meter-06",
+          "billing-01",
+          "ai-usage-01"
+        ],
+        "component": "UsageMeter1",
+        "props": "{ limit: number; now: Date; periodEnd: Date; periodStart: Date; timeZone?: string; title: string; unit: string; used: number }"
+      }
     },
     {
       "name": "usage-meter-02",
@@ -1315,7 +1498,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Storage used as a ring in its status colour, with the space that is free.",
+        "size": "compact",
+        "usedWith": [
+          "usage-meter-05",
+          "files-01",
+          "usage-meter-06"
+        ],
+        "component": "UsageMeter2",
+        "props": "{ limit: number; title: string; unit: string; used: number }"
+      }
     },
     {
       "name": "usage-meter-03",
@@ -1330,7 +1524,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Usage against what the plan includes, with the overage past the limit and what it will cost.",
+        "size": "half",
+        "usedWith": [
+          "billing-01",
+          "usage-meter-06",
+          "spend-01"
+        ],
+        "component": "UsageMeter3",
+        "props": "{ description: string; items: { included: number; name: string; price: number; per?: number; unit: string; used: number }[]; title: string }"
+      }
     },
     {
       "name": "usage-meter-04",
@@ -1348,7 +1553,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
+        "size": "compact",
+        "usedWith": [
+          "billing-02",
+          "usage-meter-01",
+          "ai-usage-02"
+        ],
+        "component": "UsageMeter4",
+        "props": "{ balance: number; dailyUsage: number[]; now: Date; onTopUp?: () => void; purchased: number; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "usage-meter-05",
@@ -1364,7 +1580,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Storage split into categories as one segmented bar, with each category's size and share.",
+        "size": "compact",
+        "usedWith": [
+          "usage-meter-02",
+          "files-01",
+          "breakdown-01"
+        ],
+        "component": "UsageMeter5",
+        "props": "{ categories: { label: string; value: number }[]; limit: number; title: string; unit: string }"
+      }
     },
     {
       "name": "usage-meter-06",
@@ -1381,7 +1608,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.",
+        "size": "compact",
+        "usedWith": [
+          "billing-01",
+          "usage-meter-01",
+          "usage-meter-03"
+        ],
+        "component": "UsageMeter6",
+        "props": "{ limits: { icon: ReactNode; limit: number; name: string; unit?: string; used: number }[]; onUpgrade?: () => void; plan: string }"
+      }
     },
     {
       "name": "usage-meter-07",
@@ -1400,7 +1638,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-07.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+        "size": "compact",
+        "usedWith": [
+          "usage-meter-02",
+          "billing-01",
+          "usage-meter-06"
+        ],
+        "component": "UsageMeter7",
+        "props": "{ icon: ReactNode; limit: number; onUpgrade?: () => void; title: string; unit: string; used: number }"
+      }
     },
     {
       "name": "usage-meter-08",
@@ -1419,7 +1668,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/usage-meter/usage-meter-08.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
+        "size": "compact",
+        "usedWith": [
+          "usage-meter-07",
+          "billing-01",
+          "usage-meter-06"
+        ],
+        "component": "UsageMeter8",
+        "props": "{ daysLeft?: number; icon: ReactNode; limit: number; onUpgrade?: () => void; title: string; unit: string; used: number }"
+      }
     },
     {
       "name": "leaderboard-01",
@@ -1435,7 +1695,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/leaderboard/leaderboard-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Ranked rows with a background bar sized relative to the leader.",
+        "size": "half",
+        "usedWith": [
+          "breakdown-01",
+          "geo-02",
+          "chart-panel-02"
+        ],
+        "component": "Leaderboard01",
+        "props": "{ description: string; onViewAll?: () => void; pages: { path: string; visitors: number }[]; title: string }"
+      }
     },
     {
       "name": "leaderboard-02",
@@ -1452,7 +1723,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/leaderboard/leaderboard-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "People ranked by revenue with badges for the top three and the change since the last period.",
+        "size": "half",
+        "usedWith": [
+          "team-01",
+          "leaderboard-04",
+          "chart-panel-01"
+        ],
+        "component": "Leaderboard02",
+        "props": "{ currency?: string; description: string; reps: { avatar: string; deals: number; id: number; name: string; revenue: number; trend: number }[]; title: string }"
+      }
     },
     {
       "name": "leaderboard-03",
@@ -1469,7 +1751,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/leaderboard/leaderboard-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The top three on a podium, with the rest of the field listed below.",
+        "size": "half",
+        "usedWith": [
+          "leaderboard-02",
+          "team-02",
+          "chart-panel-01"
+        ],
+        "component": "Leaderboard03",
+        "props": "{ contributors: { avatar: string; id: number; name: string; value: number }[]; description: string; title: string; unit: string }"
+      }
     },
     {
       "name": "leaderboard-04",
@@ -1485,7 +1778,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/leaderboard/leaderboard-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Products ranked by revenue with how far each moved in the ranking since the last period.",
+        "size": "half",
+        "usedWith": [
+          "leaderboard-01",
+          "breakdown-01",
+          "chart-panel-01"
+        ],
+        "component": "Leaderboard04",
+        "props": "{ currency?: string; description: string; products: { category: string; change: number | \"new\"; icon: ReactNode; id: number; name: string; revenue: number; unitsSold: number }[]; title: string }"
+      }
     },
     {
       "name": "leaderboard-05",
@@ -1501,7 +1805,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/leaderboard/leaderboard-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A ranked list that can be reversed and expanded to show every entry.",
+        "size": "half",
+        "usedWith": [
+          "leaderboard-01",
+          "data-table-01",
+          "breakdown-01"
+        ],
+        "component": "Leaderboard05",
+        "props": "{ countries: { code: string; name: string; visitors: number }[]; description: string; initialCount?: number; title: string }"
+      }
     },
     {
       "name": "chart-panel-01",
@@ -1520,7 +1835,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/chart-panel/chart-panel-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "This period's line against the previous period's, muted, so the current trend leads.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "breakdown-01",
+          "data-table-02"
+        ],
+        "component": "ChartPanel1",
+        "props": "{ currentLabel?: string; data: { current: number; label: string; previous: number }[]; description: string; formatter?: (value: number) => string; previousLabel?: string; showPrevious?: boolean; title: string }"
+      }
     },
     {
       "name": "chart-panel-02",
@@ -1534,6 +1860,17 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/trend.json"
       ],
+      "meta": {
+        "shows": "A chart with tabs for related metrics, each tab showing its total and change.",
+        "size": "full",
+        "usedWith": [
+          "realtime-01",
+          "leaderboard-01",
+          "geo-02"
+        ],
+        "component": "ChartPanel2",
+        "props": "{ data: Record<string, string | number> & { label: string; }[]; metrics: { formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; total: number; trend: number }[]; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/chart-panel/chart-panel-02.tsx",
@@ -1559,7 +1896,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/chart-panel/chart-panel-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Monthly totals as stacked bars split by category, with a legend.",
+        "size": "full",
+        "usedWith": [
+          "breakdown-02",
+          "data-table-02",
+          "stat-group-01"
+        ],
+        "component": "ChartPanel3",
+        "props": "{ data: Record<string, string | number> & { label: string; }[]; description: string; series: { color: string; key: string; label: string }[]; title: string; trend: number }"
+      }
     },
     {
       "name": "chart-panel-04",
@@ -1578,7 +1926,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/chart-panel/chart-panel-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A single series of bars with the latest period highlighted and labelled.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "funnel-03",
+          "activity-feed-01"
+        ],
+        "component": "ChartPanel4",
+        "props": "{ data: { label: string; value: number }[]; description: string; formatter?: (value: number) => string; title: string }"
+      }
     },
     {
       "name": "chart-panel-05",
@@ -1596,7 +1955,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/chart-panel/chart-panel-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A donut splitting a total into parts, with each value and share listed beside it.",
+        "size": "half",
+        "usedWith": [
+          "breakdown-01",
+          "leaderboard-01"
+        ],
+        "component": "ChartPanel5",
+        "props": "{ description: string; formatter?: (value: number) => string; segments: { color: string; label: string; value: number }[]; title: string; totalLabel?: string }"
+      }
     },
     {
       "name": "chart-panel-06",
@@ -1615,7 +1984,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/chart-panel/chart-panel-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
+        "size": "full",
+        "usedWith": [
+          "alerts-01",
+          "status-02",
+          "deployments-01"
+        ],
+        "component": "ChartPanel6",
+        "props": "{ data: Record<string, string | number> & { label: string; }[]; description: string; formatter?: (value: number) => string; headline: string; labelHeading?: string; percentiles: { key: string; label: string }[]; title: string; trend: number }"
+      }
     },
     {
       "name": "breakdown-01",
@@ -1630,7 +2010,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/breakdown/breakdown-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A single 100% bar splitting a total into categories, with each value and share listed below.",
+        "size": "half",
+        "usedWith": [
+          "chart-panel-01",
+          "stat-group-02"
+        ],
+        "component": "Breakdown1",
+        "props": "{ description: string; formatter?: (value: number) => string; segments: { color: string; label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "breakdown-02",
@@ -1645,7 +2035,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/breakdown/breakdown-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
+        "size": "half",
+        "usedWith": [
+          "chart-panel-03",
+          "data-table-02"
+        ],
+        "component": "Breakdown2",
+        "props": "{ categories: { color: string; key: string; label: string }[]; description: string; groups: { label: string; values: Record<string, number> }[]; highlight: string; title: string }"
+      }
     },
     {
       "name": "breakdown-03",
@@ -1660,7 +2060,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/breakdown/breakdown-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A 10 by 10 grid of squares where each square is 1% of the total, coloured by category.",
+        "size": "half",
+        "usedWith": [
+          "breakdown-01",
+          "chart-panel-05"
+        ],
+        "component": "Breakdown3",
+        "props": "{ description: string; segments: { color: string; label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "breakdown-04",
@@ -1675,7 +2085,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/breakdown/breakdown-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "How each category's share of a total moved between two periods.",
+        "size": "half",
+        "usedWith": [
+          "chart-panel-03",
+          "data-table-03"
+        ],
+        "component": "Breakdown4",
+        "props": "{ currentLabel: string; description: string; items: { current: number; label: string; previous: number }[]; previousLabel: string; title: string }"
+      }
     },
     {
       "name": "funnel-01",
@@ -1690,7 +2110,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/funnel/funnel-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each stage as a bar sized against the first, with the conversion at each step and overall.",
+        "size": "half",
+        "usedWith": [
+          "stat-group-02",
+          "data-table-02",
+          "chart-panel-01"
+        ],
+        "component": "Funnel1",
+        "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "funnel-02",
@@ -1705,7 +2136,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/funnel/funnel-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
+        "size": "full",
+        "usedWith": [
+          "funnel-04",
+          "data-table-03"
+        ],
+        "component": "Funnel2",
+        "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "funnel-03",
@@ -1721,7 +2162,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/funnel/funnel-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A vertical stepper through the stages that calls out the step with the biggest drop-off.",
+        "size": "half",
+        "usedWith": [
+          "chart-panel-04",
+          "data-table-03"
+        ],
+        "component": "Funnel3",
+        "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "funnel-04",
@@ -1736,7 +2187,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/funnel/funnel-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Two segments side by side at every stage, each as a share of its first step, to compare how they convert.",
+        "size": "full",
+        "usedWith": [
+          "funnel-01",
+          "data-table-03"
+        ],
+        "component": "Funnel4",
+        "props": "{ description: string; segments: { color: string; key: string; label: string }[]; stages: { label: string; values: Record<string, number> }[]; title: string }"
+      }
     },
     {
       "name": "status-01",
@@ -1751,7 +2212,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/status/status-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each service with its current status, and an overall badge showing the worst one.",
+        "size": "half",
+        "usedWith": [
+          "status-03",
+          "alerts-01",
+          "data-table-04"
+        ],
+        "component": "Status1",
+        "props": "{ description: string; services: { description?: string; name: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+      }
     },
     {
       "name": "status-02",
@@ -1766,7 +2238,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/status/status-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
+        "size": "full",
+        "usedWith": [
+          "status-01",
+          "status-03",
+          "alerts-01"
+        ],
+        "component": "Status2",
+        "props": "{ description: string; services: { days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; name: string }[]; title: string }"
+      }
     },
     {
       "name": "status-03",
@@ -1782,7 +2265,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/status/status-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An active incident with its severity, affected components and a timeline of updates.",
+        "size": "half",
+        "usedWith": [
+          "status-01",
+          "status-02",
+          "alerts-01"
+        ],
+        "component": "Status3",
+        "props": "{ affected: string[]; onSubscribe?: () => void; severity: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; started: string; title: string; updates: { message: string; stage: \"Investigating\" | \"Identified\" | \"Monitoring\" | \"Resolved\"; time: string }[] }"
+      }
     },
     {
       "name": "status-04",
@@ -1797,7 +2291,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/status/status-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A grid of regions, each with its status, latency and error rate.",
+        "size": "half",
+        "usedWith": [
+          "status-01",
+          "status-02",
+          "alerts-01"
+        ],
+        "component": "Status4",
+        "props": "{ regions: { code: string; errorRate: number; latency: number; name: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+      }
     },
     {
       "name": "status-05",
@@ -1812,7 +2317,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/status/status-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
+        "size": "full",
+        "usedWith": [
+          "status-02",
+          "status-03",
+          "alerts-01"
+        ],
+        "component": "Status5",
+        "props": "{ days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; description: string; downtime: string; incidents: { date: string; duration: string; severity: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; title: string }[]; title: string }"
+      }
     },
     {
       "name": "stat-group-01",
@@ -1827,7 +2343,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/stat-group/stat-group-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Three metrics side by side, each with its change and previous value.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-01",
+          "kpi-01",
+          "comparison-01"
+        ],
+        "component": "StatGroup1",
+        "props": "{ metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[] }"
+      }
     },
     {
       "name": "stat-group-02",
@@ -1842,7 +2369,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/stat-group/stat-group-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A row of metrics, each with its change and a 14-day sparkline.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-01",
+          "breakdown-01",
+          "data-table-02"
+        ],
+        "component": "StatGroup2",
+        "props": "{ description: string; metrics: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; title: string }"
+      }
     },
     {
       "name": "stat-group-03",
@@ -1862,7 +2400,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/stat-group/stat-group-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A row of metrics where picking one charts it against the previous period.",
+        "size": "full",
+        "usedWith": [
+          "heatmap-01",
+          "geo-04",
+          "billing-01"
+        ],
+        "component": "StatGroup3",
+        "props": "{ currentLabel?: string; metrics: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; previousLabel?: string; title: string }"
+      }
     },
     {
       "name": "stat-group-04",
@@ -1877,7 +2426,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/stat-group/stat-group-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Five metrics in a slim row with their changes, wrapping to two columns when narrow.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-02",
+          "kpi-02",
+          "data-table-01"
+        ],
+        "component": "StatGroup4",
+        "props": "{ metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[] }"
+      }
     },
     {
       "name": "stat-group-05",
@@ -1892,7 +2452,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/stat-group/stat-group-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-03",
+          "kpi-01",
+          "breakdown-01"
+        ],
+        "component": "StatGroup5",
+        "props": "{ description: string; metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; title: string }"
+      }
     },
     {
       "name": "dashboard-header-01",
@@ -1906,7 +2477,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboard-header/dashboard-header-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "chart-panel-01"
+        ],
+        "component": "DashboardHeader1",
+        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-header-02",
@@ -1920,7 +2501,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboard-header/dashboard-header-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A short dashboard header with a title, a date range menu and an export button.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-01",
+          "chart-panel-01"
+        ],
+        "component": "DashboardHeader2",
+        "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-header-03",
@@ -1936,7 +2527,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboard-header/dashboard-header-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "chart-panel-02"
+        ],
+        "component": "DashboardHeader3",
+        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-header-04",
@@ -1951,7 +2552,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboard-header/dashboard-header-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.",
+        "size": "full",
+        "usedWith": [
+          "realtime-01",
+          "stat-group-02"
+        ],
+        "component": "DashboardHeader4",
+        "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; description: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date }"
+      }
     },
     {
       "name": "data-table-01",
@@ -1966,7 +2577,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+        "size": "full",
+        "usedWith": [
+          "data-table-06",
+          "stat-group-02"
+        ],
+        "component": "DataTable1",
+        "props": "{ description: string; rows: { bounceRate: number; duration: number; path: string; views: number; visitors: number }[]; title: string }"
+      }
     },
     {
       "name": "data-table-02",
@@ -1981,7 +2602,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Revenue by product, each with a bar scaled to the top product and its share of the total.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-01",
+          "breakdown-01",
+          "leaderboard-01"
+        ],
+        "component": "DataTable2",
+        "props": "{ description: string; rows: { category: string; name: string; revenue: number; units: number }[]; title: string }"
+      }
     },
     {
       "name": "data-table-03",
@@ -1998,7 +2630,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "chart-panel-01",
+          "comparison-01"
+        ],
+        "component": "DataTable3",
+        "props": "{ description: string; rows: { channel: string; conversions: number[]; name: string; previousConversions: number; previousCost: number; spend: number }[]; title: string }"
+      }
     },
     {
       "name": "data-table-04",
@@ -2014,7 +2657,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Services in a table with their status, latency and error rate, worst status first.",
+        "size": "full",
+        "usedWith": [
+          "status-01",
+          "alerts-01",
+          "deployments-01"
+        ],
+        "component": "DataTable4",
+        "props": "{ rows: { errorRate: number; latency: number; name: string; region: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+      }
     },
     {
       "name": "data-table-05",
@@ -2030,7 +2684,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A table of recent orders split into pages of five, with controls to move between them.",
+        "size": "full",
+        "usedWith": [
+          "data-table-06",
+          "billing-03"
+        ],
+        "component": "DataTable5",
+        "props": "{ description: string; pageSize?: number; rows: { amount: number; customer: string; date: string; email: string; id: string; state: \"failed\" | \"paid\" | \"pending\" | \"refunded\" }[]; title: string }"
+      }
     },
     {
       "name": "data-table-06",
@@ -2046,7 +2710,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/data-table/data-table-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.",
+        "size": "full",
+        "usedWith": [
+          "data-table-05",
+          "stat-group-02"
+        ],
+        "component": "DataTable6",
+        "props": "{ description: string; onEmail?: (rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]) => void; onExport?: (rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]) => void; pageSize?: number; rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]; title: string }"
+      }
     },
     {
       "name": "heatmap-01",
@@ -2061,7 +2735,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/heatmap/heatmap-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "When visitors arrive, as a grid of weekday by hour, darker where there are more.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-03",
+          "geo-04",
+          "retention-03"
+        ],
+        "component": "Heatmap1",
+        "props": "{ description: string; values: number[][]; title: string; unit: string }"
+      }
     },
     {
       "name": "heatmap-02",
@@ -2076,7 +2761,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/heatmap/heatmap-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
+        "size": "full",
+        "usedWith": [
+          "retention-02",
+          "retention-04"
+        ],
+        "component": "Heatmap2",
+        "props": "{ cohorts: { label: string; retention: number[]; size: number }[]; description: string; title: string; weeks: number }"
+      }
     },
     {
       "name": "heatmap-03",
@@ -2091,7 +2786,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/heatmap/heatmap-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A year of daily values as a calendar grid, darker on busier days.",
+        "size": "full",
+        "usedWith": [
+          "chart-panel-01",
+          "stat-group-01"
+        ],
+        "component": "Heatmap3",
+        "props": "{ daily: number[]; description: string; endDate: Date; title: string; unit: string }"
+      }
     },
     {
       "name": "heatmap-04",
@@ -2106,7 +2811,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/heatmap/heatmap-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The p95 latency of each endpoint by hour over the last day, darker where it is slower.",
+        "size": "full",
+        "usedWith": [
+          "alerts-02",
+          "status-04"
+        ],
+        "component": "Heatmap4",
+        "props": "{ description: string; endpoints: string[]; title: string; values: number[][] }"
+      }
     },
     {
       "name": "states-01",
@@ -2123,7 +2838,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/states/states-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-02",
+          "states-04"
+        ],
+        "component": "States1",
+        "props": "{ description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]>; placeholders?: number; title: string }"
+      }
     },
     {
       "name": "states-02",
@@ -2143,7 +2868,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/states/states-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A chart that stays in place at reduced opacity while it refreshes, with an updating indicator in the header.",
+        "size": "half",
+        "usedWith": [
+          "chart-panel-01",
+          "states-01"
+        ],
+        "component": "States2",
+        "props": "{ description: string; load: () => Promise<{ label: string; value: number }[]>; title: string }"
+      }
     },
     {
       "name": "states-03",
@@ -2161,7 +2896,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/states/states-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
+        "size": "full",
+        "usedWith": [
+          "data-table-02",
+          "dashboard-header-01"
+        ],
+        "component": "States3",
+        "props": "{ defaultFilters: { field: \"region\" | \"status\"; label: string; value: string }[]; orders: { amount: number; customer: string; id: string; region: string; status: string }[]; title: string }"
+      }
     },
     {
       "name": "states-04",
@@ -2181,7 +2926,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/states/states-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A card that says what went wrong when loading fails and offers to try again.",
+        "size": "half",
+        "usedWith": [
+          "states-01",
+          "alerts-01"
+        ],
+        "component": "States4",
+        "props": "{ description: string; load: () => Promise<{ label: string; value: number }[]>; title: string }"
+      }
     },
     {
       "name": "dashboard-01",
@@ -2205,7 +2960,14 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboards/dashboard-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A full store dashboard with revenue, sales channels, top products, a checkout funnel and low stock, scoped by header filters.",
+        "size": "page",
+        "usedWith": [],
+        "component": "Dashboard1",
+        "props": "{ title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-02",
@@ -2230,7 +2992,14 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboards/dashboard-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A full SaaS dashboard with metric tabs, an activity heatmap, revenue by region, billing movement, retention and service status.",
+        "size": "page",
+        "usedWith": [],
+        "component": "Dashboard2",
+        "props": "{ title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-03",
@@ -2253,7 +3022,14 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboards/dashboard-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A full web analytics dashboard with traffic over time, visitors right now, a traffic flow, top pages, countries and browsers.",
+        "size": "page",
+        "usedWith": [],
+        "component": "Dashboard3",
+        "props": "{ title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-04",
@@ -2280,7 +3056,14 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboards/dashboard-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
+        "size": "page",
+        "usedWith": [],
+        "component": "Dashboard4",
+        "props": "{ title: string; today: Date }"
+      }
     },
     {
       "name": "dashboard-05",
@@ -2306,7 +3089,14 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/dashboards/dashboard-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A full DevOps dashboard with live throughput, delivery performance, response times, open alerts, uptime and recent deployments.",
+        "size": "page",
+        "usedWith": [],
+        "component": "Dashboard5",
+        "props": "{ title: string; today: Date }"
+      }
     },
     {
       "name": "goals-01",
@@ -2321,7 +3111,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/goals/goals-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "One target with an expected-by-today marker, what is left and a projection at the current pace.",
+        "size": "half",
+        "usedWith": [
+          "forecast-03",
+          "progress-kpi-01",
+          "goals-03"
+        ],
+        "component": "Goals1",
+        "props": "{ current: number; end: Date; formatter?: (value: number) => string; start: Date; target: number; title: string; today: Date }"
+      }
     },
     {
       "name": "goals-02",
@@ -2336,7 +3137,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/goals/goals-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Several goals for the same period, each with its own pace.",
+        "size": "half",
+        "usedWith": [
+          "goals-01",
+          "metric-list-03",
+          "forecast-02"
+        ],
+        "component": "Goals2",
+        "props": "{ description: string; elapsed: number; goals: { current: number; formatter?: (value: number) => string; label: string; owner: string; target: number }[]; title: string }"
+      }
     },
     {
       "name": "goals-03",
@@ -2355,7 +3167,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/goals/goals-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
+        "size": "full",
+        "usedWith": [
+          "goals-01",
+          "forecast-03",
+          "stat-group-01"
+        ],
+        "component": "Goals3",
+        "props": "{ daily: number[]; description: string; days: string[]; formatter?: (value: number) => string; target: number; title: string }"
+      }
     },
     {
       "name": "goals-04",
@@ -2370,7 +3193,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/goals/goals-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Small daily goals as rings, with a check mark once a goal is met.",
+        "size": "half",
+        "usedWith": [
+          "progress-kpi-03",
+          "goals-02",
+          "checklist-01"
+        ],
+        "component": "Goals4",
+        "props": "{ description: string; goals: { current: number; label: string; target: number; unit: string }[]; title: string }"
+      }
     },
     {
       "name": "comparison-01",
@@ -2387,7 +3221,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comparison/comparison-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-01",
+          "line-chart-kpi-01",
+          "comparison-03"
+        ],
+        "component": "Comparison1",
+        "props": "{ currentLabel: string; description: string; metrics: { current: number; differenceFormatter?: (value: number) => string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; label: string; previous: number }[]; previousLabel: string; title: string }"
+      }
     },
     {
       "name": "comparison-02",
@@ -2402,7 +3247,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comparison/comparison-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
+        "size": "half",
+        "usedWith": [
+          "comparison-01",
+          "funnel-01",
+          "kpi-03"
+        ],
+        "component": "Comparison2",
+        "props": "{ control: { conversions: number; label: string; visitors: number }; description: string; metric: string; title: string; variant: { conversions: number; label: string; visitors: number } }"
+      }
     },
     {
       "name": "comparison-03",
@@ -2417,7 +3273,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comparison/comparison-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
+        "size": "half",
+        "usedWith": [
+          "comparison-01",
+          "breakdown-01",
+          "data-table-01"
+        ],
+        "component": "Comparison3",
+        "props": "{ description: string; formatter?: (value: number) => string; segments: { current: number; label: string; previous: number }[]; title: string }"
+      }
     },
     {
       "name": "comparison-04",
@@ -2433,7 +3300,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comparison/comparison-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
+        "size": "half",
+        "usedWith": [
+          "comparison-01",
+          "comparison-03",
+          "metric-list-03"
+        ],
+        "component": "Comparison4",
+        "props": "{ afterLabel: string; beforeLabel: string; description: string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; rows: { after: number; before: number; label: string }[]; title: string }"
+      }
     },
     {
       "name": "alerts-01",
@@ -2449,7 +3327,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/alerts/alerts-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Open alerts, most recent first, each with a button to acknowledge it.",
+        "size": "half",
+        "usedWith": [
+          "alerts-04",
+          "status-01",
+          "activity-feed-01"
+        ],
+        "component": "Alerts1",
+        "props": "{ alerts: { acknowledged?: boolean; firedAt: Date; id: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; source: string; title: string }[]; now: Date; onAcknowledge?: (id: string) => void; title: string }"
+      }
     },
     {
       "name": "alerts-02",
@@ -2469,7 +3358,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/alerts/alerts-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A metric over the last hour against its threshold line, with the current value, the peak and actions to take.",
+        "size": "half",
+        "usedWith": [
+          "alerts-01",
+          "chart-panel-01",
+          "status-02"
+        ],
+        "component": "Alerts2",
+        "props": "{ description: string; formatter?: (value: number) => string; metric: string; readings: { label: string; value: number }[]; runbookHref?: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; threshold: number; title: string }"
+      }
     },
     {
       "name": "alerts-03",
@@ -2486,7 +3386,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/alerts/alerts-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A table of alert rules with their conditions, severities and channels, and a switch to pause or resume each one.",
+        "size": "full",
+        "usedWith": [
+          "alerts-01",
+          "alerts-04"
+        ],
+        "component": "Alerts3",
+        "props": "{ now: Date; onEnabledChange?: (id: string, enabled: boolean) => void; rules: { channels: string[]; condition: string; enabled: boolean; id: string; lastTriggered?: Date; name: string; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\" }[]; title: string }"
+      }
     },
     {
       "name": "alerts-04",
@@ -2502,7 +3412,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/alerts/alerts-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A slim strip with open alerts by severity and the latest one, for the top of a dashboard.",
+        "size": "full",
+        "usedWith": [
+          "alerts-01",
+          "stat-group-02",
+          "status-01"
+        ],
+        "component": "Alerts4",
+        "props": "{ counts: { info?: number; warning?: number; critical?: number }; latest?: { firedAt: Date; severity: \"resolved\" | \"info\" | \"warning\" | \"critical\"; source: string; title: string }; now: Date; onViewAll?: () => void }"
+      }
     },
     {
       "name": "geo-01",
@@ -2518,7 +3439,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/geo/geo-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Revenue by US state as a tile map on a single-hue scale, with the total and the top five states.",
+        "size": "full",
+        "usedWith": [
+          "geo-02",
+          "chart-panel-01"
+        ],
+        "component": "Geo1",
+        "props": "{ description: string; formatter?: (value: number) => string; title: string; valueLabel: string; values: Record<string, number> }"
+      }
     },
     {
       "name": "geo-02",
@@ -2533,7 +3464,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/geo/geo-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The leading countries with flags, values and shares, and the rest summed into one row.",
+        "size": "half",
+        "usedWith": [
+          "geo-03",
+          "chart-panel-02",
+          "breakdown-01"
+        ],
+        "component": "Geo2",
+        "props": "{ countries: { code: string; name: string; value: number }[]; description: string; formatter?: (value: number) => string; limit?: number; title: string; total?: number }"
+      }
     },
     {
       "name": "geo-03",
@@ -2548,7 +3490,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/geo/geo-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Active users by city right now as markers sized by value on a dotted world map.",
+        "size": "full",
+        "usedWith": [
+          "realtime-01",
+          "geo-02"
+        ],
+        "component": "Geo3",
+        "props": "{ description: string; locations: { id: string; lat: number; lon: number; name: string; value: number }[]; title: string; unit: string }"
+      }
     },
     {
       "name": "geo-04",
@@ -2559,6 +3511,16 @@
         "https://www.dashboardblocks.com/r/base/comparison.json",
         "https://www.dashboardblocks.com/r/base/trend.json"
       ],
+      "meta": {
+        "shows": "Revenue split across regions, each with its share and its change on the previous quarter.",
+        "size": "half",
+        "usedWith": [
+          "heatmap-01",
+          "billing-01"
+        ],
+        "component": "Geo4",
+        "props": "{ description: string; formatter?: (value: number) => string; previousLabel: string; regions: { color: string; current: number; label: string; previous: number }[]; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/geo/geo-04.tsx",
@@ -2581,7 +3543,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/billing/billing-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
+        "size": "full",
+        "usedWith": [
+          "billing-04",
+          "chart-panel-01",
+          "retention-03"
+        ],
+        "component": "Billing1",
+        "props": "{ currency?: string; description: string; movement: { contraction: number; churn: number; expansion: number; newBusiness: number; starting: number }; title: string }"
+      }
     },
     {
       "name": "billing-02",
@@ -2597,7 +3570,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/billing/billing-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The current plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.",
+        "size": "half",
+        "usedWith": [
+          "billing-03",
+          "billing-05",
+          "usage-meter-01"
+        ],
+        "component": "Billing2",
+        "props": "{ cancelsAtPeriodEnd?: boolean; currency?: string; interval: \"month\" | \"year\"; nextInvoiceAmount?: number; now: Date; onManage?: () => void; onUpdatePaymentMethod?: () => void; paymentMethod?: { brand: string; expires: string; last4: string }; plan: string; price: number; renewsAt: Date; summary?: string; title: string }"
+      }
     },
     {
       "name": "billing-03",
@@ -2614,7 +3598,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/billing/billing-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
+        "size": "half",
+        "usedWith": [
+          "billing-02",
+          "billing-05"
+        ],
+        "component": "Billing3",
+        "props": "{ currency?: string; invoices: { amount: number; date: Date; description: string; id: string; number: string; status: \"failed\" | \"paid\" | \"due\" | \"overdue\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string }"
+      }
     },
     {
       "name": "billing-04",
@@ -2630,7 +3624,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/billing/billing-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Monthly and annual recurring revenue, revenue per account and net revenue retention, each with its change from the previous month.",
+        "size": "full",
+        "usedWith": [
+          "billing-01",
+          "chart-panel-01",
+          "retention-03"
+        ],
+        "component": "Billing4",
+        "props": "{ currency?: string; current: { customers: number; mrr: number; netRevenueRetention: number }; description: string; previous: { customers: number; mrr: number; netRevenueRetention: number }; title: string }"
+      }
     },
     {
       "name": "billing-05",
@@ -2648,7 +3653,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/billing/billing-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Plans side by side, monthly or yearly, with seats, what is due today and what a downgrade takes away.",
+        "size": "full",
+        "usedWith": [
+          "billing-02",
+          "billing-03",
+          "usage-meter-01"
+        ],
+        "component": "Billing5",
+        "props": "{ currency?: string; current: { interval: \"month\" | \"year\"; planId: string; seats: number }; description: string; now: Date; onConfirm?: (change: { interval: \"month\" | \"year\"; planId: string; seats: number }) => void; onContactSales?: (planId: string) => void; periodStart: Date; plans: { description: string; features: string[]; highlight?: string; id: string; name: string; price?: { month: number; year: number } }[]; renewsAt: Date; seatsInUse: number; title: string }"
+      }
     },
     {
       "name": "insights-01",
@@ -2664,7 +3680,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/insights/insights-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.",
+        "size": "half",
+        "usedWith": [
+          "insights-02",
+          "insights-03",
+          "stat-group-02"
+        ],
+        "component": "Insights1",
+        "props": "{ description: string; insights: { actionLabel?: string; drivers?: { label: string; value: string; tone?: \"neutral\" | \"positive\" | \"negative\" }[]; href?: string; id: string; kind: \"neutral\" | \"positive\" | \"negative\" | \"anomaly\"; segments: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[]; topic: string }[]; title: string }"
+      }
     },
     {
       "name": "insights-02",
@@ -2684,7 +3711,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/insights/insights-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
+        "size": "half",
+        "usedWith": [
+          "insights-03",
+          "chart-panel-01",
+          "alerts-01"
+        ],
+        "component": "Insights2",
+        "props": "{ description: string; drivers?: { label: string; value: string; tone?: \"neutral\" | \"positive\" | \"negative\" }[]; explanation: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[]; formatter?: (value: number) => string; href?: string; metric: string; onMarkExpected?: () => void; readings: { high: number; label: string; low: number; value: number }[]; title: string }"
+      }
     },
     {
       "name": "insights-03",
@@ -2700,7 +3738,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/insights/insights-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "What contributed to a change, as bars either side of zero, with a sentence naming the biggest driver and the biggest drag.",
+        "size": "half",
+        "usedWith": [
+          "insights-02",
+          "chart-panel-01",
+          "breakdown-01"
+        ],
+        "component": "Insights3",
+        "props": "{ contributions: { label: string; value: number }[]; description: string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; metric: string; previous: number; title: string }"
+      }
     },
     {
       "name": "insights-04",
@@ -2716,7 +3765,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/insights/insights-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A short weekly summary with a headline, three takeaways and buttons to say whether it helped.",
+        "size": "half",
+        "usedWith": [
+          "insights-01",
+          "activity-feed-04"
+        ],
+        "component": "Insights4",
+        "props": "{ defaultFeedback?: null | \"helpful\" | \"not-helpful\"; headline: string; onFeedback?: (feedback: null | \"helpful\" | \"not-helpful\") => void; period: string; takeaways: { kind: \"neutral\" | \"positive\" | \"negative\" | \"anomaly\"; segments: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[] }[] }"
+      }
     },
     {
       "name": "pipeline-01",
@@ -2733,7 +3792,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/pipeline/pipeline-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+        "size": "full",
+        "usedWith": [
+          "pipeline-02",
+          "pipeline-03",
+          "funnel-01"
+        ],
+        "component": "Pipeline1",
+        "props": "{ items: { enteredStageAt: Date; id: string; owner?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+      }
     },
     {
       "name": "pipeline-02",
@@ -2751,7 +3821,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/pipeline/pipeline-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
+        "size": "full",
+        "usedWith": [
+          "pipeline-01",
+          "funnel-01",
+          "stat-group-02"
+        ],
+        "component": "Pipeline2",
+        "props": "{ noun?: string; stages: { count: number; label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "pipeline-03",
@@ -2767,7 +3848,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/pipeline/pipeline-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Items that have been in a stage longer than expected, longest first, with how long they have waited and who owns them.",
+        "size": "full",
+        "usedWith": [
+          "pipeline-01",
+          "pipeline-02"
+        ],
+        "component": "Pipeline3",
+        "props": "{ items: { enteredStageAt: Date; id: string; owner?: string; stage: string; subtitle?: string; title: string; value?: number }[]; noun?: string; now: Date; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+      }
     },
     {
       "name": "pipeline-04",
@@ -2783,7 +3874,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/pipeline/pipeline-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Closed and open deals weighted by the chance each stage closes, per owner, against their quota.",
+        "size": "full",
+        "usedWith": [
+          "pipeline-02",
+          "forecast-03",
+          "leaderboard-01"
+        ],
+        "component": "Pipeline4",
+        "props": "{ description: string; owners: { closed: number; deals: { stage: string; value: number }[]; name: string; quota: number }[]; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string }"
+      }
     },
     {
       "name": "schedule-01",
@@ -2798,7 +3900,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/schedule/schedule-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.",
+        "size": "half",
+        "usedWith": [
+          "schedule-02",
+          "calendar-01",
+          "team-04"
+        ],
+        "component": "Schedule1",
+        "props": "{ days?: number; events: { allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "schedule-02",
@@ -2814,7 +3927,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/schedule/schedule-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A month calendar with a dot on each day that has events, and a list of the events on the selected day.",
+        "size": "full",
+        "usedWith": [
+          "schedule-01",
+          "schedule-03"
+        ],
+        "component": "Schedule2",
+        "props": "{ events: { allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelect?: (day: Date) => void; timeZone?: string; title: string; weekStartsOn?: 0 | 1 }"
+      }
     },
     {
       "name": "schedule-03",
@@ -2829,7 +3952,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/schedule/schedule-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Deadlines and renewals in date order, each with a countdown and an urgency badge.",
+        "size": "half",
+        "usedWith": [
+          "schedule-01",
+          "billing-01",
+          "checklist-04"
+        ],
+        "component": "Schedule3",
+        "props": "{ deadlines: { due: Date; id: string; detail?: string; title: string }[]; now: Date; soonDays?: number; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "schedule-04",
@@ -2844,7 +3978,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/schedule/schedule-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.",
+        "size": "full",
+        "usedWith": [
+          "schedule-01",
+          "team-02"
+        ],
+        "component": "Schedule4",
+        "props": "{ calendars: { color: string; name: string }[]; endHour?: number; events: { allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; startHour?: number; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "team-01",
@@ -2860,7 +4004,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A list of members with their role, whether they are online and when they were last active.",
+        "size": "half",
+        "usedWith": [
+          "team-05",
+          "team-06",
+          "settings-01"
+        ],
+        "component": "Team1",
+        "props": "{ members: { lastActive?: Date; role: string; avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; now: Date; onInvite?: () => void; title: string }"
+      }
     },
     {
       "name": "team-02",
@@ -2875,7 +4030,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Work assigned to each person against their capacity on a shared scale, with anyone over capacity flagged and listed first.",
+        "size": "half",
+        "usedWith": [
+          "team-03",
+          "kanban-01",
+          "leaderboard-02"
+        ],
+        "component": "Team2",
+        "props": "{ description: string; people: { assigned: number; capacity: number; role?: string; avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; title: string; unit: string }"
+      }
     },
     {
       "name": "team-03",
@@ -2890,7 +4056,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "How many people are online, shown as avatars, with the team split by presence.",
+        "size": "half",
+        "usedWith": [
+          "team-01",
+          "team-04"
+        ],
+        "component": "Team3",
+        "props": "{ description: string; people: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }[]; title: string }"
+      }
     },
     {
       "name": "team-04",
@@ -2907,7 +4083,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Who is on call now and until when, who is next, and the rest of the rota.",
+        "size": "half",
+        "usedWith": [
+          "schedule-01",
+          "alerts-01",
+          "team-03"
+        ],
+        "component": "Team4",
+        "props": "{ description: string; now: Date; onPage?: (person: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }) => void; shifts: { end: Date; person: { avatar?: string; id: string; name: string; presence?: \"online\" | \"away\" | \"offline\" }; start: Date }[]; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "team-05",
@@ -2923,7 +4110,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
+        "size": "full",
+        "usedWith": [
+          "team-01",
+          "settings-01",
+          "security-02"
+        ],
+        "component": "Team5",
+        "props": "{ description: string; grants: {  }; groups: { id: string; label: string; permissions: { description?: string; id: string; label: string; requires?: string }[] }[]; onSave?: (grants: {  }) => void; roles: { id: string; locked?: boolean; members: number; name: string }[]; title: string }"
+      }
     },
     {
       "name": "team-06",
@@ -2942,7 +4140,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/team/team-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A share panel for inviting people with view or edit access, changing or removing it, and choosing who the link works for.",
+        "size": "half",
+        "usedWith": [
+          "team-01",
+          "settings-01"
+        ],
+        "component": "Team6",
+        "props": "{ currentPersonId: string; description?: string; linkAccess: \"restricted\" | \"workspace\" | \"anyone\"; onAccessChange?: (id: string, access: null | \"edit\" | \"view\") => void; onInvite?: (email: string, access: \"edit\" | \"view\") => void; onLinkAccessChange?: (access: \"restricted\" | \"workspace\" | \"anyone\") => void; people: { avatar?: string; email: string; id: string; name?: string; access: \"owner\" | \"edit\" | \"view\" }[]; title: string; url: string; workspace: string }"
+      }
     },
     {
       "name": "checklist-01",
@@ -2959,7 +4167,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/checklist/checklist-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
+        "size": "half",
+        "usedWith": [
+          "checklist-03",
+          "onboarding-01"
+        ],
+        "component": "Checklist1",
+        "props": "{ onAction?: (id: string) => void; onSkip?: (id: string) => void; steps: { action?: string; description: string; duration?: string; id: string; optional?: boolean; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+      }
     },
     {
       "name": "checklist-02",
@@ -2975,7 +4193,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/checklist/checklist-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
+        "size": "full",
+        "usedWith": [
+          "checklist-01",
+          "onboarding-02"
+        ],
+        "component": "Checklist2",
+        "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages: { detail?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+      }
     },
     {
       "name": "checklist-03",
@@ -2992,7 +4220,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/checklist/checklist-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
+        "size": "compact",
+        "usedWith": [
+          "checklist-01",
+          "kpi-01"
+        ],
+        "component": "Checklist3",
+        "props": "{ continueLabel?: string; onContinue?: () => void; steps: { duration?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string }"
+      }
     },
     {
       "name": "checklist-04",
@@ -3008,7 +4246,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/checklist/checklist-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
+        "size": "half",
+        "usedWith": [
+          "schedule-03",
+          "kanban-01",
+          "team-02"
+        ],
+        "component": "Checklist4",
+        "props": "{ groups: { name: string; tasks: { done?: boolean; due: Date; id: string; owner?: string; title: string }[] }[]; now: Date; onToggle?: (id: string, done: boolean) => void; title: string }"
+      }
     },
     {
       "name": "gauge-01",
@@ -3024,7 +4273,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/gauge/gauge-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A net promoter score on its full −100 to 100 scale, with the split of promoters, passives and detractors.",
+        "size": "compact",
+        "usedWith": [
+          "feedback-01",
+          "gauge-04",
+          "chart-panel-01"
+        ],
+        "component": "Gauge1",
+        "props": "{ description: string; previous?: number; responses: { detractors: number; passives: number; promoters: number }; title: string }"
+      }
     },
     {
       "name": "gauge-02",
@@ -3039,7 +4299,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/gauge/gauge-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
+        "size": "half",
+        "usedWith": [
+          "status-01",
+          "metric-list-03",
+          "alerts-01"
+        ],
+        "component": "Gauge2",
+        "props": "{ bands: { from: number; label: string; to: number; tone: \"neutral\" | \"critical\" | \"positive\" | \"caution\" }[]; description: string; factors: { detail: string; label: string; score: number; weight: number }[]; title: string }"
+      }
     },
     {
       "name": "gauge-03",
@@ -3054,7 +4325,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/gauge/gauge-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "CPU, memory and disk as small gauges, each in the colour of its band with warning and critical thresholds marked.",
+        "size": "half",
+        "usedWith": [
+          "realtime-01",
+          "status-02",
+          "alerts-01"
+        ],
+        "component": "Gauge3",
+        "props": "{ description: string; resources: { detail: string; label: string; value: number }[]; thresholds: { critical: number; warning: number }; title: string }"
+      }
     },
     {
       "name": "gauge-04",
@@ -3070,7 +4352,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/gauge/gauge-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A satisfaction score on an arc with a target tick, the change since last period and the gap to target.",
+        "size": "half",
+        "usedWith": [
+          "gauge-01",
+          "feedback-02",
+          "goals-01"
+        ],
+        "component": "Gauge4",
+        "props": "{ description: string; footnote?: string; formatter?: (value: number) => string; max?: number; min?: number; previous: number; scaleFormatter?: (value: number) => string; target: number; title: string; value: number }"
+      }
     },
     {
       "name": "metric-list-01",
@@ -3085,7 +4378,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/metric-list/metric-list-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A list of metrics with their change and a 14-day sparkline each.",
+        "size": "half",
+        "usedWith": [
+          "stat-group-02",
+          "metric-list-02",
+          "chart-panel-01"
+        ],
+        "component": "MetricList1",
+        "props": "{ description: string; metrics: { changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; history?: number[]; key: string; label: string; previous?: number; value: number }[]; period: string; title: string }"
+      }
     },
     {
       "name": "metric-list-02",
@@ -3100,7 +4404,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/metric-list/metric-list-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Metrics grouped into sections, each with a header and a count of how many improved.",
+        "size": "half",
+        "usedWith": [
+          "metric-list-01",
+          "stat-group-01",
+          "comparison-01"
+        ],
+        "component": "MetricList2",
+        "props": "{ comparison?: string; description: string; sections: { key: string; label: string; metrics: { changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; history?: number[]; key: string; label: string; previous?: number; value: number }[] }[]; title: string }"
+      }
     },
     {
       "name": "metric-list-03",
@@ -3115,7 +4430,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/metric-list/metric-list-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Metrics against their targets, each with a bar, a tick at the target and a status.",
+        "size": "half",
+        "usedWith": [
+          "goals-02",
+          "gauge-02",
+          "metric-list-01"
+        ],
+        "component": "MetricList3",
+        "props": "{ description: string; metrics: { domain?: [number, number]; target: number; tolerance?: number; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; value: number }[]; title: string }"
+      }
     },
     {
       "name": "metric-list-04",
@@ -3134,7 +4460,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/metric-list/metric-list-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A list of metrics where picking one charts it in the same card.",
+        "size": "full",
+        "usedWith": [
+          "stat-group-03",
+          "metric-list-01",
+          "chart-panel-01"
+        ],
+        "component": "MetricList4",
+        "props": "{ comparison: string; defaultSelected?: string; description: string; labels: string[]; metrics: { history: number[]; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; onSelectedChange?: (key: string) => void; title: string }"
+      }
     },
     {
       "name": "forecast-01",
@@ -3153,7 +4490,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forecast/forecast-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Weekly actuals continuing into a dashed forecast, with a shaded 80% range and a marker for today.",
+        "size": "full",
+        "usedWith": [
+          "forecast-04",
+          "chart-panel-01",
+          "stat-group-01"
+        ],
+        "component": "Forecast1",
+        "props": "{ actuals: number[]; description: string; formatter?: (value: number) => string; horizon: number; lastDate: Date; level?: 0.8 | 0.9 | 0.95; now: Date; stepDays?: number; title: string }"
+      }
     },
     {
       "name": "forecast-02",
@@ -3168,7 +4516,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forecast/forecast-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The date the trend reaches a target, with an 80% range of dates, against the deadline.",
+        "size": "half",
+        "usedWith": [
+          "forecast-01",
+          "goals-01",
+          "progress-kpi-01"
+        ],
+        "component": "Forecast2",
+        "props": "{ actuals: number[]; deadline: Date; formatter?: (value: number) => string; lastDate: Date; level?: 0.8 | 0.9 | 0.95; metric: string; now: Date; stepDays?: number; target: number; title: string }"
+      }
     },
     {
       "name": "forecast-03",
@@ -3183,7 +4542,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forecast/forecast-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.",
+        "size": "half",
+        "usedWith": [
+          "goals-01",
+          "goals-03",
+          "progress-kpi-01"
+        ],
+        "component": "Forecast3",
+        "props": "{ current: number; description: string; elapsed: number; formatter?: (value: number) => string; target: number; title: string; total: number }"
+      }
     },
     {
       "name": "forecast-04",
@@ -3203,7 +4573,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forecast/forecast-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.",
+        "size": "full",
+        "usedWith": [
+          "forecast-01",
+          "forecast-02",
+          "goals-03"
+        ],
+        "component": "Forecast4",
+        "props": "{ actuals: { label: string; value: number }[]; description: string; formatter?: (value: number) => string; horizon: string[]; scenarios: { low: { note: string; rate: number }; base: { note: string; rate: number }; high: { note: string; rate: number } }; target?: number; title: string }"
+      }
     },
     {
       "name": "retention-01",
@@ -3219,7 +4600,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/retention/retention-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
+        "size": "full",
+        "usedWith": [
+          "retention-02",
+          "heatmap-02"
+        ],
+        "component": "Retention1",
+        "props": "{ cohorts: { label: string; size: number; retained: number[] }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string }"
+      }
     },
     {
       "name": "retention-02",
@@ -3238,7 +4629,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/retention/retention-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
+        "size": "full",
+        "usedWith": [
+          "retention-01",
+          "retention-04"
+        ],
+        "component": "Retention2",
+        "props": "{ cohorts: { label: string; size: number; retained: number[] }[]; description: string; highlight?: number; periodName?: string; title: string }"
+      }
     },
     {
       "name": "retention-03",
@@ -3253,7 +4654,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/retention/retention-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
+        "size": "compact",
+        "usedWith": [
+          "heatmap-01",
+          "retention-01",
+          "funnel-01"
+        ],
+        "component": "Retention3",
+        "props": "{ description: string; milestones: { label: string; current: number; previous: number }[]; previousLabel?: string; title: string }"
+      }
     },
     {
       "name": "retention-04",
@@ -3272,7 +4684,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/retention/retention-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Users gained above the axis and lost below it, with the net change and the quick ratio.",
+        "size": "full",
+        "usedWith": [
+          "retention-01",
+          "stat-group-02"
+        ],
+        "component": "Retention4",
+        "props": "{ description: string; periods: { label: string; churned: number; new: number; resurrected: number }[]; periodName?: string; title: string; unit?: string }"
+      }
     },
     {
       "name": "distribution-01",
@@ -3282,6 +4704,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/distribution.json"
       ],
+      "meta": {
+        "shows": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
+        "size": "half",
+        "usedWith": [
+          "distribution-03",
+          "alerts-02"
+        ],
+        "component": "Distribution1",
+        "props": "{ bins: { x0: number; x1: number; count: number }[]; description: string; formatter?: (value: number) => string; limit?: { label: string; value: number }; title: string; unit?: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-01.tsx",
@@ -3298,6 +4730,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/distribution.json"
       ],
+      "meta": {
+        "shows": "A box and whiskers per group on a shared axis, to compare spread and median across groups.",
+        "size": "half",
+        "usedWith": [
+          "distribution-03",
+          "data-table-04"
+        ],
+        "component": "Distribution2",
+        "props": "{ description: string; formatter?: (value: number) => string; groups: { count: number; high: number; label: string; low: number; median: number; q1: number; q3: number }[]; tickFormatter?: (value: number) => string; whiskerLabel?: string; title: string; unit?: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-02.tsx",
@@ -3319,7 +4761,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/distribution/distribution-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The median, mean and percentiles of a set of values, with a note when a long tail pulls the mean away.",
+        "size": "half",
+        "usedWith": [
+          "distribution-01",
+          "stat-group-01"
+        ],
+        "component": "Distribution3",
+        "props": "{ description: string; formatter?: (value: number) => string; title: string; unit?: string; values: number[] }"
+      }
     },
     {
       "name": "distribution-04",
@@ -3329,6 +4781,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/distribution.json"
       ],
+      "meta": {
+        "shows": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
+        "size": "half",
+        "usedWith": [
+          "distribution-01",
+          "stat-group-02"
+        ],
+        "component": "Distribution4",
+        "props": "{ current: number[]; currentLabel?: string; description: string; edges: number[]; formatter?: (value: number) => string; lowerIsBetter?: boolean; previous: number[]; previousLabel?: string; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/distribution/distribution-04.tsx",
@@ -3351,7 +4813,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/spend/spend-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
+        "size": "half",
+        "usedWith": [
+          "spend-03",
+          "forecast-03"
+        ],
+        "component": "Spend1",
+        "props": "{ budget: number; currency?: string; description: string; now: Date; periodEnd: Date; periodStart: Date; spent: number; title: string }"
+      }
     },
     {
       "name": "spend-02",
@@ -3367,7 +4839,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/spend/spend-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "One budget bar per service, each with its own status, and the total underneath.",
+        "size": "half",
+        "usedWith": [
+          "spend-01",
+          "data-table-04"
+        ],
+        "component": "Spend2",
+        "props": "{ currency?: string; description: string; elapsed: number; lines: { budget: number; label: string; spent: number }[]; title: string }"
+      }
     },
     {
       "name": "spend-03",
@@ -3381,6 +4863,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/spend.json"
       ],
+      "meta": {
+        "shows": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
+        "size": "full",
+        "usedWith": [
+          "spend-01",
+          "spend-02"
+        ],
+        "component": "Spend3",
+        "props": "{ currency?: string; description: string; periods: { budget: number; label: string; spent: number }[]; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-03.tsx",
@@ -3401,6 +4893,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/spend.json"
       ],
+      "meta": {
+        "shows": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
+        "size": "half",
+        "usedWith": [
+          "forecast-02",
+          "billing-04"
+        ],
+        "component": "Spend4",
+        "props": "{ balances: number[]; currency?: string; description: string; lastMonth: Date; trailing?: number; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/spend/spend-04.tsx",
@@ -3423,7 +4925,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/flow/flow-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Sessions from each source through the landing page, to signing up, browsing on or bouncing.",
+        "size": "full",
+        "usedWith": [
+          "funnel-01",
+          "chart-panel-02",
+          "geo-02"
+        ],
+        "component": "Flow1",
+        "props": "{ description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; goal: string; title: string; unit?: string }"
+      }
     },
     {
       "name": "flow-02",
@@ -3439,7 +4952,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/flow/flow-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Where visitors go in their first pages after landing, with the ones who left at each step.",
+        "size": "full",
+        "usedWith": [
+          "flow-04",
+          "funnel-01"
+        ],
+        "component": "Flow2",
+        "props": "{ description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; title: string; unit?: string }"
+      }
     },
     {
       "name": "flow-03",
@@ -3450,6 +4973,16 @@
         "https://www.dashboardblocks.com/r/base/chart-panel.json",
         "https://www.dashboardblocks.com/r/base/flow.json"
       ],
+      "meta": {
+        "shows": "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
+        "size": "full",
+        "usedWith": [
+          "spend-02",
+          "billing-01"
+        ],
+        "component": "Flow3",
+        "props": "{ currency?: string; description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string }"
+      },
       "files": [
         {
           "path": "registry/components/dashboardblocks/flow/flow-03.tsx",
@@ -3471,7 +5004,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/flow/flow-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.",
+        "size": "full",
+        "usedWith": [
+          "flow-02",
+          "funnel-03"
+        ],
+        "component": "Flow4",
+        "props": "{ description: string; goal: string; paths: { converted: number; count: number; steps: string[] }[]; title: string; total: number; unit?: string }"
+      }
     },
     {
       "name": "timeline-01",
@@ -3486,7 +5029,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/timeline/timeline-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Projects grouped by team, each a bar from start to end filled to its progress, with a line for today.",
+        "size": "full",
+        "usedWith": [
+          "timeline-02",
+          "timeline-04",
+          "pipeline-01"
+        ],
+        "component": "Timeline1",
+        "props": "{ description: string; end: Date; items: { color?: string; end: Date; group?: string; id: string; label: string; progress?: number; start: Date; status?: \"done\" | \"in-progress\" | \"planned\" | \"at-risk\" }[]; now: Date; start: Date; title: string }"
+      }
     },
     {
       "name": "timeline-02",
@@ -3501,7 +5055,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/timeline/timeline-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A launch plan as a list on a rail, with the next milestone highlighted and how soon or how late each one is.",
+        "size": "half",
+        "usedWith": [
+          "timeline-01",
+          "checklist-01"
+        ],
+        "component": "Timeline2",
+        "props": "{ description: string; milestones: { date: Date; description?: string; id: string; label: string; status: \"done\" | \"in-progress\" | \"planned\" | \"at-risk\" }[]; now: Date; title: string }"
+      }
     },
     {
       "name": "timeline-03",
@@ -3516,7 +5080,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/timeline/timeline-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
+        "size": "full",
+        "usedWith": [
+          "deployments-01",
+          "deployments-03"
+        ],
+        "component": "Timeline3",
+        "props": "{ description: string; end: Date; now: Date; releases: { date: Date; kind: \"major\" | \"minor\" | \"patch\"; version: string; summary?: string }[]; start: Date; title: string }"
+      }
     },
     {
       "name": "timeline-04",
@@ -3531,7 +5105,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/timeline/timeline-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each phase's plan as a dashed outline with what actually happened as a bar beneath it, and how many days it slipped.",
+        "size": "full",
+        "usedWith": [
+          "timeline-01",
+          "timeline-02"
+        ],
+        "component": "Timeline4",
+        "props": "{ description: string; end: Date; now: Date; phases: { actual?: { end?: Date; start: Date }; id: string; label: string; planned: { end: Date; start: Date } }[]; start: Date; title: string }"
+      }
     },
     {
       "name": "realtime-01",
@@ -3546,7 +5130,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/realtime/realtime-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Active users now, page views per second over the last minute and the pages with the most people on them.",
+        "size": "compact",
+        "usedWith": [
+          "chart-panel-02",
+          "geo-03"
+        ],
+        "component": "Realtime1",
+        "props": "{ activeUsers: number; description: string; pageViews: number[]; pages: { path: string; users: number }[]; simulate?: boolean; title: string }"
+      }
     },
     {
       "name": "realtime-02",
@@ -3565,7 +5159,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/realtime/realtime-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.",
+        "size": "full",
+        "usedWith": [
+          "status-02",
+          "alerts-01",
+          "deployments-03"
+        ],
+        "component": "Realtime2",
+        "props": "{ description: string; samples: { errors: number; requests: number }[]; interval?: number; simulate?: boolean; title: string }"
+      }
     },
     {
       "name": "realtime-03",
@@ -3581,7 +5186,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/realtime/realtime-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.",
+        "size": "half",
+        "usedWith": [
+          "realtime-04",
+          "activity-feed-01"
+        ],
+        "component": "Realtime3",
+        "props": "{ description: string; events: { at: Date; detail: string; id: string; kind: \"order\" | \"signup\" | \"refund\" | \"message\"; label: string }[]; limit?: number; now: Date; simulate?: boolean; title: string }"
+      }
     },
     {
       "name": "realtime-04",
@@ -3596,7 +5211,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/realtime/realtime-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Running totals since midnight against yesterday at the same time, with orders per hour.",
+        "size": "half",
+        "usedWith": [
+          "realtime-03",
+          "chart-panel-01"
+        ],
+        "component": "Realtime4",
+        "props": "{ description: string; hourly: number[]; hourlyLabel?: string; metrics: { format?: (value: number) => string; id: string; label: string; today: number; yesterday: number }[]; simulate?: boolean; title: string }"
+      }
     },
     {
       "name": "feedback-01",
@@ -3611,7 +5236,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/feedback/feedback-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period.",
+        "size": "half",
+        "usedWith": [
+          "feedback-03",
+          "feedback-04"
+        ],
+        "component": "Feedback1",
+        "props": "{ counts: number[]; description: string; previousAverage?: number; title: string }"
+      }
     },
     {
       "name": "feedback-02",
@@ -3626,7 +5261,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/feedback/feedback-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
+        "size": "half",
+        "usedWith": [
+          "feedback-03",
+          "feedback-01"
+        ],
+        "component": "Feedback2",
+        "props": "{ description: string; title: string; topics: { label: string; negative: number; neutral: number; positive: number }[] }"
+      }
     },
     {
       "name": "feedback-03",
@@ -3642,7 +5287,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/feedback/feedback-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The latest reviews with their rating and source, flagging low ratings still waiting for a reply.",
+        "size": "half",
+        "usedWith": [
+          "feedback-01",
+          "feedback-02"
+        ],
+        "component": "Feedback3",
+        "props": "{ description: string; now: Date; reviews: { author: string; date: Date; id: string; rating: number; replied?: boolean; source: string; text: string }[]; title: string }"
+      }
     },
     {
       "name": "feedback-04",
@@ -3660,7 +5315,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/feedback/feedback-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.",
+        "size": "half",
+        "usedWith": [
+          "feedback-01",
+          "feedback-03"
+        ],
+        "component": "Feedback4",
+        "props": "{ description: string; periods: { label: string; responses: number; satisfied: number }[]; target?: number; title: string }"
+      }
     },
     {
       "name": "deployments-01",
@@ -3676,7 +5341,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/deployments/deployments-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The latest builds, each with its commit, environment, author, duration and status.",
+        "size": "full",
+        "usedWith": [
+          "deployments-02",
+          "deployments-04",
+          "activity-feed-05"
+        ],
+        "component": "Deployments1",
+        "props": "{ deployments: { author: string; duration: number; environment: string; id: string; message: string; sha: string; startedAt: Date; status: \"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\" }[]; description: string; now: Date; title: string }"
+      }
     },
     {
       "name": "deployments-02",
@@ -3691,7 +5367,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/deployments/deployments-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "What each environment is running, and how many commits are waiting to be promoted to the next one.",
+        "size": "half",
+        "usedWith": [
+          "deployments-01",
+          "deployments-04",
+          "status-01"
+        ],
+        "component": "Deployments2",
+        "props": "{ ahead: number[]; description: string; environments: { deployedAt: Date; deployedBy: string; id: string; name: string; sha: string; status: \"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\"; version: string }[]; now: Date; title: string }"
+      }
     },
     {
       "name": "deployments-03",
@@ -3706,7 +5393,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/deployments/deployments-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The four DORA delivery metrics, each with its performance band and the change on the previous period.",
+        "size": "full",
+        "usedWith": [
+          "deployments-01",
+          "deployments-04",
+          "chart-panel-01"
+        ],
+        "component": "Deployments3",
+        "props": "{ current: { changeFailureRate: number; deploysPerDay: number; leadTimeHours: number; restoreHours: number }; description: string; previous?: { changeFailureRate: number; deploysPerDay: number; leadTimeHours: number; restoreHours: number }; title: string }"
+      }
     },
     {
       "name": "deployments-04",
@@ -3721,7 +5419,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/deployments/deployments-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The latest runs of each pipeline as a strip of results, with the pass rate and median duration.",
+        "size": "half",
+        "usedWith": [
+          "deployments-01",
+          "deployments-03"
+        ],
+        "component": "Deployments4",
+        "props": "{ description: string; pipelines: { medianDuration: number; name: string; runs: (\"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\")[] }[]; title: string }"
+      }
     },
     {
       "name": "scatter-01",
@@ -3740,7 +5448,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/scatter/scatter-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.",
+        "size": "half",
+        "usedWith": [
+          "data-table-03",
+          "distribution-01"
+        ],
+        "component": "Scatter1",
+        "props": "{ description: string; groups: string[]; points: { group: string; label: string; x: number; y: number }[]; title: string; x: { format: (value: number) => string; label: string }; y: { format: (value: number) => string; formatChange?: (value: number) => string; label: string } }"
+      }
     },
     {
       "name": "scatter-02",
@@ -3759,7 +5477,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/scatter/scatter-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.",
+        "size": "half",
+        "usedWith": [
+          "leaderboard-01",
+          "data-table-02"
+        ],
+        "component": "Scatter2",
+        "props": "{ description: string; items: { label: string; x: number; y: number }[]; quadrants: [string, string, string, string]; title: string; split?: { x: number; y: number }; x: { domain: [number, number]; format: (value: number) => string; label: string; ticks?: number[] }; y: { domain: [number, number]; format: (value: number) => string; label: string; ticks?: number[] } }"
+      }
     },
     {
       "name": "scatter-03",
@@ -3778,7 +5506,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/scatter/scatter-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
+        "size": "full",
+        "usedWith": [
+          "data-table-03",
+          "spend-02"
+        ],
+        "component": "Scatter3",
+        "props": "{ campaigns: { channel: string; cpa: number; conversion: number; label: string; spend: number }[]; channels: string[]; description: string; title: string }"
+      }
     },
     {
       "name": "scatter-04",
@@ -3793,7 +5531,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/scatter/scatter-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.",
+        "size": "full",
+        "usedWith": [
+          "alerts-01",
+          "data-table-04"
+        ],
+        "component": "Scatter4",
+        "props": "{ description: string; risks: { id: string; impact: number; likelihood: number; owner?: string; title: string }[]; title: string }"
+      }
     },
     {
       "name": "security-01",
@@ -3811,7 +5559,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.",
+        "size": "full",
+        "usedWith": [
+          "security-02",
+          "security-04",
+          "alerts-01"
+        ],
+        "component": "Security1",
+        "props": "{ days: { blocked: number; failed: number; label: string; succeeded: number }[]; description: string; mfaCoverage?: number; title: string }"
+      }
     },
     {
       "name": "security-02",
@@ -3827,7 +5586,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Changes to access, keys and settings, newest first, with a switch to show warnings only.",
+        "size": "full",
+        "usedWith": [
+          "security-01",
+          "security-03",
+          "activity-feed-01"
+        ],
+        "component": "Security2",
+        "props": "{ description: string; events: { actor: string; action: string; at: Date; id: string; ip?: string; severity: \"info\" | \"warning\" | \"critical\"; target?: string }[]; now: Date; title: string }"
+      }
     },
     {
       "name": "security-03",
@@ -3843,7 +5613,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The devices signed in to an account, with where and when each was last active, and buttons to sign them out.",
+        "size": "half",
+        "usedWith": [
+          "security-05",
+          "security-02"
+        ],
+        "component": "Security3",
+        "props": "{ description: string; now: Date; onSignOut?: (id: string) => void; sessions: { client: string; current?: boolean; device: \"desktop\" | \"mobile\"; id: string; lastActive: Date; location: string }[]; title: string }"
+      }
     },
     {
       "name": "security-04",
@@ -3859,7 +5639,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A security score built from workspace checks, with failing checks first and what to do about each.",
+        "size": "half",
+        "usedWith": [
+          "security-05",
+          "security-06",
+          "security-01"
+        ],
+        "component": "Security4",
+        "props": "{ checks: { detail: string; id: string; label: string; result: \"pass\" | \"warn\" | \"fail\"; weight?: number }[]; description: string; title: string }"
+      }
     },
     {
       "name": "security-05",
@@ -3876,7 +5667,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Setting up two-factor sign-in with an authenticator app, security keys and passkeys, and recovery codes shown once.",
+        "size": "half",
+        "usedWith": [
+          "security-03",
+          "security-04"
+        ],
+        "component": "Security5",
+        "props": "{ authenticatorAddedAt?: Date; description: string; onAddSecurityKey?: () => void; onRemoveAuthenticator?: () => void; onRemoveSecurityKey?: (id: string) => void; onRegenerateRecoveryCodes?: () => void; onVerify?: (code: string) => boolean | Promise<boolean>; recoveryCodes: string[]; recoveryCodesLeft: number; required?: boolean; securityKeys: { addedAt: Date; id: string; name: string }[]; setup: { qrCode: ReactNode; secret: string }; title: string }"
+      }
     },
     {
       "name": "security-06",
@@ -3896,7 +5697,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/security/security-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.",
+        "size": "half",
+        "usedWith": [
+          "security-04",
+          "team-05",
+          "settings-01"
+        ],
+        "component": "Security6",
+        "props": "{ acsUrl: string; connection: { certificate: string; issuer: string; provider: string; signInUrl: string }; description: string; domains: { domain: string; id: string; txtRecord: string; verified: boolean }[]; entityId: string; enforced: boolean; onEnforcedChange?: (enforced: boolean) => void; onSave?: (connection: { certificate: string; issuer: string; provider: string; signInUrl: string }) => void; onVerifyDomain?: (id: string) => boolean | Promise<boolean>; providers: string[]; status: \"connected\" | \"error\" | \"paused\" | \"disconnected\"; title: string }"
+      }
     },
     {
       "name": "inventory-01",
@@ -3911,7 +5723,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/inventory/inventory-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.",
+        "size": "full",
+        "usedWith": [
+          "inventory-02",
+          "inventory-03",
+          "inventory-04"
+        ],
+        "component": "Inventory1",
+        "props": "{ description: string; items: { dailyDemand: number; leadTimeDays: number; name: string; onHand: number; onOrder?: number; reorderPoint: number; sku: string }[]; targetDays?: number; title: string }"
+      }
     },
     {
       "name": "inventory-02",
@@ -3925,7 +5748,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/inventory/inventory-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.",
+        "size": "half",
+        "usedWith": [
+          "inventory-01",
+          "inventory-03"
+        ],
+        "component": "Inventory2",
+        "props": "{ description: string; title: string; warehouses: { capacity: number; inbound?: number; location: string; name: string; stored: number }[]; warnAt?: number }"
+      }
     },
     {
       "name": "inventory-03",
@@ -3941,7 +5774,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/inventory/inventory-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Every SKU by stock status, with the value of stock on hand and how many times a year it turns over.",
+        "size": "full",
+        "usedWith": [
+          "inventory-01",
+          "inventory-02",
+          "stat-group-02"
+        ],
+        "component": "Inventory3",
+        "props": "{ counts: { low: number; out: number; ok: number; over: number }; currency?: string; description: string; annualCogs?: number; title: string; value: number }"
+      }
     },
     {
       "name": "inventory-04",
@@ -3960,7 +5804,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/inventory/inventory-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.",
+        "size": "full",
+        "usedWith": [
+          "inventory-01",
+          "inventory-03"
+        ],
+        "component": "Inventory4",
+        "props": "{ dailyDemand: number; description: string; horizon?: number; incoming: { day: number; quantity: number }[]; now: Date; onHand: number; reorderPoint: number; title: string }"
+      }
     },
     {
       "name": "ai-usage-01",
@@ -3979,7 +5833,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-usage/ai-usage-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
+        "size": "full",
+        "usedWith": [
+          "ai-usage-02",
+          "ai-usage-03",
+          "ai-usage-04"
+        ],
+        "component": "AiUsage1",
+        "props": "{ days: { label: string; tokens: Record<string, number> }[]; description: string; models: { cost: number; id: string; label: string }[]; title: string }"
+      }
     },
     {
       "name": "ai-usage-02",
@@ -3994,7 +5859,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-usage/ai-usage-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
+        "size": "full",
+        "usedWith": [
+          "ai-usage-01",
+          "ai-usage-04",
+          "spend-01"
+        ],
+        "component": "AiUsage2",
+        "props": "{ description: string; features: { cost: number; label: string; requests: number; tokens: { cached?: number; input: number; output: number } }[]; title: string }"
+      }
     },
     {
       "name": "ai-usage-03",
@@ -4009,7 +5885,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-usage/ai-usage-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Requests, time to first token, output speed and error rate for each model.",
+        "size": "full",
+        "usedWith": [
+          "ai-usage-01",
+          "ai-usage-02"
+        ],
+        "component": "AiUsage3",
+        "props": "{ description: string; errorThreshold?: number; models: { errorRate: number; label: string; outputSpeed: number; requests: number; ttftP50: number; ttftP95: number }[]; title: string }"
+      }
     },
     {
       "name": "ai-usage-04",
@@ -4025,7 +5911,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-usage/ai-usage-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The share of input tokens served from the cache, what it saved and what the tokens would have cost without it.",
+        "size": "half",
+        "usedWith": [
+          "ai-usage-01",
+          "ai-usage-02"
+        ],
+        "component": "AiUsage4",
+        "props": "{ description: string; previousHitRate?: number; prices: { cached?: number; input: number; output: number }; title: string; tokens: { cached?: number; input: number; output: number } }"
+      }
     },
     {
       "name": "settings-01",
@@ -4043,7 +5939,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
+        "size": "full",
+        "usedWith": [
+          "team-05",
+          "billing-01",
+          "team-01"
+        ],
+        "component": "Settings1",
+        "props": "{ currentMemberId: string; description: string; invites: { email: string; id: string; role: \"owner\" | \"admin\" | \"member\" | \"viewer\"; sentAt: Date }[]; members: { avatar?: string; email: string; id: string; name: string; role: \"owner\" | \"admin\" | \"member\" | \"viewer\" }[]; now: Date; onInvite?: (email: string, role: \"owner\" | \"admin\" | \"member\" | \"viewer\") => void; onRemoveMember?: (id: string) => void; onResendInvite?: (id: string) => void; onRevokeInvite?: (id: string) => void; onRoleChange?: (id: string, role: \"owner\" | \"admin\" | \"member\" | \"viewer\") => void; seats?: number; title: string }"
+      }
     },
     {
       "name": "settings-02",
@@ -4061,7 +5968,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.",
+        "size": "full",
+        "usedWith": [
+          "settings-05",
+          "security-02"
+        ],
+        "component": "Settings2",
+        "props": "{ createKey: (name: string, scope: \"read\" | \"write\") => { key: { createdAt: Date; createdBy: string; id: string; lastUsedAt?: Date; masked: string; name: string; scope: \"read\" | \"write\" }; secret: string }; description: string; keys: { createdAt: Date; createdBy: string; id: string; lastUsedAt?: Date; masked: string; name: string; scope: \"read\" | \"write\" }[]; now: Date; onRevoke?: (id: string) => void; staleAfterDays?: number; title: string }"
+      }
     },
     {
       "name": "settings-03",
@@ -4076,7 +5993,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.",
+        "size": "full",
+        "usedWith": [
+          "notifications-01",
+          "settings-07"
+        ],
+        "component": "Settings3",
+        "props": "{ channels: { id: string; label: string }[]; description: string; groups: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void; preferences: {  }; title: string }"
+      }
     },
     {
       "name": "settings-04",
@@ -4094,7 +6021,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
+        "size": "half",
+        "usedWith": [
+          "settings-05",
+          "settings-02"
+        ],
+        "component": "Settings4",
+        "props": "{ description: string; integrations: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"connected\" | \"error\" | \"paused\" | \"disconnected\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; title: string }"
+      }
     },
     {
       "name": "settings-05",
@@ -4112,7 +6049,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.",
+        "size": "full",
+        "usedWith": [
+          "settings-02",
+          "settings-04",
+          "status-01"
+        ],
+        "component": "Settings5",
+        "props": "{ description: string; endpoints: { deliveries: { at: Date; status: number }[]; enabled: boolean; events: string[]; id: string; url: string }[]; now: Date; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void; title: string }"
+      }
     },
     {
       "name": "settings-06",
@@ -4129,7 +6077,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-06.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+        "size": "half",
+        "usedWith": [
+          "settings-01",
+          "security-06"
+        ],
+        "component": "Settings6",
+        "props": "{ actions: { action: string; confirm?: boolean; description: string; id: string; label: string }[]; description: string; onAction?: (id: string) => void; title: string; workspace: string }"
+      }
     },
     {
       "name": "settings-07",
@@ -4147,7 +6105,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/settings/settings-07.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
+        "size": "half",
+        "usedWith": [
+          "security-05",
+          "settings-03"
+        ],
+        "component": "Settings7",
+        "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void; profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; timeZones: { label: string; value: string }[]; title: string }"
+      }
     },
     {
       "name": "app-shell-01",
@@ -4163,7 +6131,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/app-shell/app-shell-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications.",
+        "size": "page",
+        "usedWith": [
+          "app-shell-02"
+        ],
+        "component": "AppShell1",
+        "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
+      }
     },
     {
       "name": "app-shell-02",
@@ -4180,7 +6157,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/app-shell/app-shell-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An app shell whose sidebar collapses to icons with tooltips, with nested links and help and settings pinned to the bottom.",
+        "size": "page",
+        "usedWith": [
+          "app-shell-01"
+        ],
+        "component": "AppShell2",
+        "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; defaultCollapsed?: boolean; onCreate?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; secondarySections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
+      }
     },
     {
       "name": "app-shell-03",
@@ -4196,7 +6182,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/app-shell/app-shell-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu.",
+        "size": "page",
+        "usedWith": [
+          "app-shell-01"
+        ],
+        "component": "AppShell3",
+        "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; usage: { action?: { href: string; label: string }; limit: number; unit: string; title: string; used: number }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
+      }
     },
     {
       "name": "app-shell-04",
@@ -4211,7 +6206,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/app-shell/app-shell-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An app shell with no sidebar: page links sit under the top bar and scroll sideways on small screens.",
+        "size": "page",
+        "usedWith": [
+          "app-shell-01"
+        ],
+        "component": "AppShell4",
+        "props": "{ children?: ReactNode; links: { badge?: ReactNode; href: string; title: string }[]; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; title: string; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
+      }
     },
     {
       "name": "forms-01",
@@ -4232,7 +6236,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forms/forms-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
+        "size": "half",
+        "usedWith": [
+          "page-header-01",
+          "forms-04"
+        ],
+        "component": "Forms1",
+        "props": "{ defaultValues: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; bio?: string; email?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; timezones: { label: string; value: string }[] }"
+      }
     },
     {
       "name": "forms-02",
@@ -4253,7 +6267,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forms/forms-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A create form in a panel that slides in from the side, with errors from the server shown on the field.",
+        "size": "half",
+        "usedWith": [
+          "data-table-02",
+          "page-header-04"
+        ],
+        "component": "Forms2",
+        "props": "{ customers: { email: string; name: string; plan: string }[]; onCreate?: (values: { company: string; email: string; name: string; notes: string; plan: string }) => Promise<void | { name?: string; email?: string; company?: string; notes?: string; plan?: string }>; plans: string[] }"
+      }
     },
     {
       "name": "forms-03",
@@ -4274,7 +6298,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forms/forms-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A form in steps that checks each step before moving on and reviews everything on the last one.",
+        "size": "half",
+        "usedWith": [
+          "onboarding-01",
+          "checklist-02"
+        ],
+        "component": "Forms3",
+        "props": "{ environments: { label: string; value: string }[]; onCreate?: (values: { description: string; environment: string; isPublic: boolean; name: string; region: string }) => Promise<void | { name?: string; region?: string; description?: string; environment?: string; isPublic?: string }>; regions: { label: string; value: string }[] }"
+      }
     },
     {
       "name": "forms-04",
@@ -4289,7 +6323,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/forms/forms-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Single values edited in place, saved with Enter and cancelled with Escape.",
+        "size": "half",
+        "usedWith": [
+          "record-detail-01",
+          "forms-01"
+        ],
+        "component": "Forms4",
+        "props": "{ defaultValues: { company: string; email: string; name: string; phone: string; website: string }; onSave?: (field: \"name\" | \"email\" | \"company\" | \"phone\" | \"website\", value: string) => Promise<string | void> }"
+      }
     },
     {
       "name": "record-detail-01",
@@ -4308,7 +6352,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/record-detail/record-detail-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A customer page with headline numbers, recent orders, contact details and notes.",
+        "size": "full",
+        "usedWith": [
+          "page-header-03",
+          "data-table-02",
+          "comments-01"
+        ],
+        "component": "RecordDetail1",
+        "props": "{ customer: { email: string; location: string; name: string; notes: string; phone: string; since: string; status: string; tags: string[] }; onDelete?: () => void; onEdit?: () => void; onMerge?: () => void; orders: { date: string; href: string; id: string; status: \"Delivered\" | \"Refunded\" | \"Shipped\"; total: number }[]; stats: { label: string; note?: ReactNode; value: ReactNode }[] }"
+      }
     },
     {
       "name": "record-detail-02",
@@ -4327,7 +6382,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/record-detail/record-detail-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An order page with line items and totals, a timeline of what happened, the customer, and shipping and payment.",
+        "size": "full",
+        "usedWith": [
+          "page-header-03",
+          "invoice-01",
+          "timeline-01"
+        ],
+        "component": "RecordDetail2",
+        "props": "{ customer: { email: string; href: string; name: string; orders: number }; events: { at: Date; icon: ReactNode; text: string; tone: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; items: { name: string; price: number; quantity: number; sku: string }[]; now: Date; onCancel?: () => void; onPrint?: () => void; onRefund?: () => void; order: { fulfilment: string; id: string; payment: string; placed: string; shipping: number; shippingAddress: string[]; status: string; taxRate: number } }"
+      }
     },
     {
       "name": "record-detail-03",
@@ -4348,7 +6414,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/record-detail/record-detail-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.",
+        "size": "full",
+        "usedWith": [
+          "page-header-03",
+          "comments-01",
+          "activity-feed-02"
+        ],
+        "component": "RecordDetail3",
+        "props": "{ currentUser: string; events: { at: Date; author: string; id: string; comment?: string; text: string }[]; now: Date; onAssignToMe?: () => void; onClose?: () => void; onComment?: (text: string) => Promise<void>; ticket: { assignee: string; created: string; description: string[]; id: string; labels: string[]; linkedOrder: { href: string; label: string }; priority: string; reporter: string; status: string; title: string } }"
+      }
     },
     {
       "name": "page-header-01",
@@ -4363,7 +6440,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/page-header/page-header-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A page title and description with a secondary action and a main action.",
+        "size": "full",
+        "usedWith": [
+          "data-table-02",
+          "forms-01"
+        ],
+        "component": "PageHeader1",
+        "props": "{ description: string; onCreate?: () => void; onExport?: () => void; title: string }"
+      }
     },
     {
       "name": "page-header-02",
@@ -4379,7 +6466,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/page-header/page-header-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A page title with a status badge and links to the page's sections, each with a count.",
+        "size": "full",
+        "usedWith": [
+          "data-table-02",
+          "record-detail-01"
+        ],
+        "component": "PageHeader2",
+        "props": "{ description: string; onInvite?: () => void; pathname: string; status: string; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }"
+      }
     },
     {
       "name": "page-header-03",
@@ -4396,7 +6493,18 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/page-header/page-header-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
+        "size": "full",
+        "usedWith": [
+          "record-detail-01",
+          "record-detail-02",
+          "record-detail-03"
+        ],
+        "component": "PageHeader3",
+        "props": "{ back: { href: string; label: string }; customer: { email: string; initials: string; location: string; name: string; orders: number; since: string; status: string }; onArchive?: () => void; onDelete?: () => void; onDuplicate?: () => void; onEdit?: () => void; onMessage?: () => void }"
+      }
     },
     {
       "name": "page-header-04",
@@ -4413,7 +6521,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/page-header/page-header-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A page title with a count beside it, and search and the main action on the same row.",
+        "size": "full",
+        "usedWith": [
+          "data-table-02",
+          "forms-02"
+        ],
+        "component": "PageHeader4",
+        "props": "{ count: number; description: string; onCreate?: () => void; onSearch?: (query: string) => void; title: string }"
+      }
     },
     {
       "name": "notifications-01",
@@ -4429,7 +6547,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/notifications/notifications-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.",
+        "size": "half",
+        "usedWith": [
+          "notifications-03",
+          "app-shell-01"
+        ],
+        "component": "Notifications1",
+        "props": "{ notifications: { at: Date; body?: string; href?: string; icon: ReactNode; id: string; read: boolean; title: ReactNode; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; now: Date; viewAllHref: string }"
+      }
     },
     {
       "name": "notifications-02",
@@ -4445,7 +6573,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/notifications/notifications-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Notifications that ask for a decision, such as a request to join or a refund, with a tab for the ones still waiting.",
+        "size": "half",
+        "usedWith": [
+          "notifications-03",
+          "activity-feed-01"
+        ],
+        "component": "Notifications2",
+        "props": "{ notifications: { request?: { approve: string; decline: string }; at: Date; body?: string; href?: string; icon: ReactNode; id: string; read: boolean; title: ReactNode; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; now: Date; onDecide?: (id: string, decision: \"approved\" | \"declined\") => Promise<void> }"
+      }
     },
     {
       "name": "notifications-03",
@@ -4463,7 +6601,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/notifications/notifications-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.",
+        "size": "full",
+        "usedWith": [
+          "notifications-01",
+          "notifications-02"
+        ],
+        "component": "Notifications3",
+        "props": "{ notifications: { mention?: boolean; at: Date; body?: string; href?: string; icon: ReactNode; id: string; read: boolean; title: ReactNode; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; now: Date; timeZone?: string }"
+      }
     },
     {
       "name": "command-menu-01",
@@ -4477,7 +6625,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/command-menu/command-menu-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A command palette to jump to a page or run an action, with shortcuts shown beside each action.",
+        "size": "half",
+        "usedWith": [
+          "app-shell-01",
+          "command-menu-02"
+        ],
+        "component": "CommandMenu1",
+        "props": "{ shortcutKey?: string; onAction?: (id: string) => void; onNavigate?: (href: string) => void }"
+      }
     },
     {
       "name": "command-menu-02",
@@ -4491,7 +6649,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/command-menu/command-menu-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A command palette that shows recent records, then searches customers and orders as you type.",
+        "size": "half",
+        "usedWith": [
+          "command-menu-01",
+          "data-table-02"
+        ],
+        "component": "CommandMenu2",
+        "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
+      }
     },
     {
       "name": "kanban-01",
@@ -4506,7 +6674,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kanban/kanban-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A sprint board of issues in columns with labels, assignees, due dates and priorities, and warnings when a column passes its limit.",
+        "size": "full",
+        "usedWith": [
+          "comments-04",
+          "calendar-01"
+        ],
+        "component": "Kanban1",
+        "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; doneColumn: string; issues: { assignees: string[]; attachments?: number; comments?: number; due?: Date; key: string; labels: { name: string; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; subtasks?: { done: number; total: number }; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; subtitle: string; title: string }"
+      }
     },
     {
       "name": "kanban-02",
@@ -4522,7 +6700,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kanban/kanban-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A sales board of deals in columns, each column showing its total value and each deal its next step.",
+        "size": "full",
+        "usedWith": [
+          "pipeline-01",
+          "funnel-01"
+        ],
+        "component": "Kanban2",
+        "props": "{ closedColumns: { lost: string; won: string }; columns: { color?: string; id: string; title: string; wipLimit?: number }[]; deals: { description: string; nextStep: string; nextStepAt: Date; owner: string; value: number; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; title: string }"
+      }
     },
     {
       "name": "kanban-03",
@@ -4537,7 +6725,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/kanban/kanban-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.",
+        "size": "full",
+        "usedWith": [
+          "comments-04",
+          "status-01"
+        ],
+        "component": "Kanban3",
+        "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; now: Date; onAdd?: (ticket: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }) => Promise<void>; onMove?: (id: string, column: string, index: number) => void; pausedColumns: string[]; slaHours: number; tickets: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }[]; title: string }"
+      }
     },
     {
       "name": "comments-01",
@@ -4552,7 +6750,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comments/comments-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Discussion threads with replies, reactions and resolved threads, and a box to start a new one.",
+        "size": "half",
+        "usedWith": [
+          "comments-02",
+          "activity-feed-01"
+        ],
+        "component": "Comments1",
+        "props": "{ comments: { at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: ThreadComment[]; resolved?: boolean }[]; currentUser: { avatar?: string; name: string }; now: Date; onDelete?: (commentId: string) => void; onEdit?: (commentId: string, body: string) => Promise<void>; onReact?: (commentId: string, emoji: string) => void; onResolve?: (commentId: string, resolved: boolean) => void; onSubmit?: (body: string, options: { parentId?: string }) => Promise<void>; people: { avatar?: string; name: string }[]; title: string }"
+      }
     },
     {
       "name": "comments-02",
@@ -4570,7 +6778,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comments/comments-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A composer that previews how mentions will look and who will be notified, above the latest updates.",
+        "size": "half",
+        "usedWith": [
+          "comments-01",
+          "team-01"
+        ],
+        "component": "Comments2",
+        "props": "{ currentUser: { avatar?: string; name: string }; now: Date; onReact?: (updateId: string, emoji: string) => void; onSubmit?: (body: string, options: { mentions: string[] }) => Promise<void>; people: { avatar?: string; name: string }[]; project: string; updates: { at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: ThreadComment[]; resolved?: boolean }[] }"
+      }
     },
     {
       "name": "comments-03",
@@ -4587,7 +6805,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comments/comments-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Comments in a column beside a document, each quoting the words it is about, that move to Resolved when closed.",
+        "size": "full",
+        "usedWith": [
+          "comments-01",
+          "activity-feed-01"
+        ],
+        "component": "Comments3",
+        "props": "{ comments: { quote: string; at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: { at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: ThreadComment[]; resolved?: boolean }[]; resolved?: boolean }[]; currentUser: { avatar?: string; name: string }; document: { paragraphs: string[]; status: string; title: string; updated: string }; now: Date; onReact?: (commentId: string, emoji: string) => void; onResolve?: (commentId: string, resolved: boolean) => void; onSubmit?: (body: string, options: { parentId: string }) => Promise<void>; people: { avatar?: string; name: string }[] }"
+      }
     },
     {
       "name": "comments-04",
@@ -4604,7 +6832,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/comments/comments-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A support ticket conversation with replies emailed to the customer and internal notes only the team sees.",
+        "size": "half",
+        "usedWith": [
+          "record-detail-01",
+          "kanban-03"
+        ],
+        "component": "Comments4",
+        "props": "{ currentUser: { avatar?: string; name: string }; customer: { company: string; email: string; name: string }; messages: { kind: \"customer\" | \"reply\" | \"note\"; at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: { at: Date; author: { avatar?: string; name: string }; body: string; edited?: boolean; id: string; reactions?: { count: number; emoji: string; reacted: boolean }[]; replies?: ThreadComment[]; resolved?: boolean }[]; resolved?: boolean }[]; now: Date; onReact?: (messageId: string, emoji: string) => void; onSubmit?: (body: string, options: { internal: boolean }) => Promise<void>; people: { avatar?: string; name: string }[]; ticketId: string }"
+      }
     },
     {
       "name": "calendar-01",
@@ -4620,7 +6858,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/calendar/calendar-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A month grid of team events, launches, travel and holidays, with the selected day listed beside it.",
+        "size": "full",
+        "usedWith": [
+          "calendar-02",
+          "schedule-01"
+        ],
+        "component": "Calendar1",
+        "props": "{ calendars: { color: string; name: string }[]; events: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelectDay?: (day: Date) => void; onSelectEvent?: (event: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; timeZone?: string; weekStartsOn?: 0 | 1 }"
+      }
     },
     {
       "name": "calendar-02",
@@ -4636,7 +6884,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/calendar/calendar-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
+        "size": "full",
+        "usedWith": [
+          "calendar-01",
+          "calendar-04"
+        ],
+        "component": "Calendar2",
+        "props": "{ calendars: { color: string; name: string }[]; events: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelectEvent?: (event: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; timeZone?: string; weekStartsOn?: 0 | 1 }"
+      }
     },
     {
       "name": "calendar-03",
@@ -4652,7 +6910,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/calendar/calendar-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A content calendar that switches between month and week, with each calendar toggled from a sidebar.",
+        "size": "full",
+        "usedWith": [
+          "calendar-01",
+          "kanban-01"
+        ],
+        "component": "Calendar3",
+        "props": "{ calendars: { color: string; name: string }[]; events: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelectEvent?: (event: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; timeZone?: string; view?: \"month\" | \"week\"; weekStartsOn?: 0 | 1 }"
+      }
     },
     {
       "name": "calendar-04",
@@ -4668,7 +6936,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/calendar/calendar-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A day of meeting room bookings with a column per room and whether each is free right now.",
+        "size": "full",
+        "usedWith": [
+          "calendar-02",
+          "schedule-01"
+        ],
+        "component": "Calendar4",
+        "props": "{ bookings: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; endHour?: number; now: Date; onSelectBooking?: (booking: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; rooms: { id: string; name: string; seats: number }[]; startHour?: number; teams: { color: string; name: string }[]; timeZone?: string }"
+      }
     },
     {
       "name": "files-01",
@@ -4684,7 +6962,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/files/files-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
+        "size": "half",
+        "usedWith": [
+          "files-02",
+          "files-03"
+        ],
+        "component": "Files1",
+        "props": "{ accept: string; acceptHint: string; description: string; initialUploads?: { error?: string; file?: File; id: string; name: string; progress: number; rejected?: boolean; size: number; status: \"done\" | \"queued\" | \"error\" | \"canceled\" | \"uploading\"; type: string; url?: string }[]; maxFiles: number; maxSize: number; title: string; upload?: (file: File, options: { onProgress: (progress: number) => void; signal: AbortSignal }) => Promise<void | { url?: string }> }"
+      }
     },
     {
       "name": "files-02",
@@ -4703,7 +6991,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/files/files-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A table of files with type, owner, last change and size, with search, type filter, sorting and bulk download or delete.",
+        "size": "full",
+        "usedWith": [
+          "files-01",
+          "files-03"
+        ],
+        "component": "Files2",
+        "props": "{ description: string; files: { href: string; id: string; modified: Date; name: string; owner: string; size: number }[]; now: Date; onCopyLink?: (file: { href: string; id: string; modified: Date; name: string; owner: string; size: number }) => Promise<void>; onDelete?: (files: { href: string; id: string; modified: Date; name: string; owner: string; size: number }[]) => Promise<void>; onDownload?: (files: { href: string; id: string; modified: Date; name: string; owner: string; size: number }[]) => void; timeZone?: string; title: string }"
+      }
     },
     {
       "name": "files-03",
@@ -4721,7 +7019,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/files/files-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Storage used against the plan, split by kind of file, with the largest files listed to delete.",
+        "size": "half",
+        "usedWith": [
+          "files-02",
+          "usage-meter-01"
+        ],
+        "component": "Files3",
+        "props": "{ breakdown: { kind: \"archive\" | \"audio\" | \"code\" | \"document\" | \"folder\" | \"image\" | \"other\" | \"pdf\" | \"presentation\" | \"spreadsheet\" | \"video\"; label?: string; size: number }[]; largestFiles: { href: string; id: string; kind: \"archive\" | \"audio\" | \"code\" | \"document\" | \"folder\" | \"image\" | \"other\" | \"pdf\" | \"presentation\" | \"spreadsheet\" | \"video\"; location: string; name: string; size: number }[]; limit: number; onDelete?: (file: { href: string; id: string; kind: \"archive\" | \"audio\" | \"code\" | \"document\" | \"folder\" | \"image\" | \"other\" | \"pdf\" | \"presentation\" | \"spreadsheet\" | \"video\"; location: string; name: string; size: number }) => Promise<void>; plan: string; title: string; upgradeHint: string; upgradeHref: string }"
+      }
     },
     {
       "name": "files-04",
@@ -4737,7 +7045,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/files/files-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Folders and files in a grid with a path back to the top, and a menu on each file.",
+        "size": "full",
+        "usedWith": [
+          "files-01",
+          "files-02"
+        ],
+        "component": "Files4",
+        "props": "{ onCopyLink?: (file: { href: string; id: string; modified: Date; name: string; size: number; type: \"file\" }) => Promise<void>; onDelete?: (file: { href: string; id: string; modified: Date; name: string; size: number; type: \"file\" }) => Promise<void>; now: Date; root: { children: ({ href: string; id: string; modified: Date; name: string; size: number; type: \"file\" } | BrowserFolder)[]; id: string; name: string; type: \"folder\" }; timeZone?: string }"
+      }
     },
     {
       "name": "ai-assistant-01",
@@ -4753,7 +7071,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-assistant/ai-assistant-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.",
+        "size": "page",
+        "usedWith": [
+          "ai-assistant-02"
+        ],
+        "component": "AiAssistant1",
+        "props": "{ accounts: { mrr: string; name: string; plan: string }[]; context: string; defaultOpen?: boolean; description: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; metrics: { change: string; label: string; value: string }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal, context: string) => AsyncIterable<string, any, any>; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string }"
+      }
     },
     {
       "name": "ai-assistant-02",
@@ -4768,7 +7095,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-assistant/ai-assistant-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.",
+        "size": "half",
+        "usedWith": [
+          "ai-assistant-01",
+          "ai-assistant-04"
+        ],
+        "component": "AiAssistant2",
+        "props": "{ description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; title: string }"
+      }
     },
     {
       "name": "ai-assistant-03",
@@ -4784,7 +7121,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-assistant/ai-assistant-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "Questions about an AI usage card, with the tokens and cost shown for each answer.",
+        "size": "half",
+        "usedWith": [
+          "ai-usage-01",
+          "ai-assistant-02"
+        ],
+        "component": "AiAssistant3",
+        "props": "{ description: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; tokens: { cached?: number; input: number; output: number }; usage: Record<string, { cached?: number; input: number; output: number }> }"
+      }
     },
     {
       "name": "ai-assistant-04",
@@ -4799,7 +7146,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-assistant/ai-assistant-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A failed assistant reply kept in the conversation with a button to try again.",
+        "size": "half",
+        "usedWith": [
+          "ai-assistant-02",
+          "states-01"
+        ],
+        "component": "AiAssistant4",
+        "props": "{ description: string; error?: string; messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[]; onSend?: (messages: { content: string; createdAt?: Date; id: string; role: \"user\" | \"assistant\" }[], signal: AbortSignal) => AsyncIterable<string, any, any>; title: string }"
+      }
     },
     {
       "name": "invoice-01",
@@ -4816,7 +7173,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/invoice/invoice-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An overdue invoice with discount, sales tax, deposit and balance due, payment instructions and a reminder to send.",
+        "size": "full",
+        "usedWith": [
+          "billing-01",
+          "invoice-02"
+        ],
+        "component": "Invoice1",
+        "props": "{ bank: { accountName: string; accountNumber: string; bank: string; routing: string }; billTo: { label: string; lines: string[]; name: string }; brand: { name: string; website: string }; currency?: string; discountRate?: number; dueDate: Date; footer: string; from: { label: string; lines: string[]; name: string }; issueDate: Date; lines: { detail?: string; description: string; id: string; optional?: boolean; quantity: number; sku?: string; taxRate?: number; unit?: string; unitPrice: number }[]; notes: string; now: Date; number: string; onDownload?: () => void; onSendReminder?: () => Promise<void>; paid?: number; payUrl: string; poNumber?: string; sentTo: string; taxRate?: number; terms: string }"
+      }
     },
     {
       "name": "invoice-02",
@@ -4833,7 +7200,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/invoice/invoice-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A paid receipt with the payment method, a partial refund and the net amount paid.",
+        "size": "full",
+        "usedWith": [
+          "invoice-01",
+          "billing-02"
+        ],
+        "component": "Invoice2",
+        "props": "{ brand: { name: string; website: string }; currency?: string; email: string; footer: string; lines: { detail?: string; description: string; id: string; optional?: boolean; quantity: number; sku?: string; taxRate?: number; unit?: string; unitPrice: number }[]; number: string; onDownload?: () => void; onEmail?: () => Promise<void>; orderNumber: string; paidAt: Date; paymentMethod: string; refunds: { amount: number; date: Date; reason: string }[]; shipping?: number; shippingMethod: string; supportEmail: string; taxRate?: number }"
+      }
     },
     {
       "name": "invoice-03",
@@ -4850,7 +7227,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/invoice/invoice-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A quote with optional items to tick before accepting, totals that follow and an expiry date.",
+        "size": "full",
+        "usedWith": [
+          "invoice-01",
+          "billing-01"
+        ],
+        "component": "Invoice3",
+        "props": "{ brand: { name: string; website: string }; currency?: string; defaultSelected?: string[]; discountRate?: number; expiresAt: Date; footer: string; from: { label: string; lines: string[]; name: string }; issueDate: Date; lines: { detail?: string; description: string; id: string; optional?: boolean; quantity: number; sku?: string; taxRate?: number; unit?: string; unitPrice: number }[]; notes: string; now: Date; number: string; onAccept?: (selected: string[]) => Promise<void>; onDecline?: () => Promise<void>; preparedBy: string; preparedFor: { label: string; lines: string[]; name: string }; terms: string }"
+      }
     },
     {
       "name": "invoice-04",
@@ -4867,7 +7254,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/invoice/invoice-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A packing slip listing items with SKU and bin, a pick checkbox for each and a barcode of the order number, with no prices.",
+        "size": "full",
+        "usedWith": [
+          "invoice-02",
+          "inventory-01"
+        ],
+        "component": "Invoice4",
+        "props": "{ billTo: { label: string; lines: string[]; name: string }; brand: { name: string; website: string }; footer: string; giftMessage?: string; lines: { detail?: string; description: string; id: string; optional?: boolean; quantity: number; sku?: string; taxRate?: number; unit?: string; unitPrice: number }[]; onMarkPacked?: () => Promise<void>; orderDate: Date; orderNumber: string; packages: string; returnsUrl: string; shipBy: Date; shipping: string; shipTo: { label: string; lines: string[]; name: string } }"
+      }
     },
     {
       "name": "onboarding-01",
@@ -4889,7 +7286,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/onboarding/onboarding-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.",
+        "size": "page",
+        "usedWith": [
+          "onboarding-02"
+        ],
+        "component": "Onboarding1",
+        "props": "{ defaultRole: string; domain: string; onCheckSlug?: (slug: string) => Promise<string | void>; onComplete?: (workspace: { name: string; slug: string; useCase: string }, invites: { email: string; id: string; role: string }[]) => Promise<void>; product: string; roles: { label: string; value: string }[]; useCases: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; userEmail: string }"
+      }
     },
     {
       "name": "onboarding-02",
@@ -4910,7 +7316,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/onboarding/onboarding-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.",
+        "size": "page",
+        "usedWith": [
+          "onboarding-01"
+        ],
+        "component": "Onboarding2",
+        "props": "{ firstName: string; help: { description: string; href: string; icon: ReactNode; id: string; title: string }[]; quickStarts: { badge?: string; description: string; duration?: string; href: string; icon: ReactNode; id: string; title: string }[]; tasks: { href?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; templatesHref: string; tourHref: string; workspace: string }"
+      }
     },
     {
       "name": "onboarding-03",
@@ -4932,7 +7347,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/onboarding/onboarding-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A searchable, filterable list of data sources to pick from, then follow through connecting to connected, with an error state.",
+        "size": "full",
+        "usedWith": [
+          "onboarding-04",
+          "checklist-01"
+        ],
+        "component": "Onboarding3",
+        "props": "{ onConnect?: (id: string) => Promise<void>; onContinue?: (id: string) => void; requestHref: string; sources: { category: string; description: string; id: string; logo?: ReactNode; name: string; popular?: boolean }[] }"
+      }
     },
     {
       "name": "onboarding-04",
@@ -4950,7 +7375,17 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/onboarding/onboarding-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.",
+        "size": "half",
+        "usedWith": [
+          "onboarding-03",
+          "checklist-01"
+        ],
+        "component": "Onboarding4",
+        "props": "{ goals: { dashboard: { description: string; href: string; title: string }; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; maxGoals?: number; onSave?: (answers: { goals: string[]; role: string; teamSize: string }) => Promise<void>; roles: { label: string; value: string }[]; teamSizes: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[] }"
+      }
     },
     {
       "name": "error-pages-01",
@@ -4966,7 +7401,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/error-pages/error-pages-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A not found page that shows the missing path, a search and the places people usually look.",
+        "size": "page",
+        "usedWith": [
+          "error-pages-02"
+        ],
+        "component": "ErrorPages1",
+        "props": "{ brand?: ReactNode; homeHref: string; links: { description: string; href: string; icon: ReactNode; title: string }[]; onSearch?: (query: string) => void; path?: string }"
+      }
     },
     {
       "name": "error-pages-02",
@@ -4983,7 +7427,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/error-pages/error-pages-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A no access page naming who can grant access, with a request form and the account you are signed in with.",
+        "size": "page",
+        "usedWith": [
+          "error-pages-01"
+        ],
+        "component": "ErrorPages2",
+        "props": "{ brand?: ReactNode; homeHref: string; onRequestAccess?: (message: string) => void | Promise<void>; owner: { avatar?: string; name: string }; requested?: boolean; resource: string; signedInAs: string; switchAccountHref: string }"
+      }
     },
     {
       "name": "error-pages-03",
@@ -4999,7 +7452,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/error-pages/error-pages-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A failure page with a retry button and count, a copyable error ID for support and the technical details folded away.",
+        "size": "page",
+        "usedWith": [
+          "error-pages-04"
+        ],
+        "component": "ErrorPages3",
+        "props": "{ brand?: ReactNode; details?: string; errorId: string; occurredAt: Date; onRetry?: () => void | Promise<void>; statusHref?: string; supportEmail?: string }"
+      }
     },
     {
       "name": "error-pages-04",
@@ -5015,7 +7477,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/error-pages/error-pages-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.",
+        "size": "page",
+        "usedWith": [
+          "error-pages-03"
+        ],
+        "component": "ErrorPages4",
+        "props": "{ brand?: ReactNode; endsAt: Date; now: Date; onSubscribe?: (email: string) => void; startsAt: Date; statusHref?: string; updates: { at: Date; id: string; text: string }[]; work: string }"
+      }
     },
     {
       "name": "error-pages-05",
@@ -5030,7 +7501,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/error-pages/error-pages-05.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
+        "size": "page",
+        "usedWith": [
+          "auth-03"
+        ],
+        "component": "ErrorPages5",
+        "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"inactive\" | \"signed-out-elsewhere\" | \"password-changed\" | \"revoked\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
+      }
     },
     {
       "name": "auth-01",
@@ -5046,7 +7526,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/auth/auth-01.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs.",
+        "size": "page",
+        "usedWith": [
+          "auth-02"
+        ],
+        "component": "Auth1",
+        "props": "{ brand: ReactNode; email: string; expired?: boolean; invitedBy: { avatar?: string; name: string }; onAccept?: () => void | Promise<void>; onDecline?: () => void; role: string; signedInAs?: string; switchAccountHref: string; workspace: { logo?: string; members: { avatar?: string; id: string; name: string }[]; memberCount: number; name: string } }"
+      }
     },
     {
       "name": "auth-02",
@@ -5062,7 +7551,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/auth/auth-02.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A list of the workspaces you belong to with your role in each, pending invites to join and a search once there are many.",
+        "size": "page",
+        "usedWith": [
+          "auth-01"
+        ],
+        "component": "Auth2",
+        "props": "{ brand: ReactNode; createHref: string; email: string; invites: { id: string; invitedBy: string; logo?: string; name: string }[]; onAcceptInvite?: (id: string) => void | Promise<void>; signOutHref: string; workspaces: { href: string; id: string; logo?: string; members: number; name: string; role: string }[] }"
+      }
     },
     {
       "name": "auth-03",
@@ -5079,7 +7577,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/auth/auth-03.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device.",
+        "size": "page",
+        "usedWith": [
+          "auth-04"
+        ],
+        "component": "Auth3",
+        "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; signOutHref: string; trustDays?: number; onVerify?: (code: string, options: { kind: \"app\" | \"recovery\"; trustDevice: boolean }) => { ok: boolean; attemptsLeft?: number } | Promise<{ ok: boolean; attemptsLeft?: number }>; onVerified?: () => void }"
+      }
     },
     {
       "name": "auth-04",
@@ -5095,7 +7602,16 @@
           "type": "registry:component",
           "target": "@components/dashboardblocks/auth/auth-04.tsx"
         }
-      ]
+      ],
+      "meta": {
+        "shows": "An email verification code form with a resend that waits between emails and a way to fix a mistyped address.",
+        "size": "page",
+        "usedWith": [
+          "auth-03"
+        ],
+        "component": "Auth4",
+        "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; resendAfter?: number; onChangeEmail?: (email: string) => void | Promise<void>; onResend?: () => void | Promise<void>; onVerify?: (code: string) => boolean | Promise<boolean>; onVerified?: () => void }"
+      }
     },
     {
       "name": "use-animated-number",

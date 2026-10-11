@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/data-table/data-table-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+    "size": "full",
+    "usedWith": [
+      "data-table-06",
+      "stat-group-02"
+    ],
+    "component": "DataTable1",
+    "props": "{ description: string; rows: { bounceRate: number; duration: number; path: string; views: number; visitors: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

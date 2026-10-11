@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/goals/goals-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Several goals for the same period, each with its own pace.",
+    "size": "half",
+    "usedWith": [
+      "goals-01",
+      "metric-list-03",
+      "forecast-02"
+    ],
+    "component": "Goals2",
+    "props": "{ description: string; elapsed: number; goals: { current: number; formatter?: (value: number) => string; label: string; owner: string; target: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

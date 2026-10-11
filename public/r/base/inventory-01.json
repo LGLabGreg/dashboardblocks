@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/inventory/inventory-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.",
+    "size": "full",
+    "usedWith": [
+      "inventory-02",
+      "inventory-03",
+      "inventory-04"
+    ],
+    "component": "Inventory1",
+    "props": "{ description: string; items: { dailyDemand: number; leadTimeDays: number; name: string; onHand: number; onOrder?: number; reorderPoint: number; sku: string }[]; targetDays?: number; title: string }"
+  },
   "type": "registry:component"
 }

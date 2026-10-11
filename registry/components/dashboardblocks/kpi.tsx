@@ -52,7 +52,7 @@ interface KPIChangeInput {
   value: number
 }
 
-const round = (value: number) => Math.round(value * 10) / 10
+const round = (value: number) => Math.round(value * 10) / 10 + 0
 
 function getKPIChange({ changeType = 'percent', previous, value }: KPIChangeInput) {
   if (previous === undefined) return undefined

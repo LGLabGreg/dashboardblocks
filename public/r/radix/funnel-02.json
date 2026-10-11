@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/funnel/funnel-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
+    "size": "full",
+    "usedWith": [
+      "funnel-04",
+      "data-table-03"
+    ],
+    "component": "Funnel2",
+    "props": "{ description: string; stages: { label: string; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

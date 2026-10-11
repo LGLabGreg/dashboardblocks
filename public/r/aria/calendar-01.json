@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/calendar/calendar-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A month grid of team events, launches, travel and holidays, with the selected day listed beside it.",
+    "size": "full",
+    "usedWith": [
+      "calendar-02",
+      "schedule-01"
+    ],
+    "component": "Calendar1",
+    "props": "{ calendars: { color: string; name: string }[]; events: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; onSelectDay?: (day: Date) => void; onSelectEvent?: (event: { attendees?: { avatar?: string; name: string }[]; description?: string; resource?: string; allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }) => void; timeZone?: string; weekStartsOn?: 0 | 1 }"
+  },
   "type": "registry:component"
 }

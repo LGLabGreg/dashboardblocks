@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/geo/geo-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Active users by city right now as markers sized by value on a dotted world map.",
+    "size": "full",
+    "usedWith": [
+      "realtime-01",
+      "geo-02"
+    ],
+    "component": "Geo3",
+    "props": "{ description: string; locations: { id: string; lat: number; lon: number; name: string; value: number }[]; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

@@ -44,6 +44,25 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
+const yearFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+  year: 'numeric',
+})
+
+function formatDateRange(start: Date, end: Date) {
+  if (start.getUTCFullYear() !== end.getUTCFullYear()) {
+    return `${yearFormatter.format(start)} – ${yearFormatter.format(end)}`
+  }
+  const first = dateFormatter.format(start)
+  if (start.getUTCMonth() !== end.getUTCMonth()) {
+    return `${first} – ${dateFormatter.format(end)}`
+  }
+  if (start.getUTCDate() !== end.getUTCDate()) return `${first} – ${end.getUTCDate()}`
+  return first
+}
+
 const Goals1 = (props: Goals1Props) => {
   const {
     current,
@@ -55,7 +74,11 @@ const Goals1 = (props: Goals1Props) => {
     today,
   } = props
   const periodEnd = new Date(end.getTime() + DAY)
-  const pace = getPace({ current, elapsed: getElapsed(start, periodEnd, today), target })
+  const pace = getPace({
+    current,
+    elapsed: getElapsed(start, periodEnd, today),
+    target,
+  })
   const daysLeft = Math.max(
     0,
     Math.ceil((periodEnd.getTime() - today.getTime()) / DAY) - 1,
@@ -67,8 +90,7 @@ const Goals1 = (props: Goals1Props) => {
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>
-          {dateFormatter.formatRange(start, end)}, {daysLeft}{' '}
-          {daysLeft === 1 ? 'day' : 'days'} left
+          {formatDateRange(start, end)}, {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left
         </CardDescription>
         <CardAction>
           <PaceBadge status={pace.status} />

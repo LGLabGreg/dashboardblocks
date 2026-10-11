@@ -10,7 +10,7 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
-import { useId, useState } from 'react'
+import { startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -100,12 +100,14 @@ const Comments2 = (props: Comments2Props) => {
 
   async function post(body: string) {
     await onSubmit(body, { mentions: getMentions(body, names) })
-    setUpdates((current) => [
-      { at: now, author: currentUser, body, id: `${Date.now()}` },
-      ...current,
-    ])
-    setDraft('')
-    setTab('write')
+    startTransition(() => {
+      setUpdates((current) => [
+        { at: now, author: currentUser, body, id: `${Date.now()}` },
+        ...current,
+      ])
+      setDraft('')
+      setTab('write')
+    })
   }
 
   async function postFromPreview() {
@@ -113,7 +115,7 @@ const Comments2 = (props: Comments2Props) => {
     try {
       await post(draft.trim())
     } finally {
-      setIsPosting(false)
+      startTransition(() => setIsPosting(false))
     }
   }
 

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/data-table/data-table-06.tsx"
     }
   ],
+  "meta": {
+    "shows": "A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.",
+    "size": "full",
+    "usedWith": [
+      "data-table-05",
+      "stat-group-02"
+    ],
+    "component": "DataTable6",
+    "props": "{ description: string; onEmail?: (rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]) => void; onExport?: (rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]) => void; pageSize?: number; rows: { company: string; email: string; id: string; mrr: number; plan: \"Enterprise\" | \"Free\" | \"Pro\" | \"Team\"; seats: number; signedUp: string; status: \"active\" | \"churned\" | \"past-due\" | \"trial\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

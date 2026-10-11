@@ -9,7 +9,7 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
-import { useRef, useState } from 'react'
+import { startTransition, useRef, useState } from 'react'
 
 import {
   Card,
@@ -124,19 +124,21 @@ const Comments1 = (props: Comments1Props) => {
 
   async function post(body: string, parentId?: string) {
     await onSubmit(body, { parentId })
-    setComments((current) => {
-      const comment: ThreadComment = {
-        at: now,
-        author: currentUser,
-        body,
-        id: `${Date.now()}`,
-      }
-      return parentId
-        ? updateComment(current, parentId, (parent) => ({
-            ...parent,
-            replies: [...(parent.replies ?? []), comment],
-          }))
-        : [...current, comment]
+    startTransition(() => {
+      setComments((current) => {
+        const comment: ThreadComment = {
+          at: now,
+          author: currentUser,
+          body,
+          id: `${Date.now()}`,
+        }
+        return parentId
+          ? updateComment(current, parentId, (parent) => ({
+              ...parent,
+              replies: [...(parent.replies ?? []), comment],
+            }))
+          : [...current, comment]
+      })
     })
   }
 
@@ -174,12 +176,14 @@ const Comments1 = (props: Comments1Props) => {
             }}
             onEdit={async (commentId, body) => {
               await onEdit(commentId, body)
-              setComments((current) =>
-                updateComment(current, commentId, (item) => ({
-                  ...item,
-                  body,
-                  edited: true,
-                })),
+              startTransition(() =>
+                setComments((current) =>
+                  updateComment(current, commentId, (item) => ({
+                    ...item,
+                    body,
+                    edited: true,
+                  })),
+                ),
               )
             }}
             onDelete={(commentId) => {

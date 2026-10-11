@@ -16,5 +16,16 @@
       "target": "@components/dashboardblocks/settings/settings-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.",
+    "size": "full",
+    "usedWith": [
+      "settings-02",
+      "settings-04",
+      "status-01"
+    ],
+    "component": "Settings5",
+    "props": "{ description: string; endpoints: { deliveries: { at: Date; status: number }[]; enabled: boolean; events: string[]; id: string; url: string }[]; now: Date; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void; title: string }"
+  },
   "type": "registry:component"
 }

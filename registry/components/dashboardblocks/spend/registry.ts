@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
+      size: 'half',
+      usedWith: ['spend-03', 'forecast-03'],
+    },
   },
   {
     name: 'spend-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'One budget bar per service, each with its own status, and the total underneath.',
+      size: 'half',
+      usedWith: ['spend-01', 'data-table-04'],
+    },
   },
   {
     name: 'spend-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
       registryUrl('chart-panel'),
       registryUrl('spend'),
     ],
+    meta: {
+      shows:
+        'Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.',
+      size: 'full',
+      usedWith: ['spend-01', 'spend-02'],
+    },
     files: [
       {
         path: 'registry/components/dashboardblocks/spend/spend-03.tsx',
@@ -52,6 +70,12 @@ export const examples: Registry['items'] = [
       registryUrl('chart-panel'),
       registryUrl('spend'),
     ],
+    meta: {
+      shows:
+        'The cash balance, the average net burn and the months of runway left, with the balance projected to zero.',
+      size: 'half',
+      usedWith: ['forecast-02', 'billing-04'],
+    },
     files: [
       {
         path: 'registry/components/dashboardblocks/spend/spend-04.tsx',

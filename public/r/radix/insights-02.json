@@ -18,5 +18,16 @@
       "target": "@components/dashboardblocks/insights/insights-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
+    "size": "half",
+    "usedWith": [
+      "insights-03",
+      "chart-panel-01",
+      "alerts-01"
+    ],
+    "component": "Insights2",
+    "props": "{ description: string; drivers?: { label: string; value: string; tone?: \"neutral\" | \"positive\" | \"negative\" }[]; explanation: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[]; formatter?: (value: number) => string; href?: string; metric: string; onMarkExpected?: () => void; readings: { high: number; label: string; low: number; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

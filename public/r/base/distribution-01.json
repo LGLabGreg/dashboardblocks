@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/distribution/distribution-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
+    "size": "half",
+    "usedWith": [
+      "distribution-03",
+      "alerts-02"
+    ],
+    "component": "Distribution1",
+    "props": "{ bins: { x0: number; x1: number; count: number }[]; description: string; formatter?: (value: number) => string; limit?: { label: string; value: number }; title: string; unit?: string }"
+  },
   "type": "registry:component"
 }

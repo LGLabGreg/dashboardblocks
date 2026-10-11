@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/ai-usage/ai-usage-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
+    "size": "full",
+    "usedWith": [
+      "ai-usage-01",
+      "ai-usage-04",
+      "spend-01"
+    ],
+    "component": "AiUsage2",
+    "props": "{ description: string; features: { cost: number; label: string; requests: number; tokens: { cached?: number; input: number; output: number } }[]; title: string }"
+  },
   "type": "registry:component"
 }

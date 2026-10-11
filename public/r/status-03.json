@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/status/status-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "An active incident with its severity, affected components and a timeline of updates.",
+    "size": "half",
+    "usedWith": [
+      "status-01",
+      "status-02",
+      "alerts-01"
+    ],
+    "component": "Status3",
+    "props": "{ affected: string[]; onSubscribe?: () => void; severity: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; started: string; title: string; updates: { message: string; stage: \"Investigating\" | \"Identified\" | \"Monitoring\" | \"Resolved\"; time: string }[] }"
+  },
   "type": "registry:component"
 }

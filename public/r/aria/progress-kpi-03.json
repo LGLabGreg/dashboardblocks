@@ -15,5 +15,16 @@
       "target": "@components/dashboardblocks/kpi/progress-kpi-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A count against a goal as a ring, with how many are left to go.",
+    "size": "compact",
+    "usedWith": [
+      "progress-kpi-01",
+      "goals-04",
+      "kpi-01"
+    ],
+    "component": "ProgressKPI3",
+    "props": "{ current: number; goal: number; title: string; unit: string }"
+  },
   "type": "registry:component"
 }

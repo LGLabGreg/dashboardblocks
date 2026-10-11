@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/flow/flow-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
+    "size": "full",
+    "usedWith": [
+      "spend-02",
+      "billing-01"
+    ],
+    "component": "Flow3",
+    "props": "{ currency?: string; description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string }"
+  },
   "type": "registry:component"
 }

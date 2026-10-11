@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/timeline/timeline-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each phase's plan as a dashed outline with what actually happened as a bar beneath it, and how many days it slipped.",
+    "size": "full",
+    "usedWith": [
+      "timeline-01",
+      "timeline-02"
+    ],
+    "component": "Timeline4",
+    "props": "{ description: string; end: Date; now: Date; phases: { actual?: { end?: Date; start: Date }; id: string; label: string; planned: { end: Date; start: Date } }[]; start: Date; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/flow/flow-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Sessions from each source through the landing page, to signing up, browsing on or bouncing.",
+    "size": "full",
+    "usedWith": [
+      "funnel-01",
+      "chart-panel-02",
+      "geo-02"
+    ],
+    "component": "Flow1",
+    "props": "{ description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; goal: string; title: string; unit?: string }"
+  },
   "type": "registry:component"
 }

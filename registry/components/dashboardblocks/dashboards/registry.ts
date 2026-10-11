@@ -26,6 +26,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A full store dashboard with revenue, sales channels, top products, a checkout funnel and low stock, scoped by header filters.',
+      size: 'page',
+      usedWith: [],
+    },
   },
   {
     name: 'dashboard-02',
@@ -51,6 +57,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A full SaaS dashboard with metric tabs, an activity heatmap, revenue by region, billing movement, retention and service status.',
+      size: 'page',
+      usedWith: [],
+    },
   },
   {
     name: 'dashboard-03',
@@ -74,6 +86,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A full web analytics dashboard with traffic over time, visitors right now, a traffic flow, top pages, countries and browsers.',
+      size: 'page',
+      usedWith: [],
+    },
   },
   {
     name: 'dashboard-04',
@@ -101,6 +119,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.',
+      size: 'page',
+      usedWith: [],
+    },
   },
   {
     name: 'dashboard-05',
@@ -127,5 +151,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A full DevOps dashboard with live throughput, delivery performance, response times, open alerts, uptime and recent deployments.',
+      size: 'page',
+      usedWith: [],
+    },
   },
 ]

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/notifications/notifications-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.",
+    "size": "half",
+    "usedWith": [
+      "notifications-03",
+      "app-shell-01"
+    ],
+    "component": "Notifications1",
+    "props": "{ notifications: { at: Date; body?: string; href?: string; icon: ReactNode; id: string; read: boolean; title: ReactNode; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; now: Date; viewAllHref: string }"
+  },
   "type": "registry:component"
 }

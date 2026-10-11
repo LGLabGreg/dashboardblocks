@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Sessions from each source through the landing page, to signing up, browsing on or bouncing.',
+      size: 'full',
+      usedWith: ['funnel-01', 'chart-panel-02', 'geo-02'],
+    },
   },
   {
     name: 'flow-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Where visitors go in their first pages after landing, with the ones who left at each step.',
+      size: 'full',
+      usedWith: ['flow-04', 'funnel-01'],
+    },
   },
   {
     name: 'flow-03',
@@ -34,6 +46,12 @@ export const examples: Registry['items'] = [
       registryUrl('chart-panel'),
       registryUrl('flow'),
     ],
+    meta: {
+      shows:
+        "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
+      size: 'full',
+      usedWith: ['spend-02', 'billing-01'],
+    },
     files: [
       {
         path: 'registry/components/dashboardblocks/flow/flow-03.tsx',
@@ -51,5 +69,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.',
+      size: 'full',
+      usedWith: ['flow-02', 'funnel-03'],
+    },
   },
 ]

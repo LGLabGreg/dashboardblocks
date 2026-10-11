@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/status/status-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
+    "size": "full",
+    "usedWith": [
+      "status-01",
+      "status-03",
+      "alerts-01"
+    ],
+    "component": "Status2",
+    "props": "{ description: string; services: { days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; name: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

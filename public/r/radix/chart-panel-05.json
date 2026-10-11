@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/chart-panel/chart-panel-05.tsx"
     }
   ],
+  "meta": {
+    "shows": "A donut splitting a total into parts, with each value and share listed beside it.",
+    "size": "half",
+    "usedWith": [
+      "breakdown-01",
+      "leaderboard-01"
+    ],
+    "component": "ChartPanel5",
+    "props": "{ description: string; formatter?: (value: number) => string; segments: { color: string; label: string; value: number }[]; title: string; totalLabel?: string }"
+  },
   "type": "registry:component"
 }

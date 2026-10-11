@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A month grid of team events, launches, travel and holidays, with the selected day listed beside it.',
+      size: 'full',
+      usedWith: ['calendar-02', 'schedule-01'],
+    },
   },
   {
     name: 'calendar-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
+      size: 'full',
+      usedWith: ['calendar-01', 'calendar-04'],
+    },
   },
   {
     name: 'calendar-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A content calendar that switches between month and week, with each calendar toggled from a sidebar.',
+      size: 'full',
+      usedWith: ['calendar-01', 'kanban-01'],
+    },
   },
   {
     name: 'calendar-04',
@@ -46,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A day of meeting room bookings with a column per room and whether each is free right now.',
+      size: 'full',
+      usedWith: ['calendar-02', 'schedule-01'],
+    },
   },
 ]

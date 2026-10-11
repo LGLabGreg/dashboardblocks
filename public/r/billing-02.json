@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/billing/billing-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "The current plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.",
+    "size": "half",
+    "usedWith": [
+      "billing-03",
+      "billing-05",
+      "usage-meter-01"
+    ],
+    "component": "Billing2",
+    "props": "{ cancelsAtPeriodEnd?: boolean; currency?: string; interval: \"month\" | \"year\"; nextInvoiceAmount?: number; now: Date; onManage?: () => void; onUpdatePaymentMethod?: () => void; paymentMethod?: { brand: string; expires: string; last4: string }; plan: string; price: number; renewsAt: Date; summary?: string; title: string }"
+  },
   "type": "registry:component"
 }

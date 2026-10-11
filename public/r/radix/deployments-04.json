@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/deployments/deployments-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "The latest runs of each pipeline as a strip of results, with the pass rate and median duration.",
+    "size": "half",
+    "usedWith": [
+      "deployments-01",
+      "deployments-03"
+    ],
+    "component": "Deployments4",
+    "props": "{ description: string; pipelines: { medianDuration: number; name: string; runs: (\"success\" | \"failed\" | \"running\" | \"queued\" | \"rolled-back\")[] }[]; title: string }"
+  },
   "type": "registry:component"
 }

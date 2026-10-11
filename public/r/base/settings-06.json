@@ -15,5 +15,15 @@
       "target": "@components/dashboardblocks/settings/settings-06.tsx"
     }
   ],
+  "meta": {
+    "shows": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+    "size": "half",
+    "usedWith": [
+      "settings-01",
+      "security-06"
+    ],
+    "component": "Settings6",
+    "props": "{ actions: { action: string; confirm?: boolean; description: string; id: string; label: string }[]; description: string; onAction?: (id: string) => void; title: string; workspace: string }"
+  },
   "type": "registry:component"
 }

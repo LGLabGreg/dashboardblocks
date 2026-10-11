@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/stat-group/stat-group-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A row of metrics, each with its change and a 14-day sparkline.",
+    "size": "full",
+    "usedWith": [
+      "chart-panel-01",
+      "breakdown-01",
+      "data-table-02"
+    ],
+    "component": "StatGroup2",
+    "props": "{ description: string; metrics: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -13,7 +13,8 @@ const trendVariants = cva('', {
     variant: {
       default: 'flex items-center gap-1 text-sm font-medium',
       'icon-only': 'h-4 w-4',
-      badge: 'flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold',
+      badge:
+        'flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap',
     },
     direction: {
       up: '',
@@ -65,7 +66,7 @@ const trendVariants = cva('', {
     {
       variant: 'badge',
       direction: 'neutral',
-      class: 'bg-muted text-muted-foreground',
+      class: 'bg-muted text-foreground',
     },
   ],
   defaultVariants: {

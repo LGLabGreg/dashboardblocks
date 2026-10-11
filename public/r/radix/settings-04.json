@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/settings/settings-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
+    "size": "half",
+    "usedWith": [
+      "settings-05",
+      "settings-02"
+    ],
+    "component": "Settings4",
+    "props": "{ description: string; integrations: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"connected\" | \"error\" | \"paused\" | \"disconnected\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; title: string }"
+  },
   "type": "registry:component"
 }

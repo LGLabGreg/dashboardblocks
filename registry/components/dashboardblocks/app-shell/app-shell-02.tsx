@@ -231,7 +231,7 @@ const AppShell2 = (props: AppShell2Props) => {
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className='@container/inset min-w-0'>
         <AppHeader>
           <SidebarTrigger className='-ml-1' />
           <Separator
@@ -250,7 +250,7 @@ const AppShell2 = (props: AppShell2Props) => {
                 remixicon='RiAddLine'
                 data-icon='inline-start'
               />
-              <span className='max-sm:sr-only'>New report</span>
+              <span className='@max-xl/inset:sr-only'>New report</span>
             </Button>
           </div>
         </AppHeader>

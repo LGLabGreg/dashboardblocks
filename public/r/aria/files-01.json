@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/files/files-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
+    "size": "half",
+    "usedWith": [
+      "files-02",
+      "files-03"
+    ],
+    "component": "Files1",
+    "props": "{ accept: string; acceptHint: string; description: string; initialUploads?: { error?: string; file?: File; id: string; name: string; progress: number; rejected?: boolean; size: number; status: \"done\" | \"queued\" | \"error\" | \"canceled\" | \"uploading\"; type: string; url?: string }[]; maxFiles: number; maxSize: number; title: string; upload?: (file: File, options: { onProgress: (progress: number) => void; signal: AbortSignal }) => Promise<void | { url?: string }> }"
+  },
   "type": "registry:component"
 }

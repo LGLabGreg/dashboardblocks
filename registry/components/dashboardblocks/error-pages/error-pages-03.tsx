@@ -6,7 +6,7 @@ import {
 } from '@/registry/components/dashboardblocks/error-pages'
 import { CopyButton } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 
@@ -54,9 +54,9 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
     try {
       await onRetry?.()
     } catch {
-      setAttempts((count) => count + 1)
+      startTransition(() => setAttempts((count) => count + 1))
     } finally {
-      setRetrying(false)
+      startTransition(() => setRetrying(false))
     }
   }
 

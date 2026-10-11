@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/activity-feed/activity-feed-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A week of activity by kind with the change on the week before, and the most active people.",
+    "size": "half",
+    "usedWith": [
+      "activity-feed-01",
+      "stat-group-02",
+      "leaderboard-01"
+    ],
+    "component": "ActivityFeed04",
+    "props": "{ contributors: { count: number; avatar?: string; name: string }[]; counts: { icon: ReactNode; label: string; previous: number; tone?: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"; value: number }[]; description: string; title: string }"
+  },
   "type": "registry:component"
 }

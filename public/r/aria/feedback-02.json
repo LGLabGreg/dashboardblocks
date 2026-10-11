@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/feedback/feedback-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
+    "size": "half",
+    "usedWith": [
+      "feedback-03",
+      "feedback-01"
+    ],
+    "component": "Feedback2",
+    "props": "{ description: string; title: string; topics: { label: string; negative: number; neutral: number; positive: number }[] }"
+  },
   "type": "registry:component"
 }

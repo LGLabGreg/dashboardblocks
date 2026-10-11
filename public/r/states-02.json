@@ -18,5 +18,15 @@
       "target": "@components/dashboardblocks/states/states-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A chart that stays in place at reduced opacity while it refreshes, with an updating indicator in the header.",
+    "size": "half",
+    "usedWith": [
+      "chart-panel-01",
+      "states-01"
+    ],
+    "component": "States2",
+    "props": "{ description: string; load: () => Promise<{ label: string; value: number }[]>; title: string }"
+  },
   "type": "registry:component"
 }

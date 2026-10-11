@@ -20,7 +20,7 @@ import {
   slugify,
 } from '@/registry/components/dashboardblocks/onboarding'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, startTransition, useId, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -212,9 +212,9 @@ const Onboarding1 = (props: Onboarding1Props) => {
     setFinishing(true)
     try {
       await onComplete(values, filled)
-      setSent(filled)
+      startTransition(() => setSent(filled))
     } finally {
-      setFinishing(false)
+      startTransition(() => setFinishing(false))
     }
   }
 
@@ -223,7 +223,7 @@ const Onboarding1 = (props: Onboarding1Props) => {
       event.preventDefault()
       await finish(invites)
     } else if (await form.submit(event)) {
-      setStep(step + 1)
+      startTransition(() => setStep(step + 1))
     }
   }
 

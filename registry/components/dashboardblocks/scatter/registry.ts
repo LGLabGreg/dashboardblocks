@@ -14,6 +14,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.',
+      size: 'half',
+      usedWith: ['data-table-03', 'distribution-01'],
+    },
   },
   {
     name: 'scatter-02',
@@ -26,6 +32,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.',
+      size: 'half',
+      usedWith: ['leaderboard-01', 'data-table-02'],
+    },
   },
   {
     name: 'scatter-03',
@@ -38,6 +50,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.',
+      size: 'full',
+      usedWith: ['data-table-03', 'spend-02'],
+    },
   },
   {
     name: 'scatter-04',
@@ -49,5 +67,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.',
+      size: 'full',
+      usedWith: ['alerts-01', 'data-table-04'],
+    },
   },
 ]

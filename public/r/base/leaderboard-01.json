@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/leaderboard/leaderboard-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Ranked rows with a background bar sized relative to the leader.",
+    "size": "half",
+    "usedWith": [
+      "breakdown-01",
+      "geo-02",
+      "chart-panel-02"
+    ],
+    "component": "Leaderboard01",
+    "props": "{ description: string; onViewAll?: () => void; pages: { path: string; visitors: number }[]; title: string }"
+  },
   "type": "registry:component"
 }

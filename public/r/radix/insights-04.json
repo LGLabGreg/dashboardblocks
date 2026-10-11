@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/insights/insights-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A short weekly summary with a headline, three takeaways and buttons to say whether it helped.",
+    "size": "half",
+    "usedWith": [
+      "insights-01",
+      "activity-feed-04"
+    ],
+    "component": "Insights4",
+    "props": "{ defaultFeedback?: null | \"helpful\" | \"not-helpful\"; headline: string; onFeedback?: (feedback: null | \"helpful\" | \"not-helpful\") => void; period: string; takeaways: { kind: \"neutral\" | \"positive\" | \"negative\" | \"anomaly\"; segments: (string | { text: string; tone?: \"neutral\" | \"positive\" | \"negative\" })[] }[] }"
+  },
   "type": "registry:component"
 }

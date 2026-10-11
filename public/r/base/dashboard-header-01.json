@@ -12,5 +12,15 @@
       "target": "@components/dashboardblocks/dashboard-header/dashboard-header-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
+    "size": "full",
+    "usedWith": [
+      "stat-group-02",
+      "chart-panel-01"
+    ],
+    "component": "DashboardHeader1",
+    "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }"
+  },
   "type": "registry:component"
 }

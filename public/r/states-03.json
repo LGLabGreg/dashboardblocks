@@ -16,5 +16,15 @@
       "target": "@components/dashboardblocks/states/states-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
+    "size": "full",
+    "usedWith": [
+      "data-table-02",
+      "dashboard-header-01"
+    ],
+    "component": "States3",
+    "props": "{ defaultFilters: { field: \"region\" | \"status\"; label: string; value: string }[]; orders: { amount: number; customer: string; id: string; region: string; status: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/distribution/distribution-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "A box and whiskers per group on a shared axis, to compare spread and median across groups.",
+    "size": "half",
+    "usedWith": [
+      "distribution-03",
+      "data-table-04"
+    ],
+    "component": "Distribution2",
+    "props": "{ description: string; formatter?: (value: number) => string; groups: { count: number; high: number; label: string; low: number; median: number; q1: number; q3: number }[]; tickFormatter?: (value: number) => string; whiskerLabel?: string; title: string; unit?: string }"
+  },
   "type": "registry:component"
 }

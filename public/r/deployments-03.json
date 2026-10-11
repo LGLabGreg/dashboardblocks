@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/deployments/deployments-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "The four DORA delivery metrics, each with its performance band and the change on the previous period.",
+    "size": "full",
+    "usedWith": [
+      "deployments-01",
+      "deployments-04",
+      "chart-panel-01"
+    ],
+    "component": "Deployments3",
+    "props": "{ current: { changeFailureRate: number; deploysPerDay: number; leadTimeHours: number; restoreHours: number }; description: string; previous?: { changeFailureRate: number; deploysPerDay: number; leadTimeHours: number; restoreHours: number }; title: string }"
+  },
   "type": "registry:component"
 }

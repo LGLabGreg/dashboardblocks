@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/status/status-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "A grid of regions, each with its status, latency and error rate.",
+    "size": "half",
+    "usedWith": [
+      "status-01",
+      "status-02",
+      "alerts-01"
+    ],
+    "component": "Status4",
+    "props": "{ regions: { code: string; errorRate: number; latency: number; name: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

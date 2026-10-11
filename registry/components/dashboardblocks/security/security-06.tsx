@@ -6,7 +6,7 @@ import {
   CopyButton,
   SettingsRow,
 } from '@/registry/components/dashboardblocks/settings'
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -126,15 +126,17 @@ const Security6 = (props: Security6Props) => {
   const verify = async (domain: SsoDomain) => {
     setChecking(domain.id)
     const ok = onVerifyDomain ? await onVerifyDomain(domain.id) : true
-    setChecking(null)
-    setNotFound(ok ? null : domain.id)
-    if (ok) {
-      setDomains((current) =>
-        current.map((item) =>
-          item.id === domain.id ? { ...item, verified: true } : item,
-        ),
-      )
-    }
+    startTransition(() => {
+      setChecking(null)
+      setNotFound(ok ? null : domain.id)
+      if (ok) {
+        setDomains((current) =>
+          current.map((item) =>
+            item.id === domain.id ? { ...item, verified: true } : item,
+          ),
+        )
+      }
+    })
   }
 
   const field = (key: keyof SsoConnection, value: string) =>

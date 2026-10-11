@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/comparison/comparison-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
+    "size": "half",
+    "usedWith": [
+      "comparison-01",
+      "comparison-03",
+      "metric-list-03"
+    ],
+    "component": "Comparison4",
+    "props": "{ afterLabel: string; beforeLabel: string; description: string; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; rows: { after: number; before: number; label: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

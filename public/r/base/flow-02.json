@@ -14,5 +14,15 @@
       "target": "@components/dashboardblocks/flow/flow-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "Where visitors go in their first pages after landing, with the ones who left at each step.",
+    "size": "full",
+    "usedWith": [
+      "flow-04",
+      "funnel-01"
+    ],
+    "component": "Flow2",
+    "props": "{ description: string; links: { source: string; target: string; value: number }[]; nodes: { color?: string; column?: number; id: string; kind?: \"default\" | \"exit\"; label: string }[]; title: string; unit?: string }"
+  },
   "type": "registry:component"
 }

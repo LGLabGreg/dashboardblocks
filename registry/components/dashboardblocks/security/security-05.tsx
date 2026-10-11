@@ -6,7 +6,7 @@ import {
   useCopyToClipboard,
 } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type FormEvent, type ReactNode, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -143,17 +143,20 @@ const Security5 = (props: Security5Props) => {
     if (!/^\d{6}$/.test(digits)) return setError('Enter the 6-digit code from the app.')
     setVerifying(true)
     const ok = onVerify ? await onVerify(digits) : true
-    setVerifying(false)
-    if (!ok) {
-      return setError(
-        'That code didn’t work. Codes change every 30 seconds, so try the newest one.',
-      )
-    }
-    setAuthenticator(new Date())
-    setCodesLeft(recoveryCodes.length)
-    setCode('')
-    setError(null)
-    setStep('codes')
+    startTransition(() => {
+      setVerifying(false)
+      if (!ok) {
+        setError(
+          'That code didn’t work. Codes change every 30 seconds, so try the newest one.',
+        )
+        return
+      }
+      setAuthenticator(new Date())
+      setCodesLeft(recoveryCodes.length)
+      setCode('')
+      setError(null)
+      setStep('codes')
+    })
   }
 
   const download = () => {

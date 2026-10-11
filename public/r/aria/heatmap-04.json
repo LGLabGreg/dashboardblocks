@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/heatmap/heatmap-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "The p95 latency of each endpoint by hour over the last day, darker where it is slower.",
+    "size": "full",
+    "usedWith": [
+      "alerts-02",
+      "status-04"
+    ],
+    "component": "Heatmap4",
+    "props": "{ description: string; endpoints: string[]; title: string; values: number[][] }"
+  },
   "type": "registry:component"
 }

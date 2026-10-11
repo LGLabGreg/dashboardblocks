@@ -17,5 +17,15 @@
       "target": "@components/dashboardblocks/inventory/inventory-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.",
+    "size": "full",
+    "usedWith": [
+      "inventory-01",
+      "inventory-03"
+    ],
+    "component": "Inventory4",
+    "props": "{ dailyDemand: number; description: string; horizon?: number; incoming: { day: number; quantity: number }[]; now: Date; onHand: number; reorderPoint: number; title: string }"
+  },
   "type": "registry:component"
 }

@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/data-table/data-table-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Services in a table with their status, latency and error rate, worst status first.",
+    "size": "full",
+    "usedWith": [
+      "status-01",
+      "alerts-01",
+      "deployments-01"
+    ],
+    "component": "DataTable4",
+    "props": "{ rows: { errorRate: number; latency: number; name: string; region: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

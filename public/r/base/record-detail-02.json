@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/record-detail/record-detail-02.tsx"
     }
   ],
+  "meta": {
+    "shows": "An order page with line items and totals, a timeline of what happened, the customer, and shipping and payment.",
+    "size": "full",
+    "usedWith": [
+      "page-header-03",
+      "invoice-01",
+      "timeline-01"
+    ],
+    "component": "RecordDetail2",
+    "props": "{ customer: { email: string; href: string; name: string; orders: number }; events: { at: Date; icon: ReactNode; text: string; tone: \"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" }[]; items: { name: string; price: number; quantity: number; sku: string }[]; now: Date; onCancel?: () => void; onPrint?: () => void; onRefund?: () => void; order: { fulfilment: string; id: string; payment: string; placed: string; shipping: number; shippingAddress: string[]; status: string; taxRate: number } }"
+  },
   "type": "registry:component"
 }

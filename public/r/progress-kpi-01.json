@@ -14,5 +14,16 @@
       "target": "@components/dashboardblocks/kpi/progress-kpi-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
+    "size": "compact",
+    "usedWith": [
+      "goals-01",
+      "forecast-03",
+      "kpi-01"
+    ],
+    "component": "ProgressKPI1",
+    "props": "{ comparison: string; daysElapsed: number; daysInPeriod: number; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; target: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

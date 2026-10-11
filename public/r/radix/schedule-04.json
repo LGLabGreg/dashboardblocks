@@ -13,5 +13,15 @@
       "target": "@components/dashboardblocks/schedule/schedule-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.",
+    "size": "full",
+    "usedWith": [
+      "schedule-01",
+      "team-02"
+    ],
+    "component": "Schedule4",
+    "props": "{ calendars: { color: string; name: string }[]; endHour?: number; events: { allDay?: boolean; calendar?: string; color?: string; end?: Date; id: string; location?: string; start: Date; title: string }[]; now: Date; startHour?: number; timeZone?: string; title: string }"
+  },
   "type": "registry:component"
 }

@@ -18,5 +18,16 @@
       "target": "@components/dashboardblocks/forecast/forecast-04.tsx"
     }
   ],
+  "meta": {
+    "shows": "Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.",
+    "size": "full",
+    "usedWith": [
+      "forecast-01",
+      "forecast-02",
+      "goals-03"
+    ],
+    "component": "Forecast4",
+    "props": "{ actuals: { label: string; value: number }[]; description: string; formatter?: (value: number) => string; horizon: string[]; scenarios: { low: { note: string; rate: number }; base: { note: string; rate: number }; high: { note: string; rate: number } }; target?: number; title: string }"
+  },
   "type": "registry:component"
 }

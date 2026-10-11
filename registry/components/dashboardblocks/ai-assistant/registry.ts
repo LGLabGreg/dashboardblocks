@@ -13,6 +13,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.',
+      size: 'page',
+      usedWith: ['ai-assistant-02'],
+    },
   },
   {
     name: 'ai-assistant-02',
@@ -24,6 +30,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.',
+      size: 'half',
+      usedWith: ['ai-assistant-01', 'ai-assistant-04'],
+    },
   },
   {
     name: 'ai-assistant-03',
@@ -35,6 +47,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Questions about an AI usage card, with the tokens and cost shown for each answer.',
+      size: 'half',
+      usedWith: ['ai-usage-01', 'ai-assistant-02'],
+    },
   },
   {
     name: 'ai-assistant-04',
@@ -46,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'A failed assistant reply kept in the conversation with a button to try again.',
+      size: 'half',
+      usedWith: ['ai-assistant-02', 'states-01'],
+    },
   },
 ]

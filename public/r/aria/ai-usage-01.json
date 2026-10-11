@@ -17,5 +17,16 @@
       "target": "@components/dashboardblocks/ai-usage/ai-usage-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
+    "size": "full",
+    "usedWith": [
+      "ai-usage-02",
+      "ai-usage-03",
+      "ai-usage-04"
+    ],
+    "component": "AiUsage1",
+    "props": "{ days: { label: string; tokens: Record<string, number> }[]; description: string; models: { cost: number; id: string; label: string }[]; title: string }"
+  },
   "type": "registry:component"
 }

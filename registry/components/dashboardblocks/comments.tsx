@@ -11,6 +11,7 @@ import {
   Fragment,
   type KeyboardEvent,
   type ReactNode,
+  startTransition,
   useEffect,
   useId,
   useLayoutEffect,
@@ -563,12 +564,14 @@ function CommentComposer({
     setIsSubmitting(true)
     try {
       await onSubmit(body)
-      change('')
-      setCaret(0)
+      startTransition(() => {
+        change('')
+        setCaret(0)
+      })
     } catch {
-      setError('Something went wrong. Try again.')
+      startTransition(() => setError('Something went wrong. Try again.'))
     } finally {
-      setIsSubmitting(false)
+      startTransition(() => setIsSubmitting(false))
     }
   }
 
@@ -719,6 +722,8 @@ function CommentThread({
   const [expanded, setExpanded] = useState(false)
   const [status, setStatus] = useState('')
   const pendingFocus = useRef<'reopen' | 'resolve' | null>(null)
+  const [focusTarget, setFocusTarget] = useState<{ selector: string } | null>(null)
+  const focusedTarget = useRef<typeof focusTarget>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const replies = comment.replies ?? []
   const resolved = Boolean(comment.resolved)
@@ -731,6 +736,12 @@ function CommentThread({
       pendingFocus.current = null
     }
   }, [id, resolved])
+
+  useEffect(() => {
+    if (!focusTarget || focusTarget === focusedTarget.current) return
+    focusedTarget.current = focusTarget
+    rootRef.current?.querySelector<HTMLElement>(focusTarget.selector)?.focus()
+  }, [focusTarget])
 
   function focusReply() {
     requestAnimationFrame(() => document.getElementById(`${id}-reply`)?.focus())
@@ -756,18 +767,14 @@ function CommentThread({
   function stopReply() {
     setReplying(false)
     setDraft('')
-    focusReply()
+    setFocusTarget({ selector: `#${CSS.escape(`${id}-reply`)}` })
   }
 
   function stopEditing(commentId: string) {
     setEditingId(null)
-    requestAnimationFrame(() =>
-      rootRef.current
-        ?.querySelector<HTMLElement>(
-          `[data-comment-id="${CSS.escape(commentId)}"] [aria-label^="More actions"]`,
-        )
-        ?.focus(),
-    )
+    setFocusTarget({
+      selector: `[data-comment-id="${CSS.escape(commentId)}"] [aria-label^="More actions"]`,
+    })
   }
 
   function resolve(next: boolean) {
@@ -848,8 +855,10 @@ function CommentThread({
               onCancel={() => stopEditing(item.id)}
               onSubmit={async (body) => {
                 await onEdit(item.id, body)
-                stopEditing(item.id)
-                setStatus('Comment saved')
+                startTransition(() => {
+                  stopEditing(item.id)
+                  setStatus('Comment saved')
+                })
               }}
             />
           )
@@ -1010,8 +1019,10 @@ function CommentThread({
                   onCancel={stopReply}
                   onSubmit={async (body) => {
                     await onReply?.(body)
-                    setStatus('Reply posted')
-                    stopReply()
+                    startTransition(() => {
+                      setStatus('Reply posted')
+                      stopReply()
+                    })
                   }}
                 />
               </div>

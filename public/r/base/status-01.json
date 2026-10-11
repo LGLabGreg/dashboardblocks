@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/status/status-01.tsx"
     }
   ],
+  "meta": {
+    "shows": "Each service with its current status, and an overall badge showing the worst one.",
+    "size": "half",
+    "usedWith": [
+      "status-03",
+      "alerts-01",
+      "data-table-04"
+    ],
+    "component": "Status1",
+    "props": "{ description: string; services: { description?: string; name: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string }"
+  },
   "type": "registry:component"
 }

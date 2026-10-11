@@ -13,5 +13,16 @@
       "target": "@components/dashboardblocks/kpi/kpi-03.tsx"
     }
   ],
+  "meta": {
+    "shows": "A rate with its previous value underneath and the change in percentage points.",
+    "size": "compact",
+    "usedWith": [
+      "kpi-02",
+      "funnel-01",
+      "chart-panel-01"
+    ],
+    "component": "KPI3",
+    "props": "{ changeType?: \"percent\" | \"points\"; comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; goodDirection?: \"up\" | \"down\"; previous: number; title: string; value: number }"
+  },
   "type": "registry:component"
 }

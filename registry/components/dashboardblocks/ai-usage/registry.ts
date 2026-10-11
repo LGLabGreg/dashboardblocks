@@ -14,6 +14,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'Tokens per day stacked by model, with the total cost and the cost per million tokens.',
+      size: 'full',
+      usedWith: ['ai-usage-02', 'ai-usage-03', 'ai-usage-04'],
+    },
   },
   {
     name: 'ai-usage-02',
@@ -25,6 +31,12 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
+      size: 'full',
+      usedWith: ['ai-usage-01', 'ai-usage-04', 'spend-01'],
+    },
   },
   {
     name: 'ai-usage-03',
@@ -36,6 +48,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows: 'Requests, time to first token, output speed and error rate for each model.',
+      size: 'full',
+      usedWith: ['ai-usage-01', 'ai-usage-02'],
+    },
   },
   {
     name: 'ai-usage-04',
@@ -47,5 +64,11 @@ export const examples: Registry['items'] = [
         type: 'registry:component',
       },
     ],
+    meta: {
+      shows:
+        'The share of input tokens served from the cache, what it saved and what the tokens would have cost without it.',
+      size: 'half',
+      usedWith: ['ai-usage-01', 'ai-usage-02'],
+    },
   },
 ]

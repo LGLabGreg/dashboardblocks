@@ -7,7 +7,7 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
-import { Fragment, type ReactNode, useRef, useState } from 'react'
+import { Fragment, type ReactNode, startTransition, useRef, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -257,18 +257,20 @@ const Comments3 = (props: Comments3Props) => {
                             }
                             onReply={async (body) => {
                               await onSubmit(body, { parentId: comment.id })
-                              update(comment.id, (parent) => ({
-                                ...parent,
-                                replies: [
-                                  ...(parent.replies ?? []),
-                                  {
-                                    at: now,
-                                    author: currentUser,
-                                    body,
-                                    id: `${Date.now()}`,
-                                  },
-                                ],
-                              }))
+                              startTransition(() => {
+                                update(comment.id, (parent) => ({
+                                  ...parent,
+                                  replies: [
+                                    ...(parent.replies ?? []),
+                                    {
+                                      at: now,
+                                      author: currentUser,
+                                      body,
+                                      id: `${Date.now()}`,
+                                    },
+                                  ],
+                                }))
+                              })
                             }}
                             onReact={(commentId, emoji) => {
                               onReact(commentId, emoji)
