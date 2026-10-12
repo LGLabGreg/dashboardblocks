@@ -5,25 +5,13 @@ import type { ReactNode } from 'react'
 
 interface AnimatedNumberProps {
   value: number
-  /**
-   * Duration of the animation in milliseconds
-   * @default 1000
-   */
+  /** Milliseconds, 1000 by default. */
   duration?: number
-  /**
-   * Easing function for the animation
-   * @default 'easeOut'
-   */
+  /** @default 'easeOut' */
   easing?: 'linear' | 'easeOut' | 'easeIn' | 'easeInOut' | 'spring'
-  /**
-   * Starting value for the animation
-   * @default 0
-   */
+  /** @default 0 */
   from?: number
-  /**
-   * Delay before starting animation in milliseconds
-   * @default 0
-   */
+  /** Milliseconds, 0 by default. */
   delay?: number
   formatter?: (value: number) => ReactNode
   className?: string

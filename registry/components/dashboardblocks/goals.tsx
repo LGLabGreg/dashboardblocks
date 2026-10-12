@@ -21,10 +21,7 @@ interface PaceInput {
   /** Share of the period that has passed, 0–1. */
   elapsed: number
   target: number
-  /**
-   * How far from the expected value still counts as on track.
-   * @default 0.05
-   */
+  /** How far from the expected value still counts as on track, 0.05 by default. */
   tolerance?: number
 }
 
@@ -91,7 +88,7 @@ const paceConfig: Record<
     label: 'Goal met',
   },
   'on-track': {
-    className: 'bg-muted text-muted-foreground',
+    className: 'bg-muted text-foreground',
     icon: (
       <IconPlaceholder
         lucide='CircleCheckIcon'

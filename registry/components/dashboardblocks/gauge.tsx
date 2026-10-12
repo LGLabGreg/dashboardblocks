@@ -60,7 +60,7 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
         aria-hidden
       />
     ),
-    soft: 'bg-muted text-muted-foreground',
+    soft: 'bg-muted text-foreground',
     stroke: 'stroke-muted-foreground',
     swatch: 'bg-muted-foreground',
     text: 'text-muted-foreground',
@@ -182,17 +182,11 @@ interface GaugeProps {
   bands?: GaugeBand[]
   children?: ReactNode
   className?: string
-  /**
-   * Fill colour, unless `colorByBand` is set.
-   * @default 'var(--chart-2)'
-   */
+  /** Ignored when `colorByBand` is set, `var(--chart-2)` by default. */
   color?: string
   colorByBand?: boolean
   formatScale?: (value: number) => string
-  /**
-   * `fill` draws the value as an arc from `origin`, with any bands as a thin scale inside the track.
-   * @default 'fill'
-   */
+  /** @default 'fill' */
   indicator?: 'fill' | 'marker'
   label: string
   /** @default 100 */
@@ -200,16 +194,10 @@ interface GaugeProps {
   /** @default 0 */
   min?: number
   origin?: number
-  /**
-   * 180 for a semicircle, 270 for a three-quarter arc.
-   * @default 180
-   */
+  /** @default 180 */
   sweep?: 180 | 270
   target?: number
-  /**
-   * Track thickness, in hundredths of the gauge's width.
-   * @default 10
-   */
+  /** In hundredths of the gauge's width, 10 by default. */
   thickness?: number
   value: number
   valueText?: string

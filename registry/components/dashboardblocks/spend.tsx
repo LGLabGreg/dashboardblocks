@@ -13,10 +13,7 @@ interface BudgetPaceInput {
   /** Share of the period that has passed, 0–1. */
   elapsed: number
   spent: number
-  /**
-   * How far over the budget the projection can land and still count as on track, and how far under it counts as under budget.
-   * @default 0.05
-   */
+  /** How far over budget the projection can land and stay on track, and how far under counts as under budget, 0.05 by default. */
   tolerance?: number
 }
 
@@ -95,7 +92,7 @@ const budgetStatusConfig: Record<
     label: 'At risk',
   },
   'on-track': {
-    className: 'bg-muted text-muted-foreground',
+    className: 'bg-muted text-foreground',
     icon: (
       <IconPlaceholder
         lucide='CircleCheckIcon'

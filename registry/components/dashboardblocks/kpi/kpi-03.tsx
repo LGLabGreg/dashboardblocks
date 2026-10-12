@@ -12,10 +12,7 @@ import {
 import { CardDescription } from '@/components/ui/card'
 
 interface KPI3Props {
-  /**
-   * Use `points` for rates, so the change reads in percentage points.
-   * @default 'percent'
-   */
+  /** Use `points` for rates, so the change reads in percentage points; 'percent' by default. */
   changeType?: 'percent' | 'points'
   comparison: string
   format?: KPIFormat

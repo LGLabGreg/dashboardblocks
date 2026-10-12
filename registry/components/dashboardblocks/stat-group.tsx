@@ -9,10 +9,7 @@ import { cn } from '@/lib/utils'
 type StatFormatter = (value: number) => string
 
 interface StatMetric {
-  /**
-   * How the change is measured.
-   * @default 'percent'
-   */
+  /** @default 'percent' */
   changeType?: 'percent' | 'points'
   formatter?: StatFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
@@ -74,10 +71,7 @@ function StatValue({ className, ...props }: ComponentProps<'dd'>) {
 interface StatChangeProps {
   className?: string
   metric: StatMetric
-  /**
-   * Shows the previous value after the change.
-   * @default true
-   */
+  /** @default true */
   showPrevious?: boolean
   variant?: 'default' | 'badge'
 }

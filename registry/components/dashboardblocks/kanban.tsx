@@ -574,7 +574,7 @@ function KanbanBoard({
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerup', onUp)
     window.addEventListener('pointercancel', onCancel)
-    window.addEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, { capture: true })
     window.addEventListener('touchmove', onTouchMove, { passive: false })
     window.addEventListener('contextmenu', onContextMenu)
     window.addEventListener('blur', onBlur)
@@ -590,7 +590,7 @@ function KanbanBoard({
         window.removeEventListener('pointermove', onPointerMove)
         window.removeEventListener('pointerup', onUp)
         window.removeEventListener('pointercancel', onCancel)
-        window.removeEventListener('keydown', onKey)
+        window.removeEventListener('keydown', onKey, { capture: true })
         window.removeEventListener('touchmove', onTouchMove)
         window.removeEventListener('contextmenu', onContextMenu)
         window.removeEventListener('blur', onBlur)
@@ -709,7 +709,7 @@ function KanbanCount({
           ? 'bg-red-500/10 text-red-700 dark:text-red-400'
           : state === 'at'
             ? 'bg-amber-500/10 text-amber-800 dark:text-amber-400'
-            : 'bg-muted text-muted-foreground',
+            : 'bg-muted text-foreground',
         className,
       )}
     >

@@ -43,10 +43,7 @@ interface Settings2Props {
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onRevoke?: (id: string) => void
-  /**
-   * Keys unused for this many days are flagged as stale.
-   * @default 90
-   */
+  /** @default 90 */
   staleAfterDays?: number
   title: string
 }

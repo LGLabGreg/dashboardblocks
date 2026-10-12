@@ -152,13 +152,16 @@ const stackCountSize: Record<AvatarSize, string> = {
   sm: 'size-6 text-[10px]',
 }
 
+const stackSpacing: Record<AvatarSize, string> = {
+  default: '-space-x-2',
+  lg: '-space-x-2',
+  sm: 'space-x-0',
+}
+
 interface AvatarStackProps {
   className?: string
   label: string
-  /**
-   * How many avatars to show before "+N".
-   * @default 4
-   */
+  /** Avatars shown before "+N", 4 by default. */
   max?: number
   people: Pick<Person, 'avatar' | 'id' | 'name'>[]
   /** @default 'default' */
@@ -176,7 +179,7 @@ function AvatarStack({
   const hidden = people.length - shown.length
 
   return (
-    <ul aria-label={label} className={cn('flex -space-x-2', className)}>
+    <ul aria-label={label} className={cn('flex', stackSpacing[size], className)}>
       {shown.map((person) => (
         <li key={person.id} title={person.name} className='flex'>
           <PersonAvatar person={person} size={size} className='ring-card ring-2' />

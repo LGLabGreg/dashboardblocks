@@ -4,6 +4,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ComponentProps,
   type ReactNode,
+  startTransition,
   useCallback,
   useEffect,
   useRef,
@@ -155,11 +156,15 @@ function useBlockData<T>(load: () => Promise<T>, { keepData = true } = {}) {
       try {
         const next = await loadRef.current()
         hasData.current = true
-        setData(next)
-        setStatus('success')
+        startTransition(() => {
+          setData(next)
+          setStatus('success')
+        })
       } catch (caught) {
-        setError(caught)
-        setStatus('error')
+        startTransition(() => {
+          setError(caught)
+          setStatus('error')
+        })
       }
     },
     [keepData],

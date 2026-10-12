@@ -341,7 +341,7 @@ function TileMap({
             <button
               key={tile.id}
               type='button'
-              aria-label={describe(tile, value)}
+              aria-label={`${tile.code}, ${describe(tile, value)}`}
               className={cn(
                 'ring-offset-card flex aspect-square min-w-0 items-center justify-center rounded-[3px] text-[length:clamp(0.5rem,2.6cqw,0.75rem)] font-medium outline-none',
                 value === null && 'text-muted-foreground border border-dashed',

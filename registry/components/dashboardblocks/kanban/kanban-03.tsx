@@ -196,7 +196,7 @@ function SlaBadge({ due, now, paused }: { due: Date; now: Date; paused: boolean 
         'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
         state === 'breached' && 'bg-red-500/10 text-red-700 dark:text-red-400',
         state === 'soon' && 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-        (state === 'ok' || state === 'paused') && 'bg-muted text-muted-foreground',
+        (state === 'ok' || state === 'paused') && 'bg-muted text-foreground',
       )}
     >
       {state === 'paused' ? (

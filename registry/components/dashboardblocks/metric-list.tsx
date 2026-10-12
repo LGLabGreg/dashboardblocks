@@ -19,10 +19,7 @@ type MetricFormat =
   | 'milliseconds'
 
 interface Metric {
-  /**
-   * How the change is measured.
-   * @default 'percent'
-   */
+  /** @default 'percent' */
   changeType?: 'percent' | 'points'
   format?: MetricFormat | MetricFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
@@ -292,10 +289,7 @@ interface TargetInput {
   /** Use `down` when the target is a ceiling, like churn or latency. */
   goodDirection?: 'up' | 'down'
   target: number
-  /**
-   * How far short of the target, as a share of it, still counts as near.
-   * @default 0.05
-   */
+  /** How far short of the target, as a share of it, still counts as near, 0.05 by default. */
   tolerance?: number
   value: number
 }

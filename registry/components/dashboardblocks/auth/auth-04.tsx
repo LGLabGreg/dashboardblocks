@@ -19,10 +19,7 @@ interface Auth4Props {
   focusOnMount?: boolean
   brand: ReactNode
   email: string
-  /**
-   * Seconds before another email can be sent.
-   * @default 60
-   */
+  /** Seconds before another email can be sent, 60 by default. */
   resendAfter?: number
   onChangeEmail?: (email: string) => void | Promise<void>
   onResend?: () => void | Promise<void>

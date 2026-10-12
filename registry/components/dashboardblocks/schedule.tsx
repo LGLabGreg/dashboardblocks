@@ -172,11 +172,21 @@ interface EventRowProps {
   event: ScheduleEvent
   /** Dims events that have ended and marks the one in progress. */
   now?: Date
+  /** Tints the row and keeps its small text at full contrast on the tint. */
+  selected?: boolean
   /** @default 'UTC' */
   timeZone?: string
 }
 
-function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowProps) {
+function EventRow({
+  action,
+  className,
+  event,
+  now,
+  selected = false,
+  timeZone = 'UTC',
+}: EventRowProps) {
+  const muted = !selected && 'text-muted-foreground'
   const ended = now !== undefined && (event.end ?? event.start) <= now
   const live =
     now !== undefined &&
@@ -187,22 +197,20 @@ function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowP
   const meta = [event.calendar, event.location].filter(Boolean).join(' · ')
 
   return (
-    <li className={cn('flex items-stretch gap-3', className)}>
+    <li className={cn('flex items-stretch gap-3', selected && 'bg-muted', className)}>
       <div className='flex w-16 shrink-0 flex-col pt-px text-xs tabular-nums'>
         {event.allDay ? (
-          <span className='text-muted-foreground font-medium'>All day</span>
+          <span className={cn('font-medium', muted)}>All day</span>
         ) : (
           <>
             <time
               dateTime={event.start.toISOString()}
-              className={cn('font-medium', ended && 'text-muted-foreground')}
+              className={cn('font-medium', ended && muted)}
             >
               {formatTime(event.start, timeZone)}
             </time>
             {event.end && (
-              <span className='text-muted-foreground'>
-                {formatDuration(event.start, event.end)}
-              </span>
+              <span className={cn(muted)}>{formatDuration(event.start, event.end)}</span>
             )}
           </>
         )}
@@ -216,7 +224,7 @@ function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowP
         <p
           className={cn(
             'flex flex-wrap items-center gap-x-2 text-sm font-medium',
-            ended && 'text-muted-foreground',
+            ended && muted,
           )}
         >
           <span className='min-w-0 break-words'>{event.title}</span>
@@ -231,7 +239,7 @@ function EventRow({ action, className, event, now, timeZone = 'UTC' }: EventRowP
           )}
           {ended && <span className='sr-only'>(ended)</span>}
         </p>
-        {meta && <p className='text-muted-foreground truncate text-xs'>{meta}</p>}
+        {meta && <p className={cn('truncate text-xs', muted)}>{meta}</p>}
       </div>
       {action && <div className='flex shrink-0 items-start'>{action}</div>}
     </li>
@@ -256,7 +264,7 @@ const urgencyConfig: Record<
       />
     ),
     label: 'Upcoming',
-    soft: 'bg-muted text-muted-foreground',
+    soft: 'bg-muted text-foreground',
     text: 'text-muted-foreground',
   },
   overdue: {
@@ -515,7 +523,7 @@ function MonthCalendar({
                     }}
                     className={cn(
                       'focus-visible:ring-ring/50 relative mx-auto flex h-10 w-full max-w-10 flex-col items-center justify-center gap-0.5 rounded-md text-sm tabular-nums outline-none focus-visible:ring-[3px]',
-                      outside ? 'text-muted-foreground/60' : 'hover:bg-muted',
+                      outside ? 'text-muted-foreground' : 'hover:bg-muted',
                       isToday &&
                         !isSelected &&
                         'text-foreground font-semibold ring-1 ring-border',

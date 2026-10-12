@@ -73,7 +73,7 @@ const Funnel3 = (props: Funnel3Props) => {
                     'relative flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',
                     isBiggestDrop
                       ? 'bg-foreground text-background'
-                      : 'bg-muted text-muted-foreground',
+                      : 'bg-muted text-foreground',
                   )}
                 >
                   <span className='sr-only'>Step </span>

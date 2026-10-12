@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/settings.tsx for React Aria
-// source-hash: 05942d83c210
+// source-hash: 461408050cf9
 
 'use client'
 
@@ -32,10 +32,7 @@ interface RoleMenuProps {
   className?: string
   label: string
   onValueChange: (role: Role) => void
-  /**
-   * The roles to offer.
-   * @default ['admin', 'member', 'viewer']
-   */
+  /** @default ['admin', 'member', 'viewer'] */
   roles?: Role[]
   value: Role
 }

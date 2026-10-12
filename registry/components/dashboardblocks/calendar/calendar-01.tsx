@@ -19,8 +19,6 @@ import { useId, useState } from 'react'
 
 import { Card, CardContent } from '@/components/ui/card'
 
-import { cn } from '@/lib/utils'
-
 interface Calendar1Props {
   calendars: { color: string; name: string }[]
   events: CalendarEvent[]
@@ -335,10 +333,8 @@ const Calendar1 = (props: Calendar1Props) => {
                     event={event}
                     now={now}
                     timeZone={timeZone}
-                    className={cn(
-                      '-mx-2 rounded-md px-2 py-1.5',
-                      event.id === selectedEventId && 'bg-muted',
-                    )}
+                    selected={event.id === selectedEventId}
+                    className='-mx-2 rounded-md px-2 py-1.5'
                   />
                 ))}
               </ul>

@@ -43,10 +43,7 @@ function getKPIFormatter(format: KPIFormat | KPIFormatter = 'number'): KPIFormat
 }
 
 interface KPIChangeInput {
-  /**
-   * How the change is measured.
-   * @default 'percent'
-   */
+  /** @default 'percent' */
   changeType?: 'percent' | 'points'
   previous?: number
   value: number

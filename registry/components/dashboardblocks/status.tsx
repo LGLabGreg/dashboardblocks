@@ -115,7 +115,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
       />
     ),
     label: 'No data',
-    soft: 'bg-muted text-muted-foreground',
+    soft: 'bg-muted text-foreground',
     text: 'text-muted-foreground',
   },
 }

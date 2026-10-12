@@ -471,7 +471,7 @@ function UserMenu(props: UserMenuProps) {
             variant='ghost'
             size='icon'
             className='rounded-full'
-            aria-label={`Account: ${props.user.name}`}
+            aria-label={`${getInitials(props.user.name)}, account: ${props.user.name}`}
           />
         }
       >
@@ -563,15 +563,14 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         onOpen()
       }
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown, { capture: true })
+    return () => window.removeEventListener('keydown', onKeyDown, { capture: true })
   }, [onOpen])
 
   return (
     <Button
       variant='outline'
       onClick={onOpen}
-      aria-label={placeholder}
       aria-keyshortcuts='Meta+K Control+K'
       className={cn(
         'max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
@@ -586,7 +585,9 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         remixicon='RiSearchLine'
       />
       <span className='max-sm:sr-only'>{placeholder}</span>
-      <Kbd className='ml-auto max-sm:hidden'>⌘K</Kbd>
+      <Kbd aria-hidden className='ml-auto max-sm:hidden'>
+        ⌘K
+      </Kbd>
     </Button>
   )
 }

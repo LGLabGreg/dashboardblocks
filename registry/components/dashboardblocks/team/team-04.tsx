@@ -29,10 +29,7 @@ interface Team4Props {
   now: Date
   onPage?: (person: Person) => void
   shifts: Shift[]
-  /**
-   * The time zone handover times are shown in.
-   * @default 'UTC'
-   */
+  /** @default 'UTC' */
   timeZone?: string
   title: string
 }

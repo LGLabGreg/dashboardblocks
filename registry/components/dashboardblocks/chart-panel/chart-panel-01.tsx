@@ -43,10 +43,7 @@ interface ChartPanel1Props {
   description: string
   formatter?: ChartValueFormatter
   previousLabel?: string
-  /**
-   * Draws the previous period and compares the total with it.
-   * @default true
-   */
+  /** @default true */
   showPrevious?: boolean
   title: string
 }

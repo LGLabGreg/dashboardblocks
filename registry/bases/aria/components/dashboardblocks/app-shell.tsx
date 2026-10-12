@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 50e7d81caad4
+// source-hash: 7864868062a0
 
 'use client'
 
@@ -42,13 +42,6 @@ import {
 
 import { cn } from '@/lib/utils'
 
-/*
- * The sidebar, menu and breadcrumb links are React Aria links, and the rest
- * render `Link`, so the shell works with any router. For client-side
- * navigation, wrap your app in React Aria's RouterProvider and in `LinkProvider`
- * with your router's link.
- */
-
 interface NavLink {
   badge?: ReactNode
   href: string
@@ -81,10 +74,7 @@ function useRailTooltip() {
   return (label: string) => (isMobile ? undefined : label)
 }
 
-/**
- * React Aria's sheet shows its close button at the top end of the mobile
- * sidebar, over the end of the header's button, so leave room for it.
- */
+// React Aria's sheet puts its close button over the end of the mobile sidebar's header.
 function useSheetCloseRoom() {
   const { isMobile } = useSidebar()
   return isMobile ? 'pe-11' : undefined
@@ -470,7 +460,7 @@ function UserMenu(props: UserMenuProps) {
         variant='ghost'
         size='icon'
         className='rounded-full'
-        aria-label={`Account: ${props.user.name}`}
+        aria-label={`${getInitials(props.user.name)}, account: ${props.user.name}`}
       >
         <UserAvatar user={props.user} />
       </Button>
@@ -556,15 +546,15 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         onOpen()
       }
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown, { capture: true })
+    return () => window.removeEventListener('keydown', onKeyDown, { capture: true })
   }, [onOpen])
 
   return (
     <Button
       variant='outline'
       onPress={onOpen}
-      aria-label={placeholder}
+      aria-keyshortcuts='Meta+K Control+K'
       className={cn(
         'max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
         className,
@@ -578,7 +568,9 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
         remixicon='RiSearchLine'
       />
       <span className='max-sm:sr-only'>{placeholder}</span>
-      <Kbd className='ml-auto max-sm:hidden'>⌘K</Kbd>
+      <Kbd aria-hidden className='ml-auto max-sm:hidden'>
+        ⌘K
+      </Kbd>
     </Button>
   )
 }

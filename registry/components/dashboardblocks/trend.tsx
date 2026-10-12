@@ -79,10 +79,7 @@ interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction
   animated?: boolean
   className?: string
   formatter?: (value: number) => string
-  /**
-   * Which direction is good.
-   * @default 'up'
-   */
+  /** @default 'up' */
   goodDirection?: 'up' | 'down'
   trend: number
   trendIcon?: 'arrow' | 'trend'

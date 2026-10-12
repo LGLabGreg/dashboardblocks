@@ -1,5 +1,16 @@
 # dashboardblocks
 
+## 1.4.1
+
+### Patch Changes
+
+- 4b674d3: Days outside the month in the calendar and schedule month views (hovered ones included), past events in the calendar, and billing-05's billing period toggle now meet AA contrast in both themes. In the calendar's week and day views, an event that a later one overlaps shows only the lines the later event leaves uncovered, so its time no longer sits under the other event's title. billing-05's price summary is valid description list markup once you pick another plan or period.
+- c504493: Blocks ship with fewer comments. Prop docs fit on one line, comments that only described the code are gone, and every remaining lint suppression says why it's there.
+- cdce6f6: `useBlockState` shows a load's data or error in a transition, and the quote in `invoice-03` shows its accepted or declined state the same way, so with a Server Action the result shows together with the page's refreshed data.
+- e45514d: Accessible names now contain the text a control shows, so voice control can reach it by what it says: the search button in App Shell and Command Menu, the account menu in App Shell, the rows-per-page menu in Data Table, the tiles in Geo's tile map, and events in Calendar.
+- 98bd49f: Neutral badges and counts on a muted background now use the foreground colour, so their small text passes AA contrast in every style: the billing block's Due badge, the neutral or on-track badges in gauge, goals, insights, schedule, spend and status, the kanban WIP count and neutral card labels (and activity-feed's neutral tone), the SLA badge in kanban-03, comparison-02's result badge, funnel-03's step numbers, and a selected or hovered event's time in the calendar. `EventRow` takes a `selected` prop that tints the row and keeps its small text readable on the tint. Small avatar stacks no longer overlap, so each person's initials stay readable. activity-feed-04's counts are valid description list markup.
+- c5bd598: Command Menu's ⌘K, App Shell's search shortcut and the Escape that cancels a Kanban drag now work while a control that stops key events has focus, such as a React Aria sidebar link.
+
 ## 1.4.0
 
 ### Minor Changes

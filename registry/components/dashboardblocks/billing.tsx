@@ -261,7 +261,7 @@ interface InvoiceStatusConfig {
 
 const invoiceStatusConfig: Record<InvoiceStatus, InvoiceStatusConfig> = {
   due: {
-    className: 'bg-muted text-muted-foreground',
+    className: 'bg-muted text-foreground',
     icon: (
       <IconPlaceholder
         lucide='ClockIcon'

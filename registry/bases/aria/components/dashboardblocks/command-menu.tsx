@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: dc8eb3cbfaf0
+// source-hash: f4983fa5ae6a
 
 'use client'
 
@@ -62,8 +62,8 @@ function useCommandMenuShortcut(onOpen: () => void, key = 'k') {
         onOpen()
       }
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown, { capture: true })
+    return () => window.removeEventListener('keydown', onKeyDown, { capture: true })
   }, [key, onOpen])
 }
 
@@ -180,7 +180,6 @@ function CommandMenuTrigger({
     <Button
       variant='outline'
       onClick={onClick}
-      aria-label={placeholder}
       className={cn(
         'max-sm:aspect-square max-sm:px-0 sm:w-64 sm:justify-start',
         className,
@@ -194,7 +193,11 @@ function CommandMenuTrigger({
         remixicon='RiSearchLine'
       />
       <span className='truncate max-sm:sr-only'>{placeholder}</span>
-      {shortcut && <Kbd className='ml-auto max-sm:hidden'>{shortcut}</Kbd>}
+      {shortcut && (
+        <Kbd aria-hidden className='ml-auto max-sm:hidden'>
+          {shortcut}
+        </Kbd>
+      )}
     </Button>
   )
 }

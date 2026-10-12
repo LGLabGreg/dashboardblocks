@@ -144,17 +144,21 @@ const ActivityFeed04 = (props: ActivityFeed04Props) => {
       <CardContent className='flex flex-col gap-6'>
         <dl className='grid grid-cols-2 gap-x-4 gap-y-5'>
           {counts.map((count) => (
-            <div key={count.label} className='flex items-start gap-3'>
-              <ActivityIcon className='ring-0' icon={count.icon} tone={count.tone} />
-              <div className='flex min-w-0 flex-col'>
-                <dt className='text-muted-foreground truncate text-xs'>{count.label}</dt>
-                <dd className='text-xl font-semibold tracking-tight tabular-nums'>
-                  {number.format(count.value)}
-                </dd>
-                <dd>
-                  <Change previous={count.previous} value={count.value} />
-                </dd>
-              </div>
+            <div key={count.label} className='relative flex min-w-0 flex-col pl-7'>
+              <dt className='text-muted-foreground truncate text-xs'>
+                <ActivityIcon
+                  className='absolute top-0 left-0 ring-0'
+                  icon={count.icon}
+                  tone={count.tone}
+                />
+                {count.label}
+              </dt>
+              <dd className='text-xl font-semibold tracking-tight tabular-nums'>
+                {number.format(count.value)}
+              </dd>
+              <dd>
+                <Change previous={count.previous} value={count.value} />
+              </dd>
             </div>
           ))}
         </dl>

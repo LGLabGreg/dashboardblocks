@@ -31,10 +31,7 @@ interface RoleMenuProps {
   className?: string
   label: string
   onValueChange: (role: Role) => void
-  /**
-   * The roles to offer.
-   * @default ['admin', 'member', 'viewer']
-   */
+  /** @default ['admin', 'member', 'viewer'] */
   roles?: Role[]
   value: Role
 }

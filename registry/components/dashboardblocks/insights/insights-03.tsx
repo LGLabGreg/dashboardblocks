@@ -25,10 +25,7 @@ interface Insights3Props {
   contributions: Contribution[]
   description: string
   formatter?: (value: number) => string
-  /**
-   * Which direction is good for the metric.
-   * @default 'up'
-   */
+  /** @default 'up' */
   goodDirection?: 'up' | 'down'
   metric: string
   previous: number

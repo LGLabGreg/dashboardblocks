@@ -87,10 +87,7 @@ interface SentimentBarProps {
   counts: SentimentCounts
   /** For 'diverging': the share of mentions each half of the bar spans. */
   extent?: number
-  /**
-   * 'stacked' fills one bar with negative, neutral and positive.
-   * @default 'stacked'
-   */
+  /** @default 'stacked' */
   variant?: 'stacked' | 'diverging'
 }
 

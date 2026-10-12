@@ -54,17 +54,10 @@ import { Input } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
 
-/*
- * Put the table inside an element with `@container/data-table`, usually the
- * card. Below 42rem the table restacks: each row becomes a two-column grid of
- * labelled values. Use `@2xl/data-table:` for controls that only apply to one
- * layout, such as `DataTableSortMenu`. Explicit ARIA roles keep the table
- * semantics when the display changes, which some browsers otherwise drop.
- */
-
 function DataTable({ className, ...props }: ComponentProps<'table'>) {
   return (
     <table
+      // Explicit ARIA roles keep the table semantics when the display changes, which some browsers otherwise drop.
       role='table'
       data-slot='data-table'
       className={cn(
@@ -204,10 +197,7 @@ interface DataTableColumnMeta {
   hideLabelWhenStacked?: boolean
   label?: string
   primary?: boolean
-  /**
-   * Names each order in the sort menu, such as `{ asc: 'Oldest first', desc: 'Newest first' }` for dates.
-   * @default Oldest first and Newest first for a `Date` or ISO date string (a date held as a timestamp number needs these), A to Z and Z to A for text, high to low and low to high otherwise
-   */
+  /** @default Oldest first and Newest first for a Date or ISO date string (pass them for a timestamp number), A to Z and Z to A for text, high to low and low to high otherwise */
   sortLabels?: { asc: string; desc: string }
   truncate?: boolean
 }
@@ -882,9 +872,7 @@ function DataTablePagination<TData extends RowData>({
       <div className='flex flex-wrap items-center gap-2'>
         {pageSizeOptions && (
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant='ghost' size='sm' aria-label='Rows per page' />}
-            >
+            <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
               {pageSize} per page
               <IconPlaceholder
                 lucide='ChevronDownIcon'

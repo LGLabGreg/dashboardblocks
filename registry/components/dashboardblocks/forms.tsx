@@ -439,7 +439,7 @@ function InlineEditField({
           <div className='flex flex-col gap-1.5'>
             <div className='flex gap-2'>
               <Input
-                // oxlint-disable-next-line jsx-a11y/no-autofocus
+                // oxlint-disable-next-line jsx-a11y/no-autofocus -- the field replaces the Edit button the person just pressed
                 autoFocus
                 type={type}
                 aria-labelledby={`${id}-label`}

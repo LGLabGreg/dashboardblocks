@@ -216,7 +216,7 @@ const Billing5 = (props: Billing5Props) => {
           {(['month', 'year'] as const).map((value) => (
             <label
               key={value}
-              className='has-checked:bg-background has-checked:text-foreground text-muted-foreground has-focus-visible:ring-ring/50 flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium has-checked:shadow-sm has-focus-visible:ring-3'
+              className='has-checked:bg-background has-checked:text-foreground text-foreground/70 has-focus-visible:ring-ring/50 flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium has-checked:shadow-sm has-focus-visible:ring-3'
             >
               <input
                 type='radio'
@@ -231,7 +231,7 @@ const Billing5 = (props: Billing5Props) => {
               />
               {value === 'month' ? 'Monthly' : 'Yearly'}
               {value === 'year' && yearlySaving > 0 && (
-                <span className='rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-emerald-700 dark:text-emerald-400'>
+                <span className='text-xs font-medium whitespace-nowrap text-emerald-700 dark:text-emerald-400'>
                   Save {!plan?.price && 'up to '}
                   {Math.round(yearlySaving * 100)}%
                 </span>
@@ -374,53 +374,57 @@ const Billing5 = (props: Billing5Props) => {
               </p>
             </div>
 
-            <dl className='flex flex-col gap-2 text-sm'>
-              <div className='flex justify-between gap-4'>
-                <dt className='text-muted-foreground'>
-                  {plan.name}, {seats} {seats === 1 ? 'seat' : 'seats'}
-                </dt>
-                <dd className='font-medium tabular-nums'>
-                  {money(nextTotal)} / {interval}
-                </dd>
-              </div>
+            <div className='flex flex-col gap-2'>
+              <dl className='flex flex-col gap-2 text-sm'>
+                <div className='flex justify-between gap-4'>
+                  <dt className='text-muted-foreground'>
+                    {plan.name}, {seats} {seats === 1 ? 'seat' : 'seats'}
+                  </dt>
+                  <dd className='font-medium tabular-nums'>
+                    {money(nextTotal)} / {interval}
+                  </dd>
+                </div>
+                {!unchanged && (
+                  <>
+                    <div className='flex justify-between gap-4'>
+                      <dt className='text-muted-foreground'>Now</dt>
+                      <dd className='tabular-nums'>
+                        {money(currentTotal)} / {active.interval}
+                      </dd>
+                    </div>
+                    <div className='flex justify-between gap-4 border-t pt-2'>
+                      <dt className='font-medium'>Due today</dt>
+                      <dd className='font-medium tabular-nums'>
+                        {money(Math.round(dueToday * 100) / 100)}
+                      </dd>
+                    </div>
+                  </>
+                )}
+              </dl>
               {!unchanged && (
-                <>
-                  <div className='flex justify-between gap-4'>
-                    <dt className='text-muted-foreground'>Now</dt>
-                    <dd className='tabular-nums'>
-                      {money(currentTotal)} / {active.interval}
-                    </dd>
-                  </div>
-                  <div className='flex justify-between gap-4 border-t pt-2'>
-                    <dt className='font-medium'>Due today</dt>
-                    <dd className='font-medium tabular-nums'>
-                      {money(Math.round(dueToday * 100) / 100)}
-                    </dd>
-                  </div>
-                  <p className='text-muted-foreground text-xs'>
-                    {upgrade ? (
-                      <>
-                        Starts today, with credit for the unused part of this period. Then{' '}
-                        {money(nextTotal)} on{' '}
-                        <time dateTime={nextRenewal.toISOString()}>
-                          {formatBillingDate(nextRenewal)}
-                        </time>
-                        .
-                      </>
-                    ) : (
-                      <>
-                        Starts on{' '}
-                        <time dateTime={startsAt.toISOString()}>
-                          {formatBillingDate(startsAt)}
-                        </time>
-                        , when this period ends. Nothing changes until then.
-                      </>
-                    )}{' '}
-                    Before tax.
-                  </p>
-                </>
+                <p className='text-muted-foreground text-xs'>
+                  {upgrade ? (
+                    <>
+                      Starts today, with credit for the unused part of this period. Then{' '}
+                      {money(nextTotal)} on{' '}
+                      <time dateTime={nextRenewal.toISOString()}>
+                        {formatBillingDate(nextRenewal)}
+                      </time>
+                      .
+                    </>
+                  ) : (
+                    <>
+                      Starts on{' '}
+                      <time dateTime={startsAt.toISOString()}>
+                        {formatBillingDate(startsAt)}
+                      </time>
+                      , when this period ends. Nothing changes until then.
+                    </>
+                  )}{' '}
+                  Before tax.
+                </p>
               )}
-            </dl>
+            </div>
           </div>
         ) : (
           <p className='text-muted-foreground border-t pt-6 text-sm'>

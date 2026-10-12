@@ -11,6 +11,7 @@
     {
       "name": "activity-feed-01",
       "install": "@dashboardblocks/activity-feed-01",
+      "import": "@/components/dashboardblocks/activity-feed/activity-feed-01",
       "component": "ActivityFeed01",
       "shows": "What people did across a workspace, newest first and grouped by day.",
       "size": "half",
@@ -23,6 +24,7 @@
     {
       "name": "activity-feed-02",
       "install": "@dashboardblocks/activity-feed-02",
+      "import": "@/components/dashboardblocks/activity-feed/activity-feed-02",
       "component": "ActivityFeed02",
       "shows": "The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.",
       "size": "half",
@@ -35,6 +37,7 @@
     {
       "name": "activity-feed-03",
       "install": "@dashboardblocks/activity-feed-03",
+      "import": "@/components/dashboardblocks/activity-feed/activity-feed-03",
       "component": "ActivityFeed03",
       "shows": "Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.",
       "size": "half",
@@ -47,6 +50,7 @@
     {
       "name": "activity-feed-04",
       "install": "@dashboardblocks/activity-feed-04",
+      "import": "@/components/dashboardblocks/activity-feed/activity-feed-04",
       "component": "ActivityFeed04",
       "shows": "A week of activity by kind with the change on the week before, and the most active people.",
       "size": "half",
@@ -60,6 +64,7 @@
     {
       "name": "activity-feed-05",
       "install": "@dashboardblocks/activity-feed-05",
+      "import": "@/components/dashboardblocks/activity-feed/activity-feed-05",
       "component": "ActivityFeed05",
       "shows": "Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.",
       "size": "half",
@@ -72,6 +77,7 @@
     {
       "name": "ai-assistant-01",
       "install": "@dashboardblocks/ai-assistant-01",
+      "import": "@/components/dashboardblocks/ai-assistant/ai-assistant-01",
       "component": "AiAssistant1",
       "shows": "An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.",
       "size": "page",
@@ -83,6 +89,7 @@
     {
       "name": "ai-assistant-02",
       "install": "@dashboardblocks/ai-assistant-02",
+      "import": "@/components/dashboardblocks/ai-assistant/ai-assistant-02",
       "component": "AiAssistant2",
       "shows": "A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.",
       "size": "half",
@@ -95,6 +102,7 @@
     {
       "name": "ai-assistant-03",
       "install": "@dashboardblocks/ai-assistant-03",
+      "import": "@/components/dashboardblocks/ai-assistant/ai-assistant-03",
       "component": "AiAssistant3",
       "shows": "Questions about an AI usage card, with the tokens and cost shown for each answer.",
       "size": "half",
@@ -107,6 +115,7 @@
     {
       "name": "ai-assistant-04",
       "install": "@dashboardblocks/ai-assistant-04",
+      "import": "@/components/dashboardblocks/ai-assistant/ai-assistant-04",
       "component": "AiAssistant4",
       "shows": "A failed assistant reply kept in the conversation with a button to try again.",
       "size": "half",
@@ -119,6 +128,7 @@
     {
       "name": "ai-usage-01",
       "install": "@dashboardblocks/ai-usage-01",
+      "import": "@/components/dashboardblocks/ai-usage/ai-usage-01",
       "component": "AiUsage1",
       "shows": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
       "size": "full",
@@ -132,6 +142,7 @@
     {
       "name": "ai-usage-02",
       "install": "@dashboardblocks/ai-usage-02",
+      "import": "@/components/dashboardblocks/ai-usage/ai-usage-02",
       "component": "AiUsage2",
       "shows": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
       "size": "full",
@@ -145,6 +156,7 @@
     {
       "name": "ai-usage-03",
       "install": "@dashboardblocks/ai-usage-03",
+      "import": "@/components/dashboardblocks/ai-usage/ai-usage-03",
       "component": "AiUsage3",
       "shows": "Requests, time to first token, output speed and error rate for each model.",
       "size": "full",
@@ -157,6 +169,7 @@
     {
       "name": "ai-usage-04",
       "install": "@dashboardblocks/ai-usage-04",
+      "import": "@/components/dashboardblocks/ai-usage/ai-usage-04",
       "component": "AiUsage4",
       "shows": "The share of input tokens served from the cache, what it saved and what the tokens would have cost without it.",
       "size": "half",
@@ -169,6 +182,7 @@
     {
       "name": "alerts-01",
       "install": "@dashboardblocks/alerts-01",
+      "import": "@/components/dashboardblocks/alerts/alerts-01",
       "component": "Alerts1",
       "shows": "Open alerts, most recent first, each with a button to acknowledge it.",
       "size": "half",
@@ -182,6 +196,7 @@
     {
       "name": "alerts-02",
       "install": "@dashboardblocks/alerts-02",
+      "import": "@/components/dashboardblocks/alerts/alerts-02",
       "component": "Alerts2",
       "shows": "A metric over the last hour against its threshold line, with the current value, the peak and actions to take.",
       "size": "half",
@@ -195,6 +210,7 @@
     {
       "name": "alerts-03",
       "install": "@dashboardblocks/alerts-03",
+      "import": "@/components/dashboardblocks/alerts/alerts-03",
       "component": "Alerts3",
       "shows": "A table of alert rules with their conditions, severities and channels, and a switch to pause or resume each one.",
       "size": "full",
@@ -207,6 +223,7 @@
     {
       "name": "alerts-04",
       "install": "@dashboardblocks/alerts-04",
+      "import": "@/components/dashboardblocks/alerts/alerts-04",
       "component": "Alerts4",
       "shows": "A slim strip with open alerts by severity and the latest one, for the top of a dashboard.",
       "size": "full",
@@ -220,6 +237,7 @@
     {
       "name": "app-shell-01",
       "install": "@dashboardblocks/app-shell-01",
+      "import": "@/components/dashboardblocks/app-shell/app-shell-01",
       "component": "AppShell1",
       "shows": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications.",
       "size": "page",
@@ -231,6 +249,7 @@
     {
       "name": "app-shell-02",
       "install": "@dashboardblocks/app-shell-02",
+      "import": "@/components/dashboardblocks/app-shell/app-shell-02",
       "component": "AppShell2",
       "shows": "An app shell whose sidebar collapses to icons with tooltips, with nested links and help and settings pinned to the bottom.",
       "size": "page",
@@ -242,6 +261,7 @@
     {
       "name": "app-shell-03",
       "install": "@dashboardblocks/app-shell-03",
+      "import": "@/components/dashboardblocks/app-shell/app-shell-03",
       "component": "AppShell3",
       "shows": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu.",
       "size": "page",
@@ -253,6 +273,7 @@
     {
       "name": "app-shell-04",
       "install": "@dashboardblocks/app-shell-04",
+      "import": "@/components/dashboardblocks/app-shell/app-shell-04",
       "component": "AppShell4",
       "shows": "An app shell with no sidebar: page links sit under the top bar and scroll sideways on small screens.",
       "size": "page",
@@ -264,6 +285,7 @@
     {
       "name": "area-chart-kpi-01",
       "install": "@dashboardblocks/area-chart-kpi-01",
+      "import": "@/components/dashboardblocks/kpi/area-chart-kpi-01",
       "component": "AreaChartKPI1",
       "shows": "Gross profit with its margin, and revenue and profit by day as stacked areas.",
       "size": "compact",
@@ -277,6 +299,7 @@
     {
       "name": "area-chart-kpi-02",
       "install": "@dashboardblocks/area-chart-kpi-02",
+      "import": "@/components/dashboardblocks/kpi/area-chart-kpi-02",
       "component": "AreaChartKPI2",
       "shows": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
       "size": "compact",
@@ -290,6 +313,7 @@
     {
       "name": "auth-01",
       "install": "@dashboardblocks/auth-01",
+      "import": "@/components/dashboardblocks/auth/auth-01",
       "component": "Auth1",
       "shows": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs.",
       "size": "page",
@@ -301,6 +325,7 @@
     {
       "name": "auth-02",
       "install": "@dashboardblocks/auth-02",
+      "import": "@/components/dashboardblocks/auth/auth-02",
       "component": "Auth2",
       "shows": "A list of the workspaces you belong to with your role in each, pending invites to join and a search once there are many.",
       "size": "page",
@@ -312,6 +337,7 @@
     {
       "name": "auth-03",
       "install": "@dashboardblocks/auth-03",
+      "import": "@/components/dashboardblocks/auth/auth-03",
       "component": "Auth3",
       "shows": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device.",
       "size": "page",
@@ -323,6 +349,7 @@
     {
       "name": "auth-04",
       "install": "@dashboardblocks/auth-04",
+      "import": "@/components/dashboardblocks/auth/auth-04",
       "component": "Auth4",
       "shows": "An email verification code form with a resend that waits between emails and a way to fix a mistyped address.",
       "size": "page",
@@ -334,6 +361,7 @@
     {
       "name": "bar-chart-kpi-01",
       "install": "@dashboardblocks/bar-chart-kpi-01",
+      "import": "@/components/dashboardblocks/kpi/bar-chart-kpi-01",
       "component": "BarChartKPI1",
       "shows": "The week's total with a bar for each day and the change on the week before.",
       "size": "compact",
@@ -347,6 +375,7 @@
     {
       "name": "bar-chart-kpi-02",
       "install": "@dashboardblocks/bar-chart-kpi-02",
+      "import": "@/components/dashboardblocks/kpi/bar-chart-kpi-02",
       "component": "BarChartKPI2",
       "shows": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
       "size": "compact",
@@ -360,6 +389,7 @@
     {
       "name": "billing-01",
       "install": "@dashboardblocks/billing-01",
+      "import": "@/components/dashboardblocks/billing/billing-01",
       "component": "Billing1",
       "shows": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
       "size": "full",
@@ -373,6 +403,7 @@
     {
       "name": "billing-02",
       "install": "@dashboardblocks/billing-02",
+      "import": "@/components/dashboardblocks/billing/billing-02",
       "component": "Billing2",
       "shows": "The current plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.",
       "size": "half",
@@ -386,6 +417,7 @@
     {
       "name": "billing-03",
       "install": "@dashboardblocks/billing-03",
+      "import": "@/components/dashboardblocks/billing/billing-03",
       "component": "Billing3",
       "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
       "size": "half",
@@ -398,6 +430,7 @@
     {
       "name": "billing-04",
       "install": "@dashboardblocks/billing-04",
+      "import": "@/components/dashboardblocks/billing/billing-04",
       "component": "Billing4",
       "shows": "Monthly and annual recurring revenue, revenue per account and net revenue retention, each with its change from the previous month.",
       "size": "full",
@@ -411,6 +444,7 @@
     {
       "name": "billing-05",
       "install": "@dashboardblocks/billing-05",
+      "import": "@/components/dashboardblocks/billing/billing-05",
       "component": "Billing5",
       "shows": "Plans side by side, monthly or yearly, with seats, what is due today and what a downgrade takes away.",
       "size": "full",
@@ -424,6 +458,7 @@
     {
       "name": "breakdown-01",
       "install": "@dashboardblocks/breakdown-01",
+      "import": "@/components/dashboardblocks/breakdown/breakdown-01",
       "component": "Breakdown1",
       "shows": "A single 100% bar splitting a total into categories, with each value and share listed below.",
       "size": "half",
@@ -436,6 +471,7 @@
     {
       "name": "breakdown-02",
       "install": "@dashboardblocks/breakdown-02",
+      "import": "@/components/dashboardblocks/breakdown/breakdown-02",
       "component": "Breakdown2",
       "shows": "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
       "size": "half",
@@ -448,6 +484,7 @@
     {
       "name": "breakdown-03",
       "install": "@dashboardblocks/breakdown-03",
+      "import": "@/components/dashboardblocks/breakdown/breakdown-03",
       "component": "Breakdown3",
       "shows": "A 10 by 10 grid of squares where each square is 1% of the total, coloured by category.",
       "size": "half",
@@ -460,6 +497,7 @@
     {
       "name": "breakdown-04",
       "install": "@dashboardblocks/breakdown-04",
+      "import": "@/components/dashboardblocks/breakdown/breakdown-04",
       "component": "Breakdown4",
       "shows": "How each category's share of a total moved between two periods.",
       "size": "half",
@@ -472,6 +510,7 @@
     {
       "name": "calendar-01",
       "install": "@dashboardblocks/calendar-01",
+      "import": "@/components/dashboardblocks/calendar/calendar-01",
       "component": "Calendar1",
       "shows": "A month grid of team events, launches, travel and holidays, with the selected day listed beside it.",
       "size": "full",
@@ -484,6 +523,7 @@
     {
       "name": "calendar-02",
       "install": "@dashboardblocks/calendar-02",
+      "import": "@/components/dashboardblocks/calendar/calendar-02",
       "component": "Calendar2",
       "shows": "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
       "size": "full",
@@ -496,6 +536,7 @@
     {
       "name": "calendar-03",
       "install": "@dashboardblocks/calendar-03",
+      "import": "@/components/dashboardblocks/calendar/calendar-03",
       "component": "Calendar3",
       "shows": "A content calendar that switches between month and week, with each calendar toggled from a sidebar.",
       "size": "full",
@@ -508,6 +549,7 @@
     {
       "name": "calendar-04",
       "install": "@dashboardblocks/calendar-04",
+      "import": "@/components/dashboardblocks/calendar/calendar-04",
       "component": "Calendar4",
       "shows": "A day of meeting room bookings with a column per room and whether each is free right now.",
       "size": "full",
@@ -520,6 +562,7 @@
     {
       "name": "chart-panel-01",
       "install": "@dashboardblocks/chart-panel-01",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-01",
       "component": "ChartPanel1",
       "shows": "This period's line against the previous period's, muted, so the current trend leads.",
       "size": "full",
@@ -533,6 +576,7 @@
     {
       "name": "chart-panel-02",
       "install": "@dashboardblocks/chart-panel-02",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-02",
       "component": "ChartPanel2",
       "shows": "A chart with tabs for related metrics, each tab showing its total and change.",
       "size": "full",
@@ -546,6 +590,7 @@
     {
       "name": "chart-panel-03",
       "install": "@dashboardblocks/chart-panel-03",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-03",
       "component": "ChartPanel3",
       "shows": "Monthly totals as stacked bars split by category, with a legend.",
       "size": "full",
@@ -559,6 +604,7 @@
     {
       "name": "chart-panel-04",
       "install": "@dashboardblocks/chart-panel-04",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-04",
       "component": "ChartPanel4",
       "shows": "A single series of bars with the latest period highlighted and labelled.",
       "size": "full",
@@ -572,6 +618,7 @@
     {
       "name": "chart-panel-05",
       "install": "@dashboardblocks/chart-panel-05",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-05",
       "component": "ChartPanel5",
       "shows": "A donut splitting a total into parts, with each value and share listed beside it.",
       "size": "half",
@@ -584,6 +631,7 @@
     {
       "name": "chart-panel-06",
       "install": "@dashboardblocks/chart-panel-06",
+      "import": "@/components/dashboardblocks/chart-panel/chart-panel-06",
       "component": "ChartPanel6",
       "shows": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
       "size": "full",
@@ -597,6 +645,7 @@
     {
       "name": "checklist-01",
       "install": "@dashboardblocks/checklist-01",
+      "import": "@/components/dashboardblocks/checklist/checklist-01",
       "component": "Checklist1",
       "shows": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
       "size": "half",
@@ -609,6 +658,7 @@
     {
       "name": "checklist-02",
       "install": "@dashboardblocks/checklist-02",
+      "import": "@/components/dashboardblocks/checklist/checklist-02",
       "component": "Checklist2",
       "shows": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
       "size": "full",
@@ -621,6 +671,7 @@
     {
       "name": "checklist-03",
       "install": "@dashboardblocks/checklist-03",
+      "import": "@/components/dashboardblocks/checklist/checklist-03",
       "component": "Checklist3",
       "shows": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
       "size": "compact",
@@ -633,6 +684,7 @@
     {
       "name": "checklist-04",
       "install": "@dashboardblocks/checklist-04",
+      "import": "@/components/dashboardblocks/checklist/checklist-04",
       "component": "Checklist4",
       "shows": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
       "size": "half",
@@ -646,6 +698,7 @@
     {
       "name": "command-menu-01",
       "install": "@dashboardblocks/command-menu-01",
+      "import": "@/components/dashboardblocks/command-menu/command-menu-01",
       "component": "CommandMenu1",
       "shows": "A command palette to jump to a page or run an action, with shortcuts shown beside each action.",
       "size": "half",
@@ -658,6 +711,7 @@
     {
       "name": "command-menu-02",
       "install": "@dashboardblocks/command-menu-02",
+      "import": "@/components/dashboardblocks/command-menu/command-menu-02",
       "component": "CommandMenu2",
       "shows": "A command palette that shows recent records, then searches customers and orders as you type.",
       "size": "half",
@@ -670,6 +724,7 @@
     {
       "name": "comments-01",
       "install": "@dashboardblocks/comments-01",
+      "import": "@/components/dashboardblocks/comments/comments-01",
       "component": "Comments1",
       "shows": "Discussion threads with replies, reactions and resolved threads, and a box to start a new one.",
       "size": "half",
@@ -682,6 +737,7 @@
     {
       "name": "comments-02",
       "install": "@dashboardblocks/comments-02",
+      "import": "@/components/dashboardblocks/comments/comments-02",
       "component": "Comments2",
       "shows": "A composer that previews how mentions will look and who will be notified, above the latest updates.",
       "size": "half",
@@ -694,6 +750,7 @@
     {
       "name": "comments-03",
       "install": "@dashboardblocks/comments-03",
+      "import": "@/components/dashboardblocks/comments/comments-03",
       "component": "Comments3",
       "shows": "Comments in a column beside a document, each quoting the words it is about, that move to Resolved when closed.",
       "size": "full",
@@ -706,6 +763,7 @@
     {
       "name": "comments-04",
       "install": "@dashboardblocks/comments-04",
+      "import": "@/components/dashboardblocks/comments/comments-04",
       "component": "Comments4",
       "shows": "A support ticket conversation with replies emailed to the customer and internal notes only the team sees.",
       "size": "half",
@@ -718,6 +776,7 @@
     {
       "name": "comparison-01",
       "install": "@dashboardblocks/comparison-01",
+      "import": "@/components/dashboardblocks/comparison/comparison-01",
       "component": "Comparison1",
       "shows": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
       "size": "full",
@@ -731,6 +790,7 @@
     {
       "name": "comparison-02",
       "install": "@dashboardblocks/comparison-02",
+      "import": "@/components/dashboardblocks/comparison/comparison-02",
       "component": "Comparison2",
       "shows": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
       "size": "half",
@@ -744,6 +804,7 @@
     {
       "name": "comparison-03",
       "install": "@dashboardblocks/comparison-03",
+      "import": "@/components/dashboardblocks/comparison/comparison-03",
       "component": "Comparison3",
       "shows": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
       "size": "half",
@@ -757,6 +818,7 @@
     {
       "name": "comparison-04",
       "install": "@dashboardblocks/comparison-04",
+      "import": "@/components/dashboardblocks/comparison/comparison-04",
       "component": "Comparison4",
       "shows": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
       "size": "half",
@@ -770,6 +832,7 @@
     {
       "name": "dashboard-01",
       "install": "@dashboardblocks/dashboard-01",
+      "import": "@/components/dashboardblocks/dashboards/dashboard-01",
       "component": "Dashboard1",
       "shows": "A full store dashboard with revenue, sales channels, top products, a checkout funnel and low stock, scoped by header filters.",
       "size": "page",
@@ -779,6 +842,7 @@
     {
       "name": "dashboard-02",
       "install": "@dashboardblocks/dashboard-02",
+      "import": "@/components/dashboardblocks/dashboards/dashboard-02",
       "component": "Dashboard2",
       "shows": "A full SaaS dashboard with metric tabs, an activity heatmap, revenue by region, billing movement, retention and service status.",
       "size": "page",
@@ -788,6 +852,7 @@
     {
       "name": "dashboard-03",
       "install": "@dashboardblocks/dashboard-03",
+      "import": "@/components/dashboardblocks/dashboards/dashboard-03",
       "component": "Dashboard3",
       "shows": "A full web analytics dashboard with traffic over time, visitors right now, a traffic flow, top pages, countries and browsers.",
       "size": "page",
@@ -797,6 +862,7 @@
     {
       "name": "dashboard-04",
       "install": "@dashboardblocks/dashboard-04",
+      "import": "@/components/dashboardblocks/dashboards/dashboard-04",
       "component": "Dashboard4",
       "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
       "size": "page",
@@ -806,6 +872,7 @@
     {
       "name": "dashboard-05",
       "install": "@dashboardblocks/dashboard-05",
+      "import": "@/components/dashboardblocks/dashboards/dashboard-05",
       "component": "Dashboard5",
       "shows": "A full DevOps dashboard with live throughput, delivery performance, response times, open alerts, uptime and recent deployments.",
       "size": "page",
@@ -815,6 +882,7 @@
     {
       "name": "dashboard-header-01",
       "install": "@dashboardblocks/dashboard-header-01",
+      "import": "@/components/dashboardblocks/dashboard-header/dashboard-header-01",
       "component": "DashboardHeader1",
       "shows": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
       "size": "full",
@@ -827,6 +895,7 @@
     {
       "name": "dashboard-header-02",
       "install": "@dashboardblocks/dashboard-header-02",
+      "import": "@/components/dashboardblocks/dashboard-header/dashboard-header-02",
       "component": "DashboardHeader2",
       "shows": "A short dashboard header with a title, a date range menu and an export button.",
       "size": "full",
@@ -839,6 +908,7 @@
     {
       "name": "dashboard-header-03",
       "install": "@dashboardblocks/dashboard-header-03",
+      "import": "@/components/dashboardblocks/dashboard-header/dashboard-header-03",
       "component": "DashboardHeader3",
       "shows": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
       "size": "full",
@@ -851,6 +921,7 @@
     {
       "name": "dashboard-header-04",
       "install": "@dashboardblocks/dashboard-header-04",
+      "import": "@/components/dashboardblocks/dashboard-header/dashboard-header-04",
       "component": "DashboardHeader4",
       "shows": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.",
       "size": "full",
@@ -863,6 +934,7 @@
     {
       "name": "data-table-01",
       "install": "@dashboardblocks/data-table-01",
+      "import": "@/components/dashboardblocks/data-table/data-table-01",
       "component": "DataTable1",
       "shows": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
       "size": "full",
@@ -875,6 +947,7 @@
     {
       "name": "data-table-02",
       "install": "@dashboardblocks/data-table-02",
+      "import": "@/components/dashboardblocks/data-table/data-table-02",
       "component": "DataTable2",
       "shows": "Revenue by product, each with a bar scaled to the top product and its share of the total.",
       "size": "full",
@@ -888,6 +961,7 @@
     {
       "name": "data-table-03",
       "install": "@dashboardblocks/data-table-03",
+      "import": "@/components/dashboardblocks/data-table/data-table-03",
       "component": "DataTable3",
       "shows": "Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.",
       "size": "full",
@@ -901,6 +975,7 @@
     {
       "name": "data-table-04",
       "install": "@dashboardblocks/data-table-04",
+      "import": "@/components/dashboardblocks/data-table/data-table-04",
       "component": "DataTable4",
       "shows": "Services in a table with their status, latency and error rate, worst status first.",
       "size": "full",
@@ -914,6 +989,7 @@
     {
       "name": "data-table-05",
       "install": "@dashboardblocks/data-table-05",
+      "import": "@/components/dashboardblocks/data-table/data-table-05",
       "component": "DataTable5",
       "shows": "A table of recent orders split into pages of five, with controls to move between them.",
       "size": "full",
@@ -926,6 +1002,7 @@
     {
       "name": "data-table-06",
       "install": "@dashboardblocks/data-table-06",
+      "import": "@/components/dashboardblocks/data-table/data-table-06",
       "component": "DataTable6",
       "shows": "A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.",
       "size": "full",
@@ -938,6 +1015,7 @@
     {
       "name": "deployments-01",
       "install": "@dashboardblocks/deployments-01",
+      "import": "@/components/dashboardblocks/deployments/deployments-01",
       "component": "Deployments1",
       "shows": "The latest builds, each with its commit, environment, author, duration and status.",
       "size": "full",
@@ -951,6 +1029,7 @@
     {
       "name": "deployments-02",
       "install": "@dashboardblocks/deployments-02",
+      "import": "@/components/dashboardblocks/deployments/deployments-02",
       "component": "Deployments2",
       "shows": "What each environment is running, and how many commits are waiting to be promoted to the next one.",
       "size": "half",
@@ -964,6 +1043,7 @@
     {
       "name": "deployments-03",
       "install": "@dashboardblocks/deployments-03",
+      "import": "@/components/dashboardblocks/deployments/deployments-03",
       "component": "Deployments3",
       "shows": "The four DORA delivery metrics, each with its performance band and the change on the previous period.",
       "size": "full",
@@ -977,6 +1057,7 @@
     {
       "name": "deployments-04",
       "install": "@dashboardblocks/deployments-04",
+      "import": "@/components/dashboardblocks/deployments/deployments-04",
       "component": "Deployments4",
       "shows": "The latest runs of each pipeline as a strip of results, with the pass rate and median duration.",
       "size": "half",
@@ -989,6 +1070,7 @@
     {
       "name": "distribution-01",
       "install": "@dashboardblocks/distribution-01",
+      "import": "@/components/dashboardblocks/distribution/distribution-01",
       "component": "Distribution1",
       "shows": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
       "size": "half",
@@ -1001,6 +1083,7 @@
     {
       "name": "distribution-02",
       "install": "@dashboardblocks/distribution-02",
+      "import": "@/components/dashboardblocks/distribution/distribution-02",
       "component": "Distribution2",
       "shows": "A box and whiskers per group on a shared axis, to compare spread and median across groups.",
       "size": "half",
@@ -1013,6 +1096,7 @@
     {
       "name": "distribution-03",
       "install": "@dashboardblocks/distribution-03",
+      "import": "@/components/dashboardblocks/distribution/distribution-03",
       "component": "Distribution3",
       "shows": "The median, mean and percentiles of a set of values, with a note when a long tail pulls the mean away.",
       "size": "half",
@@ -1025,6 +1109,7 @@
     {
       "name": "distribution-04",
       "install": "@dashboardblocks/distribution-04",
+      "import": "@/components/dashboardblocks/distribution/distribution-04",
       "component": "Distribution4",
       "shows": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
       "size": "half",
@@ -1037,6 +1122,7 @@
     {
       "name": "error-pages-01",
       "install": "@dashboardblocks/error-pages-01",
+      "import": "@/components/dashboardblocks/error-pages/error-pages-01",
       "component": "ErrorPages1",
       "shows": "A not found page that shows the missing path, a search and the places people usually look.",
       "size": "page",
@@ -1048,6 +1134,7 @@
     {
       "name": "error-pages-02",
       "install": "@dashboardblocks/error-pages-02",
+      "import": "@/components/dashboardblocks/error-pages/error-pages-02",
       "component": "ErrorPages2",
       "shows": "A no access page naming who can grant access, with a request form and the account you are signed in with.",
       "size": "page",
@@ -1059,6 +1146,7 @@
     {
       "name": "error-pages-03",
       "install": "@dashboardblocks/error-pages-03",
+      "import": "@/components/dashboardblocks/error-pages/error-pages-03",
       "component": "ErrorPages3",
       "shows": "A failure page with a retry button and count, a copyable error ID for support and the technical details folded away.",
       "size": "page",
@@ -1070,6 +1158,7 @@
     {
       "name": "error-pages-04",
       "install": "@dashboardblocks/error-pages-04",
+      "import": "@/components/dashboardblocks/error-pages/error-pages-04",
       "component": "ErrorPages4",
       "shows": "A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.",
       "size": "page",
@@ -1081,6 +1170,7 @@
     {
       "name": "error-pages-05",
       "install": "@dashboardblocks/error-pages-05",
+      "import": "@/components/dashboardblocks/error-pages/error-pages-05",
       "component": "ErrorPages5",
       "shows": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
       "size": "page",
@@ -1092,6 +1182,7 @@
     {
       "name": "feedback-01",
       "install": "@dashboardblocks/feedback-01",
+      "import": "@/components/dashboardblocks/feedback/feedback-01",
       "component": "Feedback1",
       "shows": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period.",
       "size": "half",
@@ -1104,6 +1195,7 @@
     {
       "name": "feedback-02",
       "install": "@dashboardblocks/feedback-02",
+      "import": "@/components/dashboardblocks/feedback/feedback-02",
       "component": "Feedback2",
       "shows": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
       "size": "half",
@@ -1116,6 +1208,7 @@
     {
       "name": "feedback-03",
       "install": "@dashboardblocks/feedback-03",
+      "import": "@/components/dashboardblocks/feedback/feedback-03",
       "component": "Feedback3",
       "shows": "The latest reviews with their rating and source, flagging low ratings still waiting for a reply.",
       "size": "half",
@@ -1128,6 +1221,7 @@
     {
       "name": "feedback-04",
       "install": "@dashboardblocks/feedback-04",
+      "import": "@/components/dashboardblocks/feedback/feedback-04",
       "component": "Feedback4",
       "shows": "Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.",
       "size": "half",
@@ -1140,6 +1234,7 @@
     {
       "name": "files-01",
       "install": "@dashboardblocks/files-01",
+      "import": "@/components/dashboardblocks/files/files-01",
       "component": "Files1",
       "shows": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
       "size": "half",
@@ -1152,6 +1247,7 @@
     {
       "name": "files-02",
       "install": "@dashboardblocks/files-02",
+      "import": "@/components/dashboardblocks/files/files-02",
       "component": "Files2",
       "shows": "A table of files with type, owner, last change and size, with search, type filter, sorting and bulk download or delete.",
       "size": "full",
@@ -1164,6 +1260,7 @@
     {
       "name": "files-03",
       "install": "@dashboardblocks/files-03",
+      "import": "@/components/dashboardblocks/files/files-03",
       "component": "Files3",
       "shows": "Storage used against the plan, split by kind of file, with the largest files listed to delete.",
       "size": "half",
@@ -1176,6 +1273,7 @@
     {
       "name": "files-04",
       "install": "@dashboardblocks/files-04",
+      "import": "@/components/dashboardblocks/files/files-04",
       "component": "Files4",
       "shows": "Folders and files in a grid with a path back to the top, and a menu on each file.",
       "size": "full",
@@ -1188,6 +1286,7 @@
     {
       "name": "flow-01",
       "install": "@dashboardblocks/flow-01",
+      "import": "@/components/dashboardblocks/flow/flow-01",
       "component": "Flow1",
       "shows": "Sessions from each source through the landing page, to signing up, browsing on or bouncing.",
       "size": "full",
@@ -1201,6 +1300,7 @@
     {
       "name": "flow-02",
       "install": "@dashboardblocks/flow-02",
+      "import": "@/components/dashboardblocks/flow/flow-02",
       "component": "Flow2",
       "shows": "Where visitors go in their first pages after landing, with the ones who left at each step.",
       "size": "full",
@@ -1213,6 +1313,7 @@
     {
       "name": "flow-03",
       "install": "@dashboardblocks/flow-03",
+      "import": "@/components/dashboardblocks/flow/flow-03",
       "component": "Flow3",
       "shows": "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
       "size": "full",
@@ -1225,6 +1326,7 @@
     {
       "name": "flow-04",
       "install": "@dashboardblocks/flow-04",
+      "import": "@/components/dashboardblocks/flow/flow-04",
       "component": "Flow4",
       "shows": "The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.",
       "size": "full",
@@ -1237,6 +1339,7 @@
     {
       "name": "forecast-01",
       "install": "@dashboardblocks/forecast-01",
+      "import": "@/components/dashboardblocks/forecast/forecast-01",
       "component": "Forecast1",
       "shows": "Weekly actuals continuing into a dashed forecast, with a shaded 80% range and a marker for today.",
       "size": "full",
@@ -1250,6 +1353,7 @@
     {
       "name": "forecast-02",
       "install": "@dashboardblocks/forecast-02",
+      "import": "@/components/dashboardblocks/forecast/forecast-02",
       "component": "Forecast2",
       "shows": "The date the trend reaches a target, with an 80% range of dates, against the deadline.",
       "size": "half",
@@ -1263,6 +1367,7 @@
     {
       "name": "forecast-03",
       "install": "@dashboardblocks/forecast-03",
+      "import": "@/components/dashboardblocks/forecast/forecast-03",
       "component": "Forecast3",
       "shows": "Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.",
       "size": "half",
@@ -1276,6 +1381,7 @@
     {
       "name": "forecast-04",
       "install": "@dashboardblocks/forecast-04",
+      "import": "@/components/dashboardblocks/forecast/forecast-04",
       "component": "Forecast4",
       "shows": "Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.",
       "size": "full",
@@ -1289,6 +1395,7 @@
     {
       "name": "forms-01",
       "install": "@dashboardblocks/forms-01",
+      "import": "@/components/dashboardblocks/forms/forms-01",
       "component": "Forms1",
       "shows": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
       "size": "half",
@@ -1301,6 +1408,7 @@
     {
       "name": "forms-02",
       "install": "@dashboardblocks/forms-02",
+      "import": "@/components/dashboardblocks/forms/forms-02",
       "component": "Forms2",
       "shows": "A create form in a panel that slides in from the side, with errors from the server shown on the field.",
       "size": "half",
@@ -1313,6 +1421,7 @@
     {
       "name": "forms-03",
       "install": "@dashboardblocks/forms-03",
+      "import": "@/components/dashboardblocks/forms/forms-03",
       "component": "Forms3",
       "shows": "A form in steps that checks each step before moving on and reviews everything on the last one.",
       "size": "half",
@@ -1325,6 +1434,7 @@
     {
       "name": "forms-04",
       "install": "@dashboardblocks/forms-04",
+      "import": "@/components/dashboardblocks/forms/forms-04",
       "component": "Forms4",
       "shows": "Single values edited in place, saved with Enter and cancelled with Escape.",
       "size": "half",
@@ -1337,6 +1447,7 @@
     {
       "name": "funnel-01",
       "install": "@dashboardblocks/funnel-01",
+      "import": "@/components/dashboardblocks/funnel/funnel-01",
       "component": "Funnel1",
       "shows": "Each stage as a bar sized against the first, with the conversion at each step and overall.",
       "size": "half",
@@ -1350,6 +1461,7 @@
     {
       "name": "funnel-02",
       "install": "@dashboardblocks/funnel-02",
+      "import": "@/components/dashboardblocks/funnel/funnel-02",
       "component": "Funnel2",
       "shows": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
       "size": "full",
@@ -1362,6 +1474,7 @@
     {
       "name": "funnel-03",
       "install": "@dashboardblocks/funnel-03",
+      "import": "@/components/dashboardblocks/funnel/funnel-03",
       "component": "Funnel3",
       "shows": "A vertical stepper through the stages that calls out the step with the biggest drop-off.",
       "size": "half",
@@ -1374,6 +1487,7 @@
     {
       "name": "funnel-04",
       "install": "@dashboardblocks/funnel-04",
+      "import": "@/components/dashboardblocks/funnel/funnel-04",
       "component": "Funnel4",
       "shows": "Two segments side by side at every stage, each as a share of its first step, to compare how they convert.",
       "size": "full",
@@ -1386,6 +1500,7 @@
     {
       "name": "gauge-01",
       "install": "@dashboardblocks/gauge-01",
+      "import": "@/components/dashboardblocks/gauge/gauge-01",
       "component": "Gauge1",
       "shows": "A net promoter score on its full −100 to 100 scale, with the split of promoters, passives and detractors.",
       "size": "compact",
@@ -1399,6 +1514,7 @@
     {
       "name": "gauge-02",
       "install": "@dashboardblocks/gauge-02",
+      "import": "@/components/dashboardblocks/gauge/gauge-02",
       "component": "Gauge2",
       "shows": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
       "size": "half",
@@ -1412,6 +1528,7 @@
     {
       "name": "gauge-03",
       "install": "@dashboardblocks/gauge-03",
+      "import": "@/components/dashboardblocks/gauge/gauge-03",
       "component": "Gauge3",
       "shows": "CPU, memory and disk as small gauges, each in the colour of its band with warning and critical thresholds marked.",
       "size": "half",
@@ -1425,6 +1542,7 @@
     {
       "name": "gauge-04",
       "install": "@dashboardblocks/gauge-04",
+      "import": "@/components/dashboardblocks/gauge/gauge-04",
       "component": "Gauge4",
       "shows": "A satisfaction score on an arc with a target tick, the change since last period and the gap to target.",
       "size": "half",
@@ -1438,6 +1556,7 @@
     {
       "name": "geo-01",
       "install": "@dashboardblocks/geo-01",
+      "import": "@/components/dashboardblocks/geo/geo-01",
       "component": "Geo1",
       "shows": "Revenue by US state as a tile map on a single-hue scale, with the total and the top five states.",
       "size": "full",
@@ -1450,6 +1569,7 @@
     {
       "name": "geo-02",
       "install": "@dashboardblocks/geo-02",
+      "import": "@/components/dashboardblocks/geo/geo-02",
       "component": "Geo2",
       "shows": "The leading countries with flags, values and shares, and the rest summed into one row.",
       "size": "half",
@@ -1463,6 +1583,7 @@
     {
       "name": "geo-03",
       "install": "@dashboardblocks/geo-03",
+      "import": "@/components/dashboardblocks/geo/geo-03",
       "component": "Geo3",
       "shows": "Active users by city right now as markers sized by value on a dotted world map.",
       "size": "full",
@@ -1475,6 +1596,7 @@
     {
       "name": "geo-04",
       "install": "@dashboardblocks/geo-04",
+      "import": "@/components/dashboardblocks/geo/geo-04",
       "component": "Geo4",
       "shows": "Revenue split across regions, each with its share and its change on the previous quarter.",
       "size": "half",
@@ -1487,6 +1609,7 @@
     {
       "name": "goals-01",
       "install": "@dashboardblocks/goals-01",
+      "import": "@/components/dashboardblocks/goals/goals-01",
       "component": "Goals1",
       "shows": "One target with an expected-by-today marker, what is left and a projection at the current pace.",
       "size": "half",
@@ -1500,6 +1623,7 @@
     {
       "name": "goals-02",
       "install": "@dashboardblocks/goals-02",
+      "import": "@/components/dashboardblocks/goals/goals-02",
       "component": "Goals2",
       "shows": "Several goals for the same period, each with its own pace.",
       "size": "half",
@@ -1513,6 +1637,7 @@
     {
       "name": "goals-03",
       "install": "@dashboardblocks/goals-03",
+      "import": "@/components/dashboardblocks/goals/goals-03",
       "component": "Goals3",
       "shows": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
       "size": "full",
@@ -1526,6 +1651,7 @@
     {
       "name": "goals-04",
       "install": "@dashboardblocks/goals-04",
+      "import": "@/components/dashboardblocks/goals/goals-04",
       "component": "Goals4",
       "shows": "Small daily goals as rings, with a check mark once a goal is met.",
       "size": "half",
@@ -1539,6 +1665,7 @@
     {
       "name": "heatmap-01",
       "install": "@dashboardblocks/heatmap-01",
+      "import": "@/components/dashboardblocks/heatmap/heatmap-01",
       "component": "Heatmap1",
       "shows": "When visitors arrive, as a grid of weekday by hour, darker where there are more.",
       "size": "full",
@@ -1552,6 +1679,7 @@
     {
       "name": "heatmap-02",
       "install": "@dashboardblocks/heatmap-02",
+      "import": "@/components/dashboardblocks/heatmap/heatmap-02",
       "component": "Heatmap2",
       "shows": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
       "size": "full",
@@ -1564,6 +1692,7 @@
     {
       "name": "heatmap-03",
       "install": "@dashboardblocks/heatmap-03",
+      "import": "@/components/dashboardblocks/heatmap/heatmap-03",
       "component": "Heatmap3",
       "shows": "A year of daily values as a calendar grid, darker on busier days.",
       "size": "full",
@@ -1576,6 +1705,7 @@
     {
       "name": "heatmap-04",
       "install": "@dashboardblocks/heatmap-04",
+      "import": "@/components/dashboardblocks/heatmap/heatmap-04",
       "component": "Heatmap4",
       "shows": "The p95 latency of each endpoint by hour over the last day, darker where it is slower.",
       "size": "full",
@@ -1588,6 +1718,7 @@
     {
       "name": "insights-01",
       "install": "@dashboardblocks/insights-01",
+      "import": "@/components/dashboardblocks/insights/insights-01",
       "component": "Insights1",
       "shows": "A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.",
       "size": "half",
@@ -1601,6 +1732,7 @@
     {
       "name": "insights-02",
       "install": "@dashboardblocks/insights-02",
+      "import": "@/components/dashboardblocks/insights/insights-02",
       "component": "Insights2",
       "shows": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
       "size": "half",
@@ -1614,6 +1746,7 @@
     {
       "name": "insights-03",
       "install": "@dashboardblocks/insights-03",
+      "import": "@/components/dashboardblocks/insights/insights-03",
       "component": "Insights3",
       "shows": "What contributed to a change, as bars either side of zero, with a sentence naming the biggest driver and the biggest drag.",
       "size": "half",
@@ -1627,6 +1760,7 @@
     {
       "name": "insights-04",
       "install": "@dashboardblocks/insights-04",
+      "import": "@/components/dashboardblocks/insights/insights-04",
       "component": "Insights4",
       "shows": "A short weekly summary with a headline, three takeaways and buttons to say whether it helped.",
       "size": "half",
@@ -1639,6 +1773,7 @@
     {
       "name": "inventory-01",
       "install": "@dashboardblocks/inventory-01",
+      "import": "@/components/dashboardblocks/inventory/inventory-01",
       "component": "Inventory1",
       "shows": "Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.",
       "size": "full",
@@ -1652,6 +1787,7 @@
     {
       "name": "inventory-02",
       "install": "@dashboardblocks/inventory-02",
+      "import": "@/components/dashboardblocks/inventory/inventory-02",
       "component": "Inventory2",
       "shows": "Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.",
       "size": "half",
@@ -1664,6 +1800,7 @@
     {
       "name": "inventory-03",
       "install": "@dashboardblocks/inventory-03",
+      "import": "@/components/dashboardblocks/inventory/inventory-03",
       "component": "Inventory3",
       "shows": "Every SKU by stock status, with the value of stock on hand and how many times a year it turns over.",
       "size": "full",
@@ -1677,6 +1814,7 @@
     {
       "name": "inventory-04",
       "install": "@dashboardblocks/inventory-04",
+      "import": "@/components/dashboardblocks/inventory/inventory-04",
       "component": "Inventory4",
       "shows": "One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.",
       "size": "full",
@@ -1689,6 +1827,7 @@
     {
       "name": "invoice-01",
       "install": "@dashboardblocks/invoice-01",
+      "import": "@/components/dashboardblocks/invoice/invoice-01",
       "component": "Invoice1",
       "shows": "An overdue invoice with discount, sales tax, deposit and balance due, payment instructions and a reminder to send.",
       "size": "full",
@@ -1701,6 +1840,7 @@
     {
       "name": "invoice-02",
       "install": "@dashboardblocks/invoice-02",
+      "import": "@/components/dashboardblocks/invoice/invoice-02",
       "component": "Invoice2",
       "shows": "A paid receipt with the payment method, a partial refund and the net amount paid.",
       "size": "full",
@@ -1713,6 +1853,7 @@
     {
       "name": "invoice-03",
       "install": "@dashboardblocks/invoice-03",
+      "import": "@/components/dashboardblocks/invoice/invoice-03",
       "component": "Invoice3",
       "shows": "A quote with optional items to tick before accepting, totals that follow and an expiry date.",
       "size": "full",
@@ -1725,6 +1866,7 @@
     {
       "name": "invoice-04",
       "install": "@dashboardblocks/invoice-04",
+      "import": "@/components/dashboardblocks/invoice/invoice-04",
       "component": "Invoice4",
       "shows": "A packing slip listing items with SKU and bin, a pick checkbox for each and a barcode of the order number, with no prices.",
       "size": "full",
@@ -1737,6 +1879,7 @@
     {
       "name": "kanban-01",
       "install": "@dashboardblocks/kanban-01",
+      "import": "@/components/dashboardblocks/kanban/kanban-01",
       "component": "Kanban1",
       "shows": "A sprint board of issues in columns with labels, assignees, due dates and priorities, and warnings when a column passes its limit.",
       "size": "full",
@@ -1749,6 +1892,7 @@
     {
       "name": "kanban-02",
       "install": "@dashboardblocks/kanban-02",
+      "import": "@/components/dashboardblocks/kanban/kanban-02",
       "component": "Kanban2",
       "shows": "A sales board of deals in columns, each column showing its total value and each deal its next step.",
       "size": "full",
@@ -1761,6 +1905,7 @@
     {
       "name": "kanban-03",
       "install": "@dashboardblocks/kanban-03",
+      "import": "@/components/dashboardblocks/kanban/kanban-03",
       "component": "Kanban3",
       "shows": "A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.",
       "size": "full",
@@ -1773,6 +1918,7 @@
     {
       "name": "kpi-01",
       "install": "@dashboardblocks/kpi-01",
+      "import": "@/components/dashboardblocks/kpi/kpi-01",
       "component": "KPI1",
       "shows": "A single value with its change and what it is compared with.",
       "size": "compact",
@@ -1786,6 +1932,7 @@
     {
       "name": "kpi-02",
       "install": "@dashboardblocks/kpi-02",
+      "import": "@/components/dashboardblocks/kpi/kpi-02",
       "component": "KPI2",
       "shows": "A value with its change shown as a badge beside the label.",
       "size": "compact",
@@ -1799,6 +1946,7 @@
     {
       "name": "kpi-03",
       "install": "@dashboardblocks/kpi-03",
+      "import": "@/components/dashboardblocks/kpi/kpi-03",
       "component": "KPI3",
       "shows": "A rate with its previous value underneath and the change in percentage points.",
       "size": "compact",
@@ -1812,6 +1960,7 @@
     {
       "name": "leaderboard-01",
       "install": "@dashboardblocks/leaderboard-01",
+      "import": "@/components/dashboardblocks/leaderboard/leaderboard-01",
       "component": "Leaderboard01",
       "shows": "Ranked rows with a background bar sized relative to the leader.",
       "size": "half",
@@ -1825,6 +1974,7 @@
     {
       "name": "leaderboard-02",
       "install": "@dashboardblocks/leaderboard-02",
+      "import": "@/components/dashboardblocks/leaderboard/leaderboard-02",
       "component": "Leaderboard02",
       "shows": "People ranked by revenue with badges for the top three and the change since the last period.",
       "size": "half",
@@ -1838,6 +1988,7 @@
     {
       "name": "leaderboard-03",
       "install": "@dashboardblocks/leaderboard-03",
+      "import": "@/components/dashboardblocks/leaderboard/leaderboard-03",
       "component": "Leaderboard03",
       "shows": "The top three on a podium, with the rest of the field listed below.",
       "size": "half",
@@ -1851,6 +2002,7 @@
     {
       "name": "leaderboard-04",
       "install": "@dashboardblocks/leaderboard-04",
+      "import": "@/components/dashboardblocks/leaderboard/leaderboard-04",
       "component": "Leaderboard04",
       "shows": "Products ranked by revenue with how far each moved in the ranking since the last period.",
       "size": "half",
@@ -1864,6 +2016,7 @@
     {
       "name": "leaderboard-05",
       "install": "@dashboardblocks/leaderboard-05",
+      "import": "@/components/dashboardblocks/leaderboard/leaderboard-05",
       "component": "Leaderboard05",
       "shows": "A ranked list that can be reversed and expanded to show every entry.",
       "size": "half",
@@ -1877,6 +2030,7 @@
     {
       "name": "line-chart-kpi-01",
       "install": "@dashboardblocks/line-chart-kpi-01",
+      "import": "@/components/dashboardblocks/kpi/line-chart-kpi-01",
       "component": "LineChartKPI1",
       "shows": "This week against the same days last week, drawn as a solid and a dashed line.",
       "size": "compact",
@@ -1890,6 +2044,7 @@
     {
       "name": "metric-list-01",
       "install": "@dashboardblocks/metric-list-01",
+      "import": "@/components/dashboardblocks/metric-list/metric-list-01",
       "component": "MetricList1",
       "shows": "A list of metrics with their change and a 14-day sparkline each.",
       "size": "half",
@@ -1903,6 +2058,7 @@
     {
       "name": "metric-list-02",
       "install": "@dashboardblocks/metric-list-02",
+      "import": "@/components/dashboardblocks/metric-list/metric-list-02",
       "component": "MetricList2",
       "shows": "Metrics grouped into sections, each with a header and a count of how many improved.",
       "size": "half",
@@ -1916,6 +2072,7 @@
     {
       "name": "metric-list-03",
       "install": "@dashboardblocks/metric-list-03",
+      "import": "@/components/dashboardblocks/metric-list/metric-list-03",
       "component": "MetricList3",
       "shows": "Metrics against their targets, each with a bar, a tick at the target and a status.",
       "size": "half",
@@ -1929,6 +2086,7 @@
     {
       "name": "metric-list-04",
       "install": "@dashboardblocks/metric-list-04",
+      "import": "@/components/dashboardblocks/metric-list/metric-list-04",
       "component": "MetricList4",
       "shows": "A list of metrics where picking one charts it in the same card.",
       "size": "full",
@@ -1942,6 +2100,7 @@
     {
       "name": "notifications-01",
       "install": "@dashboardblocks/notifications-01",
+      "import": "@/components/dashboardblocks/notifications/notifications-01",
       "component": "Notifications1",
       "shows": "A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.",
       "size": "half",
@@ -1954,6 +2113,7 @@
     {
       "name": "notifications-02",
       "install": "@dashboardblocks/notifications-02",
+      "import": "@/components/dashboardblocks/notifications/notifications-02",
       "component": "Notifications2",
       "shows": "Notifications that ask for a decision, such as a request to join or a refund, with a tab for the ones still waiting.",
       "size": "half",
@@ -1966,6 +2126,7 @@
     {
       "name": "notifications-03",
       "install": "@dashboardblocks/notifications-03",
+      "import": "@/components/dashboardblocks/notifications/notifications-03",
       "component": "Notifications3",
       "shows": "Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.",
       "size": "full",
@@ -1978,6 +2139,7 @@
     {
       "name": "onboarding-01",
       "install": "@dashboardblocks/onboarding-01",
+      "import": "@/components/dashboardblocks/onboarding/onboarding-01",
       "component": "Onboarding1",
       "shows": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.",
       "size": "page",
@@ -1989,6 +2151,7 @@
     {
       "name": "onboarding-02",
       "install": "@dashboardblocks/onboarding-02",
+      "import": "@/components/dashboardblocks/onboarding/onboarding-02",
       "component": "Onboarding2",
       "shows": "The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.",
       "size": "page",
@@ -2000,6 +2163,7 @@
     {
       "name": "onboarding-03",
       "install": "@dashboardblocks/onboarding-03",
+      "import": "@/components/dashboardblocks/onboarding/onboarding-03",
       "component": "Onboarding3",
       "shows": "A searchable, filterable list of data sources to pick from, then follow through connecting to connected, with an error state.",
       "size": "full",
@@ -2012,6 +2176,7 @@
     {
       "name": "onboarding-04",
       "install": "@dashboardblocks/onboarding-04",
+      "import": "@/components/dashboardblocks/onboarding/onboarding-04",
       "component": "Onboarding4",
       "shows": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.",
       "size": "half",
@@ -2024,6 +2189,7 @@
     {
       "name": "page-header-01",
       "install": "@dashboardblocks/page-header-01",
+      "import": "@/components/dashboardblocks/page-header/page-header-01",
       "component": "PageHeader1",
       "shows": "A page title and description with a secondary action and a main action.",
       "size": "full",
@@ -2036,6 +2202,7 @@
     {
       "name": "page-header-02",
       "install": "@dashboardblocks/page-header-02",
+      "import": "@/components/dashboardblocks/page-header/page-header-02",
       "component": "PageHeader2",
       "shows": "A page title with a status badge and links to the page's sections, each with a count.",
       "size": "full",
@@ -2048,6 +2215,7 @@
     {
       "name": "page-header-03",
       "install": "@dashboardblocks/page-header-03",
+      "import": "@/components/dashboardblocks/page-header/page-header-03",
       "component": "PageHeader3",
       "shows": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
       "size": "full",
@@ -2061,6 +2229,7 @@
     {
       "name": "page-header-04",
       "install": "@dashboardblocks/page-header-04",
+      "import": "@/components/dashboardblocks/page-header/page-header-04",
       "component": "PageHeader4",
       "shows": "A page title with a count beside it, and search and the main action on the same row.",
       "size": "full",
@@ -2073,6 +2242,7 @@
     {
       "name": "pipeline-01",
       "install": "@dashboardblocks/pipeline-01",
+      "import": "@/components/dashboardblocks/pipeline/pipeline-01",
       "component": "Pipeline1",
       "shows": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
       "size": "full",
@@ -2086,6 +2256,7 @@
     {
       "name": "pipeline-02",
       "install": "@dashboardblocks/pipeline-02",
+      "import": "@/components/dashboardblocks/pipeline/pipeline-02",
       "component": "Pipeline2",
       "shows": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
       "size": "full",
@@ -2099,6 +2270,7 @@
     {
       "name": "pipeline-03",
       "install": "@dashboardblocks/pipeline-03",
+      "import": "@/components/dashboardblocks/pipeline/pipeline-03",
       "component": "Pipeline3",
       "shows": "Items that have been in a stage longer than expected, longest first, with how long they have waited and who owns them.",
       "size": "full",
@@ -2111,6 +2283,7 @@
     {
       "name": "pipeline-04",
       "install": "@dashboardblocks/pipeline-04",
+      "import": "@/components/dashboardblocks/pipeline/pipeline-04",
       "component": "Pipeline4",
       "shows": "Closed and open deals weighted by the chance each stage closes, per owner, against their quota.",
       "size": "full",
@@ -2124,6 +2297,7 @@
     {
       "name": "progress-kpi-01",
       "install": "@dashboardblocks/progress-kpi-01",
+      "import": "@/components/dashboardblocks/kpi/progress-kpi-01",
       "component": "ProgressKPI1",
       "shows": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
       "size": "compact",
@@ -2137,6 +2311,7 @@
     {
       "name": "progress-kpi-02",
       "install": "@dashboardblocks/progress-kpi-02",
+      "import": "@/components/dashboardblocks/kpi/progress-kpi-02",
       "component": "ProgressKPI2",
       "shows": "The share of work done, with a bar for each status.",
       "size": "compact",
@@ -2150,6 +2325,7 @@
     {
       "name": "progress-kpi-03",
       "install": "@dashboardblocks/progress-kpi-03",
+      "import": "@/components/dashboardblocks/kpi/progress-kpi-03",
       "component": "ProgressKPI3",
       "shows": "A count against a goal as a ring, with how many are left to go.",
       "size": "compact",
@@ -2163,6 +2339,7 @@
     {
       "name": "realtime-01",
       "install": "@dashboardblocks/realtime-01",
+      "import": "@/components/dashboardblocks/realtime/realtime-01",
       "component": "Realtime1",
       "shows": "Active users now, page views per second over the last minute and the pages with the most people on them.",
       "size": "compact",
@@ -2175,6 +2352,7 @@
     {
       "name": "realtime-02",
       "install": "@dashboardblocks/realtime-02",
+      "import": "@/components/dashboardblocks/realtime/realtime-02",
       "component": "Realtime2",
       "shows": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.",
       "size": "full",
@@ -2188,6 +2366,7 @@
     {
       "name": "realtime-03",
       "install": "@dashboardblocks/realtime-03",
+      "import": "@/components/dashboardblocks/realtime/realtime-03",
       "component": "Realtime3",
       "shows": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.",
       "size": "half",
@@ -2200,6 +2379,7 @@
     {
       "name": "realtime-04",
       "install": "@dashboardblocks/realtime-04",
+      "import": "@/components/dashboardblocks/realtime/realtime-04",
       "component": "Realtime4",
       "shows": "Running totals since midnight against yesterday at the same time, with orders per hour.",
       "size": "half",
@@ -2212,6 +2392,7 @@
     {
       "name": "record-detail-01",
       "install": "@dashboardblocks/record-detail-01",
+      "import": "@/components/dashboardblocks/record-detail/record-detail-01",
       "component": "RecordDetail1",
       "shows": "A customer page with headline numbers, recent orders, contact details and notes.",
       "size": "full",
@@ -2225,6 +2406,7 @@
     {
       "name": "record-detail-02",
       "install": "@dashboardblocks/record-detail-02",
+      "import": "@/components/dashboardblocks/record-detail/record-detail-02",
       "component": "RecordDetail2",
       "shows": "An order page with line items and totals, a timeline of what happened, the customer, and shipping and payment.",
       "size": "full",
@@ -2238,6 +2420,7 @@
     {
       "name": "record-detail-03",
       "install": "@dashboardblocks/record-detail-03",
+      "import": "@/components/dashboardblocks/record-detail/record-detail-03",
       "component": "RecordDetail3",
       "shows": "A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.",
       "size": "full",
@@ -2251,6 +2434,7 @@
     {
       "name": "retention-01",
       "install": "@dashboardblocks/retention-01",
+      "import": "@/components/dashboardblocks/retention/retention-01",
       "component": "Retention1",
       "shows": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
       "size": "full",
@@ -2263,6 +2447,7 @@
     {
       "name": "retention-02",
       "install": "@dashboardblocks/retention-02",
+      "import": "@/components/dashboardblocks/retention/retention-02",
       "component": "Retention2",
       "shows": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
       "size": "full",
@@ -2275,6 +2460,7 @@
     {
       "name": "retention-03",
       "install": "@dashboardblocks/retention-03",
+      "import": "@/components/dashboardblocks/retention/retention-03",
       "component": "Retention3",
       "shows": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
       "size": "compact",
@@ -2288,6 +2474,7 @@
     {
       "name": "retention-04",
       "install": "@dashboardblocks/retention-04",
+      "import": "@/components/dashboardblocks/retention/retention-04",
       "component": "Retention4",
       "shows": "Users gained above the axis and lost below it, with the net change and the quick ratio.",
       "size": "full",
@@ -2300,6 +2487,7 @@
     {
       "name": "scatter-01",
       "install": "@dashboardblocks/scatter-01",
+      "import": "@/components/dashboardblocks/scatter/scatter-01",
       "component": "Scatter1",
       "shows": "Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.",
       "size": "half",
@@ -2312,6 +2500,7 @@
     {
       "name": "scatter-02",
       "install": "@dashboardblocks/scatter-02",
+      "import": "@/components/dashboardblocks/scatter/scatter-02",
       "component": "Scatter2",
       "shows": "Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.",
       "size": "half",
@@ -2324,6 +2513,7 @@
     {
       "name": "scatter-03",
       "install": "@dashboardblocks/scatter-03",
+      "import": "@/components/dashboardblocks/scatter/scatter-03",
       "component": "Scatter3",
       "shows": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
       "size": "full",
@@ -2336,6 +2526,7 @@
     {
       "name": "scatter-04",
       "install": "@dashboardblocks/scatter-04",
+      "import": "@/components/dashboardblocks/scatter/scatter-04",
       "component": "Scatter4",
       "shows": "Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.",
       "size": "full",
@@ -2348,6 +2539,7 @@
     {
       "name": "schedule-01",
       "install": "@dashboardblocks/schedule-01",
+      "import": "@/components/dashboardblocks/schedule/schedule-01",
       "component": "Schedule1",
       "shows": "Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.",
       "size": "half",
@@ -2361,6 +2553,7 @@
     {
       "name": "schedule-02",
       "install": "@dashboardblocks/schedule-02",
+      "import": "@/components/dashboardblocks/schedule/schedule-02",
       "component": "Schedule2",
       "shows": "A month calendar with a dot on each day that has events, and a list of the events on the selected day.",
       "size": "full",
@@ -2373,6 +2566,7 @@
     {
       "name": "schedule-03",
       "install": "@dashboardblocks/schedule-03",
+      "import": "@/components/dashboardblocks/schedule/schedule-03",
       "component": "Schedule3",
       "shows": "Deadlines and renewals in date order, each with a countdown and an urgency badge.",
       "size": "half",
@@ -2386,6 +2580,7 @@
     {
       "name": "schedule-04",
       "install": "@dashboardblocks/schedule-04",
+      "import": "@/components/dashboardblocks/schedule/schedule-04",
       "component": "Schedule4",
       "shows": "The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.",
       "size": "full",
@@ -2398,6 +2593,7 @@
     {
       "name": "security-01",
       "install": "@dashboardblocks/security-01",
+      "import": "@/components/dashboardblocks/security/security-01",
       "component": "Security1",
       "shows": "Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.",
       "size": "full",
@@ -2411,6 +2607,7 @@
     {
       "name": "security-02",
       "install": "@dashboardblocks/security-02",
+      "import": "@/components/dashboardblocks/security/security-02",
       "component": "Security2",
       "shows": "Changes to access, keys and settings, newest first, with a switch to show warnings only.",
       "size": "full",
@@ -2424,6 +2621,7 @@
     {
       "name": "security-03",
       "install": "@dashboardblocks/security-03",
+      "import": "@/components/dashboardblocks/security/security-03",
       "component": "Security3",
       "shows": "The devices signed in to an account, with where and when each was last active, and buttons to sign them out.",
       "size": "half",
@@ -2436,6 +2634,7 @@
     {
       "name": "security-04",
       "install": "@dashboardblocks/security-04",
+      "import": "@/components/dashboardblocks/security/security-04",
       "component": "Security4",
       "shows": "A security score built from workspace checks, with failing checks first and what to do about each.",
       "size": "half",
@@ -2449,6 +2648,7 @@
     {
       "name": "security-05",
       "install": "@dashboardblocks/security-05",
+      "import": "@/components/dashboardblocks/security/security-05",
       "component": "Security5",
       "shows": "Setting up two-factor sign-in with an authenticator app, security keys and passkeys, and recovery codes shown once.",
       "size": "half",
@@ -2461,6 +2661,7 @@
     {
       "name": "security-06",
       "install": "@dashboardblocks/security-06",
+      "import": "@/components/dashboardblocks/security/security-06",
       "component": "Security6",
       "shows": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.",
       "size": "half",
@@ -2474,6 +2675,7 @@
     {
       "name": "settings-01",
       "install": "@dashboardblocks/settings-01",
+      "import": "@/components/dashboardblocks/settings/settings-01",
       "component": "Settings1",
       "shows": "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
       "size": "full",
@@ -2487,6 +2689,7 @@
     {
       "name": "settings-02",
       "install": "@dashboardblocks/settings-02",
+      "import": "@/components/dashboardblocks/settings/settings-02",
       "component": "Settings2",
       "shows": "API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.",
       "size": "full",
@@ -2499,6 +2702,7 @@
     {
       "name": "settings-03",
       "install": "@dashboardblocks/settings-03",
+      "import": "@/components/dashboardblocks/settings/settings-03",
       "component": "Settings3",
       "shows": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.",
       "size": "full",
@@ -2511,6 +2715,7 @@
     {
       "name": "settings-04",
       "install": "@dashboardblocks/settings-04",
+      "import": "@/components/dashboardblocks/settings/settings-04",
       "component": "Settings4",
       "shows": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
       "size": "half",
@@ -2523,6 +2728,7 @@
     {
       "name": "settings-05",
       "install": "@dashboardblocks/settings-05",
+      "import": "@/components/dashboardblocks/settings/settings-05",
       "component": "Settings5",
       "shows": "Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.",
       "size": "full",
@@ -2536,6 +2742,7 @@
     {
       "name": "settings-06",
       "install": "@dashboardblocks/settings-06",
+      "import": "@/components/dashboardblocks/settings/settings-06",
       "component": "Settings6",
       "shows": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
       "size": "half",
@@ -2548,6 +2755,7 @@
     {
       "name": "settings-07",
       "install": "@dashboardblocks/settings-07",
+      "import": "@/components/dashboardblocks/settings/settings-07",
       "component": "Settings7",
       "shows": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
       "size": "half",
@@ -2560,6 +2768,7 @@
     {
       "name": "spend-01",
       "install": "@dashboardblocks/spend-01",
+      "import": "@/components/dashboardblocks/spend/spend-01",
       "component": "Spend1",
       "shows": "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
       "size": "half",
@@ -2572,6 +2781,7 @@
     {
       "name": "spend-02",
       "install": "@dashboardblocks/spend-02",
+      "import": "@/components/dashboardblocks/spend/spend-02",
       "component": "Spend2",
       "shows": "One budget bar per service, each with its own status, and the total underneath.",
       "size": "half",
@@ -2584,6 +2794,7 @@
     {
       "name": "spend-03",
       "install": "@dashboardblocks/spend-03",
+      "import": "@/components/dashboardblocks/spend/spend-03",
       "component": "Spend3",
       "shows": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
       "size": "full",
@@ -2596,6 +2807,7 @@
     {
       "name": "spend-04",
       "install": "@dashboardblocks/spend-04",
+      "import": "@/components/dashboardblocks/spend/spend-04",
       "component": "Spend4",
       "shows": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
       "size": "half",
@@ -2608,6 +2820,7 @@
     {
       "name": "stat-group-01",
       "install": "@dashboardblocks/stat-group-01",
+      "import": "@/components/dashboardblocks/stat-group/stat-group-01",
       "component": "StatGroup1",
       "shows": "Three metrics side by side, each with its change and previous value.",
       "size": "full",
@@ -2621,6 +2834,7 @@
     {
       "name": "stat-group-02",
       "install": "@dashboardblocks/stat-group-02",
+      "import": "@/components/dashboardblocks/stat-group/stat-group-02",
       "component": "StatGroup2",
       "shows": "A row of metrics, each with its change and a 14-day sparkline.",
       "size": "full",
@@ -2634,6 +2848,7 @@
     {
       "name": "stat-group-03",
       "install": "@dashboardblocks/stat-group-03",
+      "import": "@/components/dashboardblocks/stat-group/stat-group-03",
       "component": "StatGroup3",
       "shows": "A row of metrics where picking one charts it against the previous period.",
       "size": "full",
@@ -2647,6 +2862,7 @@
     {
       "name": "stat-group-04",
       "install": "@dashboardblocks/stat-group-04",
+      "import": "@/components/dashboardblocks/stat-group/stat-group-04",
       "component": "StatGroup4",
       "shows": "Five metrics in a slim row with their changes, wrapping to two columns when narrow.",
       "size": "full",
@@ -2660,6 +2876,7 @@
     {
       "name": "stat-group-05",
       "install": "@dashboardblocks/stat-group-05",
+      "import": "@/components/dashboardblocks/stat-group/stat-group-05",
       "component": "StatGroup5",
       "shows": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
       "size": "full",
@@ -2673,6 +2890,7 @@
     {
       "name": "states-01",
       "install": "@dashboardblocks/states-01",
+      "import": "@/components/dashboardblocks/states/states-01",
       "component": "States1",
       "shows": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
       "size": "full",
@@ -2685,6 +2903,7 @@
     {
       "name": "states-02",
       "install": "@dashboardblocks/states-02",
+      "import": "@/components/dashboardblocks/states/states-02",
       "component": "States2",
       "shows": "A chart that stays in place at reduced opacity while it refreshes, with an updating indicator in the header.",
       "size": "half",
@@ -2697,6 +2916,7 @@
     {
       "name": "states-03",
       "install": "@dashboardblocks/states-03",
+      "import": "@/components/dashboardblocks/states/states-03",
       "component": "States3",
       "shows": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
       "size": "full",
@@ -2709,6 +2929,7 @@
     {
       "name": "states-04",
       "install": "@dashboardblocks/states-04",
+      "import": "@/components/dashboardblocks/states/states-04",
       "component": "States4",
       "shows": "A card that says what went wrong when loading fails and offers to try again.",
       "size": "half",
@@ -2721,6 +2942,7 @@
     {
       "name": "status-01",
       "install": "@dashboardblocks/status-01",
+      "import": "@/components/dashboardblocks/status/status-01",
       "component": "Status1",
       "shows": "Each service with its current status, and an overall badge showing the worst one.",
       "size": "half",
@@ -2734,6 +2956,7 @@
     {
       "name": "status-02",
       "install": "@dashboardblocks/status-02",
+      "import": "@/components/dashboardblocks/status/status-02",
       "component": "Status2",
       "shows": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
       "size": "full",
@@ -2747,6 +2970,7 @@
     {
       "name": "status-03",
       "install": "@dashboardblocks/status-03",
+      "import": "@/components/dashboardblocks/status/status-03",
       "component": "Status3",
       "shows": "An active incident with its severity, affected components and a timeline of updates.",
       "size": "half",
@@ -2760,6 +2984,7 @@
     {
       "name": "status-04",
       "install": "@dashboardblocks/status-04",
+      "import": "@/components/dashboardblocks/status/status-04",
       "component": "Status4",
       "shows": "A grid of regions, each with its status, latency and error rate.",
       "size": "half",
@@ -2773,6 +2998,7 @@
     {
       "name": "status-05",
       "install": "@dashboardblocks/status-05",
+      "import": "@/components/dashboardblocks/status/status-05",
       "component": "Status5",
       "shows": "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
       "size": "full",
@@ -2786,6 +3012,7 @@
     {
       "name": "team-01",
       "install": "@dashboardblocks/team-01",
+      "import": "@/components/dashboardblocks/team/team-01",
       "component": "Team1",
       "shows": "A list of members with their role, whether they are online and when they were last active.",
       "size": "half",
@@ -2799,6 +3026,7 @@
     {
       "name": "team-02",
       "install": "@dashboardblocks/team-02",
+      "import": "@/components/dashboardblocks/team/team-02",
       "component": "Team2",
       "shows": "Work assigned to each person against their capacity on a shared scale, with anyone over capacity flagged and listed first.",
       "size": "half",
@@ -2812,6 +3040,7 @@
     {
       "name": "team-03",
       "install": "@dashboardblocks/team-03",
+      "import": "@/components/dashboardblocks/team/team-03",
       "component": "Team3",
       "shows": "How many people are online, shown as avatars, with the team split by presence.",
       "size": "half",
@@ -2824,6 +3053,7 @@
     {
       "name": "team-04",
       "install": "@dashboardblocks/team-04",
+      "import": "@/components/dashboardblocks/team/team-04",
       "component": "Team4",
       "shows": "Who is on call now and until when, who is next, and the rest of the rota.",
       "size": "half",
@@ -2837,6 +3067,7 @@
     {
       "name": "team-05",
       "install": "@dashboardblocks/team-05",
+      "import": "@/components/dashboardblocks/team/team-05",
       "component": "Team5",
       "shows": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
       "size": "full",
@@ -2850,6 +3081,7 @@
     {
       "name": "team-06",
       "install": "@dashboardblocks/team-06",
+      "import": "@/components/dashboardblocks/team/team-06",
       "component": "Team6",
       "shows": "A share panel for inviting people with view or edit access, changing or removing it, and choosing who the link works for.",
       "size": "half",
@@ -2862,6 +3094,7 @@
     {
       "name": "timeline-01",
       "install": "@dashboardblocks/timeline-01",
+      "import": "@/components/dashboardblocks/timeline/timeline-01",
       "component": "Timeline1",
       "shows": "Projects grouped by team, each a bar from start to end filled to its progress, with a line for today.",
       "size": "full",
@@ -2875,6 +3108,7 @@
     {
       "name": "timeline-02",
       "install": "@dashboardblocks/timeline-02",
+      "import": "@/components/dashboardblocks/timeline/timeline-02",
       "component": "Timeline2",
       "shows": "A launch plan as a list on a rail, with the next milestone highlighted and how soon or how late each one is.",
       "size": "half",
@@ -2887,6 +3121,7 @@
     {
       "name": "timeline-03",
       "install": "@dashboardblocks/timeline-03",
+      "import": "@/components/dashboardblocks/timeline/timeline-03",
       "component": "Timeline3",
       "shows": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
       "size": "full",
@@ -2899,6 +3134,7 @@
     {
       "name": "timeline-04",
       "install": "@dashboardblocks/timeline-04",
+      "import": "@/components/dashboardblocks/timeline/timeline-04",
       "component": "Timeline4",
       "shows": "Each phase's plan as a dashed outline with what actually happened as a bar beneath it, and how many days it slipped.",
       "size": "full",
@@ -2911,6 +3147,7 @@
     {
       "name": "usage-meter-01",
       "install": "@dashboardblocks/usage-meter-01",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-01",
       "component": "UsageMeter1",
       "shows": "An API quota with its status, when it resets and the usage it is on pace for, with the date it would hit the limit.",
       "size": "compact",
@@ -2924,6 +3161,7 @@
     {
       "name": "usage-meter-02",
       "install": "@dashboardblocks/usage-meter-02",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-02",
       "component": "UsageMeter2",
       "shows": "Storage used as a ring in its status colour, with the space that is free.",
       "size": "compact",
@@ -2937,6 +3175,7 @@
     {
       "name": "usage-meter-03",
       "install": "@dashboardblocks/usage-meter-03",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-03",
       "component": "UsageMeter3",
       "shows": "Usage against what the plan includes, with the overage past the limit and what it will cost.",
       "size": "half",
@@ -2950,6 +3189,7 @@
     {
       "name": "usage-meter-04",
       "install": "@dashboardblocks/usage-meter-04",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-04",
       "component": "UsageMeter4",
       "shows": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
       "size": "compact",
@@ -2963,6 +3203,7 @@
     {
       "name": "usage-meter-05",
       "install": "@dashboardblocks/usage-meter-05",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-05",
       "component": "UsageMeter5",
       "shows": "Storage split into categories as one segmented bar, with each category's size and share.",
       "size": "compact",
@@ -2976,6 +3217,7 @@
     {
       "name": "usage-meter-06",
       "install": "@dashboardblocks/usage-meter-06",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-06",
       "component": "UsageMeter6",
       "shows": "Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.",
       "size": "compact",
@@ -2989,6 +3231,7 @@
     {
       "name": "usage-meter-07",
       "install": "@dashboardblocks/usage-meter-07",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-07",
       "component": "UsageMeter7",
       "shows": "What is left as a liquid that drains as usage grows, turning amber and then red.",
       "size": "compact",
@@ -3002,6 +3245,7 @@
     {
       "name": "usage-meter-08",
       "install": "@dashboardblocks/usage-meter-08",
+      "import": "@/components/dashboardblocks/usage-meter/usage-meter-08",
       "component": "UsageMeter8",
       "shows": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
       "size": "compact",

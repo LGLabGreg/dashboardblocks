@@ -39,10 +39,18 @@ interface CalendarEvent extends ScheduleEvent {
 const DAY = 86_400_000
 
 const MIN_EVENT_MINUTES = 30
+const SHORT_EVENT_MINUTES = 45
+const LOCATION_EVENT_MINUTES = 90
+const TEXT_LINE_MINUTES = 20
+const TEXT_PADDING_MINUTES = 5
 const HOUR_LABEL_OFFSET_PX = 12
 
 const toKey = (day: Date) => day.toISOString().slice(0, 10)
 const getEnd = (event: ScheduleEvent) => (event.end ?? event.start).getTime()
+const getMinutes = (event: ScheduleEvent) =>
+  (getEnd(event) - event.start.getTime()) / 60_000
+const fitsLines = (lines: number, minutes: number) =>
+  minutes >= lines * TEXT_LINE_MINUTES + TEXT_PADDING_MINUTES
 
 function getWeekDays(day: Date, weekStartsOn: 0 | 1 = 0) {
   const start = addDays(day, -((day.getUTCDay() - weekStartsOn + 7) % 7))
@@ -66,7 +74,10 @@ function formatDayRange(first: Date, last: Date) {
   if (first.getUTCMonth() === last.getUTCMonth()) {
     return `${formatDay(first, { month: 'long' })} ${first.getUTCDate()}–${last.getUTCDate()}, ${year}`
   }
-  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+  }
   return `${formatDay(first, options)} – ${formatDay(last, options)}, ${year}`
 }
 
@@ -154,6 +165,7 @@ interface EventLayout<T extends ScheduleEvent = CalendarEvent> {
   lane: number
   lanes: number
   span: number
+  uncoveredMinutes: number
 }
 
 function layoutEvents<T extends ScheduleEvent>(events: T[]): EventLayout<T>[] {
@@ -181,7 +193,22 @@ function layoutEvents<T extends ScheduleEvent>(events: T[]): EventLayout<T>[] {
       ) {
         span++
       }
-      result.push({ event: item.event, lane: item.lane, lanes, span })
+      const covering = group
+        .filter(
+          (other) =>
+            other.lane > item.lane &&
+            other.lane < item.lane + span &&
+            other.start < item.end &&
+            item.start < other.end,
+        )
+        .map((other) => (other.start - item.start) / 60_000)
+      result.push({
+        event: item.event,
+        lane: item.lane,
+        lanes,
+        span,
+        uncoveredMinutes: Math.min(Infinity, ...covering),
+      })
     }
     group = []
     laneEnds = []
@@ -241,6 +268,10 @@ function getEventLabel(event: ScheduleEvent, timeZone = 'UTC') {
   ]
     .filter(Boolean)
     .join(', ')
+}
+
+function EventName({ event, timeZone }: { event: ScheduleEvent; timeZone: string }) {
+  return <span className='sr-only'>{getEventLabel(event, timeZone)}</span>
 }
 
 function formatShortTime(date: Date, timeZone: string) {
@@ -382,14 +413,13 @@ function EventBar({
       type='button'
       data-event-id={event.id}
       tabIndex={tabIndex}
-      aria-label={getEventLabel(event, timeZone)}
       aria-current={selected ? 'true' : undefined}
       onClick={onSelect}
       className={cn(
         'flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
         continuesBefore && 'rounded-l-none',
         continuesAfter && 'rounded-r-none',
-        ended && 'text-muted-foreground',
+        ended && 'text-foreground/70',
         selected && 'ring-primary ring-2',
         eventFocus,
         className,
@@ -397,18 +427,17 @@ function EventBar({
       style={{ ...eventStyle(event, ended ? 14 : 28), ...style }}
     >
       {!event.allDay && !continuesBefore && (
-        <span
-          className={cn(
-            'shrink-0 tabular-nums',
-            ended ? 'text-muted-foreground' : 'text-foreground/70',
-          )}
-        >
+        <span aria-hidden className='text-foreground/70 shrink-0 tabular-nums'>
           {formatShortTime(event.start, timeZone)}
         </span>
       )}
-      <span className={cn('truncate', stickyTitle && 'sticky left-[3.875rem]')}>
+      <span
+        aria-hidden
+        className={cn('truncate', stickyTitle && 'sticky left-[3.875rem]')}
+      >
         {event.title}
       </span>
+      <EventName event={event} timeZone={timeZone} />
     </button>
   )
 }
@@ -540,7 +569,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
   }
 
   return (
-    // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
+    // oxlint-disable-next-line jsx-a11y/interactive-supports-focus -- focus roves over the cells inside, as the APG grid pattern does
     <div
       ref={grid}
       role='grid'
@@ -618,10 +647,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                   role='gridcell'
                   aria-selected={isSelected}
                   data-day={key}
-                  className={cn(
-                    'relative flex min-h-12 min-w-0 flex-col items-center gap-0.5 p-1 @2xl:min-h-28 @2xl:items-stretch',
-                    outside ? 'bg-muted/40' : 'bg-card',
-                  )}
+                  className='group/day bg-card relative flex min-h-12 min-w-0 flex-col items-center gap-0.5 p-1 @2xl:min-h-28 @2xl:items-stretch'
                 >
                   <button
                     type='button'
@@ -643,14 +669,14 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                     }}
                     className={cn(
                       'focus-visible:ring-ring/50 absolute inset-0 outline-none focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-inset',
-                      outside ? 'hover:bg-muted' : 'hover:bg-muted/50',
+                      outside ? 'bg-muted/40 hover:bg-muted' : 'hover:bg-muted/50',
                     )}
                   />
                   <span
                     aria-hidden
                     className={cn(
                       'pointer-events-none relative flex size-7 shrink-0 items-center justify-center rounded-full text-sm tabular-nums @2xl:size-6 @2xl:text-xs',
-                      outside && 'text-muted-foreground',
+                      outside && 'text-muted-foreground group-hover/day:text-foreground',
                       isToday &&
                         !isSelected &&
                         'text-primary ring-primary font-semibold ring-1',
@@ -669,7 +695,9 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                         <span
                           key={event.id}
                           className='size-1.5 rounded-full'
-                          style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
+                          style={{
+                            backgroundColor: event.color ?? 'var(--chart-2)',
+                          }}
                         />
                       ))}
                   </span>
@@ -719,6 +747,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                                 }}
                                 className={cn(
                                   'text-muted-foreground hover:bg-muted hover:text-foreground flex h-5 w-full items-center rounded-sm px-1 text-xs font-medium',
+                                  outside && 'group-hover/day:text-foreground',
                                   eventFocus,
                                 )}
                               >
@@ -729,22 +758,21 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                         }
                         const { event } = slot
                         const ended = getEnd(event) <= now.getTime()
+                        const selected = event.id === selectedEventId
                         return (
                           <li key={row} className='relative'>
                             <button
                               type='button'
                               data-event-id={event.id}
                               tabIndex={tabIndex}
-                              aria-label={getEventLabel(event, timeZone)}
-                              aria-current={
-                                event.id === selectedEventId ? 'true' : undefined
-                              }
+                              aria-current={selected ? 'true' : undefined}
                               onClick={() => onSelectEvent?.(event)}
                               className={cn(
-                                'hover:bg-muted flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1 text-left text-xs',
-                                ended && 'text-muted-foreground',
-                                event.id === selectedEventId &&
-                                  'bg-muted ring-primary ring-2',
+                                'hover:bg-muted hover:text-foreground group flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1 text-left text-xs',
+                                selected
+                                  ? 'bg-muted ring-primary ring-2'
+                                  : ended && 'text-muted-foreground',
+                                outside && 'group-hover/day:text-foreground',
                                 eventFocus,
                               )}
                             >
@@ -755,10 +783,23 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                                   backgroundColor: event.color ?? 'var(--chart-2)',
                                 }}
                               />
-                              <span className='text-muted-foreground shrink-0 tabular-nums'>
+                              <span
+                                aria-hidden
+                                className={cn(
+                                  'shrink-0 tabular-nums',
+                                  !selected &&
+                                    'text-muted-foreground group-hover:text-foreground',
+                                  !selected &&
+                                    outside &&
+                                    'group-hover/day:text-foreground',
+                                )}
+                              >
                                 {formatShortTime(event.start, timeZone)}
                               </span>
-                              <span className='truncate font-medium'>{event.title}</span>
+                              <span aria-hidden className='truncate font-medium'>
+                                {event.title}
+                              </span>
+                              <EventName event={event} timeZone={timeZone} />
                             </button>
                           </li>
                         )
@@ -846,7 +887,11 @@ function TimeGrid<T extends ScheduleEvent>({
       ref={scroller}
       className={cn('relative h-[32rem] overflow-auto rounded-lg border', className)}
     >
-      <div style={{ minWidth: `calc(3.5rem + ${columns.length} * ${minColumnWidth})` }}>
+      <div
+        style={{
+          minWidth: `calc(3.5rem + ${columns.length} * ${minColumnWidth})`,
+        }}
+      >
         <div
           className='bg-card sticky top-0 z-30 grid border-b'
           style={{ gridTemplateColumns: template }}
@@ -948,69 +993,72 @@ function TimeGrid<T extends ScheduleEvent>({
               >
                 {column.events.length > 0 && (
                   <ul>
-                    {layoutEvents(column.events).map(({ event, lane, lanes, span }) => {
-                      const { hour, minute } = getDateParts(event.start, timeZone)
-                      const top = Math.max(0, (hour - startHour) * 60 + minute)
-                      const minutes = (getEnd(event) - event.start.getTime()) / 60_000
-                      const bottom = Math.min(
-                        hours * 60,
-                        (hour - startHour) * 60 + minute + minutes,
-                      )
-                      if (bottom <= 0 || top >= hours * 60) return null
-                      const ended = getEnd(event) <= now.getTime()
-                      const selected = event.id === selectedEventId
-                      const short = minutes < 45
-                      return (
-                        <li
-                          key={event.id}
-                          className='absolute z-[2] px-px'
-                          style={{
-                            height: `max(1.5rem, ${percent(bottom - top)})`,
-                            left: `${(lane / lanes) * 100}%`,
-                            top: percent(top),
-                            width: `${(span / lanes) * 100}%`,
-                          }}
-                        >
-                          <button
-                            type='button'
-                            data-event-id={event.id}
-                            aria-label={getEventLabel(event, timeZone)}
-                            aria-current={selected ? 'true' : undefined}
-                            onClick={() => onSelectEvent?.(event)}
-                            className={cn(
-                              'ring-card flex size-full min-w-0 overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-xs leading-4 ring-1',
-                              short ? 'items-center gap-1' : 'flex-col',
-                              ended && 'text-muted-foreground',
-                              selected && 'ring-primary relative z-10 ring-2',
-                              eventFocus,
-                            )}
-                            style={eventStyle(event, ended ? 14 : 28)}
+                    {layoutEvents(column.events).map(
+                      ({ event, lane, lanes, span, uncoveredMinutes }) => {
+                        const { hour, minute } = getDateParts(event.start, timeZone)
+                        const top = Math.max(0, (hour - startHour) * 60 + minute)
+                        const minutes = getMinutes(event)
+                        const bottom = Math.min(
+                          hours * 60,
+                          (hour - startHour) * 60 + minute + minutes,
+                        )
+                        if (bottom <= 0 || top >= hours * 60) return null
+                        const ended = getEnd(event) <= now.getTime()
+                        const selected = event.id === selectedEventId
+                        const short =
+                          minutes < SHORT_EVENT_MINUTES || !fitsLines(2, uncoveredMinutes)
+                        const showsLocation =
+                          minutes >= LOCATION_EVENT_MINUTES &&
+                          Boolean(event.location) &&
+                          fitsLines(3, uncoveredMinutes)
+                        return (
+                          <li
+                            key={event.id}
+                            className='absolute z-[2] px-px'
+                            style={{
+                              height: `max(1.5rem, ${percent(bottom - top)})`,
+                              left: `${(lane / lanes) * 100}%`,
+                              top: percent(top),
+                              width: `${(span / lanes) * 100}%`,
+                            }}
                           >
-                            <span className='truncate font-medium'>{event.title}</span>
-                            <span
+                            <button
+                              type='button'
+                              data-event-id={event.id}
+                              aria-current={selected ? 'true' : undefined}
+                              onClick={() => onSelectEvent?.(event)}
                               className={cn(
-                                'truncate tabular-nums',
-                                ended ? 'text-muted-foreground' : 'text-foreground/70',
+                                'ring-card flex size-full min-w-0 overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-xs leading-4 ring-1',
+                                short ? 'gap-1' : 'flex-col',
+                                short && minutes < SHORT_EVENT_MINUTES && 'items-center',
+                                ended && 'text-foreground/70',
+                                selected && 'ring-primary relative z-10 ring-2',
+                                eventFocus,
                               )}
+                              style={eventStyle(event, ended ? 14 : 28)}
                             >
-                              {short
-                                ? formatShortTime(event.start, timeZone)
-                                : formatTimeRange(event.start, event.end, timeZone)}
-                            </span>
-                            {!short && minutes >= 90 && event.location && (
-                              <span
-                                className={cn(
-                                  'truncate',
-                                  ended ? 'text-muted-foreground' : 'text-foreground/70',
-                                )}
-                              >
-                                {event.location}
+                              <span aria-hidden className='truncate font-medium'>
+                                {event.title}
                               </span>
-                            )}
-                          </button>
-                        </li>
-                      )
-                    })}
+                              <EventName event={event} timeZone={timeZone} />
+                              <span
+                                aria-hidden
+                                className='text-foreground/70 truncate tabular-nums'
+                              >
+                                {short
+                                  ? formatShortTime(event.start, timeZone)
+                                  : formatTimeRange(event.start, event.end, timeZone)}
+                              </span>
+                              {showsLocation && (
+                                <span aria-hidden className='text-foreground/70 truncate'>
+                                  {event.location}
+                                </span>
+                              )}
+                            </button>
+                          </li>
+                        )
+                      },
+                    )}
                   </ul>
                 )}
                 {isToday && showNow && (
@@ -1049,7 +1097,11 @@ function CalendarWeekView<T extends ScheduleEvent = CalendarEvent>({
   const columns = days.map((day) => {
     const key = toKey(day)
     const isToday = key === todayKey
-    const name = formatDay(day, { day: 'numeric', month: 'long', weekday: 'long' })
+    const name = formatDay(day, {
+      day: 'numeric',
+      month: 'long',
+      weekday: 'long',
+    })
     return {
       day,
       events: timed.filter((event) => getDayKey(event.start, timeZone) === key),
@@ -1180,12 +1232,17 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
               aria-current={selected ? 'true' : undefined}
               onClick={() => onSelectEvent(event)}
               className={cn(
-                'hover:bg-muted flex w-full items-stretch gap-3 rounded-md px-2 py-1.5 text-left text-sm',
+                'hover:bg-muted group flex w-full items-stretch gap-3 rounded-md px-2 py-1.5 text-left text-sm',
                 selected && 'bg-muted',
                 eventFocus,
               )}
             >
-              <span className='text-muted-foreground w-16 shrink-0 pt-px text-xs whitespace-nowrap tabular-nums'>
+              <span
+                className={cn(
+                  'w-16 shrink-0 pt-px text-xs whitespace-nowrap tabular-nums',
+                  !selected && 'text-muted-foreground group-hover:text-foreground',
+                )}
+              >
                 {spansDays(event, timeZone)
                   ? 'All day'
                   : formatTime(event.start, timeZone)}
@@ -1196,11 +1253,23 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
                 style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
               />
               <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                <span className={cn('font-medium', ended && 'text-muted-foreground')}>
+                <span
+                  className={cn(
+                    'font-medium',
+                    ended && !selected && 'text-muted-foreground',
+                  )}
+                >
                   {event.title}
                 </span>
                 {meta && (
-                  <span className='text-muted-foreground truncate text-xs'>{meta}</span>
+                  <span
+                    className={cn(
+                      'truncate text-xs',
+                      !selected && 'text-muted-foreground group-hover:text-foreground',
+                    )}
+                  >
+                    {meta}
+                  </span>
                 )}
               </span>
             </button>

@@ -25,7 +25,7 @@ import {
   getTotalRows,
 } from '@/registry/components/dashboardblocks/invoice'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -182,11 +182,15 @@ const Invoice3 = (props: Invoice3Props) => {
     setPending(next)
     try {
       await (next === 'accepted' ? onAccept(selected) : onDecline())
-      setDecision(next)
+      startTransition(() => {
+        setDecision(next)
+        setPending(null)
+      })
     } catch {
-      setDecision(null)
-    } finally {
-      setPending(null)
+      startTransition(() => {
+        setDecision(null)
+        setPending(null)
+      })
     }
   }
 

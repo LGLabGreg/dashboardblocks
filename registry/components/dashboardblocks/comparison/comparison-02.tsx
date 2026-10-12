@@ -58,7 +58,7 @@ const Comparison2 = (props: Comparison2Props) => {
               'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
               result.significant
                 ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
-                : 'bg-muted text-muted-foreground',
+                : 'bg-muted text-foreground',
             )}
           >
             {result.significant ? (

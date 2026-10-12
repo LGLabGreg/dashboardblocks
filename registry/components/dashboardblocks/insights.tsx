@@ -63,7 +63,7 @@ const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
       />
     ),
     label: 'Neutral',
-    soft: 'bg-muted text-muted-foreground',
+    soft: 'bg-muted text-foreground',
     text: 'text-muted-foreground',
   },
   positive: {

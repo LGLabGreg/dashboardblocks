@@ -14,35 +14,17 @@ const easings: Record<string, EasingFunction> = {
 }
 
 interface UseAnimatedNumberOptions {
-  /**
-   * Duration of the animation in milliseconds
-   * @default 1000
-   */
+  /** Milliseconds, 1000 by default. */
   duration?: number
-  /**
-   * Easing function for the animation
-   * @default 'easeOut'
-   */
+  /** @default 'easeOut' */
   easing?: keyof typeof easings | EasingFunction
-  /**
-   * Starting value for the animation
-   * @default 0
-   */
+  /** @default 0 */
   from?: number
-  /**
-   * Intersection Observer threshold (0-1)
-   * @default 0.1
-   */
+  /** From 0 to 1, 0.1 by default. */
   threshold?: number
-  /**
-   * Intersection Observer root margin
-   * @default '0px'
-   */
+  /** @default '0px' */
   rootMargin?: string
-  /**
-   * Delay before starting animation in milliseconds
-   * @default 0
-   */
+  /** Milliseconds, 0 by default. */
   delay?: number
   reanimateOnView?: boolean
 }

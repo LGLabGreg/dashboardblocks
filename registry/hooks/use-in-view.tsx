@@ -3,15 +3,9 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
 interface UseInViewOptions {
-  /**
-   * Intersection Observer threshold (0-1)
-   * @default 1.0
-   */
+  /** From 0 to 1, 1 by default. */
   threshold?: number
-  /**
-   * Intersection Observer root margin
-   * @default '0px'
-   */
+  /** @default '0px' */
   rootMargin?: string
 }
 

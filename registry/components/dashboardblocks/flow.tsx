@@ -35,10 +35,7 @@ interface FlowLayoutLink extends FlowLink {
 }
 
 interface FlowLayoutOptions {
-  /**
-   * 'source' keeps each source's colour downstream, for flows that split from several sources.
-   * @default 'source'
-   */
+  /** @default 'source' */
   colorBy?: 'source' | 'target'
   height: number
   /** @default 8 */

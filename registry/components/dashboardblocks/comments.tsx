@@ -629,7 +629,7 @@ function CommentComposer({
             className='w-full border-t p-1'
           >
             {suggestions.map((person, index) => (
-              // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
+              // oxlint-disable-next-line jsx-a11y/click-events-have-key-events -- the textarea's keydown handler picks options, as the APG combobox pattern does
               <div
                 key={person.name}
                 id={`${id}-person-${index}`}
