@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "inventory-04",
+  "description": "One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.",
   "dependencies": [
     "recharts"
   ],

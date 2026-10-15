@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checklist-02",
+  "description": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
   "registryDependencies": [
     "button",
     "card",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard-05",
+  "description": "A ranked list that can be reversed and expanded to show every entry.",
   "registryDependencies": [
     "button",
     "card",

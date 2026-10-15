@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-04",
+  "description": "Who is on call now and until when, who is next, and the rest of the rota.",
   "registryDependencies": [
     "button",
     "card",

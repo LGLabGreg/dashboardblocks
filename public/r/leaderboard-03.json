@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard-03",
+  "description": "The top three on a podium, with the rest of the field listed below.",
   "registryDependencies": [
     "avatar",
     "card",

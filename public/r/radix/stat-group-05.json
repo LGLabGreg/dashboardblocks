@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-group-05",
+  "description": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/stat-group.json"

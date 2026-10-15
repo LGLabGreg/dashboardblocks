@@ -271,6 +271,8 @@ interface TimelineProps {
   end: Date
   formatTick?: (date: Date) => string
   items: TimelineItem[]
+  /** Names the sideways scroll region `minWidth` adds. @default 'Timeline' */
+  label?: string
   /** Keeps bars legible in narrow cards: below this width the track scrolls sideways. */
   minWidth?: string
   now?: Date
@@ -286,6 +288,7 @@ function Timeline({
   end,
   formatTick,
   items,
+  label = 'Timeline',
   minWidth,
   now,
   start,
@@ -308,7 +311,16 @@ function Timeline({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <div className={cn(minWidth && '-my-1 overflow-x-auto py-1')}>
+      <div
+        role={minWidth ? 'region' : undefined}
+        aria-label={minWidth ? label : undefined}
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+        tabIndex={minWidth ? 0 : undefined}
+        className={cn(
+          minWidth &&
+            'focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none focus-visible:ring-3',
+        )}
+      >
         <div
           className='grid grid-cols-[minmax(6rem,11rem)_minmax(0,1fr)] gap-x-3'
           style={{ minWidth }}

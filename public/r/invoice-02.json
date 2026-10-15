@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "invoice-02",
+  "description": "A paid receipt with the payment method, a partial refund and the net amount paid.",
   "registryDependencies": [
     "badge",
     "button",

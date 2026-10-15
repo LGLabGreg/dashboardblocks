@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "app-shell-03",
+  "description": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu.",
   "registryDependencies": [
     "separator",
     "sidebar",

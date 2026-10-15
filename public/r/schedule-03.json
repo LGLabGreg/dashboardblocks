@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "schedule-03",
+  "description": "Deadlines and renewals in date order, each with a countdown and an urgency badge.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/schedule.json"

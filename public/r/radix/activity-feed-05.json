@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-05",
+  "description": "Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.",
   "registryDependencies": [
     "badge",
     "button",

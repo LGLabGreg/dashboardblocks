@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comments-02",
+  "description": "A composer that previews how mentions will look and who will be notified, above the latest updates.",
   "registryDependencies": [
     "button",
     "card",

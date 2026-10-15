@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "gauge-04",
+  "description": "A satisfaction score on an arc with a target tick, the change since last period and the gap to target.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/gauge.json",

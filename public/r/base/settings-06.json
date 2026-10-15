@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "settings-06",
+  "description": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
   "registryDependencies": [
     "button",
     "card",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "heatmap-02",
+  "description": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/heatmap.json"

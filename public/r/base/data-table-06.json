@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-06",
+  "description": "A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.",
   "registryDependencies": [
     "badge",
     "card",

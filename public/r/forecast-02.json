@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forecast-02",
+  "description": "The date the trend reaches a target, with an 80% range of dates, against the deadline.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/forecast.json"

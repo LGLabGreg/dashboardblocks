@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-03",
+  "description": "Usage against what the plan includes, with the overage past the limit and what it will cost.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/usage-meter.json"

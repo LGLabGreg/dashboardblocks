@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "distribution-04",
+  "description": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/chart-panel.json",

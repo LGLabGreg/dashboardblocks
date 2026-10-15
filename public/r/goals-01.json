@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "goals-01",
+  "description": "One target with an expected-by-today marker, what is left and a projection at the current pace.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/goals.json"

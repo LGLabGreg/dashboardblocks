@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "status-01",
+  "description": "Each service with its current status, and an overall badge showing the worst one.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/status.json"

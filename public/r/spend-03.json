@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spend-03",
+  "description": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
   "dependencies": [
     "recharts"
   ],

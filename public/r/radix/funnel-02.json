@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "funnel-02",
+  "description": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/funnel.json"

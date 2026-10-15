@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "scatter-01",
+  "description": "Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.",
   "dependencies": [
     "recharts"
   ],

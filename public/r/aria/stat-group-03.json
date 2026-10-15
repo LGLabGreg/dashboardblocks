@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-group-03",
+  "description": "A row of metrics where picking one charts it against the previous period.",
   "dependencies": [
     "recharts"
   ],

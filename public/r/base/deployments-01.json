@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "deployments-01",
+  "description": "The latest builds, each with its commit, environment, author, duration and status.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/deployments.json",

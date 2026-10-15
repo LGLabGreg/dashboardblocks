@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-04",
+  "description": "Services in a table with their status, latency and error rate, worst status first.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/data-table.json",

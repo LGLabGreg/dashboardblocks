@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-01",
+  "description": "A single value with its change and what it is compared with.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/kpi.json"

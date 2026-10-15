@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "record-detail-01",
+  "description": "A customer page with headline numbers, recent orders, contact details and notes.",
   "registryDependencies": [
     "avatar",
     "badge",

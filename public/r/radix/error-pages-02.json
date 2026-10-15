@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "error-pages-02",
+  "description": "A no access page naming who can grant access, with a request form and the account you are signed in with.",
   "registryDependencies": [
     "button",
     "textarea",

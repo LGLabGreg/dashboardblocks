@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "ai-usage-02",
+  "description": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/ai-usage.json"

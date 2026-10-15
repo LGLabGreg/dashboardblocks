@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-01",
+  "description": "This period's line against the previous period's, muted, so the current trend leads.",
   "dependencies": [
     "recharts"
   ],

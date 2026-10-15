@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "files-03",
+  "description": "Storage used against the plan, split by kind of file, with the largest files listed to delete.",
   "registryDependencies": [
     "button",
     "card",

@@ -9,16 +9,53 @@ import {
   useEffect,
   useId,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react'
 
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentMedia,
+  AttachmentTitle,
+} from '@/components/ui/attachment'
+import { Bubble, BubbleContent } from '@/components/ui/bubble'
 import { Button } from '@/components/ui/button'
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockLine,
+  CodeBlockTitle,
+} from '@/components/ui/code-block'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupTextarea,
 } from '@/components/ui/input-group'
+import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
+import {
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+} from '@/components/ui/message'
+import {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+  useMessageScroller,
+} from '@/components/ui/message-scroller'
+
+import { useHighlightedCode } from '@/hooks/use-highlighted-code'
 
 import { cn } from '@/lib/utils'
 
@@ -167,19 +204,17 @@ function useCopyToClipboard(timeout = 2000) {
 function CopyButton({
   className,
   label = 'Copy',
-  size = 'icon-sm',
   value,
 }: {
   className?: string
   label?: string
-  size?: 'icon-xs' | 'icon-sm'
   value: string
 }) {
   const { copied, copy } = useCopyToClipboard()
   return (
     <Button
       variant='ghost'
-      size={size}
+      size='icon-sm'
       className={className}
       aria-label={label}
       onClick={() => void copy(value)}
@@ -210,7 +245,11 @@ function CopyButton({
   )
 }
 
-function CodeBlock({
+function highlightable(language: string) {
+  return !Object.hasOwn(Object.prototype, language.toLowerCase())
+}
+
+function ChatCodeBlock({
   caret,
   code,
   language,
@@ -219,23 +258,30 @@ function CodeBlock({
   code: string
   language: string
 }) {
+  const lines = useHighlightedCode(code, highlightable(language) ? language : '')
   return (
-    <div className='bg-muted/50 overflow-hidden rounded-lg border'>
-      <div className='flex items-center justify-between gap-2 border-b py-1 pr-1 pl-3'>
-        <span className='text-muted-foreground font-mono text-xs'>
-          {language || 'code'}
-        </span>
-        <CopyButton label='Copy code' size='icon-xs' value={code} />
-      </div>
-      <pre
-        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- lets keyboard users scroll long lines
-        tabIndex={0}
-        className='focus-visible:ring-ring/50 overflow-x-auto p-3 text-xs leading-relaxed outline-none focus-visible:ring-3 focus-visible:ring-inset'
-      >
-        <code className='font-mono text-xs'>{code}</code>
-        {caret}
-      </pre>
-    </div>
+    <CodeBlock size='sm'>
+      <CodeBlockHeader>
+        <CodeBlockTitle>{language || 'code'}</CodeBlockTitle>
+        <CodeBlockActions>
+          <CodeBlockCopyButton size='icon-sm' aria-label='Copy code' value={code} />
+        </CodeBlockActions>
+      </CodeBlockHeader>
+      <CodeBlockContent>
+        {lines.map((line, index) => (
+          <CodeBlockLine key={index}>
+            {caret && index === lines.length - 1 ? (
+              <>
+                {line}
+                {caret}
+              </>
+            ) : (
+              line
+            )}
+          </CodeBlockLine>
+        ))}
+      </CodeBlockContent>
+    </CodeBlock>
   )
 }
 
@@ -243,13 +289,13 @@ function StreamingCaret() {
   return (
     <span
       aria-hidden
-      className='bg-foreground/70 ml-0.5 inline-block h-[1em] w-[0.45em] translate-y-[0.15em] animate-pulse rounded-[1px] motion-reduce:animate-none'
+      className='bg-foreground/70 ms-0.5 inline-block h-[1em] w-[0.45em] translate-y-[0.15em] animate-pulse rounded-[1px] motion-reduce:animate-none'
     />
   )
 }
 
 /** Message text with light formatting: paragraphs and line breaks, bullet and numbered lists, headings, **bold**, `code` and fenced code blocks. */
-function MessageContent({
+function ChatMessageContent({
   caret,
   className,
   content,
@@ -267,7 +313,7 @@ function MessageContent({
         switch (block.type) {
           case 'code':
             return (
-              <CodeBlock
+              <ChatCodeBlock
                 key={index}
                 caret={end}
                 code={block.code}
@@ -288,12 +334,12 @@ function MessageContent({
                 key={index}
                 start={block.ordered && block.start !== 1 ? block.start : undefined}
                 className={cn(
-                  'flex flex-col gap-1 pl-5',
+                  'flex flex-col gap-1 ps-5',
                   block.ordered ? 'list-decimal' : 'list-disc',
                 )}
               >
                 {block.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className='marker:text-muted-foreground pl-1'>
+                  <li key={itemIndex} className='marker:text-muted-foreground ps-1'>
                     {renderInline(item)}
                     {itemIndex === block.items.length - 1 && end}
                   </li>
@@ -369,6 +415,20 @@ function ChatHeader({
   )
 }
 
+const QUESTION_PEEK_PX = 64
+const SCROLL_KEYS = new Set([
+  'ArrowDown',
+  'ArrowUp',
+  'End',
+  'Home',
+  'PageDown',
+  'PageUp',
+  ' ',
+])
+
+// Message Scroller places a saved conversation by its height, which `content-visibility: auto` estimates while the log is off screen.
+const MEASURED_ITEM = '[content-visibility:visible]'
+
 interface ChatMessagesProps {
   children: ReactNode
   className?: string
@@ -377,23 +437,42 @@ interface ChatMessagesProps {
   label?: string
   /** The newest message, read out once it has finished instead of word by word. */
   latest?: ChatMessageData
-  /** Brings the log back to the bottom on a new message and announces progress. */
+  /** Moves each new question to the top when the status turns `submitted`, and announces that the assistant is thinking, then the finished reply. Without it, the log follows the end for new questions. */
   status?: ChatStatus
 }
 
-function ChatMessages({
+function latestQuestion(content: HTMLElement | null) {
+  return [...(content?.querySelectorAll<HTMLElement>('[data-chat-question]') ?? [])].at(
+    -1,
+  )
+}
+
+function ChatMessages(props: ChatMessagesProps) {
+  const [selecting, setSelecting] = useState(false)
+  return (
+    <MessageScrollerProvider autoScroll={!selecting}>
+      <ChatLog {...props} onSelectingChange={setSelecting} />
+    </MessageScrollerProvider>
+  )
+}
+
+function ChatLog({
   children,
   className,
   contentClassName,
   label = 'Conversation',
   latest,
+  onSelectingChange,
   status = 'ready',
-}: ChatMessagesProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
+}: ChatMessagesProps & { onSelectingChange: (selecting: boolean) => void }) {
+  const scroller = useMessageScroller()
+  const scrollerRef = useRef(scroller)
+  const viewportRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-  const pinned = useRef(true)
-  const lastScrollTop = useRef(0)
-  const [atBottom, setAtBottom] = useState(true)
+  const heldQuestion = useRef<string | null>(null)
+  const placedTop = useRef<number | null>(null)
+  const opened = useRef(false)
+  const placedForStatus = useRef(status)
   const [announcement, setAnnouncement] = useState('')
   const [previousStatus, setPreviousStatus] = useState(status)
 
@@ -414,80 +493,151 @@ function ChatMessages({
     return () => cancelAnimationFrame(frame)
   }, [])
 
-  function scrollToBottom() {
-    const scroller = scrollRef.current
-    if (scroller) scroller.scrollTop = scroller.scrollHeight
+  useLayoutEffect(() => {
+    scrollerRef.current = scroller
+  })
+
+  function placeQuestion(id: string) {
+    heldQuestion.current = id
+    scrollerRef.current.scrollToMessage(id, { scrollMargin: QUESTION_PEEK_PX })
+    placedTop.current = viewportRef.current?.scrollTop ?? null
   }
 
-  useEffect(() => {
-    const scroller = scrollRef.current
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current
     const content = contentRef.current
-    if (!scroller || !content) return
+    return () => {
+      if (!viewport || !content || viewport.clientHeight === 0) return
+      if (viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 2) return
+      const item = content.querySelector<HTMLElement>('[data-message-id]')
+      const id = item?.dataset.messageId
+      if (!item || !id) return
+      const offset =
+        item.getBoundingClientRect().top -
+        viewport.getBoundingClientRect().top -
+        parseFloat(getComputedStyle(content).paddingTop)
+      // Message Scroller goes back to following the end while hidden unless it's mid-jump, so make the current position one.
+      scrollerRef.current.scrollToMessage(id, { scrollMargin: offset })
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    if (opened.current) return
+    opened.current = true
+    const content = contentRef.current
+    const question = latestQuestion(content)
+    const id = question?.dataset.messageId
+    if (!content || !question || !id || !viewportRef.current) return
+    const rest =
+      content.getBoundingClientRect().bottom -
+      question.getBoundingClientRect().top +
+      QUESTION_PEEK_PX
+    if (rest <= viewportRef.current.clientHeight) return
+    placeQuestion(id)
+  }, [])
+
+  useEffect(() => {
+    const before = placedForStatus.current
+    placedForStatus.current = status
+    if (status !== 'submitted' || before === 'submitted') return
+    const id = latestQuestion(contentRef.current)?.dataset.messageId
+    if (!id) return
+    heldQuestion.current = id
+    const frame = requestAnimationFrame(() => placeQuestion(id))
+    return () => cancelAnimationFrame(frame)
+  }, [status])
+
+  useEffect(() => {
+    const content = contentRef.current
+    if (!content) return
     const observer = new ResizeObserver(() => {
-      if (pinned.current) scroller.scrollTop = scroller.scrollHeight
+      const id = heldQuestion.current
+      if (!id) return
+      if (latestQuestion(content)?.dataset.messageId !== id) {
+        heldQuestion.current = null
+        return
+      }
+      placeQuestion(id)
     })
     observer.observe(content)
-    observer.observe(scroller)
     return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
-    if (status !== 'submitted') return
-    pinned.current = true
-    scrollToBottom()
-  }, [status])
+    function onSelectionChange() {
+      const selection = document.getSelection()
+      const inLog = Boolean(
+        selection &&
+        !selection.isCollapsed &&
+        viewportRef.current?.contains(selection.anchorNode),
+      )
+      if (inLog) heldQuestion.current = null
+      onSelectingChange(inLog)
+    }
+    document.addEventListener('selectionchange', onSelectionChange)
+    return () => document.removeEventListener('selectionchange', onSelectionChange)
+  }, [onSelectingChange])
 
-  function onScroll() {
-    const scroller = scrollRef.current
-    if (!scroller) return
-    const gap = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight
-    const userScrolledUp = scroller.scrollTop < lastScrollTop.current
-    if (gap < 24) pinned.current = true
-    else if (userScrolledUp) pinned.current = false
-    lastScrollTop.current = scroller.scrollTop
-    setAtBottom(pinned.current)
+  function release() {
+    heldQuestion.current = null
+    placedTop.current = null
   }
 
   return (
-    <div className={cn('relative flex min-h-0 flex-1 flex-col', className)}>
-      <div
-        ref={scrollRef}
+    <MessageScroller className={cn('flex-1', className)}>
+      <MessageScrollerViewport
+        ref={viewportRef}
         role='log'
         aria-label={label}
         aria-live='off'
-        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- lets keyboard users scroll the log
-        tabIndex={0}
-        onScroll={onScroll}
-        className='focus-visible:ring-ring/50 min-h-0 flex-1 overflow-y-auto overscroll-contain outline-none focus-visible:ring-3 focus-visible:ring-inset'
+        onScroll={(event) => {
+          const viewport = event.currentTarget
+          const top = placedTop.current
+          const held = heldQuestion.current
+          if (viewport.clientHeight === 0 || top === null || held === null) return
+          if (Math.abs(viewport.scrollTop - top) <= 1) return
+          const clamped =
+            viewport.scrollTop < top &&
+            viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight <= 1
+          if (clamped) placeQuestion(held)
+          else release()
+        }}
+        onWheel={release}
+        onTouchMove={release}
+        onPointerDown={release}
+        onKeyDown={(event) => {
+          if (SCROLL_KEYS.has(event.key)) release()
+        }}
+        className='focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset'
       >
-        <div ref={contentRef} className={cn('flex flex-col gap-6 p-4', contentClassName)}>
-          {children}
-        </div>
-      </div>
-      {!atBottom && (
-        <Button
-          variant='outline'
-          size='icon-sm'
-          aria-label='Scroll to latest message'
-          onClick={() => {
-            pinned.current = true
-            scrollToBottom()
-          }}
-          className='absolute bottom-3 left-1/2 -translate-x-1/2 shadow-sm'
+        <MessageScrollerContent
+          ref={contentRef}
+          role='none'
+          className={cn('p-4', contentClassName)}
         >
-          <IconPlaceholder
-            lucide='ArrowDownIcon'
-            tabler='IconArrowDown'
-            hugeicons='ArrowDown01Icon'
-            phosphor='ArrowDownIcon'
-            remixicon='RiArrowDownLine'
-          />
-        </Button>
-      )}
+          {children}
+        </MessageScrollerContent>
+      </MessageScrollerViewport>
+      <MessageScrollerButton
+        behavior='auto'
+        onClick={() => {
+          release()
+          viewportRef.current?.focus({ preventScroll: true })
+        }}
+      >
+        <IconPlaceholder
+          lucide='ArrowDownIcon'
+          tabler='IconArrowDown'
+          hugeicons='ArrowDown01Icon'
+          phosphor='ArrowDownIcon'
+          remixicon='RiArrowDownLine'
+        />
+        <span className='sr-only'>Scroll to latest message</span>
+      </MessageScrollerButton>
       <div role='status' className='sr-only'>
         {announcement}
       </div>
-    </div>
+    </MessageScroller>
   )
 }
 
@@ -512,29 +662,49 @@ function ChatMessage({
 }: ChatMessageProps) {
   if (message.role === 'user') {
     return (
-      <div data-role='user' className={cn('flex flex-col items-end gap-1', className)}>
-        <div className='bg-muted max-w-[85%] rounded-2xl px-3.5 py-2 text-sm'>
-          <span className='sr-only'>{name ?? 'You'}: </span>
-          <MessageContent content={message.content} />
-        </div>
-        {actions}
-      </div>
+      <MessageScrollerItem
+        messageId={message.id}
+        data-chat-question
+        className={MEASURED_ITEM}
+      >
+        <Message data-role='user' align='end' className={className}>
+          <MessageContent>
+            <Bubble variant='muted' align='end'>
+              <BubbleContent>
+                <span className='sr-only'>{name ?? 'You'}: </span>
+                <ChatMessageContent content={message.content} />
+              </BubbleContent>
+            </Bubble>
+            {actions}
+          </MessageContent>
+        </Message>
+      </MessageScrollerItem>
     )
   }
   return (
-    <div data-role='assistant' className={cn('flex gap-3', className)}>
-      {avatar ?? <AssistantAvatar />}
-      <div className='flex min-w-0 flex-1 flex-col gap-2 pt-1 text-sm'>
-        <span className='sr-only'>{name ?? 'Assistant'}: </span>
-        <MessageContent
-          content={message.content}
-          caret={streaming ? <StreamingCaret /> : undefined}
-        />
-        {footer}
-        {actions}
-      </div>
-    </div>
+    <MessageScrollerItem messageId={message.id} className={MEASURED_ITEM}>
+      <Message data-role='assistant' className={className}>
+        <AssistantMessageAvatar avatar={avatar} />
+        <MessageContent>
+          <Bubble variant='ghost'>
+            <BubbleContent>
+              <span className='sr-only'>{name ?? 'Assistant'}: </span>
+              <ChatMessageContent
+                content={message.content}
+                caret={streaming ? <StreamingCaret /> : undefined}
+              />
+            </BubbleContent>
+          </Bubble>
+          {footer}
+          {actions && <MessageFooter>{actions}</MessageFooter>}
+        </MessageContent>
+      </Message>
+    </MessageScrollerItem>
   )
+}
+
+function AssistantMessageAvatar({ avatar }: { avatar?: ReactNode }) {
+  return <MessageAvatar>{avatar ?? <AssistantAvatar className='size-8' />}</MessageAvatar>
 }
 
 interface ChatMessageActionsProps {
@@ -558,7 +728,7 @@ function ChatMessageActions({
     <div
       role='group'
       aria-label='Message actions'
-      className={cn('text-muted-foreground -ml-1.5 flex items-center gap-0.5', className)}
+      className={cn('text-muted-foreground -ms-1.5 flex items-center gap-0.5', className)}
     >
       <CopyButton label='Copy message' value={content} />
       {onRegenerate && (
@@ -621,26 +791,31 @@ function ChatMessageActions({
 
 function TypingIndicator({
   className,
-  label = 'Assistant is thinking',
+  label = 'Thinking…',
 }: {
   className?: string
-  /** @default 'Assistant is thinking' */
+  /** @default 'Thinking…' */
   label?: string
 }) {
   return (
-    <div className={cn('flex items-center gap-3', className)}>
-      <AssistantAvatar />
-      <span aria-hidden className='flex items-center gap-1'>
-        {[0, 1, 2].map((dot) => (
-          <span
-            key={dot}
-            className='bg-muted-foreground size-1.5 animate-pulse rounded-full motion-reduce:animate-none'
-            style={{ animationDelay: `${dot * 300}ms` }}
-          />
-        ))}
-      </span>
-      <span className='sr-only'>{label}</span>
-    </div>
+    <Message data-role='assistant' className={className}>
+      <AssistantMessageAvatar />
+      <MessageContent>
+        <Marker>
+          <MarkerIcon>
+            <IconPlaceholder
+              lucide='Loader2Icon'
+              tabler='IconLoader'
+              hugeicons='Loading03Icon'
+              phosphor='SpinnerIcon'
+              remixicon='RiLoaderLine'
+              className='animate-spin motion-reduce:animate-none'
+            />
+          </MarkerIcon>
+          <MarkerContent className='shimmer'>{label}</MarkerContent>
+        </Marker>
+      </MessageContent>
+    </Message>
   )
 }
 
@@ -670,27 +845,46 @@ function SuggestedPrompts({
     <ul
       aria-label={label}
       className={cn(
-        variant === 'chips' ? 'flex flex-wrap gap-2' : 'flex flex-col gap-2',
+        variant === 'chips'
+          ? 'scroll-fade-x -mx-1 flex scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain p-1'
+          : 'flex flex-col gap-2',
         className,
       )}
     >
-      {prompts.map((prompt) => (
-        <li key={prompt.label} className='flex max-w-full'>
-          <button
-            type='button'
-            onClick={() => onSelect(prompt.prompt ?? prompt.label)}
-            className={cn(
-              'hover:bg-muted/50 focus-visible:border-ring focus-visible:ring-ring/50 bg-background flex items-center rounded-lg border text-left text-sm transition-colors outline-none focus-visible:ring-3 motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0',
-              variant === 'chips' ? 'gap-2 px-3 py-1.5' : 'w-full gap-3 px-3 py-2.5',
-            )}
-          >
-            {prompt.icon && (
-              <span className='text-muted-foreground flex'>{prompt.icon}</span>
-            )}
-            {prompt.label}
-          </button>
-        </li>
-      ))}
+      {prompts.map((prompt) =>
+        variant === 'chips' ? (
+          <li key={prompt.label} className='flex shrink-0'>
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              onClick={() => onSelect(prompt.prompt ?? prompt.label)}
+              onFocus={(event) =>
+                event.currentTarget.scrollIntoView({
+                  block: 'nearest',
+                  inline: 'nearest',
+                })
+              }
+            >
+              {prompt.icon}
+              {prompt.label}
+            </Button>
+          </li>
+        ) : (
+          <li key={prompt.label} className='flex max-w-full'>
+            <button
+              type='button'
+              onClick={() => onSelect(prompt.prompt ?? prompt.label)}
+              className='hover:bg-muted/50 focus-visible:border-ring focus-visible:ring-ring/50 bg-background flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors outline-none focus-visible:ring-3 motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0'
+            >
+              {prompt.icon && (
+                <span className='text-muted-foreground flex'>{prompt.icon}</span>
+              )}
+              {prompt.label}
+            </button>
+          </li>
+        ),
+      )}
     </ul>
   )
 }
@@ -715,7 +909,7 @@ function ChatWelcome({
           <p className='text-muted-foreground text-sm text-balance'>{description}</p>
         )}
       </div>
-      {children && <div className='w-full text-left'>{children}</div>}
+      {children && <div className='w-full text-start'>{children}</div>}
     </div>
   )
 }
@@ -731,26 +925,22 @@ function ChatError({
   onRetry?: () => void
 }) {
   return (
-    <div
-      role='alert'
-      className={cn(
-        'border-destructive/30 bg-destructive/5 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border px-3 py-2 text-sm',
-        className,
-      )}
-    >
-      <div className='flex min-w-48 flex-1 items-start gap-3'>
-        <IconPlaceholder
-          lucide='TriangleAlertIcon'
-          tabler='IconAlertTriangle'
-          hugeicons='Alert02Icon'
-          phosphor='WarningIcon'
-          remixicon='RiErrorWarningLine'
-          className='text-destructive mt-0.5 size-4 shrink-0'
-        />
-        <p className='flex-1'>{message}</p>
-      </div>
+    <div className={cn('flex flex-col items-start gap-2', className)}>
+      <Bubble variant='destructive' role='alert'>
+        <BubbleContent className='flex items-start gap-2'>
+          <IconPlaceholder
+            lucide='TriangleAlertIcon'
+            tabler='IconAlertTriangle'
+            hugeicons='Alert02Icon'
+            phosphor='WarningIcon'
+            remixicon='RiErrorWarningLine'
+            className='mt-1 size-4 shrink-0'
+          />
+          <p className='min-w-0'>{message}</p>
+        </BubbleContent>
+      </Bubble>
       {onRetry && (
-        <Button variant='outline' size='sm' className='ml-auto' onClick={onRetry}>
+        <Button variant='outline' size='sm' onClick={onRetry}>
           <IconPlaceholder
             lucide='RefreshCwIcon'
             tabler='IconRefresh'
@@ -779,32 +969,29 @@ function ChatContextChip({
   onRemove?: () => void
 }) {
   return (
-    <span
-      className={cn(
-        'bg-muted text-foreground inline-flex h-6 max-w-full items-center gap-1.5 rounded-md pl-2 text-xs font-medium [&_svg]:size-3.5 [&_svg]:shrink-0',
-        onRemove ? 'pr-0.5' : 'pr-2',
-        className,
-      )}
-    >
-      {icon}
-      <span className='truncate'>{label}</span>
+    <Attachment size='xs' className={className}>
+      {icon && <AttachmentMedia>{icon}</AttachmentMedia>}
+      <AttachmentContent>
+        <AttachmentTitle>{label}</AttachmentTitle>
+      </AttachmentContent>
       {onRemove && (
-        <button
-          type='button'
-          aria-label={`Remove ${label}`}
-          onClick={onRemove}
-          className='text-muted-foreground hover:bg-foreground/10 hover:text-foreground focus-visible:ring-ring/50 flex size-5 items-center justify-center rounded-sm outline-none focus-visible:ring-2 [&_svg]:size-3'
-        >
-          <IconPlaceholder
-            lucide='XIcon'
-            tabler='IconX'
-            hugeicons='Cancel01Icon'
-            phosphor='XIcon'
-            remixicon='RiCloseLine'
-          />
-        </button>
+        <AttachmentActions>
+          <AttachmentAction
+            type='button'
+            aria-label={`Remove ${label}`}
+            onClick={onRemove}
+          >
+            <IconPlaceholder
+              lucide='XIcon'
+              tabler='IconX'
+              hugeicons='Cancel01Icon'
+              phosphor='XIcon'
+              remixicon='RiCloseLine'
+            />
+          </AttachmentAction>
+        </AttachmentActions>
       )}
-    </span>
+    </Attachment>
   )
 }
 
@@ -905,7 +1092,7 @@ function ChatComposer({
                 onStop()
                 inner.current?.focus()
               }}
-              className='ml-auto'
+              className='ms-auto'
             >
               <IconPlaceholder
                 lucide='SquareIcon'
@@ -922,7 +1109,7 @@ function ChatComposer({
               size='icon-sm'
               aria-label='Send message'
               disabled={!canSend}
-              className='ml-auto'
+              className='ms-auto'
             >
               <IconPlaceholder
                 lucide='ArrowUpIcon'
@@ -1070,9 +1257,9 @@ export {
   ChatHeader,
   ChatMessage,
   ChatMessageActions,
+  ChatMessageContent,
   ChatMessages,
   ChatWelcome,
-  MessageContent,
   SuggestedPrompts,
   TypingIndicator,
   isBusy,

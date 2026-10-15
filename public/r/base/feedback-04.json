@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feedback-04",
+  "description": "Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.",
   "dependencies": [
     "recharts"
   ],

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "scatter-03",
+  "description": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
   "dependencies": [
     "recharts"
   ],

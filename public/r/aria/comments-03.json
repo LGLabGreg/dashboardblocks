@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comments-03",
+  "description": "Comments in a column beside a document, each quoting the words it is about, that move to Resolved when closed.",
   "registryDependencies": [
     "badge",
     "card",

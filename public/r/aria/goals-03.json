@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "goals-03",
+  "description": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
   "dependencies": [
     "recharts"
   ],

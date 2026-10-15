@@ -1,0 +1,30 @@
+name: Bug
+description: A free block doesn't install, or doesn't work as its page describes.
+body:
+  - type: input
+    id: block
+    attributes:
+      label: Block
+      description: The block's name, as in its install command, such as `kpi-01`.
+    validations:
+      required: true
+  - type: input
+    id: cli
+    attributes:
+      label: shadcn CLI version
+      description: What `npx shadcn --version` prints in your project.
+  - type: dropdown
+    id: base
+    attributes:
+      label: Component library
+      options:
+        - Base UI
+        - Radix UI
+        - React Aria
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Paste error messages and the CLI's output.
+    validations:
+      required: true

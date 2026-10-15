@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "goals-04",
+  "description": "Small daily goals as rings, with a check mark once a goal is met.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/ring.json"

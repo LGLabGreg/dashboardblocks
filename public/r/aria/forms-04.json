@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forms-04",
+  "description": "Single values edited in place, saved with Enter and cancelled with Escape.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/forms.json"

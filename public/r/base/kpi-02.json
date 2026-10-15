@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-02",
+  "description": "A value with its change shown as a badge beside the label.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/kpi.json"

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "heatmap-04",
+  "description": "The p95 latency of each endpoint by hour over the last day, darker where it is slower.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/heatmap.json"

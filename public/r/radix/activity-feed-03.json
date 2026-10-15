@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-03",
+  "description": "Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.",
   "registryDependencies": [
     "button",
     "card",

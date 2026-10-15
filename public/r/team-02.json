@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-02",
+  "description": "Work assigned to each person against their capacity on a shared scale, with anyone over capacity flagged and listed first.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/team.json"

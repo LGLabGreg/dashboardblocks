@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pipeline-03",
+  "description": "Items that have been in a stage longer than expected, longest first, with how long they have waited and who owns them.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/data-table.json",

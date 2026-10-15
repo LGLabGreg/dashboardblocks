@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "onboarding-03",
+  "description": "A searchable, filterable list of data sources to pick from, then follow through connecting to connected, with an error state.",
   "registryDependencies": [
     "badge",
     "button",

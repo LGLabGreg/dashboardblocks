@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-02",
+  "description": "The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/activity-feed.json"

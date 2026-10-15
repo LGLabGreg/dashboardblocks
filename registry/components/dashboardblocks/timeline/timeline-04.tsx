@@ -115,7 +115,13 @@ const Timeline4 = (props: Timeline4Props) => {
             <span className='text-muted-foreground'>On plan so far.</span>
           )}
         </p>
-        <div className='-my-1 overflow-x-auto py-1'>
+        <div
+          role='region'
+          aria-label={title}
+          // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+          tabIndex={0}
+          className='focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none focus-visible:ring-3'
+        >
           <div className='grid min-w-[34rem] grid-cols-[7rem_minmax(0,1fr)_4rem] gap-x-3'>
             <span className='bg-card sticky left-0 z-20 col-start-1 row-start-1' />
             <TimelineAxis
@@ -155,7 +161,10 @@ const Timeline4 = (props: Timeline4Props) => {
                       <span
                         aria-hidden
                         className='border-muted-foreground/70 absolute top-1 h-3 rounded-sm border border-dashed'
-                        style={{ left: `${planned.left}%`, width: `${planned.width}%` }}
+                        style={{
+                          left: `${planned.left}%`,
+                          width: `${planned.width}%`,
+                        }}
                       />
                       {actual && (
                         <span

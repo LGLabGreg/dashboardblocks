@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spend-04",
+  "description": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
   "dependencies": [
     "recharts"
   ],

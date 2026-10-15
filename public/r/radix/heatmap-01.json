@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "heatmap-01",
+  "description": "When visitors arrive, as a grid of weekday by hour, darker where there are more.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/heatmap.json"

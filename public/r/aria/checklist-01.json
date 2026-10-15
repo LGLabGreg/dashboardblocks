@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checklist-01",
+  "description": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
   "registryDependencies": [
     "button",
     "card",

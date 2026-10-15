@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "calendar-04",
+  "description": "A day of meeting room bookings with a column per room and whether each is free right now.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/calendar.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comments-04",
+  "description": "A support ticket conversation with replies emailed to the customer and internal notes only the team sees.",
   "registryDependencies": [
     "badge",
     "card",

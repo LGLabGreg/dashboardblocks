@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "timeline-03",
+  "description": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/timeline.json"

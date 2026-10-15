@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "onboarding-01",
+  "description": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.",
   "registryDependencies": [
     "badge",
     "button",

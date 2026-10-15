@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "auth-01",
+  "description": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs.",
   "registryDependencies": [
     "button",
     "https://www.dashboardblocks.com/r/base/team.json",

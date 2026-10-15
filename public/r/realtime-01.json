@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "realtime-01",
+  "description": "Active users now, page views per second over the last minute and the pages with the most people on them.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/realtime.json"

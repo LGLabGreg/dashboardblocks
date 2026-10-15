@@ -77,7 +77,13 @@ const AiUsage3 = (props: AiUsage3Props) => {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='relative -mx-1 overflow-x-auto px-1'>
+        <div
+          role='region'
+          aria-label={title}
+          // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+          tabIndex={0}
+          className='focus-visible:ring-ring/50 relative -mx-1 overflow-x-auto px-1 rounded-sm outline-none focus-visible:ring-3'
+        >
           <table className='w-full min-w-[30rem] text-sm tabular-nums'>
             <thead>
               <tr className='text-muted-foreground border-b text-xs'>

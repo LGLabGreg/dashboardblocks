@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "funnel-03",
+  "description": "A vertical stepper through the stages that calls out the step with the biggest drop-off.",
   "registryDependencies": [
     "badge",
     "card",

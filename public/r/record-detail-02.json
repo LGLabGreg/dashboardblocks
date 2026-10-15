@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "record-detail-02",
+  "description": "An order page with line items and totals, a timeline of what happened, the customer, and shipping and payment.",
   "registryDependencies": [
     "badge",
     "button",

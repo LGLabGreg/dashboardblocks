@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-03",
+  "description": "Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/data-table.json",

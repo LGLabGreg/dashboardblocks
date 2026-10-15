@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-05",
+  "description": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
   "registryDependencies": [
     "button",
     "card",

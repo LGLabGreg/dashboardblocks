@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "billing-02",
+  "description": "The current plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.",
   "registryDependencies": [
     "button",
     "card",

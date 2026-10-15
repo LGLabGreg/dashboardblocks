@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "states-03",
+  "description": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
   "registryDependencies": [
     "button",
     "card",

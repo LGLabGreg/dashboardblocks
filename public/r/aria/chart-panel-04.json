@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-04",
+  "description": "A single series of bars with the latest period highlighted and labelled.",
   "dependencies": [
     "recharts"
   ],

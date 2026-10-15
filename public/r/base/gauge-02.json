@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "gauge-02",
+  "description": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/gauge.json"

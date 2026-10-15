@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forecast-03",
+  "description": "Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/forecast.json"

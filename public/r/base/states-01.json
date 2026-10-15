@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "states-01",
+  "description": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
   "registryDependencies": [
     "button",
     "card",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comparison-03",
+  "description": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/comparison.json"

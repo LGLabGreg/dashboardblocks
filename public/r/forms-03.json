@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forms-03",
+  "description": "A form in steps that checks each step before moving on and reviews everything on the last one.",
   "registryDependencies": [
     "button",
     "card",

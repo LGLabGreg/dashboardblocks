@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "invoice-04",
+  "description": "A packing slip listing items with SKU and bin, a pick checkbox for each and a barcode of the order number, with no prices.",
   "registryDependencies": [
     "badge",
     "button",

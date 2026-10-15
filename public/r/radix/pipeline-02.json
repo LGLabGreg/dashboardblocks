@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pipeline-02",
+  "description": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
   "registryDependencies": [
     "button",
     "button-group",

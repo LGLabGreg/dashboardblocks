@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forecast-01",
+  "description": "Weekly actuals continuing into a dashed forecast, with a shaded 80% range and a marker for today.",
   "dependencies": [
     "recharts"
   ],

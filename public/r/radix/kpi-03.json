@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-03",
+  "description": "A rate with its previous value underneath and the change in percentage points.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/kpi.json"

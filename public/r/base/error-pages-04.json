@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "error-pages-04",
+  "description": "A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.",
   "registryDependencies": [
     "button",
     "input",

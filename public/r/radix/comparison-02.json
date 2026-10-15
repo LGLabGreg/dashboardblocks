@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comparison-02",
+  "description": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/comparison.json"

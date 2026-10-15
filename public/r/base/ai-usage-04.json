@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "ai-usage-04",
+  "description": "The share of input tokens served from the cache, what it saved and what the tokens would have cost without it.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/ai-usage.json",

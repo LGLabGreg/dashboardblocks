@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-06",
+  "description": "A share panel for inviting people with view or edit access, changing or removing it, and choosing who the link works for.",
   "registryDependencies": [
     "button",
     "card",

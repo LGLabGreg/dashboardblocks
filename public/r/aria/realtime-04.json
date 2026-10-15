@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "realtime-04",
+  "description": "Running totals since midnight against yesterday at the same time, with orders per hour.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/realtime.json"

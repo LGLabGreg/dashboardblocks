@@ -9,6 +9,14 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockTitle,
+} from '@/components/ui/code-block'
 
 interface ErrorPages3Props {
   brand?: ReactNode
@@ -121,7 +129,7 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
         </p>
       </div>
 
-      <div className='flex flex-col gap-3 rounded-xl border p-4 text-left text-sm'>
+      <div className='flex flex-col gap-3 rounded-xl border p-4 text-start text-sm'>
         <div className='flex items-center gap-2'>
           <div className='flex min-w-0 flex-1 flex-col'>
             <span className='text-muted-foreground text-xs'>Error ID</span>
@@ -147,9 +155,19 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
               />
               Details
             </summary>
-            <pre className='bg-muted mt-2 overflow-x-auto rounded-md p-3 font-mono text-xs whitespace-pre-wrap'>
-              {details}
-            </pre>
+            <CodeBlock size='sm' className='mt-2'>
+              <CodeBlockHeader>
+                <CodeBlockTitle>Error details</CodeBlockTitle>
+                <CodeBlockActions>
+                  <CodeBlockCopyButton
+                    size='icon-sm'
+                    aria-label='Copy details'
+                    value={details}
+                  />
+                </CodeBlockActions>
+              </CodeBlockHeader>
+              <CodeBlockContent wrap>{details}</CodeBlockContent>
+            </CodeBlock>
           </details>
         )}
       </div>

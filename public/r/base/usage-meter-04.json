@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-04",
+  "description": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
   "registryDependencies": [
     "button",
     "card",

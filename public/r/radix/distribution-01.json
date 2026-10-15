@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "distribution-01",
+  "description": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/chart-panel.json",

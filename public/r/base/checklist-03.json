@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checklist-03",
+  "description": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
   "registryDependencies": [
     "button",
     "card",

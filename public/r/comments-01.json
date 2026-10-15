@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comments-01",
+  "description": "Discussion threads with replies, reactions and resolved threads, and a box to start a new one.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/comments.json"

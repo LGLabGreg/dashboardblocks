@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "heatmap-03",
+  "description": "A year of daily values as a calendar grid, darker on busier days.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/heatmap.json"

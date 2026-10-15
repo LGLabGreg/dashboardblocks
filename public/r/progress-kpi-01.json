@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progress-kpi-01",
+  "description": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/kpi.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "status-03",
+  "description": "An active incident with its severity, affected components and a timeline of updates.",
   "registryDependencies": [
     "button",
     "card",

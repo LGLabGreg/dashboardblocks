@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "settings-07",
+  "description": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
   "registryDependencies": [
     "button",
     "card",

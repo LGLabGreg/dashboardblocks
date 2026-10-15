@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "security-03",
+  "description": "The devices signed in to an account, with where and when each was last active, and buttons to sign them out.",
   "registryDependencies": [
     "button",
     "card",

@@ -62,7 +62,7 @@ Capping summaries at 400 tokens would save roughly **$150** a month.`,
   ],
   prices: { cached: 0.3, input: 3, output: 15 },
   suggestions: [
-    { label: 'How can we raise the cache hit rate?' },
+    { label: 'Raise the cache hit rate', prompt: 'How can we raise the cache hit rate?' },
     { label: 'Forecast next month’s cost' },
   ],
   title: 'Token usage',

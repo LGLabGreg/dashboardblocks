@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "calendar-03",
+  "description": "A content calendar that switches between month and week, with each calendar toggled from a sidebar.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/calendar.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "funnel-04",
+  "description": "Two segments side by side at every stage, each as a share of its first step, to compare how they convert.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/funnel.json"

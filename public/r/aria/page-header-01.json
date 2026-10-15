@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "page-header-01",
+  "description": "A page title and description with a secondary action and a main action.",
   "registryDependencies": [
     "button",
     "https://www.dashboardblocks.com/r/aria/page-header.json"

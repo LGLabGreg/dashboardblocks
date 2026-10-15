@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spend-01",
+  "description": "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/billing.json",

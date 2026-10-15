@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-05",
+  "description": "A donut splitting a total into parts, with each value and share listed beside it.",
   "dependencies": [
     "recharts"
   ],

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "settings-01",
+  "description": "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
   "registryDependencies": [
     "button",
     "card",

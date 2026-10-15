@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard-02",
+  "description": "People ranked by revenue with badges for the top three and the change since the last period.",
   "registryDependencies": [
     "avatar",
     "card",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "security-06",
+  "description": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.",
   "registryDependencies": [
     "button",
     "card",

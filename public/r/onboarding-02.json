@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "onboarding-02",
+  "description": "The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.",
   "registryDependencies": [
     "badge",
     "button",

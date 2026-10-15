@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "notifications-03",
+  "description": "Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.",
   "registryDependencies": [
     "button",
     "card",

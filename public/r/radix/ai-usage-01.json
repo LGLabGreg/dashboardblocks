@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "ai-usage-01",
+  "description": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
   "dependencies": [
     "recharts"
   ],

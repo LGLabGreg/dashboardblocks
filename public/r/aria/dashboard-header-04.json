@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dashboard-header-04",
+  "description": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.",
   "registryDependencies": [
     "button",
     "https://www.dashboardblocks.com/r/aria/dashboard-header.json"

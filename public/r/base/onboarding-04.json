@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "onboarding-04",
+  "description": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.",
   "registryDependencies": [
     "button",
     "card",

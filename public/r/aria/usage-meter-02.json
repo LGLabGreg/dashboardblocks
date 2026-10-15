@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-02",
+  "description": "Storage used as a ring in its status colour, with the space that is free.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/animated-number.json",

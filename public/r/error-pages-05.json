@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "error-pages-05",
+  "description": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
   "registryDependencies": [
     "button",
     "https://www.dashboardblocks.com/r/error-pages.json"

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pipeline-01",
+  "description": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
   "registryDependencies": [
     "button",
     "card",

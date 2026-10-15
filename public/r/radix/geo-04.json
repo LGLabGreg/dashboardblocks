@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "geo-04",
+  "description": "Revenue split across regions, each with its share and its change on the previous quarter.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/breakdown.json",

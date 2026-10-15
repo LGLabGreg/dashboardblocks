@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "scatter-04",
+  "description": "Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/scatter.json"

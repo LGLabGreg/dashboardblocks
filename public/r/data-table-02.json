@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-02",
+  "description": "Revenue by product, each with a bar scaled to the top product and its share of the total.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/data-table.json"

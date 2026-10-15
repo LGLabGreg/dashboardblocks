@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "inventory-02",
+  "description": "Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.",
   "registryDependencies": [
     "card"
   ],

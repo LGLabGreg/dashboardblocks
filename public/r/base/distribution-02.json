@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "distribution-02",
+  "description": "A box and whiskers per group on a shared axis, to compare spread and median across groups.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/chart-panel.json",

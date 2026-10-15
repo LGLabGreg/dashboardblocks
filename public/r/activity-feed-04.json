@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-04",
+  "description": "A week of activity by kind with the change on the week before, and the most active people.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/activity-feed.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "bar-chart-kpi-02",
+  "description": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
   "dependencies": [
     "recharts"
   ],

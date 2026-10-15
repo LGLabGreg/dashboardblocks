@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "area-chart-kpi-01",
+  "description": "Gross profit with its margin, and revenue and profit by day as stacked areas.",
   "dependencies": [
     "recharts"
   ],

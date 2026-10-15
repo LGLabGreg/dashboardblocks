@@ -100,6 +100,7 @@ const Flow3 = (props: Flow3Props) => {
           </div>
         </dl>
         <FlowChart
+          label={title}
           colorBy='target'
           describeLink={(link, source, target) =>
             `${source.label} → ${target.label}: ${format(link.value)} (${margin(link.value)} of revenue)`

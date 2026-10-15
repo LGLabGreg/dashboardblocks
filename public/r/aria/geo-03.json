@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "geo-03",
+  "description": "Active users by city right now as markers sized by value on a dotted world map.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/geo.json"

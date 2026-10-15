@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "record-detail-03",
+  "description": "A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.",
   "registryDependencies": [
     "avatar",
     "badge",

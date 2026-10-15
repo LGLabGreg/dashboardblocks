@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-08",
+  "description": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
   "registryDependencies": [
     "button",
     "card",

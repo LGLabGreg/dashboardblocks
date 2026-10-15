@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "retention-01",
+  "description": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/heatmap.json",

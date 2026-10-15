@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "status-05",
+  "description": "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/status.json"

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "schedule-02",
+  "description": "A month calendar with a dot on each day that has events, and a list of the events on the selected day.",
   "registryDependencies": [
     "button",
     "card",

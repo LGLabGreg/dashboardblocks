@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-05",
+  "description": "Storage split into categories as one segmented bar, with each category's size and share.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/progress-bar.json",

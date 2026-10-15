@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-05",
+  "description": "A table of recent orders split into pages of five, with controls to move between them.",
   "registryDependencies": [
     "badge",
     "card",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "scatter-02",
+  "description": "Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.",
   "dependencies": [
     "recharts"
   ],

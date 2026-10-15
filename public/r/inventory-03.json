@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "inventory-03",
+  "description": "Every SKU by stock status, with the value of stock on hand and how many times a year it turns over.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/billing.json",

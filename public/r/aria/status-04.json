@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "status-04",
+  "description": "A grid of regions, each with its status, latency and error rate.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/status.json"

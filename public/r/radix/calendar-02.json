@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "calendar-02",
+  "description": "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/calendar.json",

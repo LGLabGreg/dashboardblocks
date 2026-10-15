@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "goals-02",
+  "description": "Several goals for the same period, each with its own pace.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/goals.json"

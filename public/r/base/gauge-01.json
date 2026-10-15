@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "gauge-01",
+  "description": "A net promoter score on its full −100 to 100 scale, with the split of promoters, passives and detractors.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/gauge.json",

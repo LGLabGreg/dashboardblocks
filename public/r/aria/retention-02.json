@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "retention-02",
+  "description": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
   "dependencies": [
     "recharts"
   ],

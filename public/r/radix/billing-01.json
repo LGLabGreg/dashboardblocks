@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "billing-01",
+  "description": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/billing.json",

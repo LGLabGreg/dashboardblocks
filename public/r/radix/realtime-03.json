@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "realtime-03",
+  "description": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.",
   "registryDependencies": [
     "button",
     "card",

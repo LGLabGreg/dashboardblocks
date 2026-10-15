@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "area-chart-kpi-02",
+  "description": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
   "dependencies": [
     "recharts"
   ],

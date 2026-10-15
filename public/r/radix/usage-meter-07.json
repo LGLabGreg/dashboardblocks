@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-07",
+  "description": "What is left as a liquid that drains as usage grows, turning amber and then red.",
   "registryDependencies": [
     "button",
     "card",

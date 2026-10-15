@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "status-02",
+  "description": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/status.json"

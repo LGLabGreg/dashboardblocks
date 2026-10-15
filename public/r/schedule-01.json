@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "schedule-01",
+  "description": "Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/schedule.json"

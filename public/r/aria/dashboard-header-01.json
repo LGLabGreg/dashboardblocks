@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dashboard-header-01",
+  "description": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
   "registryDependencies": [
     "https://www.dashboardblocks.com/r/aria/dashboard-header.json"
   ],

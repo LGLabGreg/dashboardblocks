@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pipeline-04",
+  "description": "Closed and open deals weighted by the chance each stage closes, per owner, against their quota.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/pipeline.json",

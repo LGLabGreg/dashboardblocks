@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forms-01",
+  "description": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
   "registryDependencies": [
     "card",
     "field",

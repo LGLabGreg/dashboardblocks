@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "insights-04",
+  "description": "A short weekly summary with a headline, three takeaways and buttons to say whether it helped.",
   "registryDependencies": [
     "button",
     "card",

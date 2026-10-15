@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "settings-04",
+  "description": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
   "registryDependencies": [
     "button",
     "card",

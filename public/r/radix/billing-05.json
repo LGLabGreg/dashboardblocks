@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "billing-05",
+  "description": "Plans side by side, monthly or yearly, with seats, what is due today and what a downgrade takes away.",
   "registryDependencies": [
     "badge",
     "button",

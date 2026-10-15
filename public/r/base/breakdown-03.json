@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "breakdown-03",
+  "description": "A 10 by 10 grid of squares where each square is 1% of the total, coloured by category.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/breakdown.json"

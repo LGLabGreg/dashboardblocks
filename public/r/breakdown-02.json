@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "breakdown-02",
+  "description": "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/breakdown.json"

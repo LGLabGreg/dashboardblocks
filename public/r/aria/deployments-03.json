@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "deployments-03",
+  "description": "The four DORA delivery metrics, each with its performance band and the change on the previous period.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/deployments.json"

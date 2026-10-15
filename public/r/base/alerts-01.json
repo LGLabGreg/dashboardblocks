@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "alerts-01",
+  "description": "Open alerts, most recent first, each with a button to acknowledge it.",
   "registryDependencies": [
     "button",
     "card",

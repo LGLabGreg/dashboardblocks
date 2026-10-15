@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "calendar-01",
+  "description": "A month grid of team events, launches, travel and holidays, with the selected day listed beside it.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/calendar.json",

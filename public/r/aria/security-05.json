@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "security-05",
+  "description": "Setting up two-factor sign-in with an authenticator app, security keys and passkeys, and recovery codes shown once.",
   "registryDependencies": [
     "button",
     "card",

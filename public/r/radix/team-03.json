@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-03",
+  "description": "How many people are online, shown as avatars, with the team split by presence.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/team.json"

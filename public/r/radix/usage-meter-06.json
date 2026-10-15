@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-06",
+  "description": "Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.",
   "registryDependencies": [
     "button",
     "card",

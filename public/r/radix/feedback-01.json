@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feedback-01",
+  "description": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/feedback.json"

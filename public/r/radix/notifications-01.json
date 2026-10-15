@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "notifications-01",
+  "description": "A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.",
   "registryDependencies": [
     "button",
     "https://www.dashboardblocks.com/r/radix/link.json",

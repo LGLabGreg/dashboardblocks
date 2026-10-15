@@ -100,6 +100,7 @@ const Flow2 = (props: Flow2Props) => {
           ))}
         </dl>
         <FlowChart
+          label={title}
           colorBy='target'
           height={300}
           links={links}

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-group-01",
+  "description": "Three metrics side by side, each with its change and previous value.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/stat-group.json"

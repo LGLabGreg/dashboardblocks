@@ -1,7 +1,7 @@
 'use client'
 
 import { useInView } from '@/registry/hooks/use-in-view'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 
 type EasingFunction = (t: number) => number
 
@@ -12,6 +12,16 @@ const easings: Record<string, EasingFunction> = {
   easeInOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
   spring: (t) => 1 - Math.pow(Math.cos(t * Math.PI * 0.5), 3),
 }
+
+const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
+
+function subscribeToReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(REDUCED_MOTION)
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
+
+const prefersReducedMotion = () => window.matchMedia(REDUCED_MOTION).matches
 
 interface UseAnimatedNumberOptions {
   /** Milliseconds, 1000 by default. */
@@ -49,6 +59,11 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { isInView, ref } = useInView({ rootMargin, threshold })
+  const reducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    prefersReducedMotion,
+    () => false,
+  )
 
   const decimals = to.toString().split('.')[1]?.length || 0
 
@@ -69,6 +84,13 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
   const animate = useCallback(
     (startValue: number = displayedValueRef.current) => {
       cancel()
+
+      if (prefersReducedMotion()) {
+        displayedValueRef.current = to
+        setValue(to)
+        setIsAnimating(false)
+        return
+      }
 
       const startTime = performance.now()
 
@@ -143,10 +165,10 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
 
   return {
     animate,
-    isAnimating,
+    isAnimating: isAnimating && !reducedMotion,
     isInView,
     ref,
     reset,
-    value,
+    value: reducedMotion ? to : value,
   }
 }

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "states-04",
+  "description": "A card that says what went wrong when loading fails and offers to try again.",
   "dependencies": [
     "recharts"
   ],

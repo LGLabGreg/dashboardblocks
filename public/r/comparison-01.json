@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comparison-01",
+  "description": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/comparison.json",

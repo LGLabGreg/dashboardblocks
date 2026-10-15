@@ -110,7 +110,13 @@ const Flow1 = (props: Flow1Props) => {
             </dd>
           </div>
         </dl>
-        <FlowChart height={300} links={links} minWidth='36rem' nodes={nodes}>
+        <FlowChart
+          label={title}
+          height={300}
+          links={links}
+          minWidth='36rem'
+          nodes={nodes}
+        >
           Hover a source, page or band to follow it.
         </FlowChart>
         <ChartPanelTable

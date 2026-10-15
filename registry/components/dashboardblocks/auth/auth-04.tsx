@@ -62,6 +62,7 @@ const Auth4 = (props: Auth4Props) => {
   const [code, setCode] = useState('')
   const [checking, setChecking] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [sendError, setSendError] = useState<string | null>(null)
   const [status, setStatus] = useState('')
   const [cooldown, setCooldown] = useState(0)
   const [editing, setEditing] = useState(false)
@@ -91,6 +92,7 @@ const Auth4 = (props: Auth4Props) => {
     if (!/^\d{6}$/.test(value)) return fail('Enter all 6 digits from the email.')
     setChecking(true)
     setError(null)
+    setSendError(null)
     try {
       const ok = onVerify ? await onVerify(value) : value === '123456'
       startTransition(() => {
@@ -111,6 +113,8 @@ const Auth4 = (props: Auth4Props) => {
 
   const resend = async () => {
     setError(null)
+    setSendError(null)
+    setStatus('')
     try {
       await onResend?.()
       startTransition(() => {
@@ -119,7 +123,7 @@ const Auth4 = (props: Auth4Props) => {
       })
     } catch {
       startTransition(() =>
-        setError('We couldn’t send the email. Try again in a moment.'),
+        setSendError('We couldn’t send the email. Try again in a moment.'),
       )
     }
   }
@@ -129,6 +133,7 @@ const Auth4 = (props: Auth4Props) => {
     const address = draft.trim().toLowerCase()
     if (!EMAIL.test(address)) return fail('Enter an email address.')
     setError(null)
+    setSendError(null)
     try {
       await onChangeEmail?.(address)
       startTransition(() => {
@@ -237,6 +242,7 @@ const Auth4 = (props: Auth4Props) => {
                   setEditing(false)
                   setDraft(email)
                   setError(null)
+                  setSendError(null)
                 }}
               >
                 Cancel
@@ -262,6 +268,7 @@ const Auth4 = (props: Auth4Props) => {
               onChange={(next) => {
                 setCode(next)
                 setError(null)
+                setSendError(null)
               }}
               onComplete={(next) => void verify(next)}
               invalid={Boolean(error)}
@@ -276,19 +283,20 @@ const Auth4 = (props: Auth4Props) => {
               onClick={() => {
                 setEditing(true)
                 setError(null)
+                setSendError(null)
               }}
             >
               Wrong address? Change it
             </Button>
           </form>
         )}
-        {error && (
+        {(error ?? sendError) && (
           <p
             id={`${id}-error`}
             role='alert'
             className='text-destructive text-center text-sm'
           >
-            {error}
+            {error ?? sendError}
           </p>
         )}
         <p

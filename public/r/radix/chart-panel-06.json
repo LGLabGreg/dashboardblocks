@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-06",
+  "description": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
   "dependencies": [
     "recharts"
   ],

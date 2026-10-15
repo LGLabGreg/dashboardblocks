@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "metric-list-01",
+  "description": "A list of metrics with their change and a 14-day sparkline each.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/metric-list.json"

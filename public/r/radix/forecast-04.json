@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "forecast-04",
+  "description": "Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.",
   "dependencies": [
     "recharts"
   ],

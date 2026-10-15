@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "bar-chart-kpi-01",
+  "description": "The week's total with a bar for each day and the change on the week before.",
   "dependencies": [
     "recharts"
   ],

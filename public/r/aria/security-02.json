@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "security-02",
+  "description": "Changes to access, keys and settings, newest first, with a switch to show warnings only.",
   "registryDependencies": [
     "button",
     "card",

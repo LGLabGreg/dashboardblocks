@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "retention-03",
+  "description": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/retention.json"

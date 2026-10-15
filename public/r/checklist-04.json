@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checklist-04",
+  "description": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/checklist.json",

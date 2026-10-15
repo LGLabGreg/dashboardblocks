@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "files-04",
+  "description": "Folders and files in a grid with a path back to the top, and a menu on each file.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/activity-feed.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "insights-03",
+  "description": "What contributed to a change, as bars either side of zero, with a sentence naming the biggest driver and the biggest drag.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/comparison.json",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "flow-04",
+  "description": "The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/flow.json"

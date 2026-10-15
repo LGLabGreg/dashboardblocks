@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feedback-03",
+  "description": "The latest reviews with their rating and source, flagging low ratings still waiting for a reply.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/feedback.json",

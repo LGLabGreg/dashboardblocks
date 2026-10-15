@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "app-shell-02",
+  "description": "An app shell whose sidebar collapses to icons with tooltips, with nested links and help and settings pinned to the bottom.",
   "registryDependencies": [
     "button",
     "separator",

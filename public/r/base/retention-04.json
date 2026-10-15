@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "retention-04",
+  "description": "Users gained above the axis and lost below it, with the net change and the quick ratio.",
   "dependencies": [
     "recharts"
   ],

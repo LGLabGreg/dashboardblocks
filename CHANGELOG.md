@@ -1,5 +1,23 @@
 # dashboardblocks
 
+## 1.5.0
+
+### Minor Changes
+
+- 053f070: AI Assistant's log is built on shadcn's Message Scroller, which installs with it and adds the `@shadcn/react` package. A new question (and one you retry or regenerate) moves to the top of the log and its reply grows below it, a saved conversation opens at its last question, and the log stops following a reply when you select text in it, as it already did when you scroll up. Screen readers still hear each reply once, when it's done.
+  
+  `ChatMessage` now has to render inside `ChatMessages`: wrap a message you show on its own in one.
+- 38b04a0: AI Assistant is built on shadcn's Message, Bubble, Marker and Attachment, so it takes your style's chat look: the question is a Bubble, the typing indicator says "Thinking…" with a spinner, a failed reply is a destructive Bubble, suggested prompt chips are outline buttons in a row that scrolls sideways, and the context chip is an Attachment.
+  
+  Breaking: the message formatter `MessageContent` is renamed `ChatMessageContent`, since shadcn's Message exports a `MessageContent` of its own.
+- 73bcdf8: AI Assistant's code and the details on the Something Went Wrong error page use shadcn's Code Block, so they take your style. Code in a reply is highlighted as it streams, SQL included. Both now install `code-block`, which adds the `shiki` package to your project.
+
+### Patch Changes
+
+- 410c228: Every block's registry item has a description saying what it shows, so shadcn's MCP server finds blocks by what you ask for. New docs page: [MCP server](https://www.dashboardblocks.com/docs/mcp), on letting Claude Code, Cursor, VS Code, Codex or OpenCode find and install blocks.
+- f7d3223: Code in AI Assistant and the error details in Error Pages read left to right on right-to-left pages, and AI Assistant's spacing and alignment follow the page's direction.
+- 73b0965: `TinyBarChart`, `TinyLineChart` and `TinyAreaChart` take a `label`, which names the chart for keyboard and screen reader users while its keyboard layer is on.
+
 ## 1.4.1
 
 ### Patch Changes

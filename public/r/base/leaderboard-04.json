@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard-04",
+  "description": "Products ranked by revenue with how far each moved in the ranking since the last period.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/icon.json",

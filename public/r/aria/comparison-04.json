@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "comparison-04",
+  "description": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/comparison.json",

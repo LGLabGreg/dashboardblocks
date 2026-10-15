@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dashboard-header-03",
+  "description": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
   "registryDependencies": [
     "button",
     "button-group",

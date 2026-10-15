@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "team-01",
+  "description": "A list of members with their role, whether they are online and when they were last active.",
   "registryDependencies": [
     "button",
     "card",

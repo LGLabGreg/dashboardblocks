@@ -131,7 +131,14 @@ const Timeline1 = (props: Timeline1Props) => {
             </li>
           ))}
         </ul>
-        <Timeline end={end} items={items} minWidth='40rem' now={now} start={start}>
+        <Timeline
+          end={end}
+          items={items}
+          label={title}
+          minWidth='40rem'
+          now={now}
+          start={start}
+        >
           Bars fill to each project&apos;s progress. Hover one for its dates.
         </Timeline>
       </CardContent>

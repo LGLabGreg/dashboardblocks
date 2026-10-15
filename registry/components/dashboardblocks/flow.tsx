@@ -201,6 +201,8 @@ interface FlowChartProps {
   format?: (value: number) => string
   /** @default 280 */
   height?: number
+  /** Names the sideways scroll region `minWidth` adds. @default 'Flow' */
+  label?: string
   links: FlowLink[]
   /** Keeps labels legible in narrow cards: below this width the chart scrolls sideways. */
   minWidth?: string
@@ -215,6 +217,7 @@ function FlowChart({
   describeNode,
   format = (value) => value.toLocaleString(),
   height = 280,
+  label = 'Flow',
   links,
   minWidth,
   nodes,
@@ -273,7 +276,16 @@ function FlowChart({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <div className={cn(minWidth && '-my-1 overflow-x-auto py-1')}>
+      <div
+        role={minWidth ? 'region' : undefined}
+        aria-label={minWidth ? label : undefined}
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+        tabIndex={minWidth ? 0 : undefined}
+        className={cn(
+          minWidth &&
+            'focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none focus-visible:ring-3',
+        )}
+      >
         <div ref={frame} aria-hidden style={{ height, minWidth }}>
           {width > 0 && (
             <svg

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kanban-03",
+  "description": "A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/kanban.json"

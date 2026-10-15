@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-03",
+  "description": "Monthly totals as stacked bars split by category, with a legend.",
   "dependencies": [
     "recharts"
   ],

@@ -1,0 +1,63 @@
+name: Pro bug
+description: A Pro item doesn't install, or doesn't work as its page describes.
+title: '[Pro] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues here are public, so don't paste Pro source code: the licence doesn't allow sharing it. Name the file and the lines instead, or email the snippet to support@dashboardblocks.com.
+
+        Questions about your licence, account or a payment go to support@dashboardblocks.com, not here.
+  - type: input
+    id: item
+    attributes:
+      label: Pro item
+      description: The item's name, as in its install command, such as `data-grid` or `saas-admin`.
+    validations:
+      required: true
+  - type: input
+    id: cli
+    attributes:
+      label: shadcn CLI version
+      description: What `npx shadcn --version` prints in your project.
+    validations:
+      required: true
+  - type: dropdown
+    id: base
+    attributes:
+      label: Component library
+      options:
+        - Base UI
+        - Radix UI
+        - React Aria
+    validations:
+      required: true
+  - type: input
+    id: preset
+    attributes:
+      label: Preset
+      description: The code `npx shadcn preset resolve` prints in your project, or your style and icon library (such as Nova and Lucide).
+    validations:
+      required: true
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options:
+        - Next.js
+        - Vite
+        - Other
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Paste error messages and the CLI's output, not the item's code.
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-code
+    attributes:
+      label: Pro code
+      options:
+        - label: This issue has no Pro source code in it.
+          required: true

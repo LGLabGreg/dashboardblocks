@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "command-menu-02",
+  "description": "A command palette that shows recent records, then searches customers and orders as you type.",
   "registryDependencies": [
     "https://www.dashboardblocks.com/r/aria/command-menu.json"
   ],

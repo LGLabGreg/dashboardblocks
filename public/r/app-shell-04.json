@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "app-shell-04",
+  "description": "An app shell with no sidebar: page links sit under the top bar and scroll sideways on small screens.",
   "registryDependencies": [
     "https://www.dashboardblocks.com/r/app-shell.json",
     "https://www.dashboardblocks.com/r/link.json"

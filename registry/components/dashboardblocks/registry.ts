@@ -849,8 +849,18 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'AI Assistant',
     description:
-      'Primitives for AI chat: a scrolling log that follows streamed replies and reads each one out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
-    registryDependencies: ['button', 'input-group'],
+      'Primitives for AI chat: a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
+    registryDependencies: [
+      'attachment',
+      'bubble',
+      'button',
+      'code-block',
+      'input-group',
+      'marker',
+      'message',
+      'message-scroller',
+      'use-highlighted-code',
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant.tsx',

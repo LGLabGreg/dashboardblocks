@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "geo-01",
+  "description": "Revenue by US state as a tile map on a single-hue scale, with the total and the top five states.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/geo.json",

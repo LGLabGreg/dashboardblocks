@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "line-chart-kpi-01",
+  "description": "This week against the same days last week, drawn as a solid and a dashed line.",
   "dependencies": [
     "recharts"
   ],

@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "funnel-01",
+  "description": "Each stage as a bar sized against the first, with the conversion at each step and overall.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/funnel.json"

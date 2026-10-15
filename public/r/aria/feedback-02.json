@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feedback-02",
+  "description": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/feedback.json"

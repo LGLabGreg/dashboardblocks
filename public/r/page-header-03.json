@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "page-header-03",
+  "description": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
   "registryDependencies": [
     "avatar",
     "badge",

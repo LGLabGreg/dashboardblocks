@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "files-02",
+  "description": "A table of files with type, owner, last change and size, with search, type filter, sorting and bulk download or delete.",
   "registryDependencies": [
     "avatar",
     "button",

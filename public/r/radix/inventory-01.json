@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "inventory-01",
+  "description": "Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/inventory.json"

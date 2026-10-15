@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "invoice-03",
+  "description": "A quote with optional items to tick before accepting, totals that follow and an expiry date.",
   "registryDependencies": [
     "badge",
     "button",

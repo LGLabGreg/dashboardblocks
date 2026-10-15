@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "notifications-02",
+  "description": "Notifications that ask for a decision, such as a request to join or a refund, with a tab for the ones still waiting.",
   "registryDependencies": [
     "button",
     "tabs",

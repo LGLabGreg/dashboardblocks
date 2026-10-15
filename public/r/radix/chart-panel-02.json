@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart-panel-02",
+  "description": "A chart with tabs for related metrics, each tab showing its total and change.",
   "dependencies": [
     "recharts"
   ],

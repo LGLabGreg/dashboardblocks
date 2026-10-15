@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "deployments-02",
+  "description": "What each environment is running, and how many commits are waiting to be promoted to the next one.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/deployments.json"

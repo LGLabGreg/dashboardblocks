@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "ai-assistant-04",
+  "description": "A failed assistant reply kept in the conversation with a button to try again.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/ai-assistant.json"

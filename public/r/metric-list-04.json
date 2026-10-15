@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "metric-list-04",
+  "description": "A list of metrics where picking one charts it in the same card.",
   "dependencies": [
     "recharts"
   ],

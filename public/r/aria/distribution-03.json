@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "distribution-03",
+  "description": "The median, mean and percentiles of a set of values, with a note when a long tail pulls the mean away.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/distribution.json"

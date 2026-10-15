@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard-01",
+  "description": "Ranked rows with a background bar sized relative to the leader.",
   "registryDependencies": [
     "button",
     "card",

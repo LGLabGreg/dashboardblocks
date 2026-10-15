@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "files-01",
+  "description": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
   "registryDependencies": [
     "button",
     "card",

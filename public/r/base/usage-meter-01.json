@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "usage-meter-01",
+  "description": "An API quota with its status, when it resets and the usage it is on pace for, with the date it would hit the limit.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/base/icon.json",

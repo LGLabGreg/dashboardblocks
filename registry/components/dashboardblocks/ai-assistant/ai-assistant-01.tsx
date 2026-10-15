@@ -289,7 +289,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
         <aside
           id={panelId}
           aria-label='Assistant'
-          className='bg-background flex w-full flex-col border-l @3xl:w-96'
+          className='bg-background flex w-full flex-col border-s @3xl:w-96'
         >
           <ChatHeader
             title='Assistant'

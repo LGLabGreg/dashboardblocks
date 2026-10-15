@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "geo-02",
+  "description": "The leading countries with flags, values and shares, and the rest summed into one row.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/geo.json"

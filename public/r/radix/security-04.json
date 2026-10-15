@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "security-04",
+  "description": "A security score built from workspace checks, with failing checks first and what to do about each.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/radix/ring.json",

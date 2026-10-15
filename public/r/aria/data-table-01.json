@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-01",
+  "description": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
   "registryDependencies": [
     "card",
     "https://www.dashboardblocks.com/r/aria/data-table.json"

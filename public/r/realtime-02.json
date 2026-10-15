@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "realtime-02",
+  "description": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.",
   "dependencies": [
     "recharts"
   ],

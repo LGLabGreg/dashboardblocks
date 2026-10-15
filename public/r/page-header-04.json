@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "page-header-04",
+  "description": "A page title with a count beside it, and search and the main action on the same row.",
   "registryDependencies": [
     "badge",
     "button",

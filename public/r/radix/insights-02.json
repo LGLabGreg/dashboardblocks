@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "insights-02",
+  "description": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
   "dependencies": [
     "recharts"
   ],

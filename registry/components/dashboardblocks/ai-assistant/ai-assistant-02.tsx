@@ -40,9 +40,9 @@ const minutesAgo = (minutes: number) => new Date(exampleNow.getTime() - minutes 
 const exampleProps: AiAssistant2Props = {
   description: 'Ask questions about your product analytics',
   followUps: [
-    { label: 'Compare with the week before' },
-    { label: 'Which pages lost the most sessions?' },
-    { label: 'Draft a note for the payments team' },
+    { label: 'Compare with last week', prompt: 'Compare with the week before' },
+    { label: 'Pages that lost sessions', prompt: 'Which pages lost the most sessions?' },
+    { label: 'Note for payments', prompt: 'Draft a note for the payments team' },
   ],
   messages: [
     {

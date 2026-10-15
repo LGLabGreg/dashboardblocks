@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "alerts-04",
+  "description": "A slim strip with open alerts by severity and the latest one, for the top of a dashboard.",
   "registryDependencies": [
     "button",
     "card",

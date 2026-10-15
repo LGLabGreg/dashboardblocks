@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "billing-03",
+  "description": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
   "registryDependencies": [
     "button",
     "card",

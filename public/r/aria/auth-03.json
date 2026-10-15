@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "auth-03",
+  "description": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device.",
   "registryDependencies": [
     "button",
     "input",

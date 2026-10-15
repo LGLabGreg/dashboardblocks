@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "settings-02",
+  "description": "API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.",
   "registryDependencies": [
     "badge",
     "button",

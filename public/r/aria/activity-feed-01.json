@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "activity-feed-01",
+  "description": "What people did across a workspace, newest first and grouped by day.",
   "registryDependencies": [
     "button",
     "card",
