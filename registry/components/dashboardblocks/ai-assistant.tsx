@@ -608,7 +608,7 @@ function ChatLog({
         onKeyDown={(event) => {
           if (SCROLL_KEYS.has(event.key)) release()
         }}
-        className='focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset'
+        className='mask-none focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset'
       >
         <MessageScrollerContent
           ref={contentRef}
@@ -850,7 +850,7 @@ function SuggestedPrompts({
       aria-label={label}
       className={cn(
         variant === 'chips'
-          ? 'scroll-fade-x -mx-1 flex scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain p-1'
+          ? '-mx-1 flex scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain p-1'
           : 'flex flex-col gap-2',
         className,
       )}

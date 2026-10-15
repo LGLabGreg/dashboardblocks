@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.5.2
+
+### Patch Changes
+
+- b317095: AI Assistant's suggested questions and its conversation no longer fade out at the edges.
+
 ## 1.5.1
 
 ### Patch Changes
