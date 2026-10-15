@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.5.1
+
+### Patch Changes
+
+- 3e6b0c0: AI Assistant shows the assistant's avatar at the top of its reply instead of the bottom. Code in a reply, and the technical details on Error Pages, no longer fade out at the edges.
+
 ## 1.5.0
 
 ### Minor Changes

@@ -267,7 +267,7 @@ function ChatCodeBlock({
           <CodeBlockCopyButton size='icon-sm' aria-label='Copy code' value={code} />
         </CodeBlockActions>
       </CodeBlockHeader>
-      <CodeBlockContent>
+      <CodeBlockContent className='mask-none'>
         {lines.map((line, index) => (
           <CodeBlockLine key={index}>
             {caret && index === lines.length - 1 ? (
@@ -704,7 +704,11 @@ function ChatMessage({
 }
 
 function AssistantMessageAvatar({ avatar }: { avatar?: ReactNode }) {
-  return <MessageAvatar>{avatar ?? <AssistantAvatar className='size-8' />}</MessageAvatar>
+  return (
+    <MessageAvatar className='self-start group-has-data-[slot=message-footer]/message:translate-y-0'>
+      {avatar ?? <AssistantAvatar className='size-8' />}
+    </MessageAvatar>
+  )
 }
 
 interface ChatMessageActionsProps {

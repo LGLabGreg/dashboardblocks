@@ -166,7 +166,9 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
                   />
                 </CodeBlockActions>
               </CodeBlockHeader>
-              <CodeBlockContent wrap>{details}</CodeBlockContent>
+              <CodeBlockContent wrap className='data-wrap:mask-none'>
+                {details}
+              </CodeBlockContent>
             </CodeBlock>
           </details>
         )}
