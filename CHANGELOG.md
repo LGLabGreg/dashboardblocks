@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.5.5
+
+### Patch Changes
+
+- 7063367: The README's screenshot now shows on sites that display it outside GitHub, such as shadhub.dev.
+
 ## 1.5.4
 
 ### Patch Changes
