@@ -18,7 +18,8 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Milestone {
-  date: Date
+  /** Leave it out while a milestone has no date: the row shows none. */
+  date?: Date
   description?: string
   id: string
   label: string
@@ -97,7 +98,7 @@ const Timeline2 = (props: Timeline2Props) => {
       <CardContent>
         <ol className='flex flex-col'>
           {milestones.map((milestone, index) => {
-            const days = getDaysBetween(now, milestone.date)
+            const days = milestone.date ? getDaysBetween(now, milestone.date) : 0
             const isNext = milestone.id === next?.id
             const overdue = milestone.status !== 'done' && days < 0
             return (
@@ -114,7 +115,7 @@ const Timeline2 = (props: Timeline2Props) => {
                   />
                 )}
                 <TimelineStatusLabel
-                  className='bg-card relative mt-0.5 [&_svg]:size-5'
+                  className='bg-card relative mt-0.5 self-start [&_svg]:size-5'
                   status={milestone.status}
                 />
                 <div
@@ -140,19 +141,23 @@ const Timeline2 = (props: Timeline2Props) => {
                         </span>
                       )}
                     </span>
-                    <span className='text-muted-foreground text-xs tabular-nums'>
-                      {formatTimelineDate(milestone.date)}
-                      {milestone.status !== 'done' && (
-                        <span
-                          className={cn(
-                            'ml-1.5',
-                            overdue && 'text-red-700 dark:text-red-400',
-                          )}
-                        >
-                          {overdue ? `${-days} days late` : relative.format(days, 'day')}
-                        </span>
-                      )}
-                    </span>
+                    {milestone.date && (
+                      <span className='text-muted-foreground text-xs tabular-nums'>
+                        {formatTimelineDate(milestone.date)}
+                        {milestone.status !== 'done' && (
+                          <span
+                            className={cn(
+                              'ml-1.5',
+                              overdue && 'text-red-700 dark:text-red-400',
+                            )}
+                          >
+                            {overdue
+                              ? `${-days} days late`
+                              : relative.format(days, 'day')}
+                          </span>
+                        )}
+                      </span>
+                    )}
                   </div>
                   {milestone.description && (
                     <span className='text-muted-foreground text-sm'>

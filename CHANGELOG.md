@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.5.3
+
+### Patch Changes
+
+- 5c785a7: Timeline 2's milestones take an optional date. A milestone without one, such as a step that waits on an event rather than a day, shows no date.
+  
+  Its status icons now stay beside the milestone's name when the description wraps.
+
 ## 1.5.2
 
 ### Patch Changes
