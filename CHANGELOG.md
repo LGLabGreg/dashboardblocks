@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.5.4
+
+### Patch Changes
+
+- 955b297: This repository is now a GitHub registry, so you can install any block with `npx shadcn add LGLabGreg/dashboardblocks/<name>`. You get the same copy as `@dashboardblocks/<name>`, for your project's base.
+
 ## 1.5.3
 
 ### Patch Changes

@@ -1,0 +1,2540 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "dashboardblocks",
+  "homepage": "https://www.dashboardblocks.com",
+  "items": [
+    {
+      "name": "activity-feed",
+      "type": "registry:component",
+      "title": "Activity Feed",
+      "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed"
+      ]
+    },
+    {
+      "name": "ai-usage",
+      "type": "registry:component",
+      "title": "AI Usage",
+      "description": "Primitives for LLM usage: token cost at per-million prices with cached input billed separately, cache savings and hit rate, compact token and dollar formatting, model colours in a fixed order and an input, cached and output token bar.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-usage"
+      ]
+    },
+    {
+      "name": "alerts",
+      "type": "registry:component",
+      "title": "Alerts",
+      "description": "Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.",
+      "registryDependencies": [
+        "@dashboardblocks/alerts"
+      ]
+    },
+    {
+      "name": "animated-number",
+      "type": "registry:component",
+      "title": "Animated Number",
+      "description": "An animated number component.",
+      "registryDependencies": [
+        "@dashboardblocks/animated-number"
+      ]
+    },
+    {
+      "name": "animated-wave",
+      "type": "registry:component",
+      "title": "Animated Wave",
+      "description": "An animated wave component.",
+      "registryDependencies": [
+        "@dashboardblocks/animated-wave"
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:component",
+      "title": "App Shell",
+      "description": "Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, plan usage and a top navigation row.",
+      "registryDependencies": [
+        "@dashboardblocks/app-shell"
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:component",
+      "title": "Chart",
+      "description": "Chart components.",
+      "registryDependencies": [
+        "@dashboardblocks/chart"
+      ]
+    },
+    {
+      "name": "auth",
+      "type": "registry:component",
+      "title": "Auth",
+      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.",
+      "registryDependencies": [
+        "@dashboardblocks/auth"
+      ]
+    },
+    {
+      "name": "billing",
+      "type": "registry:component",
+      "title": "Billing",
+      "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
+      "registryDependencies": [
+        "@dashboardblocks/billing"
+      ]
+    },
+    {
+      "name": "block-state",
+      "type": "registry:component",
+      "title": "Block State",
+      "description": "Primitives for loading, refreshing, empty and error states: a skeleton, a dimmed frame that keeps its layout while it refreshes, a message with an action, and a data-loading hook.",
+      "registryDependencies": [
+        "@dashboardblocks/block-state"
+      ]
+    },
+    {
+      "name": "breakdown",
+      "type": "registry:component",
+      "title": "Breakdown",
+      "description": "Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.",
+      "registryDependencies": [
+        "@dashboardblocks/breakdown"
+      ]
+    },
+    {
+      "name": "chart-panel",
+      "type": "registry:component",
+      "title": "Chart Panel",
+      "description": "Primitives for full-size chart panels: tooltip, legend, axis defaults and an accessible data table.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel"
+      ]
+    },
+    {
+      "name": "checklist",
+      "type": "registry:component",
+      "title": "Checklist",
+      "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.",
+      "registryDependencies": [
+        "@dashboardblocks/checklist"
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table"
+      ]
+    },
+    {
+      "name": "command-menu",
+      "type": "registry:component",
+      "title": "Command Menu",
+      "description": "Primitives for a command menu: a search dialog of pages, actions and records that filters as you type or shows results you fetch, with descriptions, shortcuts and a searching state, a search button with ⌘K, and a shortcut hook.",
+      "registryDependencies": [
+        "@dashboardblocks/command-menu"
+      ]
+    },
+    {
+      "name": "comparison",
+      "type": "registry:component",
+      "title": "Comparison",
+      "description": "Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.",
+      "registryDependencies": [
+        "@dashboardblocks/comparison"
+      ]
+    },
+    {
+      "name": "dashboard-header",
+      "type": "registry:component",
+      "title": "Dashboard Header",
+      "description": "Primitives for dashboard headers: a date range preset menu, a compare switch, filter menus, filter chips and an export menu.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-header"
+      ]
+    },
+    {
+      "name": "deployments",
+      "type": "registry:component",
+      "title": "Deployments",
+      "description": "Primitives for deployments: ready, failed, running, queued and rolled back statuses each with an icon and label, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA badge and a run history strip.",
+      "registryDependencies": [
+        "@dashboardblocks/deployments"
+      ]
+    },
+    {
+      "name": "distribution",
+      "type": "registry:component",
+      "title": "Distribution",
+      "description": "Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.",
+      "registryDependencies": [
+        "@dashboardblocks/distribution"
+      ]
+    },
+    {
+      "name": "error-pages",
+      "type": "registry:component",
+      "title": "Error Pages",
+      "description": "Primitives for error and interruption pages: a full-page frame with your brand, a centred message, an optional code and icon, actions and footer links, plus UTC time and duration formatting.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages"
+      ]
+    },
+    {
+      "name": "feedback",
+      "type": "registry:component",
+      "title": "Feedback",
+      "description": "Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.",
+      "registryDependencies": [
+        "@dashboardblocks/feedback"
+      ]
+    },
+    {
+      "name": "flow",
+      "type": "registry:component",
+      "title": "Flow",
+      "description": "Primitives for flows: a Sankey layout that places nodes in columns and links as bands, keeping each flow's colour downstream and drawing drop-offs muted, a Sankey chart with hover highlighting and a readout, and path steps as chips.",
+      "registryDependencies": [
+        "@dashboardblocks/flow"
+      ]
+    },
+    {
+      "name": "forecast",
+      "type": "registry:component",
+      "title": "Forecast",
+      "description": "Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.",
+      "registryDependencies": [
+        "@dashboardblocks/forecast"
+      ]
+    },
+    {
+      "name": "forms",
+      "type": "registry:component",
+      "title": "Forms",
+      "description": "Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.",
+      "registryDependencies": [
+        "@dashboardblocks/forms"
+      ]
+    },
+    {
+      "name": "funnel",
+      "type": "registry:component",
+      "title": "Funnel",
+      "description": "Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.",
+      "registryDependencies": [
+        "@dashboardblocks/funnel"
+      ]
+    },
+    {
+      "name": "gauge",
+      "type": "registry:component",
+      "title": "Gauge",
+      "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
+      "registryDependencies": [
+        "@dashboardblocks/gauge"
+      ]
+    },
+    {
+      "name": "geo",
+      "type": "registry:component",
+      "title": "Geo",
+      "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
+      "registryDependencies": [
+        "@dashboardblocks/geo"
+      ]
+    },
+    {
+      "name": "goals",
+      "type": "registry:component",
+      "title": "Goals",
+      "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
+      "registryDependencies": [
+        "@dashboardblocks/goals"
+      ]
+    },
+    {
+      "name": "heatmap",
+      "type": "registry:component",
+      "title": "Heatmap",
+      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.",
+      "registryDependencies": [
+        "@dashboardblocks/heatmap"
+      ]
+    },
+    {
+      "name": "icon",
+      "type": "registry:component",
+      "title": "Icon",
+      "description": "An icon component.",
+      "registryDependencies": [
+        "@dashboardblocks/icon"
+      ]
+    },
+    {
+      "name": "insights",
+      "type": "registry:component",
+      "title": "Insights",
+      "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a \"why\" line of drivers.",
+      "registryDependencies": [
+        "@dashboardblocks/insights"
+      ]
+    },
+    {
+      "name": "inventory",
+      "type": "registry:component",
+      "title": "Inventory",
+      "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
+      "registryDependencies": [
+        "@dashboardblocks/inventory"
+      ]
+    },
+    {
+      "name": "kpi",
+      "type": "registry:component",
+      "title": "KPI",
+      "description": "Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi"
+      ]
+    },
+    {
+      "name": "leaderboard",
+      "type": "registry:component",
+      "title": "Leaderboard",
+      "description": "Primitives for composing ranked lists and leaderboards.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard"
+      ]
+    },
+    {
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "A link provider that makes every primitive render your router's link, for client-side navigation, with plain anchors as the default.",
+      "registryDependencies": [
+        "@dashboardblocks/link"
+      ]
+    },
+    {
+      "name": "metric-list",
+      "type": "registry:component",
+      "title": "Metric List",
+      "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
+      "registryDependencies": [
+        "@dashboardblocks/metric-list"
+      ]
+    },
+    {
+      "name": "notifications",
+      "type": "registry:component",
+      "title": "Notifications",
+      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.",
+      "registryDependencies": [
+        "@dashboardblocks/notifications"
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:component",
+      "title": "Page Header",
+      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.",
+      "registryDependencies": [
+        "@dashboardblocks/page-header"
+      ]
+    },
+    {
+      "name": "pipeline",
+      "type": "registry:component",
+      "title": "Pipeline",
+      "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.",
+      "registryDependencies": [
+        "@dashboardblocks/pipeline"
+      ]
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:component",
+      "title": "Progress Bar",
+      "description": "A progress bar component.",
+      "registryDependencies": [
+        "@dashboardblocks/progress-bar"
+      ]
+    },
+    {
+      "name": "realtime",
+      "type": "registry:component",
+      "title": "Realtime",
+      "description": "Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live badge that stays still for reduced motion, a number that counts to each new value, rolling bars and a short time-ago format.",
+      "registryDependencies": [
+        "@dashboardblocks/realtime"
+      ]
+    },
+    {
+      "name": "record-detail",
+      "type": "registry:component",
+      "title": "Record Detail",
+      "description": "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+      "registryDependencies": [
+        "@dashboardblocks/record-detail"
+      ]
+    },
+    {
+      "name": "retention",
+      "type": "registry:component",
+      "title": "Retention",
+      "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.",
+      "registryDependencies": [
+        "@dashboardblocks/retention"
+      ]
+    },
+    {
+      "name": "ring",
+      "type": "registry:component",
+      "title": "Ring",
+      "description": "A ring component.",
+      "registryDependencies": [
+        "@dashboardblocks/ring"
+      ]
+    },
+    {
+      "name": "scatter",
+      "type": "registry:component",
+      "title": "Scatter",
+      "description": "Primitives for scatter plots and matrices: a least-squares line with the correlation coefficient described in words, a median, categorical colours in a fixed order, point tooltip content, and risk levels from likelihood and impact with a labelled swatch.",
+      "registryDependencies": [
+        "@dashboardblocks/scatter"
+      ]
+    },
+    {
+      "name": "schedule",
+      "type": "registry:component",
+      "title": "Schedule",
+      "description": "Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.",
+      "registryDependencies": [
+        "@dashboardblocks/schedule"
+      ]
+    },
+    {
+      "name": "security",
+      "type": "registry:component",
+      "title": "Security",
+      "description": "Primitives for security: info, warning and critical audit severities and passing, attention and failing check results, each with an icon and label, a desktop or phone device icon, a weighted security score and a time-since format.",
+      "registryDependencies": [
+        "@dashboardblocks/security"
+      ]
+    },
+    {
+      "name": "settings",
+      "type": "registry:component",
+      "title": "Settings",
+      "description": "Primitives for settings pages: owner, admin, member and viewer roles with what each can do and a menu to pick one, a row that puts a label and description beside its control, connected, needs attention, paused and not connected statuses each with an icon and label, secret masking, a copy button that announces itself, and relative and UTC date formatting.",
+      "registryDependencies": [
+        "@dashboardblocks/settings"
+      ]
+    },
+    {
+      "name": "spend",
+      "type": "registry:component",
+      "title": "Spend",
+      "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.",
+      "registryDependencies": [
+        "@dashboardblocks/spend"
+      ]
+    },
+    {
+      "name": "stat-group",
+      "type": "registry:component",
+      "title": "Stat Group",
+      "description": "Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group"
+      ]
+    },
+    {
+      "name": "status",
+      "type": "registry:component",
+      "title": "Status",
+      "description": "Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.",
+      "registryDependencies": [
+        "@dashboardblocks/status"
+      ]
+    },
+    {
+      "name": "team",
+      "type": "registry:component",
+      "title": "Team",
+      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a \"+N\" overflow.",
+      "registryDependencies": [
+        "@dashboardblocks/team"
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:component",
+      "title": "Timeline",
+      "description": "Primitives for timelines: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis, grid lines, a today line and a Gantt-style timeline with grouped rows, progress fills and a readout.",
+      "registryDependencies": [
+        "@dashboardblocks/timeline"
+      ]
+    },
+    {
+      "name": "trend",
+      "type": "registry:component",
+      "title": "Trend",
+      "description": "A trend indicator component.",
+      "registryDependencies": [
+        "@dashboardblocks/trend"
+      ]
+    },
+    {
+      "name": "usage-meter",
+      "type": "registry:component",
+      "title": "Usage Meter",
+      "description": "Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter"
+      ]
+    },
+    {
+      "name": "kanban",
+      "type": "registry:component",
+      "title": "Kanban",
+      "description": "Primitives for kanban boards: a board of columns with drag and drop by mouse, touch and keyboard and announced moves, columns with counts, WIP limits that warn or block and collapsing, cards with a move menu, labels, assignees, due dates, priorities, stats and subtasks, an inline add-card form and a helper that moves a card in your array.",
+      "registryDependencies": [
+        "@dashboardblocks/kanban"
+      ]
+    },
+    {
+      "name": "comments",
+      "type": "registry:component",
+      "title": "Comments",
+      "description": "Primitives for comments: threads with one level of replies joined by a line, a composer that suggests people after @ and submits with ⌘ Enter, highlighted mentions, reaction toggles with an emoji picker, an edit and delete menu, and resolved threads that collapse to a summary.",
+      "registryDependencies": [
+        "@dashboardblocks/comments"
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:component",
+      "title": "Calendar",
+      "description": "Primitives for calendars: a toolbar with today, previous, next and a view switch, a keyboard-navigable month grid with event chips, multi-day bars and \"+N more\", week and resource views on an hour axis with overlapping events side by side and a now line, an event list for narrow screens, inline event details, a legend that can filter calendars, and date helpers for weeks, event days and lanes.",
+      "registryDependencies": [
+        "@dashboardblocks/calendar"
+      ]
+    },
+    {
+      "name": "files",
+      "type": "registry:component",
+      "title": "Files",
+      "description": "Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.",
+      "registryDependencies": [
+        "@dashboardblocks/files"
+      ]
+    },
+    {
+      "name": "ai-assistant",
+      "type": "registry:component",
+      "title": "AI Assistant",
+      "description": "Primitives for AI chat: a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-assistant"
+      ]
+    },
+    {
+      "name": "invoice",
+      "type": "registry:component",
+      "title": "Invoice",
+      "description": "Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.",
+      "registryDependencies": [
+        "@dashboardblocks/invoice"
+      ]
+    },
+    {
+      "name": "onboarding",
+      "type": "registry:component",
+      "title": "Onboarding",
+      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.",
+      "registryDependencies": [
+        "@dashboardblocks/onboarding"
+      ]
+    },
+    {
+      "name": "kpi-01",
+      "type": "registry:component",
+      "description": "A single value with its change and what it is compared with.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi-01"
+      ]
+    },
+    {
+      "name": "kpi-02",
+      "type": "registry:component",
+      "description": "A value with its change shown as a badge beside the label.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi-02"
+      ]
+    },
+    {
+      "name": "kpi-03",
+      "type": "registry:component",
+      "description": "A rate with its previous value underneath and the change in percentage points.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi-03"
+      ]
+    },
+    {
+      "name": "progress-kpi-01",
+      "type": "registry:component",
+      "description": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
+      "registryDependencies": [
+        "@dashboardblocks/progress-kpi-01"
+      ]
+    },
+    {
+      "name": "progress-kpi-02",
+      "type": "registry:component",
+      "description": "The share of work done, with a bar for each status.",
+      "registryDependencies": [
+        "@dashboardblocks/progress-kpi-02"
+      ]
+    },
+    {
+      "name": "progress-kpi-03",
+      "type": "registry:component",
+      "description": "A count against a goal as a ring, with how many are left to go.",
+      "registryDependencies": [
+        "@dashboardblocks/progress-kpi-03"
+      ]
+    },
+    {
+      "name": "bar-chart-kpi-01",
+      "type": "registry:component",
+      "description": "The week's total with a bar for each day and the change on the week before.",
+      "registryDependencies": [
+        "@dashboardblocks/bar-chart-kpi-01"
+      ]
+    },
+    {
+      "name": "bar-chart-kpi-02",
+      "type": "registry:component",
+      "description": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
+      "registryDependencies": [
+        "@dashboardblocks/bar-chart-kpi-02"
+      ]
+    },
+    {
+      "name": "line-chart-kpi-01",
+      "type": "registry:component",
+      "description": "This week against the same days last week, drawn as a solid and a dashed line.",
+      "registryDependencies": [
+        "@dashboardblocks/line-chart-kpi-01"
+      ]
+    },
+    {
+      "name": "area-chart-kpi-01",
+      "type": "registry:component",
+      "description": "Gross profit with its margin, and revenue and profit by day as stacked areas.",
+      "registryDependencies": [
+        "@dashboardblocks/area-chart-kpi-01"
+      ]
+    },
+    {
+      "name": "area-chart-kpi-02",
+      "type": "registry:component",
+      "description": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
+      "registryDependencies": [
+        "@dashboardblocks/area-chart-kpi-02"
+      ]
+    },
+    {
+      "name": "activity-feed-01",
+      "type": "registry:component",
+      "description": "What people did across a workspace, newest first and grouped by day.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed-01"
+      ]
+    },
+    {
+      "name": "activity-feed-02",
+      "type": "registry:component",
+      "description": "The history of one record as a timeline, with each change shown from the old value to the new one and comments quoted in full.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed-02"
+      ]
+    },
+    {
+      "name": "activity-feed-03",
+      "type": "registry:component",
+      "description": "Notifications in All, Mentions and Unread tabs, with each marked read when opened or all at once.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed-03"
+      ]
+    },
+    {
+      "name": "activity-feed-04",
+      "type": "registry:component",
+      "description": "A week of activity by kind with the change on the week before, and the most active people.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed-04"
+      ]
+    },
+    {
+      "name": "activity-feed-05",
+      "type": "registry:component",
+      "description": "Slack and GitHub activity in one timeline, with quoted messages and actions such as starting a review.",
+      "registryDependencies": [
+        "@dashboardblocks/activity-feed-05"
+      ]
+    },
+    {
+      "name": "usage-meter-01",
+      "type": "registry:component",
+      "description": "An API quota with its status, when it resets and the usage it is on pace for, with the date it would hit the limit.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-01"
+      ]
+    },
+    {
+      "name": "usage-meter-02",
+      "type": "registry:component",
+      "description": "Storage used as a ring in its status colour, with the space that is free.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-02"
+      ]
+    },
+    {
+      "name": "usage-meter-03",
+      "type": "registry:component",
+      "description": "Usage against what the plan includes, with the overage past the limit and what it will cost.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-03"
+      ]
+    },
+    {
+      "name": "usage-meter-04",
+      "type": "registry:component",
+      "description": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-04"
+      ]
+    },
+    {
+      "name": "usage-meter-05",
+      "type": "registry:component",
+      "description": "Storage split into categories as one segmented bar, with each category's size and share.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-05"
+      ]
+    },
+    {
+      "name": "usage-meter-06",
+      "type": "registry:component",
+      "description": "Every limit on a plan, flagging the ones nearly reached and prompting an upgrade.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-06"
+      ]
+    },
+    {
+      "name": "usage-meter-07",
+      "type": "registry:component",
+      "description": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-07"
+      ]
+    },
+    {
+      "name": "usage-meter-08",
+      "type": "registry:component",
+      "description": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
+      "registryDependencies": [
+        "@dashboardblocks/usage-meter-08"
+      ]
+    },
+    {
+      "name": "leaderboard-01",
+      "type": "registry:component",
+      "description": "Ranked rows with a background bar sized relative to the leader.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard-01"
+      ]
+    },
+    {
+      "name": "leaderboard-02",
+      "type": "registry:component",
+      "description": "People ranked by revenue with badges for the top three and the change since the last period.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard-02"
+      ]
+    },
+    {
+      "name": "leaderboard-03",
+      "type": "registry:component",
+      "description": "The top three on a podium, with the rest of the field listed below.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard-03"
+      ]
+    },
+    {
+      "name": "leaderboard-04",
+      "type": "registry:component",
+      "description": "Products ranked by revenue with how far each moved in the ranking since the last period.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard-04"
+      ]
+    },
+    {
+      "name": "leaderboard-05",
+      "type": "registry:component",
+      "description": "A ranked list that can be reversed and expanded to show every entry.",
+      "registryDependencies": [
+        "@dashboardblocks/leaderboard-05"
+      ]
+    },
+    {
+      "name": "chart-panel-01",
+      "type": "registry:component",
+      "description": "This period's line against the previous period's, muted, so the current trend leads.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-01"
+      ]
+    },
+    {
+      "name": "chart-panel-02",
+      "type": "registry:component",
+      "description": "A chart with tabs for related metrics, each tab showing its total and change.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-02"
+      ]
+    },
+    {
+      "name": "chart-panel-03",
+      "type": "registry:component",
+      "description": "Monthly totals as stacked bars split by category, with a legend.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-03"
+      ]
+    },
+    {
+      "name": "chart-panel-04",
+      "type": "registry:component",
+      "description": "A single series of bars with the latest period highlighted and labelled.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-04"
+      ]
+    },
+    {
+      "name": "chart-panel-05",
+      "type": "registry:component",
+      "description": "A donut splitting a total into parts, with each value and share listed beside it.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-05"
+      ]
+    },
+    {
+      "name": "chart-panel-06",
+      "type": "registry:component",
+      "description": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
+      "registryDependencies": [
+        "@dashboardblocks/chart-panel-06"
+      ]
+    },
+    {
+      "name": "breakdown-01",
+      "type": "registry:component",
+      "description": "A single 100% bar splitting a total into categories, with each value and share listed below.",
+      "registryDependencies": [
+        "@dashboardblocks/breakdown-01"
+      ]
+    },
+    {
+      "name": "breakdown-02",
+      "type": "registry:component",
+      "description": "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
+      "registryDependencies": [
+        "@dashboardblocks/breakdown-02"
+      ]
+    },
+    {
+      "name": "breakdown-03",
+      "type": "registry:component",
+      "description": "A 10 by 10 grid of squares where each square is 1% of the total, coloured by category.",
+      "registryDependencies": [
+        "@dashboardblocks/breakdown-03"
+      ]
+    },
+    {
+      "name": "breakdown-04",
+      "type": "registry:component",
+      "description": "How each category's share of a total moved between two periods.",
+      "registryDependencies": [
+        "@dashboardblocks/breakdown-04"
+      ]
+    },
+    {
+      "name": "funnel-01",
+      "type": "registry:component",
+      "description": "Each stage as a bar sized against the first, with the conversion at each step and overall.",
+      "registryDependencies": [
+        "@dashboardblocks/funnel-01"
+      ]
+    },
+    {
+      "name": "funnel-02",
+      "type": "registry:component",
+      "description": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
+      "registryDependencies": [
+        "@dashboardblocks/funnel-02"
+      ]
+    },
+    {
+      "name": "funnel-03",
+      "type": "registry:component",
+      "description": "A vertical stepper through the stages that calls out the step with the biggest drop-off.",
+      "registryDependencies": [
+        "@dashboardblocks/funnel-03"
+      ]
+    },
+    {
+      "name": "funnel-04",
+      "type": "registry:component",
+      "description": "Two segments side by side at every stage, each as a share of its first step, to compare how they convert.",
+      "registryDependencies": [
+        "@dashboardblocks/funnel-04"
+      ]
+    },
+    {
+      "name": "status-01",
+      "type": "registry:component",
+      "description": "Each service with its current status, and an overall badge showing the worst one.",
+      "registryDependencies": [
+        "@dashboardblocks/status-01"
+      ]
+    },
+    {
+      "name": "status-02",
+      "type": "registry:component",
+      "description": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
+      "registryDependencies": [
+        "@dashboardblocks/status-02"
+      ]
+    },
+    {
+      "name": "status-03",
+      "type": "registry:component",
+      "description": "An active incident with its severity, affected components and a timeline of updates.",
+      "registryDependencies": [
+        "@dashboardblocks/status-03"
+      ]
+    },
+    {
+      "name": "status-04",
+      "type": "registry:component",
+      "description": "A grid of regions, each with its status, latency and error rate.",
+      "registryDependencies": [
+        "@dashboardblocks/status-04"
+      ]
+    },
+    {
+      "name": "status-05",
+      "type": "registry:component",
+      "description": "One service's uptime, incident count and downtime, with its daily history and recent incidents.",
+      "registryDependencies": [
+        "@dashboardblocks/status-05"
+      ]
+    },
+    {
+      "name": "stat-group-01",
+      "type": "registry:component",
+      "description": "Three metrics side by side, each with its change and previous value.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group-01"
+      ]
+    },
+    {
+      "name": "stat-group-02",
+      "type": "registry:component",
+      "description": "A row of metrics, each with its change and a 14-day sparkline.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group-02"
+      ]
+    },
+    {
+      "name": "stat-group-03",
+      "type": "registry:component",
+      "description": "A row of metrics where picking one charts it against the previous period.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group-03"
+      ]
+    },
+    {
+      "name": "stat-group-04",
+      "type": "registry:component",
+      "description": "Five metrics in a slim row with their changes, wrapping to two columns when narrow.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group-04"
+      ]
+    },
+    {
+      "name": "stat-group-05",
+      "type": "registry:component",
+      "description": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
+      "registryDependencies": [
+        "@dashboardblocks/stat-group-05"
+      ]
+    },
+    {
+      "name": "dashboard-header-01",
+      "type": "registry:component",
+      "description": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-header-01"
+      ]
+    },
+    {
+      "name": "dashboard-header-02",
+      "type": "registry:component",
+      "description": "A short dashboard header with a title, a date range menu and an export button.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-header-02"
+      ]
+    },
+    {
+      "name": "dashboard-header-03",
+      "type": "registry:component",
+      "description": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-header-03"
+      ]
+    },
+    {
+      "name": "dashboard-header-04",
+      "type": "registry:component",
+      "description": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-header-04"
+      ]
+    },
+    {
+      "name": "data-table-01",
+      "type": "registry:component",
+      "description": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-01"
+      ]
+    },
+    {
+      "name": "data-table-02",
+      "type": "registry:component",
+      "description": "Revenue by product, each with a bar scaled to the top product and its share of the total.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-02"
+      ]
+    },
+    {
+      "name": "data-table-03",
+      "type": "registry:component",
+      "description": "Campaign conversions and cost per conversion, each with its change and a 14-day sparkline.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-03"
+      ]
+    },
+    {
+      "name": "data-table-04",
+      "type": "registry:component",
+      "description": "Services in a table with their status, latency and error rate, worst status first.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-04"
+      ]
+    },
+    {
+      "name": "data-table-05",
+      "type": "registry:component",
+      "description": "A table of recent orders split into pages of five, with controls to move between them.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-05"
+      ]
+    },
+    {
+      "name": "data-table-06",
+      "type": "registry:component",
+      "description": "A searchable table with status and plan filters, a column menu, page sizes and row selection to export or email.",
+      "registryDependencies": [
+        "@dashboardblocks/data-table-06"
+      ]
+    },
+    {
+      "name": "heatmap-01",
+      "type": "registry:component",
+      "description": "When visitors arrive, as a grid of weekday by hour, darker where there are more.",
+      "registryDependencies": [
+        "@dashboardblocks/heatmap-01"
+      ]
+    },
+    {
+      "name": "heatmap-02",
+      "type": "registry:component",
+      "description": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
+      "registryDependencies": [
+        "@dashboardblocks/heatmap-02"
+      ]
+    },
+    {
+      "name": "heatmap-03",
+      "type": "registry:component",
+      "description": "A year of daily values as a calendar grid, darker on busier days.",
+      "registryDependencies": [
+        "@dashboardblocks/heatmap-03"
+      ]
+    },
+    {
+      "name": "heatmap-04",
+      "type": "registry:component",
+      "description": "The p95 latency of each endpoint by hour over the last day, darker where it is slower.",
+      "registryDependencies": [
+        "@dashboardblocks/heatmap-04"
+      ]
+    },
+    {
+      "name": "states-01",
+      "type": "registry:component",
+      "description": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
+      "registryDependencies": [
+        "@dashboardblocks/states-01"
+      ]
+    },
+    {
+      "name": "states-02",
+      "type": "registry:component",
+      "description": "A chart that stays in place at reduced opacity while it refreshes, with an updating indicator in the header.",
+      "registryDependencies": [
+        "@dashboardblocks/states-02"
+      ]
+    },
+    {
+      "name": "states-03",
+      "type": "registry:component",
+      "description": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
+      "registryDependencies": [
+        "@dashboardblocks/states-03"
+      ]
+    },
+    {
+      "name": "states-04",
+      "type": "registry:component",
+      "description": "A card that says what went wrong when loading fails and offers to try again.",
+      "registryDependencies": [
+        "@dashboardblocks/states-04"
+      ]
+    },
+    {
+      "name": "dashboard-01",
+      "type": "registry:block",
+      "title": "Store dashboard",
+      "description": "A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-01"
+      ]
+    },
+    {
+      "name": "dashboard-02",
+      "type": "registry:block",
+      "title": "SaaS dashboard",
+      "description": "A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-02"
+      ]
+    },
+    {
+      "name": "dashboard-03",
+      "type": "registry:block",
+      "title": "Web analytics dashboard",
+      "description": "A web analytics dashboard: traffic tabs, visitors right now, a traffic flow, top pages, top countries and browsers, filtered by device.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-03"
+      ]
+    },
+    {
+      "name": "dashboard-04",
+      "type": "registry:block",
+      "title": "CRM dashboard",
+      "description": "A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-04"
+      ]
+    },
+    {
+      "name": "dashboard-05",
+      "type": "registry:block",
+      "title": "DevOps dashboard",
+      "description": "A DevOps dashboard: live throughput, delivery performance, response time percentiles, open alerts, uptime, build health and recent deployments, filtered by service.",
+      "registryDependencies": [
+        "@dashboardblocks/dashboard-05"
+      ]
+    },
+    {
+      "name": "goals-01",
+      "type": "registry:component",
+      "description": "One target with an expected-by-today marker, what is left and a projection at the current pace.",
+      "registryDependencies": [
+        "@dashboardblocks/goals-01"
+      ]
+    },
+    {
+      "name": "goals-02",
+      "type": "registry:component",
+      "description": "Several goals for the same period, each with its own pace.",
+      "registryDependencies": [
+        "@dashboardblocks/goals-02"
+      ]
+    },
+    {
+      "name": "goals-03",
+      "type": "registry:component",
+      "description": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
+      "registryDependencies": [
+        "@dashboardblocks/goals-03"
+      ]
+    },
+    {
+      "name": "goals-04",
+      "type": "registry:component",
+      "description": "Small daily goals as rings, with a check mark once a goal is met.",
+      "registryDependencies": [
+        "@dashboardblocks/goals-04"
+      ]
+    },
+    {
+      "name": "comparison-01",
+      "type": "registry:component",
+      "description": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
+      "registryDependencies": [
+        "@dashboardblocks/comparison-01"
+      ]
+    },
+    {
+      "name": "comparison-02",
+      "type": "registry:component",
+      "description": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
+      "registryDependencies": [
+        "@dashboardblocks/comparison-02"
+      ]
+    },
+    {
+      "name": "comparison-03",
+      "type": "registry:component",
+      "description": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
+      "registryDependencies": [
+        "@dashboardblocks/comparison-03"
+      ]
+    },
+    {
+      "name": "comparison-04",
+      "type": "registry:component",
+      "description": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
+      "registryDependencies": [
+        "@dashboardblocks/comparison-04"
+      ]
+    },
+    {
+      "name": "alerts-01",
+      "type": "registry:component",
+      "description": "Open alerts, most recent first, each with a button to acknowledge it.",
+      "registryDependencies": [
+        "@dashboardblocks/alerts-01"
+      ]
+    },
+    {
+      "name": "alerts-02",
+      "type": "registry:component",
+      "description": "A metric over the last hour against its threshold line, with the current value, the peak and actions to take.",
+      "registryDependencies": [
+        "@dashboardblocks/alerts-02"
+      ]
+    },
+    {
+      "name": "alerts-03",
+      "type": "registry:component",
+      "description": "A table of alert rules with their conditions, severities and channels, and a switch to pause or resume each one.",
+      "registryDependencies": [
+        "@dashboardblocks/alerts-03"
+      ]
+    },
+    {
+      "name": "alerts-04",
+      "type": "registry:component",
+      "description": "A slim strip with open alerts by severity and the latest one, for the top of a dashboard.",
+      "registryDependencies": [
+        "@dashboardblocks/alerts-04"
+      ]
+    },
+    {
+      "name": "geo-01",
+      "type": "registry:component",
+      "description": "Revenue by US state as a tile map on a single-hue scale, with the total and the top five states.",
+      "registryDependencies": [
+        "@dashboardblocks/geo-01"
+      ]
+    },
+    {
+      "name": "geo-02",
+      "type": "registry:component",
+      "description": "The leading countries with flags, values and shares, and the rest summed into one row.",
+      "registryDependencies": [
+        "@dashboardblocks/geo-02"
+      ]
+    },
+    {
+      "name": "geo-03",
+      "type": "registry:component",
+      "description": "Active users by city right now as markers sized by value on a dotted world map.",
+      "registryDependencies": [
+        "@dashboardblocks/geo-03"
+      ]
+    },
+    {
+      "name": "geo-04",
+      "type": "registry:component",
+      "description": "Revenue split across regions, each with its share and its change on the previous quarter.",
+      "registryDependencies": [
+        "@dashboardblocks/geo-04"
+      ]
+    },
+    {
+      "name": "billing-01",
+      "type": "registry:component",
+      "description": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
+      "registryDependencies": [
+        "@dashboardblocks/billing-01"
+      ]
+    },
+    {
+      "name": "billing-02",
+      "type": "registry:component",
+      "description": "The current plan and its price, when it renews, the next invoice and the payment method on file, with actions to manage them.",
+      "registryDependencies": [
+        "@dashboardblocks/billing-02"
+      ]
+    },
+    {
+      "name": "billing-03",
+      "type": "registry:component",
+      "description": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
+      "registryDependencies": [
+        "@dashboardblocks/billing-03"
+      ]
+    },
+    {
+      "name": "billing-04",
+      "type": "registry:component",
+      "description": "Monthly and annual recurring revenue, revenue per account and net revenue retention, each with its change from the previous month.",
+      "registryDependencies": [
+        "@dashboardblocks/billing-04"
+      ]
+    },
+    {
+      "name": "billing-05",
+      "type": "registry:component",
+      "description": "Plans side by side, monthly or yearly, with seats, what is due today and what a downgrade takes away.",
+      "registryDependencies": [
+        "@dashboardblocks/billing-05"
+      ]
+    },
+    {
+      "name": "insights-01",
+      "type": "registry:component",
+      "description": "A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.",
+      "registryDependencies": [
+        "@dashboardblocks/insights-01"
+      ]
+    },
+    {
+      "name": "insights-02",
+      "type": "registry:component",
+      "description": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
+      "registryDependencies": [
+        "@dashboardblocks/insights-02"
+      ]
+    },
+    {
+      "name": "insights-03",
+      "type": "registry:component",
+      "description": "What contributed to a change, as bars either side of zero, with a sentence naming the biggest driver and the biggest drag.",
+      "registryDependencies": [
+        "@dashboardblocks/insights-03"
+      ]
+    },
+    {
+      "name": "insights-04",
+      "type": "registry:component",
+      "description": "A short weekly summary with a headline, three takeaways and buttons to say whether it helped.",
+      "registryDependencies": [
+        "@dashboardblocks/insights-04"
+      ]
+    },
+    {
+      "name": "pipeline-01",
+      "type": "registry:component",
+      "description": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+      "registryDependencies": [
+        "@dashboardblocks/pipeline-01"
+      ]
+    },
+    {
+      "name": "pipeline-02",
+      "type": "registry:component",
+      "description": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
+      "registryDependencies": [
+        "@dashboardblocks/pipeline-02"
+      ]
+    },
+    {
+      "name": "pipeline-03",
+      "type": "registry:component",
+      "description": "Items that have been in a stage longer than expected, longest first, with how long they have waited and who owns them.",
+      "registryDependencies": [
+        "@dashboardblocks/pipeline-03"
+      ]
+    },
+    {
+      "name": "pipeline-04",
+      "type": "registry:component",
+      "description": "Closed and open deals weighted by the chance each stage closes, per owner, against their quota.",
+      "registryDependencies": [
+        "@dashboardblocks/pipeline-04"
+      ]
+    },
+    {
+      "name": "schedule-01",
+      "type": "registry:component",
+      "description": "Upcoming events grouped by day, as Today, Tomorrow and then weekdays, with the event in progress marked.",
+      "registryDependencies": [
+        "@dashboardblocks/schedule-01"
+      ]
+    },
+    {
+      "name": "schedule-02",
+      "type": "registry:component",
+      "description": "A month calendar with a dot on each day that has events, and a list of the events on the selected day.",
+      "registryDependencies": [
+        "@dashboardblocks/schedule-02"
+      ]
+    },
+    {
+      "name": "schedule-03",
+      "type": "registry:component",
+      "description": "Deadlines and renewals in date order, each with a countdown and an urgency badge.",
+      "registryDependencies": [
+        "@dashboardblocks/schedule-03"
+      ]
+    },
+    {
+      "name": "schedule-04",
+      "type": "registry:component",
+      "description": "The next seven days on a shared time axis, with how many events each day holds and how much of it is booked.",
+      "registryDependencies": [
+        "@dashboardblocks/schedule-04"
+      ]
+    },
+    {
+      "name": "team-01",
+      "type": "registry:component",
+      "description": "A list of members with their role, whether they are online and when they were last active.",
+      "registryDependencies": [
+        "@dashboardblocks/team-01"
+      ]
+    },
+    {
+      "name": "team-02",
+      "type": "registry:component",
+      "description": "Work assigned to each person against their capacity on a shared scale, with anyone over capacity flagged and listed first.",
+      "registryDependencies": [
+        "@dashboardblocks/team-02"
+      ]
+    },
+    {
+      "name": "team-03",
+      "type": "registry:component",
+      "description": "How many people are online, shown as avatars, with the team split by presence.",
+      "registryDependencies": [
+        "@dashboardblocks/team-03"
+      ]
+    },
+    {
+      "name": "team-04",
+      "type": "registry:component",
+      "description": "Who is on call now and until when, who is next, and the rest of the rota.",
+      "registryDependencies": [
+        "@dashboardblocks/team-04"
+      ]
+    },
+    {
+      "name": "team-05",
+      "type": "registry:component",
+      "description": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
+      "registryDependencies": [
+        "@dashboardblocks/team-05"
+      ]
+    },
+    {
+      "name": "team-06",
+      "type": "registry:component",
+      "description": "A share panel for inviting people with view or edit access, changing or removing it, and choosing who the link works for.",
+      "registryDependencies": [
+        "@dashboardblocks/team-06"
+      ]
+    },
+    {
+      "name": "checklist-01",
+      "type": "registry:component",
+      "description": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
+      "registryDependencies": [
+        "@dashboardblocks/checklist-01"
+      ]
+    },
+    {
+      "name": "checklist-02",
+      "type": "registry:component",
+      "description": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
+      "registryDependencies": [
+        "@dashboardblocks/checklist-02"
+      ]
+    },
+    {
+      "name": "checklist-03",
+      "type": "registry:component",
+      "description": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
+      "registryDependencies": [
+        "@dashboardblocks/checklist-03"
+      ]
+    },
+    {
+      "name": "checklist-04",
+      "type": "registry:component",
+      "description": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
+      "registryDependencies": [
+        "@dashboardblocks/checklist-04"
+      ]
+    },
+    {
+      "name": "gauge-01",
+      "type": "registry:component",
+      "description": "A net promoter score on its full −100 to 100 scale, with the split of promoters, passives and detractors.",
+      "registryDependencies": [
+        "@dashboardblocks/gauge-01"
+      ]
+    },
+    {
+      "name": "gauge-02",
+      "type": "registry:component",
+      "description": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
+      "registryDependencies": [
+        "@dashboardblocks/gauge-02"
+      ]
+    },
+    {
+      "name": "gauge-03",
+      "type": "registry:component",
+      "description": "CPU, memory and disk as small gauges, each in the colour of its band with warning and critical thresholds marked.",
+      "registryDependencies": [
+        "@dashboardblocks/gauge-03"
+      ]
+    },
+    {
+      "name": "gauge-04",
+      "type": "registry:component",
+      "description": "A satisfaction score on an arc with a target tick, the change since last period and the gap to target.",
+      "registryDependencies": [
+        "@dashboardblocks/gauge-04"
+      ]
+    },
+    {
+      "name": "metric-list-01",
+      "type": "registry:component",
+      "description": "A list of metrics with their change and a 14-day sparkline each.",
+      "registryDependencies": [
+        "@dashboardblocks/metric-list-01"
+      ]
+    },
+    {
+      "name": "metric-list-02",
+      "type": "registry:component",
+      "description": "Metrics grouped into sections, each with a header and a count of how many improved.",
+      "registryDependencies": [
+        "@dashboardblocks/metric-list-02"
+      ]
+    },
+    {
+      "name": "metric-list-03",
+      "type": "registry:component",
+      "description": "Metrics against their targets, each with a bar, a tick at the target and a status.",
+      "registryDependencies": [
+        "@dashboardblocks/metric-list-03"
+      ]
+    },
+    {
+      "name": "metric-list-04",
+      "type": "registry:component",
+      "description": "A list of metrics where picking one charts it in the same card.",
+      "registryDependencies": [
+        "@dashboardblocks/metric-list-04"
+      ]
+    },
+    {
+      "name": "forecast-01",
+      "type": "registry:component",
+      "description": "Weekly actuals continuing into a dashed forecast, with a shaded 80% range and a marker for today.",
+      "registryDependencies": [
+        "@dashboardblocks/forecast-01"
+      ]
+    },
+    {
+      "name": "forecast-02",
+      "type": "registry:component",
+      "description": "The date the trend reaches a target, with an 80% range of dates, against the deadline.",
+      "registryDependencies": [
+        "@dashboardblocks/forecast-02"
+      ]
+    },
+    {
+      "name": "forecast-03",
+      "type": "registry:component",
+      "description": "Month to date, projected to the end of the month at the daily run-rate, with what is needed per day to hit the target.",
+      "registryDependencies": [
+        "@dashboardblocks/forecast-03"
+      ]
+    },
+    {
+      "name": "forecast-04",
+      "type": "registry:component",
+      "description": "Low, base and high growth scenarios from the last actual, as a chart and a table with when each one reaches the target.",
+      "registryDependencies": [
+        "@dashboardblocks/forecast-04"
+      ]
+    },
+    {
+      "name": "retention-01",
+      "type": "registry:component",
+      "description": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
+      "registryDependencies": [
+        "@dashboardblocks/retention-01"
+      ]
+    },
+    {
+      "name": "retention-02",
+      "type": "registry:component",
+      "description": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
+      "registryDependencies": [
+        "@dashboardblocks/retention-02"
+      ]
+    },
+    {
+      "name": "retention-03",
+      "type": "registry:component",
+      "description": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
+      "registryDependencies": [
+        "@dashboardblocks/retention-03"
+      ]
+    },
+    {
+      "name": "retention-04",
+      "type": "registry:component",
+      "description": "Users gained above the axis and lost below it, with the net change and the quick ratio.",
+      "registryDependencies": [
+        "@dashboardblocks/retention-04"
+      ]
+    },
+    {
+      "name": "distribution-01",
+      "type": "registry:component",
+      "description": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
+      "registryDependencies": [
+        "@dashboardblocks/distribution-01"
+      ]
+    },
+    {
+      "name": "distribution-02",
+      "type": "registry:component",
+      "description": "A box and whiskers per group on a shared axis, to compare spread and median across groups.",
+      "registryDependencies": [
+        "@dashboardblocks/distribution-02"
+      ]
+    },
+    {
+      "name": "distribution-03",
+      "type": "registry:component",
+      "description": "The median, mean and percentiles of a set of values, with a note when a long tail pulls the mean away.",
+      "registryDependencies": [
+        "@dashboardblocks/distribution-03"
+      ]
+    },
+    {
+      "name": "distribution-04",
+      "type": "registry:component",
+      "description": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
+      "registryDependencies": [
+        "@dashboardblocks/distribution-04"
+      ]
+    },
+    {
+      "name": "spend-01",
+      "type": "registry:component",
+      "description": "Spend so far against the month's budget, with the projected month end and what is left to spend per day.",
+      "registryDependencies": [
+        "@dashboardblocks/spend-01"
+      ]
+    },
+    {
+      "name": "spend-02",
+      "type": "registry:component",
+      "description": "One budget bar per service, each with its own status, and the total underneath.",
+      "registryDependencies": [
+        "@dashboardblocks/spend-02"
+      ]
+    },
+    {
+      "name": "spend-03",
+      "type": "registry:component",
+      "description": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
+      "registryDependencies": [
+        "@dashboardblocks/spend-03"
+      ]
+    },
+    {
+      "name": "spend-04",
+      "type": "registry:component",
+      "description": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
+      "registryDependencies": [
+        "@dashboardblocks/spend-04"
+      ]
+    },
+    {
+      "name": "flow-01",
+      "type": "registry:component",
+      "description": "Sessions from each source through the landing page, to signing up, browsing on or bouncing.",
+      "registryDependencies": [
+        "@dashboardblocks/flow-01"
+      ]
+    },
+    {
+      "name": "flow-02",
+      "type": "registry:component",
+      "description": "Where visitors go in their first pages after landing, with the ones who left at each step.",
+      "registryDependencies": [
+        "@dashboardblocks/flow-02"
+      ]
+    },
+    {
+      "name": "flow-03",
+      "type": "registry:component",
+      "description": "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
+      "registryDependencies": [
+        "@dashboardblocks/flow-03"
+      ]
+    },
+    {
+      "name": "flow-04",
+      "type": "registry:component",
+      "description": "The most common routes as steps, ranked by how many people took them, with how often each reaches the goal.",
+      "registryDependencies": [
+        "@dashboardblocks/flow-04"
+      ]
+    },
+    {
+      "name": "timeline-01",
+      "type": "registry:component",
+      "description": "Projects grouped by team, each a bar from start to end filled to its progress, with a line for today.",
+      "registryDependencies": [
+        "@dashboardblocks/timeline-01"
+      ]
+    },
+    {
+      "name": "timeline-02",
+      "type": "registry:component",
+      "description": "A launch plan as a list on a rail, with the next milestone highlighted and how soon or how late each one is.",
+      "registryDependencies": [
+        "@dashboardblocks/timeline-02"
+      ]
+    },
+    {
+      "name": "timeline-03",
+      "type": "registry:component",
+      "description": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
+      "registryDependencies": [
+        "@dashboardblocks/timeline-03"
+      ]
+    },
+    {
+      "name": "timeline-04",
+      "type": "registry:component",
+      "description": "Each phase's plan as a dashed outline with what actually happened as a bar beneath it, and how many days it slipped.",
+      "registryDependencies": [
+        "@dashboardblocks/timeline-04"
+      ]
+    },
+    {
+      "name": "realtime-01",
+      "type": "registry:component",
+      "description": "Active users now, page views per second over the last minute and the pages with the most people on them.",
+      "registryDependencies": [
+        "@dashboardblocks/realtime-01"
+      ]
+    },
+    {
+      "name": "realtime-02",
+      "type": "registry:component",
+      "description": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale.",
+      "registryDependencies": [
+        "@dashboardblocks/realtime-02"
+      ]
+    },
+    {
+      "name": "realtime-03",
+      "type": "registry:component",
+      "description": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button.",
+      "registryDependencies": [
+        "@dashboardblocks/realtime-03"
+      ]
+    },
+    {
+      "name": "realtime-04",
+      "type": "registry:component",
+      "description": "Running totals since midnight against yesterday at the same time, with orders per hour.",
+      "registryDependencies": [
+        "@dashboardblocks/realtime-04"
+      ]
+    },
+    {
+      "name": "feedback-01",
+      "type": "registry:component",
+      "description": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period.",
+      "registryDependencies": [
+        "@dashboardblocks/feedback-01"
+      ]
+    },
+    {
+      "name": "feedback-02",
+      "type": "registry:component",
+      "description": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
+      "registryDependencies": [
+        "@dashboardblocks/feedback-02"
+      ]
+    },
+    {
+      "name": "feedback-03",
+      "type": "registry:component",
+      "description": "The latest reviews with their rating and source, flagging low ratings still waiting for a reply.",
+      "registryDependencies": [
+        "@dashboardblocks/feedback-03"
+      ]
+    },
+    {
+      "name": "feedback-04",
+      "type": "registry:component",
+      "description": "Weekly customer satisfaction against a target, with the change on the week before and how many weeks met it.",
+      "registryDependencies": [
+        "@dashboardblocks/feedback-04"
+      ]
+    },
+    {
+      "name": "deployments-01",
+      "type": "registry:component",
+      "description": "The latest builds, each with its commit, environment, author, duration and status.",
+      "registryDependencies": [
+        "@dashboardblocks/deployments-01"
+      ]
+    },
+    {
+      "name": "deployments-02",
+      "type": "registry:component",
+      "description": "What each environment is running, and how many commits are waiting to be promoted to the next one.",
+      "registryDependencies": [
+        "@dashboardblocks/deployments-02"
+      ]
+    },
+    {
+      "name": "deployments-03",
+      "type": "registry:component",
+      "description": "The four DORA delivery metrics, each with its performance band and the change on the previous period.",
+      "registryDependencies": [
+        "@dashboardblocks/deployments-03"
+      ]
+    },
+    {
+      "name": "deployments-04",
+      "type": "registry:component",
+      "description": "The latest runs of each pipeline as a strip of results, with the pass rate and median duration.",
+      "registryDependencies": [
+        "@dashboardblocks/deployments-04"
+      ]
+    },
+    {
+      "name": "scatter-01",
+      "type": "registry:component",
+      "description": "Pages plotted by load time and conversion rate, grouped by section, with a trend line and how strong the link is.",
+      "registryDependencies": [
+        "@dashboardblocks/scatter-01"
+      ]
+    },
+    {
+      "name": "scatter-02",
+      "type": "registry:component",
+      "description": "Features plotted by usage and satisfaction, split into four labelled quadrants with each point named.",
+      "registryDependencies": [
+        "@dashboardblocks/scatter-02"
+      ]
+    },
+    {
+      "name": "scatter-03",
+      "type": "registry:component",
+      "description": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
+      "registryDependencies": [
+        "@dashboardblocks/scatter-03"
+      ]
+    },
+    {
+      "name": "scatter-04",
+      "type": "registry:component",
+      "description": "Open risks on a likelihood by impact grid, shaded by level, with the risks in a selected cell listed.",
+      "registryDependencies": [
+        "@dashboardblocks/scatter-04"
+      ]
+    },
+    {
+      "name": "security-01",
+      "type": "registry:component",
+      "description": "Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.",
+      "registryDependencies": [
+        "@dashboardblocks/security-01"
+      ]
+    },
+    {
+      "name": "security-02",
+      "type": "registry:component",
+      "description": "Changes to access, keys and settings, newest first, with a switch to show warnings only.",
+      "registryDependencies": [
+        "@dashboardblocks/security-02"
+      ]
+    },
+    {
+      "name": "security-03",
+      "type": "registry:component",
+      "description": "The devices signed in to an account, with where and when each was last active, and buttons to sign them out.",
+      "registryDependencies": [
+        "@dashboardblocks/security-03"
+      ]
+    },
+    {
+      "name": "security-04",
+      "type": "registry:component",
+      "description": "A security score built from workspace checks, with failing checks first and what to do about each.",
+      "registryDependencies": [
+        "@dashboardblocks/security-04"
+      ]
+    },
+    {
+      "name": "security-05",
+      "type": "registry:component",
+      "description": "Setting up two-factor sign-in with an authenticator app, security keys and passkeys, and recovery codes shown once.",
+      "registryDependencies": [
+        "@dashboardblocks/security-05"
+      ]
+    },
+    {
+      "name": "security-06",
+      "type": "registry:component",
+      "description": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.",
+      "registryDependencies": [
+        "@dashboardblocks/security-06"
+      ]
+    },
+    {
+      "name": "inventory-01",
+      "type": "registry:component",
+      "description": "Items at or near their reorder point, soonest to run out first, with how much to order and which will run out before an order arrives.",
+      "registryDependencies": [
+        "@dashboardblocks/inventory-01"
+      ]
+    },
+    {
+      "name": "inventory-02",
+      "type": "registry:component",
+      "description": "Units stored against capacity in each warehouse, with what arrives this week and which will be nearly full.",
+      "registryDependencies": [
+        "@dashboardblocks/inventory-02"
+      ]
+    },
+    {
+      "name": "inventory-03",
+      "type": "registry:component",
+      "description": "Every SKU by stock status, with the value of stock on hand and how many times a year it turns over.",
+      "registryDependencies": [
+        "@dashboardblocks/inventory-03"
+      ]
+    },
+    {
+      "name": "inventory-04",
+      "type": "registry:component",
+      "description": "One item's stock day by day at its current demand, with incoming orders, the reorder point and when it runs out.",
+      "registryDependencies": [
+        "@dashboardblocks/inventory-04"
+      ]
+    },
+    {
+      "name": "ai-usage-01",
+      "type": "registry:component",
+      "description": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-usage-01"
+      ]
+    },
+    {
+      "name": "ai-usage-02",
+      "type": "registry:component",
+      "description": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-usage-02"
+      ]
+    },
+    {
+      "name": "ai-usage-03",
+      "type": "registry:component",
+      "description": "Requests, time to first token, output speed and error rate for each model.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-usage-03"
+      ]
+    },
+    {
+      "name": "ai-usage-04",
+      "type": "registry:component",
+      "description": "The share of input tokens served from the cache, what it saved and what the tokens would have cost without it.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-usage-04"
+      ]
+    },
+    {
+      "name": "settings-01",
+      "type": "registry:component",
+      "description": "Invite people by email with a role, change roles, remove members and resend or revoke pending invites, counted against the plan's seats.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-01"
+      ]
+    },
+    {
+      "name": "settings-02",
+      "type": "registry:component",
+      "description": "API keys with their access, last use and creator, with unused keys flagged and a new key shown once with a copy button.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-02"
+      ]
+    },
+    {
+      "name": "settings-03",
+      "type": "registry:component",
+      "description": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-03"
+      ]
+    },
+    {
+      "name": "settings-04",
+      "type": "registry:component",
+      "description": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-04"
+      ]
+    },
+    {
+      "name": "settings-05",
+      "type": "registry:component",
+      "description": "Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-05"
+      ]
+    },
+    {
+      "name": "settings-06",
+      "type": "registry:component",
+      "description": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-06"
+      ]
+    },
+    {
+      "name": "settings-07",
+      "type": "registry:component",
+      "description": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
+      "registryDependencies": [
+        "@dashboardblocks/settings-07"
+      ]
+    },
+    {
+      "name": "app-shell-01",
+      "type": "registry:component",
+      "description": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications.",
+      "registryDependencies": [
+        "@dashboardblocks/app-shell-01"
+      ]
+    },
+    {
+      "name": "app-shell-02",
+      "type": "registry:component",
+      "description": "An app shell whose sidebar collapses to icons with tooltips, with nested links and help and settings pinned to the bottom.",
+      "registryDependencies": [
+        "@dashboardblocks/app-shell-02"
+      ]
+    },
+    {
+      "name": "app-shell-03",
+      "type": "registry:component",
+      "description": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu.",
+      "registryDependencies": [
+        "@dashboardblocks/app-shell-03"
+      ]
+    },
+    {
+      "name": "app-shell-04",
+      "type": "registry:component",
+      "description": "An app shell with no sidebar: page links sit under the top bar and scroll sideways on small screens.",
+      "registryDependencies": [
+        "@dashboardblocks/app-shell-04"
+      ]
+    },
+    {
+      "name": "forms-01",
+      "type": "registry:component",
+      "description": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-01"
+      ]
+    },
+    {
+      "name": "forms-02",
+      "type": "registry:component",
+      "description": "A create form in a panel that slides in from the side, with errors from the server shown on the field.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-02"
+      ]
+    },
+    {
+      "name": "forms-03",
+      "type": "registry:component",
+      "description": "A form in steps that checks each step before moving on and reviews everything on the last one.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-03"
+      ]
+    },
+    {
+      "name": "forms-04",
+      "type": "registry:component",
+      "description": "Single values edited in place, saved with Enter and cancelled with Escape.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-04"
+      ]
+    },
+    {
+      "name": "record-detail-01",
+      "type": "registry:component",
+      "description": "A customer page with headline numbers, recent orders, contact details and notes.",
+      "registryDependencies": [
+        "@dashboardblocks/record-detail-01"
+      ]
+    },
+    {
+      "name": "record-detail-02",
+      "type": "registry:component",
+      "description": "An order page with line items and totals, a timeline of what happened, the customer, and shipping and payment.",
+      "registryDependencies": [
+        "@dashboardblocks/record-detail-02"
+      ]
+    },
+    {
+      "name": "record-detail-03",
+      "type": "registry:component",
+      "description": "A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.",
+      "registryDependencies": [
+        "@dashboardblocks/record-detail-03"
+      ]
+    },
+    {
+      "name": "page-header-01",
+      "type": "registry:component",
+      "description": "A page title and description with a secondary action and a main action.",
+      "registryDependencies": [
+        "@dashboardblocks/page-header-01"
+      ]
+    },
+    {
+      "name": "page-header-02",
+      "type": "registry:component",
+      "description": "A page title with a status badge and links to the page's sections, each with a count.",
+      "registryDependencies": [
+        "@dashboardblocks/page-header-02"
+      ]
+    },
+    {
+      "name": "page-header-03",
+      "type": "registry:component",
+      "description": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
+      "registryDependencies": [
+        "@dashboardblocks/page-header-03"
+      ]
+    },
+    {
+      "name": "page-header-04",
+      "type": "registry:component",
+      "description": "A page title with a count beside it, and search and the main action on the same row.",
+      "registryDependencies": [
+        "@dashboardblocks/page-header-04"
+      ]
+    },
+    {
+      "name": "notifications-01",
+      "type": "registry:component",
+      "description": "A bell menu listing the latest notifications, with a mark all as read action and a link to the inbox.",
+      "registryDependencies": [
+        "@dashboardblocks/notifications-01"
+      ]
+    },
+    {
+      "name": "notifications-02",
+      "type": "registry:component",
+      "description": "Notifications that ask for a decision, such as a request to join or a refund, with a tab for the ones still waiting.",
+      "registryDependencies": [
+        "@dashboardblocks/notifications-02"
+      ]
+    },
+    {
+      "name": "notifications-03",
+      "type": "registry:component",
+      "description": "Every notification grouped by day, filtered by unread and mentions, each markable as read or unread or archived.",
+      "registryDependencies": [
+        "@dashboardblocks/notifications-03"
+      ]
+    },
+    {
+      "name": "command-menu-01",
+      "type": "registry:component",
+      "description": "A command palette to jump to a page or run an action, with shortcuts shown beside each action.",
+      "registryDependencies": [
+        "@dashboardblocks/command-menu-01"
+      ]
+    },
+    {
+      "name": "command-menu-02",
+      "type": "registry:component",
+      "description": "A command palette that shows recent records, then searches customers and orders as you type.",
+      "registryDependencies": [
+        "@dashboardblocks/command-menu-02"
+      ]
+    },
+    {
+      "name": "kanban-01",
+      "type": "registry:component",
+      "description": "A sprint board of issues in columns with labels, assignees, due dates and priorities, and warnings when a column passes its limit.",
+      "registryDependencies": [
+        "@dashboardblocks/kanban-01"
+      ]
+    },
+    {
+      "name": "kanban-02",
+      "type": "registry:component",
+      "description": "A sales board of deals in columns, each column showing its total value and each deal its next step.",
+      "registryDependencies": [
+        "@dashboardblocks/kanban-02"
+      ]
+    },
+    {
+      "name": "kanban-03",
+      "type": "registry:component",
+      "description": "A support queue of tickets with priority and time left to their SLA, where a full column refuses more tickets.",
+      "registryDependencies": [
+        "@dashboardblocks/kanban-03"
+      ]
+    },
+    {
+      "name": "comments-01",
+      "type": "registry:component",
+      "description": "Discussion threads with replies, reactions and resolved threads, and a box to start a new one.",
+      "registryDependencies": [
+        "@dashboardblocks/comments-01"
+      ]
+    },
+    {
+      "name": "comments-02",
+      "type": "registry:component",
+      "description": "A composer that previews how mentions will look and who will be notified, above the latest updates.",
+      "registryDependencies": [
+        "@dashboardblocks/comments-02"
+      ]
+    },
+    {
+      "name": "comments-03",
+      "type": "registry:component",
+      "description": "Comments in a column beside a document, each quoting the words it is about, that move to Resolved when closed.",
+      "registryDependencies": [
+        "@dashboardblocks/comments-03"
+      ]
+    },
+    {
+      "name": "comments-04",
+      "type": "registry:component",
+      "description": "A support ticket conversation with replies emailed to the customer and internal notes only the team sees.",
+      "registryDependencies": [
+        "@dashboardblocks/comments-04"
+      ]
+    },
+    {
+      "name": "calendar-01",
+      "type": "registry:component",
+      "description": "A month grid of team events, launches, travel and holidays, with the selected day listed beside it.",
+      "registryDependencies": [
+        "@dashboardblocks/calendar-01"
+      ]
+    },
+    {
+      "name": "calendar-02",
+      "type": "registry:component",
+      "description": "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
+      "registryDependencies": [
+        "@dashboardblocks/calendar-02"
+      ]
+    },
+    {
+      "name": "calendar-03",
+      "type": "registry:component",
+      "description": "A content calendar that switches between month and week, with each calendar toggled from a sidebar.",
+      "registryDependencies": [
+        "@dashboardblocks/calendar-03"
+      ]
+    },
+    {
+      "name": "calendar-04",
+      "type": "registry:component",
+      "description": "A day of meeting room bookings with a column per room and whether each is free right now.",
+      "registryDependencies": [
+        "@dashboardblocks/calendar-04"
+      ]
+    },
+    {
+      "name": "files-01",
+      "type": "registry:component",
+      "description": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions.",
+      "registryDependencies": [
+        "@dashboardblocks/files-01"
+      ]
+    },
+    {
+      "name": "files-02",
+      "type": "registry:component",
+      "description": "A table of files with type, owner, last change and size, with search, type filter, sorting and bulk download or delete.",
+      "registryDependencies": [
+        "@dashboardblocks/files-02"
+      ]
+    },
+    {
+      "name": "files-03",
+      "type": "registry:component",
+      "description": "Storage used against the plan, split by kind of file, with the largest files listed to delete.",
+      "registryDependencies": [
+        "@dashboardblocks/files-03"
+      ]
+    },
+    {
+      "name": "files-04",
+      "type": "registry:component",
+      "description": "Folders and files in a grid with a path back to the top, and a menu on each file.",
+      "registryDependencies": [
+        "@dashboardblocks/files-04"
+      ]
+    },
+    {
+      "name": "ai-assistant-01",
+      "type": "registry:component",
+      "description": "An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-assistant-01"
+      ]
+    },
+    {
+      "name": "ai-assistant-02",
+      "type": "registry:component",
+      "description": "A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-assistant-02"
+      ]
+    },
+    {
+      "name": "ai-assistant-03",
+      "type": "registry:component",
+      "description": "Questions about an AI usage card, with the tokens and cost shown for each answer.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-assistant-03"
+      ]
+    },
+    {
+      "name": "ai-assistant-04",
+      "type": "registry:component",
+      "description": "A failed assistant reply kept in the conversation with a button to try again.",
+      "registryDependencies": [
+        "@dashboardblocks/ai-assistant-04"
+      ]
+    },
+    {
+      "name": "invoice-01",
+      "type": "registry:component",
+      "description": "An overdue invoice with discount, sales tax, deposit and balance due, payment instructions and a reminder to send.",
+      "registryDependencies": [
+        "@dashboardblocks/invoice-01"
+      ]
+    },
+    {
+      "name": "invoice-02",
+      "type": "registry:component",
+      "description": "A paid receipt with the payment method, a partial refund and the net amount paid.",
+      "registryDependencies": [
+        "@dashboardblocks/invoice-02"
+      ]
+    },
+    {
+      "name": "invoice-03",
+      "type": "registry:component",
+      "description": "A quote with optional items to tick before accepting, totals that follow and an expiry date.",
+      "registryDependencies": [
+        "@dashboardblocks/invoice-03"
+      ]
+    },
+    {
+      "name": "invoice-04",
+      "type": "registry:component",
+      "description": "A packing slip listing items with SKU and bin, a pick checkbox for each and a barcode of the order number, with no prices.",
+      "registryDependencies": [
+        "@dashboardblocks/invoice-04"
+      ]
+    },
+    {
+      "name": "onboarding-01",
+      "type": "registry:component",
+      "description": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.",
+      "registryDependencies": [
+        "@dashboardblocks/onboarding-01"
+      ]
+    },
+    {
+      "name": "onboarding-02",
+      "type": "registry:component",
+      "description": "The first page of an empty workspace with quick starts, an empty dashboards list, setup progress and help links.",
+      "registryDependencies": [
+        "@dashboardblocks/onboarding-02"
+      ]
+    },
+    {
+      "name": "onboarding-03",
+      "type": "registry:component",
+      "description": "A searchable, filterable list of data sources to pick from, then follow through connecting to connected, with an error state.",
+      "registryDependencies": [
+        "@dashboardblocks/onboarding-03"
+      ]
+    },
+    {
+      "name": "onboarding-04",
+      "type": "registry:component",
+      "description": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.",
+      "registryDependencies": [
+        "@dashboardblocks/onboarding-04"
+      ]
+    },
+    {
+      "name": "error-pages-01",
+      "type": "registry:component",
+      "description": "A not found page that shows the missing path, a search and the places people usually look.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages-01"
+      ]
+    },
+    {
+      "name": "error-pages-02",
+      "type": "registry:component",
+      "description": "A no access page naming who can grant access, with a request form and the account you are signed in with.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages-02"
+      ]
+    },
+    {
+      "name": "error-pages-03",
+      "type": "registry:component",
+      "description": "A failure page with a retry button and count, a copyable error ID for support and the technical details folded away.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages-03"
+      ]
+    },
+    {
+      "name": "error-pages-04",
+      "type": "registry:component",
+      "description": "A maintenance page with what is being done, when it ends, progress through the window, the latest updates and an email sign-up.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages-04"
+      ]
+    },
+    {
+      "name": "error-pages-05",
+      "type": "registry:component",
+      "description": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
+      "registryDependencies": [
+        "@dashboardblocks/error-pages-05"
+      ]
+    },
+    {
+      "name": "auth-01",
+      "type": "registry:component",
+      "description": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs.",
+      "registryDependencies": [
+        "@dashboardblocks/auth-01"
+      ]
+    },
+    {
+      "name": "auth-02",
+      "type": "registry:component",
+      "description": "A list of the workspaces you belong to with your role in each, pending invites to join and a search once there are many.",
+      "registryDependencies": [
+        "@dashboardblocks/auth-02"
+      ]
+    },
+    {
+      "name": "auth-03",
+      "type": "registry:component",
+      "description": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device.",
+      "registryDependencies": [
+        "@dashboardblocks/auth-03"
+      ]
+    },
+    {
+      "name": "auth-04",
+      "type": "registry:component",
+      "description": "An email verification code form with a resend that waits between emails and a way to fix a mistyped address.",
+      "registryDependencies": [
+        "@dashboardblocks/auth-04"
+      ]
+    },
+    {
+      "name": "use-animated-number",
+      "type": "registry:hook",
+      "title": "Use Animated Number",
+      "description": "A hook for animating a number.",
+      "registryDependencies": [
+        "@dashboardblocks/use-animated-number"
+      ]
+    },
+    {
+      "name": "use-in-view",
+      "type": "registry:hook",
+      "title": "Use In View",
+      "description": "A hook that tracks whether an element is visible in the viewport using IntersectionObserver.",
+      "registryDependencies": [
+        "@dashboardblocks/use-in-view"
+      ]
+    }
+  ]
+}
