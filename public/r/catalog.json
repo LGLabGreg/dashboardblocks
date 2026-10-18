@@ -836,7 +836,7 @@
       "component": "Dashboard1",
       "shows": "A full store dashboard with revenue, sales channels, top products, a checkout funnel and low stock, scoped by header filters.",
       "size": "page",
-      "props": "{ status?: \"loading\" | \"error\"; title: string; today: Date }",
+      "props": "{ empty?: boolean; status?: \"loading\" | \"error\"; title: string; today: Date }",
       "usedWith": []
     },
     {
@@ -846,7 +846,7 @@
       "component": "Dashboard2",
       "shows": "A full SaaS dashboard with metric tabs, an activity heatmap, revenue by region, billing movement, retention and service status.",
       "size": "page",
-      "props": "{ status?: \"loading\" | \"error\"; title: string; today: Date }",
+      "props": "{ empty?: boolean; status?: \"loading\" | \"error\"; title: string; today: Date }",
       "usedWith": []
     },
     {
@@ -856,7 +856,7 @@
       "component": "Dashboard3",
       "shows": "A full web analytics dashboard with traffic over time, visitors right now, a traffic flow, top pages, countries and browsers.",
       "size": "page",
-      "props": "{ status?: \"loading\" | \"error\"; title: string; today: Date }",
+      "props": "{ empty?: boolean; status?: \"loading\" | \"error\"; title: string; today: Date }",
       "usedWith": []
     },
     {
@@ -866,7 +866,7 @@
       "component": "Dashboard4",
       "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
       "size": "page",
-      "props": "{ status?: \"loading\" | \"error\"; title: string; today: Date }",
+      "props": "{ empty?: boolean; status?: \"loading\" | \"error\"; title: string; today: Date }",
       "usedWith": []
     },
     {
@@ -876,7 +876,7 @@
       "component": "Dashboard5",
       "shows": "A full DevOps dashboard with live throughput, delivery performance, response times, open alerts, uptime and recent deployments.",
       "size": "page",
-      "props": "{ status?: \"loading\" | \"error\"; title: string; today: Date }",
+      "props": "{ empty?: boolean; status?: \"loading\" | \"error\"; title: string; today: Date }",
       "usedWith": []
     },
     {

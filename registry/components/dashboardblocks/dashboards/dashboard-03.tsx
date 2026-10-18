@@ -31,6 +31,7 @@ import {
 import { useEffect, useState } from 'react'
 
 interface Dashboard3Props {
+  empty?: boolean
   status?: BlockStatus
   title: string
   /** The last day of every date range. */
@@ -276,7 +277,7 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
 }
 
 const Dashboard3 = (props: Dashboard3Props) => {
-  const { status, title, today } = props
+  const { empty = false, status, title, today } = props
   const [query, setQuery] = useState<Query>({ device: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -293,13 +294,13 @@ const Dashboard3 = (props: Dashboard3Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status}>
+    <BlockStateProvider status={status} empty={empty}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-wrap items-start justify-between gap-3'>
               <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
             </div>
             <p className='text-muted-foreground leading-relaxed'>
               Showing{' '}
@@ -345,26 +346,36 @@ const Dashboard3 = (props: Dashboard3Props) => {
           <BlockBusy busy={busy} label='Updating traffic' className='@4xl:col-span-2'>
             <ChartPanel2
               status={status}
-              data={data.traffic.data}
-              description={status ? '' : data.traffic.summary}
-              metrics={data.traffic.metrics}
+              data={empty ? [] : data.traffic.data}
+              description={status || empty ? '' : data.traffic.summary}
+              metrics={empty ? [] : data.traffic.metrics}
               title='Traffic'
             />
           </BlockBusy>
           <Realtime1
             status={status}
-            activeUsers={284}
+            activeUsers={empty ? undefined : 284}
             description='People on the site in the last 5 minutes, on every device.'
-            pageViews={Array.from({ length: 60 }, (_, second) =>
-              Math.round(44 + Math.sin(second / 4) * 12 + Math.cos(second / 1.7) * 5),
-            )}
-            pages={[
-              { path: '/pricing', users: 71 },
-              { path: '/', users: 63 },
-              { path: '/docs/getting-started', users: 44 },
-              { path: '/blog/launch-week', users: 32 },
-              { path: '/changelog', users: 18 },
-            ]}
+            pageViews={
+              empty
+                ? []
+                : Array.from({ length: 60 }, (_, second) =>
+                    Math.round(
+                      44 + Math.sin(second / 4) * 12 + Math.cos(second / 1.7) * 5,
+                    ),
+                  )
+            }
+            pages={
+              empty
+                ? []
+                : [
+                    { path: '/pricing', users: 71 },
+                    { path: '/', users: 63 },
+                    { path: '/docs/getting-started', users: 44 },
+                    { path: '/blog/launch-week', users: 32 },
+                    { path: '/changelog', users: 18 },
+                  ]
+            }
             simulate
             title='Right now'
           />
@@ -378,24 +389,28 @@ const Dashboard3 = (props: Dashboard3Props) => {
                 status={status}
                 description='Sessions from each source, through the page they landed on, to how the visit ended.'
                 goal='signed-up'
-                links={data.flow.links}
-                nodes={data.flow.nodes}
+                links={empty ? [] : data.flow.links}
+                nodes={empty ? [] : data.flow.nodes}
                 title='Traffic flow'
               />
             </div>
-            <Leaderboard1 status={status} pages={data.pages} title='Top pages' />
+            <Leaderboard1
+              status={status}
+              pages={empty ? [] : data.pages}
+              title='Top pages'
+            />
             <Geo2
               status={status}
-              countries={data.countries}
+              countries={empty ? [] : data.countries}
               limit={6}
               title='Top countries'
               unit='visitors'
             />
             <Breakdown1
               status={status}
-              description={status ? '' : data.browserSummary}
+              description={status || empty ? '' : data.browserSummary}
               formatter={(value) => formatNumber(value)}
-              segments={data.browsers}
+              segments={empty ? [] : data.browsers}
               title='Browsers'
             />
           </BlockBusy>

@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.6.1
+
+### Patch Changes
+
+- 1622056: Dashboards take `empty` and show every block's empty state, so a dashboard can be previewed with no data, as each block can.
+  
+  "No data" and "Couldn’t load" are the same size and wording in every block: 20px, light. Lists and tables no longer say "Couldn’t load the data."
+
 ## 1.6.0
 
 ### Minor Changes

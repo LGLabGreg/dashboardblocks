@@ -33,6 +33,7 @@ import {
 import { useEffect, useState } from 'react'
 
 interface Dashboard2Props {
+  empty?: boolean
   status?: BlockStatus
   title: string
   /** The last day of every date range. */
@@ -209,7 +210,7 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
 }
 
 const Dashboard2 = (props: Dashboard2Props) => {
-  const { status, title, today } = props
+  const { empty = false, status, title, today } = props
   const [query, setQuery] = useState<Query>({ plan: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -226,13 +227,13 @@ const Dashboard2 = (props: Dashboard2Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status}>
+    <BlockStateProvider status={status} empty={empty}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-wrap items-start justify-between gap-3'>
               <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
             </div>
             <p className='text-muted-foreground leading-relaxed'>
               Showing{' '}
@@ -284,7 +285,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
             <StatGroup3
               status={status}
               currentLabel={data.currentLabel}
-              metrics={data.metrics}
+              metrics={empty ? [] : data.metrics}
               previousLabel={data.previousLabel}
               title='Revenue and customers'
             />
@@ -292,8 +293,8 @@ const Dashboard2 = (props: Dashboard2Props) => {
           <div className='@4xl:col-span-2'>
             <Billing1
               status={status}
-              description={status ? '' : data.movementSummary}
-              movement={data.movement}
+              description={status || empty ? '' : data.movementSummary}
+              movement={empty ? undefined : data.movement}
               title='MRR movement'
             />
           </div>
@@ -301,7 +302,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
             status={status}
             comparison={`in ${data.previousLabel}`}
             formatter={(value) => formatCurrency(value)}
-            regions={data.regions}
+            regions={empty ? [] : data.regions}
             title='MRR by region'
           />
           <div className='@4xl:col-span-2'>
@@ -309,17 +310,21 @@ const Dashboard2 = (props: Dashboard2Props) => {
               status={status}
               title='When customers are active'
               unit='accounts'
-              values={data.activity}
+              values={empty ? [] : data.activity}
             />
           </div>
           <Retention3
             status={status}
             description='Share of the latest monthly signup cohort still active, against the cohort before.'
-            milestones={data.retention}
+            milestones={empty ? [] : data.retention}
             title='Retention milestones'
           />
           <div className='@4xl:col-span-3'>
-            <DataTable4 status={status} {...dataTable4ExampleProps} />
+            <DataTable4
+              status={status}
+              {...dataTable4ExampleProps}
+              rows={empty ? [] : dataTable4ExampleProps.rows}
+            />
           </div>
         </BlockBusy>
       </div>

@@ -38,6 +38,7 @@ import {
 import { useEffect, useState } from 'react'
 
 interface Dashboard4Props {
+  empty?: boolean
   status?: BlockStatus
   title: string
   /** The last day of every date range. */
@@ -444,7 +445,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
 }
 
 const Dashboard4 = (props: Dashboard4Props) => {
-  const { status, title, today } = props
+  const { empty = false, status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '90d', segment: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -461,13 +462,13 @@ const Dashboard4 = (props: Dashboard4Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status}>
+    <BlockStateProvider status={status} empty={empty}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-wrap items-start justify-between gap-3'>
               <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
             </div>
             <p className='text-muted-foreground leading-relaxed'>
               Showing{' '}
@@ -519,7 +520,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
             <StatGroup2
               status={status}
               comparison={data.previousLabel}
-              metrics={data.stats}
+              metrics={empty ? [] : data.stats}
               title='Sales performance'
             />
           </div>
@@ -527,15 +528,15 @@ const Dashboard4 = (props: Dashboard4Props) => {
             <Pipeline2
               status={status}
               noun='deals'
-              stages={data.stages}
+              stages={empty ? [] : data.stages}
               title='Open pipeline'
             />
           </div>
           <div className='@4xl:col-span-2'>
             <ChartPanel4
               status={status}
-              data={data.months}
-              description={status ? '' : data.bookingsSummary}
+              data={empty ? [] : data.months}
+              description={status || empty ? '' : data.bookingsSummary}
               formatter={currency}
               title='Bookings'
             />
@@ -543,27 +544,27 @@ const Dashboard4 = (props: Dashboard4Props) => {
           <Funnel3
             status={status}
             description='How far the leads that came in got, one step at a time.'
-            stages={data.funnel}
+            stages={empty ? [] : data.funnel}
             title='Lead conversion'
           />
           <div className='@4xl:col-span-2'>
             <Pipeline4
               status={status}
-              owners={data.owners}
+              owners={empty ? [] : data.owners}
               stages={STAGES}
               title={`${data.quarter.label} forecast`}
             />
           </div>
           <ActivityFeed1
             status={status}
-            activities={data.activity}
+            activities={empty ? [] : data.activity}
             now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
             title='Deal activity'
           />
           <div className='@4xl:col-span-3'>
             <Pipeline3
               status={status}
-              items={data.deals}
+              items={empty ? [] : data.deals}
               noun='open deals'
               now={today}
               stages={STAGES}

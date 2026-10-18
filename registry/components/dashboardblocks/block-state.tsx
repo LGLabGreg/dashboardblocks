@@ -74,15 +74,15 @@ function useBlockState() {
 }
 
 const blockStateMessages = {
-  empty: { sentence: 'No data', short: 'No data' },
-  error: { sentence: 'Couldn’t load the data.', short: 'Couldn’t load' },
+  empty: 'No data',
+  error: 'Couldn’t load',
 }
 
 interface BlockStateTextProps {
   className?: string
   /** Shows this state instead of the block's own. */
   state?: BlockState
-  /** `short` fits beside a title, such as `No data`. @default 'sentence' */
+  /** `short` sizes the loading placeholder to fit beside a title. @default 'sentence' */
   variant?: 'sentence' | 'short'
 }
 
@@ -111,9 +111,10 @@ function BlockStateText({
         'block',
         state === 'error' ? 'text-red-700 dark:text-red-400' : 'text-muted-foreground',
         className,
+        'text-xl font-light tracking-normal',
       )}
     >
-      {blockStateMessages[state][variant]}
+      {blockStateMessages[state]}
     </span>
   )
 }

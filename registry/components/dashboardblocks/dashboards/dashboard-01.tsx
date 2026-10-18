@@ -33,6 +33,7 @@ import {
 import { useEffect, useState } from 'react'
 
 interface Dashboard1Props {
+  empty?: boolean
   status?: BlockStatus
   title: string
   /** The last day of every date range. */
@@ -284,7 +285,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
 }
 
 const Dashboard1 = (props: Dashboard1Props) => {
-  const { status, title, today } = props
+  const { empty = false, status, title, today } = props
   const [query, setQuery] = useState<Query>({
     compare: true,
     preset: '30d',
@@ -305,7 +306,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status}>
+    <BlockStateProvider status={status} empty={empty}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>
@@ -316,7 +317,10 @@ const Dashboard1 = (props: Dashboard1Props) => {
                   checked={query.compare}
                   onCheckedChange={(compare) => update({ compare })}
                 />
-                <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+                <ExportMenu
+                  disabled={status !== undefined || empty}
+                  onExport={() => {}}
+                />
               </div>
             </div>
             <p className='text-muted-foreground leading-relaxed'>
@@ -375,7 +379,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
                   ? undefined
                   : 'Sessions, orders, order value and conversion, by day.'
               }
-              metrics={data.stats}
+              metrics={empty ? [] : data.stats}
               title='Shoppers and orders'
             />
           </div>
@@ -384,8 +388,8 @@ const Dashboard1 = (props: Dashboard1Props) => {
               status={status}
               comparison={`in ${data.previousLabel}`}
               currentLabel={data.rangeLabel}
-              data={data.chart}
-              description={status ? '' : data.bestDay}
+              data={empty ? [] : data.chart}
+              description={status || empty ? '' : data.bestDay}
               formatter={currency}
               previousLabel={data.previousLabel}
               showPrevious={displayedQuery.compare}
@@ -394,7 +398,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
           </div>
           <Forecast3
             status={status}
-            current={data.month.current}
+            current={empty ? undefined : data.month.current}
             description='Month to date, projected at the daily run-rate so far.'
             elapsed={data.month.elapsed}
             formatter={currency}
@@ -403,22 +407,26 @@ const Dashboard1 = (props: Dashboard1Props) => {
             total={data.month.total}
           />
           <div className='@4xl:col-span-2'>
-            <DataTable2 status={status} rows={data.products} title='Revenue by product' />
+            <DataTable2
+              status={status}
+              rows={empty ? [] : data.products}
+              title='Revenue by product'
+            />
           </div>
           <Funnel1
             status={status}
             description='Most shoppers who leave do it between viewing a product and adding it to the cart.'
-            stages={data.funnel}
+            stages={empty ? [] : data.funnel}
             title='Checkout funnel'
           />
           <div className='@4xl:col-span-2'>
-            <Inventory1 status={status} items={STOCK} title='Low stock' />
+            <Inventory1 status={status} items={empty ? [] : STOCK} title='Low stock' />
           </div>
           <Breakdown1
             status={status}
-            description={status ? '' : data.channelSummary}
+            description={status || empty ? '' : data.channelSummary}
             formatter={currency}
-            segments={data.channels}
+            segments={empty ? [] : data.channels}
             title='Revenue by channel'
           />
         </BlockBusy>

@@ -35,6 +35,7 @@ import { formatDateRange, formatNumber } from '@/registry/lib/dashboardblocks/fo
 import { useEffect, useState } from 'react'
 
 interface Dashboard5Props {
+  empty?: boolean
   status?: BlockStatus
   title: string
   /** The last day of every date range. */
@@ -534,7 +535,7 @@ const THROUGHPUT = Array.from({ length: 60 }, (_, index) => {
 })
 
 const Dashboard5 = (props: Dashboard5Props) => {
-  const { status, title, today } = props
+  const { empty = false, status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '30d', service: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -551,13 +552,13 @@ const Dashboard5 = (props: Dashboard5Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status}>
+    <BlockStateProvider status={status} empty={empty}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-wrap items-start justify-between gap-3'>
               <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
             </div>
             <p className='text-muted-foreground leading-relaxed'>
               Showing{' '}
@@ -602,7 +603,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
         <Realtime2
           status={status}
           description='Requests per second across every service, over the last 5 minutes.'
-          samples={THROUGHPUT}
+          samples={empty ? [] : THROUGHPUT}
           simulate
           title='Throughput'
         />
@@ -619,8 +620,8 @@ const Dashboard5 = (props: Dashboard5Props) => {
                   ? 'yesterday'
                   : `in the ${getPreset(displayedQuery.preset).days} days before`
               }
-              current={data.dora.current}
-              previous={data.dora.previous}
+              current={empty ? undefined : data.dora.current}
+              previous={empty ? undefined : data.dora.previous}
               title='Delivery performance'
             />
           </div>
@@ -632,7 +633,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
                   ? 'this time yesterday'
                   : 'the day before'
               }
-              data={data.latency}
+              data={empty ? [] : data.latency}
               description='Half of all requests finish within p50, and all but the slowest 1% within p99.'
               formatter={ms}
               headline='p95'
@@ -643,28 +644,32 @@ const Dashboard5 = (props: Dashboard5Props) => {
                 { key: 'p95', label: 'p95' },
                 { key: 'p99', label: 'p99' },
               ]}
-              previous={data.latencyPrevious}
+              previous={empty ? undefined : data.latencyPrevious}
               title='Response time'
             />
           </div>
           <Alerts1
             status={status}
-            alerts={data.alerts}
+            alerts={empty ? [] : data.alerts}
             now={data.now}
             title='Open alerts'
           />
           <div className='@4xl:col-span-2'>
             <Status2
               status={status}
-              services={data.uptime}
+              services={empty ? [] : data.uptime}
               title='Uptime, last 90 days'
             />
           </div>
-          <Deployments4 status={status} pipelines={data.pipelines} title='Build health' />
+          <Deployments4
+            status={status}
+            pipelines={empty ? [] : data.pipelines}
+            title='Build health'
+          />
           <div className='@4xl:col-span-3'>
             <Deployments1
               status={status}
-              deployments={data.deployments}
+              deployments={empty ? [] : data.deployments}
               now={data.now}
               title='Recent deployments'
             />
