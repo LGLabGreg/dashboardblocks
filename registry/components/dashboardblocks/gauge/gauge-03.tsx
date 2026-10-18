@@ -58,7 +58,7 @@ const Gauge3 = (props: Gauge3Props) => {
     thresholds,
     title,
   } = props
-  const state = getBlockState(status, resources.length === 0)
+  const state = getBlockState(status, resources)
   const bands: GaugeBand[] = [
     { from: 0, label: 'Normal', to: thresholds.warning, tone: 'positive' },
     {
@@ -76,7 +76,7 @@ const Gauge3 = (props: Gauge3Props) => {
   const worst = busiest ? getGaugeBand(busiest.value, bands) : undefined
 
   return (
-    <BlockStateProvider status={status} empty={resources.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

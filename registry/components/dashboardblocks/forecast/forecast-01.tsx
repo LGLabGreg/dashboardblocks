@@ -99,7 +99,7 @@ const Forecast1 = (props: Forecast1Props) => {
     stepDays = 7,
     title,
   } = props
-  const state = getBlockState(status, actuals.length === 0)
+  const state = getBlockState(status, actuals)
 
   const { fit, rows: forecastRows } = buildForecast(actuals, horizon, level)
   const last = actuals.length - 1
@@ -116,7 +116,7 @@ const Forecast1 = (props: Forecast1Props) => {
   const unit = stepDays === 7 ? 'week' : `${stepDays} days`
 
   return (
-    <BlockStateProvider status={status} empty={actuals.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

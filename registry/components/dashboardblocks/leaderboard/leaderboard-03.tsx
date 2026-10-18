@@ -172,13 +172,13 @@ function Podium({ top, unit }: PodiumProps) {
 
 const Leaderboard3 = (props: Leaderboard3Props) => {
   const { contributors = [], status, title, unit } = props
-  const state = getBlockState(status, contributors.length === 0)
+  const state = getBlockState(status, contributors)
   const { description = summarize(contributors, unit) } = props
   const top = contributors.slice(0, 3)
   const rest = contributors.slice(3)
 
   return (
-    <BlockStateProvider status={status} empty={contributors.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

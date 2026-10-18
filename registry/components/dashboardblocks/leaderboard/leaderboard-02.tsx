@@ -118,13 +118,13 @@ function summarize(reps: SalesRep[], format: (value: number) => string) {
 
 const Leaderboard2 = (props: Leaderboard2Props) => {
   const { currency = 'USD', reps = [], status, title } = props
-  const state = getBlockState(status, reps.length === 0)
+  const state = getBlockState(status, reps)
   const format = (value: number) => formatCurrency(value, { currency })
   const { description = summarize(reps, format) } = props
   const scale = Math.max(...reps.map((rep) => rep.revenue / (rep.quota || 1)), 1)
 
   return (
-    <BlockStateProvider status={status} empty={reps.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

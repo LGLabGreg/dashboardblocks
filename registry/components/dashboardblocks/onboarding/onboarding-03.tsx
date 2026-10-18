@@ -141,7 +141,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
     sources = [],
     status: blockStatus,
   } = props
-  const blockState = getBlockState(blockStatus, sources.length === 0)
+  const blockState = getBlockState(blockStatus, sources)
   const id = useId()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
@@ -225,7 +225,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
           : ''
 
   return (
-    <BlockStateProvider status={blockStatus} empty={sources.length === 0}>
+    <BlockStateProvider state={blockState}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 id={`${id}-title`} className='font-semibold tracking-tight'>

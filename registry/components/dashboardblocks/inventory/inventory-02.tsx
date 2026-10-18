@@ -88,7 +88,7 @@ const percent = (ratio: number) => formatPercent(ratio, { maximumFractionDigits:
 
 const Inventory2 = (props: Inventory2Props) => {
   const { status, title, warehouses = [], warnAt = 0.85 } = props
-  const state = getBlockState(status, warehouses.length === 0)
+  const state = getBlockState(status, warehouses)
   const stored = warehouses.reduce((sum, warehouse) => sum + warehouse.stored, 0)
   const capacity = warehouses.reduce((sum, warehouse) => sum + warehouse.capacity, 0)
   const rows = warehouses.map((warehouse) => {
@@ -105,7 +105,7 @@ const Inventory2 = (props: Inventory2Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={warehouses.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

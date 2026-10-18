@@ -117,13 +117,13 @@ function describe(shown: number, total: number, filters: Filter[]) {
 const States3 = (props: States3Props) => {
   const { defaultFilters, orders = [], status, title } = props
   const [filters, setFilters] = useState(defaultFilters)
-  const state = getBlockState(status, orders.length === 0)
+  const state = getBlockState(status, orders)
   const rows = orders.filter((order) =>
     filters.every((filter) => order[filter.field] === filter.value),
   )
 
   return (
-    <BlockStateProvider status={status} empty={orders.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

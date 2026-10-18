@@ -183,7 +183,7 @@ const Realtime3 = (props: Realtime3Props) => {
   }
   const [now, setNow] = useState(props.now)
   const [paused, setPaused] = useState(false)
-  const state = getBlockState(status, events.length === 0)
+  const state = getBlockState(status, events)
   const random = useRef(createRandom(5))
   const count = useRef(0)
 
@@ -207,7 +207,7 @@ const Realtime3 = (props: Realtime3Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={events.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

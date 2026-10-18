@@ -36,7 +36,7 @@ const exampleProps: Feedback2Props = {
 
 const Feedback2 = (props: Feedback2Props) => {
   const { description, status, title, topics = [] } = props
-  const state = getBlockState(status, topics.length === 0)
+  const state = getBlockState(status, topics)
   const sorted = [...topics].sort((a, b) => getNetSentiment(b) - getNetSentiment(a))
   const mentions = topics.reduce(
     (sum, topic) => sum + topic.negative + topic.neutral + topic.positive,
@@ -47,7 +47,7 @@ const Feedback2 = (props: Feedback2Props) => {
   const worst = negative.at(-1)
 
   return (
-    <BlockStateProvider status={status} empty={topics.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

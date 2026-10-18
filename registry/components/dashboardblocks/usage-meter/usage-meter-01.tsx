@@ -60,7 +60,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
     unit,
     used = 0,
   } = props
-  const state = getBlockState(blockStatus, props.used === undefined)
+  const state = getBlockState(blockStatus, props.used)
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'short',
@@ -79,7 +79,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
   const limitDate = new Date(now.getTime() + daysToLimit * DAY)
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.used === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3 border-t pt-3'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

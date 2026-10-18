@@ -5,6 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   Stat,
@@ -119,7 +120,7 @@ const Billing4 = (props: Billing4Props) => {
     status === 'loading' ? getStatPlaceholders(4) : metrics
 
   return (
-    <BlockStateProvider status={status} empty={metrics.length === 0}>
+    <BlockStateProvider state={getBlockState(status, metrics)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

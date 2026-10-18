@@ -3,6 +3,7 @@
 import {
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   Stat,
@@ -69,7 +70,7 @@ const StatGroup4 = (props: StatGroup4Props) => {
   const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <BlockStateProvider status={status} empty={metrics.length === 0}>
+    <BlockStateProvider state={getBlockState(status, metrics)}>
       <section className='@container flex flex-col gap-4'>
         <StatGroup className='grid-cols-2 gap-x-4 gap-y-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
           {shown.map((metric) => (

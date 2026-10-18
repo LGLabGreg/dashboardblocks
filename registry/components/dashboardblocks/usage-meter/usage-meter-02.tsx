@@ -5,6 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
@@ -42,7 +43,7 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
   const free = Math.max(0, limit - used)
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.used === undefined}>
+    <BlockStateProvider state={getBlockState(blockStatus, props.used)}>
       <section className='@container flex items-center gap-6 border-t pt-4'>
         <Ring
           ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}

@@ -161,7 +161,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
   const commentId = useId()
   const [posted, setPosted] = useState<TicketEvent[]>([])
   const events = [...loadedEvents, ...posted]
-  const state = getBlockState(status, ticket === undefined)
+  const state = getBlockState(status, ticket)
   const ready = ticket !== undefined && state === undefined
   const [draft, setDraft] = useState('')
   const [isSaving, setIsSaving] = useState(false)
@@ -194,7 +194,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
   const comments = events.filter((event) => event.comment).length
 
   return (
-    <BlockStateProvider status={status} empty={ticket === undefined}>
+    <BlockStateProvider state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Issues</BackLink>

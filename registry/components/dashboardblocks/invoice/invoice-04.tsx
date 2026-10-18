@@ -160,7 +160,7 @@ const Invoice4 = (props: Invoice4Props) => {
     status,
     weight,
   } = props
-  const state = getBlockState(status, lines.length === 0)
+  const state = getBlockState(status, lines)
   const [picked, setPicked] = useState<string[]>([])
   const [packing, setPacking] = useState<'idle' | 'saving' | 'packed'>('idle')
   const units = lines.reduce((sum, line) => sum + line.quantity, 0)
@@ -177,7 +177,7 @@ const Invoice4 = (props: Invoice4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={lines.length === 0}>
+    <BlockStateProvider state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

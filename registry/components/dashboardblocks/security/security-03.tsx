@@ -164,10 +164,10 @@ function SessionList(props: Security3Props) {
 
 const Security3 = (props: Security3Props) => {
   const { sessions = [], status } = props
-  const state = getBlockState(status, sessions.length === 0)
+  const state = getBlockState(status, sessions)
 
   return (
-    <BlockStateProvider status={status} empty={sessions.length === 0}>
+    <BlockStateProvider state={state}>
       <SessionList key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

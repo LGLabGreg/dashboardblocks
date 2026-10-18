@@ -139,7 +139,7 @@ const Notifications3 = (props: Notifications3Props) => {
   )
   const [archived, setArchived] = useState<ReadonlySet<string>>(() => new Set())
   const [filter, setFilter] = useState<Filter>('all')
-  const state = getBlockState(status, loaded.length === 0)
+  const state = getBlockState(status, loaded)
   const notifications = loaded
     .filter((notification) => !archived.has(notification.id))
     .map((notification) => ({
@@ -178,7 +178,7 @@ const Notifications3 = (props: Notifications3Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={loaded.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

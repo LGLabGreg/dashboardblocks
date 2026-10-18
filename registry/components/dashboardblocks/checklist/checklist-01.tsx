@@ -250,10 +250,10 @@ function ChecklistSteps(props: ChecklistStepsProps) {
 
 const Checklist1 = (props: Checklist1Props) => {
   const { status, steps = [], title } = props
-  const state = getBlockState(status, steps.length === 0)
+  const state = getBlockState(status, steps)
 
   return (
-    <BlockStateProvider status={status} empty={steps.length === 0}>
+    <BlockStateProvider state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

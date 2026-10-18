@@ -294,7 +294,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={status ?? (empty ? 'empty' : undefined)}>
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3 border-b pb-4'>
           <div className='flex flex-col gap-2'>

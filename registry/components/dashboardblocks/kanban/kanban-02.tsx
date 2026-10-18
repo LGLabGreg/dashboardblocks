@@ -198,14 +198,14 @@ const Kanban2 = (props: Kanban2Props) => {
       ),
     [loadedDeals, moves],
   )
-  const state = getBlockState(status, loadedDeals.length === 0)
+  const state = getBlockState(status, loadedDeals)
   const [collapsed, setCollapsed] = useState<string[]>([closedColumns.lost])
   const closed = [closedColumns.won, closedColumns.lost]
   const open = deals.filter((deal) => !closed.includes(deal.column))
   const won = getColumnItems(deals, closedColumns.won)
 
   return (
-    <BlockStateProvider status={status} empty={loadedDeals.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

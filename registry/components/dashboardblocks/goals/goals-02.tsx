@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   GoalProgress,
@@ -78,7 +79,7 @@ const Goals2 = (props: Goals2Props) => {
   const onPace = rows.filter((row) => row.pace.status !== 'behind').length
 
   return (
-    <BlockStateProvider status={status} empty={goals.length === 0}>
+    <BlockStateProvider state={getBlockState(status, goals)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

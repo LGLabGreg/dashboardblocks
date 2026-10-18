@@ -48,7 +48,7 @@ const exampleProps: Heatmap2Props = {
 
 const Heatmap2 = (props: Heatmap2Props) => {
   const { cohorts = [], status, title } = props
-  const state = getBlockState(status, cohorts.length === 0)
+  const state = getBlockState(status, cohorts)
   const averages = getAverageRetention(cohorts)
   const firstWeek = averages[1]
   const {
@@ -58,7 +58,7 @@ const Heatmap2 = (props: Heatmap2Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={cohorts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

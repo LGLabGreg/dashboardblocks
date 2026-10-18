@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   createDataTableColumnHelper,
@@ -146,7 +147,7 @@ const DataTable5 = (props: DataTable5Props) => {
   const { pageIndex } = table.state.pagination
 
   return (
-    <BlockStateProvider status={status} empty={rows.length === 0}>
+    <BlockStateProvider state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

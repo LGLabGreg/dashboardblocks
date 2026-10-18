@@ -112,7 +112,7 @@ const LEVELS: RiskLevel[] = ['critical', 'high', 'medium', 'low']
 
 const Scatter4 = (props: Scatter4Props) => {
   const { description, risks = [], status, title } = props
-  const state = getBlockState(status, risks.length === 0)
+  const state = getBlockState(status, risks)
   const [selected, setSelected] = useState<{ impact: number; likelihood: number } | null>(
     null,
   )
@@ -125,7 +125,7 @@ const Scatter4 = (props: Scatter4Props) => {
         .slice(0, 3)
 
   return (
-    <BlockStateProvider status={status} empty={risks.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

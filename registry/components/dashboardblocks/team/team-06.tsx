@@ -394,10 +394,10 @@ function ShareSettings(props: Team6Props) {
 
 const Team6 = (props: Team6Props) => {
   const { people = [], status } = props
-  const state = getBlockState(status, people.length === 0)
+  const state = getBlockState(status, people)
 
   return (
-    <BlockStateProvider status={status} empty={people.length === 0}>
+    <BlockStateProvider state={state}>
       <ShareSettings key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

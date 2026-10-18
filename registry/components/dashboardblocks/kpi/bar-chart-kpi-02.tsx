@@ -99,7 +99,7 @@ function BarWithGoal({
 
 const BarChartKPI2 = (props: BarChartKPI2Props) => {
   const { data = [], format, height = 144, status, title } = props
-  const state = getBlockState(status, data.length === 0)
+  const state = getBlockState(status, data)
   const formatter = getKPIFormatter(format)
   const total = data.reduce((sum, point) => sum + point.value, 0)
   const goal = data.reduce((sum, point) => sum + point.goal, 0)
@@ -107,7 +107,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
   const daysMet = data.filter((point) => point.value >= point.goal).length
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={state}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

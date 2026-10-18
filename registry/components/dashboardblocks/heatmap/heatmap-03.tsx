@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   HeatmapGrid,
@@ -114,7 +115,7 @@ const Heatmap3 = (props: Heatmap3Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={daily.length === 0}>
+    <BlockStateProvider state={getBlockState(status, daily)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

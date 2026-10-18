@@ -102,7 +102,7 @@ const Retention4 = (props: Retention4Props) => {
     title,
     unit = 'users',
   } = props
-  const state = getBlockState(status, periods.length === 0)
+  const state = getBlockState(status, periods)
   const rows = periods.map((period) => ({
     churned: -period.churned,
     label: period.label,
@@ -116,7 +116,7 @@ const Retention4 = (props: Retention4Props) => {
   const netTotal = rows.reduce((sum, row) => sum + row.net, 0)
 
   return (
-    <BlockStateProvider status={status} empty={periods.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

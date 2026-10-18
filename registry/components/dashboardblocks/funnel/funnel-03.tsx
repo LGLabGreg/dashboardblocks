@@ -41,13 +41,13 @@ const exampleProps: Funnel3Props = {
 
 const Funnel3 = (props: Funnel3Props) => {
   const { description, stages = [], status, title } = props
-  const state = getBlockState(status, stages.length === 0)
+  const state = getBlockState(status, stages)
   const steps = getFunnelSteps(stages)
   const biggestDrop = getBiggestDropIndex(steps)
   const last = steps.at(-1)
 
   return (
-    <BlockStateProvider status={status} empty={stages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

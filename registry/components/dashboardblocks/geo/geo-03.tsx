@@ -45,7 +45,7 @@ const exampleProps: Geo3Props = {
 
 const Geo3 = (props: Geo3Props) => {
   const { locations = [], status, title, unit } = props
-  const state = getBlockState(status, locations.length === 0)
+  const state = getBlockState(status, locations)
   const unitName = unit.charAt(0).toUpperCase() + unit.slice(1)
   const total = locations.reduce((sum, location) => sum + location.value, 0)
   const max = Math.max(0, ...locations.map((location) => location.value))
@@ -62,7 +62,7 @@ const Geo3 = (props: Geo3Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={locations.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

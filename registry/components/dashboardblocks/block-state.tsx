@@ -45,28 +45,28 @@ type BlockStatus = 'loading' | 'error'
 
 type BlockState = BlockStatus | 'empty'
 
+type BlockData = readonly unknown[] | string | number | object | null | undefined
+
 const BlockStateContext = createContext<BlockState | undefined>(undefined)
 
-function getBlockState(status: BlockStatus | undefined, empty: boolean) {
-  return status ?? (empty ? 'empty' : undefined)
+/** `data` is empty when it's left out, `null`, `''` or `[]`. */
+function getBlockState(status: BlockStatus | undefined, data: BlockData) {
+  if (status) return status
+  const empty =
+    data === undefined ||
+    data === null ||
+    data === '' ||
+    (Array.isArray(data) && data.length === 0)
+  return empty ? ('empty' as const) : undefined
 }
 
 interface BlockStateProviderProps {
   children: ReactNode
-  empty?: boolean
-  status?: BlockStatus
+  state?: BlockState
 }
 
-function BlockStateProvider({
-  children,
-  empty = false,
-  status,
-}: BlockStateProviderProps) {
-  return (
-    <BlockStateContext.Provider value={getBlockState(status, empty)}>
-      {children}
-    </BlockStateContext.Provider>
-  )
+function BlockStateProvider({ children, state }: BlockStateProviderProps) {
+  return <BlockStateContext.Provider value={state}>{children}</BlockStateContext.Provider>
 }
 
 function useBlockState() {
@@ -339,6 +339,7 @@ export {
 
 export type {
   BlockBusyProps,
+  BlockData,
   BlockMessageProps,
   BlockReadyProps,
   BlockState,

@@ -104,7 +104,7 @@ const formatCorrelation = (r: number) =>
 
 const Scatter1 = (props: Scatter1Props) => {
   const { description, groups, points = [], status, title, x, y } = props
-  const state = getBlockState(status, points.length === 0)
+  const state = getBlockState(status, points)
   const fit = fitLine(points)
   const xs = points.map((point) => point.x)
   const minX = Math.min(...xs)
@@ -115,7 +115,7 @@ const Scatter1 = (props: Scatter1Props) => {
   const perUnit = fit.slope
 
   return (
-    <BlockStateProvider status={status} empty={points.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

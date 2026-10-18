@@ -196,7 +196,7 @@ const Invoice1 = (props: Invoice1Props) => {
     taxRate,
     terms,
   } = props
-  const state = getBlockState(blockStatus, lines.length === 0)
+  const state = getBlockState(blockStatus, lines)
   const [reminder, setReminder] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, discountRate, paid, taxRate })
   const daysLeft = getDaysUntil(dueDate, now)
@@ -225,7 +225,7 @@ const Invoice1 = (props: Invoice1Props) => {
   }
 
   return (
-    <BlockStateProvider status={blockStatus} empty={lines.length === 0}>
+    <BlockStateProvider state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

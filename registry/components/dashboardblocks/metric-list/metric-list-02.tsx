@@ -138,10 +138,13 @@ const MetricList2 = (props: MetricList2Props) => {
     (sum, section) => sum + section.metrics.filter(isBetter).length,
     0,
   )
-  const state = getBlockState(status, total === 0)
+  const state = getBlockState(
+    status,
+    sections.flatMap((section) => section.metrics),
+  )
 
   return (
-    <BlockStateProvider status={status} empty={total === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

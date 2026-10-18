@@ -86,14 +86,14 @@ const exampleProps: MetricList3Props = {
 
 const MetricList3 = (props: MetricList3Props) => {
   const { description, metrics = [], status, title } = props
-  const state = getBlockState(status, metrics.length === 0)
+  const state = getBlockState(status, metrics)
   const statuses = metrics.map((metric) => getTargetStatus(metric))
   const met = statuses.filter((status) => status === 'met').length
 
   const missed = statuses.filter((status) => status === 'missed').length
 
   return (
-    <BlockStateProvider status={status} empty={metrics.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

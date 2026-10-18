@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type Person,
@@ -104,10 +105,10 @@ function summarize(members: Member[]) {
 
 const Team1 = (props: Team1Props) => {
   const { description, members = [], now, onInvite, status, title } = props
-  const empty = members.length === 0
+  const state = getBlockState(status, members)
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>
@@ -133,7 +134,7 @@ const Team1 = (props: Team1Props) => {
           </Button>
         </header>
         <BlockStateRows className='border-t' rows={members.length || 5} />
-        {!status && !empty && (
+        {!state && (
           <ul className='flex flex-col divide-y border-t'>
             {members.map((member) => {
               const presence = member.presence ?? 'offline'

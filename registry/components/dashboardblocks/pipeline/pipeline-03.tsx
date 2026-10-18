@@ -138,7 +138,7 @@ const exampleProps: Pipeline3Props = {
 
 const Pipeline3 = (props: Pipeline3Props) => {
   const { items = [], noun = 'items', now, stages, status, title } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const stageById = new Map(stages.map((stage) => [stage.id, stage]))
 
   const stuck = items
@@ -161,7 +161,7 @@ const Pipeline3 = (props: Pipeline3Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

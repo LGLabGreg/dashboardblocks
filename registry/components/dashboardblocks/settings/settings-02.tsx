@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import {
@@ -162,7 +163,7 @@ const Settings2 = (props: Settings2Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={keys.length === 0}>
+    <BlockStateProvider state={getBlockState(status, keys)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

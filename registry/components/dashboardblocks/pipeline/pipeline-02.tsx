@@ -58,7 +58,7 @@ const MEASURES: { label: string; value: Measure }[] = [
 
 const Pipeline2 = (props: Pipeline2Props) => {
   const { noun = 'items', stages = [], status, title } = props
-  const state = getBlockState(status, stages.length === 0)
+  const state = getBlockState(status, stages)
   const [measure, setMeasure] = useState<Measure>('value')
 
   const totalCount = stages.reduce((sum, stage) => sum + stage.count, 0)
@@ -76,7 +76,7 @@ const Pipeline2 = (props: Pipeline2Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={stages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

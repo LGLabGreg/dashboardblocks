@@ -92,7 +92,7 @@ const exactPercent = (value: number) =>
 const Feedback4 = (props: Feedback4Props) => {
   const { description, periods = [], status, target, title } = props
   const gradient = useChartId()
-  const state = getBlockState(status, periods.length === 0)
+  const state = getBlockState(status, periods)
   const rows = periods.map((period) => ({
     ...period,
     csat: period.responses > 0 ? period.satisfied / period.responses : 0,
@@ -111,7 +111,7 @@ const Feedback4 = (props: Feedback4Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={periods.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

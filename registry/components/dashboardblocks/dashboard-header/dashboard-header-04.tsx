@@ -54,7 +54,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
     title,
     today,
   } = props
-  const state = getBlockState(status, !description)
+  const state = getBlockState(status, description)
   const [preset, setPreset] = useState<DateRangePreset>(defaultPreset)
   const [compare, setCompare] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -71,7 +71,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={!description}>
+    <BlockStateProvider state={state}>
       <header className='@container border-b pb-4'>
         <div className='flex flex-col gap-4 @3xl:flex-row @3xl:items-end @3xl:justify-between'>
           <div className='flex flex-col gap-2'>

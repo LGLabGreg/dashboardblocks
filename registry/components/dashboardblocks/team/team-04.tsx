@@ -111,7 +111,7 @@ function formatDuration(ms: number) {
 
 const Team4 = (props: Team4Props) => {
   const { description, now, onPage, shifts = [], status, timeZone = 'UTC', title } = props
-  const state = getBlockState(status, shifts.length === 0)
+  const state = getBlockState(status, shifts)
   const id = useId()
   const handoverFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
@@ -151,7 +151,7 @@ const Team4 = (props: Team4Props) => {
       : 'Nobody is on call.'
 
   return (
-    <BlockStateProvider status={status} empty={shifts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -5,6 +5,7 @@ import {
   type BlockStatus,
   type LoadStatus,
   useBlockData,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   Stat,
@@ -77,7 +78,7 @@ const States1 = (props: States1Props) => {
   const shown = loading ? getStatPlaceholders(placeholders) : data
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

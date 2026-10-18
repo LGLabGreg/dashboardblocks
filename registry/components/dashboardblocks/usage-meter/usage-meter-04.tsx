@@ -70,7 +70,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
     timeZone = 'UTC',
     title,
   } = props
-  const state = getBlockState(blockStatus, props.balance === undefined)
+  const state = getBlockState(blockStatus, props.balance)
   const burn =
     dailyUsage.length > 0
       ? dailyUsage.reduce((sum, value) => sum + value, 0) / dailyUsage.length
@@ -93,7 +93,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
   const latest = days[days.length - 1]
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.balance === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3 border-t pt-3'>
         <header className='flex min-h-8 items-center justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

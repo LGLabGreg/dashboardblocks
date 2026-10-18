@@ -86,7 +86,7 @@ const Distribution2 = (props: Distribution2Props) => {
     unit = 'tickets',
     whiskerLabel = '5th–95th percentile',
   } = props
-  const state = getBlockState(status, groups.length === 0)
+  const state = getBlockState(status, groups)
   const ticks = getNiceTicks(0, Math.max(0, ...groups.map((group) => group.high)), 5)
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]]
   const slowest = groups.reduce<DistributionGroup | undefined>(
@@ -99,7 +99,7 @@ const Distribution2 = (props: Distribution2Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={groups.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

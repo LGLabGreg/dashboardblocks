@@ -222,10 +222,10 @@ const ActivityFeed2 = (props: ActivityFeed2Props) => {
     timeZone = 'UTC',
     title,
   } = props
-  const state = getBlockState(status, events.length === 0)
+  const state = getBlockState(status, events)
 
   return (
-    <BlockStateProvider status={status} empty={events.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

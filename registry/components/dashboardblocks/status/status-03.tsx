@@ -68,10 +68,10 @@ const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
 
 const Status3 = (props: Status3Props) => {
   const { affected, onSubscribe, severity, started, status, title, updates = [] } = props
-  const state = getBlockState(status, updates.length === 0)
+  const state = getBlockState(status, updates)
 
   return (
-    <BlockStateProvider status={status} empty={updates.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-1'>

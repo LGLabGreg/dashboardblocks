@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type FormErrors,
@@ -107,7 +108,7 @@ const Forms2 = (props: Forms2Props) => {
   })
 
   return (
-    <BlockStateProvider status={status} empty={customers.length === 0}>
+    <BlockStateProvider state={getBlockState(status, customers)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

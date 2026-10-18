@@ -99,7 +99,7 @@ const Inventory4 = (props: Inventory4Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, onHand === undefined)
+  const state = getBlockState(status, onHand)
   const ready = state === undefined || state === 'loading'
   const gradientId = useChartId()
   const { levels, stockoutDay } = projectStock({
@@ -123,7 +123,7 @@ const Inventory4 = (props: Inventory4Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={onHand === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

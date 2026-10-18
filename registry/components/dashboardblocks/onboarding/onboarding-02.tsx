@@ -214,12 +214,12 @@ const Onboarding2 = (props: Onboarding2Props) => {
     workspace,
   } = props
   const id = useId()
-  const state = getBlockState(status, tasks.length === 0)
+  const state = getBlockState(status, tasks)
   const progress = getChecklistProgress(tasks)
   const next = getNextStep(tasks)
 
   return (
-    <BlockStateProvider status={status} empty={tasks.length === 0}>
+    <BlockStateProvider state={state}>
       <div className='bg-background @container/page flex min-h-svh flex-col'>
         <div className='mx-auto flex w-full max-w-6xl flex-col gap-8 p-4 sm:p-6 lg:p-8'>
           <header className='flex flex-col gap-4 @3xl/page:flex-row @3xl/page:items-end @3xl/page:justify-between'>

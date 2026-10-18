@@ -243,11 +243,13 @@ function TaskGroups(props: TaskGroupsProps) {
 
 const Checklist4 = (props: Checklist4Props) => {
   const { groups = [], status, title } = props
-  const empty = groups.every((group) => group.tasks.length === 0)
-  const state = getBlockState(status, empty)
+  const state = getBlockState(
+    status,
+    groups.flatMap((group) => group.tasks),
+  )
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

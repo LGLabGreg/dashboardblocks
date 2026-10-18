@@ -107,7 +107,7 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
   const { notifications = [], now, onRead, status, timeZone = 'UTC', title } = props
   const [filter, setFilter] = useState<Filter>('all')
   const [markedRead, setMarkedRead] = useState<ReadonlySet<string>>(() => new Set())
-  const state = getBlockState(status, notifications.length === 0)
+  const state = getBlockState(status, notifications)
 
   const isRead = (item: Notification) => item.read || markedRead.has(item.id)
   const unread = notifications.filter((item) => !isRead(item))
@@ -129,7 +129,7 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
   ]
 
   return (
-    <BlockStateProvider status={status} empty={notifications.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

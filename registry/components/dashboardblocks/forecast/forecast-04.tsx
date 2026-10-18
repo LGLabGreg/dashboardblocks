@@ -119,7 +119,7 @@ const Forecast4 = (props: Forecast4Props) => {
     target,
     title,
   } = props
-  const state = getBlockState(status, actuals.length === 0)
+  const state = getBlockState(status, actuals)
 
   const current = actuals[actuals.length - 1]?.value ?? 0
   const paths = {
@@ -170,7 +170,7 @@ const Forecast4 = (props: Forecast4Props) => {
       ) : null
 
   return (
-    <BlockStateProvider status={status} empty={actuals.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container/data-table flex flex-col gap-4 [--data-table-inset:0px]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

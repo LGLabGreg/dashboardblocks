@@ -199,7 +199,7 @@ const Schedule4 = (props: Schedule4Props) => {
   } = props
   const frame = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<HoveredEvent | null>(null)
-  const state = getBlockState(status, events.length === 0)
+  const state = getBlockState(status, events)
   const today = getDay(now, timeZone)
   const range = (endHour - startHour) * 60
   const ticks = Array.from(
@@ -253,7 +253,7 @@ const Schedule4 = (props: Schedule4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={events.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

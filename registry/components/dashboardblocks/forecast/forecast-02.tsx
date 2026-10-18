@@ -108,7 +108,7 @@ const Forecast2 = (props: Forecast2Props) => {
     target,
     title,
   } = props
-  const state = getBlockState(blockStatus, actuals.length === 0)
+  const state = getBlockState(blockStatus, actuals)
 
   const gradientId = useChartId()
   const stepMs = stepDays * DAY
@@ -156,7 +156,7 @@ const Forecast2 = (props: Forecast2Props) => {
     .map((row) => row.date)
 
   return (
-    <BlockStateProvider status={blockStatus} empty={actuals.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-4'>
           <div className='flex flex-col gap-0.5'>

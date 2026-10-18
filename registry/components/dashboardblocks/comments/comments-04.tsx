@@ -142,7 +142,7 @@ const Comments4 = (props: Comments4Props) => {
   const [mode, setMode] = useState<Mode>('reply')
   const [drafts, setDrafts] = useState({ note: '', reply: '' })
   const [announcement, setAnnouncement] = useState('')
-  const state = getBlockState(status, messages.length === 0)
+  const state = getBlockState(status, messages)
   const unavailable = state === 'loading' || state === 'error'
   const mentioned = getMentions(
     drafts.note,
@@ -191,7 +191,7 @@ const Comments4 = (props: Comments4Props) => {
       : `${customer.name.split(' ')[0]} has waited ${waitingHours < 1 ? 'under an hour' : `${waitingHours} ${waitingHours === 1 ? 'hour' : 'hours'}`} for a reply.`
 
   return (
-    <BlockStateProvider status={status} empty={messages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

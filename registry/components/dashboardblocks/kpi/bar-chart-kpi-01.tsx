@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
 import {
@@ -64,7 +65,7 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={getBlockState(status, data)}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

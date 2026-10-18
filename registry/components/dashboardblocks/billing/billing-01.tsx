@@ -51,13 +51,13 @@ const Billing1 = (props: Billing1Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, props.movement === undefined)
+  const state = getBlockState(status, props.movement)
   const { ending, net, steps } = getMrrMovement(movement)
   const retention = getNetRevenueRetention(movement)
   const format = (value: number) => formatCurrency(value, { currency })
 
   return (
-    <BlockStateProvider status={status} empty={props.movement === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

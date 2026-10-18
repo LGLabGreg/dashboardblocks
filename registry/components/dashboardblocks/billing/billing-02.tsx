@@ -75,13 +75,13 @@ const Billing2 = (props: Billing2Props) => {
     summary,
     title,
   } = props
-  const state = getBlockState(status, props.price === undefined)
+  const state = getBlockState(status, props.price)
   const unavailable = status !== undefined
   const days = getDaysUntil(renewsAt, now)
   const renewal = formatBillingDate(renewsAt)
 
   return (
-    <BlockStateProvider status={status} empty={props.price === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-1 basis-56 flex-col gap-0.5'>

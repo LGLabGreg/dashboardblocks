@@ -250,7 +250,7 @@ const Calendar4 = (props: Calendar4Props) => {
     teams,
     timeZone = 'UTC',
   } = props
-  const state = getBlockState(blockStatus, data.length === 0)
+  const state = getBlockState(blockStatus, data)
   const bookings = state ? [] : data
   const today = getDay(now, timeZone)
   const [day, setDay] = useState(today)
@@ -293,7 +293,7 @@ const Calendar4 = (props: Calendar4Props) => {
   }
 
   return (
-    <BlockStateProvider status={blockStatus} empty={data.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={formatDay(day, { day: 'numeric', month: 'long', weekday: 'long' })}

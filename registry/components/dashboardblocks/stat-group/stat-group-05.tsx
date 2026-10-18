@@ -110,11 +110,11 @@ const StatGroup5 = (props: StatGroup5Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, metrics.length === 0)
+  const state = getBlockState(status, metrics)
   const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <BlockStateProvider status={status} empty={metrics.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

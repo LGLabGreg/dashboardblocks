@@ -104,7 +104,7 @@ const compact = (value: number) => formatCurrency(value, { compact: true })
 
 const Pipeline4 = (props: Pipeline4Props) => {
   const { owners = [], stages, status, title } = props
-  const state = getBlockState(status, owners.length === 0)
+  const state = getBlockState(status, owners)
   const ready = state === undefined || state === 'loading'
   const probability = new Map(stages.map((stage) => [stage.id, stage.probability ?? 0]))
   const rows = owners.map((owner) => {
@@ -122,7 +122,7 @@ const Pipeline4 = (props: Pipeline4Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={owners.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -106,7 +106,7 @@ function Slip({ slip }: { slip: number | null }) {
 const Timeline4 = (props: Timeline4Props) => {
   const { description, end, now, phases = [], start, status, title } = props
   const id = useChartId()
-  const state = getBlockState(status, phases.length === 0)
+  const state = getBlockState(status, phases)
   const ticks = getTimelineTicks(start, end, 'month')
   const projections = phases.map((phase) => {
     if (!phase.actual || phase.actual.end) return null
@@ -129,7 +129,7 @@ const Timeline4 = (props: Timeline4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={phases.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

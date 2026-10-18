@@ -74,7 +74,7 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
     title,
     totalLabel = 'Total',
   } = props
-  const state = getBlockState(status, segments.length === 0)
+  const state = getBlockState(status, segments)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const total = segments.reduce((sum, segment) => sum + segment.value, 0)
   const share = (value: number) =>
@@ -85,7 +85,7 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={segments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   ChartTooltipFrame,
@@ -189,7 +190,7 @@ const Settings5 = (props: Settings5Props) => {
     `${endpoints.length} ${endpoints.length === 1 ? 'endpoint gets' : 'endpoints get'} a JSON POST when their events happen${failing > 0 ? `, and ${failing} ${failing === 1 ? 'is' : 'are'} failing` : ''}.`
 
   return (
-    <BlockStateProvider status={blockStatus} empty={endpoints.length === 0}>
+    <BlockStateProvider state={getBlockState(blockStatus, endpoints)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

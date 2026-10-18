@@ -91,13 +91,13 @@ const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
 
 const Timeline2 = (props: Timeline2Props) => {
   const { description, milestones = [], now, status, title } = props
-  const state = getBlockState(status, milestones.length === 0)
+  const state = getBlockState(status, milestones)
   const next = milestones.find((milestone) => milestone.status !== 'done')
   const done = milestones.filter((milestone) => milestone.status === 'done').length
   const nextDays = next?.date ? getDaysBetween(now, next.date) : 0
 
   return (
-    <BlockStateProvider status={status} empty={milestones.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

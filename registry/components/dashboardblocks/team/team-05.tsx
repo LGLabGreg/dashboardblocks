@@ -326,10 +326,10 @@ function PermissionMatrix(props: PermissionMatrixProps) {
 
 const Team5 = (props: Team5Props) => {
   const { description, grants = {}, roles = [], status, title } = props
-  const state = getBlockState(status, roles.length === 0)
+  const state = getBlockState(status, roles)
 
   return (
-    <BlockStateProvider status={status} empty={roles.length === 0}>
+    <BlockStateProvider state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

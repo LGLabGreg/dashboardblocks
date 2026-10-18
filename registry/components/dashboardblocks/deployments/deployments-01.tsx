@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type DeployStatus,
@@ -143,7 +144,7 @@ const Deployments1 = (props: Deployments1Props) => {
   const { description = summarize(deployments, now) } = props
 
   return (
-    <BlockStateProvider status={status} empty={deployments.length === 0}>
+    <BlockStateProvider state={getBlockState(status, deployments)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

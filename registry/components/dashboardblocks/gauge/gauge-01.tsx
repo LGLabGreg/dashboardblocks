@@ -56,13 +56,12 @@ const GROUPS = [
 
 const Gauge1 = (props: Gauge1Props) => {
   const { period, previous, responses, status, title } = props
-  const empty = responses === undefined
-  const state = getBlockState(status, empty)
+  const state = getBlockState(status, responses)
   const counts = responses ?? { detractors: 0, passives: 0, promoters: 0 }
   const nps = getNps(counts)
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

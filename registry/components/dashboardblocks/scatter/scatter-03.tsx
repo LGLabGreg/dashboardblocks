@@ -126,7 +126,7 @@ const percent = (value: number) => formatPercent(value, { minimumFractionDigits:
 
 const Scatter3 = (props: Scatter3Props) => {
   const { campaigns = [], channels, description, status, target, title } = props
-  const state = getBlockState(status, campaigns.length === 0)
+  const state = getBlockState(status, campaigns)
   const colorOf = (channel: string) =>
     scatterPalette[Math.max(0, channels.indexOf(channel)) % scatterPalette.length]
   const totalSpend = campaigns.reduce((sum, campaign) => sum + campaign.spend, 0)
@@ -137,7 +137,7 @@ const Scatter3 = (props: Scatter3Props) => {
     : []
 
   return (
-    <BlockStateProvider status={status} empty={campaigns.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

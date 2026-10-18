@@ -353,10 +353,10 @@ function SsoSettings(props: SsoSettingsProps) {
 
 const Security6 = (props: Security6Props) => {
   const { connection, description, status, title } = props
-  const state = getBlockState(status, connection === undefined)
+  const state = getBlockState(status, connection)
 
   return (
-    <BlockStateProvider status={status} empty={connection === undefined}>
+    <BlockStateProvider state={state}>
       {state || !connection ? (
         <section className='@container flex flex-col gap-4'>
           <header className='flex flex-col gap-0.5'>

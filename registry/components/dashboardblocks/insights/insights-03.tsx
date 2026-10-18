@@ -71,7 +71,7 @@ const Insights3 = (props: Insights3Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, contributions.length === 0)
+  const state = getBlockState(status, contributions)
   const rows = [...contributions].sort((a, b) => b.value - a.value)
   const net = rows.reduce((sum, row) => sum + row.value, 0)
   const max = Math.max(...rows.map((row) => Math.abs(row.value)), 0)
@@ -107,7 +107,7 @@ const Insights3 = (props: Insights3Props) => {
   summary.push('.')
 
   return (
-    <BlockStateProvider status={status} empty={contributions.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

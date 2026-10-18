@@ -61,14 +61,14 @@ const AiUsage4 = (props: AiUsage4Props) => {
     title,
     tokens = { input: 0, output: 0 },
   } = props
-  const state = getBlockState(status, props.tokens === undefined)
+  const state = getBlockState(status, props.tokens)
   const hitRate = getCacheHitRate(tokens)
   const saved = getCacheSavings(tokens.cached ?? 0, prices)
   const cost = getTokenCost(tokens, prices)
   const asPercent = (rate: number) => Math.round(rate * 1_000) / 10
 
   return (
-    <BlockStateProvider status={status} empty={props.tokens === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

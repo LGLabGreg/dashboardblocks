@@ -134,7 +134,7 @@ const ShiftShape = ({
 
 const Breakdown4 = (props: Breakdown4Props) => {
   const { currentLabel, description, items = [], previousLabel, status, title } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const rows: ShiftRow[] = items.map((item) => ({
     ...item,
     delta: Math.round((item.current - item.previous) * 10) / 10,
@@ -152,7 +152,7 @@ const Breakdown4 = (props: Breakdown4Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

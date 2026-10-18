@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type ConnectionStatus,
@@ -126,7 +127,7 @@ const Settings4 = (props: Settings4Props) => {
   const attention = integrations.filter((item) => item.status === 'error').length
 
   return (
-    <BlockStateProvider status={status} empty={integrations.length === 0}>
+    <BlockStateProvider state={getBlockState(status, integrations)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

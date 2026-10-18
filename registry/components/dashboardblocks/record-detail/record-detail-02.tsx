@@ -205,7 +205,7 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
     order,
     status,
   } = props
-  const state = getBlockState(status, order === undefined)
+  const state = getBlockState(status, order)
   const ready = order !== undefined && state === undefined
   const taxRate = order?.taxRate ?? 0
   const shipping = order?.shipping ?? 0
@@ -223,7 +223,7 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
   ]
 
   return (
-    <BlockStateProvider status={status} empty={order === undefined}>
+    <BlockStateProvider state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Orders</BackLink>

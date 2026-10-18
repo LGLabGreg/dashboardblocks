@@ -100,13 +100,13 @@ const exampleProps: UsageMeter6Props = {
 
 const UsageMeter6 = (props: UsageMeter6Props) => {
   const { limits = [], onUpgrade, plan, status: blockStatus } = props
-  const state = getBlockState(blockStatus, limits.length === 0)
+  const state = getBlockState(blockStatus, limits)
   const nearLimit = limits.filter(
     (item) => getUsageStatus(item.used, item.limit) !== 'ok',
   )
 
   return (
-    <BlockStateProvider status={blockStatus} empty={limits.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

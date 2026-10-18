@@ -149,7 +149,7 @@ const Insights2 = (props: Insights2Props) => {
     title,
   } = props
   const [markedExpected, setMarkedExpected] = useState(false)
-  const state = getBlockState(status, readings.length === 0)
+  const state = getBlockState(status, readings)
 
   const data = readings.map((reading, index) => {
     const anomalous = reading.value < reading.low || reading.value > reading.high
@@ -184,7 +184,7 @@ const Insights2 = (props: Insights2Props) => {
     .map((point) => point.index)
 
   return (
-    <BlockStateProvider status={status} empty={readings.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

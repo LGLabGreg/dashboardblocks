@@ -85,11 +85,11 @@ function describe(items: MeteredItem[]) {
 const UsageMeter3 = (props: UsageMeter3Props) => {
   const { billedOn, items = [], status, title } = props
   const { description = describe(items) } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const total = items.reduce((sum, item) => sum + getOverageCost(item), 0)
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

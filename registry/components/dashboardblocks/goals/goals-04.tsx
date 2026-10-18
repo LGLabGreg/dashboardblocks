@@ -41,11 +41,11 @@ const exampleProps: Goals4Props = {
 
 const Goals4 = (props: Goals4Props) => {
   const { description, goals = [], placeholders = 3, status, title } = props
-  const state = getBlockState(status, goals.length === 0)
+  const state = getBlockState(status, goals)
   const met = goals.filter((goal) => goal.current >= goal.target).length
 
   return (
-    <BlockStateProvider status={status} empty={goals.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

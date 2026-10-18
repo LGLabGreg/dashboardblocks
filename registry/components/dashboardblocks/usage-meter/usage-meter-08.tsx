@@ -73,7 +73,7 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
     unit,
     used = 0,
   } = props
-  const state = getBlockState(blockStatus, props.used === undefined)
+  const state = getBlockState(blockStatus, props.used)
   const remaining = Math.max(0, limit - used)
   const share = getUsageShare(used, limit)
   const status = getUsageStatus(used, limit)
@@ -89,7 +89,7 @@ const UsageMeter8 = (props: UsageMeter8Props) => {
   ]
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.used === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 border-t pt-3'>
         <header className='flex min-h-8 items-center justify-between gap-3'>
           <p className='text-muted-foreground flex min-w-0 items-center gap-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0'>

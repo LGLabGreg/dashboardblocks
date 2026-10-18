@@ -113,11 +113,11 @@ function LatencyRange({ max, p50, p95 }: { max: number; p50: number; p95: number
 const AiUsage3 = (props: AiUsage3Props) => {
   const { errorThreshold = 0.01, models = [], status, title } = props
   const { description = describe(models, errorThreshold) } = props
-  const state = getBlockState(status, models.length === 0)
+  const state = getBlockState(status, models)
   const slowest = Math.max(0, ...models.map((model) => model.ttftP95))
 
   return (
-    <BlockStateProvider status={status} empty={models.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

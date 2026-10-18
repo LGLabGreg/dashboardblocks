@@ -63,13 +63,13 @@ const Checklist2 = (props: Checklist2Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, stages.length === 0)
+  const state = getBlockState(status, stages)
   const progress = getChecklistProgress(stages)
   const next = getNextStep(stages)
   const position = next ? stages.indexOf(next) + 1 : stages.length
 
   return (
-    <BlockStateProvider status={status} empty={stages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

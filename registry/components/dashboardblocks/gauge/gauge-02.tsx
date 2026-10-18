@@ -87,7 +87,7 @@ const joinLabels = (labels: string[]) =>
 
 const Gauge2 = (props: Gauge2Props) => {
   const { bands, description, factors = [], status, title } = props
-  const state = getBlockState(status, factors.length === 0)
+  const state = getBlockState(status, factors)
   const exact = getWeightedScore(factors)
   const score = Math.round(exact)
   const band = getGaugeBand(score, bands)
@@ -100,7 +100,7 @@ const Gauge2 = (props: Gauge2Props) => {
     .map((factor) => factor.label.toLowerCase())
 
   return (
-    <BlockStateProvider status={status} empty={factors.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

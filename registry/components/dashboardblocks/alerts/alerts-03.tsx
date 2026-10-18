@@ -104,13 +104,13 @@ const summarize = (rules: AlertRule[], active: number, now: Date) => {
 const Alerts3 = (props: Alerts3Props) => {
   const { now, onEnabledChange, rules = [], status, title } = props
   const [enabled, setEnabled] = useState<ReadonlyMap<string, boolean>>(() => new Map())
-  const state = getBlockState(status, rules.length === 0)
+  const state = getBlockState(status, rules)
   const isEnabled = (rule: AlertRule) => enabled.get(rule.id) ?? rule.enabled
   const active = rules.filter(isEnabled).length
   const { description = summarize(rules, active, now) } = props
 
   return (
-    <BlockStateProvider status={status} empty={rules.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

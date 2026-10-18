@@ -72,11 +72,11 @@ const summarize = (services: Service[]) => {
 const Status1 = (props: Status1Props) => {
   const { services = [], status, title, updated } = props
   const { description = summarize(services) } = props
-  const state = getBlockState(status, services.length === 0)
+  const state = getBlockState(status, services)
   const overall = getWorstStatus(services.map((service) => service.status))
 
   return (
-    <BlockStateProvider status={status} empty={services.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-1'>
           <BlockReady className='w-40 text-sm'>

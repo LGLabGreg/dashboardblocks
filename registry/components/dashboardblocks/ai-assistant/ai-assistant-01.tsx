@@ -238,7 +238,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     suggestions,
     title,
   } = props
-  const state = getBlockState(blockStatus, metrics.length === 0)
+  const state = getBlockState(blockStatus, metrics)
   const shown: (StatMetric & { history?: number[] })[] =
     blockStatus === 'loading' ? getStatPlaceholders(4) : metrics
   const accountsMrr = accounts.reduce((sum, account) => sum + account.mrr, 0)
@@ -273,7 +273,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   }
 
   return (
-    <BlockStateProvider status={blockStatus} empty={metrics.length === 0}>
+    <BlockStateProvider state={state}>
       <div className='bg-background @container flex h-svh'>
         <div
           className={

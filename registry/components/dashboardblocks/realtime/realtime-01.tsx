@@ -86,7 +86,7 @@ const Realtime1 = (props: Realtime1Props) => {
     setPages(loadedPages)
   }
   const random = useRef(createRandom(42))
-  const state = getBlockState(status, activeUsers === undefined)
+  const state = getBlockState(status, activeUsers)
 
   useInterval(
     () => {
@@ -111,7 +111,7 @@ const Realtime1 = (props: Realtime1Props) => {
   const top = Math.max(1, ...pages.map((page) => page.users))
 
   return (
-    <BlockStateProvider status={status} empty={activeUsers === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -111,13 +111,13 @@ const summarize = (events: AuditEvent[]) => {
 const Security2 = (props: Security2Props) => {
   const { description, events = [], now, status, timeZone, title } = props
   const [importantOnly, setImportantOnly] = useState(false)
-  const state = getBlockState(status, events.length === 0)
+  const state = getBlockState(status, events)
   const shown = importantOnly
     ? events.filter((event) => event.severity !== 'info')
     : events
 
   return (
-    <BlockStateProvider status={status} empty={events.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex flex-col gap-0.5'>

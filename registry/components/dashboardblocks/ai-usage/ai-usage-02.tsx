@@ -80,13 +80,13 @@ const describe = (sorted: FeatureUsage[], total: number) => {
 
 const AiUsage2 = (props: AiUsage2Props) => {
   const { features = [], period = 'this month', status, title } = props
-  const state = getBlockState(status, features.length === 0)
+  const state = getBlockState(status, features)
   const total = features.reduce((sum, feature) => sum + feature.cost, 0)
   const sorted = [...features].sort((a, b) => b.cost - a.cost)
   const { description = describe(sorted, total) } = props
 
   return (
-    <BlockStateProvider status={status} empty={features.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

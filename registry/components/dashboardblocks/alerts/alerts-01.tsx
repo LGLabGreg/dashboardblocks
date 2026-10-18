@@ -104,7 +104,7 @@ const Alerts1 = (props: Alerts1Props) => {
   const { alerts = [], now, onAcknowledge, status, title } = props
   const [acknowledged, setAcknowledged] = useState<ReadonlySet<string>>(() => new Set())
   const [announcement, setAnnouncement] = useState('')
-  const state = getBlockState(status, alerts.length === 0)
+  const state = getBlockState(status, alerts)
   const isAcknowledged = (alert: AlertItem) =>
     alert.acknowledged || acknowledged.has(alert.id)
   const open = alerts.filter((alert) => !isAcknowledged(alert))
@@ -123,7 +123,7 @@ const Alerts1 = (props: Alerts1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={alerts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

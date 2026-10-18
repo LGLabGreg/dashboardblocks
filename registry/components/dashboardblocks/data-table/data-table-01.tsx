@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   createDataTableColumnHelper,
@@ -119,7 +120,7 @@ const DataTable1 = (props: DataTable1Props) => {
   })
 
   return (
-    <BlockStateProvider status={status} empty={rows.length === 0}>
+    <BlockStateProvider state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

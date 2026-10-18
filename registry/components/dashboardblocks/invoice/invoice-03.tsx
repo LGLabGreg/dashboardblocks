@@ -189,7 +189,7 @@ const Invoice3 = (props: Invoice3Props) => {
     status: blockStatus,
     terms,
   } = props
-  const state = getBlockState(blockStatus, lines.length === 0)
+  const state = getBlockState(blockStatus, lines)
   const [selected, setSelected] = useState(defaultSelected)
   const [decision, setDecision] = useState<QuoteDecision | null>(null)
   const [pending, setPending] = useState<QuoteDecision | null>(null)
@@ -219,7 +219,7 @@ const Invoice3 = (props: Invoice3Props) => {
   }
 
   return (
-    <BlockStateProvider status={blockStatus} empty={lines.length === 0}>
+    <BlockStateProvider state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

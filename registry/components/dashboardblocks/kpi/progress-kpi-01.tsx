@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   KPI,
@@ -64,7 +65,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
   const gap = projected - target
 
   return (
-    <BlockStateProvider status={status} empty={value === undefined}>
+    <BlockStateProvider state={getBlockState(status, value)}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

@@ -59,7 +59,7 @@ const Distribution4 = (props: Distribution4Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, current.length === 0)
+  const state = getBlockState(status, current)
 
   const toBins = (counts: number[]): DistributionBin[] =>
     counts.map((count, index) => ({ count, x0: edges[index], x1: edges[index + 1] }))
@@ -79,7 +79,7 @@ const Distribution4 = (props: Distribution4Props) => {
   const median = stats[0]
 
   return (
-    <BlockStateProvider status={status} empty={current.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

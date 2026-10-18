@@ -180,7 +180,7 @@ const Pipeline1 = (props: Pipeline1Props) => {
   const id = useId()
   const [moves, setMoves] = useState<{ id: string; stage: string }[]>([])
   const [announcement, setAnnouncement] = useState('')
-  const state = getBlockState(status, loadedItems.length === 0)
+  const state = getBlockState(status, loadedItems)
   const items = useMemo(
     () =>
       moves.reduce((current, moved) => {
@@ -208,7 +208,7 @@ const Pipeline1 = (props: Pipeline1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={loadedItems.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type FormErrors,
@@ -357,7 +358,7 @@ const Settings7 = (props: Settings7Props) => {
   const ready = !status && profile !== undefined
 
   return (
-    <BlockStateProvider status={status} empty={profile === undefined}>
+    <BlockStateProvider state={getBlockState(status, profile)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

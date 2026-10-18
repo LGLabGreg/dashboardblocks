@@ -127,11 +127,11 @@ const Leaderboard4 = (props: Leaderboard4Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, products.length === 0)
+  const state = getBlockState(status, products)
   const { description = summarize(products, period) } = props
 
   return (
-    <BlockStateProvider status={status} empty={products.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -109,10 +109,10 @@ const summarize = (services: ServiceUptime[]) => {
 const Status2 = (props: Status2Props) => {
   const { services = [], status, title } = props
   const { description = summarize(services) } = props
-  const state = getBlockState(status, services.length === 0)
+  const state = getBlockState(status, services)
 
   return (
-    <BlockStateProvider status={status} empty={services.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

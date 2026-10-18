@@ -72,7 +72,7 @@ const barFill: Record<Presence, string> = {
 
 const Team3 = (props: Team3Props) => {
   const { description, people = [], status, title } = props
-  const state = getBlockState(status, people.length === 0)
+  const state = getBlockState(status, people)
   const byPresence = Object.fromEntries(
     presenceOrder.map((presence) => [
       presence,
@@ -82,7 +82,7 @@ const Team3 = (props: Team3Props) => {
   const online = byPresence.online.length
 
   return (
-    <BlockStateProvider status={status} empty={people.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

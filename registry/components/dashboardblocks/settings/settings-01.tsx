@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import {
@@ -129,8 +130,8 @@ const Settings1 = (props: Settings1Props) => {
   const emailId = useId()
   const [members, setMembers] = useState(props.members ?? [])
   const [invites, setInvites] = useState(props.invites ?? [])
-  const empty = (props.members ?? []).length === 0
-  const ready = !status && !empty
+  const state = getBlockState(status, props.members)
+  const ready = !state
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<Role>('member')
   const [error, setError] = useState<string | null>(null)
@@ -166,7 +167,7 @@ const Settings1 = (props: Settings1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-5'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

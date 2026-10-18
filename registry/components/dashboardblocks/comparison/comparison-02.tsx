@@ -80,11 +80,11 @@ function verdict(result: ReturnType<typeof compareProportions>, variant: Variant
 
 const Comparison2 = (props: Comparison2Props) => {
   const { control, description, metric, status, title, variant } = props
-  const state = getBlockState(status, !control || !variant)
+  const state = getBlockState(status, control && variant)
 
   if (state || !control || !variant) {
     return (
-      <BlockStateProvider status={status} empty={!control || !variant}>
+      <BlockStateProvider state={state}>
         <section className='@container flex flex-col gap-4'>
           <header className='flex flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>

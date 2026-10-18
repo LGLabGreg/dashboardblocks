@@ -5,6 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   createDataTableColumnHelper,
@@ -340,7 +341,7 @@ const Files2 = (props: Files2Props) => {
   const shownDescription = description ?? summarize(rows)
 
   return (
-    <BlockStateProvider status={status} empty={files.length === 0}>
+    <BlockStateProvider state={getBlockState(status, files)}>
       <FileTable value={{ actionsFor, now, timeZone }}>
         <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
           <header className='flex flex-col gap-0.5'>

@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   EventRow,
@@ -127,7 +128,7 @@ const Schedule1 = (props: Schedule1Props) => {
     .sort((a, b) => a.start.getTime() - b.start.getTime())[0]
 
   return (
-    <BlockStateProvider status={status} empty={events.length === 0}>
+    <BlockStateProvider state={getBlockState(status, events)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

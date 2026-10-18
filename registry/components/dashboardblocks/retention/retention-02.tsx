@@ -81,7 +81,7 @@ const exampleProps: Retention2Props = {
 
 const Retention2 = (props: Retention2Props) => {
   const { cohorts = [], description, periodName = 'Month', status, title } = props
-  const state = getBlockState(status, cohorts.length === 0)
+  const state = getBlockState(status, cohorts)
   let fallback = cohorts.length - 1
   while (fallback > 0 && cohorts[fallback].retained.length < 2) fallback--
   const highlight = props.highlight ?? Math.max(0, fallback)
@@ -107,7 +107,7 @@ const Retention2 = (props: Retention2Props) => {
   const otherCohortColor = chartFadedColor('var(--color-muted-foreground)')
 
   return (
-    <BlockStateProvider status={status} empty={cohorts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

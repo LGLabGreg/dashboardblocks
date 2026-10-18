@@ -3,6 +3,7 @@
 import {
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   KPI,
@@ -34,7 +35,7 @@ const KPI1 = (props: KPI1Props) => {
   const { comparison, format, previous, status, title, value } = props
 
   return (
-    <BlockStateProvider status={status} empty={value === undefined}>
+    <BlockStateProvider state={getBlockState(status, value)}>
       <KPI className='gap-1'>
         <KPITitle>{title}</KPITitle>
         <KPIValue value={value} format={format} animated />

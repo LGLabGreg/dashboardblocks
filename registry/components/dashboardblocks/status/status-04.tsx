@@ -105,11 +105,11 @@ const summarize = (regions: Region[]) => {
 const Status4 = (props: Status4Props) => {
   const { regions = [], status, title } = props
   const { description = summarize(regions) } = props
-  const state = getBlockState(status, regions.length === 0)
+  const state = getBlockState(status, regions)
   const slowest = Math.max(...regions.map((region) => region.latency), 0)
 
   return (
-    <BlockStateProvider status={status} empty={regions.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

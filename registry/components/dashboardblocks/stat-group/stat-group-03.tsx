@@ -152,7 +152,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
   } = props
   const gradient = useChartId()
   const [active, setActive] = useState<string>()
-  const state = getBlockState(status, metrics.length === 0)
+  const state = getBlockState(status, metrics)
 
   const header = (
     <header className='flex flex-col gap-0.5'>
@@ -165,7 +165,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
 
   if (state) {
     return (
-      <BlockStateProvider status={status} empty={metrics.length === 0}>
+      <BlockStateProvider state={state}>
         <section className='@container flex flex-col gap-4'>
           {header}
           <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @2xl:grid-cols-4'>

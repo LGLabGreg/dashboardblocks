@@ -103,7 +103,7 @@ const exampleProps: Billing3Props = {
 
 const Billing3 = (props: Billing3Props) => {
   const { currency = 'USD', invoices = [], onDownload, onViewAll, status, title } = props
-  const state = getBlockState(status, invoices.length === 0)
+  const state = getBlockState(status, invoices)
   const unpaid = invoices.filter((invoice) => invoice.status !== 'paid')
   const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0)
   const money = (value: number) =>
@@ -122,7 +122,7 @@ const Billing3 = (props: Billing3Props) => {
       : `${money(outstanding)} outstanding across ${unpaid.length} ${unpaid.length === 1 ? 'invoice' : 'invoices'}, the oldest from ${formatBillingDate(oldest.date)}.`
 
   return (
-    <BlockStateProvider status={status} empty={invoices.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

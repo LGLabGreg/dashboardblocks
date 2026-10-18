@@ -116,7 +116,7 @@ const exampleProps: Notifications1Props = {
 const Notifications1 = (props: Notifications1Props) => {
   const { notifications: loaded = [], now, status, title, viewAllHref } = props
   const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set())
-  const state = getBlockState(status, loaded.length === 0)
+  const state = getBlockState(status, loaded)
   const notifications = loaded.map((notification) =>
     readIds.has(notification.id) ? { ...notification, read: true } : notification,
   )
@@ -129,7 +129,7 @@ const Notifications1 = (props: Notifications1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={loaded.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex items-center justify-between gap-3 border-b pb-2'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <NotificationBell unreadCount={unread}>

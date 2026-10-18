@@ -97,10 +97,10 @@ const summarize = (environments: Environment[], ahead: number[]) => {
 const Deployments2 = (props: Deployments2Props) => {
   const { ahead = [], environments = [], now, status, title } = props
   const { description = summarize(environments, ahead) } = props
-  const state = getBlockState(status, environments.length === 0)
+  const state = getBlockState(status, environments)
 
   return (
-    <BlockStateProvider status={status} empty={environments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

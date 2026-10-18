@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   Dumbbell,
@@ -85,7 +86,7 @@ const Comparison4 = (props: Comparison4Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={rows.length === 0}>
+    <BlockStateProvider state={getBlockState(status, rows)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -65,8 +65,7 @@ const exampleProps: Flow2Props = {
 
 const Flow2 = (props: Flow2Props) => {
   const { description, links = [], nodes = [], status, title, unit = 'visitors' } = props
-  const empty = links.length === 0
-  const state = getBlockState(status, empty)
+  const state = getBlockState(status, links)
   const totals = getFlowTotals(nodes, links)
   const labels = new Map(nodes.map((node) => [node.id, node.label]))
   const start = nodes.find((node) => (totals.get(node.id)?.in ?? 0) === 0)
@@ -82,7 +81,7 @@ const Flow2 = (props: Flow2Props) => {
     formatPercent(value / (entered || 1), { maximumFractionDigits: 0 })
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

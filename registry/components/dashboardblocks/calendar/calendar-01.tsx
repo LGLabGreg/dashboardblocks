@@ -268,7 +268,7 @@ const Calendar1 = (props: Calendar1Props) => {
     timeZone = 'UTC',
     weekStartsOn = 0,
   } = props
-  const state = getBlockState(status, data.length === 0)
+  const state = getBlockState(status, data)
   const events = state ? [] : data
   const today = getDay(now, timeZone)
   const [month, setMonth] = useState(() => startOfMonth(today))
@@ -293,7 +293,7 @@ const Calendar1 = (props: Calendar1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={monthLabel}

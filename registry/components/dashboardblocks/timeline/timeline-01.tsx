@@ -122,14 +122,14 @@ const summarize = (items: TimelineItem[]) => {
 const Timeline1 = (props: Timeline1Props) => {
   const { end, items = [], now, start, status, title } = props
   const { description = summarize(items) } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const counts = STATUSES.map((itemStatus) => ({
     count: items.filter((item) => item.status === itemStatus).length,
     status: itemStatus,
   })).filter((entry) => entry.count > 0)
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-end justify-between gap-x-6 gap-y-2'>
           <div className='flex min-w-0 flex-col gap-0.5'>

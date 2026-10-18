@@ -149,7 +149,7 @@ const MetricList4 = (props: MetricList4Props) => {
   const gradient = useChartId()
   const [selected, setSelected] = useState(defaultSelected ?? metrics[0]?.key)
   const metric = metrics.find((item) => item.key === selected) ?? metrics[0]
-  const state = getBlockState(status, !metric)
+  const state = getBlockState(status, metric)
   const showHeading = state === undefined || state === 'loading'
 
   const format = getMetricFormatter(metric?.format)
@@ -162,7 +162,7 @@ const MetricList4 = (props: MetricList4Props) => {
   const last = data.length - 1
 
   return (
-    <BlockStateProvider status={status} empty={!metric}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,6 +3,7 @@
 import {
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   KPI,
@@ -35,7 +36,7 @@ const KPI2 = (props: KPI2Props) => {
   const { comparison, format, previous, status, title, value } = props
 
   return (
-    <BlockStateProvider status={status} empty={value === undefined}>
+    <BlockStateProvider state={getBlockState(status, value)}>
       <KPI>
         <KPIContent className='gap-1'>
           <div className='flex items-baseline justify-between gap-3'>

@@ -110,7 +110,7 @@ const formatCover = (cover: number) =>
 
 const Inventory1 = (props: Inventory1Props) => {
   const { items = [], status, targetDays = 30, title } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const { description = summarize(items) } = props
   const sorted = [...items].sort(
     (a, b) =>
@@ -120,7 +120,7 @@ const Inventory1 = (props: Inventory1Props) => {
     Math.max(...items.map((item) => Math.max(item.onHand, item.reorderPoint))) * 1.1
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

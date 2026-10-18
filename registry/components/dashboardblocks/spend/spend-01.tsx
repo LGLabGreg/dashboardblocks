@@ -58,7 +58,7 @@ const Spend1 = (props: Spend1Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, props.spent === undefined)
+  const state = getBlockState(status, props.spent)
   const pace = getBudgetPace({
     budget,
     elapsed: getElapsed(periodStart, periodEnd, now),
@@ -70,7 +70,7 @@ const Spend1 = (props: Spend1Props) => {
   const share = budget > 0 ? spent / budget : 0
 
   return (
-    <BlockStateProvider status={status} empty={props.spent === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

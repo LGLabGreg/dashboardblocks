@@ -98,7 +98,7 @@ const Alerts2 = (props: Alerts2Props) => {
   } = props
   const id = useChartId()
   const [acknowledged, setAcknowledged] = useState(false)
-  const state = getBlockState(status, readings.length === 0)
+  const state = getBlockState(status, readings)
   const values = readings.map((reading) => reading.value)
   const current = values[values.length - 1] ?? 0
   const highest = Math.max(...values, 0)
@@ -112,7 +112,7 @@ const Alerts2 = (props: Alerts2Props) => {
   const gap = formatter(Math.abs(current - threshold))
 
   return (
-    <BlockStateProvider status={status} empty={readings.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

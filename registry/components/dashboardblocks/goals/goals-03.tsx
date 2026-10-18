@@ -84,7 +84,7 @@ const Goals3 = (props: Goals3Props) => {
     target,
     title,
   } = props
-  const state = getBlockState(status, daily.length === 0)
+  const state = getBlockState(status, daily)
   const gradient = useChartId()
 
   const actual = daily.map((_, index) =>
@@ -110,7 +110,7 @@ const Goals3 = (props: Goals3Props) => {
   const shortfall = target - projected
 
   return (
-    <BlockStateProvider status={status} empty={daily.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

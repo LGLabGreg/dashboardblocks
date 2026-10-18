@@ -5,6 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   KPI,
@@ -45,7 +46,7 @@ const ProgressKPI3 = (props: ProgressKPI3Props) => {
   const remaining = Math.max(0, goal - reached)
 
   return (
-    <BlockStateProvider status={status} empty={current === undefined}>
+    <BlockStateProvider state={getBlockState(status, current)}>
       <KPI>
         <KPIContent className='flex-row items-center justify-between gap-4'>
           <div className='flex min-w-0 flex-col gap-1'>

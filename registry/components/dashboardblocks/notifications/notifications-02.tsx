@@ -123,7 +123,7 @@ const Notifications2 = (props: Notifications2Props) => {
   const [decisions, setDecisions] = useState<Record<string, Decision>>({})
   const [pending, setPending] = useState<string | null>(null)
   const [tab, setTab] = useState<'all' | 'requests'>('all')
-  const state = getBlockState(status, loaded.length === 0)
+  const state = getBlockState(status, loaded)
   const notifications = loaded.map((notification) =>
     readIds.has(notification.id) ? { ...notification, read: true } : notification,
   )
@@ -214,7 +214,7 @@ const Notifications2 = (props: Notifications2Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={loaded.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex items-center justify-between gap-3 border-b pb-2'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <NotificationBell unreadCount={unread}>

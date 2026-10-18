@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Fragment, useState } from 'react'
 
@@ -143,7 +144,7 @@ const Settings3 = (props: Settings3Props) => {
     )
 
   return (
-    <BlockStateProvider status={status} empty={groups.length === 0}>
+    <BlockStateProvider state={getBlockState(status, groups)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

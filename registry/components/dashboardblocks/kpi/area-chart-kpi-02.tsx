@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import {
@@ -61,7 +62,7 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={getBlockState(status, data)}>
       <KPI className='relative overflow-hidden'>
         <KPIContent className='gap-1 pb-20'>
           <KPITitle className='relative z-10'>{title}</KPITitle>

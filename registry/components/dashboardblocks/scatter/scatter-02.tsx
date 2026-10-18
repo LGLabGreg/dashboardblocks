@@ -96,7 +96,7 @@ const exampleProps: Scatter2Props = {
 
 const Scatter2 = (props: Scatter2Props) => {
   const { description, items = [], quadrants, status, title, x, y } = props
-  const state = getBlockState(status, items.length === 0)
+  const state = getBlockState(status, items)
   const split = props.split ?? {
     x: getMedian(items.map((item) => item.x)),
     y: getMedian(items.map((item) => item.y)),
@@ -113,7 +113,7 @@ const Scatter2 = (props: Scatter2Props) => {
   ) => ({ ...chartReferenceLabel, fontWeight: 500, position, value })
 
   return (
-    <BlockStateProvider status={status} empty={items.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

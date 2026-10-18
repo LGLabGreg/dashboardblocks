@@ -114,10 +114,10 @@ const Geo1 = (props: Geo1Props) => {
         )} of ${valueLabel.toLowerCase()}.`
       : undefined,
   } = props
-  const state = getBlockState(status, ranked.length === 0)
+  const state = getBlockState(status, ranked)
 
   return (
-    <BlockStateProvider status={status} empty={ranked.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

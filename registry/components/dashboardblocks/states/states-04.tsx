@@ -6,6 +6,7 @@ import {
   type BlockStatus,
   type LoadStatus,
   useBlockData,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   ChartPlaceholder,
@@ -79,7 +80,7 @@ const States4 = (props: States4Props) => {
     : 0
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

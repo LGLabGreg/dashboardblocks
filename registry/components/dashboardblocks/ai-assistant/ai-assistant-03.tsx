@@ -151,7 +151,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
     tokens = { input: 0, output: 0 },
     usage: initialUsage,
   } = props
-  const state = getBlockState(blockStatus, props.tokens === undefined)
+  const state = getBlockState(blockStatus, props.tokens)
   const askId = useId()
   const [usage, setUsage] = useState(initialUsage)
   const chat = useChatStream({
@@ -172,7 +172,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
   const total = tokens.input + (tokens.cached ?? 0) + tokens.output
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.tokens === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

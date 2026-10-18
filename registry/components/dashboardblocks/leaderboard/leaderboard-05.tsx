@@ -115,7 +115,7 @@ function IconSwap({
 
 const Leaderboard5 = (props: Leaderboard5Props) => {
   const { countries = [], initialCount = 5, status, title } = props
-  const state = getBlockState(status, countries.length === 0)
+  const state = getBlockState(status, countries)
   const [ascending, setAscending] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [skipBarAnimation, setSkipBarAnimation] = useState(false)
@@ -129,7 +129,7 @@ const Leaderboard5 = (props: Leaderboard5Props) => {
   const { description = summarize(ranked) } = props
 
   return (
-    <BlockStateProvider status={status} empty={countries.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

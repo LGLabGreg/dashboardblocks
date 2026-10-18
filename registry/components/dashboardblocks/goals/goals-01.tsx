@@ -57,8 +57,7 @@ const Goals1 = (props: Goals1Props) => {
     title,
     today,
   } = props
-  const empty = props.current === undefined
-  const state = getBlockState(status, empty)
+  const state = getBlockState(status, props.current)
   const current = props.current ?? 0
   const periodEnd = new Date(end.getTime() + DAY)
   const pace = getPace({
@@ -76,7 +75,7 @@ const Goals1 = (props: Goals1Props) => {
   const shortfall = target - pace.projected
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

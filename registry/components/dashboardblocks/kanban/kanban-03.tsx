@@ -251,7 +251,7 @@ const Kanban3 = (props: Kanban3Props) => {
       ),
     [added, loadedTickets, moves],
   )
-  const state = getBlockState(status, tickets.length === 0)
+  const state = getBlockState(status, tickets)
   const unsolved = tickets.filter((ticket) => !pausedColumns.includes(ticket.column))
   const breached = unsolved.filter((ticket) => ticket.slaDueAt < now).length
   const [firstColumn] = columns
@@ -280,7 +280,7 @@ const Kanban3 = (props: Kanban3Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={tickets.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

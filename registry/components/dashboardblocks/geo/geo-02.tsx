@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
 import {
@@ -93,7 +94,7 @@ const Geo2 = (props: Geo2Props) => {
   ]
 
   return (
-    <BlockStateProvider status={status} empty={countries.length === 0}>
+    <BlockStateProvider state={getBlockState(status, countries)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

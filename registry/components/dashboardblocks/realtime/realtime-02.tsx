@@ -104,7 +104,7 @@ const Realtime2 = (props: Realtime2Props) => {
   }
   const random = useRef(createRandom(99))
   const tick = useRef(loadedSamples.length)
-  const state = getBlockState(status, samples.length === 0)
+  const state = getBlockState(status, samples)
 
   useInterval(
     () => {
@@ -135,7 +135,7 @@ const Realtime2 = (props: Realtime2Props) => {
   const minutes = Math.round((samples.length * interval) / 60)
 
   return (
-    <BlockStateProvider status={status} empty={samples.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

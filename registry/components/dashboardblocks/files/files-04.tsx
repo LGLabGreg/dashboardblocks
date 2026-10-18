@@ -154,7 +154,7 @@ const Files4 = (props: Files4Props) => {
     [deleted, storedRoot],
   )
   const [folderId, setFolderId] = useState(storedRoot.id)
-  const state = getBlockState(status, storedRoot.children.length === 0)
+  const state = getBlockState(status, storedRoot.children)
   const [message, setMessage] = useState('')
   const contentRef = useRef<HTMLElement>(null)
   const moved = useRef(false)
@@ -249,7 +249,7 @@ const Files4 = (props: Files4Props) => {
     ) || 'Empty'
 
   return (
-    <BlockStateProvider status={status} empty={storedRoot.children.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <FileBreadcrumbs

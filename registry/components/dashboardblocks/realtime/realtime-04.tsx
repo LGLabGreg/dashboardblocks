@@ -118,7 +118,7 @@ const Realtime4 = (props: Realtime4Props) => {
     setHourly(loadedHourly)
   }
   const random = useRef(createRandom(21))
-  const state = getBlockState(status, metrics.length === 0)
+  const state = getBlockState(status, metrics)
   const shown: TodayMetric[] =
     status === 'loading'
       ? getStatPlaceholders(3).map((placeholder) => ({
@@ -177,7 +177,7 @@ const Realtime4 = (props: Realtime4Props) => {
     Number.isFinite(value) ? formatNumber(value) : 'Not yet'
 
   return (
-    <BlockStateProvider status={status} empty={metrics.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

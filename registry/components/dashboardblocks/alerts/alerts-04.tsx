@@ -45,11 +45,11 @@ const SEVERITIES = ['critical', 'warning', 'info'] as const
 
 const Alerts4 = (props: Alerts4Props) => {
   const { counts, latest, now, onViewAll, status } = props
-  const state = getBlockState(status, counts === undefined)
+  const state = getBlockState(status, counts)
   const total = SEVERITIES.reduce((sum, severity) => sum + (counts?.[severity] ?? 0), 0)
 
   return (
-    <BlockStateProvider status={status} empty={counts === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3 border-y py-3 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
         <div className='flex shrink-0 flex-col gap-0.5'>
           {state === 'error' || state === 'empty' ? (

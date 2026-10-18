@@ -93,7 +93,7 @@ const countChecks = (count: number) => `${count} ${count === 1 ? 'check' : 'chec
 
 const Security4 = (props: Security4Props) => {
   const { checks = [], description, status, title } = props
-  const state = getBlockState(status, checks.length === 0)
+  const state = getBlockState(status, checks)
   const score = getSecurityScore(checks)
   const band = getGaugeBand(score, BANDS)
   const sorted = [...checks].sort((a, b) => ORDER[a.result] - ORDER[b.result])
@@ -102,7 +102,7 @@ const Security4 = (props: Security4Props) => {
   const passing = checks.length - failing - warnings
 
   return (
-    <BlockStateProvider status={status} empty={checks.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

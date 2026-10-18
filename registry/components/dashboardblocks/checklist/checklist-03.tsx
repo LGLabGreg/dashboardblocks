@@ -42,7 +42,7 @@ const exampleProps: Checklist3Props = {
 
 const Checklist3 = (props: Checklist3Props) => {
   const { continueLabel = 'Continue', onContinue, status, steps = [], title } = props
-  const state = getBlockState(status, steps.length === 0)
+  const state = getBlockState(status, steps)
   const progress = getChecklistProgress(steps)
   const next = getNextStep(steps)
   const continueButton = (
@@ -66,7 +66,7 @@ const Checklist3 = (props: Checklist3Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={steps.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <div className='flex flex-col gap-2'>

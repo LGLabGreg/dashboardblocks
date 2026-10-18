@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import {
@@ -80,7 +81,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
   const [lead, rest] = describeLead(data)
 
   return (
-    <BlockStateProvider status={status} empty={data.length === 0}>
+    <BlockStateProvider state={getBlockState(status, data)}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

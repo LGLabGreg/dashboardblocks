@@ -127,7 +127,7 @@ const Comments1 = (props: Comments1Props) => {
     setLoaded(initialComments)
     setComments(initialComments)
   }
-  const state = getBlockState(status, comments.length === 0)
+  const state = getBlockState(status, comments)
   const composerRef = useRef<HTMLDivElement>(null)
   const open = comments.filter((comment) => !comment.resolved).length
   const resolved = comments.length - open
@@ -153,7 +153,7 @@ const Comments1 = (props: Comments1Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={comments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

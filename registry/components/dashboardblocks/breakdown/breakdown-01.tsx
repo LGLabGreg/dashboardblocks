@@ -47,7 +47,7 @@ const Breakdown1 = (props: Breakdown1Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, segments.length === 0)
+  const state = getBlockState(status, segments)
   const total = getTotal(segments)
   const largest = segments.reduce<BreakdownSegment | undefined>(
     (best, segment) => (best && best.value >= segment.value ? best : segment),
@@ -55,7 +55,7 @@ const Breakdown1 = (props: Breakdown1Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={segments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

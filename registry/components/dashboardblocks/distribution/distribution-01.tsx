@@ -59,7 +59,7 @@ const Distribution1 = (props: Distribution1Props) => {
     title,
     unit = 'requests',
   } = props
-  const state = getBlockState(status, bins.length === 0)
+  const state = getBlockState(status, bins)
   const blank = state === 'empty' || state === 'error'
 
   const total = bins.reduce((sum, bin) => sum + bin.count, 0)
@@ -72,7 +72,7 @@ const Distribution1 = (props: Distribution1Props) => {
   const range = (bin: DistributionBin) => `${formatter(bin.x0)}–${formatter(bin.x1)}`
 
   return (
-    <BlockStateProvider status={status} empty={bins.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

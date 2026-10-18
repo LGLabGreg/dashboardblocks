@@ -100,10 +100,10 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
   } = props
   const chat = useChatStream({ initialError, initialMessages, onSend })
   const { messages, status } = chat
-  const state = getBlockState(blockStatus, messages.length === 0)
+  const state = getBlockState(blockStatus, messages)
 
   return (
-    <BlockStateProvider status={blockStatus} empty={messages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex h-[34rem] flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

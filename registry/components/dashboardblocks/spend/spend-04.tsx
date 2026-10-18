@@ -81,7 +81,7 @@ const Spend4 = (props: Spend4Props) => {
     title,
     trailing = 3,
   } = props
-  const state = getBlockState(status, balances.length === 0)
+  const state = getBlockState(status, balances)
   const gradient = useChartId()
   const format = (value: number) => formatCurrency(value, { currency })
   const compact = (value: number) => formatCurrency(value, { compact: true, currency })
@@ -116,7 +116,7 @@ const Spend4 = (props: Spend4Props) => {
   const empty = rows.find((row) => row.projected === 0)
 
   return (
-    <BlockStateProvider status={status} empty={balances.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -144,7 +144,7 @@ function summarize(people: Assignee[]) {
 
 const Team2 = (props: Team2Props) => {
   const { people = [], status, title, unit } = props
-  const state = getBlockState(status, people.length === 0)
+  const state = getBlockState(status, people)
   const { ref, revealed } = useReveal<HTMLElement>(true)
   const max = Math.max(
     1,
@@ -158,7 +158,7 @@ const Team2 = (props: Team2Props) => {
   const load = capacity > 0 ? assigned / capacity : 0
 
   return (
-    <BlockStateProvider status={status} empty={people.length === 0}>
+    <BlockStateProvider state={state}>
       <section ref={ref} className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

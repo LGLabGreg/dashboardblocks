@@ -32,10 +32,10 @@ const exampleProps: PageHeader1Props = {
 
 const PageHeader1 = (props: PageHeader1Props) => {
   const { description, onCreate = () => {}, onExport = () => {}, status, title } = props
-  const state = getBlockState(status, !description)
+  const state = getBlockState(status, description)
 
   return (
-    <BlockStateProvider status={status} empty={!description}>
+    <BlockStateProvider state={state}>
       <PageHeader className='border-b pb-4'>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

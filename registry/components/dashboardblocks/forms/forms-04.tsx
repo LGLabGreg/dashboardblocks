@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { InlineEditField, isEmail } from '@/registry/components/dashboardblocks/forms'
 import { startTransition, useState } from 'react'
@@ -101,7 +102,7 @@ const Forms4 = (props: Forms4Props) => {
   const ready = !status && defaultValues !== undefined
 
   return (
-    <BlockStateProvider status={status} empty={defaultValues === undefined}>
+    <BlockStateProvider state={getBlockState(status, defaultValues)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

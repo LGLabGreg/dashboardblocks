@@ -151,7 +151,7 @@ function ActiveRing({ cx, cy, r }: { cx: number; cy: number; r: number }) {
 
 const Timeline3 = (props: Timeline3Props) => {
   const { end, now, releases = [], start, status, title } = props
-  const state = getBlockState(status, releases.length === 0)
+  const state = getBlockState(status, releases)
   const ticks = getTimelineTicks(start, end, 'month')
   const gaps = releases
     .slice(1)
@@ -243,7 +243,7 @@ const Timeline3 = (props: Timeline3Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={releases.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

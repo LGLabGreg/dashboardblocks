@@ -4,6 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   DoraLabel,
@@ -124,7 +125,7 @@ const Deployments3 = (props: Deployments3Props) => {
   const levels = current ? getDoraLevels(current) : undefined
 
   return (
-    <BlockStateProvider status={status} empty={current === undefined}>
+    <BlockStateProvider state={getBlockState(status, current)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

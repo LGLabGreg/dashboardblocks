@@ -51,10 +51,10 @@ const KPI3 = (props: KPI3Props) => {
     title,
     value,
   } = props
-  const state = getBlockState(status, value === undefined)
+  const state = getBlockState(status, value)
 
   return (
-    <BlockStateProvider status={status} empty={value === undefined}>
+    <BlockStateProvider state={state}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

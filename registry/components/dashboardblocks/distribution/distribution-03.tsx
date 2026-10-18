@@ -56,7 +56,7 @@ const Distribution3 = (props: Distribution3Props) => {
     unit = 'orders',
     values = [],
   } = props
-  const state = getBlockState(status, values.length === 0)
+  const state = getBlockState(status, values)
   const blank = state === 'empty' || state === 'error'
 
   const sorted = [...values].sort((a, b) => a - b)
@@ -67,7 +67,7 @@ const Distribution3 = (props: Distribution3Props) => {
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]]
 
   return (
-    <BlockStateProvider status={status} empty={values.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

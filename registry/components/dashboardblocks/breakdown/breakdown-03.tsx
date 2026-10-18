@@ -77,14 +77,14 @@ function toCells(segments: BreakdownSegment[]) {
 const Breakdown3 = (props: Breakdown3Props) => {
   const { description, segments = [], status, title } = props
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const state = getBlockState(status, segments.length === 0)
+  const state = getBlockState(status, segments)
   const total = getTotal(segments)
   const squares: Square[] = toCells(segments)
     .flatMap((count, segment) => Array.from({ length: count }, () => segment))
     .map((segment, cell) => ({ segment, x: cell % SIDE, y: Math.floor(cell / SIDE) }))
 
   return (
-    <BlockStateProvider status={status} empty={segments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

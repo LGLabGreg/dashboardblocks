@@ -71,7 +71,7 @@ const MIN_LABELLED_BAR_WIDTH = 30
 
 const Spend3 = (props: Spend3Props) => {
   const { currency = 'USD', description, periods = [], status, title } = props
-  const state = getBlockState(status, periods.length === 0)
+  const state = getBlockState(status, periods)
   const format = (value: number) => formatCurrency(value, { currency })
   const compact = (value: number) => formatCurrency(value, { compact: true, currency })
   const spent = periods.reduce((sum, period) => sum + period.spent, 0)
@@ -80,7 +80,7 @@ const Spend3 = (props: Spend3Props) => {
   const overMonths = periods.filter((period) => period.spent > period.budget).length
 
   return (
-    <BlockStateProvider status={status} empty={periods.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

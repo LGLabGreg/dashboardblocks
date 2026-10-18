@@ -53,7 +53,7 @@ const colors = [
 
 const UsageMeter5 = (props: UsageMeter5Props) => {
   const { categories = [], limit, status: blockStatus, title, unit } = props
-  const state = getBlockState(blockStatus, categories.length === 0)
+  const state = getBlockState(blockStatus, categories)
   const used = categories.reduce((sum, category) => sum + category.value, 0)
   const free = Math.max(0, limit - used)
   const status = getUsageStatus(used, limit)
@@ -72,7 +72,7 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
   ]
 
   return (
-    <BlockStateProvider status={blockStatus} empty={categories.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-1 border-t pt-3'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

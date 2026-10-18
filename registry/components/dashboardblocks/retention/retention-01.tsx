@@ -60,7 +60,7 @@ const Retention1 = (props: Retention1Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, cohorts.length === 0)
+  const state = getBlockState(status, cohorts)
   const averages = getAverageRetention(cohorts)
   const unit = periodName.toLowerCase()
   const milestone = state ? 3 : Math.min(3, averages.length - 1)
@@ -77,7 +77,7 @@ const Retention1 = (props: Retention1Props) => {
   )
 
   return (
-    <BlockStateProvider status={status} empty={cohorts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

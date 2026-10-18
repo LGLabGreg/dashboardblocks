@@ -63,14 +63,13 @@ const Gauge4 = (props: Gauge4Props) => {
     target,
     title,
   } = props
-  const empty = props.value === undefined
-  const state = getBlockState(status, empty)
+  const state = getBlockState(status, props.value)
   const value = props.value ?? min
   const gap = Math.abs(value - target)
   const met = value >= target
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

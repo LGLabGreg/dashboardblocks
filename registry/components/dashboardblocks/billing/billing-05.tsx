@@ -130,7 +130,7 @@ const Billing5 = (props: Billing5Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, plans.length === 0)
+  const state = getBlockState(status, plans)
   const id = useId()
   const [active, setActive] = useState(current)
   const [interval, setBillingInterval] = useState(current.interval)
@@ -210,7 +210,7 @@ const Billing5 = (props: Billing5Props) => {
       )
 
   return (
-    <BlockStateProvider status={status} empty={plans.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

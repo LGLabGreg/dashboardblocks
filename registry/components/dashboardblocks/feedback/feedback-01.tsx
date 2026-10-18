@@ -53,10 +53,10 @@ const Feedback1 = (props: Feedback1Props) => {
   const { average, shares, total } = getRatingSummary(counts)
   const csat = getCsat(counts)
   const { ref, revealed } = useReveal<HTMLDivElement>(true)
-  const state = getBlockState(status, counts.length === 0)
+  const state = getBlockState(status, counts)
 
   return (
-    <BlockStateProvider status={status} empty={counts.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

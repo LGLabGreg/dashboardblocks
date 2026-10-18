@@ -105,10 +105,10 @@ const ActivityFeed1 = (props: ActivityFeed1Props) => {
   const id = useId()
   const days = groupActivityByDay(activities, now, timeZone)
   const { description = summarize(activities, days.length) } = props
-  const state = getBlockState(status, activities.length === 0)
+  const state = getBlockState(status, activities)
 
   return (
-    <BlockStateProvider status={status} empty={activities.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

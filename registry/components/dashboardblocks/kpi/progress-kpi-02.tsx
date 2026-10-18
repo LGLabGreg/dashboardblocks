@@ -54,7 +54,7 @@ const exampleProps: ProgressKPI2Props = {
 
 const ProgressKPI2 = (props: ProgressKPI2Props) => {
   const { counts = [], status, title, unit } = props
-  const state = getBlockState(status, counts.length === 0)
+  const state = getBlockState(status, counts)
   const sorted = statusOrder.flatMap((taskStatus) =>
     counts.filter((item) => item.status === taskStatus),
   )
@@ -63,7 +63,7 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
   const share = (count: number) => (total > 0 ? count / total : 0)
 
   return (
-    <BlockStateProvider status={status} empty={counts.length === 0}>
+    <BlockStateProvider state={state}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

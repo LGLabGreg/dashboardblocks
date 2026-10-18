@@ -53,7 +53,7 @@ const Forecast3 = (props: Forecast3Props) => {
     title,
     total,
   } = props
-  const state = getBlockState(blockStatus, props.current === undefined)
+  const state = getBlockState(blockStatus, props.current)
 
   const { projected, rate, remaining, required } = getRunRate({
     current,
@@ -68,7 +68,7 @@ const Forecast3 = (props: Forecast3Props) => {
   })
 
   return (
-    <BlockStateProvider status={blockStatus} empty={props.current === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-4'>
           <div className='flex flex-col gap-0.5'>

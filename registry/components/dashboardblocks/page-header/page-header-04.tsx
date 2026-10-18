@@ -46,10 +46,10 @@ const PageHeader4 = (props: PageHeader4Props) => {
     title,
   } = props
   const [query, setQuery] = useState('')
-  const state = getBlockState(status, count === undefined)
+  const state = getBlockState(status, count)
 
   return (
-    <BlockStateProvider status={status} empty={count === undefined}>
+    <BlockStateProvider state={state}>
       <PageHeader className='border-b pb-4'>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

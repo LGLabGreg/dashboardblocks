@@ -126,14 +126,14 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
     stats = [],
     status,
   } = props
-  const state = getBlockState(status, customer === undefined)
+  const state = getBlockState(status, customer)
   const ready = customer !== undefined && state === undefined
   const spent = orders
     .filter((order) => order.status !== 'Refunded')
     .reduce((sum, order) => sum + order.total, 0)
 
   return (
-    <BlockStateProvider status={status} empty={customer === undefined}>
+    <BlockStateProvider state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Customers</BackLink>

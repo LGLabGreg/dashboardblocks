@@ -80,8 +80,7 @@ const Flow1 = (props: Flow1Props) => {
     title,
     unit = 'sessions',
   } = props
-  const empty = links.length === 0
-  const state = getBlockState(status, empty)
+  const state = getBlockState(status, links)
   const totals = getFlowTotals(nodes, links)
   const labels = new Map(nodes.map((node) => [node.id, node.label]))
   const sessions = nodes
@@ -105,7 +104,7 @@ const Flow1 = (props: Flow1Props) => {
     .sort((a, b) => b.rate - a.rate)[0]
 
   return (
-    <BlockStateProvider status={status} empty={empty}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

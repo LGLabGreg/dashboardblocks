@@ -4,6 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type InsightKind,
@@ -98,7 +99,7 @@ const Insights4 = (props: Insights4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={takeaways.length === 0}>
+    <BlockStateProvider state={getBlockState(status, takeaways)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{headline}</h2>

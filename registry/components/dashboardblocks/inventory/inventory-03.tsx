@@ -47,7 +47,7 @@ const noCounts: Record<StockStatus, number> = { low: 0, ok: 0, out: 0, over: 0 }
 
 const Inventory3 = (props: Inventory3Props) => {
   const { annualCogs, counts = noCounts, currency = 'USD', status, title, value } = props
-  const state = getBlockState(status, value === undefined)
+  const state = getBlockState(status, value)
   const total = ORDER.reduce((sum, stock) => sum + counts[stock], 0)
   const reorder = counts.low + counts.out
   const turnover =
@@ -59,7 +59,7 @@ const Inventory3 = (props: Inventory3Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={value === undefined}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -125,12 +125,12 @@ const PageHeader3 = (props: PageHeader3Props) => {
     onMessage = () => {},
     status,
   } = props
-  const state = getBlockState(status, !customer)
+  const state = getBlockState(status, customer)
   const ready = state ? undefined : customer
   const loading = state === 'loading'
 
   return (
-    <BlockStateProvider status={status} empty={!customer}>
+    <BlockStateProvider state={state}>
       <PageHeader>
         <BackLink href={back.href}>{back.label}</BackLink>
         <PageHeaderRow className='@2xl/page-header:items-end'>

@@ -3,7 +3,6 @@
 import {
   BlockStateProvider,
   type BlockStatus,
-  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   ChartPlaceholder,
@@ -114,7 +113,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
   const gradient = useChartId()
   const [active, setActive] = useState<string>()
   const empty = metrics.length === 0 || data.length === 0
-  const state = getBlockState(status, empty)
+  const state = status ?? (empty ? 'empty' : undefined)
 
   const header = (
     <header className='flex flex-col gap-0.5'>
@@ -125,7 +124,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
 
   if (state) {
     return (
-      <BlockStateProvider status={status} empty={empty}>
+      <BlockStateProvider state={state}>
         <section className='@container flex flex-col gap-4'>
           {header}
           <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-3'>

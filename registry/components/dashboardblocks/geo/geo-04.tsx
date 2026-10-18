@@ -83,7 +83,7 @@ const Geo4 = (props: Geo4Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, regions.length === 0)
+  const state = getBlockState(status, regions)
   const total = regions.reduce((sum, region) => sum + region.current, 0)
   const previousTotal = regions.reduce((sum, region) => sum + region.previous, 0)
   const growth = (region: Region) =>
@@ -99,7 +99,7 @@ const Geo4 = (props: Geo4Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={regions.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

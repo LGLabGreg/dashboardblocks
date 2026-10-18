@@ -230,7 +230,7 @@ const Kanban1 = (props: Kanban1Props) => {
       ),
     [loadedIssues, moves],
   )
-  const state = getBlockState(status, loadedIssues.length === 0)
+  const state = getBlockState(status, loadedIssues)
   const done = getColumnItems(issues, doneColumn).length
   const overdue = issues.filter(
     (issue) =>
@@ -238,7 +238,7 @@ const Kanban1 = (props: Kanban1Props) => {
   ).length
 
   return (
-    <BlockStateProvider status={status} empty={loadedIssues.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

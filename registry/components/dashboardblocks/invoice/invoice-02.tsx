@@ -155,7 +155,7 @@ const Invoice2 = (props: Invoice2Props) => {
     supportEmail,
     taxRate,
   } = props
-  const state = getBlockState(status, lines.length === 0)
+  const state = getBlockState(status, lines)
   const [emailState, setEmailState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, shipping, taxRate })
   const unit = 10 ** getCurrencyDigits(currency)
@@ -193,7 +193,7 @@ const Invoice2 = (props: Invoice2Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={lines.length === 0}>
+    <BlockStateProvider state={state}>
       <DocumentLayout className='max-w-md'>
         <DocumentToolbar
           description={

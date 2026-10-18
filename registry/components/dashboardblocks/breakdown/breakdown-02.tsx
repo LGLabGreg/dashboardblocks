@@ -68,7 +68,7 @@ const Breakdown2 = (props: Breakdown2Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, groups.length === 0)
+  const state = getBlockState(status, groups)
   const highlighted = categories.find((category) => category.key === highlight)
   const rows = groups
     .map((group) => {
@@ -94,7 +94,7 @@ const Breakdown2 = (props: Breakdown2Props) => {
   const leads = rows.filter((row) => row.leads).length
 
   return (
-    <BlockStateProvider status={status} empty={groups.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

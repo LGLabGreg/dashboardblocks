@@ -89,10 +89,10 @@ const exampleProps: Status5Props = {
 
 const Status5 = (props: Status5Props) => {
   const { days = [], description, downtime, incidents = [], status, title } = props
-  const state = getBlockState(status, days.length === 0)
+  const state = getBlockState(status, days)
 
   return (
-    <BlockStateProvider status={status} empty={days.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

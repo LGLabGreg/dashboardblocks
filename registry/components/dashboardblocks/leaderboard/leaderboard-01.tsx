@@ -57,11 +57,11 @@ const summarize = (pages: PageStat[]) => {
 const Leaderboard1 = (props: Leaderboard1Props) => {
   const { onViewAll, pages = [], status, title } = props
   const { description = summarize(pages) } = props
-  const state = getBlockState(status, pages.length === 0)
+  const state = getBlockState(status, pages)
   const max = Math.max(...pages.map((page) => page.visitors), 1)
 
   return (
-    <BlockStateProvider status={status} empty={pages.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

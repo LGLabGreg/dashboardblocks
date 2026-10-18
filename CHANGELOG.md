@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.6.2
+
+### Patch Changes
+
+- d754669: `BlockStateProvider` takes a `state` instead of `status` and `empty`, and `getBlockState(status, data)` works it out from the block's data: empty when the data is left out, `null`, `''` or an empty list. If your own code wraps blocks in `BlockStateProvider`, change `status='loading'` to `state='loading'`. What you pass to each block doesn't change.
+
 ## 1.6.1
 
 ### Patch Changes

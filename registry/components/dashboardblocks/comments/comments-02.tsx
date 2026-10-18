@@ -111,7 +111,7 @@ const Comments2 = (props: Comments2Props) => {
     setLoaded(initialUpdates)
     setUpdates(initialUpdates)
   }
-  const state = getBlockState(status, updates.length === 0)
+  const state = getBlockState(status, updates)
   const [tab, setTab] = useState<Tab>('write')
   const [draft, setDraft] = useState('')
   const [isPosting, setIsPosting] = useState(false)
@@ -163,7 +163,7 @@ const Comments2 = (props: Comments2Props) => {
     )
 
   return (
-    <BlockStateProvider status={status} empty={updates.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

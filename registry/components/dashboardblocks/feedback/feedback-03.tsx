@@ -90,13 +90,13 @@ function formatReviewAge(date: Date, now: Date) {
 
 const Feedback3 = (props: Feedback3Props) => {
   const { description, now, reviews = [], status, title } = props
-  const state = getBlockState(status, reviews.length === 0)
+  const state = getBlockState(status, reviews)
   const needsReply = reviews.filter(
     (review) => review.rating <= 2 && !review.replied,
   ).length
 
   return (
-    <BlockStateProvider status={status} empty={reviews.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

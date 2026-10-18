@@ -73,10 +73,10 @@ const PageHeader2 = (props: PageHeader2Props) => {
     tabs,
     title,
   } = props
-  const state = getBlockState(status, !description)
+  const state = getBlockState(status, description)
 
   return (
-    <BlockStateProvider status={status} empty={!description}>
+    <BlockStateProvider state={state}>
       <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

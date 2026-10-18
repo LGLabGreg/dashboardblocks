@@ -73,7 +73,7 @@ const describe = (lines: SpendLine[], elapsed: number) => {
 const Spend2 = (props: Spend2Props) => {
   const { currency = 'USD', elapsed, lines = [], status, title } = props
   const { description = describe(lines, elapsed) } = props
-  const state = getBlockState(status, lines.length === 0)
+  const state = getBlockState(status, lines)
   const format = (value: number) =>
     formatCurrency(value, { compact: value >= 10_000, currency })
   const totals = lines.reduce(
@@ -83,7 +83,7 @@ const Spend2 = (props: Spend2Props) => {
   const total = getBudgetPace({ ...totals, elapsed })
 
   return (
-    <BlockStateProvider status={status} empty={lines.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

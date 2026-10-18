@@ -157,7 +157,7 @@ function CountChange({ previous, value }: { previous: number; value: number }) {
 const ActivityFeed4 = (props: ActivityFeed4Props) => {
   const { contributors = [], counts = [], days = [], range, status, title } = props
   const id = useId()
-  const state = getBlockState(status, days.length === 0)
+  const state = getBlockState(status, days)
   const total = days.reduce((sum, day) => sum + day.value, 0)
   const previousTotal = days.reduce((sum, day) => sum + day.previous, 0)
   const busiest = days.reduce(
@@ -173,7 +173,7 @@ const ActivityFeed4 = (props: ActivityFeed4Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={days.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

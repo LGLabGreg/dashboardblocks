@@ -5,6 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStatus,
+  getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -114,7 +115,7 @@ const Auth2 = (props: Auth2Props) => {
   }
 
   return (
-    <BlockStateProvider status={status} empty={workspaces.length === 0}>
+    <BlockStateProvider state={getBlockState(status, workspaces)}>
       <AuthLayout
         brand={brand}
         title='Choose a workspace'

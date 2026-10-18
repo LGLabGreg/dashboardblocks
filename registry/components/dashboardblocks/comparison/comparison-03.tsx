@@ -54,7 +54,7 @@ const Comparison3 = (props: Comparison3Props) => {
     status,
     title,
   } = props
-  const state = getBlockState(status, segments.length === 0)
+  const state = getBlockState(status, segments)
   const rows = segments
     .map((segment) => ({ ...segment, ...getDelta(segment.current, segment.previous) }))
     .sort((a, b) => b.difference - a.difference)
@@ -77,7 +77,7 @@ const Comparison3 = (props: Comparison3Props) => {
   } = props
 
   return (
-    <BlockStateProvider status={status} empty={segments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

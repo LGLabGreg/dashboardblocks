@@ -105,7 +105,7 @@ const median = (values: number[]) => {
 
 const Security1 = (props: Security1Props) => {
   const { days = [], description, mfaCoverage, status, title } = props
-  const state = getBlockState(status, days.length === 0)
+  const state = getBlockState(status, days)
   const totals = days.reduce(
     (sum, day) => ({
       blocked: sum.blocked + day.blocked,
@@ -126,7 +126,7 @@ const Security1 = (props: Security1Props) => {
   const spikeBlocked = spikes.reduce((sum, day) => sum + day.blocked, 0)
 
   return (
-    <BlockStateProvider status={status} empty={days.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

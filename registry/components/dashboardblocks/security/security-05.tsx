@@ -425,10 +425,10 @@ function TwoFactorSettings(props: Security5Props) {
 
 const Security5 = (props: Security5Props) => {
   const { securityKeys, status } = props
-  const state = getBlockState(status, securityKeys === undefined)
+  const state = getBlockState(status, securityKeys)
 
   return (
-    <BlockStateProvider status={status} empty={securityKeys === undefined}>
+    <BlockStateProvider state={state}>
       <TwoFactorSettings key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

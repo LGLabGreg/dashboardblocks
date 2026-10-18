@@ -187,7 +187,7 @@ const Comments3 = (props: Comments3Props) => {
   const [filter, setFilter] = useState<Filter>('open')
   const [activeId, setActiveId] = useState<string>()
   const [announcement, setAnnouncement] = useState('')
-  const state = getBlockState(status, comments.length === 0)
+  const state = getBlockState(status, comments)
   const headingId = useId()
   const listRef = useRef<HTMLDivElement>(null)
   const open = comments.filter((comment) => !comment.resolved)
@@ -215,7 +215,7 @@ const Comments3 = (props: Comments3Props) => {
   ]
 
   return (
-    <BlockStateProvider status={status} empty={comments.length === 0}>
+    <BlockStateProvider state={state}>
       <section className='@container'>
         <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem] @3xl:gap-8'>
           <article className='flex flex-col gap-4 self-start'>
