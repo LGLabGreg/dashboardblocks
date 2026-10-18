@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'flow-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('flow')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('flow'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/flow/flow-01.tsx',
@@ -23,7 +28,12 @@ export const examples: Registry['items'] = [
   {
     name: 'flow-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('flow')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('flow'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/flow/flow-02.tsx',
@@ -41,10 +51,10 @@ export const examples: Registry['items'] = [
     name: 'flow-03',
     type: 'registry:component',
     registryDependencies: [
-      'card',
-      registryUrl('billing'),
+      registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('flow'),
+      registryUrl('kpi'),
     ],
     meta: {
       shows:
@@ -62,7 +72,11 @@ export const examples: Registry['items'] = [
   {
     name: 'flow-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('flow')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('flow'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/flow/flow-04.tsx',

@@ -1,12 +1,24 @@
 'use client'
 
 import {
-  ChartPanelFigure,
-  ChartPanelTable,
-  ChartPanelTooltip,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipContent,
+  chartActiveDot,
   chartAxisProps,
   chartGridProps,
-  formatCompact,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  ChartPanelFigure,
+  ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   DataTable,
@@ -15,17 +27,25 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
 import {
   ForecastKey,
   type ForecastKeyShape,
   ForecastLegend,
+  ForecastStatusLabel,
   forecastColors,
   forecastDash,
-  forecastStatusConfig,
   getForecastAxis,
   projectGrowth,
 } from '@/registry/components/dashboardblocks/forecast'
+import {
+  formatCompact,
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+  formatSigned,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   Area,
   CartesianGrid,
@@ -38,16 +58,6 @@ import {
   YAxis,
 } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
-
 type ScenarioKey = 'low' | 'base' | 'high'
 
 interface Scenario {
@@ -57,12 +67,13 @@ interface Scenario {
 }
 
 interface Forecast4Props {
-  /** Values so far, oldest first. */
-  actuals: { label: string; value: number }[]
+  /** Values so far, oldest first. Leave out, or pass none, to show the empty state. */
+  actuals?: { label: string; value: number }[]
   description: string
   formatter?: (value: number) => string
   horizon: string[]
   scenarios: Record<ScenarioKey, Scenario>
+  status?: BlockStatus
   target?: number
   title: string
 }
@@ -76,8 +87,8 @@ const exampleProps: Forecast4Props = {
     { label: 'Jul 2026', value: 207_300 },
     { label: 'Aug 2026', value: 214_200 },
   ],
-  description: 'Monthly recurring revenue under three growth scenarios',
-  formatter: (value) => `$${Math.round(value).toLocaleString('en-US')}`,
+  description: 'Monthly recurring revenue under three growth scenarios.',
+  formatter: (value) => formatCurrency(value),
   horizon: ['Sep 2026', 'Oct 2026', 'Nov 2026', 'Dec 2026', 'Jan 2027', 'Feb 2027'],
   scenarios: {
     base: { note: 'Current growth continues', rate: 0.03 },
@@ -94,22 +105,21 @@ const SCENARIOS: { key: ScenarioKey; label: string; shape: ForecastKeyShape }[] 
   { key: 'low', label: 'Low', shape: 'dotted' },
 ]
 
-const percentFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  signDisplay: 'always',
-  style: 'percent',
-})
+const formatGrowth = (ratio: number) =>
+  formatSigned(ratio, (value) => formatPercent(value))
 
 const Forecast4 = (props: Forecast4Props) => {
   const {
-    actuals,
+    actuals = [],
     description,
-    formatter = (value) => Math.round(value).toLocaleString(),
+    formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     horizon,
     scenarios,
+    status,
     target,
     title,
   } = props
+  const state = getBlockState(status, actuals.length === 0)
 
   const current = actuals[actuals.length - 1]?.value ?? 0
   const paths = {
@@ -160,203 +170,210 @@ const Forecast4 = (props: Forecast4Props) => {
       ) : null
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='pb-4'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4 border-b pb-6'>
-        <ForecastLegend
-          items={[
-            { label: 'Actual', shape: 'line' },
-            { label: 'Base', shape: 'dashed' },
-            { label: 'Low to high', shape: 'band' },
-            ...(target !== undefined
-              ? [{ label: `Target ${formatter(target)}`, shape: 'dotted' as const }]
-              : []),
-          ]}
-        />
-        <ChartPanelFigure className='h-56'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <ComposedChart data={rows} margin={{ top: 8, right: 36, bottom: 0, left: 0 }}>
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='label'
-                interval='preserveStartEnd'
-                minTickGap={16}
-                tickFormatter={(label: string) => label.slice(0, 3)}
-              />
-              <YAxis
-                {...chartAxisProps}
-                domain={yAxis.domain}
-                tickFormatter={(value: number) => formatCompact(value)}
-                ticks={yAxis.ticks}
-                width={48}
-              />
-              {target !== undefined && (
-                <ReferenceLine
-                  y={target}
-                  stroke={forecastColors.target}
-                  strokeDasharray={forecastDash.target}
-                  strokeWidth={1.5}
-                  label={{
-                    fill: 'var(--color-muted-foreground)',
-                    fontSize: 11,
-                    position: 'insideTopLeft',
-                    value: 'Target',
-                  }}
-                />
-              )}
-              <Tooltip
-                content={(tooltipProps) => {
-                  const row = tooltipProps.payload?.[0]?.payload as
-                    | (typeof rows)[number]
-                    | undefined
-                  const payload = tooltipProps.payload?.filter((item) =>
-                    row?.actual !== null
-                      ? item.dataKey === 'actual'
-                      : item.dataKey !== 'range' && item.dataKey !== 'actual',
-                  )
-                  return (
-                    <ChartPanelTooltip
-                      {...tooltipProps}
-                      payload={payload}
-                      valueFormatter={formatter}
+    <BlockStateProvider status={status} empty={actuals.length === 0}>
+      <section className='@container/data-table flex flex-col gap-4 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-col gap-4 border-t pt-4'>
+          <ForecastLegend
+            items={[
+              { label: 'Actual', shape: 'line' },
+              { label: 'Base', shape: 'dashed' },
+              { label: 'Low to high', shape: 'band' },
+              ...(target !== undefined
+                ? [{ label: `Target ${formatter(target)}`, shape: 'dotted' as const }]
+                : []),
+            ]}
+          />
+          {state ? (
+            <ChartPlaceholder height={224} />
+          ) : (
+            <ChartPanelFigure className='h-56'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <ComposedChart
+                  aria-label={title}
+                  data={rows}
+                  margin={{ top: 8, right: 36, bottom: 0, left: 0 }}
+                >
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='label'
+                    interval='preserveStartEnd'
+                    minTickGap={16}
+                    tickFormatter={(label: string) => label.slice(0, 3)}
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    domain={yAxis.domain}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    ticks={yAxis.ticks}
+                    width={chartValueAxisWidth}
+                  />
+                  {target !== undefined && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={target}
+                      label={{
+                        ...chartReferenceLabel,
+                        position: 'insideTopLeft',
+                        value: 'Target',
+                      }}
                     />
-                  )
-                }}
-                cursor={{ stroke: 'var(--color-border)' }}
-              />
-              <Area
-                activeDot={false}
-                dataKey='range'
-                fill={forecastColors.band}
-                fillOpacity={1}
-                name='Low to high'
-                stroke='none'
-                type='linear'
-              />
-              {SCENARIOS.map((scenario) => (
-                <Line
-                  key={scenario.key}
-                  activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                  dataKey={scenario.key}
-                  dot={false}
-                  label={renderEndLabel(scenario.label)}
-                  name={scenario.label}
-                  stroke={forecastColors.forecast}
-                  strokeDasharray={
-                    scenario.key === 'base' ? forecastDash.forecast : forecastDash.target
-                  }
-                  strokeOpacity={scenario.key === 'base' ? 1 : 0.7}
-                  strokeWidth={scenario.key === 'base' ? 2 : 1.5}
-                  type='linear'
-                />
-              ))}
-              <Line
-                activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                dataKey='actual'
-                dot={false}
-                name='Actual'
-                stroke={forecastColors.actual}
-                strokeLinecap='round'
-                strokeWidth={2}
-                type='monotone'
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}.`}
-          columns={[
-            { key: 'label', label: 'Month' },
-            { format: formatter, key: 'actual', label: 'Actual' },
-            ...SCENARIOS.map((scenario) => ({
-              format: formatter,
-              key: scenario.key,
-              label: scenario.label,
-            })),
-          ]}
-          rows={rows.map((row, index) => {
-            const isScenario = index >= actuals.length
-            return {
-              actual: row.actual ?? '—',
-              base: isScenario ? (row.base ?? '—') : '—',
-              high: isScenario ? (row.high ?? '—') : '—',
-              label: row.label,
-              low: isScenario ? (row.low ?? '—') : '—',
-            }
-          })}
-        />
-      </CardContent>
-      <DataTable>
-        <caption className='sr-only'>{`${title} by scenario, to ${endLabel}`}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Scenario</DataTableHead>
-            <DataTableHead align='end'>Growth</DataTableHead>
-            <DataTableHead align='end'>{endLabel}</DataTableHead>
-            <DataTableHead align='end'>Change</DataTableHead>
-            {target !== undefined && (
-              <DataTableHead align='end'>Reaches target</DataTableHead>
-            )}
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {SCENARIOS.map((scenario) => {
-            const path = paths[scenario.key]
-            const end = path[path.length - 1] ?? current
-            const reachedIndex =
-              target !== undefined ? path.findIndex((value) => value >= target) : -1
-            const reached =
-              target !== undefined && current >= target
-                ? 'Already'
-                : reachedIndex >= 0
-                  ? horizon[reachedIndex]
-                  : null
-            const status = forecastStatusConfig[reached ? 'on-track' : 'off-track']
-            return (
-              <DataTableRow key={scenario.key}>
-                <DataTableCell primary>
-                  <div className='flex items-start gap-2'>
-                    <ForecastKey className='mt-1' shape={scenario.shape} />
-                    <div className='flex min-w-0 flex-col'>
-                      <span className='font-medium'>{scenario.label}</span>
-                      <span className='text-muted-foreground text-xs'>
-                        {scenarios[scenario.key].note}
-                      </span>
-                    </div>
-                  </div>
-                </DataTableCell>
-                <DataTableCell align='end' label='Growth'>
-                  {percentFormatter.format(scenarios[scenario.key].rate)} a month
-                </DataTableCell>
-                <DataTableCell align='end' label={endLabel} className='font-medium'>
-                  {formatter(end)}
-                </DataTableCell>
-                <DataTableCell align='end' label='Change'>
-                  {percentFormatter.format(current > 0 ? end / current - 1 : 0)}
-                </DataTableCell>
-                {target !== undefined && (
-                  <DataTableCell align='end' label='Reaches target'>
-                    <span
-                      className={cn(
-                        'inline-flex items-center gap-1 @2xl/data-table:justify-end [&_svg]:size-3.5 [&_svg]:shrink-0',
-                        status.text,
-                      )}
-                    >
-                      {status.icon}
-                      {reached ?? `Not by ${endLabel}`}
-                    </span>
-                  </DataTableCell>
-                )}
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+                  )}
+                  <Tooltip
+                    content={(tooltipProps) => {
+                      const row = tooltipProps.payload?.[0]?.payload as
+                        | (typeof rows)[number]
+                        | undefined
+                      const payload = tooltipProps.payload?.filter((item) =>
+                        row?.actual !== null
+                          ? item.dataKey === 'actual'
+                          : item.dataKey !== 'range' && item.dataKey !== 'actual',
+                      )
+                      return (
+                        <ChartTooltipContent
+                          {...tooltipProps}
+                          payload={payload}
+                          valueFormatter={formatter}
+                        />
+                      )
+                    }}
+                    cursor={chartLineCursor}
+                  />
+                  <Area
+                    activeDot={false}
+                    dataKey='range'
+                    fill={forecastColors.band}
+                    fillOpacity={1}
+                    name='Low to high'
+                    stroke='none'
+                    type='linear'
+                  />
+                  {SCENARIOS.map((scenario) => (
+                    <Line
+                      key={scenario.key}
+                      activeDot={chartActiveDot}
+                      dataKey={scenario.key}
+                      dot={false}
+                      label={renderEndLabel(scenario.label)}
+                      name={scenario.label}
+                      stroke={forecastColors.forecast}
+                      strokeDasharray={
+                        scenario.key === 'base'
+                          ? forecastDash.forecast
+                          : forecastDash.target
+                      }
+                      strokeOpacity={scenario.key === 'base' ? 1 : 0.7}
+                      strokeWidth={scenario.key === 'base' ? 2 : 1.5}
+                      type='linear'
+                    />
+                  ))}
+                  <Line
+                    activeDot={chartActiveDot}
+                    dataKey='actual'
+                    dot={false}
+                    name='Actual'
+                    stroke={forecastColors.actual}
+                    strokeLinecap='round'
+                    strokeWidth={2}
+                    type='monotone'
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+          )}
+          {!state && (
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Month' },
+                { format: formatter, key: 'actual', label: 'Actual' },
+                ...SCENARIOS.map((scenario) => ({
+                  format: formatter,
+                  key: scenario.key,
+                  label: scenario.label,
+                })),
+              ]}
+              rows={rows.map((row, index) => {
+                const isScenario = index >= actuals.length
+                return {
+                  actual: row.actual ?? '—',
+                  base: isScenario ? (row.base ?? '—') : '—',
+                  high: isScenario ? (row.high ?? '—') : '—',
+                  label: row.label,
+                  low: isScenario ? (row.low ?? '—') : '—',
+                }
+              })}
+            />
+          )}
+        </div>
+        <DataTable>
+          <caption className='sr-only'>{`${title} by scenario, to ${endLabel}`}</caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Scenario</DataTableHead>
+              <DataTableHead align='end'>Growth</DataTableHead>
+              <DataTableHead align='end'>{endLabel}</DataTableHead>
+              <DataTableHead align='end'>Change</DataTableHead>
+              {target !== undefined && (
+                <DataTableHead align='end'>Reaches target</DataTableHead>
+              )}
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={target !== undefined ? 5 : 4} rows={3} />
+            {!state &&
+              SCENARIOS.map((scenario) => {
+                const path = paths[scenario.key]
+                const end = path[path.length - 1] ?? current
+                const reachedIndex =
+                  target !== undefined ? path.findIndex((value) => value >= target) : -1
+                const reached =
+                  target !== undefined && current >= target
+                    ? 'Already'
+                    : reachedIndex >= 0
+                      ? horizon[reachedIndex]
+                      : null
+                return (
+                  <DataTableRow key={scenario.key}>
+                    <DataTableCell primary>
+                      <div className='flex items-start gap-2'>
+                        <ForecastKey className='mt-1' shape={scenario.shape} />
+                        <div className='flex min-w-0 flex-col'>
+                          <span className='font-medium'>{scenario.label}</span>
+                          <span className='text-muted-foreground text-xs'>
+                            {scenarios[scenario.key].note}
+                          </span>
+                        </div>
+                      </div>
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Growth'>
+                      {formatGrowth(scenarios[scenario.key].rate)} a month
+                    </DataTableCell>
+                    <DataTableCell align='end' label={endLabel} className='font-medium'>
+                      {formatter(end)}
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Change'>
+                      {formatGrowth(current > 0 ? end / current - 1 : 0)}
+                    </DataTableCell>
+                    {target !== undefined && (
+                      <DataTableCell align='end' label='Reaches target'>
+                        <ForecastStatusLabel
+                          label={reached ?? `Not by ${endLabel}`}
+                          status={reached ? 'on-track' : 'off-track'}
+                        />
+                      </DataTableCell>
+                    )}
+                  </DataTableRow>
+                )
+              })}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,6 +1,10 @@
-'use client'
-
-import { Icon } from '@/registry/components/dashboardblocks/icon'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   Leaderboard,
   LeaderboardItem,
@@ -9,52 +13,42 @@ import {
   LeaderboardRankChange,
   LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+  formatCurrency,
+  formatNumber,
+  joinDetails,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface Product {
   category: string
+  /** Places moved since the last period, or `new` for a first entry. */
   change: number | 'new'
-  icon: React.ReactNode
   id: number
   name: string
   revenue: number
   unitsSold: number
 }
 
-interface Leaderboard04Props {
+interface Leaderboard4Props {
   currency?: string
-  description: string
-  products: Product[]
+  /** Defaults to a sentence about the biggest climber and new entries. */
+  description?: string
+  /** Names the last period in the sentence, such as `last week`. */
+  period?: string
+  /** Leave out, or pass none, to show the empty state. */
+  products?: Product[]
+  status?: BlockStatus
   title: string
 }
 
-const exampleProps: Leaderboard04Props = {
+const exampleProps: Leaderboard4Props = {
   currency: 'USD',
-  description: 'By revenue, rank change vs last week',
+  period: 'last week',
   products: [
     {
       id: 1,
       name: 'Studio Monitor 27"',
       category: 'Displays',
-      icon: (
-        <IconPlaceholder
-          lucide='MonitorIcon'
-          tabler='IconDeviceDesktop'
-          hugeicons='ComputerIcon'
-          phosphor='MonitorIcon'
-          remixicon='RiComputerLine'
-        />
-      ),
       revenue: 48_920,
       unitsSold: 112,
       change: 1,
@@ -63,15 +57,6 @@ const exampleProps: Leaderboard04Props = {
       id: 2,
       name: 'Wireless Headphones',
       category: 'Audio',
-      icon: (
-        <IconPlaceholder
-          lucide='HeadphonesIcon'
-          tabler='IconHeadphones'
-          hugeicons='HeadphonesIcon'
-          phosphor='HeadphonesIcon'
-          remixicon='RiHeadphoneLine'
-        />
-      ),
       revenue: 41_370,
       unitsSold: 287,
       change: -1,
@@ -80,15 +65,6 @@ const exampleProps: Leaderboard04Props = {
       id: 3,
       name: 'Ergonomic Chair',
       category: 'Furniture',
-      icon: (
-        <IconPlaceholder
-          lucide='ArmchairIcon'
-          tabler='IconArmchair'
-          hugeicons='Sofa01Icon'
-          phosphor='ArmchairIcon'
-          remixicon='RiSofaLine'
-        />
-      ),
       revenue: 36_540,
       unitsSold: 84,
       change: 0,
@@ -97,15 +73,6 @@ const exampleProps: Leaderboard04Props = {
       id: 4,
       name: 'Mechanical Keyboard',
       category: 'Peripherals',
-      icon: (
-        <IconPlaceholder
-          lucide='KeyboardIcon'
-          tabler='IconKeyboard'
-          hugeicons='KeyboardIcon'
-          phosphor='KeyboardIcon'
-          remixicon='RiKeyboardLine'
-        />
-      ),
       revenue: 22_815,
       unitsSold: 169,
       change: 3,
@@ -114,15 +81,6 @@ const exampleProps: Leaderboard04Props = {
       id: 5,
       name: 'Desk Lamp Pro',
       category: 'Lighting',
-      icon: (
-        <IconPlaceholder
-          lucide='LampIcon'
-          tabler='IconLamp'
-          hugeicons='Idea01Icon'
-          phosphor='LampIcon'
-          remixicon='RiLightbulbLine'
-        />
-      ),
       revenue: 14_260,
       unitsSold: 203,
       change: 'new',
@@ -131,77 +89,103 @@ const exampleProps: Leaderboard04Props = {
       id: 6,
       name: 'Precision Mouse',
       category: 'Peripherals',
-      icon: (
-        <IconPlaceholder
-          lucide='MouseIcon'
-          tabler='IconMouse'
-          hugeicons='Mouse01Icon'
-          phosphor='MouseIcon'
-          remixicon='RiMouseLine'
-        />
-      ),
       revenue: 9_880,
       unitsSold: 152,
       change: -2,
     },
   ],
-  title: 'Top Products',
+  title: 'Top products',
 }
 
-const tileSurface =
-  'bg-card text-foreground shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]'
+const ordinalRules = new Intl.PluralRules('en-US', { type: 'ordinal' })
+const ordinalSuffix: Record<string, string> = { few: 'rd', one: 'st', two: 'nd' }
+const ordinal = (rank: number) =>
+  `${rank}${ordinalSuffix[ordinalRules.select(rank)] ?? 'th'}`
 
-const Leaderboard04 = (props: Leaderboard04Props) => {
-  const { currency = 'USD', description, products, title } = props
-  const formatter = new Intl.NumberFormat('en-US', {
-    currency,
-    maximumFractionDigits: 0,
-    style: 'currency',
-  })
+function summarize(products: Product[], period: string) {
+  const climber = products
+    .map((product, index) => ({ ...product, rank: index + 1 }))
+    .filter((product) => typeof product.change === 'number' && product.change > 0)
+    .sort((a, b) => (b.change as number) - (a.change as number))[0]
+  const fresh = products.filter((product) => product.change === 'new')
+  const parts = [
+    climber &&
+      `${climber.name} climbed ${climber.change} ${climber.change === 1 ? 'place' : 'places'} to ${ordinal(climber.rank)}`,
+    fresh.length === 1 && `${fresh[0].name} is new`,
+    fresh.length > 1 && `${fresh.length} products are new`,
+  ].filter(Boolean)
+  return parts.length > 0
+    ? `${parts.join(' and ')} since ${period}.`
+    : `No changes in the ranking since ${period}.`
+}
+
+const Leaderboard4 = (props: Leaderboard4Props) => {
+  const {
+    currency = 'USD',
+    period = 'the last period',
+    products = [],
+    status,
+    title,
+  } = props
+  const state = getBlockState(status, products.length === 0)
+  const { description = summarize(products, period) } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Leaderboard className='gap-2'>
-          {products.map((product, index) => (
-            <LeaderboardItem key={product.id} size='lg' className='px-0'>
-              <LeaderboardRank rank={index + 1} />
-              <Icon
-                icon={product.icon}
-                size='md'
-                variant='ghost'
-                className={cn('[&_svg]:stroke-[1.5]', tileSurface)}
-              />
-              <LeaderboardLabel>
-                <p className='truncate font-medium'>{product.name}</p>
-                <p className='truncate text-xs text-muted-foreground'>
-                  {product.category}
-                </p>
-              </LeaderboardLabel>
-              <LeaderboardValue>
-                <p>{formatter.format(product.revenue)}</p>
-                <p className='text-xs font-normal text-muted-foreground'>
-                  {product.unitsSold.toLocaleString()} sold
-                </p>
-              </LeaderboardValue>
-              <div className='flex w-9 shrink-0 justify-end'>
-                <LeaderboardRankChange change={product.change} />
-              </div>
-            </LeaderboardItem>
-          ))}
-        </Leaderboard>
-      </CardContent>
-    </Card>
+    <BlockStateProvider status={status} empty={products.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <div className='flex flex-col'>
+          <div
+            aria-hidden='true'
+            className='text-muted-foreground flex gap-3 border-b pb-2 text-xs'
+          >
+            <span className='w-5 shrink-0'>#</span>
+            <span className='flex-1'>Product</span>
+            <span>Revenue</span>
+            <span className='w-16 shrink-0 text-end'>Move</span>
+          </div>
+          <BlockStateRows rows={6} />
+          {!state && (
+            <Leaderboard className='gap-0'>
+              {products.map((product, index) => (
+                <LeaderboardItem
+                  key={product.id}
+                  className='border-b px-0 py-2.5 last:border-b-0'
+                >
+                  <LeaderboardRank rank={index + 1} />
+                  <LeaderboardLabel>
+                    <p className='truncate font-medium'>{product.name}</p>
+                    <p className='text-muted-foreground truncate text-xs'>
+                      {joinDetails(
+                        product.category,
+                        `${formatNumber(product.unitsSold)} sold`,
+                      )}
+                    </p>
+                  </LeaderboardLabel>
+                  <LeaderboardValue>
+                    {formatCurrency(product.revenue, { currency })}
+                  </LeaderboardValue>
+                  <div className='flex w-16 shrink-0 justify-end'>
+                    <LeaderboardRankChange change={product.change} />
+                  </div>
+                </LeaderboardItem>
+              ))}
+            </Leaderboard>
+          )}
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 
 export {
-  Leaderboard04,
-  exampleProps as leaderboard04ExampleProps,
-  type Leaderboard04Props,
+  Leaderboard4,
+  exampleProps as leaderboard4ExampleProps,
+  type Leaderboard4Props,
   type Product,
 }

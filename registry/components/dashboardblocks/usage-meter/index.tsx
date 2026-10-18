@@ -28,3 +28,14 @@ export const usageMeterExampleProps = {
   'usage-meter-07': usageMeter7ExampleProps,
   'usage-meter-08': usageMeter8ExampleProps,
 }
+
+export const usageMeterEmptyProps = {
+  'usage-meter-01': { used: undefined },
+  'usage-meter-02': { used: undefined },
+  'usage-meter-03': { items: [] },
+  'usage-meter-04': { balance: undefined, dailyUsage: [] },
+  'usage-meter-05': { categories: [] },
+  'usage-meter-06': { limits: [] },
+  'usage-meter-07': { used: undefined },
+  'usage-meter-08': { used: undefined },
+}

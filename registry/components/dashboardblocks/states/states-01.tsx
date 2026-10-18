@@ -1,6 +1,11 @@
 'use client'
 
-import { Skeleton, useBlockData } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockStateProvider,
+  type BlockStatus,
+  type LoadStatus,
+  useBlockData,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   Stat,
   StatChange,
@@ -9,19 +14,16 @@ import {
   type StatMetric,
   StatValue,
   formatStatValue,
+  getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface States1Props {
+  /** Follows the change, such as `the previous 30 days`. */
+  comparison: string
   description: string
   load: () => Promise<StatMetric[]>
   placeholders?: number
@@ -29,14 +31,15 @@ interface States1Props {
 }
 
 const exampleProps: States1Props = {
-  description: 'Last 30 days, compared with the previous 30 days',
+  comparison: 'the previous 30 days',
+  description: 'The last 30 days, compared with the 30 days before.',
   load: () =>
     new Promise((resolve) =>
       setTimeout(
         () =>
           resolve([
             {
-              formatter: (value) => `$${value.toLocaleString('en-US')}`,
+              formatter: (value) => formatCurrency(value),
               key: 'revenue',
               label: 'Revenue',
               previous: 42_890,
@@ -45,7 +48,7 @@ const exampleProps: States1Props = {
             { key: 'orders', label: 'Orders', previous: 1_210, value: 1_284 },
             {
               changeType: 'points',
-              formatter: (value) => `${value}%`,
+              formatter: (value) => formatPercent(value / 100),
               goodDirection: 'down',
               key: 'refunds',
               label: 'Refund rate',
@@ -60,17 +63,27 @@ const exampleProps: States1Props = {
   title: 'Overview',
 }
 
+function toBlockStatus(status: LoadStatus): BlockStatus | undefined {
+  if (status === 'idle' || status === 'loading') return 'loading'
+  if (status === 'error') return 'error'
+  return undefined
+}
+
 const States1 = (props: States1Props) => {
-  const { description, load, placeholders = 3, title } = props
-  const { data, reload, status } = useBlockData(load)
-  const loading = status === 'loading' || status === 'idle'
+  const { comparison, description, load, placeholders = 3, title } = props
+  const { data = [], reload, status: loadStatus } = useBlockData(load)
+  const status = toBlockStatus(loadStatus)
+  const loading = status === 'loading'
+  const shown = loading ? getStatPlaceholders(placeholders) : data
 
   return (
-    <Card className='@container gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
           <Button
             variant='outline'
             size='sm'
@@ -86,35 +99,18 @@ const States1 = (props: States1Props) => {
             />
             Reload
           </Button>
-        </CardAction>
-      </CardHeader>
-      <div aria-busy={loading}>
-        <span role='status' className='sr-only'>
-          {loading ? `Loading ${title.toLowerCase()}…` : ''}
-        </span>
-        {loading || !data ? (
-          <div className='bg-border grid gap-px @xl:grid-cols-3'>
-            {Array.from({ length: placeholders }, (_, index) => (
-              <div key={index} className='bg-card flex flex-col gap-1 p-6'>
-                <Skeleton className='my-0.5 h-4 w-20' />
-                <Skeleton className='my-0.5 h-8 w-32' />
-                <Skeleton className='my-0.5 h-3 w-24' />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <StatGroup className='@xl:grid-cols-3'>
-            {data.map((metric) => (
-              <Stat key={metric.key}>
-                <StatLabel>{metric.label}</StatLabel>
-                <StatValue>{formatStatValue(metric)}</StatValue>
-                <StatChange metric={metric} />
-              </Stat>
-            ))}
-          </StatGroup>
-        )}
-      </div>
-    </Card>
+        </header>
+        <StatGroup className='@xl:grid-cols-3'>
+          {shown.map((metric) => (
+            <Stat key={metric.key}>
+              <StatLabel>{metric.label}</StatLabel>
+              <StatValue>{formatStatValue(metric)}</StatValue>
+              <StatChange comparison={comparison} metric={metric} variant='short' />
+            </Stat>
+          ))}
+        </StatGroup>
+      </section>
+    </BlockStateProvider>
   )
 }
 

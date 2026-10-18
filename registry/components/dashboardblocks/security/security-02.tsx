@@ -1,21 +1,21 @@
 'use client'
 
+import { ActivityTime } from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   type AuditSeverity,
-  AuditSeverityIcon,
-  formatSince,
+  AuditSeverityLabel,
 } from '@/registry/components/dashboardblocks/security'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface AuditEvent {
   actor: string
@@ -28,10 +28,15 @@ interface AuditEvent {
 }
 
 interface Security2Props {
-  description: string
-  events: AuditEvent[]
+  /** Defaults to a sentence counting the changes and the critical ones. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  events?: AuditEvent[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
+  status?: BlockStatus
+  /** @default 'UTC' */
+  timeZone?: string
   title: string
 }
 
@@ -39,7 +44,6 @@ const NOW = new Date(Date.UTC(2026, 8, 26, 16, 0))
 const minutesAgo = (minutes: number) => new Date(NOW.getTime() - minutes * 60_000)
 
 const exampleProps: Security2Props = {
-  description: 'Changes to access, keys and settings',
   events: [
     {
       action: 'created an API key',
@@ -98,59 +102,73 @@ const exampleProps: Security2Props = {
   title: 'Audit log',
 }
 
+const summarize = (events: AuditEvent[]) => {
+  const critical = events.filter((event) => event.severity === 'critical').length
+  const changes = `${events.length} ${events.length === 1 ? 'change' : 'changes'} to access, keys and settings`
+  return critical > 0 ? `${changes}, ${critical} of them critical.` : `${changes}.`
+}
+
 const Security2 = (props: Security2Props) => {
-  const { description, events, now, title } = props
+  const { description, events = [], now, status, timeZone, title } = props
   const [importantOnly, setImportantOnly] = useState(false)
+  const state = getBlockState(status, events.length === 0)
   const shown = importantOnly
     ? events.filter((event) => event.severity !== 'info')
     : events
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
+    <BlockStateProvider status={status} empty={events.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            {description ? (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            ) : (
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{summarize(events)}</p>
+              </BlockReady>
+            )}
+          </div>
           <Button
             aria-pressed={importantOnly}
+            disabled={state !== undefined}
             size='sm'
             variant={importantOnly ? 'secondary' : 'outline'}
             onClick={() => setImportantOnly((value) => !value)}
           >
             Warnings only
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <ol className='flex flex-col'>
-          {shown.map((event) => (
-            <li
-              key={event.id}
-              className='flex gap-3 border-b py-2.5 first:pt-0 last:border-b-0 last:pb-0'
-            >
-              <AuditSeverityIcon severity={event.severity} />
-              <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                <p className='text-sm'>
-                  <span className='font-medium'>{event.actor}</span> {event.action}
-                  {event.target && <span className='font-medium'> {event.target}</span>}
-                </p>
-                <span className='text-muted-foreground flex flex-wrap gap-x-2 text-xs'>
-                  <time dateTime={event.at.toISOString()}>
-                    {formatSince(event.at, now)}
-                  </time>
-                  {event.ip && <span className='font-mono'>{event.ip}</span>}
-                </span>
-              </div>
-            </li>
-          ))}
-          {shown.length === 0 && (
-            <li className='text-muted-foreground py-6 text-center text-sm'>
-              Nothing to show.
-            </li>
-          )}
-        </ol>
-      </CardContent>
-    </Card>
+        </header>
+        <BlockStateRows className='border-t' rows={6} />
+        {!state && (
+          <ol className='flex flex-col border-t'>
+            {shown.map((event) => (
+              <li key={event.id} className='flex items-start gap-3 border-b py-2.5'>
+                <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                  <p className='text-sm text-pretty'>
+                    <span className='font-medium'>{event.actor}</span> {event.action}
+                    {event.target && <span className='font-medium'> {event.target}</span>}
+                  </p>
+                  <Details className='text-muted-foreground text-xs'>
+                    <ActivityTime date={event.at} now={now} timeZone={timeZone} />
+                    {event.ip && <span className='font-mono'>{event.ip}</span>}
+                  </Details>
+                </div>
+                {event.severity !== 'info' && (
+                  <AuditSeverityLabel severity={event.severity} />
+                )}
+              </li>
+            ))}
+            {shown.length === 0 && (
+              <li className='text-muted-foreground border-b py-6 text-center text-sm'>
+                No warnings in this log.
+              </li>
+            )}
+          </ol>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

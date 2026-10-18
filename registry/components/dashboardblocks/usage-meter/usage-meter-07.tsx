@@ -2,9 +2,15 @@
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wave'
-import { Icon } from '@/registry/components/dashboardblocks/icon'
 import {
-  UsageStatusBadge,
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  UsageMeterValue,
+  UsageStatusLabel,
   type UsageStatus,
   formatUsage,
   getUsageShare,
@@ -14,15 +20,18 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card'
+
+import { cn } from '@/lib/utils'
 
 interface UsageMeter7Props {
   icon: ReactNode
   limit: number
   onUpgrade?: () => void
+  status?: BlockStatus
   title: string
   unit: string
-  used: number
+  /** Leave out to show the empty state. */
+  used?: number
 }
 
 const exampleProps: UsageMeter7Props = {
@@ -44,66 +53,86 @@ const exampleProps: UsageMeter7Props = {
 
 const waveColors: Record<UsageStatus, string> = {
   critical: 'text-red-300 dark:text-red-900',
-  ok: 'text-[color-mix(in_oklab,var(--chart-2)_25%,var(--card))]',
+  ok: 'text-[color-mix(in_oklab,var(--color-chart-2)_25%,var(--color-background))]',
   over: 'text-red-300 dark:text-red-900',
   warning: 'text-amber-200 dark:text-amber-900',
 }
 
 const UsageMeter7 = (props: UsageMeter7Props) => {
-  const { icon, limit, onUpgrade, title, unit, used } = props
+  const { icon, limit, onUpgrade, status: blockStatus, title, unit, used = 0 } = props
+  const state = getBlockState(blockStatus, props.used === undefined)
   const remaining = Math.max(0, limit - used)
   const share = getUsageShare(used, limit)
   const status = getUsageStatus(used, limit)
 
   return (
-    <Card className='overflow-hidden pb-0'>
-      <CardHeader>
-        <div className='flex items-center gap-2'>
-          <Icon icon={icon} size='sm' variant='secondary' />
-          <CardTitle>{title}</CardTitle>
-        </div>
-        {onUpgrade && (
-          <CardAction>
+    <BlockStateProvider status={blockStatus} empty={props.used === undefined}>
+      <section className='@container flex flex-col gap-3 border-t pt-3'>
+        <header className='flex min-h-8 items-center justify-between gap-3'>
+          <p className='text-muted-foreground flex min-w-0 items-center gap-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0'>
+            {icon}
+            <span className='truncate'>{title}</span>
+          </p>
+          {onUpgrade && (
             <Button variant='outline' size='sm' onClick={onUpgrade}>
               Upgrade
             </Button>
-          </CardAction>
-        )}
-      </CardHeader>
-      <div
-        role='meter'
-        aria-label={title}
-        aria-valuemax={limit}
-        aria-valuemin={0}
-        aria-valuenow={Math.min(used, limit)}
-        aria-valuetext={`${formatUsage(used, unit)} of ${formatUsage(limit, unit)} used`}
-        className='bg-muted/50 relative h-40 border-t'
-      >
-        <AnimatedWave
-          percentage={100 - Math.min(100, share)}
-          className={waveColors[status]}
-        />
+          )}
+        </header>
         <div
-          aria-hidden
-          className='text-foreground absolute inset-0 flex flex-col items-center justify-center gap-2 text-center'
+          {...(state
+            ? {}
+            : {
+                role: 'meter',
+                'aria-label': title,
+                'aria-valuemax': limit,
+                'aria-valuemin': 0,
+                'aria-valuenow': Math.min(used, limit),
+                'aria-valuetext': `${formatUsage(used, unit)} of ${formatUsage(limit, unit)} used`,
+              })}
+          className={cn(
+            'bg-muted/50 relative h-40 overflow-hidden rounded-lg',
+            state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          )}
         >
-          <span className='text-muted-foreground text-sm font-medium'>Remaining</span>
-          <span className='flex items-start gap-1 text-4xl leading-none font-semibold tracking-tight tabular-nums'>
-            <AnimatedNumber
-              value={remaining}
-              formatter={(value) => formatUsage(Math.round(value))}
+          {!state && (
+            <AnimatedWave
+              percentage={100 - Math.min(100, share)}
+              className={waveColors[status]}
             />
-            <span className='text-sm font-medium'>{unit}</span>
-          </span>
-          <span className='text-sm tabular-nums'>
-            {formatUsage(used, unit)} of {formatUsage(limit, unit)} used
-          </span>
+          )}
+          {state ? (
+            <div className='absolute inset-0 flex items-center justify-center'>
+              <UsageMeterValue className='leading-none' />
+            </div>
+          ) : (
+            <div
+              aria-hidden
+              className='text-foreground absolute inset-0 flex flex-col items-center justify-center gap-1 text-center'
+            >
+              <span className='text-4xl leading-none font-light tracking-tight tabular-nums'>
+                <AnimatedNumber
+                  value={remaining}
+                  formatter={(value) => formatUsage(Math.round(value))}
+                />
+                <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                  {unit}
+                </span>
+              </span>
+              <span className='text-muted-foreground text-sm'>left</span>
+            </div>
+          )}
         </div>
-        {status !== 'ok' && (
-          <UsageStatusBadge className='absolute top-3 right-3' status={status} />
-        )}
-      </div>
-    </Card>
+        <BlockReady className='text-sm'>
+          <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm'>
+            <span className='tabular-nums'>
+              {formatUsage(used, unit)} of {formatUsage(limit, unit)} used
+            </span>
+            {status !== 'ok' && <UsageStatusLabel status={status} />}
+          </p>
+        </BlockReady>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -13,3 +13,9 @@ export const recordDetailExampleProps = {
   'record-detail-02': recordDetail2ExampleProps,
   'record-detail-03': recordDetail3ExampleProps,
 }
+
+export const recordDetailEmptyProps = {
+  'record-detail-01': { customer: undefined, orders: [], stats: [] },
+  'record-detail-02': { customer: undefined, events: [], items: [], order: undefined },
+  'record-detail-03': { events: [], ticket: undefined },
+}

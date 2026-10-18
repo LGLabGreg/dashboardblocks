@@ -5,6 +5,7 @@ import {
   formatDuration,
   formatTime,
 } from '@/registry/components/dashboardblocks/error-pages'
+import { UsageBar } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { flushSync } from 'react-dom'
@@ -76,8 +77,8 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
   const [subscribed, setSubscribed] = useState(false)
 
   const total = endsAt.getTime() - startsAt.getTime()
-  const elapsed = Math.min(Math.max(now.getTime() - startsAt.getTime(), 0), total)
-  const percent = total > 0 ? Math.round((elapsed / total) * 100) : 0
+  const elapsed = Math.max(now.getTime() - startsAt.getTime(), 0)
+  const percent = total > 0 ? Math.round((Math.min(elapsed, total) / total) * 100) : 0
   const overrun = now.getTime() > endsAt.getTime()
 
   const subscribe = (event: FormEvent<HTMLFormElement>) => {
@@ -96,15 +97,6 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
   return (
     <ErrorPageLayout
       brand={brand}
-      icon={
-        <IconPlaceholder
-          lucide='WrenchIcon'
-          tabler='IconTool'
-          hugeicons='Wrench01Icon'
-          phosphor='WrenchIcon'
-          remixicon='RiToolsLine'
-        />
-      }
       title='Down for maintenance'
       description={work}
       footer={
@@ -118,22 +110,19 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
         )
       }
     >
-      <div className='flex flex-col gap-2 text-left'>
-        <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm'>
-          <span className='font-medium'>
-            {overrun ? (
-              'Taking longer than planned'
-            ) : (
-              <>
-                Back by <time dateTime={endsAt.toISOString()}>{formatTime(endsAt)}</time>
-              </>
-            )}
-          </span>
-          <span className='text-muted-foreground'>
+      <div className='flex flex-col gap-3 border-t pt-6'>
+        <div className='flex flex-col gap-1'>
+          <p className='text-muted-foreground text-sm'>
+            {overrun ? 'Planned to be back by' : 'Back by'}
+          </p>
+          <p className='text-4xl font-light tracking-tight tabular-nums'>
+            <time dateTime={endsAt.toISOString()}>{formatTime(endsAt)}</time>
+          </p>
+          <p className='text-muted-foreground text-sm'>
             {overrun
-              ? 'We’ll post an update soon'
-              : `${formatDuration(endsAt.getTime() - now.getTime())} left`}
-          </span>
+              ? 'It’s taking longer than planned. We’ll post an update soon.'
+              : `Started ${formatTime(startsAt)}, with ${formatDuration(endsAt.getTime() - now.getTime())} to go.`}
+          </p>
         </div>
         <div
           role='progressbar'
@@ -141,45 +130,42 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
           aria-valuenow={percent}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuetext={`${percent}% of the planned time has passed`}
-          className='bg-muted h-2 overflow-hidden rounded-full'
+          aria-valuetext={
+            overrun
+              ? 'Past the planned time'
+              : `${percent}% of the planned time has passed`
+          }
         >
-          <div
-            className={overrun ? 'h-full bg-amber-500' : 'bg-primary h-full'}
-            style={{ width: `${percent}%` }}
+          <UsageBar
+            color='var(--color-chart-2)'
+            limit={total}
+            overColor='var(--color-amber-500)'
+            size='sm'
+            used={elapsed}
           />
         </div>
-        <p className='text-muted-foreground text-xs'>
-          Started <time dateTime={startsAt.toISOString()}>{formatTime(startsAt)}</time>
-        </p>
       </div>
 
       {updates.length > 0 && (
-        <section
-          aria-labelledby={`${id}-updates`}
-          className='flex flex-col gap-3 text-left'
-        >
+        <section aria-labelledby={`${id}-updates`} className='flex flex-col gap-2'>
           <h2 id={`${id}-updates`} className='text-sm font-medium'>
             Updates
           </h2>
-          <ol className='flex flex-col gap-3 border-l pl-4'>
+          <ol className='flex flex-col divide-y border-y'>
             {updates.map((update, index) => (
-              <li key={update.id} className='relative flex flex-col gap-0.5 text-sm'>
-                <span
-                  aria-hidden
-                  className={
-                    index === 0
-                      ? 'bg-primary absolute top-1.5 -left-[21px] size-2 rounded-full'
-                      : 'bg-muted-foreground/40 absolute top-1.5 -left-[21px] size-2 rounded-full'
-                  }
-                />
+              <li
+                key={update.id}
+                className='grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 py-2.5 text-sm'
+              >
                 <time
                   dateTime={update.at.toISOString()}
-                  className='text-muted-foreground text-xs'
+                  className='text-muted-foreground tabular-nums'
                 >
                   {formatTime(update.at)}
                 </time>
-                <span>{update.text}</span>
+                <span className={index === 0 ? 'font-medium' : undefined}>
+                  {update.text}
+                </span>
               </li>
             ))}
           </ol>
@@ -196,7 +182,7 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
             method='post'
             noValidate
             onSubmit={subscribe}
-            className='flex flex-col gap-2 text-left'
+            className='flex flex-col gap-2'
           >
             <label htmlFor={`${id}-email`} className='text-sm font-medium'>
               Get an email when it’s back

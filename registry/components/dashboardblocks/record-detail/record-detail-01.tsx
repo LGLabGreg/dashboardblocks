@@ -1,10 +1,27 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+} from '@/registry/components/dashboardblocks/data-table'
+import {
   ActionsMenu,
   BackLink,
   PageHeader,
   PageHeaderActions,
+  type PageHeaderFact,
+  PageHeaderFacts,
   PageHeaderHeading,
   PageHeaderRow,
 } from '@/registry/components/dashboardblocks/page-header'
@@ -12,45 +29,53 @@ import {
   Property,
   PropertyList,
   RecordLayout,
-  type RecordStat,
-  RecordStats,
+  RecordPlaceholder,
+  RecordSection,
 } from '@/registry/components/dashboardblocks/record-detail'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { formatCurrency, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+type OrderStatus = 'Delivered' | 'Refunded' | 'Shipped'
 
 interface CustomerOrder {
   date: string
   href: string
   id: string
-  status: 'Delivered' | 'Refunded' | 'Shipped'
+  status: OrderStatus
   total: number
 }
 
 interface RecordDetail1Props {
-  customer: {
+  /** Leave out to show the empty state. */
+  customer?: {
+    avatar?: string
     email: string
     location: string
     name: string
     notes: string
     phone: string
     since: string
-    status: string
+    status: 'Active' | 'At risk' | 'Churned'
     tags: string[]
   }
   onDelete?: () => void
   onEdit?: () => void
   onMerge?: () => void
-  orders: CustomerOrder[]
-  stats: RecordStat[]
+  orders?: CustomerOrder[]
+  stats?: PageHeaderFact[]
+  status?: BlockStatus
 }
-
-const currency = new Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' })
 
 const exampleProps: RecordDetail1Props = {
   customer: {
+    avatar: '/images/avatar-07.webp',
     email: 'jonas@northwind.io',
     location: 'Berlin, Germany',
     name: 'Jonas Weber',
@@ -63,32 +88,33 @@ const exampleProps: RecordDetail1Props = {
   orders: [
     { date: 'Sep 24, 2026', href: '#', id: '#1042', status: 'Shipped', total: 652.22 },
     { date: 'Aug 30, 2026', href: '#', id: '#0987', status: 'Delivered', total: 289 },
-    { date: 'Aug 02, 2026', href: '#', id: '#0931', status: 'Refunded', total: 94.5 },
+    { date: 'Aug 2, 2026', href: '#', id: '#0931', status: 'Refunded', total: 94.5 },
     { date: 'Jul 11, 2026', href: '#', id: '#0874', status: 'Delivered', total: 1_210 },
   ],
   stats: [
-    { label: 'Lifetime value', note: 'Top 5% of customers', value: '$4,820' },
-    { label: 'Orders', value: '12' },
+    { detail: 'Top 5% of customers', label: 'Lifetime value', value: '$4,820' },
+    { detail: 'Since Mar 2024', label: 'Orders', value: '12' },
     { label: 'Average order', value: '$401.67' },
-    { label: 'Last order', value: '3 days ago' },
+    { detail: 'Order #1042', label: 'Last order', value: '3 days ago' },
   ],
 }
 
-const head = 'h-10 px-2 font-medium whitespace-nowrap'
+type CustomerStatus = NonNullable<RecordDetail1Props['customer']>['status']
 
-const statusVariant = {
-  Delivered: 'secondary',
-  Refunded: 'outline',
-  Shipped: 'default',
-} as const
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('')
+const CUSTOMER_TONE: Record<CustomerStatus, StatusTone> = {
+  Active: 'good',
+  'At risk': 'warning',
+  Churned: 'neutral',
 }
+
+const ORDER_TONE: Record<OrderStatus, StatusTone> = {
+  Delivered: 'good',
+  Refunded: 'neutral',
+  Shipped: 'info',
+}
+
+const money = (value: number) =>
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
 
 const RecordDetail1 = (props: RecordDetail1Props) => {
   const {
@@ -96,136 +122,150 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
     onDelete = () => {},
     onEdit = () => {},
     onMerge = () => {},
-    orders,
-    stats,
+    orders = [],
+    stats = [],
+    status,
   } = props
+  const state = getBlockState(status, customer === undefined)
+  const ready = customer !== undefined && state === undefined
+  const spent = orders
+    .filter((order) => order.status !== 'Refunded')
+    .reduce((sum, order) => sum + order.total, 0)
 
   return (
-    <div className='flex flex-col gap-6'>
-      <PageHeader>
-        <BackLink href='#'>Customers</BackLink>
-        <PageHeaderRow>
-          <PageHeaderHeading
-            title={customer.name}
-            description={customer.email}
-            badge={<Badge variant='secondary'>{customer.status}</Badge>}
-            media={
-              <Avatar className='size-12'>
-                <AvatarFallback>{initials(customer.name)}</AvatarFallback>
-              </Avatar>
-            }
-          />
-          <PageHeaderActions>
-            <Button variant='outline' onClick={onEdit}>
-              Edit
-            </Button>
-            <ActionsMenu
-              items={[
-                { label: 'Merge with…', onSelect: onMerge },
-                { label: 'Delete customer', onSelect: onDelete, variant: 'destructive' },
-              ]}
+    <BlockStateProvider status={status} empty={customer === undefined}>
+      <div className='flex flex-col gap-8'>
+        <PageHeader>
+          <BackLink href='#'>Customers</BackLink>
+          <PageHeaderRow className='@2xl/page-header:items-end'>
+            {ready ? (
+              <PageHeaderHeading
+                title={customer.name}
+                description={joinDetails(customer.email, customer.location)}
+                badge={
+                  <StatusLabel tone={CUSTOMER_TONE[customer.status]}>
+                    {customer.status}
+                  </StatusLabel>
+                }
+                media={<PersonAvatar className='size-12' person={customer} size='lg' />}
+              />
+            ) : (
+              <PageHeaderHeading
+                title={<BlockStateText variant='short' />}
+                description={state === 'loading' && <SkeletonText className='w-56' />}
+              />
+            )}
+            <PageHeaderActions>
+              <Button variant='outline' disabled={!ready} onClick={onEdit}>
+                Edit
+              </Button>
+              <ActionsMenu
+                disabled={!ready}
+                items={[
+                  { label: 'Merge with…', onSelect: onMerge },
+                  {
+                    label: 'Delete customer',
+                    onSelect: onDelete,
+                    variant: 'destructive',
+                  },
+                ]}
+              />
+            </PageHeaderActions>
+          </PageHeaderRow>
+          {ready && <PageHeaderFacts items={stats} />}
+          {state === 'loading' && stats.length > 0 && (
+            <PageHeaderFacts
+              items={stats.map((fact) => ({
+                label: fact.label,
+                value: <SkeletonText className='w-16' />,
+              }))}
             />
-          </PageHeaderActions>
-        </PageHeaderRow>
-      </PageHeader>
-      <RecordLayout
-        aside={
-          <>
-            <Card>
-              <CardHeader>
-                <CardTitle>Details</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <PropertyList>
-                  <Property label='Email'>
-                    <a
-                      href={`mailto:${customer.email}`}
-                      className='underline-offset-4 hover:underline'
-                    >
-                      {customer.email}
-                    </a>
-                  </Property>
-                  <Property label='Phone'>{customer.phone}</Property>
-                  <Property label='Location'>{customer.location}</Property>
-                  <Property label='Customer since'>{customer.since}</Property>
-                  <Property label='Tags'>
-                    <span className='flex flex-wrap gap-1'>
-                      {customer.tags.map((tag) => (
-                        <Badge key={tag} variant='outline'>
-                          {tag}
-                        </Badge>
-                      ))}
-                    </span>
-                  </Property>
-                </PropertyList>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Notes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-muted-foreground text-sm'>{customer.notes}</p>
-              </CardContent>
-            </Card>
-          </>
-        }
-      >
-        <RecordStats items={stats} />
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent orders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='w-full overflow-x-auto'>
-              <table className='w-full text-sm'>
-                <thead>
-                  <tr className='border-b'>
-                    <th scope='col' className={`${head} text-start`}>
-                      Order
-                    </th>
-                    <th scope='col' className={`${head} text-start`}>
-                      Date
-                    </th>
-                    <th scope='col' className={`${head} text-start`}>
-                      Status
-                    </th>
-                    <th scope='col' className={`${head} text-end`}>
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
+          )}
+        </PageHeader>
+        <RecordPlaceholder aside={['Details', 'Notes']} sections={['Recent orders']} />
+        {ready && (
+          <RecordLayout
+            aside={
+              <>
+                <RecordSection title='Details'>
+                  <PropertyList>
+                    <Property label='Email'>
+                      <a
+                        href={`mailto:${customer.email}`}
+                        className='underline-offset-4 hover:underline'
+                      >
+                        {customer.email}
+                      </a>
+                    </Property>
+                    <Property label='Phone'>{customer.phone}</Property>
+                    <Property label='Location'>{customer.location}</Property>
+                    <Property label='Customer since'>{customer.since}</Property>
+                    <Property label='Tags'>
+                      <span className='flex flex-wrap gap-1'>
+                        {customer.tags.map((tag) => (
+                          <Badge key={tag} variant='outline'>
+                            {tag}
+                          </Badge>
+                        ))}
+                      </span>
+                    </Property>
+                  </PropertyList>
+                </RecordSection>
+                <RecordSection title='Notes'>
+                  <p className='text-muted-foreground text-sm'>{customer.notes}</p>
+                </RecordSection>
+              </>
+            }
+          >
+            <RecordSection
+              className='[--data-table-inset:0px]'
+              description={`The last ${orders.length} orders, ${money(spent)} after refunds.`}
+              title='Recent orders'
+            >
+              <DataTable>
+                <caption className='sr-only'>Recent orders</caption>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>Order</DataTableHead>
+                    <DataTableHead>Date</DataTableHead>
+                    <DataTableHead>Status</DataTableHead>
+                    <DataTableHead align='end'>Total</DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
                   {orders.map((order) => (
-                    <tr key={order.id} className='border-b last:border-0'>
-                      <td className='p-2 font-medium whitespace-nowrap'>
+                    <DataTableRow key={order.id}>
+                      <DataTableCell primary>
                         <a
                           href={order.href}
                           className='underline-offset-4 hover:underline'
                         >
                           {order.id}
                         </a>
-                      </td>
-                      <td className='text-muted-foreground p-2 whitespace-nowrap'>
+                      </DataTableCell>
+                      <DataTableCell
+                        label='Date'
+                        className='text-muted-foreground whitespace-nowrap'
+                      >
                         {order.date}
-                      </td>
-                      <td className='p-2'>
-                        <Badge variant={statusVariant[order.status]}>
+                      </DataTableCell>
+                      <DataTableCell label='Status'>
+                        <StatusLabel tone={ORDER_TONE[order.status]}>
                           {order.status}
-                        </Badge>
-                      </td>
-                      <td className='p-2 text-end whitespace-nowrap tabular-nums'>
-                        {currency.format(order.total)}
-                      </td>
-                    </tr>
+                        </StatusLabel>
+                      </DataTableCell>
+                      <DataTableCell align='end' label='Total'>
+                        {money(order.total)}
+                      </DataTableCell>
+                    </DataTableRow>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-      </RecordLayout>
-    </div>
+                </DataTableBody>
+              </DataTable>
+            </RecordSection>
+          </RecordLayout>
+        )}
+      </div>
+    </BlockStateProvider>
   )
 }
 

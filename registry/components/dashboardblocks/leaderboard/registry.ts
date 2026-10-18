@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'leaderboard-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('leaderboard')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('leaderboard'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard/leaderboard-01.tsx',
@@ -24,9 +29,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'avatar',
-      'card',
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kpi'),
       registryUrl('leaderboard'),
-      registryUrl('trend'),
     ],
     files: [
       {
@@ -36,7 +42,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'People ranked by revenue with badges for the top three and the change since the last period.',
+        'People ranked by revenue with a bar to their quota and the change since the last period.',
       size: 'half',
       usedWith: ['team-01', 'leaderboard-04', 'chart-panel-01'],
     },
@@ -46,9 +52,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'avatar',
-      'card',
+      registryUrl('block-state'),
+      registryUrl('format'),
       registryUrl('leaderboard'),
-      registryUrl('use-in-view'),
+      registryUrl('use-reveal'),
     ],
     files: [
       {
@@ -57,7 +64,8 @@ export const examples: Registry['items'] = [
       },
     ],
     meta: {
-      shows: 'The top three on a podium, with the rest of the field listed below.',
+      shows:
+        'The top three on a podium sized by their totals, with the rest of the field listed below.',
       size: 'half',
       usedWith: ['leaderboard-02', 'team-02', 'chart-panel-01'],
     },
@@ -65,7 +73,11 @@ export const examples: Registry['items'] = [
   {
     name: 'leaderboard-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('icon'), registryUrl('leaderboard')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('leaderboard'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard/leaderboard-04.tsx',
@@ -82,7 +94,12 @@ export const examples: Registry['items'] = [
   {
     name: 'leaderboard-05',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('leaderboard')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('leaderboard'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard/leaderboard-05.tsx',

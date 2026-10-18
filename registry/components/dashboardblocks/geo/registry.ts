@@ -6,7 +6,13 @@ export const examples: Registry['items'] = [
   {
     name: 'geo-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('geo'), registryUrl('heatmap')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('geo'),
+      registryUrl('heatmap'),
+      registryUrl('kpi'),
+      registryUrl('leaderboard'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/geo/geo-01.tsx',
@@ -23,7 +29,11 @@ export const examples: Registry['items'] = [
   {
     name: 'geo-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('geo')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('geo'),
+      registryUrl('leaderboard'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/geo/geo-02.tsx',
@@ -40,7 +50,11 @@ export const examples: Registry['items'] = [
   {
     name: 'geo-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('geo')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('geo'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/geo/geo-03.tsx',
@@ -49,7 +63,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Active users by city right now as markers sized by value on a dotted world map.',
+        'Active users by city right now as markers sized by value on a dotted world map, with the busiest city named.',
       size: 'full',
       usedWith: ['realtime-01', 'geo-02'],
     },
@@ -58,10 +72,9 @@ export const examples: Registry['items'] = [
     name: 'geo-04',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
       registryUrl('breakdown'),
-      registryUrl('comparison'),
-      registryUrl('trend'),
+      registryUrl('kpi'),
     ],
     meta: {
       shows:

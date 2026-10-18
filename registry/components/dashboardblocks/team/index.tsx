@@ -22,3 +22,12 @@ export const teamExampleProps = {
   'team-05': team5ExampleProps,
   'team-06': team6ExampleProps,
 }
+
+export const teamEmptyProps = {
+  'team-01': { members: [] },
+  'team-02': { people: [] },
+  'team-03': { people: [] },
+  'team-04': { shifts: [] },
+  'team-05': { grants: undefined, roles: [] },
+  'team-06': { linkAccess: undefined, people: [] },
+}

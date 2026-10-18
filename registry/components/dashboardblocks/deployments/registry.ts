@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'deployments-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('deployments'), registryUrl('team')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('deployments'),
+      registryUrl('details'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/deployments/deployments-01.tsx',
@@ -23,7 +28,11 @@ export const examples: Registry['items'] = [
   {
     name: 'deployments-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('deployments')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('deployments'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/deployments/deployments-02.tsx',
@@ -40,7 +49,13 @@ export const examples: Registry['items'] = [
   {
     name: 'deployments-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('deployments')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('deployments'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/deployments/deployments-03.tsx',
@@ -57,7 +72,12 @@ export const examples: Registry['items'] = [
   {
     name: 'deployments-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('deployments')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('deployments'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/deployments/deployments-04.tsx',

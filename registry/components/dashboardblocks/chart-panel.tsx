@@ -1,35 +1,15 @@
 'use client'
 
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  type ChartValueFormatter,
+} from '@/registry/components/dashboardblocks/chart'
 import type { ReactNode } from 'react'
-import type { TooltipContentProps } from 'recharts'
-import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { cn } from '@/lib/utils'
 
 type ChartPanelKeyShape = 'line' | 'rect'
-
-type ChartValueFormatter = (value: number) => string
-
-const chartAxisProps = {
-  axisLine: false,
-  tickLine: false,
-  tickMargin: 8,
-  tick: { fill: 'var(--color-muted-foreground)', fontSize: 12 },
-} as const
-
-const chartValueAxisWidth = 48
-
-const chartGridProps = {
-  stroke: 'var(--color-border)',
-  vertical: false,
-} as const
-
-const compactFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  notation: 'compact',
-})
-
-const formatCompact: ChartValueFormatter = (value) => compactFormatter.format(value)
 
 interface ChartPanelKeyProps {
   className?: string
@@ -63,6 +43,9 @@ interface ChartPanelLegendProps {
 }
 
 function ChartPanelLegend({ className, items }: ChartPanelLegendProps) {
+  const state = useBlockState()
+  if (state === 'empty' || state === 'error') return null
+
   return (
     <ul
       className={cn(
@@ -77,54 +60,6 @@ function ChartPanelLegend({ className, items }: ChartPanelLegendProps) {
         </li>
       ))}
     </ul>
-  )
-}
-
-type ChartPanelTooltipProps = Partial<
-  Pick<TooltipContentProps<ValueType, NameType>, 'active' | 'label' | 'payload'>
-> & {
-  formatLabel?: (label: string) => string
-  valueFormatter?: ChartValueFormatter
-}
-
-function ChartPanelTooltip({
-  active,
-  label,
-  formatLabel,
-  payload,
-  valueFormatter = (value) => value.toLocaleString(),
-}: ChartPanelTooltipProps) {
-  if (!active || !payload || payload.length === 0) return null
-
-  const heading = label !== undefined && label !== '' ? String(label) : undefined
-
-  return (
-    <div className='bg-popover text-popover-foreground grid min-w-36 gap-1.5 rounded-lg px-3 py-2 text-xs shadow-md ring-1 ring-foreground/10'>
-      {heading && (
-        <span className='text-muted-foreground'>
-          {formatLabel ? formatLabel(heading) : heading}
-        </span>
-      )}
-      {payload.map((item, index) => {
-        const color =
-          (item.color as string | undefined) ??
-          (item.payload as { fill?: string } | undefined)?.fill ??
-          'var(--color-foreground)'
-
-        return (
-          <div
-            key={`${String(item.dataKey ?? item.name)}-${index}`}
-            className='flex items-center gap-2'
-          >
-            <ChartPanelKey color={color} shape='line' />
-            <span className='font-medium tabular-nums'>
-              {valueFormatter(Number(item.value))}
-            </span>
-            <span className='text-muted-foreground ml-auto pl-3'>{item.name}</span>
-          </div>
-        )
-      })}
-    </div>
   )
 }
 
@@ -145,6 +80,9 @@ function ChartPanelTable<T extends object>({
   columns,
   rows,
 }: ChartPanelTableProps<T>) {
+  const state = useBlockState()
+  if (state) return null
+
   return (
     <div className='sr-only'>
       <table>
@@ -189,24 +127,15 @@ interface ChartPanelFigureProps {
 }
 
 function ChartPanelFigure({ children, className }: ChartPanelFigureProps) {
-  return <div className={cn('w-full tabular-nums', className)}>{children}</div>
+  const state = useBlockState()
+
+  return (
+    <div className={cn('w-full tabular-nums', className)}>
+      {state ? <ChartPlaceholder height='100%' /> : children}
+    </div>
+  )
 }
 
-export {
-  ChartPanelFigure,
-  ChartPanelKey,
-  ChartPanelLegend,
-  ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
-  chartValueAxisWidth,
-  formatCompact,
-}
+export { ChartPanelFigure, ChartPanelKey, ChartPanelLegend, ChartPanelTable }
 
-export type {
-  ChartPanelKeyShape,
-  ChartPanelLegendItem,
-  ChartPanelTableColumn,
-  ChartValueFormatter,
-}
+export type { ChartPanelKeyShape, ChartPanelLegendItem, ChartPanelTableColumn }

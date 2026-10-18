@@ -16,3 +16,8 @@ export const onboardingExampleProps = {
   'onboarding-03': onboarding3ExampleProps,
   'onboarding-04': onboarding4ExampleProps,
 }
+
+export const onboardingEmptyProps = {
+  'onboarding-02': { tasks: [] },
+  'onboarding-03': { sources: [] },
+}

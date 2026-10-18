@@ -1,21 +1,20 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-03",
-  "description": "A rate with its previous value underneath and the change in percentage points.",
+  "description": "A rate beside its previous value, with the change in percentage points.",
   "registryDependencies": [
-    "card",
     "https://www.dashboardblocks.com/r/base/kpi.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-03.tsx",
-      "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n  getKPIFormatter,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI3Props {\n  /** Use `points` for rates, so the change reads in percentage points; 'percent' by default. */\n  changeType?: 'percent' | 'points'\n  comparison: string\n  format?: KPIFormat\n  /** Use `down` for metrics like churn, where a decrease is good. */\n  goodDirection?: 'up' | 'down'\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI3Props = {\n  changeType: 'points',\n  comparison: 'last month',\n  format: 'percent',\n  previous: 3.46,\n  title: 'Conversion rate',\n  value: 3.24,\n}\n\nconst KPI3 = (props: KPI3Props) => {\n  const { changeType, comparison, format, goodDirection, previous, title, value } = props\n  const formatter = getKPIFormatter(format)\n\n  return (\n    <KPI>\n      <KPIContent className='gap-1'>\n        <CardDescription>{title}</CardDescription>\n        <KPIValue value={value} format={format} animated />\n        <div className='mt-3 flex items-center justify-between gap-2 border-t pt-3'>\n          <span className='text-muted-foreground text-sm'>\n            {formatter(previous)} {comparison}\n          </span>\n          <KPIChange\n            changeType={changeType}\n            comparison={`vs ${comparison}`}\n            goodDirection={goodDirection}\n            previous={previous}\n            value={value}\n          />\n        </div>\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI3, exampleProps as kpi3ExampleProps, type KPI3Props }\n",
+      "content": "'use client'\n\nimport {\n  BlockStateProvider,\n  type BlockStatus,\n  getBlockState,\n} from '@/registry/components/dashboardblocks/block-state'\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  KPITitle,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\ninterface KPI3Props {\n  /** Use `points` for rates, so the change reads in percentage points; 'percent' by default. */\n  changeType?: 'percent' | 'points'\n  comparison: string\n  /** @default 'This month' */\n  currentLabel?: string\n  format?: KPIFormat\n  /** Use `down` for metrics like churn, where a decrease is good. */\n  goodDirection?: 'up' | 'down'\n  previous?: number\n  status?: BlockStatus\n  title: string\n  /** Leave out to show the empty state. */\n  value?: number\n}\n\nconst exampleProps: KPI3Props = {\n  changeType: 'points',\n  comparison: 'last month',\n  format: 'percent',\n  previous: 3.46,\n  title: 'Conversion rate',\n  value: 3.24,\n}\n\nconst KPI3 = (props: KPI3Props) => {\n  const {\n    changeType,\n    comparison,\n    currentLabel = 'This month',\n    format,\n    goodDirection,\n    previous,\n    status,\n    title,\n    value,\n  } = props\n  const state = getBlockState(status, value === undefined)\n\n  return (\n    <BlockStateProvider status={status} empty={value === undefined}>\n      <KPI>\n        <KPIContent className='gap-1'>\n          <KPITitle>{title}</KPITitle>\n          <div className='flex flex-wrap items-end gap-x-6 gap-y-1'>\n            <div className='flex flex-col'>\n              <KPIValue value={value} format={format} animated />\n              <span className='text-muted-foreground text-xs'>{currentLabel}</span>\n            </div>\n            {(state === undefined || state === 'loading') && (\n              <div className='text-muted-foreground flex flex-col pb-px'>\n                <KPIValue className='text-2xl' value={previous} format={format} />\n                <span className='text-xs first-letter:uppercase'>{comparison}</span>\n              </div>\n            )}\n          </div>\n          <KPIChange\n            className='mt-2'\n            changeType={changeType}\n            comparison={comparison}\n            format={format}\n            goodDirection={goodDirection}\n            previous={previous}\n            value={value}\n            variant='short'\n          />\n        </KPIContent>\n      </KPI>\n    </BlockStateProvider>\n  )\n}\n\nexport { KPI3, exampleProps as kpi3ExampleProps, type KPI3Props }\n",
       "type": "registry:component",
       "target": "@components/dashboardblocks/kpi/kpi-03.tsx"
     }
   ],
   "meta": {
-    "shows": "A rate with its previous value underneath and the change in percentage points.",
+    "shows": "A rate beside its previous value, with the change in percentage points.",
     "size": "compact",
     "usedWith": [
       "kpi-02",
@@ -23,7 +22,7 @@
       "chart-panel-01"
     ],
     "component": "KPI3",
-    "props": "{ changeType?: \"percent\" | \"points\"; comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; goodDirection?: \"up\" | \"down\"; previous: number; title: string; value: number }"
+    "props": "{ changeType?: \"percent\" | \"points\"; comparison: string; currentLabel?: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; goodDirection?: \"up\" | \"down\"; previous?: number; status?: \"loading\" | \"error\"; title: string; value?: number }"
   },
   "type": "registry:component"
 }

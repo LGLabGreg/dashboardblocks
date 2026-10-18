@@ -1,32 +1,39 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { TileMap, US_STATE_TILES } from '@/registry/components/dashboardblocks/geo'
 import { HeatmapLegend } from '@/registry/components/dashboardblocks/heatmap'
-
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  Leaderboard,
+  LeaderboardBar,
+  LeaderboardItem,
+  LeaderboardLabel,
+  LeaderboardValue,
+} from '@/registry/components/dashboardblocks/leaderboard'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Geo1Props {
-  description: string
+  /** Defaults to a sentence about the leading states' share. */
+  description?: string
   formatter?: (value: number) => string
+  status?: BlockStatus
   title: string
   valueLabel: string
-  /** By two-letter state code, including DC. */
-  values: Record<string, number>
+  /** By two-letter state code, including DC. Leave out, or pass none, to show the empty state. */
+  values?: Record<string, number>
 }
 
 const currency = (value: number) =>
-  value >= 1_000_000
-    ? `$${(value / 1_000_000).toFixed(2)}M`
-    : `$${Math.round(value / 1_000).toLocaleString('en-US')}K`
+  formatCurrency(value, { compact: true, maximumFractionDigits: 2 })
 
 const exampleProps: Geo1Props = {
-  description: 'Last 30 days',
   formatter: currency,
   title: 'Revenue by state',
   valueLabel: 'Revenue',
@@ -86,76 +93,104 @@ const exampleProps: Geo1Props = {
 }
 
 const Geo1 = (props: Geo1Props) => {
-  const { description, formatter = currency, title, valueLabel, values } = props
+  const { formatter = currency, status, title, valueLabel, values = {} } = props
   const total = Object.values(values).reduce((sum, value) => sum + value, 0)
   const ranked = US_STATE_TILES.filter((tile) => values[tile.id] !== undefined).sort(
     (a, b) => values[b.id] - values[a.id],
   )
-  const top = ranked[0]
+  const top = ranked.slice(0, 5)
+  const topShare = top.reduce((sum, tile) => sum + values[tile.id], 0)
   const share = (value: number) =>
-    total > 0 ? `${((value / total) * 100).toFixed(1)}%` : '0%'
+    formatPercent(total > 0 ? value / total : 0, { maximumFractionDigits: 0 })
   const rankedValues = ranked.map((tile) => values[tile.id])
+  const max = rankedValues[0] ?? 1
+  const {
+    description = top.length > 0
+      ? `${top
+          .slice(0, 3)
+          .map((tile) => tile.name)
+          .join(', ')} bring in ${share(
+          top.slice(0, 3).reduce((sum, tile) => sum + values[tile.id], 0),
+        )} of ${valueLabel.toLowerCase()}.`
+      : undefined,
+  } = props
+  const state = getBlockState(status, ranked.length === 0)
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6 @2xl:flex-row @2xl:items-start'>
-        <TileMap
-          className='w-full max-w-xl @2xl:flex-1'
-          describe={(tile, value) =>
-            value === null
-              ? `${tile.name}: no data`
-              : `${tile.name}: ${formatter(value)} · ${share(value)} of total`
-          }
-          footer={
-            <HeatmapLegend
-              high={formatter(Math.max(...rankedValues))}
-              low={formatter(Math.min(...rankedValues))}
-            />
-          }
-          format={formatter}
-          label={`${title}, ${description.toLowerCase()}`}
-          nameHeader='State'
-          scale='sqrt'
-          tiles={US_STATE_TILES}
-          valueHeader={valueLabel}
-          values={values}
-        >
-          {top &&
-            `Top: ${top.name}, ${formatter(values[top.id])} · ${share(values[top.id])} of total`}
-        </TileMap>
-        <div className='flex flex-col gap-3 @2xl:w-56 @2xl:border-l @2xl:pl-6'>
-          <div className='flex flex-col'>
-            <span className='text-muted-foreground text-xs'>Total</span>
-            <span className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatter(total)}
-            </span>
+    <BlockStateProvider status={status} empty={ranked.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </BlockReady>
+        </header>
+        <div className='flex flex-col gap-6 border-t pt-4 @2xl:flex-row @2xl:items-start'>
+          <TileMap
+            className='w-full max-w-xl @2xl:flex-1'
+            describe={(tile, value) =>
+              value === null
+                ? `${tile.name}: no data`
+                : `${tile.name}: ${formatter(value)}, ${share(value)} of total`
+            }
+            footer={
+              rankedValues.length > 0 && (
+                <HeatmapLegend
+                  high={formatter(Math.max(...rankedValues))}
+                  low={formatter(Math.min(...rankedValues))}
+                />
+              )
+            }
+            format={formatter}
+            label={title}
+            nameHeader='State'
+            scale='sqrt'
+            showShare
+            tiles={US_STATE_TILES}
+            valueHeader={valueLabel}
+            values={values}
+          />
+          <div className='flex flex-col gap-4 @2xl:w-60'>
+            <div className='flex flex-col gap-1'>
+              <span className='text-muted-foreground text-sm'>
+                Total {valueLabel.toLowerCase()}
+              </span>
+              <KPIValue value={total} format={formatter} />
+            </div>
+            {state === 'loading' && <BlockStateRows rows={5} />}
+            {!state && (
+              <div className='flex flex-col gap-1.5'>
+                <p className='text-muted-foreground text-xs'>
+                  Top {top.length}, {share(topShare)} of the total
+                </p>
+                <Leaderboard>
+                  {top.map((tile, index) => (
+                    <LeaderboardItem key={tile.id}>
+                      <LeaderboardBar
+                        delay={index * 100}
+                        value={(values[tile.id] / max) * 100}
+                      />
+                      <span
+                        aria-hidden
+                        className='text-muted-foreground w-6 shrink-0 font-mono text-xs'
+                      >
+                        {tile.code}
+                      </span>
+                      <LeaderboardLabel className='truncate'>
+                        {tile.name}
+                      </LeaderboardLabel>
+                      <LeaderboardValue>{formatter(values[tile.id])}</LeaderboardValue>
+                    </LeaderboardItem>
+                  ))}
+                </Leaderboard>
+              </div>
+            )}
           </div>
-          <ol aria-label='Top 5 states' className='flex flex-col text-sm'>
-            {ranked.slice(0, 5).map((tile) => (
-              <li
-                key={tile.id}
-                className='flex items-center gap-2 border-b py-2 last:border-b-0'
-              >
-                <span
-                  aria-hidden
-                  className='bg-muted text-foreground w-7 shrink-0 rounded-[3px] py-0.5 text-center text-[10px] font-medium'
-                >
-                  {tile.code}
-                </span>
-                <span className='min-w-0 flex-1 truncate'>{tile.name}</span>
-                <span className='font-medium tabular-nums'>
-                  {formatter(values[tile.id])}
-                </span>
-              </li>
-            ))}
-          </ol>
         </div>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

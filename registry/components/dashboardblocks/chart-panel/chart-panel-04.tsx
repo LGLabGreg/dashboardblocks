@@ -1,36 +1,44 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  chartAxisProps,
+  chartBarCursor,
+  chartBarValueLabel,
+  chartFadedColor,
+  chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
+  chartValueAxisWidth,
+  type ChartValueFormatter,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelTable,
-  ChartPanelTooltip,
-  type ChartValueFormatter,
-  chartAxisProps,
-  chartGridProps,
-  chartValueAxisWidth,
-  formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  formatCompact,
+  formatCurrency,
+  formatNumber,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
   LabelList,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface MonthValue {
   label: string
@@ -38,9 +46,13 @@ interface MonthValue {
 }
 
 interface ChartPanel4Props {
-  data: MonthValue[]
+  /** Leave out, or pass no months, to show the empty state. */
+  data?: MonthValue[]
   description: string
   formatter?: ChartValueFormatter
+  /** A target drawn as a line across the bars, and said in words against the latest value. */
+  goal?: { label: string; value: number }
+  status?: BlockStatus
   title: string
 }
 
@@ -59,63 +71,81 @@ const exampleProps: ChartPanel4Props = {
     { label: 'Aug', value: 55_600 },
     { label: 'Sep', value: 59_400 },
   ],
-  description: 'Monthly recurring revenue, last 12 months',
-  formatter: (value) => `$${value.toLocaleString()}`,
+  description: 'Monthly recurring revenue at the end of each of the last 12 months.',
+  formatter: (value) => formatCurrency(value),
+  goal: { label: 'Goal', value: 60_000 },
   title: 'MRR',
 }
 
-const HIGHLIGHT_COLOR = 'var(--chart-2)'
-const MUTED_COLOR = 'color-mix(in oklab, var(--muted-foreground) 25%, transparent)'
+const HIGHLIGHT_COLOR = 'var(--color-chart-2)'
+const MUTED_COLOR = chartFadedColor(HIGHLIGHT_COLOR)
 
 const ChartPanel4 = (props: ChartPanel4Props) => {
   const {
-    data,
+    data = [],
     description,
-    formatter = (value) => value.toLocaleString(),
+    formatter = (value) => formatNumber(value),
+    goal,
+    status,
     title,
   } = props
   const lastIndex = data.length - 1
   const latest = data[lastIndex]
   const prior = data[lastIndex - 1]
-  const change =
-    latest && prior?.value ? ((latest.value - prior.value) / prior.value) * 100 : 0
+  const gap = latest && goal ? goal.value - latest.value : 0
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <Trend trend={Number(change.toFixed(1))} variant='badge' />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-col gap-0.5'>
-          <span className='text-3xl font-semibold tracking-tight'>
-            {latest ? formatter(latest.value) : '—'}
-          </span>
-          <span className='text-muted-foreground text-xs'>
-            in {latest?.label}, vs {prior ? formatter(prior.value) : '—'} in{' '}
-            {prior?.label}
-          </span>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-col gap-1 border-t pt-4'>
+          <BlockReady className='w-16 text-sm'>
+            <p className='text-muted-foreground text-sm'>{latest?.label}</p>
+          </BlockReady>
+          <KPIValue value={latest?.value} format={formatter} />
+          <KPIChange
+            comparison={`in ${prior?.label}`}
+            format={formatter}
+            previous={prior?.value}
+            value={latest?.value}
+          />
+          {goal && (
+            <BlockReady className='text-sm'>
+              {latest && (
+                <p className='text-muted-foreground text-sm'>
+                  {gap > 0
+                    ? `${formatter(gap)} short of the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`
+                    : `${formatter(-gap)} past the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`}
+                </p>
+              )}
+            </BlockReady>
+          )}
         </div>
-        <ChartPanelFigure className='h-60'>
+        <ChartPanelFigure className='h-64'>
           <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={data} margin={{ top: 24, right: 20, bottom: 0, left: 0 }}>
+            <BarChart
+              aria-label={`${title} chart`}
+              data={data}
+              margin={{ top: 24, right: 8, bottom: 0, left: 0 }}
+            >
               <CartesianGrid {...chartGridProps} />
               <XAxis {...chartAxisProps} dataKey='label' />
               <YAxis
                 {...chartAxisProps}
+                domain={[0, 'auto']}
                 tickFormatter={(value: number) => formatCompact(value)}
                 width={chartValueAxisWidth}
               />
               <Tooltip
                 content={(tooltipProps) => (
-                  <ChartPanelTooltip {...tooltipProps} valueFormatter={formatter} />
+                  <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
                 )}
-                cursor={{ fill: 'var(--color-muted)', fillOpacity: 0.6 }}
+                cursor={chartBarCursor}
               />
-              <Bar dataKey='value' maxBarSize={24} name={title} radius={[4, 4, 0, 0]}>
+              <Bar dataKey='value' maxBarSize={28} name={title} radius={[4, 4, 0, 0]}>
                 {data.map((point, index) => (
                   <Cell
                     key={point.label}
@@ -124,33 +154,35 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
                 ))}
                 <LabelList
                   dataKey='value'
-                  content={({ index, width, x, y }) =>
-                    index === lastIndex ? (
-                      <text
-                        x={Number(x) + Number(width) / 2}
-                        y={Number(y) - 8}
-                        textAnchor='middle'
-                        className='fill-foreground text-xs font-medium'
-                      >
-                        {formatCompact(Number(latest?.value ?? 0))}
-                      </text>
-                    ) : null
-                  }
+                  content={chartBarValueLabel(lastIndex, formatCompact)}
                 />
               </Bar>
+              {goal && (
+                <ReferenceLine
+                  {...chartReferenceProps}
+                  ifOverflow='extendDomain'
+                  y={goal.value}
+                  label={{
+                    ...chartReferenceLabel,
+                    value: `${goal.label} ${formatCompact(goal.value)}`,
+                    position: 'insideBottomLeft',
+                    dy: -4,
+                  }}
+                />
+              )}
             </BarChart>
           </ResponsiveContainer>
         </ChartPanelFigure>
         <ChartPanelTable
-          caption={`${title}: ${description}`}
+          caption={`${title}: ${description}${goal ? ` ${goal.label}: ${formatter(goal.value)}.` : ''}`}
           columns={[
             { key: 'label', label: 'Month' },
             { format: formatter, key: 'value', label: title },
           ]}
           rows={data}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

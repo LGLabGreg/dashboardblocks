@@ -4,8 +4,10 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ComponentProps,
   type ReactNode,
+  createContext,
   startTransition,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -23,6 +25,145 @@ function Skeleton({ className, ...props }: ComponentProps<'div'>) {
       )}
       {...props}
     />
+  )
+}
+
+function SkeletonText({ className, ...props }: ComponentProps<'span'>) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        'bg-muted inline-block h-[0.8em] max-w-full animate-pulse rounded-sm align-middle motion-reduce:animate-none',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+type BlockStatus = 'loading' | 'error'
+
+type BlockState = BlockStatus | 'empty'
+
+const BlockStateContext = createContext<BlockState | undefined>(undefined)
+
+function getBlockState(status: BlockStatus | undefined, empty: boolean) {
+  return status ?? (empty ? 'empty' : undefined)
+}
+
+interface BlockStateProviderProps {
+  children: ReactNode
+  empty?: boolean
+  status?: BlockStatus
+}
+
+function BlockStateProvider({
+  children,
+  empty = false,
+  status,
+}: BlockStateProviderProps) {
+  return (
+    <BlockStateContext.Provider value={getBlockState(status, empty)}>
+      {children}
+    </BlockStateContext.Provider>
+  )
+}
+
+function useBlockState() {
+  return useContext(BlockStateContext)
+}
+
+const blockStateMessages = {
+  empty: { sentence: 'No data', short: 'No data' },
+  error: { sentence: 'Couldn’t load the data.', short: 'Couldn’t load' },
+}
+
+interface BlockStateTextProps {
+  className?: string
+  /** Shows this state instead of the block's own. */
+  state?: BlockState
+  /** `short` fits beside a title, such as `No data`. @default 'sentence' */
+  variant?: 'sentence' | 'short'
+}
+
+function BlockStateText({
+  className,
+  state: shown,
+  variant = 'sentence',
+}: BlockStateTextProps) {
+  const blockState = useBlockState()
+  const state = shown ?? blockState
+  if (!state) return null
+
+  if (state === 'loading') {
+    return (
+      <span data-slot='block-state-text' className={cn('block', className)}>
+        <SkeletonText className={variant === 'short' ? 'w-16' : 'w-48'} />
+        <span className='sr-only'>Loading</span>
+      </span>
+    )
+  }
+
+  return (
+    <span
+      data-slot='block-state-text'
+      className={cn(
+        'block',
+        state === 'error' ? 'text-red-700 dark:text-red-400' : 'text-muted-foreground',
+        className,
+      )}
+    >
+      {blockStateMessages[state][variant]}
+    </span>
+  )
+}
+
+interface BlockReadyProps {
+  children: ReactNode
+  /** Sizes the placeholder line shown while loading, such as `text-xs`. */
+  className?: string
+}
+
+function BlockReady({ children, className }: BlockReadyProps) {
+  const state = useBlockState()
+  if (!state) return children
+  if (state !== 'loading') return null
+  return (
+    <span className={cn('block', className)}>
+      <SkeletonText className='w-2/3' />
+    </span>
+  )
+}
+
+interface BlockStateRowsProps {
+  className?: string
+  /** How many rows to sketch while loading. @default 4 */
+  rows?: number
+}
+
+function BlockStateRows({ className, rows = 4 }: BlockStateRowsProps) {
+  const state = useBlockState()
+  if (!state) return null
+
+  if (state !== 'loading') {
+    return <BlockStateText className={cn('py-2.5 text-sm', className)} />
+  }
+
+  return (
+    <div data-slot='block-state-rows' className={className}>
+      <span className='sr-only'>Loading</span>
+      <ul aria-hidden className='flex flex-col'>
+        {Array.from({ length: rows }, (_, index) => (
+          <li
+            key={index}
+            className='flex items-center gap-4 border-b py-2.5 text-sm last:border-b-0'
+          >
+            <SkeletonText className='w-1/3' />
+            <SkeletonText className='ml-auto w-16' />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -180,6 +321,29 @@ function useBlockData<T>(load: () => Promise<T>, { keepData = true } = {}) {
   return { data, error, reload, status }
 }
 
-export { BlockBusy, BlockBusyIndicator, BlockMessage, Skeleton, useBlockData }
+export {
+  BlockBusy,
+  BlockBusyIndicator,
+  BlockMessage,
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  BlockStateText,
+  Skeleton,
+  SkeletonText,
+  getBlockState,
+  useBlockData,
+  useBlockState,
+}
 
-export type { BlockBusyProps, BlockMessageProps, LoadStatus }
+export type {
+  BlockBusyProps,
+  BlockMessageProps,
+  BlockReadyProps,
+  BlockState,
+  BlockStateProviderProps,
+  BlockStateRowsProps,
+  BlockStateTextProps,
+  BlockStatus,
+  LoadStatus,
+}

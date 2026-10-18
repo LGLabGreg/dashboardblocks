@@ -15,58 +15,116 @@ import {
   TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  Stat,
+  StatChange,
+  StatGroup,
+  StatLabel,
+  type StatMetric,
+  StatSparkline,
+  StatValue,
+  formatStatValue,
+  getStatPlaceholders,
+} from '@/registry/components/dashboardblocks/stat-group'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useId, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-interface Metric {
-  change: string
-  label: string
-  value: string
+interface Metric extends StatMetric {
+  /** Oldest first, ending with `value`. */
+  history: number[]
 }
 
 interface Account {
-  mrr: string
+  mrr: number
   name: string
   plan: string
 }
 
 interface AiAssistant1Props {
-  accounts: Account[]
+  accounts?: Account[]
+  /** Follows each previous value, such as `last month`. */
+  comparison: string
   context: string
   defaultOpen?: boolean
   description: string
+  /** Names each point of a metric's history, oldest first. */
+  historyLabels: string[]
   messages: ChatMessageData[]
-  metrics: Metric[]
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: Metric[]
   /** Streams the reply to the conversation as chunks of text. */
   onSend?: (
     messages: ChatMessageData[],
     signal: AbortSignal,
     context?: string,
   ) => AsyncIterable<string>
+  status?: BlockStatus
   suggestions: SuggestedPrompt[]
   title: string
 }
 
+const asCurrency = (value: number) => formatCurrency(value)
+const asPercent = (value: number) => formatPercent(value / 100)
+
 const exampleProps: AiAssistant1Props = {
   accounts: [
-    { mrr: '$12,400', name: 'Northwind Logistics', plan: 'Enterprise' },
-    { mrr: '$8,950', name: 'Helio Health', plan: 'Enterprise' },
-    { mrr: '$4,200', name: 'Brightline Studio', plan: 'Growth' },
-    { mrr: '$3,780', name: 'Kestrel Analytics', plan: 'Growth' },
-    { mrr: '$2,640', name: 'Oakridge Dental Group', plan: 'Growth' },
+    { mrr: 12_400, name: 'Northwind Logistics', plan: 'Enterprise' },
+    { mrr: 8_950, name: 'Helio Health', plan: 'Enterprise' },
+    { mrr: 4_200, name: 'Brightline Studio', plan: 'Growth' },
+    { mrr: 3_780, name: 'Kestrel Analytics', plan: 'Growth' },
+    { mrr: 2_640, name: 'Oakridge Dental Group', plan: 'Growth' },
   ],
-  context: 'Revenue · Last 30 days',
+  comparison: 'last month',
+  context: 'Revenue, last 30 days',
   defaultOpen: true,
-  description: 'Recurring revenue and customers, last 30 days',
+  description: 'Recurring revenue and customers over the last 30 days.',
+  historyLabels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
   messages: [],
   metrics: [
-    { change: '+4.2%', label: 'MRR', value: '$184,320' },
-    { change: '+38', label: 'New customers', value: '312' },
-    { change: '+0.4 pts', label: 'Churn', value: '1.8%' },
-    { change: '+2 pts', label: 'Net retention', value: '112%' },
+    {
+      formatter: asCurrency,
+      history: [151_200, 158_900, 164_400, 171_050, 176_890, 184_320],
+      key: 'mrr',
+      label: 'MRR',
+      previous: 176_890,
+      value: 184_320,
+    },
+    {
+      history: [241, 266, 258, 289, 274, 312],
+      key: 'customers',
+      label: 'New customers',
+      previous: 274,
+      value: 312,
+    },
+    {
+      changeType: 'points',
+      formatter: asPercent,
+      goodDirection: 'down',
+      history: [1.6, 1.5, 1.3, 1.5, 1.4, 1.8],
+      key: 'churn',
+      label: 'Churn',
+      previous: 1.4,
+      value: 1.8,
+    },
+    {
+      changeType: 'points',
+      formatter: asPercent,
+      history: [106, 107, 109, 108, 110, 112],
+      key: 'retention',
+      label: 'Net retention',
+      previous: 110,
+      value: 112,
+    },
   ],
   suggestions: [
     {
@@ -167,16 +225,23 @@ async function* simulateStream(
 
 const AiAssistant1 = (props: AiAssistant1Props) => {
   const {
-    accounts,
+    accounts = [],
+    comparison,
     context: contextLabel,
     defaultOpen = true,
     description,
+    historyLabels,
     messages: initialMessages,
-    metrics,
+    metrics = [],
     onSend = simulateStream,
+    status: blockStatus,
     suggestions,
     title,
   } = props
+  const state = getBlockState(blockStatus, metrics.length === 0)
+  const shown: (StatMetric & { history?: number[] })[] =
+    blockStatus === 'loading' ? getStatPlaceholders(4) : metrics
+  const accountsMrr = accounts.reduce((sum, account) => sum + account.mrr, 0)
   const panelId = useId()
   const [open, setOpen] = useState(defaultOpen)
   const [withContext, setWithContext] = useState(true)
@@ -208,199 +273,228 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   }
 
   return (
-    <div className='bg-background @container flex h-svh'>
-      <div
-        className={
-          open
-            ? '@container/main hidden min-w-0 flex-1 flex-col @3xl:flex'
-            : '@container/main flex min-w-0 flex-1 flex-col'
-        }
-      >
-        <header className='flex items-center justify-between gap-4 border-b px-4 py-3 @xl/main:px-6'>
-          <div className='flex min-w-0 flex-col'>
-            <h1 className='truncate text-lg font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground truncate text-sm'>{description}</p>
-          </div>
-          <Button
-            ref={toggleRef}
-            variant='outline'
-            aria-expanded={open}
-            aria-controls={open ? panelId : undefined}
-            onClick={() => {
-              focusNext.current = open ? 'toggle' : 'composer'
-              setOpen(!open)
-            }}
-          >
-            <IconPlaceholder
-              lucide='SparklesIcon'
-              tabler='IconSparkles'
-              hugeicons='SparklesIcon'
-              phosphor='SparkleIcon'
-              remixicon='RiSparklingLine'
-              data-icon='inline-start'
-            />
-            Ask AI
-          </Button>
-        </header>
-        <div className='flex flex-1 flex-col gap-4 overflow-y-auto p-4 @xl/main:p-6'>
-          <div className='grid grid-cols-2 gap-4 @2xl/main:grid-cols-4'>
-            {metrics.map((metric) => (
-              <Card key={metric.label} size='sm'>
-                <CardContent>
-                  <dl className='flex flex-col gap-1'>
-                    <dt className='text-muted-foreground text-xs'>{metric.label}</dt>
-                    <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                      {metric.value}
-                    </dd>
-                    <dd className='text-muted-foreground text-xs tabular-nums'>
-                      {metric.change} on last month
-                    </dd>
-                  </dl>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Top accounts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className='divide-y'>
-                {accounts.map((account) => (
-                  <li
-                    key={account.name}
-                    className='flex items-center justify-between gap-4 py-2.5 text-sm first:pt-0 last:pb-0'
-                  >
-                    <span className='flex min-w-0 flex-col'>
-                      <span className='truncate font-medium'>{account.name}</span>
-                      <span className='text-muted-foreground text-xs'>
-                        {account.plan}
-                      </span>
-                    </span>
-                    <span className='tabular-nums'>{account.mrr}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-      {open && (
-        <aside
-          id={panelId}
-          aria-label='Assistant'
-          className='bg-background flex w-full flex-col border-s @3xl:w-96'
+    <BlockStateProvider status={blockStatus} empty={metrics.length === 0}>
+      <div className='bg-background @container flex h-svh'>
+        <div
+          className={
+            open
+              ? '@container/main hidden min-w-0 flex-1 flex-col @3xl:flex'
+              : '@container/main flex min-w-0 flex-1 flex-col'
+          }
         >
-          <ChatHeader
-            title='Assistant'
-            description='Answers from your revenue data'
-            className='border-b'
-            actions={
-              <>
-                <Button
-                  variant='ghost'
-                  size='icon-sm'
-                  aria-label='New chat'
-                  disabled={messages.length === 0}
-                  onClick={newChat}
-                >
-                  <IconPlaceholder
-                    lucide='SquarePenIcon'
-                    tabler='IconEdit'
-                    hugeicons='PencilEdit02Icon'
-                    phosphor='NotePencilIcon'
-                    remixicon='RiEditBoxLine'
-                  />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='icon-sm'
-                  aria-label='Close assistant'
-                  onClick={() => {
-                    focusNext.current = 'toggle'
-                    setOpen(false)
-                  }}
-                >
-                  <IconPlaceholder
-                    lucide='XIcon'
-                    tabler='IconX'
-                    hugeicons='Cancel01Icon'
-                    phosphor='XIcon'
-                    remixicon='RiCloseLine'
-                  />
-                </Button>
-              </>
-            }
-          />
-          {messages.length === 0 ? (
-            <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
-              <ChatWelcome
-                className='m-auto'
-                title='How can I help?'
-                description='Ask about revenue, customers or churn on this page.'
+          <div className='flex flex-1 flex-col gap-8 overflow-y-auto p-4 @xl/main:p-6'>
+            <header className='flex items-end justify-between gap-4'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h1 className='truncate text-2xl font-semibold tracking-tight'>
+                  {title}
+                </h1>
+                <p className='text-muted-foreground truncate text-sm'>{description}</p>
+              </div>
+              <Button
+                ref={toggleRef}
+                variant='outline'
+                size='sm'
+                aria-expanded={open}
+                aria-controls={open ? panelId : undefined}
+                onClick={() => {
+                  focusNext.current = open ? 'toggle' : 'composer'
+                  setOpen(!open)
+                }}
               >
-                <SuggestedPrompts variant='list' prompts={suggestions} onSelect={send} />
-              </ChatWelcome>
-            </div>
-          ) : (
-            <ChatMessages status={status} latest={latest}>
-              {messages.map((message, index) => {
-                const isLast = index === messages.length - 1
-                const streaming = isLast && status === 'streaming'
-                return (
-                  <ChatMessage
-                    key={message.id}
-                    message={message}
-                    streaming={streaming}
-                    actions={
-                      message.role === 'assistant' &&
-                      !streaming && (
-                        <ChatMessageActions
-                          content={message.content}
-                          onRegenerate={isLast ? chat.regenerate : undefined}
-                        />
-                      )
+                <IconPlaceholder
+                  lucide='SparklesIcon'
+                  tabler='IconSparkles'
+                  hugeicons='SparklesIcon'
+                  phosphor='SparkleIcon'
+                  remixicon='RiSparklingLine'
+                  data-icon='inline-start'
+                />
+                Ask AI
+              </Button>
+            </header>
+            <StatGroup className='grid-cols-1 @md/main:grid-cols-2 @4xl/main:grid-cols-4'>
+              {shown.map((metric) => (
+                <Stat key={metric.key}>
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue className='text-3xl @2xl/main:text-4xl'>
+                    {formatStatValue(metric)}
+                  </StatValue>
+                  <StatChange comparison={comparison} metric={metric} />
+                  <dd className='mt-2'>
+                    <StatSparkline
+                      data={metric.history ?? []}
+                      formatter={metric.formatter}
+                      label={`${metric.label} by month, ${historyLabels[0]} to ${historyLabels.at(-1)}`}
+                      labels={historyLabels}
+                    />
+                  </dd>
+                </Stat>
+              ))}
+            </StatGroup>
+            {state !== 'empty' && state !== 'error' && (
+              <section
+                aria-labelledby={`${panelId}-accounts`}
+                className='flex flex-col gap-3'
+              >
+                <header className='flex flex-col gap-0.5'>
+                  <h2 id={`${panelId}-accounts`} className='font-semibold tracking-tight'>
+                    Top accounts
+                  </h2>
+                  <BlockReady className='text-sm'>
+                    <p className='text-muted-foreground text-sm'>
+                      Your {accounts.length} largest accounts pay{' '}
+                      {formatCurrency(accountsMrr)} a month.
+                    </p>
+                  </BlockReady>
+                </header>
+                {state === 'loading' ? (
+                  <BlockStateRows className='border-y' rows={5} />
+                ) : (
+                  <ul className='divide-y border-y'>
+                    {accounts.map((account) => (
+                      <li
+                        key={account.name}
+                        className='flex items-center justify-between gap-4 py-2.5 text-sm'
+                      >
+                        <span className='flex min-w-0 flex-col'>
+                          <span className='truncate font-medium'>{account.name}</span>
+                          <span className='text-muted-foreground text-xs'>
+                            {account.plan}
+                          </span>
+                        </span>
+                        <span className='tabular-nums'>
+                          {formatCurrency(account.mrr)}
+                          <span className='text-muted-foreground'>/mo</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+          </div>
+        </div>
+        {open && (
+          <aside
+            id={panelId}
+            aria-label='Assistant'
+            className='bg-background flex w-full flex-col border-s @3xl:w-96'
+          >
+            <ChatHeader
+              title='Assistant'
+              description='Answers from your revenue data'
+              className='border-b'
+              actions={
+                <>
+                  <Button
+                    variant='ghost'
+                    size='icon-sm'
+                    aria-label='New chat'
+                    disabled={messages.length === 0}
+                    onClick={newChat}
+                  >
+                    <IconPlaceholder
+                      lucide='SquarePenIcon'
+                      tabler='IconEdit'
+                      hugeicons='PencilEdit02Icon'
+                      phosphor='NotePencilIcon'
+                      remixicon='RiEditBoxLine'
+                    />
+                  </Button>
+                  <Button
+                    variant='ghost'
+                    size='icon-sm'
+                    aria-label='Close assistant'
+                    onClick={() => {
+                      focusNext.current = 'toggle'
+                      setOpen(false)
+                    }}
+                  >
+                    <IconPlaceholder
+                      lucide='XIcon'
+                      tabler='IconX'
+                      hugeicons='Cancel01Icon'
+                      phosphor='XIcon'
+                      remixicon='RiCloseLine'
+                    />
+                  </Button>
+                </>
+              }
+            />
+            {messages.length === 0 ? (
+              <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
+                <ChatWelcome
+                  className='m-auto'
+                  title='How can I help?'
+                  description='Ask about revenue, customers or churn on this page.'
+                >
+                  <SuggestedPrompts
+                    variant='list'
+                    prompts={suggestions}
+                    onSelect={send}
+                  />
+                </ChatWelcome>
+              </div>
+            ) : (
+              <ChatMessages status={status} latest={latest}>
+                {messages.map((message, index) => {
+                  const isLast = index === messages.length - 1
+                  const streaming = isLast && status === 'streaming'
+                  return (
+                    <ChatMessage
+                      key={message.id}
+                      message={message}
+                      streaming={streaming}
+                      actions={
+                        message.role === 'assistant' &&
+                        !streaming && (
+                          <ChatMessageActions
+                            content={message.content}
+                            onRegenerate={isLast ? chat.regenerate : undefined}
+                          />
+                        )
+                      }
+                    />
+                  )
+                })}
+                {status === 'submitted' && <TypingIndicator />}
+                {status === 'error' && (
+                  <ChatError message={chat.error} onRetry={chat.regenerate} />
+                )}
+              </ChatMessages>
+            )}
+            <ChatComposer
+              className='p-4 pt-0'
+              textareaRef={composerRef}
+              status={status}
+              onSubmit={chat.send}
+              onStop={chat.stop}
+              placeholder='Ask about this page…'
+              context={
+                withContext && (
+                  <ChatContextChip
+                    label={contextLabel}
+                    icon={
+                      <IconPlaceholder
+                        lucide='LayoutDashboardIcon'
+                        tabler='IconDashboard'
+                        hugeicons='DashboardSquare01Icon'
+                        phosphor='SquaresFourIcon'
+                        remixicon='RiDashboardLine'
+                      />
                     }
+                    onRemove={() => {
+                      setWithContext(false)
+                      composerRef.current?.focus()
+                    }}
                   />
                 )
-              })}
-              {status === 'submitted' && <TypingIndicator />}
-              {status === 'error' && (
-                <ChatError message={chat.error} onRetry={chat.regenerate} />
-              )}
-            </ChatMessages>
-          )}
-          <ChatComposer
-            className='p-4 pt-0'
-            textareaRef={composerRef}
-            status={status}
-            onSubmit={chat.send}
-            onStop={chat.stop}
-            placeholder='Ask about this page…'
-            context={
-              withContext && (
-                <ChatContextChip
-                  label={contextLabel}
-                  icon={
-                    <IconPlaceholder
-                      lucide='LayoutDashboardIcon'
-                      tabler='IconDashboard'
-                      hugeicons='DashboardSquare01Icon'
-                      phosphor='SquaresFourIcon'
-                      remixicon='RiDashboardLine'
-                    />
-                  }
-                  onRemove={() => {
-                    setWithContext(false)
-                    composerRef.current?.focus()
-                  }}
-                />
-              )
-            }
-          />
-        </aside>
-      )}
-    </div>
+              }
+            />
+          </aside>
+        )}
+      </div>
+    </BlockStateProvider>
   )
 }
 

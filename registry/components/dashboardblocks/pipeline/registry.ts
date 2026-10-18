@@ -6,7 +6,13 @@ export const examples: Registry['items'] = [
   {
     name: 'pipeline-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', 'dropdown-menu', registryUrl('pipeline')],
+    registryDependencies: [
+      'button',
+      'dropdown-menu',
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('pipeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline/pipeline-01.tsx',
@@ -26,9 +32,11 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'button-group',
-      'card',
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('chart'),
+      registryUrl('format'),
       registryUrl('pipeline'),
-      registryUrl('use-in-view'),
     ],
     files: [
       {
@@ -38,7 +46,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.',
+        'Open value across stages, with each stage as a segment sized by value or by count.',
       size: 'full',
       usedWith: ['pipeline-01', 'funnel-01', 'stat-group-02'],
     },
@@ -46,7 +54,11 @@ export const examples: Registry['items'] = [
   {
     name: 'pipeline-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('data-table'), registryUrl('pipeline')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('pipeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline/pipeline-03.tsx',
@@ -63,7 +75,13 @@ export const examples: Registry['items'] = [
   {
     name: 'pipeline-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('pipeline'), registryUrl('use-in-view')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('goals'),
+      registryUrl('pipeline'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline/pipeline-04.tsx',

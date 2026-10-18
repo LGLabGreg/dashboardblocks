@@ -1,14 +1,26 @@
 'use client'
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  GoalProgress,
+  GoalProgressKey,
+} from '@/registry/components/dashboardblocks/goals'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import {
+  formatNumber,
+  formatPercent,
+  joinDetails,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface Warehouse {
   capacity: number
@@ -20,15 +32,17 @@ interface Warehouse {
 }
 
 interface Inventory2Props {
-  description: string
+  /** Defaults to a sentence with the units stored and the warehouses filling up. */
+  description?: string
+  status?: BlockStatus
   title: string
-  warehouses: Warehouse[]
+  /** Leave out, or pass none, to show the empty state. */
+  warehouses?: Warehouse[]
   /** Utilisation at which a warehouse is getting full, 0–1. */
   warnAt?: number
 }
 
 const exampleProps: Inventory2Props = {
-  description: 'Units stored against capacity, with what arrives this week',
   title: 'Warehouse capacity',
   warehouses: [
     {
@@ -62,109 +76,112 @@ const exampleProps: Inventory2Props = {
   ],
 }
 
+type Fill = 'full' | 'warning' | 'ok'
+
+const FILL: Record<Fill, { color: string; label: string; tone: StatusTone }> = {
+  full: { color: 'var(--color-red-500)', label: 'Over capacity', tone: 'bad' },
+  ok: { color: 'var(--color-chart-2)', label: 'Room to spare', tone: 'neutral' },
+  warning: { color: 'var(--color-amber-500)', label: 'Nearly full', tone: 'warning' },
+}
+
+const percent = (ratio: number) => formatPercent(ratio, { maximumFractionDigits: 0 })
+
 const Inventory2 = (props: Inventory2Props) => {
-  const { description, title, warehouses, warnAt = 0.85 } = props
+  const { status, title, warehouses = [], warnAt = 0.85 } = props
+  const state = getBlockState(status, warehouses.length === 0)
   const stored = warehouses.reduce((sum, warehouse) => sum + warehouse.stored, 0)
   const capacity = warehouses.reduce((sum, warehouse) => sum + warehouse.capacity, 0)
+  const rows = warehouses.map((warehouse) => {
+    const after = warehouse.stored + (warehouse.inbound ?? 0)
+    const ratio = after / (warehouse.capacity || 1)
+    const fill: Fill = ratio >= 1 ? 'full' : ratio >= warnAt ? 'warning' : 'ok'
+    return { ...warehouse, after, fill, ratio }
+  })
+  const filling = rows.filter((row) => row.fill !== 'ok')
+  const {
+    description = filling.length > 0
+      ? `${formatNumber(stored)} of ${formatNumber(capacity)} units stored; ${filling.map((row) => row.name).join(' and ')} ${filling.length === 1 ? 'fills' : 'fill'} up once this week’s stock arrives.`
+      : `${formatNumber(stored)} of ${formatNumber(capacity)} units stored, with room for everything arriving this week.`,
+  } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex items-baseline gap-2'>
-          <span className='text-3xl font-semibold tracking-tight tabular-nums'>
-            {Math.round((stored / (capacity || 1)) * 100)}%
+    <BlockStateProvider status={status} empty={warehouses.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <p className='flex flex-wrap items-baseline gap-x-2 border-t pt-4'>
+          <span className='text-4xl font-light tracking-tight tabular-nums'>
+            {state ? (
+              <BlockStateText variant='short' />
+            ) : (
+              percent(stored / (capacity || 1))
+            )}
           </span>
-          <span className='text-muted-foreground text-sm tabular-nums'>
-            full across the network, {stored.toLocaleString()} of{' '}
-            {capacity.toLocaleString()} units
-          </span>
-        </div>
-        <ul className='flex flex-col gap-4'>
-          {warehouses.map((warehouse) => {
-            const used = warehouse.stored / (warehouse.capacity || 1)
-            const after =
-              (warehouse.stored + (warehouse.inbound ?? 0)) / (warehouse.capacity || 1)
-            const full = after >= 1
-            const warning = !full && after >= warnAt
-            return (
-              <li key={warehouse.name} className='flex flex-col gap-1.5'>
-                <div className='flex items-baseline justify-between gap-3'>
-                  <span className='text-sm'>
-                    <span className='font-medium'>{warehouse.name}</span>{' '}
-                    <span className='text-muted-foreground text-xs'>
-                      {warehouse.location}
+          {(state === undefined || state === 'loading') && (
+            <span className='text-muted-foreground text-sm'>full across the network</span>
+          )}
+        </p>
+        {state === 'loading' && <BlockStateRows rows={warehouses.length || 4} />}
+        {!state && (
+          <ul className='flex flex-col'>
+            {rows.map((row) => {
+              const fill = FILL[row.fill]
+              return (
+                <li
+                  key={row.name}
+                  className='flex flex-col gap-2 border-b py-3 first:pt-0'
+                >
+                  <div className='flex items-baseline justify-between gap-3'>
+                    <span className='flex min-w-0 flex-col'>
+                      <span className='truncate text-sm font-medium'>{row.name}</span>
+                      <span className='text-muted-foreground truncate text-xs'>
+                        {row.location}
+                      </span>
                     </span>
-                  </span>
-                  <span className='text-sm font-medium tabular-nums'>
-                    {Math.round(used * 100)}%
-                  </span>
-                </div>
-                <div
-                  aria-hidden
-                  className='bg-muted flex h-2.5 overflow-hidden rounded-full'
-                >
-                  <span
-                    className='bg-primary h-full'
-                    style={{ width: `${Math.min(1, used) * 100}%` }}
+                    <span className='text-sm tabular-nums'>
+                      {percent(row.stored / (row.capacity || 1))}
+                    </span>
+                  </div>
+                  <GoalProgress
+                    color={fill.color}
+                    current={row.stored}
+                    expected={row.capacity * warnAt}
+                    projected={row.after}
+                    target={row.capacity}
                   />
-                  {warehouse.inbound ? (
-                    <span
-                      className={cn(
-                        'h-full',
-                        full ? 'bg-red-500' : warning ? 'bg-amber-500' : 'bg-primary/35',
+                  <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs tabular-nums'>
+                    <span>
+                      {joinDetails(
+                        `${formatNumber(row.stored)} of ${formatNumber(row.capacity)} units`,
+                        row.inbound
+                          ? `${formatNumber(row.inbound)} arriving takes it to ${percent(row.ratio)}`
+                          : 'nothing arriving',
                       )}
-                      style={{
-                        width: `${Math.max(0, Math.min(1, after) - used) * 100}%`,
-                      }}
-                    />
-                  ) : null}
-                </div>
-                <span
-                  className={cn(
-                    'text-xs tabular-nums',
-                    full
-                      ? 'font-medium text-red-700 dark:text-red-400'
-                      : warning
-                        ? 'font-medium text-amber-800 dark:text-amber-400'
-                        : 'text-muted-foreground',
-                  )}
-                >
-                  {warehouse.inbound
-                    ? `+${warehouse.inbound.toLocaleString()} inbound, ${Math.round(after * 100)}% after`
-                    : 'Nothing inbound'}
-                  {full ? ': over capacity' : warning ? ': nearly full' : ''}
-                </span>
-              </li>
-            )
-          })}
-        </ul>
-        <ul
-          aria-hidden
-          className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 border-t pt-3 text-xs'
-        >
-          <li className='flex items-center gap-1.5'>
-            <span className='bg-primary size-2.5 rounded-[3px]' />
-            Stored
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <span className='bg-primary/35 size-2.5 rounded-[3px]' />
-            Inbound
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <span className='size-2.5 rounded-[3px] bg-amber-500' />
-            Inbound, nearly full
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <span className='size-2.5 rounded-[3px] bg-red-500' />
-            Inbound, over capacity
-          </li>
-        </ul>
-      </CardContent>
-    </Card>
+                    </span>
+                    {row.fill !== 'ok' && (
+                      <StatusLabel className='text-xs' tone={fill.tone}>
+                        {fill.label}
+                      </StatusLabel>
+                    )}
+                  </p>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+        {(state === undefined || state === 'loading') && (
+          <div className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs'>
+            <GoalProgressKey label='Stored' shape='progress' />
+            <GoalProgressKey label='Arriving this week' shape='projected' />
+            <GoalProgressKey label={`Nearly full, ${percent(warnAt)}`} />
+          </div>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

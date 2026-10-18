@@ -1,10 +1,19 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import {
+  BlockStateText,
+  SkeletonText,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  formatCompact,
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+  formatPoints,
+} from '@/registry/lib/dashboardblocks/format'
 import type { ComponentProps, ReactNode } from 'react'
-
-import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -12,30 +21,12 @@ type KPIFormatter = (value: number) => string
 
 type KPIFormat = 'number' | 'compact' | 'currency' | 'currency-compact' | 'percent'
 
-const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
-const compactFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  notation: 'compact',
-})
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 0,
-  style: 'currency',
-})
-const currencyCompactFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 1,
-  notation: 'compact',
-  style: 'currency',
-})
-const percentFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 })
-
 const kpiFormats: Record<KPIFormat, KPIFormatter> = {
-  compact: (value) => compactFormatter.format(value),
-  currency: (value) => currencyFormatter.format(value),
-  'currency-compact': (value) => currencyCompactFormatter.format(value),
-  number: (value) => numberFormatter.format(value),
-  percent: (value) => `${percentFormatter.format(value)}%`,
+  compact: formatCompact,
+  currency: (value) => formatCurrency(value),
+  'currency-compact': (value) => formatCurrency(value, { compact: true }),
+  number: (value) => formatNumber(value),
+  percent: (value) => formatPercent(value / 100, { maximumFractionDigits: 2 }),
 }
 
 function getKPIFormatter(format: KPIFormat | KPIFormatter = 'number'): KPIFormatter {
@@ -46,29 +37,43 @@ interface KPIChangeInput {
   /** @default 'percent' */
   changeType?: 'percent' | 'points'
   previous?: number
-  value: number
+  value?: number
 }
 
 const round = (value: number) => Math.round(value * 10) / 10 + 0
 
 function getKPIChange({ changeType = 'percent', previous, value }: KPIChangeInput) {
-  if (previous === undefined) return undefined
+  if (previous === undefined || value === undefined) return undefined
   if (changeType === 'points') return round(value - previous)
-  if (previous === 0) return 0
+  if (previous === 0) return value === 0 ? 0 : undefined
   return round(((value - previous) / Math.abs(previous)) * 100)
 }
 
-const formatChange = (unit: '%' | ' pts') => (value: number) =>
-  `${value > 0 ? '+' : ''}${numberFormatter.format(value)}${unit}`
-
-function KPI(props: ComponentProps<typeof Card>) {
-  return <Card {...props} />
+function KPI({ className, ...props }: ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot='kpi'
+      className={cn('flex flex-col border-t pt-3', className)}
+      {...props}
+    />
+  )
 }
 
-function KPIContent({ className, ...props }: ComponentProps<typeof CardContent>) {
+function KPIContent({ className, ...props }: ComponentProps<'div'>) {
   return (
-    <CardContent
+    <div
+      data-slot='kpi-content'
       className={cn('flex flex-1 flex-col justify-between', className)}
+      {...props}
+    />
+  )
+}
+
+function KPITitle({ className, ...props }: ComponentProps<'p'>) {
+  return (
+    <p
+      data-slot='kpi-title'
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
   )
@@ -78,15 +83,23 @@ interface KPIValueProps {
   animated?: boolean
   className?: string
   format?: KPIFormat | KPIFormatter
-  value: number
+  value?: number
 }
 
 function KPIValue({ animated = false, className, format, value }: KPIValueProps) {
+  const state = useBlockState() ?? (value === undefined ? 'empty' : undefined)
   const formatter = getKPIFormatter(format)
 
   return (
-    <div className={cn('text-3xl font-semibold tracking-tight tabular-nums', className)}>
-      {animated ? (
+    <div
+      data-slot='kpi-value'
+      className={cn('text-4xl font-light tracking-tight tabular-nums', className)}
+    >
+      {state === 'loading' ? (
+        <SkeletonText className='w-[4.5em]' />
+      ) : state || value === undefined ? (
+        <BlockStateText state={state} variant='short' />
+      ) : animated ? (
         <>
           <span aria-hidden>
             <AnimatedNumber value={value} formatter={formatter} />
@@ -102,42 +115,76 @@ function KPIValue({ animated = false, className, format, value }: KPIValueProps)
 
 interface KPIChangeProps extends KPIChangeInput {
   className?: string
+  /** Renders a `span` instead of a `p`, for inside a button or another line of text. */
+  inline?: boolean
+  /** Follows the previous value in the sentence, such as `last month`. */
   comparison: string
+  /** Formats the previous value in the sentence; match the value's own format. */
+  format?: KPIFormat | KPIFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
   goodDirection?: 'up' | 'down'
-  showComparison?: boolean
-  /** @default 'badge' */
-  variant?: 'default' | 'badge'
+  /** `short` shows only the change, such as `Up 12.5%`, and gives screen readers the rest. @default 'sentence' */
+  variant?: 'sentence' | 'short'
 }
 
 function KPIChange({
   className,
   comparison,
+  format,
   goodDirection,
-  showComparison = false,
-  variant = 'badge',
+  inline = false,
+  variant = 'sentence',
   ...input
 }: KPIChangeProps) {
+  const state = useBlockState()
   const change = getKPIChange(input)
-  if (change === undefined) return null
+
+  if (state === 'loading') {
+    return (
+      <BlockStateText
+        className={cn('text-sm', className)}
+        variant={variant === 'short' ? 'short' : 'sentence'}
+      />
+    )
+  }
+  if (state || change === undefined) return null
+
+  const good = goodDirection === 'down' ? change < 0 : change > 0
+  const rest = (
+    <>
+      {' '}
+      from{' '}
+      <span className='tabular-nums'>
+        {getKPIFormatter(format)(input.previous ?? 0)}
+      </span>{' '}
+      {comparison}
+    </>
+  )
+
+  const Element = inline ? 'span' : 'p'
+  const amount =
+    input.changeType === 'points'
+      ? formatPoints(Math.abs(change))
+      : formatPercent(Math.abs(change) / 100)
 
   return (
-    <div className={cn('flex items-center gap-1.5 text-xs', className)}>
-      <Trend
+    <Element
+      data-slot='kpi-change'
+      className={cn('text-muted-foreground text-sm', inline && 'block', className)}
+    >
+      <span
         className={cn(
-          'tabular-nums',
-          variant === 'default' && 'text-xs [&_svg]:size-3.5',
+          'font-medium tabular-nums',
+          change !== 0 &&
+            (good
+              ? 'text-emerald-700 dark:text-emerald-400'
+              : 'text-red-700 dark:text-red-400'),
         )}
-        formatter={formatChange(input.changeType === 'points' ? ' pts' : '%')}
-        goodDirection={goodDirection}
-        trend={change}
-        trendIcon='arrow'
-        variant={variant}
-      />
-      <span className={cn('text-muted-foreground', !showComparison && 'sr-only')}>
-        {comparison}
+      >
+        {change === 0 ? 'No change' : `${change > 0 ? 'Up' : 'Down'} ${amount}`}
       </span>
-    </div>
+      {variant === 'short' ? <span className='sr-only'>{rest}</span> : rest}
+    </Element>
   )
 }
 
@@ -148,8 +195,14 @@ interface KPIChartProps {
 }
 
 function KPIChart({ children, className, label }: KPIChartProps) {
+  const state = useBlockState()
+
   return (
-    <div role='img' aria-label={label} className={cn('w-full', className)}>
+    <div
+      role={state ? undefined : 'img'}
+      aria-label={state ? undefined : label}
+      className={cn('w-full', className)}
+    >
       {children}
     </div>
   )
@@ -173,6 +226,7 @@ export {
   KPIChange,
   KPIChart,
   KPIContent,
+  KPITitle,
   KPIValue,
   describeSeries,
   getKPIChange,

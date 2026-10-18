@@ -1,46 +1,57 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipContent,
+  chartActiveDot,
+  chartAxisProps,
+  chartFadedColor,
+  chartGridProps,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   RetentionChange,
   type RetentionCohort,
-  formatRetention,
   getAverageRetention,
   getPlateau,
   getRetentionRates,
 } from '@/registry/components/dashboardblocks/retention'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
+  Area,
   CartesianGrid,
+  ComposedChart,
   Line,
-  LineChart,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface Retention2Props {
-  /** Oldest first. */
-  cohorts: RetentionCohort[]
+  /** Oldest first. Leave out, or pass none, to show the empty state. */
+  cohorts?: RetentionCohort[]
   description: string
   highlight?: number
   /** @default 'Month' */
   periodName?: string
+  status?: BlockStatus
   title: string
 }
 
@@ -61,14 +72,16 @@ const exampleProps: Retention2Props = {
       size,
     }
   }),
-  description: 'Share of each monthly signup cohort still active, by months since signup',
+  description:
+    'Share of each monthly signup cohort still active, by months since signup.',
   highlight: 4,
   periodName: 'Month',
   title: 'Retention curves',
 }
 
 const Retention2 = (props: Retention2Props) => {
-  const { cohorts, description, periodName = 'Month', title } = props
+  const { cohorts = [], description, periodName = 'Month', status, title } = props
+  const state = getBlockState(status, cohorts.length === 0)
   let fallback = cohorts.length - 1
   while (fallback > 0 && cohorts[fallback].retained.length < 2) fallback--
   const highlight = props.highlight ?? Math.max(0, fallback)
@@ -89,156 +102,220 @@ const Retention2 = (props: Retention2Props) => {
   const selectedRate = rates[highlight]?.[latest] ?? 0
   const averageRate = averages[latest] ?? 0
   const plateau = getPlateau(averages)
-  const format = (value: number) => formatRetention(value)
+  const format = (value: number) => formatPercent(value, { maximumFractionDigits: 0 })
+  const gradientId = useChartId()
+  const otherCohortColor = chartFadedColor('var(--color-muted-foreground)')
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>
-              {selected?.label}, {unit} {latest}
+    <BlockStateProvider status={status} empty={cohorts.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+            <dt className='text-muted-foreground text-sm'>
+              {selected ? `${selected.label}, ${unit} ${latest}` : 'Latest cohort'}
             </dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatRetention(selectedRate)}
+            <dd>
+              <KPIValue value={selected ? selectedRate : undefined} format={format} />
             </dd>
             <dd>
               <RetentionChange
                 difference={selectedRate - averageRate}
-                versus='the average'
+                versus='against the average'
               />
             </dd>
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>
-              Average, {unit} {latest}
-            </dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatRetention(averageRate)}
-            </dd>
-          </div>
-          <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
-            <dt className='text-muted-foreground text-xs'>Levels off</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {plateau ? `${periodName} ${plateau.period}` : 'Not yet'}
-            </dd>
-            {plateau && (
-              <dd className='text-muted-foreground text-xs'>
-                at about {formatRetention(plateau.rate)} retained
-              </dd>
-            )}
-          </div>
-        </dl>
-        <ChartPanelLegend
-          items={[
-            { color: 'var(--chart-2)', label: selected?.label ?? '', shape: 'line' },
-            { color: 'var(--foreground)', label: 'Average', shape: 'line' },
-            {
-              color: 'color-mix(in oklab, var(--muted-foreground) 45%, transparent)',
-              label: 'Other cohorts',
-              shape: 'line',
-            },
-          ]}
-        />
-        <ChartPanelFigure className='h-60'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <LineChart data={rows} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='period'
-                tickFormatter={(value: number) =>
-                  `${periodName.charAt(0).toUpperCase()}${value}`
-                }
-              />
-              <YAxis
-                {...chartAxisProps}
-                domain={[0, 1]}
-                tickFormatter={format}
-                ticks={[0, 0.25, 0.5, 0.75, 1]}
-                width={52}
-              />
-              <Tooltip
-                content={({ active, label, payload }) => (
-                  <ChartPanelTooltip
-                    active={active}
-                    formatLabel={(value) => `${periodName} ${value}`}
-                    label={label}
-                    payload={payload?.filter(
-                      (item) =>
-                        item.dataKey === 'average' || item.dataKey === `c${highlight}`,
-                    )}
-                    valueFormatter={(value) => formatRetention(value, 1)}
-                  />
+          {state === 'loading' && (
+            <>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Average</dt>
+                <dd>
+                  <KPIValue className='text-2xl' value={undefined} />
+                </dd>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Levels off</dt>
+                <dd>
+                  <KPIValue className='text-2xl' value={undefined} />
+                </dd>
+              </div>
+            </>
+          )}
+          {!state && (
+            <>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>
+                  Average, {unit} {latest}
+                </dt>
+                <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                  {format(averageRate)}
+                </dd>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Levels off</dt>
+                <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                  {plateau ? `${periodName} ${plateau.period}` : 'Not yet'}
+                </dd>
+                {plateau && (
+                  <dd className='text-muted-foreground text-xs'>
+                    at about {format(plateau.rate)} retained
+                  </dd>
                 )}
-                cursor={{ stroke: 'var(--color-border)' }}
-              />
-              {cohorts.map((cohort, index) =>
-                index === highlight ? null : (
+              </div>
+            </>
+          )}
+        </dl>
+        {(!state || state === 'loading') && (
+          <ChartPanelLegend
+            items={[
+              {
+                color: 'var(--color-chart-2)',
+                label: selected?.label ?? '',
+                shape: 'line',
+              },
+              { color: 'var(--color-foreground)', label: 'Average', shape: 'line' },
+              {
+                color: otherCohortColor,
+                label: 'Other cohorts',
+                shape: 'line',
+              },
+            ]}
+          />
+        )}
+        {state ? (
+          <ChartPlaceholder height={240} />
+        ) : (
+          <>
+            <ChartPanelFigure className='h-60'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <ComposedChart
+                  aria-label={title}
+                  data={rows}
+                  margin={{ top: 8, right: 12, bottom: 0, left: 0 }}
+                >
+                  <defs>
+                    <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
+                      <stop
+                        offset='0%'
+                        stopColor='var(--color-chart-2)'
+                        stopOpacity={0.3}
+                      />
+                      <stop
+                        offset='100%'
+                        stopColor='var(--color-chart-2)'
+                        stopOpacity={0}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='period'
+                    tickFormatter={(value: number) =>
+                      `${periodName.charAt(0).toUpperCase()}${value}`
+                    }
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    domain={[0, 1]}
+                    tickFormatter={format}
+                    ticks={[0, 0.25, 0.5, 0.75, 1]}
+                    width={chartValueAxisWidth}
+                  />
+                  {plateau && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      x={plateau.period}
+                      label={{
+                        ...chartReferenceLabel,
+                        position: 'insideTopRight',
+                        value: 'Levels off',
+                      }}
+                    />
+                  )}
+                  <Tooltip
+                    content={({ active, label, payload }) => (
+                      <ChartTooltipContent
+                        active={active}
+                        formatLabel={(value) => `${periodName} ${value}`}
+                        label={label}
+                        payload={payload?.filter(
+                          (item) =>
+                            item.dataKey === 'average' ||
+                            item.dataKey === `c${highlight}`,
+                        )}
+                        valueFormatter={(value) => formatPercent(value)}
+                      />
+                    )}
+                    cursor={chartLineCursor}
+                  />
+                  {cohorts.map((cohort, index) =>
+                    index === highlight ? null : (
+                      <Line
+                        key={cohort.label}
+                        activeDot={false}
+                        dataKey={`c${index}`}
+                        dot={false}
+                        name={cohort.label}
+                        stroke={otherCohortColor}
+                        strokeWidth={1}
+                        type='monotone'
+                      />
+                    ),
+                  )}
                   <Line
-                    key={cohort.label}
-                    activeDot={false}
-                    dataKey={`c${index}`}
+                    activeDot={chartActiveDot}
+                    dataKey='average'
                     dot={false}
-                    isAnimationActive={false}
-                    name={cohort.label}
-                    stroke='var(--color-muted-foreground)'
-                    strokeOpacity={0.35}
-                    strokeWidth={1}
+                    name='Average'
+                    stroke='var(--color-foreground)'
+                    strokeDasharray='4 3'
+                    strokeWidth={2}
                     type='monotone'
                   />
-                ),
-              )}
-              <Line
-                activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                dataKey='average'
-                dot={false}
-                name='Average'
-                stroke='var(--color-foreground)'
-                strokeDasharray='4 3'
-                strokeWidth={2}
-                type='monotone'
-              />
-              <Line
-                activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                dataKey={`c${highlight}`}
-                dot={{ fill: 'var(--chart-2)', r: 2.5, strokeWidth: 0 }}
-                name={selected?.label}
-                stroke='var(--chart-2)'
-                strokeLinecap='round'
-                strokeWidth={2.5}
-                type='monotone'
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}. The average is weighted by cohort size.`}
-          columns={[
-            { key: 'label', label: periodName },
-            { format, key: 'average', label: 'Average' },
-            ...cohorts.map((cohort, index) => ({
-              format,
-              key: `c${index}`,
-              label: cohort.label,
-            })),
-          ]}
-          rows={rows.map((row) => {
-            const cells: Record<string, number | string> = {
-              label: `${periodName} ${row.period}`,
-            }
-            for (const [key, value] of Object.entries(row)) {
-              if (key !== 'period') cells[key] = value ?? '—'
-            }
-            return cells
-          })}
-        />
-      </CardContent>
-    </Card>
+                  <Area
+                    activeDot={chartActiveDot}
+                    dataKey={`c${highlight}`}
+                    dot={{ fill: 'var(--color-chart-2)', r: 2.5, strokeWidth: 0 }}
+                    fill={`url(#${gradientId})`}
+                    fillOpacity={1}
+                    name={selected?.label}
+                    stroke='var(--color-chart-2)'
+                    strokeLinecap='round'
+                    strokeWidth={2.5}
+                    type='monotone'
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description} The average is weighted by cohort size.`}
+              columns={[
+                { key: 'label', label: periodName },
+                { format, key: 'average', label: 'Average' },
+                ...cohorts.map((cohort, index) => ({
+                  format,
+                  key: `c${index}`,
+                  label: cohort.label,
+                })),
+              ]}
+              rows={rows.map((row) => {
+                const cells: Record<string, number | string> = {
+                  label: `${periodName} ${row.period}`,
+                }
+                for (const [key, value] of Object.entries(row)) {
+                  if (key !== 'period') cells[key] = value ?? '—'
+                }
+                return cells
+              })}
+            />
+          </>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -24,6 +24,8 @@ interface Auth1Props {
   onAccept?: () => void | Promise<void>
   onDecline?: () => void
   role: string
+  /** What the role can do, under its name. */
+  roleDescription?: string
   signedInAs?: string
   switchAccountHref: string
   workspace: InviteWorkspace
@@ -45,18 +47,19 @@ const exampleProps: Auth1Props = {
     </>
   ),
   email: 'noah@northwind.io',
-  invitedBy: { name: 'Liam Chen' },
+  invitedBy: { avatar: '/images/avatar-04.webp', name: 'Liam Chen' },
   onAccept: () => new Promise((resolve) => setTimeout(resolve, 800)),
-  role: 'Member · create and edit dashboards',
+  role: 'Member',
+  roleDescription: 'Can create and edit dashboards',
   signedInAs: 'noah@northwind.io',
   switchAccountHref: '#',
   workspace: {
     memberCount: 24,
     members: [
-      { id: 'm1', name: 'Amara Okafor' },
-      { id: 'm2', name: 'Liam Chen' },
-      { id: 'm3', name: 'Sofia Rossi' },
-      { id: 'm4', name: 'Mateo García' },
+      { avatar: '/images/avatar-05.webp', id: 'm1', name: 'Amara Okafor' },
+      { avatar: '/images/avatar-04.webp', id: 'm2', name: 'Liam Chen' },
+      { avatar: '/images/avatar-01.webp', id: 'm3', name: 'Sofia Rossi' },
+      { avatar: '/images/avatar-06.webp', id: 'm4', name: 'Mateo García' },
     ],
     name: 'Northwind Finance',
   },
@@ -73,6 +76,7 @@ const Auth1 = (props: Auth1Props) => {
     onAccept,
     onDecline,
     role,
+    roleDescription,
     signedInAs,
     switchAccountHref,
     workspace,
@@ -83,7 +87,6 @@ const Auth1 = (props: Auth1Props) => {
 
   const wrongAccount =
     signedInAs !== undefined && signedInAs.toLowerCase() !== email.toLowerCase()
-  const others = workspace.memberCount - workspace.members.length
 
   const accept = async () => {
     setJoining(true)
@@ -129,19 +132,24 @@ const Auth1 = (props: Auth1Props) => {
     >
       {!expired && outcome === 'pending' && (
         <div className='flex flex-col gap-6'>
-          <dl className='flex flex-col divide-y rounded-xl border text-sm'>
-            <div className='flex items-center justify-between gap-4 p-3'>
+          <dl className='flex flex-col divide-y border-y text-sm'>
+            <div className='flex items-center justify-between gap-4 py-2.5'>
               <dt className='text-muted-foreground'>Invited by</dt>
               <dd className='flex min-w-0 items-center gap-2 font-medium'>
                 <PersonAvatar person={invitedBy} size='sm' />
                 <span className='truncate'>{invitedBy.name}</span>
               </dd>
             </div>
-            <div className='flex items-center justify-between gap-4 p-3'>
+            <div className='flex items-center justify-between gap-4 py-2.5'>
               <dt className='text-muted-foreground'>Role</dt>
-              <dd className='text-right font-medium'>{role}</dd>
+              <dd className='flex flex-col items-end text-right'>
+                <span className='font-medium'>{role}</span>
+                {roleDescription && (
+                  <span className='text-muted-foreground text-xs'>{roleDescription}</span>
+                )}
+              </dd>
             </div>
-            <div className='flex items-center justify-between gap-4 p-3'>
+            <div className='flex items-center justify-between gap-4 py-2.5'>
               <dt className='text-muted-foreground'>Members</dt>
               <dd className='flex items-center gap-2'>
                 <AvatarStack
@@ -149,11 +157,9 @@ const Auth1 = (props: Auth1Props) => {
                   people={workspace.members}
                   size='sm'
                 />
-                {others > 0 && (
-                  <span className='text-muted-foreground text-xs whitespace-nowrap'>
-                    +{others} others
-                  </span>
-                )}
+                <span className='text-muted-foreground text-xs whitespace-nowrap tabular-nums'>
+                  {workspace.memberCount} people
+                </span>
               </dd>
             </div>
           </dl>
@@ -162,7 +168,7 @@ const Auth1 = (props: Auth1Props) => {
             <div className='flex flex-col gap-3'>
               <p
                 role='alert'
-                className='flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-sm [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0'
+                className='bg-muted/50 flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-pretty [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0'
               >
                 <IconPlaceholder
                   lucide='TriangleAlertIcon'
@@ -198,7 +204,7 @@ const Auth1 = (props: Auth1Props) => {
                 Decline
               </Button>
               {error && (
-                <p role='alert' className='text-destructive text-center text-sm'>
+                <p role='alert' className='text-destructive text-sm'>
                   {error}
                 </p>
               )}

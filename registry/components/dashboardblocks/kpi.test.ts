@@ -13,4 +13,10 @@ describe('getKPIChange', () => {
     assert.equal(getKPIChange({ value: 99.5, previous: 100 }), -0.5)
     assert.equal(getKPIChange({ value: 12.34, previous: 10, changeType: 'points' }), 2.3)
   })
+
+  it('has no percent change from zero, so no "No change" line for a value that appeared', () => {
+    assert.equal(getKPIChange({ value: 120, previous: 0 }), undefined)
+    assert.equal(getKPIChange({ value: 0, previous: 0 }), 0)
+    assert.equal(getKPIChange({ value: 4, previous: 0, changeType: 'points' }), 4)
+  })
 })

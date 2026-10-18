@@ -1,6 +1,18 @@
 'use client'
 
 import {
+  ActivityFeed,
+  ActivityFeedItem,
+  ActivityIcon,
+  type ActivityTone,
+} from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   LiveBadge,
   createRandom,
   formatAgo,
@@ -10,14 +22,6 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -33,18 +37,21 @@ interface LiveEvent {
 
 interface Realtime3Props {
   description: string
-  /** Newest first. */
-  events: LiveEvent[]
+  /** Newest first. Leave out, or pass none, to show the empty state. */
+  events?: LiveEvent[]
   limit?: number
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   simulate?: boolean
+  status?: BlockStatus
   title: string
 }
 
-const kindConfig: Record<LiveEventKind, { className: string; icon: ReactNode }> = {
+const noEvents: LiveEvent[] = []
+
+const kindConfig: Record<LiveEventKind, { icon: ReactNode; tone: ActivityTone }> = {
   message: {
-    className: 'bg-muted text-muted-foreground',
+    tone: 'neutral',
     icon: (
       <IconPlaceholder
         lucide='MessageSquareIcon'
@@ -57,7 +64,7 @@ const kindConfig: Record<LiveEventKind, { className: string; icon: ReactNode }> 
     ),
   },
   order: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    tone: 'success',
     icon: (
       <IconPlaceholder
         lucide='CreditCardIcon'
@@ -70,7 +77,7 @@ const kindConfig: Record<LiveEventKind, { className: string; icon: ReactNode }> 
     ),
   },
   refund: {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
+    tone: 'warning',
     icon: (
       <IconPlaceholder
         lucide='Undo2Icon'
@@ -83,7 +90,7 @@ const kindConfig: Record<LiveEventKind, { className: string; icon: ReactNode }> 
     ),
   },
   signup: {
-    className: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
+    tone: 'info',
     icon: (
       <IconPlaceholder
         lucide='UserPlusIcon'
@@ -101,7 +108,7 @@ const NOW = new Date(Date.UTC(2026, 8, 26, 14, 30, 0))
 const secondsAgo = (seconds: number) => new Date(NOW.getTime() - seconds * 1000)
 
 const exampleProps: Realtime3Props = {
-  description: 'Orders, sign-ups, refunds and messages as they happen',
+  description: 'Every order, sign-up, refund and support chat as it happens.',
   events: [
     {
       at: secondsAgo(3),
@@ -160,10 +167,23 @@ const DEMO: Omit<LiveEvent, 'at' | 'id'>[] = [
 ]
 
 const Realtime3 = (props: Realtime3Props) => {
-  const { description, limit = 6, simulate = false, title } = props
-  const [events, setEvents] = useState(props.events.slice(0, limit))
+  const {
+    description,
+    events: loadedEvents = noEvents,
+    limit = 6,
+    simulate = false,
+    status,
+    title,
+  } = props
+  const [events, setEvents] = useState(() => loadedEvents.slice(0, limit))
+  const [loaded, setLoaded] = useState(loadedEvents)
+  if (loadedEvents !== loaded) {
+    setLoaded(loadedEvents)
+    setEvents(loadedEvents.slice(0, limit))
+  }
   const [now, setNow] = useState(props.now)
   const [paused, setPaused] = useState(false)
+  const state = getBlockState(status, events.length === 0)
   const random = useRef(createRandom(5))
   const count = useRef(0)
 
@@ -183,65 +203,68 @@ const Realtime3 = (props: Realtime3Props) => {
         ),
       )
     },
-    simulate && !paused ? 2_500 : null,
+    simulate && !paused && !state ? 2_500 : null,
   )
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction className='flex items-center gap-2'>
-          <LiveBadge paused={paused} />
-          <Button
-            size='sm'
-            variant='outline'
-            onClick={() => setPaused((value) => !value)}
-          >
-            {paused ? 'Resume' : 'Pause'}
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <ol className='flex flex-col'>
-          {events.map((event, index) => {
-            const config = kindConfig[event.kind]
-            return (
-              <li
-                key={event.id}
-                className={cn(
-                  'flex items-center gap-3 border-b py-2.5 last:border-b-0',
-                  index === 0 &&
-                    event.id.startsWith('live-') &&
-                    'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1',
-                )}
-              >
-                <span
+    <BlockStateProvider status={status} empty={events.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
+          <div className='flex shrink-0 items-center gap-3'>
+            {!state && <LiveBadge paused={paused} />}
+            <Button
+              disabled={Boolean(state)}
+              size='sm'
+              variant='outline'
+              onClick={() => setPaused((value) => !value)}
+            >
+              {paused ? 'Resume' : 'Pause'}
+            </Button>
+          </div>
+        </header>
+        {state && (
+          <div className='border-t'>
+            <BlockStateRows rows={limit} />
+          </div>
+        )}
+        {!state && (
+          <ActivityFeed className='border-t pt-1'>
+            {events.map((event, index) => {
+              const config = kindConfig[event.kind]
+              return (
+                <ActivityFeedItem
+                  key={event.id}
                   className={cn(
-                    'flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4',
-                    config.className,
+                    'items-center border-b py-2.5 last:border-b-0',
+                    index === 0 &&
+                      event.id.startsWith('live-') &&
+                      'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1',
                   )}
                 >
-                  {config.icon}
-                </span>
-                <div className='flex min-w-0 flex-1 flex-col'>
-                  <span className='truncate text-sm font-medium'>{event.label}</span>
-                  <span className='text-muted-foreground truncate text-xs'>
-                    {event.detail}
-                  </span>
-                </div>
-                <time
-                  className='text-muted-foreground shrink-0 text-xs tabular-nums'
-                  dateTime={event.at.toISOString()}
-                >
-                  {formatAgo(event.at, now)}
-                </time>
-              </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-    </Card>
+                  <ActivityIcon icon={config.icon} tone={config.tone} />
+                  <div className='flex min-w-0 flex-1 flex-col'>
+                    <span className='truncate text-sm font-medium'>{event.label}</span>
+                    <span className='text-muted-foreground truncate text-sm'>
+                      {event.detail}
+                    </span>
+                  </div>
+                  <time
+                    className='text-muted-foreground shrink-0 text-xs tabular-nums'
+                    dateTime={event.at.toISOString()}
+                  >
+                    {formatAgo(event.at, now)}
+                  </time>
+                </ActivityFeedItem>
+              )
+            })}
+          </ActivityFeed>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

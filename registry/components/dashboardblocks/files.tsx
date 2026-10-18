@@ -1,6 +1,9 @@
 'use client'
 
+import { Details } from '@/registry/components/dashboardblocks/details'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
   type ChangeEvent,
   type DragEvent,
@@ -695,11 +698,6 @@ function summarizeUploads(uploads: FileUpload[]) {
   return { active, done, failed, progress: total > 0 ? sent / total : 0 }
 }
 
-const percentFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 0,
-  style: 'percent',
-})
-
 function FileUploadProgress({
   className,
   label,
@@ -739,7 +737,7 @@ function FileUploadList({
   label?: string
 }) {
   return (
-    <ul aria-label={label} className={cn('flex flex-col divide-y', className)}>
+    <ul aria-label={label} className={cn('flex flex-col border-t', className)}>
       {children}
     </ul>
   )
@@ -776,17 +774,20 @@ function FileUploadItem({
   return (
     <li
       data-status={status}
-      className={cn('flex items-center gap-3 py-3 [&_svg]:shrink-0', className)}
+      className={cn(
+        'flex items-center gap-3 border-b py-2.5 [&_svg]:shrink-0',
+        className,
+      )}
     >
       <FileKindIcon name={name} type={upload.type} />
-      <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
+      <div className='flex min-w-0 flex-1 flex-col gap-1'>
         <div className='flex items-baseline justify-between gap-3'>
           <p className='truncate text-sm font-medium' title={name}>
             {name}
           </p>
           {status === 'uploading' && (
-            <span className='text-muted-foreground text-xs tabular-nums'>
-              {percentFormatter.format(progress)}
+            <span className='text-muted-foreground text-sm tabular-nums'>
+              {formatPercent(progress, { maximumFractionDigits: 0 })}
             </span>
           )}
         </div>
@@ -796,47 +797,35 @@ function FileUploadItem({
             value={status === 'queued' ? 0 : progress}
           />
         )}
-        <p
-          className={cn(
-            'text-muted-foreground flex min-w-0 items-center gap-1 text-xs tabular-nums [&_svg]:size-3.5',
-            status === 'error' && 'text-destructive',
+        <p className='text-muted-foreground flex min-w-0 items-baseline gap-1 text-sm tabular-nums'>
+          {status === 'queued' && (
+            <Details>
+              {formatFileSize(size)}
+              Waiting…
+            </Details>
           )}
-        >
-          {status === 'queued' && <>{formatFileSize(size)} · Waiting…</>}
           {status === 'uploading' && (
             <>
               {formatFileSize(size * progress)} of {formatFileSize(size)}
             </>
           )}
           {status === 'done' && (
-            <>
-              {formatFileSize(size)} ·
-              <IconPlaceholder
-                lucide='CircleCheckIcon'
-                tabler='IconCircleCheck'
-                hugeicons='CheckmarkCircle02Icon'
-                phosphor='CheckCircleIcon'
-                remixicon='RiCheckboxCircleLine'
-                aria-hidden
-                className='text-emerald-700 dark:text-emerald-400'
-              />
-              Uploaded
-            </>
+            <Details>
+              {formatFileSize(size)}
+              <StatusLabel tone='good'>Uploaded</StatusLabel>
+            </Details>
           )}
           {status === 'error' && (
-            <>
-              <IconPlaceholder
-                lucide='CircleAlertIcon'
-                tabler='IconAlertCircle'
-                hugeicons='AlertCircleIcon'
-                phosphor='WarningCircleIcon'
-                remixicon='RiErrorWarningLine'
-                aria-hidden
-              />
-              <span className='truncate'>{error ?? 'Upload failed'}</span>
-            </>
+            <StatusLabel tone='bad' className='min-w-0 truncate'>
+              {error ?? 'Upload failed'}
+            </StatusLabel>
           )}
-          {status === 'canceled' && <>{formatFileSize(size)} · Canceled</>}
+          {status === 'canceled' && (
+            <Details>
+              {formatFileSize(size)}
+              Canceled
+            </Details>
+          )}
         </p>
       </div>
       <div ref={actionsRef} className='flex shrink-0 items-center'>

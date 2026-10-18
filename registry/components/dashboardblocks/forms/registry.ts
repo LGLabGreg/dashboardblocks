@@ -7,13 +7,12 @@ export const examples: Registry['items'] = [
     name: 'forms-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       'field',
       'input',
       'native-select',
-      'separator',
       'switch',
       'textarea',
+      registryUrl('block-state'),
       registryUrl('forms'),
     ],
     files: [
@@ -33,13 +32,12 @@ export const examples: Registry['items'] = [
     name: 'forms-02',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
-      'card',
       'field',
       'input',
       'native-select',
       'textarea',
+      registryUrl('block-state'),
       registryUrl('forms'),
     ],
     files: [
@@ -60,7 +58,6 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'field',
       'input',
       'native-select',
@@ -84,7 +81,7 @@ export const examples: Registry['items'] = [
   {
     name: 'forms-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('forms')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('forms')],
     files: [
       {
         path: 'registry/components/dashboardblocks/forms/forms-04.tsx',

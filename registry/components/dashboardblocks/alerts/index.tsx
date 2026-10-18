@@ -16,3 +16,10 @@ export const alertsExampleProps = {
   'alerts-03': alerts3ExampleProps,
   'alerts-04': alerts4ExampleProps,
 }
+
+export const alertsEmptyProps = {
+  'alerts-01': { alerts: [] },
+  'alerts-02': { readings: [] },
+  'alerts-03': { rules: [] },
+  'alerts-04': { counts: undefined, latest: undefined },
+}

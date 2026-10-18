@@ -1,17 +1,26 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   DataTable,
   DataTableBody,
   DataTableCell,
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
+import { getKPIChange, KPIChange } from '@/registry/components/dashboardblocks/kpi'
 import { StatSparkline } from '@/registry/components/dashboardblocks/stat-group'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
-
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface CampaignRow {
   channel: string
@@ -24,8 +33,15 @@ interface CampaignRow {
 }
 
 interface DataTable3Props {
-  description: string
-  rows: CampaignRow[]
+  /** Follows each change, such as `the previous 14 days`. */
+  comparison: string
+  /** Defaults to a sentence with the total conversions, spend and change. */
+  description?: string
+  /** Follows the totals in the default description. */
+  period?: string
+  /** Leave out, or pass none, to show the empty state. */
+  rows?: CampaignRow[]
+  status?: BlockStatus
   title: string
 }
 
@@ -38,7 +54,8 @@ const exampleDaily = (base: number, slope: number, phase: number) =>
   )
 
 const exampleProps: DataTable3Props = {
-  description: 'Last 14 days, compared with the previous 14 days',
+  comparison: 'the previous 14 days',
+  period: 'in the last 14 days',
   rows: [
     {
       channel: 'Paid search',
@@ -76,79 +93,111 @@ const exampleProps: DataTable3Props = {
   title: 'Campaigns',
 }
 
-const currency = (value: number, digits = 0) =>
-  `$${value.toLocaleString('en-US', { maximumFractionDigits: digits, minimumFractionDigits: digits })}`
+const money = (value: number) =>
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
 
-const percentChange = (current: number, previous: number) =>
-  previous === 0 ? 0 : Math.round(((current - previous) / previous) * 1000) / 10
+const dayLabel = (index: number, count: number) => {
+  const daysAgo = count - 1 - index
+  return daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo} days ago`
+}
+
+const sum = (values: number[]) => values.reduce((total, value) => total + value, 0)
+
+const summarize = (rows: CampaignRow[], comparison: string, period?: string) => {
+  const conversions = sum(rows.map((row) => sum(row.conversions)))
+  const previous = sum(rows.map((row) => row.previousConversions))
+  const spend = sum(rows.map((row) => row.spend))
+  const change = getKPIChange({ previous, value: conversions })
+  const trend = change
+    ? `, ${change > 0 ? 'up' : 'down'} ${formatPercent(Math.abs(change) / 100, { maximumFractionDigits: 0 })} on ${comparison}`
+    : ''
+  return `${formatNumber(conversions)} conversions for ${formatCurrency(spend)}${period ? ` ${period}` : ''}${trend}.`
+}
 
 const DataTable3 = (props: DataTable3Props) => {
-  const { description, rows, title } = props
+  const { comparison, period, rows = [], status, title } = props
+  const { description = summarize(rows, comparison, period) } = props
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{`${title}: ${description}`}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Campaign</DataTableHead>
-            <DataTableHead align='end'>Spend</DataTableHead>
-            <DataTableHead align='end'>Conversions</DataTableHead>
-            <DataTableHead align='end'>Cost per conversion</DataTableHead>
-            <DataTableHead>Conversions by day</DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {rows.map((row) => {
-            const conversions = row.conversions.reduce((sum, value) => sum + value, 0)
-            const cost = conversions > 0 ? row.spend / conversions : 0
-            const first = row.conversions[0]
-            const last = row.conversions[row.conversions.length - 1]
-            return (
-              <DataTableRow key={row.name}>
-                <DataTableCell primary>
-                  <span className='block'>{row.name}</span>
-                  <span className='text-muted-foreground block text-xs font-normal'>
-                    {row.channel}
-                  </span>
-                </DataTableCell>
-                <DataTableCell align='end' label='Spend'>
-                  {currency(row.spend)}
-                </DataTableCell>
-                <DataTableCell align='end' label='Conversions'>
-                  <span className='block'>{conversions.toLocaleString()}</span>
-                  <Trend
-                    className='justify-end text-xs @max-2xl/data-table:justify-start [&_svg]:size-3'
-                    trend={percentChange(conversions, row.previousConversions)}
-                    trendIcon='arrow'
-                  />
-                </DataTableCell>
-                <DataTableCell align='end' label='Cost per conversion'>
-                  <span className='block'>{currency(cost, 2)}</span>
-                  <Trend
-                    className='justify-end text-xs @max-2xl/data-table:justify-start [&_svg]:size-3'
-                    goodDirection='down'
-                    trend={percentChange(cost, row.previousCost)}
-                    trendIcon='arrow'
-                  />
-                </DataTableCell>
-                <DataTableCell label='Conversions by day' className='w-32'>
-                  <StatSparkline
-                    className='h-7 w-full'
-                    data={row.conversions}
-                    label={`${row.name} conversions by day: from ${first} to ${last}`}
-                  />
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+    <BlockStateProvider status={status} empty={rows.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <DataTable>
+          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Campaign</DataTableHead>
+              <DataTableHead align='end'>Spend</DataTableHead>
+              <DataTableHead align='end'>Conversions</DataTableHead>
+              <DataTableHead align='end'>Cost per conversion</DataTableHead>
+              <DataTableHead>Conversions by day</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={5} rows={4} />
+            {!status &&
+              rows.map((row) => {
+                const conversions = sum(row.conversions)
+                const cost = conversions > 0 ? row.spend / conversions : 0
+                const first = row.conversions[0]
+                const last = row.conversions[row.conversions.length - 1]
+                return (
+                  <DataTableRow key={row.name}>
+                    <DataTableCell primary>
+                      <span className='block'>{row.name}</span>
+                      <span className='text-muted-foreground block text-xs font-normal'>
+                        {row.channel}
+                      </span>
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Spend'>
+                      {formatCurrency(row.spend)}
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Conversions'>
+                      <span className='block'>{formatNumber(conversions)}</span>
+                      <KPIChange
+                        className='text-xs'
+                        comparison={comparison}
+                        inline
+                        previous={row.previousConversions}
+                        value={conversions}
+                        variant='short'
+                      />
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Cost per conversion'>
+                      <span className='block'>{money(cost)}</span>
+                      <KPIChange
+                        className='text-xs'
+                        comparison={comparison}
+                        format={money}
+                        goodDirection='down'
+                        inline
+                        previous={row.previousCost}
+                        value={cost}
+                        variant='short'
+                      />
+                    </DataTableCell>
+                    <DataTableCell label='Conversions by day' className='w-32'>
+                      <StatSparkline
+                        className='h-7 w-full'
+                        data={row.conversions}
+                        label={`${row.name} conversions by day: from ${first} to ${last}`}
+                        labels={row.conversions.map((_, index) =>
+                          dayLabel(index, row.conversions.length),
+                        )}
+                      />
+                    </DataTableCell>
+                  </DataTableRow>
+                )
+              })}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

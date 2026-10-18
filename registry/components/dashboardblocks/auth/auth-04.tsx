@@ -201,7 +201,7 @@ const Auth4 = (props: Auth4Props) => {
         <>
           <p>Can’t find it? Check your spam folder.</p>
           {cooldown > 0 ? (
-            <p>You can send a new code in {cooldown}s</p>
+            <p className='tabular-nums'>You can send a new code in {cooldown}s</p>
           ) : (
             <button
               type='button'
@@ -234,7 +234,8 @@ const Auth4 = (props: Auth4Props) => {
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? `${id}-error` : undefined}
             />
-            <div className='flex justify-end gap-2'>
+            <div className='mt-2 flex flex-col gap-2'>
+              <Button type='submit'>Send code</Button>
               <Button
                 type='button'
                 variant='ghost'
@@ -247,7 +248,6 @@ const Auth4 = (props: Auth4Props) => {
               >
                 Cancel
               </Button>
-              <Button type='submit'>Send code</Button>
             </div>
           </form>
         ) : (
@@ -291,18 +291,11 @@ const Auth4 = (props: Auth4Props) => {
           </form>
         )}
         {(error ?? sendError) && (
-          <p
-            id={`${id}-error`}
-            role='alert'
-            className='text-destructive text-center text-sm'
-          >
+          <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
             {error ?? sendError}
           </p>
         )}
-        <p
-          role='status'
-          className='text-muted-foreground text-center text-sm empty:sr-only'
-        >
+        <p role='status' className='text-muted-foreground text-sm empty:sr-only'>
           {status}
         </p>
       </div>

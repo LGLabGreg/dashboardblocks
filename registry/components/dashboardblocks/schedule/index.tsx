@@ -16,3 +16,10 @@ export const scheduleExampleProps = {
   'schedule-03': schedule3ExampleProps,
   'schedule-04': schedule4ExampleProps,
 }
+
+export const scheduleEmptyProps = {
+  'schedule-01': { events: [] },
+  'schedule-02': { events: [] },
+  'schedule-03': { deadlines: [] },
+  'schedule-04': { events: [] },
+}

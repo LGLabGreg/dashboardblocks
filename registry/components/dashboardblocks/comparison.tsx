@@ -1,14 +1,15 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
-import { type RefObject, useEffect, useState } from 'react'
+import { getKPIChange } from '@/registry/components/dashboardblocks/kpi'
+import { useReveal } from '@/registry/hooks/use-reveal'
 
 import { cn } from '@/lib/utils'
 
 function getDelta(current: number, previous: number) {
-  const difference = current - previous
-  const percent = previous === 0 ? 0 : (difference / Math.abs(previous)) * 100
-  return { difference, percent: Math.round(percent * 10) / 10 }
+  return {
+    difference: current - previous,
+    percent: getKPIChange({ previous, value: current }) ?? 0,
+  }
 }
 
 interface ProportionTest {
@@ -51,23 +52,10 @@ function compareProportions(
   }
 }
 
-function useReveal(animated: boolean) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  return { ref: ref as RefObject<HTMLDivElement>, revealed }
-}
-
 interface DivergingBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   max: number
   value: number
@@ -76,7 +64,7 @@ interface DivergingBarProps {
 function DivergingBar({
   animated = true,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   max,
   value,
 }: DivergingBarProps) {
@@ -102,7 +90,7 @@ interface DumbbellProps {
   after: number
   before: number
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   max: number
   /** @default 0 */
@@ -113,7 +101,7 @@ function Dumbbell({
   after,
   before,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   max,
   min = 0,
 }: DumbbellProps) {
@@ -134,11 +122,11 @@ function Dumbbell({
         }}
       />
       <span
-        className='bg-card absolute top-1/2 size-3 -translate-1/2 rounded-full border-2'
+        className='bg-background absolute top-1/2 size-3 -translate-1/2 rounded-full border-2'
         style={{ borderColor: color, left: position(before) }}
       />
       <span
-        className='ring-card absolute top-1/2 size-3 -translate-1/2 rounded-full ring-2'
+        className='ring-background absolute top-1/2 size-3 -translate-1/2 rounded-full ring-2'
         style={{ backgroundColor: color, left: position(after) }}
       />
     </div>
@@ -149,7 +137,7 @@ function DumbbellLegend({
   afterLabel,
   beforeLabel,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
 }: {
   afterLabel: string
   beforeLabel: string
@@ -185,7 +173,7 @@ function DumbbellLegend({
 
 interface IntervalBarProps {
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   estimate: number
   high: number
@@ -196,7 +184,7 @@ interface IntervalBarProps {
 
 function IntervalBar({
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   estimate,
   extent,
   high,
@@ -218,7 +206,7 @@ function IntervalBar({
         }}
       />
       <span
-        className='ring-card absolute top-1/2 size-3 -translate-1/2 rounded-full ring-2'
+        className='ring-background absolute top-1/2 size-3 -translate-1/2 rounded-full ring-2'
         style={{ backgroundColor: color, left: position(estimate) }}
       />
     </div>

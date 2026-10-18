@@ -13,7 +13,6 @@ interface ErrorPageLayoutProps {
   code?: string
   description?: ReactNode
   footer?: ReactNode
-  icon?: ReactNode
   title: ReactNode
 }
 
@@ -25,13 +24,15 @@ function ErrorPageLayout({
   code,
   description,
   footer,
-  icon,
   title,
 }: ErrorPageLayoutProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const focused = useRef(false)
 
   useEffect(() => {
-    if (focusOnMount) headingRef.current?.focus()
+    if (!focusOnMount || focused.current) return
+    focused.current = true
+    headingRef.current?.focus()
   }, [focusOnMount])
 
   return (
@@ -46,18 +47,10 @@ function ErrorPageLayout({
         </header>
       )}
       <main className='flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6'>
-        <div className='flex w-full max-w-md flex-col items-center gap-6 text-center'>
-          {icon && (
-            <span
-              aria-hidden
-              className='bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-xl [&_svg]:size-6'
-            >
-              {icon}
-            </span>
-          )}
+        <div className='flex w-full max-w-lg flex-col gap-6'>
           <div className='flex flex-col gap-2'>
             {code && (
-              <p className='text-muted-foreground font-mono text-sm tabular-nums'>
+              <p className='text-muted-foreground text-5xl font-light tracking-tight tabular-nums'>
                 {code}
               </p>
             )}
@@ -76,8 +69,10 @@ function ErrorPageLayout({
         </div>
       </main>
       {footer && (
-        <footer className='text-muted-foreground flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-4 py-6 text-sm'>
-          {footer}
+        <footer className='text-muted-foreground flex justify-center px-4 py-6 text-sm sm:px-6'>
+          <div className='flex w-full max-w-lg flex-wrap items-center gap-x-4 gap-y-1'>
+            {footer}
+          </div>
         </footer>
       )}
     </div>

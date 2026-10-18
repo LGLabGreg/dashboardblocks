@@ -1,35 +1,47 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  chartActiveDot,
+  chartAxisProps,
+  chartGridProps,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  chartAxisProps,
-  chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
-  StockStatusBadge,
+  StockStatusLabel,
   getStockStatus,
   projectStock,
 } from '@/registry/components/dashboardblocks/inventory'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   Area,
   AreaChart,
   CartesianGrid,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface IncomingOrder {
   day: number
@@ -38,175 +50,253 @@ interface IncomingOrder {
 
 interface Inventory4Props {
   dailyDemand: number
-  description: string
+  /** Defaults to a sentence saying when stock runs out. */
+  description?: string
   horizon?: number
-  incoming: IncomingOrder[]
+  incoming?: IncomingOrder[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  onHand: number
+  /** Leave out to show the empty state. */
+  onHand?: number
+  /** Names the item in the default description, such as `the merino socks 3-pack`. */
+  product: string
   reorderPoint: number
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Inventory4Props = {
   dailyDemand: 22,
-  description: 'Merino crew socks, 3 pack · MS-3P-GRY',
   incoming: [{ day: 9, quantity: 360 }],
   now: new Date(Date.UTC(2026, 8, 26)),
   onHand: 238,
+  product: 'the merino socks 3-pack',
   reorderPoint: 180,
   title: 'Stock projection',
 }
 
 const DAY = 86_400_000
+const STOCK_COLOR = 'var(--color-chart-2)'
+const STOCKOUT_COLOR = 'var(--color-red-500)'
+
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   month: 'short',
   timeZone: 'UTC',
 })
 
+const units = (value: number) => `${formatNumber(value)} units`
+
 const Inventory4 = (props: Inventory4Props) => {
   const {
     dailyDemand,
-    description,
     horizon = 30,
-    incoming,
+    incoming = [],
     now,
     onHand,
+    product,
     reorderPoint,
+    status,
     title,
   } = props
+  const state = getBlockState(status, onHand === undefined)
+  const ready = state === undefined || state === 'loading'
+  const gradientId = useChartId()
   const { levels, stockoutDay } = projectStock({
     dailyDemand,
     days: horizon,
     incoming,
-    onHand,
+    onHand: onHand ?? 0,
   })
   const rows = levels.map((level, day) => ({
     date: dateFormatter.format(new Date(now.getTime() + day * DAY)),
     day,
     stock: Math.max(0, Math.round(level)),
   }))
-  const firstStockout = stockoutDay
+  const stockout = stockoutDay === null ? null : rows[stockoutDay]
   const lowest = rows.reduce((min, row) => (row.stock < min.stock ? row : min), rows[0])
-  const status = getStockStatus({ onHand, reorderPoint })
+  const arriving = incoming.reduce((sum, order) => sum + order.quantity, 0)
+  const {
+    description = stockout
+      ? `At ${formatNumber(dailyDemand)} a day, ${product} runs out on ${stockout.date}, even with what’s on order.`
+      : `At ${formatNumber(dailyDemand)} a day, ${product} lasts the next ${horizon} days.`,
+  } = props
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
+    <BlockStateProvider status={status} empty={onHand === undefined}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-3'>
           <div className='flex flex-col gap-1'>
-            <dt className='text-muted-foreground text-xs'>On hand</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {onHand.toLocaleString()}
+            <dt className='text-muted-foreground text-sm'>On hand</dt>
+            <dd className='text-2xl font-light tracking-tight tabular-nums'>
+              {state || onHand === undefined ? (
+                <BlockStateText variant='short' />
+              ) : (
+                formatNumber(onHand)
+              )}
             </dd>
             <dd>
-              <StockStatusBadge status={status} />
-            </dd>
-          </div>
-          <div className='flex flex-col gap-1'>
-            <dt className='text-muted-foreground text-xs'>Lowest point</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {lowest.stock.toLocaleString()}
-            </dd>
-            <dd className='text-muted-foreground text-xs'>on {lowest.date}</dd>
-          </div>
-          <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
-            <dt className='text-muted-foreground text-xs'>Runs out</dt>
-            <dd className='text-2xl font-semibold tracking-tight'>
-              {firstStockout === null
-                ? 'Not in ' + horizon + ' days'
-                : rows[firstStockout].date}
-            </dd>
-            <dd className='text-muted-foreground text-xs'>
-              {incoming.length > 0
-                ? `${incoming.reduce((sum, order) => sum + order.quantity, 0).toLocaleString()} arriving ${incoming.map((order) => rows[order.day]?.date).join(', ')}`
-                : 'Nothing on order'}
-            </dd>
-          </div>
-        </dl>
-        <ChartPanelLegend
-          items={[
-            { color: 'var(--chart-3)', label: 'Projected stock' },
-            { color: 'var(--muted-foreground)', label: 'Reorder point', shape: 'line' },
-          ]}
-        />
-        <ChartPanelFigure className='h-52'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <AreaChart data={rows} margin={{ top: 20, right: 12, bottom: 0, left: 0 }}>
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='date'
-                interval='preserveStartEnd'
-                minTickGap={24}
-              />
-              <YAxis {...chartAxisProps} width={40} />
-              <ReferenceLine
-                label={{
-                  fill: 'var(--color-muted-foreground)',
-                  fontSize: 11,
-                  position: 'insideTopRight',
-                  value: 'Reorder point',
-                }}
-                stroke='var(--color-muted-foreground)'
-                strokeDasharray='4 4'
-                y={reorderPoint}
-              />
-              {incoming.map((order) => (
-                <ReferenceLine
-                  key={order.day}
-                  label={{
-                    fill: 'var(--color-foreground)',
-                    fontSize: 11,
-                    position: 'top',
-                    value: `+${order.quantity}`,
-                  }}
-                  stroke='var(--color-border)'
-                  x={rows[order.day]?.date}
+              <BlockReady className='text-xs'>
+                <StockStatusLabel
+                  className='text-xs'
+                  status={getStockStatus({ onHand: onHand ?? 0, reorderPoint })}
                 />
-              ))}
-              <Tooltip
-                content={({ active, label, payload }) =>
-                  active && payload?.length ? (
-                    <div className='bg-popover text-popover-foreground ring-foreground/10 rounded-lg px-3 py-2 text-xs shadow-md ring-1'>
-                      <span className='text-muted-foreground'>{label}</span>
-                      <div className='font-medium tabular-nums'>
-                        {Number(payload[0].value).toLocaleString()} units
-                      </div>
-                    </div>
-                  ) : null
-                }
-                cursor={{ stroke: 'var(--color-border)' }}
-              />
-              <Area
-                dataKey='stock'
-                fill='var(--chart-3)'
-                fillOpacity={0.2}
-                name='Projected stock'
-                stroke='var(--chart-3)'
-                strokeWidth={2}
-                type='stepAfter'
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}. ${dailyDemand} units a day, reorder point ${reorderPoint}.`}
-          columns={[
-            { key: 'date', label: 'Date' },
-            { key: 'stock', label: 'Projected stock' },
-          ]}
-          rows={rows.filter(
-            (row) => row.day % 5 === 0 || incoming.some((order) => order.day === row.day),
+              </BlockReady>
+            </dd>
+          </div>
+          {ready && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Lowest point</dt>
+              <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                {state ? <SkeletonText className='w-16' /> : formatNumber(lowest.stock)}
+              </dd>
+              <dd className='text-muted-foreground text-xs'>
+                <BlockReady className='text-xs'>on {lowest.date}</BlockReady>
+              </dd>
+            </div>
           )}
-        />
-      </CardContent>
-    </Card>
+          {ready && (
+            <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
+              <dt className='text-muted-foreground text-sm'>Runs out</dt>
+              <dd className='text-2xl font-light tracking-tight'>
+                {state ? (
+                  <SkeletonText className='w-20' />
+                ) : stockout ? (
+                  stockout.date
+                ) : (
+                  `Not in ${horizon} days`
+                )}
+              </dd>
+              <dd className='text-muted-foreground text-xs'>
+                <BlockReady className='text-xs'>
+                  {incoming.length > 0
+                    ? `${formatNumber(arriving)} arriving ${incoming.map((order) => rows[order.day]?.date).join(', ')}`
+                    : 'Nothing on order'}
+                </BlockReady>
+              </dd>
+            </div>
+          )}
+        </dl>
+        {ready && (
+          <ChartPanelLegend
+            items={[
+              { color: STOCK_COLOR, label: 'Projected stock' },
+              {
+                color: 'var(--color-muted-foreground)',
+                label: 'Reorder point',
+                shape: 'line',
+              },
+            ]}
+          />
+        )}
+        {state ? (
+          <ChartPanelFigure className='h-56'>
+            <ChartPlaceholder height='100%' />
+          </ChartPanelFigure>
+        ) : (
+          <>
+            <ChartPanelFigure className='h-56'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <AreaChart
+                  data={rows}
+                  margin={{ top: 20, right: 12, bottom: 0, left: 0 }}
+                >
+                  <defs>
+                    <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='0%' stopColor={STOCK_COLOR} stopOpacity={0.3} />
+                      <stop offset='100%' stopColor={STOCK_COLOR} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='date'
+                    interval='preserveStartEnd'
+                    minTickGap={24}
+                  />
+                  <YAxis {...chartAxisProps} width={chartValueAxisWidth} />
+                  <ReferenceLine
+                    {...chartReferenceProps}
+                    label={{
+                      ...chartReferenceLabel,
+                      position: 'insideTopRight',
+                      value: 'Reorder point',
+                    }}
+                    y={reorderPoint}
+                  />
+                  {incoming.map((order) => (
+                    <ReferenceLine
+                      key={order.day}
+                      {...chartReferenceProps}
+                      label={{
+                        ...chartReferenceLabel,
+                        fill: 'var(--color-foreground)',
+                        position: 'top',
+                        value: `+${formatNumber(order.quantity)} arrive`,
+                      }}
+                      x={rows[order.day]?.date}
+                    />
+                  ))}
+                  <Tooltip
+                    content={<ChartTooltipContent valueFormatter={units} />}
+                    cursor={chartLineCursor}
+                  />
+                  <Area
+                    activeDot={chartActiveDot}
+                    dataKey='stock'
+                    fill={`url(#${gradientId})`}
+                    name='Projected stock'
+                    stroke={STOCK_COLOR}
+                    strokeWidth={2}
+                    type='stepAfter'
+                  />
+                  {stockout && (
+                    <ReferenceLine
+                      label={{
+                        ...chartReferenceLabel,
+                        fill: STOCKOUT_COLOR,
+                        position: 'insideTopLeft',
+                        value: 'Runs out',
+                      }}
+                      stroke={STOCKOUT_COLOR}
+                      strokeDasharray='3 3'
+                      x={stockout.date}
+                    />
+                  )}
+                  {stockout && (
+                    <ReferenceDot
+                      fill={STOCKOUT_COLOR}
+                      r={4}
+                      stroke='var(--color-background)'
+                      strokeWidth={2}
+                      x={stockout.date}
+                      y={0}
+                    />
+                  )}
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description} Reorder point ${formatNumber(reorderPoint)}.`}
+              columns={[
+                { key: 'date', label: 'Date' },
+                { key: 'stock', label: 'Projected stock' },
+              ]}
+              rows={rows.filter(
+                (row) =>
+                  row.day % 5 === 0 || incoming.some((order) => order.day === row.day),
+              )}
+            />
+          </>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

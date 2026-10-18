@@ -16,3 +16,10 @@ export const geoExampleProps = {
   'geo-03': geo3ExampleProps,
   'geo-04': geo4ExampleProps,
 }
+
+export const geoEmptyProps = {
+  'geo-01': { values: {} },
+  'geo-02': { countries: [], total: undefined },
+  'geo-03': { locations: [] },
+  'geo-04': { regions: [] },
+}

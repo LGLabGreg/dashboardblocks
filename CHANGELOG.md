@@ -1,5 +1,23 @@
 # dashboardblocks
 
+## 1.6.0
+
+### Minor Changes
+
+- b59a430: Every block is redesigned in one house style. Blocks drop their cards for rules and space, headline numbers are large and light, and a change reads as a sentence ("Up 20.1% from $37,660 last month") instead of a badge. Status is a coloured word instead of a pill. Main charts carry a goal line, the previous period, a forecast or an average, and every chart shows the same tooltip.
+  
+  Every data block takes `status?: 'loading' | 'error'` and shows its own skeleton or error message. With no data it shows its empty state.
+  
+  New blocks and parts:
+  
+  - `kpi-04`: a value with its change and a button that shows the date range, filters and query behind the number. It uses the new `kpi-provenance`.
+  - `format`: number, money, percentage and date range formatters, all in `en-US`, so server and browser render the same text.
+  - `status-label`: a status word with a tone (`good`, `warning`, `bad`, `info` or `neutral`).
+  - `details`: two or three short facts on one line, joined by a dot that screen readers skip.
+  - `use-reveal`: grows bars in when they scroll into view.
+  
+  Blocks you already installed keep working. Run `npx shadcn add` again to get the new look.
+
 ## 1.5.5
 
 ### Patch Changes

@@ -1,20 +1,25 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { DivergingBar } from '@/registry/components/dashboardblocks/comparison'
 import {
   type InsightSegment,
   InsightText,
-  formatSigned,
   getChangeTone,
 } from '@/registry/components/dashboardblocks/insights'
-
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  formatNumber,
+  formatPercent,
+  formatPoints,
+  formatSigned,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface Contribution {
   label: string
@@ -22,13 +27,15 @@ interface Contribution {
 }
 
 interface Insights3Props {
-  contributions: Contribution[]
+  /** Leave out, or pass none, to show the empty state. */
+  contributions?: Contribution[]
   description: string
   formatter?: (value: number) => string
   /** @default 'up' */
   goodDirection?: 'up' | 'down'
   metric: string
   previous: number
+  status?: BlockStatus
   title: string
 }
 
@@ -41,7 +48,7 @@ const exampleProps: Insights3Props = {
     { label: 'Partnerships', value: -48 },
     { label: 'Paid social', value: -118 },
   ],
-  description: 'Weekly signups, 14–20 Sep vs 7–13 Sep',
+  description: 'Weekly signups by channel, Sep 14–20 against Sep 7–13.',
   metric: 'Signups',
   previous: 5_350,
   title: 'What drove the change',
@@ -55,14 +62,16 @@ const toneColors = {
 
 const Insights3 = (props: Insights3Props) => {
   const {
-    contributions,
+    contributions = [],
     description,
-    formatter = (value) => Math.round(value).toLocaleString('en-US'),
+    formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     goodDirection = 'up',
     metric,
     previous,
+    status,
     title,
   } = props
+  const state = getBlockState(status, contributions.length === 0)
   const rows = [...contributions].sort((a, b) => b.value - a.value)
   const net = rows.reduce((sum, row) => sum + row.value, 0)
   const max = Math.max(...rows.map((row) => Math.abs(row.value)), 0)
@@ -76,7 +85,10 @@ const Insights3 = (props: Insights3Props) => {
   const summary: InsightSegment[] = [
     `${metric} `,
     {
-      text: net === 0 ? 'unchanged' : `${net > 0 ? 'up' : 'down'} ${Math.abs(percent)}%`,
+      text:
+        net === 0
+          ? 'unchanged'
+          : `${net > 0 ? 'up' : 'down'} ${formatPercent(Math.abs(percent) / 100)}`,
       tone: netTone,
     },
   ]
@@ -95,62 +107,73 @@ const Insights3 = (props: Insights3Props) => {
   summary.push('.')
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-col gap-1.5'>
-          <p className='flex flex-wrap items-baseline gap-x-2'>
-            <span className='text-3xl font-semibold tracking-tight tabular-nums'>
-              {formatSigned(net, formatter)}
-            </span>
-            <span className='text-muted-foreground text-sm tabular-nums'>
-              {formatter(previous)} <span aria-hidden>→</span>
-              <span className='sr-only'>to</span> {formatter(previous + net)}
-            </span>
-          </p>
-          <InsightText segments={summary} />
-        </div>
-        <ul className='flex flex-col gap-3'>
-          {rows.map((row) => (
-            <li
-              key={row.label}
-              className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
-            >
-              <span className='truncate text-sm'>{row.label}</span>
-              <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
-                <span className='font-medium'>{formatSigned(row.value, formatter)}</span>{' '}
-                <span className='text-muted-foreground text-xs'>
-                  ({formatSigned(points(row.value), (value) => `${value}`)} pts)
+    <BlockStateProvider status={status} empty={contributions.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-col gap-5 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <div className='flex flex-wrap items-baseline gap-x-2'>
+              <KPIValue value={net} format={(value) => formatSigned(value, formatter)} />
+              {!state && (
+                <span className='text-muted-foreground text-sm tabular-nums'>
+                  {formatter(previous)} <span aria-hidden>→</span>
+                  <span className='sr-only'>to</span> {formatter(previous + net)}
                 </span>
-              </span>
-              <DivergingBar
-                className='col-span-2 @md:col-span-1'
-                color={toneColors[getChangeTone(row.value, goodDirection)]}
-                max={max}
-                value={row.value}
-              />
-            </li>
-          ))}
-        </ul>
-        <div
-          aria-hidden
-          className='text-muted-foreground grid grid-cols-[minmax(0,1fr)] gap-x-4 text-xs @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
-        >
-          <span className='hidden @md:block' />
-          <span className='flex justify-between'>
-            <span>Pulled down</span>
-            <span>Pushed up</span>
-          </span>
+              )}
+            </div>
+            <BlockReady className='text-sm'>
+              <InsightText segments={summary} />
+            </BlockReady>
+          </div>
+          {state === 'loading' && <BlockStateRows rows={6} />}
+          {!state && (
+            <>
+              <ul className='flex flex-col gap-3'>
+                {rows.map((row) => (
+                  <li
+                    key={row.label}
+                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
+                  >
+                    <span className='truncate text-sm'>{row.label}</span>
+                    <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
+                      <span className='font-medium'>
+                        {formatSigned(row.value, formatter)}
+                      </span>{' '}
+                      <span className='text-muted-foreground text-xs'>
+                        ({formatSigned(points(row.value), formatPoints)})
+                      </span>
+                    </span>
+                    <DivergingBar
+                      className='col-span-2 @md:col-span-1'
+                      color={toneColors[getChangeTone(row.value, goodDirection)]}
+                      max={max}
+                      value={row.value}
+                    />
+                  </li>
+                ))}
+              </ul>
+              <div
+                aria-hidden
+                className='text-muted-foreground grid grid-cols-[minmax(0,1fr)] gap-x-4 text-xs @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
+              >
+                <span className='hidden @md:block' />
+                <span className='flex justify-between'>
+                  <span>Pulled down</span>
+                  <span>Pushed up</span>
+                </span>
+              </div>
+              <p className='text-muted-foreground border-t pt-4 text-xs'>
+                Points are each segment's share of the change, as a percentage of last
+                period's {metric.toLowerCase()}. They add up to the total change.
+              </p>
+            </>
+          )}
         </div>
-        <p className='text-muted-foreground border-t pt-4 text-xs'>
-          Points are each segment's share of the change, as a percentage of last period's{' '}
-          {metric.toLowerCase()}. They add up to the total change.
-        </p>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

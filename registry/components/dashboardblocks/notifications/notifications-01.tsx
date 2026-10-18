@@ -1,5 +1,12 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type AppNotification,
@@ -14,9 +21,12 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 interface Notifications1Props {
-  notifications: AppNotification[]
+  /** Leave out, or pass none, to show the empty state. */
+  notifications?: AppNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
+  status?: BlockStatus
+  title: string
   viewAllHref: string
 }
 
@@ -99,59 +109,76 @@ const exampleProps: Notifications1Props = {
     },
   ],
   now: exampleNow,
+  title: 'Dashboard',
   viewAllHref: '#',
 }
 
 const Notifications1 = (props: Notifications1Props) => {
-  const { notifications: initial, now, viewAllHref } = props
-  const [notifications, setNotifications] = useState(initial)
-  const unread = notifications.filter((notification) => !notification.read).length
+  const { notifications: loaded = [], now, status, title, viewAllHref } = props
+  const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set())
+  const state = getBlockState(status, loaded.length === 0)
+  const notifications = loaded.map((notification) =>
+    readIds.has(notification.id) ? { ...notification, read: true } : notification,
+  )
+  const unread = state
+    ? 0
+    : notifications.filter((notification) => !notification.read).length
 
   function markRead(ids: string[]) {
-    setNotifications((current) =>
-      current.map((notification) =>
-        ids.includes(notification.id) ? { ...notification, read: true } : notification,
-      ),
-    )
+    setReadIds((current) => new Set([...current, ...ids]))
   }
 
   return (
-    <div className='bg-card text-card-foreground flex items-center justify-between rounded-xl px-4 py-2 ring-1 ring-foreground/10'>
-      <span className='text-sm font-medium'>Dashboard</span>
-      <NotificationBell unreadCount={unread}>
-        <NotificationsHeader
-          action={
-            unread > 0 && (
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() =>
-                  markRead(notifications.map((notification) => notification.id))
-                }
-              >
-                Mark all as read
-              </Button>
-            )
-          }
-        />
-        <NotificationList className='max-h-96 overflow-y-auto border-y'>
-          {notifications.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              now={now}
-              onOpen={() => markRead([notification.id])}
-            />
-          ))}
-        </NotificationList>
-        <Link
-          href={viewAllHref}
-          className='hover:bg-muted/50 focus-visible:bg-muted/50 rounded-b-[inherit] px-4 py-2.5 text-center text-sm font-medium outline-none'
-        >
-          View all notifications
-        </Link>
-      </NotificationBell>
-    </div>
+    <BlockStateProvider status={status} empty={loaded.length === 0}>
+      <section className='@container flex items-center justify-between gap-3 border-b pb-2'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <NotificationBell unreadCount={unread}>
+          <NotificationsHeader
+            description={
+              <BlockReady>
+                {unread > 0 ? `${unread} unread.` : 'You’re all caught up.'}
+              </BlockReady>
+            }
+            action={
+              unread > 0 && (
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={() =>
+                    markRead(notifications.map((notification) => notification.id))
+                  }
+                >
+                  Mark all as read
+                </Button>
+              )
+            }
+          />
+          {state && (
+            <div className='border-y px-4'>
+              <BlockStateRows rows={4} />
+            </div>
+          )}
+          {!state && (
+            <NotificationList className='max-h-96 overflow-y-auto border-y'>
+              {notifications.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notification}
+                  now={now}
+                  onOpen={() => markRead([notification.id])}
+                />
+              ))}
+            </NotificationList>
+          )}
+          <Link
+            href={viewAllHref}
+            className='hover:bg-muted/50 focus-visible:bg-muted/50 rounded-b-[inherit] px-4 py-2.5 text-center text-sm font-medium outline-none'
+          >
+            View all notifications
+          </Link>
+        </NotificationBell>
+      </section>
+    </BlockStateProvider>
   )
 }
 

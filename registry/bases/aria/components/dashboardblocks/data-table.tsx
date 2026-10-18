@@ -1,10 +1,16 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 76a5584e6e68
+// source-hash: 7278b02953c7
 
 'use client'
 
 /* oxlint-disable jsx-a11y/no-redundant-roles, jsx-a11y/no-interactive-element-to-noninteractive-role -- the explicit roles keep table semantics when the stacked layout changes the display */
 
+import {
+  BlockStateText,
+  SkeletonText,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type CellData,
@@ -93,7 +99,7 @@ function DataTableRow({ className, ...props }: ComponentProps<'tr'>) {
     <tr
       role='row'
       className={cn(
-        'data-[state=selected]:bg-muted/50 border-b last:border-b-0 @max-2xl/data-table:grid @max-2xl/data-table:grid-cols-2 @max-2xl/data-table:gap-x-4 @max-2xl/data-table:gap-y-3 @max-2xl/data-table:px-6 @max-2xl/data-table:py-4',
+        'data-[state=selected]:bg-muted/50 border-b last:border-b-0 @max-2xl/data-table:grid @max-2xl/data-table:grid-cols-2 @max-2xl/data-table:gap-x-4 @max-2xl/data-table:gap-y-3 @max-2xl/data-table:px-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:py-4',
         className,
       )}
       {...props}
@@ -113,7 +119,7 @@ function DataTableHead({ align = 'start', className, ...props }: DataTableHeadPr
       role='columnheader'
       scope='col'
       className={cn(
-        'text-muted-foreground h-10 px-3 text-xs font-medium whitespace-nowrap first:pl-6 last:pr-6',
+        'text-muted-foreground h-10 px-3 text-xs font-medium whitespace-nowrap first:pl-[var(--data-table-inset,1.5rem)] last:pr-[var(--data-table-inset,1.5rem)]',
         align === 'end' ? 'text-right' : 'text-left',
         className,
       )}
@@ -142,7 +148,7 @@ function DataTableCell({
       role='cell'
       data-label={label}
       className={cn(
-        'h-12 px-3 py-2 align-middle first:pl-6 last:pr-6 @max-2xl/data-table:flex @max-2xl/data-table:h-auto @max-2xl/data-table:min-w-0 @max-2xl/data-table:flex-col @max-2xl/data-table:items-start @max-2xl/data-table:gap-1 @max-2xl/data-table:p-0 @max-2xl/data-table:text-left @max-2xl/data-table:first:pl-0 @max-2xl/data-table:last:pr-0',
+        'h-12 px-3 py-2 align-middle first:pl-[var(--data-table-inset,1.5rem)] last:pr-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:flex @max-2xl/data-table:h-auto @max-2xl/data-table:min-w-0 @max-2xl/data-table:flex-col @max-2xl/data-table:items-start @max-2xl/data-table:gap-1 @max-2xl/data-table:p-0 @max-2xl/data-table:text-left @max-2xl/data-table:first:pl-0 @max-2xl/data-table:last:pr-0',
         align === 'end' && 'text-right whitespace-nowrap tabular-nums',
         truncate &&
           'w-full max-w-0 truncate @max-2xl/data-table:w-auto @max-2xl/data-table:max-w-none @max-2xl/data-table:items-stretch @max-2xl/data-table:whitespace-normal',
@@ -157,9 +163,48 @@ function DataTableCell({
   )
 }
 
+interface DataTableStateRowsProps {
+  colSpan: number
+  /** How many rows to sketch while loading. @default 5 */
+  rows?: number
+}
+
+function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
+  const state = useBlockState()
+  if (!state) return null
+
+  if (state !== 'loading') {
+    return (
+      <DataTableRow>
+        <DataTableCell colSpan={colSpan} className='@max-2xl/data-table:col-span-2'>
+          <BlockStateText />
+        </DataTableCell>
+      </DataTableRow>
+    )
+  }
+
+  return Array.from({ length: rows }, (_, index) => (
+    <DataTableRow key={index} aria-hidden={index > 0 || undefined}>
+      <DataTableCell colSpan={colSpan} className='@max-2xl/data-table:col-span-2'>
+        <span className='flex w-full items-center gap-4'>
+          {index === 0 && <span className='sr-only'>Loading</span>}
+          <SkeletonText className='w-1/4' />
+          <SkeletonText className='ml-auto w-16' />
+          <SkeletonText className='w-16' />
+        </span>
+      </DataTableCell>
+    </DataTableRow>
+  ))
+}
+
+function useDataTableUnavailable() {
+  const state = useBlockState()
+  return state === 'loading' || state === 'error'
+}
+
 interface DataTableBarProps {
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   max: number
   value: number
@@ -167,7 +212,7 @@ interface DataTableBarProps {
 
 function DataTableBar({
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   max,
   value,
 }: DataTableBarProps) {
@@ -390,16 +435,20 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
   /** Read by screen readers only. */
   caption?: ReactNode
   empty?: ReactNode
+  /** How many rows to sketch while loading. @default 5 */
+  loadingRows?: number
   table: DataTableInstance<TData>
 }
 
 function DataTableContent<TData extends RowData>({
   caption,
   empty,
+  loadingRows,
   table,
   ...props
 }: DataTableContentProps<TData>) {
   'use no memo'
+  const state = useBlockState()
   const rows = table.getRowModel().rows
   const columns = table.getVisibleLeafColumns()
   const selectable = columns.some((column) => column.id === SELECT_COLUMN_ID)
@@ -423,7 +472,9 @@ function DataTableContent<TData extends RowData>({
         ))}
       </DataTableHeader>
       <DataTableBody>
-        {rows.length > 0 ? (
+        {state ? (
+          <DataTableStateRows colSpan={columns.length} rows={loadingRows} />
+        ) : rows.length > 0 ? (
           rows.map((row) => (
             <DataTableRow
               key={row.id}
@@ -480,7 +531,7 @@ function resetFilters<TData extends RowData>(table: DataTableInstance<TData>) {
 }
 
 function focusTableNear(control: Element) {
-  const card = control.closest("[data-slot='card']")
+  const block = control.closest("[data-slot='card'], section")
   for (let parent = control.parentElement; parent; parent = parent.parentElement) {
     const table = parent.querySelector<HTMLElement>("[data-slot='data-table']")
     if (table) {
@@ -491,7 +542,7 @@ function focusTableNear(control: Element) {
       table.focus()
       return
     }
-    if (parent === card) return
+    if (parent === block) return
   }
 }
 
@@ -501,7 +552,7 @@ function DataTableEmpty<TData extends RowData>({
   table: DataTableInstance<TData>
 }) {
   'use no memo'
-  if (!getIsFiltered(table)) return 'No rows yet.'
+  if (!getIsFiltered(table)) return <BlockStateText state='empty' />
   return (
     <span className='inline-flex flex-col items-center gap-2'>
       No rows match your filters.
@@ -536,6 +587,7 @@ function DataTableSearch<TData extends RowData>({
   ...props
 }: DataTableSearchProps<TData>) {
   'use no memo'
+  const unavailable = useDataTableUnavailable()
   return (
     <Input
       type='search'
@@ -545,6 +597,7 @@ function DataTableSearch<TData extends RowData>({
       onChange={(event) => table.setGlobalFilter(event.target.value)}
       className={cn('w-full @2xl/data-table:w-56', className)}
       {...props}
+      disabled={props.disabled || unavailable}
     />
   )
 }
@@ -572,6 +625,7 @@ function DataTableFacetFilter<TData extends RowData>({
   title,
 }: DataTableFacetFilterProps<TData>) {
   'use no memo'
+  const unavailable = useDataTableUnavailable()
   if (!column) return null
   const label = title ?? getColumnLabel(column)
   const counts = new Map<string, number>()
@@ -587,7 +641,7 @@ function DataTableFacetFilter<TData extends RowData>({
 
   return (
     <DropdownMenuTrigger>
-      <Button variant='outline' size='sm' className={className}>
+      <Button variant='outline' size='sm' className={className} isDisabled={unavailable}>
         <IconPlaceholder
           lucide='CirclePlusIcon'
           tabler='IconCirclePlus'
@@ -680,13 +734,14 @@ function DataTableViewOptions<TData extends RowData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
   'use no memo'
+  const unavailable = useDataTableUnavailable()
   const columns = table
     .getAllLeafColumns()
     .filter((column) => column.accessorFn !== undefined && column.getCanHide())
 
   return (
     <DropdownMenuTrigger>
-      <Button variant='outline' size='sm' className={className}>
+      <Button variant='outline' size='sm' className={className} isDisabled={unavailable}>
         <IconPlaceholder
           lucide='Columns3Icon'
           tabler='IconColumns'
@@ -751,6 +806,7 @@ function DataTableSortMenu<TData extends RowData>({
   table,
 }: DataTableSortMenuProps<TData>) {
   'use no memo'
+  const unavailable = useDataTableUnavailable()
   const columns = table
     .getAllLeafColumns()
     .filter((column) => column.getCanSort() && column.getIsVisible())
@@ -771,7 +827,7 @@ function DataTableSortMenu<TData extends RowData>({
 
   return (
     <DropdownMenuTrigger>
-      <Button variant='outline' size='sm' className={className}>
+      <Button variant='outline' size='sm' className={className} isDisabled={unavailable}>
         <IconPlaceholder
           lucide='ListFilterIcon'
           tabler='IconFilter'
@@ -851,6 +907,7 @@ function DataTablePagination<TData extends RowData>({
   const to = Math.min(total, (pageIndex + 1) * pageSize)
   const selected = selectedCount ?? table.getSelectedRowModel().rows.length
   const pageCount = table.getPageCount()
+  const state = useBlockState()
 
   const previousRef = useRef<HTMLButtonElement>(null)
   const nextRef = useRef<HTMLButtonElement>(null)
@@ -859,6 +916,8 @@ function DataTablePagination<TData extends RowData>({
     focusAfterRender.current?.focus()
     focusAfterRender.current = null
   })
+
+  if (state === 'empty' || state === 'error') return null
 
   return (
     <div
@@ -871,8 +930,14 @@ function DataTablePagination<TData extends RowData>({
         className='text-muted-foreground text-xs whitespace-nowrap tabular-nums'
         aria-live='polite'
       >
-        {countFormat.format(from)}–{countFormat.format(to)} of {countFormat.format(total)}
-        {selected > 0 && ` · ${selected} selected`}
+        {state === 'loading' ? (
+          <SkeletonText className='w-24' />
+        ) : (
+          <Details>
+            {`${countFormat.format(from)}–${countFormat.format(to)} of ${countFormat.format(total)}`}
+            {selected > 0 && `${countFormat.format(selected)} selected`}
+          </Details>
+        )}
       </p>
       <div className='flex flex-wrap items-center gap-2'>
         {pageSizeOptions && (
@@ -915,7 +980,7 @@ function DataTablePagination<TData extends RowData>({
             variant='outline'
             size='sm'
             ref={previousRef}
-            isDisabled={!table.getCanPreviousPage()}
+            isDisabled={state === 'loading' || !table.getCanPreviousPage()}
             onClick={() => {
               if (pageIndex === 1) focusAfterRender.current = nextRef.current
               table.previousPage()
@@ -927,7 +992,7 @@ function DataTablePagination<TData extends RowData>({
             variant='outline'
             size='sm'
             ref={nextRef}
-            isDisabled={!table.getCanNextPage()}
+            isDisabled={state === 'loading' || !table.getCanNextPage()}
             onClick={() => {
               if (pageIndex + 2 === pageCount)
                 focusAfterRender.current = previousRef.current
@@ -982,11 +1047,13 @@ function DataTableSelectAll<TData extends RowData>({
   table: Table<DataTableFeatures, TData>
 }) {
   'use no memo'
+  const unavailable = useBlockState() !== undefined
   return (
     <Checkbox
       aria-label='Select all rows on this page'
       isSelected={table.getIsAllPageRowsSelected()}
       isIndeterminate={table.getIsSomePageRowsSelected()}
+      isDisabled={unavailable}
       onChange={(checked) => table.toggleAllPageRowsSelected(checked === true)}
     />
   )
@@ -1026,7 +1093,7 @@ function createDataTableSelectColumn<TData extends RowData>({
     id: SELECT_COLUMN_ID,
     meta: {
       cellClassName:
-        'w-px pr-0 @max-2xl/data-table:absolute @max-2xl/data-table:top-4 @max-2xl/data-table:right-6 @max-2xl/data-table:w-auto',
+        'w-px pr-0 @max-2xl/data-table:absolute @max-2xl/data-table:top-4 @max-2xl/data-table:right-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:w-auto',
       headerClassName: 'w-px pr-0',
       label: 'Select',
     },
@@ -1053,6 +1120,7 @@ export {
   DataTableSelectionBar,
   DataTableSortButton,
   DataTableSortMenu,
+  DataTableStateRows,
   DataTableViewOptions,
   getColumnLabel,
   useDataTable,
@@ -1074,6 +1142,7 @@ export type {
   DataTableSearchProps,
   DataTableSelectionBarProps,
   DataTableSortMenuProps,
+  DataTableStateRowsProps,
   DataTableViewOptionsProps,
   UseDataTableOptions,
 }

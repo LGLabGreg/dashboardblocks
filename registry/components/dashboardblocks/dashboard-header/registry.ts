@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('dashboard-header')],
+    registryDependencies: [registryUrl('dashboard-header'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header/dashboard-header-01.tsx',
@@ -23,7 +23,7 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('dashboard-header')],
+    registryDependencies: [registryUrl('dashboard-header'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header/dashboard-header-02.tsx',
@@ -40,7 +40,12 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-03',
     type: 'registry:component',
-    registryDependencies: ['button', 'button-group', registryUrl('dashboard-header')],
+    registryDependencies: [
+      'button',
+      'button-group',
+      registryUrl('dashboard-header'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header/dashboard-header-03.tsx',
@@ -57,7 +62,11 @@ export const examples: Registry['items'] = [
   {
     name: 'dashboard-header-04',
     type: 'registry:component',
-    registryDependencies: ['button', registryUrl('dashboard-header')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('dashboard-header'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header/dashboard-header-04.tsx',

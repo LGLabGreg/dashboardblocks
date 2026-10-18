@@ -1,6 +1,12 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   EventRow,
   type ScheduleEvent,
   formatCountdown,
@@ -10,18 +16,12 @@ import {
 } from '@/registry/components/dashboardblocks/schedule'
 import { useId } from 'react'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface Schedule1Props {
   days?: number
-  events: ScheduleEvent[]
+  /** Leave out, or pass none, to show the empty state. */
+  events?: ScheduleEvent[]
   now: Date
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -32,9 +32,9 @@ const at = (day: number, hour: number, minute = 0) =>
   new Date(Date.UTC(2026, 8, 28 + day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
-  product: { calendar: 'Product', color: 'var(--chart-2)' },
-  team: { calendar: 'Team', color: 'var(--chart-4)' },
+  customers: { calendar: 'Customers', color: 'var(--color-chart-3)' },
+  product: { calendar: 'Product', color: 'var(--color-chart-2)' },
+  team: { calendar: 'Team', color: 'var(--color-chart-4)' },
 }
 
 const exampleProps: Schedule1Props = {
@@ -115,7 +115,7 @@ const exampleProps: Schedule1Props = {
 }
 
 const Schedule1 = (props: Schedule1Props) => {
-  const { days = 7, events, now, timeZone = 'UTC', title } = props
+  const { days = 7, events = [], now, status, timeZone = 'UTC', title } = props
   const upcoming = events.filter((event) => {
     const offset = getDayOffset(event.start, now, timeZone)
     return offset >= 0 && offset < days
@@ -127,49 +127,57 @@ const Schedule1 = (props: Schedule1Props) => {
     .sort((a, b) => a.start.getTime() - b.start.getTime())[0]
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {upcoming.length} {upcoming.length === 1 ? 'event' : 'events'} in the next{' '}
-          {days} days
-          {next && <> · next {formatCountdown(next.start, now, timeZone)}</>}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {groups.length === 0 ? (
-          <p className='text-muted-foreground py-6 text-center text-sm'>
+    <BlockStateProvider status={status} empty={events.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {upcoming.length} {upcoming.length === 1 ? 'event' : 'events'} in the next{' '}
+              {days} days.
+              {next && (
+                <>
+                  {' '}
+                  Next up is {next.title}, {formatCountdown(next.start, now, timeZone)}.
+                </>
+              )}
+            </p>
+          </BlockReady>
+        </header>
+        {status || events.length === 0 ? (
+          <div className='border-t'>
+            <BlockStateRows rows={4} />
+          </div>
+        ) : groups.length === 0 ? (
+          <p className='text-muted-foreground border-t pt-3 text-sm'>
             Nothing scheduled in the next {days} days.
           </p>
         ) : (
-          <div className='flex flex-col gap-5'>
-            {groups.map((group) => (
-              <section key={group.key} aria-labelledby={`${id}-${group.key}`}>
-                <h3
-                  id={`${id}-${group.key}`}
-                  className='mb-2.5 flex items-baseline gap-2 border-b pb-1.5 text-sm font-semibold'
-                >
-                  {group.label}
-                  <span className='text-muted-foreground text-xs font-normal'>
-                    {formatDay(group.day)}
-                  </span>
-                </h3>
-                <ul className='flex flex-col gap-3'>
-                  {group.events.map((event) => (
-                    <EventRow
-                      key={event.id}
-                      event={event}
-                      now={now}
-                      timeZone={timeZone}
-                    />
-                  ))}
-                </ul>
-              </section>
-            ))}
-          </div>
+          groups.map((group) => (
+            <section
+              key={group.key}
+              aria-labelledby={`${id}-${group.key}`}
+              className='flex flex-col gap-3 border-t pt-3'
+            >
+              <h3
+                id={`${id}-${group.key}`}
+                className='text-muted-foreground flex justify-between text-xs font-medium'
+              >
+                {group.label}
+                <span className='font-normal tabular-nums'>
+                  {formatDay(group.day, { day: 'numeric', month: 'short' })}
+                </span>
+              </h3>
+              <ul className='flex flex-col gap-3'>
+                {group.events.map((event) => (
+                  <EventRow key={event.id} event={event} now={now} timeZone={timeZone} />
+                ))}
+              </ul>
+            </section>
+          ))
         )}
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

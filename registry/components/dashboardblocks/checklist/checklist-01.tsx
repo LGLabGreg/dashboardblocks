@@ -1,26 +1,27 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type StepState,
   StepIndicator,
+  StepStateLabel,
+  describeChecklistProgress,
   getChecklistProgress,
   getNextStep,
   skipStep,
-  stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
-import { Ring } from '@/registry/components/dashboardblocks/ring'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -37,8 +38,14 @@ interface OnboardingStep {
 interface Checklist1Props {
   onAction?: (id: string) => void
   onSkip?: (id: string) => void
-  steps: OnboardingStep[]
+  status?: BlockStatus
+  /** Leave out, or pass none, to show the empty state. */
+  steps?: OnboardingStep[]
   title: string
+}
+
+interface ChecklistStepsProps extends Omit<Checklist1Props, 'status' | 'steps'> {
+  steps: OnboardingStep[]
 }
 
 const exampleProps: Checklist1Props = {
@@ -97,7 +104,7 @@ const exampleProps: Checklist1Props = {
   title: 'Get started',
 }
 
-const Checklist1 = (props: Checklist1Props) => {
+function ChecklistSteps(props: ChecklistStepsProps) {
   const { onAction, onSkip, title } = props
   const id = useId()
   const [steps, setSteps] = useState(props.steps)
@@ -107,6 +114,7 @@ const Checklist1 = (props: Checklist1Props) => {
   })
   const [announcement, setAnnouncement] = useState('')
   const progress = getChecklistProgress(steps)
+  const nextStep = getNextStep(steps)
 
   const toggle = (stepId: string) => {
     setExpanded((current) => {
@@ -134,108 +142,135 @@ const Checklist1 = (props: Checklist1Props) => {
   }
 
   return (
-    <Card className='@container gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {progress.done} of {progress.total} steps done
-          {progress.skipped > 0 && `, ${progress.skipped} skipped`}
-        </CardDescription>
-        <CardAction>
-          <Ring
-            ariaLabel={`${Math.round(progress.percentage)}% complete`}
-            className='size-12'
-            percentage={progress.percentage}
-            strokeWidth={10}
-          >
-            <span aria-hidden className='text-xs font-semibold tabular-nums'>
-              {Math.round(progress.percentage)}%
-            </span>
-          </Ring>
-        </CardAction>
-      </CardHeader>
-      <CardContent className='px-0'>
-        <p role='status' className='sr-only'>
-          {announcement}
+    <section className='@container flex flex-col gap-3'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <p className='text-muted-foreground text-sm'>
+          {describeChecklistProgress(progress)}.{nextStep && ` Next: ${nextStep.title}.`}
         </p>
-        <ol>
-          {steps.map((step, index) => {
-            const config = stepStateConfig[step.state]
-            const isOpen = expanded.has(step.id)
-            const panelId = `${id}-${step.id}`
-            return (
-              <li key={step.id} className='border-b last:border-b-0'>
-                <button
-                  type='button'
-                  aria-controls={panelId}
-                  aria-current={step.state === 'current' ? 'step' : undefined}
-                  aria-expanded={isOpen}
-                  onClick={() => toggle(step.id)}
-                  className='hover:bg-muted/50 focus-visible:ring-ring/50 flex w-full items-center gap-3 px-6 py-3 text-left outline-none focus-visible:ring-3 focus-visible:ring-inset'
-                >
-                  <StepIndicator index={index + 1} state={step.state} />
-                  <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                    <span
-                      className={cn(
-                        'text-sm font-medium',
-                        step.state !== 'current' &&
-                          step.state !== 'todo' &&
-                          'text-muted-foreground',
-                      )}
-                    >
-                      {step.title}
-                    </span>
-                    <span className='text-muted-foreground text-xs'>
-                      <span className={config.text}>{config.label}</span>
-                      {step.duration && ` · ${step.duration}`}
-                      {step.optional && ' · Optional'}
-                    </span>
-                  </span>
-                  <IconPlaceholder
-                    lucide='ChevronDownIcon'
-                    tabler='IconChevronDown'
-                    hugeicons='ArrowDownIcon'
-                    phosphor='CaretDownIcon'
-                    remixicon='RiArrowDownSLine'
-                    aria-hidden
+      </header>
+      <div
+        role='progressbar'
+        aria-label={title}
+        aria-valuemax={progress.total}
+        aria-valuemin={0}
+        aria-valuenow={progress.done}
+        aria-valuetext={describeChecklistProgress(progress)}
+      >
+        <ProgressBar
+          className='h-1.5'
+          fillClassName='motion-reduce:transition-none'
+          percentage={progress.percentage}
+        />
+      </div>
+      <p role='status' className='sr-only'>
+        {announcement}
+      </p>
+      <ol className='border-t'>
+        {steps.map((step, index) => {
+          const isOpen = expanded.has(step.id)
+          const panelId = `${id}-${step.id}`
+          return (
+            <li key={step.id} className='border-b'>
+              <button
+                type='button'
+                aria-controls={panelId}
+                aria-current={step.state === 'current' ? 'step' : undefined}
+                aria-expanded={isOpen}
+                onClick={() => toggle(step.id)}
+                className='group/step focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-md py-2.5 text-left outline-none focus-visible:ring-3'
+              >
+                <StepIndicator index={index + 1} state={step.state} />
+                <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                  <span
                     className={cn(
-                      'text-muted-foreground size-4 shrink-0 transition-transform motion-reduce:transition-none',
-                      isOpen && 'rotate-180',
+                      'text-sm font-medium group-hover/step:underline group-hover/step:underline-offset-4',
+                      (step.state === 'done' || step.state === 'skipped') &&
+                        'text-muted-foreground',
                     )}
-                  />
-                </button>
-                <div id={panelId} hidden={!isOpen} className='pr-6 pb-4 pl-16'>
-                  <p className='text-muted-foreground text-sm'>{step.description}</p>
-                  {step.state !== 'done' && (step.action || step.optional) && (
-                    <div className='mt-3 flex flex-wrap gap-2'>
-                      {step.action && (
-                        <Button
-                          size='sm'
-                          variant={step.state === 'current' ? 'default' : 'outline'}
-                          onClick={() => onAction?.(step.id)}
-                        >
-                          {step.action}
-                        </Button>
-                      )}
-                      {step.optional && step.state !== 'skipped' && (
-                        <Button
-                          size='sm'
-                          variant='ghost'
-                          onClick={() => skip(step)}
-                          aria-label={`Skip ${step.title}`}
-                        >
-                          Skip
-                        </Button>
-                      )}
-                    </div>
+                  >
+                    {step.title}
+                  </span>
+                  <Details className='text-muted-foreground text-sm'>
+                    <StepStateLabel state={step.state} />
+                    {step.optional && 'Optional'}
+                  </Details>
+                </span>
+                {step.duration && (
+                  <span className='text-muted-foreground shrink-0 text-sm tabular-nums'>
+                    {step.duration}
+                  </span>
+                )}
+                <IconPlaceholder
+                  lucide='ChevronDownIcon'
+                  tabler='IconChevronDown'
+                  hugeicons='ArrowDownIcon'
+                  phosphor='CaretDownIcon'
+                  remixicon='RiArrowDownSLine'
+                  aria-hidden
+                  className={cn(
+                    'text-muted-foreground size-4 shrink-0 transition-transform motion-reduce:transition-none',
+                    isOpen && 'rotate-180',
                   )}
-                </div>
-              </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-    </Card>
+                />
+              </button>
+              <div id={panelId} hidden={!isOpen} className='pr-7 pb-3 pl-9'>
+                <p className='text-muted-foreground text-sm'>{step.description}</p>
+                {step.state !== 'done' && (step.action || step.optional) && (
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {step.action && (
+                      <Button
+                        size='sm'
+                        variant={step.state === 'current' ? 'default' : 'outline'}
+                        onClick={() => onAction?.(step.id)}
+                      >
+                        {step.action}
+                      </Button>
+                    )}
+                    {step.optional && step.state !== 'skipped' && (
+                      <Button
+                        size='sm'
+                        variant='ghost'
+                        onClick={() => skip(step)}
+                        aria-label={`Skip ${step.title}`}
+                      >
+                        Skip
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </section>
+  )
+}
+
+const Checklist1 = (props: Checklist1Props) => {
+  const { status, steps = [], title } = props
+  const state = getBlockState(status, steps.length === 0)
+
+  return (
+    <BlockStateProvider status={status} empty={steps.length === 0}>
+      {state ? (
+        <section className='@container flex flex-col gap-3'>
+          <header className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            {state === 'loading' && (
+              <span className='text-sm'>
+                <SkeletonText className='w-2/3' />
+              </span>
+            )}
+          </header>
+          {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
+          <BlockStateRows className='border-t' rows={6} />
+        </section>
+      ) : (
+        <ChecklistSteps {...props} steps={steps} />
+      )}
+    </BlockStateProvider>
   )
 }
 

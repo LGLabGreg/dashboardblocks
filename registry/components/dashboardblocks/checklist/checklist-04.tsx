@@ -1,20 +1,27 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   TaskCheckbox,
+  describeChecklistProgress,
   getChecklistProgress,
 } from '@/registry/components/dashboardblocks/checklist'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useId, useState } from 'react'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  UrgencyLabel,
+  formatDay,
+  getDay,
+  getDayOffset,
+  getUrgency,
+} from '@/registry/components/dashboardblocks/schedule'
+import { useId, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -32,10 +39,16 @@ interface TaskGroup {
 }
 
 interface Checklist4Props {
-  groups: TaskGroup[]
+  /** Leave out, or pass none, to show the empty state. */
+  groups?: TaskGroup[]
   now: Date
   onToggle?: (id: string, done: boolean) => void
+  status?: BlockStatus
   title: string
+}
+
+interface TaskGroupsProps extends Omit<Checklist4Props, 'groups' | 'status'> {
+  groups: TaskGroup[]
 }
 
 const NOW = Date.UTC(2026, 8, 26, 9, 0)
@@ -89,74 +102,33 @@ const exampleProps: Checklist4Props = {
   title: 'Pricing launch',
 }
 
-const DAY = 86_400_000
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-
-function daysUntil(due: Date, now: Date) {
-  const start = (date: Date) => Math.floor(date.getTime() / DAY)
-  return start(due) - start(now)
-}
+const SOON_DAYS = 2
 
 function DueDate({ done, due, now }: { done: boolean; due: Date; now: Date }) {
-  const days = daysUntil(due, now)
-  const date = dateFormatter.format(due)
-  let icon = (
-    <IconPlaceholder
-      lucide='CalendarIcon'
-      tabler='IconCalendar'
-      hugeicons='CalendarIcon'
-      phosphor='CalendarBlankIcon'
-      remixicon='RiCalendarLine'
-      aria-hidden
-      className='size-3.5'
-    />
-  )
-  let label = `Due ${date}`
-  let className = 'text-muted-foreground'
-  if (!done && days < 0) {
-    icon = (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-        className='size-3.5'
-      />
-    )
-    label = `Overdue · ${date}`
-    className = 'text-red-700 dark:text-red-400'
-  } else if (!done && days === 0) {
-    icon = (
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-        aria-hidden
-        className='size-3.5'
-      />
-    )
-    label = 'Due today'
-    className = 'text-amber-800 dark:text-amber-400'
-  } else if (!done && days === 1) {
-    label = 'Due tomorrow'
-  }
+  const offset = getDayOffset(due, now)
+  const day = getDay(due)
+  const date = formatDay(day, { day: 'numeric', month: 'short' })
+  const urgency = done ? 'later' : getUrgency(due, now, 'UTC', SOON_DAYS)
+  const label =
+    urgency === 'overdue'
+      ? `${-offset} ${offset === -1 ? 'day' : 'days'} overdue`
+      : urgency === 'today'
+        ? 'Due today'
+        : offset === 1
+          ? 'Due tomorrow'
+          : `Due ${date}`
   return (
-    <span className={cn('inline-flex items-center gap-1 whitespace-nowrap', className)}>
-      {icon}
-      <time dateTime={due.toISOString().slice(0, 10)}>{label}</time>
-    </span>
+    <time dateTime={day.toISOString().slice(0, 10)}>
+      <UrgencyLabel
+        className={cn(urgency === 'later' && 'font-normal')}
+        label={label}
+        urgency={urgency}
+      />
+    </time>
   )
 }
 
-const Checklist4 = (props: Checklist4Props) => {
+function TaskGroups(props: TaskGroupsProps) {
   const { groups, now, onToggle, title } = props
   const id = useId()
   const [done, setDone] = useState(
@@ -173,7 +145,7 @@ const Checklist4 = (props: Checklist4Props) => {
     tasks.map((task) => ({ state: done.has(task.id) ? 'done' : 'todo' })),
   )
   const overdue = tasks.filter(
-    (task) => !done.has(task.id) && daysUntil(task.due, now) < 0,
+    (task) => !done.has(task.id) && getDayOffset(task.due, now) < 0,
   ).length
 
   const toggle = (task: Task, checked: boolean) => {
@@ -188,25 +160,25 @@ const Checklist4 = (props: Checklist4Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {progress.done} of {progress.total} tasks done
-          {overdue > 0 && `, ${overdue} overdue`}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <p role='status' className='sr-only'>
-          {announcement}
+    <section className='@container flex flex-col gap-3'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <p className='text-muted-foreground text-sm'>
+          {describeChecklistProgress(progress, { one: 'task', other: 'tasks' })}
+          {overdue > 0 ? `, ${overdue} overdue.` : '.'}
         </p>
-        <div aria-hidden>
-          <ProgressBar
-            className='h-1.5'
-            fillClassName='motion-reduce:transition-none'
-            percentage={progress.percentage}
-          />
-        </div>
+      </header>
+      <p role='status' className='sr-only'>
+        {announcement}
+      </p>
+      <div aria-hidden>
+        <ProgressBar
+          className='h-1.5'
+          fillClassName='motion-reduce:transition-none'
+          percentage={progress.percentage}
+        />
+      </div>
+      <div className='flex flex-col gap-4'>
         {groups.map((group, groupIndex) => {
           const headingId = `${id}-group-${groupIndex}`
           const groupDone = group.tasks.filter((task) => done.has(task.id)).length
@@ -218,12 +190,11 @@ const Checklist4 = (props: Checklist4Props) => {
             >
               <h3
                 id={headingId}
-                className='text-muted-foreground flex items-center justify-between gap-3 border-b pb-2 text-xs font-medium'
+                className='flex items-baseline justify-between gap-3 border-b pb-2 text-sm font-medium'
               >
                 {group.name}
-                <span className='tabular-nums'>
-                  {groupDone}/{group.tasks.length}
-                  <span className='sr-only'> done</span>
+                <span className='text-muted-foreground font-normal tabular-nums'>
+                  {groupDone} of {group.tasks.length} done
                 </span>
               </h3>
               <ul>
@@ -232,10 +203,7 @@ const Checklist4 = (props: Checklist4Props) => {
                   const metaId = `${checkboxId}-meta`
                   const isDone = done.has(task.id)
                   return (
-                    <li
-                      key={task.id}
-                      className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
-                    >
+                    <li key={task.id} className='flex items-start gap-3 border-b py-2.5'>
                       <TaskCheckbox
                         id={checkboxId}
                         checked={isDone}
@@ -253,13 +221,13 @@ const Checklist4 = (props: Checklist4Props) => {
                         >
                           {task.title}
                         </label>
-                        <span
+                        <Details
                           id={metaId}
-                          className='text-muted-foreground flex flex-wrap items-center gap-x-2 text-xs'
+                          className='text-muted-foreground text-sm @md:shrink-0'
                         >
-                          {task.owner && <span>{task.owner}</span>}
+                          {task.owner}
                           <DueDate done={isDone} due={task.due} now={now} />
-                        </span>
+                        </Details>
                       </div>
                     </li>
                   )
@@ -268,8 +236,35 @@ const Checklist4 = (props: Checklist4Props) => {
             </section>
           )
         })}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
+  )
+}
+
+const Checklist4 = (props: Checklist4Props) => {
+  const { groups = [], status, title } = props
+  const empty = groups.every((group) => group.tasks.length === 0)
+  const state = getBlockState(status, empty)
+
+  return (
+    <BlockStateProvider status={status} empty={empty}>
+      {state ? (
+        <section className='@container flex flex-col gap-3'>
+          <header className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            {state === 'loading' && (
+              <span className='text-sm'>
+                <SkeletonText className='w-2/3' />
+              </span>
+            )}
+          </header>
+          {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
+          <BlockStateRows className='border-t' rows={6} />
+        </section>
+      ) : (
+        <TaskGroups {...props} groups={groups} />
+      )}
+    </BlockStateProvider>
   )
 }
 

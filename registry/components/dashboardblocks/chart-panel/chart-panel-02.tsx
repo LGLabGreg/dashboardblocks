@@ -1,46 +1,73 @@
 'use client'
 
 import {
-  ChartPanelFigure,
-  ChartPanelTable,
-  ChartPanelTooltip,
-  type ChartValueFormatter,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  chartActiveDot,
   chartAxisProps,
   chartGridProps,
+  chartLastDot,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
   chartValueAxisWidth,
-  formatCompact,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  ChartPanelFigure,
+  ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import {
+  Stat,
+  StatChange,
+  StatChangeContent,
+  StatGroup,
+  StatLabel,
+  type StatMetric,
+  StatValue,
+  formatStatValue,
+  getStatPlaceholders,
+} from '@/registry/components/dashboardblocks/stat-group'
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 import {
   Area,
   AreaChart,
   CartesianGrid,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
 
-import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-interface Metric {
-  formatter?: ChartValueFormatter
-  goodDirection?: 'up' | 'down'
-  key: string
-  label: string
-  total: number
-  trend: number
-}
-
 interface ChartPanel2Props {
-  data: Array<Record<string, number | string> & { label: string }>
-  metrics: Metric[]
+  /** Follows the previous value in each change, such as `the previous 14 days`. @default 'the previous period' */
+  comparison?: string
+  /** Leave out, or pass no days, to show the empty state. */
+  data?: Array<Record<string, number | string> & { label: string }>
+  description: string
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: StatMetric[]
+  /** How many metrics to sketch while loading. @default 3 */
+  placeholders?: number
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: ChartPanel2Props = {
+  comparison: 'the previous 14 days',
   data: Array.from({ length: 14 }, (_, day) => {
     const weekend = day % 7 > 4
     const visitors = Math.round(
@@ -55,73 +82,125 @@ const exampleProps: ChartPanel2Props = {
       visitors,
     }
   }),
+  description: 'Sep 17 to 30, by day. Pick a metric to chart it.',
   metrics: [
-    { key: 'visitors', label: 'Visitors', total: 24_318, trend: 12.4 },
-    { key: 'pageviews', label: 'Page views', total: 81_204, trend: 8.1 },
+    { key: 'visitors', label: 'Visitors', previous: 21_635, value: 24_318 },
+    { key: 'pageviews', label: 'Page views', previous: 75_119, value: 81_204 },
     {
-      formatter: (value) => `${value}%`,
+      changeType: 'points',
+      formatter: (value) => formatPercent(value / 100),
       goodDirection: 'down',
       key: 'bounceRate',
       label: 'Bounce rate',
-      total: 41,
-      trend: -3.2,
+      previous: 44.2,
+      value: 41,
     },
   ],
   title: 'Traffic',
 }
 
-const SERIES_COLOR = 'var(--chart-2)'
+const SERIES_COLOR = 'var(--color-chart-2)'
 
 const ChartPanel2 = (props: ChartPanel2Props) => {
-  const { data, metrics, title } = props
-  const [active, setActive] = useState(metrics[0]?.key)
+  const {
+    comparison = 'the previous period',
+    data = [],
+    description,
+    metrics = [],
+    placeholders = 3,
+    status,
+    title,
+  } = props
+  const gradient = useChartId()
+  const [active, setActive] = useState<string>()
+  const empty = metrics.length === 0 || data.length === 0
+  const state = getBlockState(status, empty)
+
+  const header = (
+    <header className='flex flex-col gap-0.5'>
+      <h2 className='font-semibold tracking-tight'>{title}</h2>
+      <p className='text-muted-foreground text-sm'>{description}</p>
+    </header>
+  )
+
+  if (state) {
+    return (
+      <BlockStateProvider status={status} empty={empty}>
+        <section className='@container flex flex-col gap-4'>
+          {header}
+          <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-3'>
+            {getStatPlaceholders(placeholders).map((metric) => (
+              <Stat key={metric.key}>
+                <StatLabel />
+                <StatValue className='text-3xl @2xl:text-4xl' />
+                <StatChange className='text-xs' metric={metric} variant='short' />
+              </Stat>
+            ))}
+          </StatGroup>
+          <ChartPlaceholder className='mt-1' height={240} />
+        </section>
+      </BlockStateProvider>
+    )
+  }
 
   return (
-    <Card className='@container gap-0 py-0'>
+    <section className='@container flex flex-col gap-4'>
+      {header}
       <Tabs
-        value={active}
+        value={active ?? metrics[0]?.key}
         onValueChange={(value) => setActive(String(value))}
         className='gap-0'
       >
         <TabsList
-          aria-label={title}
-          // Not the primitive's colour: the strip is the card's own header band, drawn flat
-          className='h-auto w-full items-stretch group-data-horizontal/tabs:h-auto gap-0 rounded-none border-b bg-transparent p-0'
+          aria-label={`${title} metrics`}
+          variant='line'
+          className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @xl:grid-cols-3'
         >
-          {metrics.map((metric) => {
-            const format = metric.formatter ?? formatCompact
-            return (
-              <TabsTrigger
-                key={metric.key}
-                value={metric.key}
-                className='hover:bg-muted/40 data-active:bg-muted/60 dark:data-active:bg-muted/60 h-auto flex-col items-start gap-1 rounded-none border-0 border-r px-3 py-4 text-left @sm:px-6 last:border-r-0 data-active:shadow-none dark:data-active:border-transparent'
-              >
-                <span className='text-muted-foreground text-xs font-normal'>
-                  {metric.label}
-                </span>
-                <span className='text-foreground text-xl font-semibold tracking-tight @sm:text-2xl'>
-                  {format(metric.total)}
-                </span>
-                <Trend
-                  className='text-xs'
-                  goodDirection={metric.goodDirection}
-                  trend={metric.trend}
-                  trendIcon='arrow'
-                />
-              </TabsTrigger>
-            )
-          })}
+          {metrics.map((metric) => (
+            <TabsTrigger
+              key={metric.key}
+              value={metric.key}
+              className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
+            >
+              <span className='text-muted-foreground text-sm'>{metric.label}</span>
+              <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @2xl:text-4xl'>
+                {formatStatValue(metric)}
+              </span>
+              <StatChangeContent
+                className='text-xs'
+                comparison={comparison}
+                metric={metric}
+                variant='short'
+              />
+            </TabsTrigger>
+          ))}
         </TabsList>
         {metrics.map((metric) => {
-          const format = metric.formatter ?? ((value: number) => value.toLocaleString())
+          const format = metric.formatter ?? ((value: number) => formatNumber(value))
+          const values = data.map((point) => Number(point[metric.key] ?? 0))
+          const average =
+            values.length > 0
+              ? values.reduce((sum, value) => sum + value, 0) / values.length
+              : 0
           return (
-            <TabsContent key={metric.key} value={metric.key} className='px-6 pt-6 pb-4'>
+            <TabsContent
+              key={metric.key}
+              value={metric.key}
+              className='mt-1 flex flex-col gap-3 border-t pt-4'
+            >
               <ChartPanelFigure className='h-56'>
                 <ResponsiveContainer width='100%' height='100%'>
                   <AreaChart
+                    aria-label={`${title}: ${metric.label} chart`}
                     data={data}
                     margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
                   >
+                    <defs>
+                      <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
+                        <stop offset='0%' stopColor={SERIES_COLOR} stopOpacity={0.3} />
+                        <stop offset='100%' stopColor={SERIES_COLOR} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid {...chartGridProps} />
                     <XAxis
                       {...chartAxisProps}
@@ -131,6 +210,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
                     />
                     <YAxis
                       {...chartAxisProps}
+                      domain={['auto', 'auto']}
                       tickFormatter={(value: number) =>
                         metric.formatter ? metric.formatter(value) : formatCompact(value)
                       }
@@ -138,15 +218,25 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
                     />
                     <Tooltip
                       content={(tooltipProps) => (
-                        <ChartPanelTooltip {...tooltipProps} valueFormatter={format} />
+                        <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
                       )}
-                      cursor={{ stroke: 'var(--color-border)' }}
+                      cursor={chartLineCursor}
+                    />
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={average}
+                      label={{
+                        ...chartReferenceLabel,
+                        value: `avg ${format(Math.round(average))}`,
+                        position: 'insideBottomLeft',
+                        dy: -4,
+                      }}
                     />
                     <Area
-                      activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
+                      activeDot={chartActiveDot}
                       dataKey={metric.key}
-                      fill={SERIES_COLOR}
-                      fillOpacity={0.1}
+                      dot={chartLastDot(data.length, SERIES_COLOR)}
+                      fill={`url(#${gradient})`}
                       name={metric.label}
                       stroke={SERIES_COLOR}
                       strokeLinecap='round'
@@ -169,7 +259,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
           )
         })}
       </Tabs>
-    </Card>
+    </section>
   )
 }
 

@@ -8,8 +8,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
       registryUrl('team'),
     ],
     files: [
@@ -27,7 +27,11 @@ export const examples: Registry['items'] = [
   {
     name: 'activity-feed-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('activity-feed')],
+    registryDependencies: [
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-02.tsx',
@@ -46,9 +50,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'tabs',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
       registryUrl('team'),
     ],
     files: [
@@ -67,7 +71,12 @@ export const examples: Registry['items'] = [
   {
     name: 'activity-feed-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('activity-feed'), registryUrl('team')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed/activity-feed-04.tsx',
@@ -76,7 +85,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A week of activity by kind with the change on the week before, and the most active people.',
+        'A week of activity as daily bars with the busiest day labelled, by kind, with the most active people.',
       size: 'half',
       usedWith: ['activity-feed-01', 'stat-group-02', 'leaderboard-01'],
     },
@@ -87,8 +96,9 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'badge',
       'button',
-      'card',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('format'),
       registryUrl('icon'),
       registryUrl('team'),
     ],

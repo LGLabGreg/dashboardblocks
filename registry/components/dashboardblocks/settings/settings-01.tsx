@@ -1,25 +1,25 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
   type Role,
   RoleMenu,
   formatRelative,
   roleConfig,
   roleOrder,
 } from '@/registry/components/dashboardblocks/settings'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, useId, useState } from 'react'
 import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
 interface Member {
@@ -41,8 +41,9 @@ interface Settings1Props {
   /** The signed-in member, who can't change their own role or remove themselves. */
   currentMemberId: string
   description: string
-  invites: Invite[]
-  members: Member[]
+  invites?: Invite[]
+  /** Leave out, or pass none, to show the empty state. */
+  members?: Member[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onInvite?: (email: string, role: Role) => void
@@ -51,6 +52,7 @@ interface Settings1Props {
   onRevokeInvite?: (id: string) => void
   onRoleChange?: (id: string, role: Role) => void
   seats?: number
+  status?: BlockStatus
   title: string
 }
 
@@ -65,11 +67,41 @@ const exampleProps: Settings1Props = {
     { email: 'yuki@acme.co', id: 'i2', role: 'viewer', sentAt: daysAgo(9) },
   ],
   members: [
-    { email: 'amara@acme.co', id: 'm1', name: 'Amara Okafor', role: 'owner' },
-    { email: 'liam@acme.co', id: 'm2', name: 'Liam Chen', role: 'admin' },
-    { email: 'sofia@acme.co', id: 'm3', name: 'Sofia Rossi', role: 'member' },
-    { email: 'mateo@acme.co', id: 'm4', name: 'Mateo García', role: 'member' },
-    { email: 'priya@acme.co', id: 'm5', name: 'Priya Nair', role: 'viewer' },
+    {
+      avatar: '/images/avatar-05.webp',
+      email: 'amara@acme.co',
+      id: 'm1',
+      name: 'Amara Okafor',
+      role: 'owner',
+    },
+    {
+      avatar: '/images/avatar-04.webp',
+      email: 'liam@acme.co',
+      id: 'm2',
+      name: 'Liam Chen',
+      role: 'admin',
+    },
+    {
+      avatar: '/images/avatar-01.webp',
+      email: 'sofia@acme.co',
+      id: 'm3',
+      name: 'Sofia Rossi',
+      role: 'member',
+    },
+    {
+      avatar: '/images/avatar-06.webp',
+      email: 'mateo@acme.co',
+      id: 'm4',
+      name: 'Mateo García',
+      role: 'member',
+    },
+    {
+      avatar: '/images/avatar-02.webp',
+      email: 'priya@acme.co',
+      id: 'm5',
+      name: 'Priya Nair',
+      role: 'viewer',
+    },
   ],
   now: NOW,
   seats: 10,
@@ -91,17 +123,20 @@ const Settings1 = (props: Settings1Props) => {
     onRevokeInvite,
     onRoleChange,
     seats,
+    status,
     title,
   } = props
   const emailId = useId()
-  const [members, setMembers] = useState(props.members)
-  const [invites, setInvites] = useState(props.invites)
+  const [members, setMembers] = useState(props.members ?? [])
+  const [invites, setInvites] = useState(props.invites ?? [])
+  const empty = (props.members ?? []).length === 0
+  const ready = !status && !empty
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<Role>('member')
   const [error, setError] = useState<string | null>(null)
 
   const used = members.length + invites.length
-  const full = seats !== undefined && used >= seats
+  const full = seats !== undefined && ready && used >= seats
   const sorted = [...members].sort(
     (a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role),
   )
@@ -131,20 +166,20 @@ const Settings1 = (props: Settings1Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {description}
-          {seats !== undefined && (
-            <>
-              {' '}
-              {used} of {seats} seats used.
-            </>
-          )}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
+    <BlockStateProvider status={status} empty={empty}>
+      <section className='@container flex flex-col gap-5'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {description}
+            {ready && seats !== undefined && (
+              <>
+                {' '}
+                {used} of {seats} seats used.
+              </>
+            )}
+          </p>
+        </header>
         <form method='post' onSubmit={invite} noValidate className='flex flex-col gap-2'>
           <label htmlFor={emailId} className='text-sm font-medium'>
             Invite by email
@@ -159,7 +194,7 @@ const Settings1 = (props: Settings1Props) => {
               onChange={(event) => setEmail(event.target.value)}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? `${emailId}-error` : undefined}
-              disabled={full}
+              disabled={full || status !== undefined}
               className='@md:flex-1'
             />
             <div className='flex gap-2'>
@@ -168,7 +203,11 @@ const Settings1 = (props: Settings1Props) => {
                 value={role}
                 onValueChange={setRole}
               />
-              <Button type='submit' disabled={full} className='flex-1 @md:flex-none'>
+              <Button
+                type='submit'
+                disabled={full || status !== undefined}
+                className='flex-1 @md:flex-none'
+              >
                 Send invite
               </Button>
             </div>
@@ -185,76 +224,88 @@ const Settings1 = (props: Settings1Props) => {
           )}
         </form>
 
-        <section aria-labelledby={`${emailId}-members`} className='flex flex-col gap-2'>
+        <section aria-labelledby={`${emailId}-members`} className='flex flex-col gap-1'>
           <h3 id={`${emailId}-members`} className='text-sm font-medium'>
-            {members.length} {members.length === 1 ? 'member' : 'members'}
+            {ready
+              ? `${members.length} ${members.length === 1 ? 'member' : 'members'}`
+              : 'Members'}
           </h3>
-          <ul className='flex flex-col divide-y border-t'>
-            {sorted.map((member) => {
-              const isYou = member.id === currentMemberId
-              const locked = isYou || member.role === 'owner'
-              return (
-                <li key={member.id} className='flex items-center gap-3 py-3'>
-                  <PersonAvatar person={member} />
-                  <div className='flex min-w-0 flex-1 flex-col'>
-                    <span className='truncate text-sm font-medium'>
-                      {member.name}
-                      {isYou && (
-                        <span className='text-muted-foreground font-normal'> (you)</span>
-                      )}
-                    </span>
-                    <span className='text-muted-foreground truncate text-xs'>
-                      {member.email}
-                    </span>
-                  </div>
-                  {locked ? (
-                    <span className='text-muted-foreground px-2.5 text-sm'>
-                      {roleConfig[member.role].label}
-                    </span>
-                  ) : (
-                    <>
-                      <RoleMenu
-                        label={`Role for ${member.name}`}
-                        value={member.role}
-                        onValueChange={(next) => {
-                          setMembers((current) =>
-                            current.map((item) =>
-                              item.id === member.id ? { ...item, role: next } : item,
-                            ),
-                          )
-                          onRoleChange?.(member.id, next)
-                        }}
-                      />
-                      <Button
-                        variant='ghost'
-                        size='icon-sm'
-                        aria-label={`Remove ${member.name}`}
-                        onClick={() => {
-                          setMembers((current) =>
-                            current.filter((item) => item.id !== member.id),
-                          )
-                          onRemoveMember?.(member.id)
-                        }}
-                      >
-                        <IconPlaceholder
-                          lucide='XIcon'
-                          tabler='IconX'
-                          hugeicons='Cancel01Icon'
-                          phosphor='XIcon'
-                          remixicon='RiCloseLine'
-                          aria-hidden
+          {!ready && (
+            <div className='border-t'>
+              <BlockStateRows rows={5} />
+            </div>
+          )}
+          {ready && (
+            <ul className='flex flex-col divide-y border-t'>
+              {sorted.map((member) => {
+                const isYou = member.id === currentMemberId
+                const locked = isYou || member.role === 'owner'
+                return (
+                  <li key={member.id} className='flex items-center gap-3 py-2.5'>
+                    <PersonAvatar person={member} />
+                    <div className='flex min-w-0 flex-1 flex-col'>
+                      <span className='truncate text-sm font-medium'>
+                        {member.name}
+                        {isYou && (
+                          <span className='text-muted-foreground font-normal'>
+                            {' '}
+                            (you)
+                          </span>
+                        )}
+                      </span>
+                      <span className='text-muted-foreground truncate text-xs'>
+                        {member.email}
+                      </span>
+                    </div>
+                    {locked ? (
+                      <span className='text-muted-foreground px-2.5 text-sm'>
+                        {roleConfig[member.role].label}
+                      </span>
+                    ) : (
+                      <>
+                        <RoleMenu
+                          label={`Role for ${member.name}`}
+                          value={member.role}
+                          onValueChange={(next) => {
+                            setMembers((current) =>
+                              current.map((item) =>
+                                item.id === member.id ? { ...item, role: next } : item,
+                              ),
+                            )
+                            onRoleChange?.(member.id, next)
+                          }}
                         />
-                      </Button>
-                    </>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
+                        <Button
+                          variant='ghost'
+                          size='icon-sm'
+                          aria-label={`Remove ${member.name}`}
+                          onClick={() => {
+                            setMembers((current) =>
+                              current.filter((item) => item.id !== member.id),
+                            )
+                            onRemoveMember?.(member.id)
+                          }}
+                        >
+                          <IconPlaceholder
+                            lucide='XIcon'
+                            tabler='IconX'
+                            hugeicons='Cancel01Icon'
+                            phosphor='XIcon'
+                            remixicon='RiCloseLine'
+                            aria-hidden
+                          />
+                        </Button>
+                      </>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
         </section>
 
-        {invites.length > 0 && (
-          <section aria-labelledby={`${emailId}-invites`} className='flex flex-col gap-2'>
+        {ready && invites.length > 0 && (
+          <section aria-labelledby={`${emailId}-invites`} className='flex flex-col gap-1'>
             <h3 id={`${emailId}-invites`} className='text-sm font-medium'>
               {invites.length} pending {invites.length === 1 ? 'invite' : 'invites'}
             </h3>
@@ -266,7 +317,7 @@ const Settings1 = (props: Settings1Props) => {
                 return (
                   <li
                     key={pending.id}
-                    className='flex flex-wrap items-center gap-x-3 gap-y-2 py-3'
+                    className='flex flex-wrap items-center gap-x-3 gap-y-2 py-2.5'
                   >
                     <span
                       aria-hidden
@@ -284,12 +335,12 @@ const Settings1 = (props: Settings1Props) => {
                       <span className='truncate text-sm font-medium'>
                         {pending.email}
                       </span>
-                      <span className='text-muted-foreground text-xs'>
-                        {roleConfig[pending.role].label} ·{' '}
+                      <Details className='text-muted-foreground text-xs'>
+                        {roleConfig[pending.role].label}
                         {expired ? (
-                          <span className='text-amber-800 dark:text-amber-400'>
+                          <StatusLabel tone='warning' className='text-xs'>
                             Expired
-                          </span>
+                          </StatusLabel>
                         ) : (
                           <>
                             Sent{' '}
@@ -298,7 +349,7 @@ const Settings1 = (props: Settings1Props) => {
                             </time>
                           </>
                         )}
-                      </span>
+                      </Details>
                     </div>
                     <div className='flex gap-1'>
                       <Button
@@ -336,8 +387,8 @@ const Settings1 = (props: Settings1Props) => {
             </ul>
           </section>
         )}
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

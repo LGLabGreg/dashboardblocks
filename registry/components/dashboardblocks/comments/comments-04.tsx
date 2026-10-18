@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CommentAuthor,
   CommentComposer,
   CommentItem,
@@ -9,18 +16,10 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type MessageKind = 'customer' | 'reply' | 'note'
@@ -34,20 +33,23 @@ type Mode = 'reply' | 'note'
 interface Comments4Props {
   currentUser: CommentAuthor
   customer: { company: string; email: string; name: string }
-  messages: TicketMessage[]
+  /** Oldest first. Leave out, or pass none, to show the empty state. */
+  messages?: TicketMessage[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onReact?: (messageId: string, emoji: string) => void
   onSubmit?: (body: string, options: { internal: boolean }) => Promise<void>
   people: CommentAuthor[]
+  status?: BlockStatus
   ticketId: string
+  title: string
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)
 
-const hannah = { name: 'Hannah Becker' }
-const lena = { name: 'Lena Fischer' }
+const hannah = { avatar: '/images/avatar-01.webp', name: 'Hannah Becker' }
+const lena = { avatar: '/images/avatar-03.webp', name: 'Lena Fischer' }
 const mateo = { name: 'Mateo Silva' }
 
 const exampleProps: Comments4Props = {
@@ -99,7 +101,10 @@ const exampleProps: Comments4Props = {
   now: exampleNow,
   people: [lena, mateo, { name: 'Priya Nair' }, { name: 'Jonas Weber' }],
   ticketId: 'TCK-381',
+  title: 'Conversation',
 }
+
+const noMessages: TicketMessage[] = []
 
 async function saveMessage() {
   await new Promise((resolve) => setTimeout(resolve, 500))
@@ -119,17 +124,26 @@ const Comments4 = (props: Comments4Props) => {
   const {
     currentUser,
     customer,
-    messages: initialMessages,
+    messages: initialMessages = noMessages,
     now,
     onReact = () => {},
     onSubmit = saveMessage,
     people,
+    status,
     ticketId,
+    title,
   } = props
   const [messages, setMessages] = useState(initialMessages)
+  const [loaded, setLoaded] = useState(initialMessages)
+  if (initialMessages !== loaded) {
+    setLoaded(initialMessages)
+    setMessages(initialMessages)
+  }
   const [mode, setMode] = useState<Mode>('reply')
   const [drafts, setDrafts] = useState({ note: '', reply: '' })
-  const [status, setStatus] = useState('')
+  const [announcement, setAnnouncement] = useState('')
+  const state = getBlockState(status, messages.length === 0)
+  const unavailable = state === 'loading' || state === 'error'
   const mentioned = getMentions(
     drafts.note,
     people.map((person) => person.name),
@@ -142,119 +156,152 @@ const Comments4 = (props: Comments4Props) => {
         ...current,
         { at: now, author: currentUser, body, id: `${Date.now()}`, kind },
       ])
-      setStatus(kind === 'note' ? 'Note added' : `Reply sent to ${customer.name}`)
+      setAnnouncement(kind === 'note' ? 'Note added' : `Reply sent to ${customer.name}`)
     })
   }
 
   function badge(kind: MessageKind) {
-    if (kind === 'customer') return <Badge variant='outline'>Customer</Badge>
+    if (kind === 'customer')
+      return (
+        <StatusLabel className='text-xs' tone='info'>
+          Customer
+        </StatusLabel>
+      )
     if (kind === 'note')
       return (
-        <Badge variant='outline'>
+        <StatusLabel
+          className='flex items-center gap-1 text-xs [&_svg]:size-3'
+          tone='warning'
+        >
           {lockIcon}
           Internal
-        </Badge>
+        </StatusLabel>
       )
     return null
   }
 
+  const last = messages[messages.length - 1]
+  const waitingHours =
+    last?.kind === 'customer'
+      ? Math.max(0, Math.round((now.getTime() - last.at.getTime()) / 3_600_000))
+      : null
+  const waiting =
+    waitingHours === null
+      ? 'Waiting on the customer.'
+      : `${customer.name.split(' ')[0]} has waited ${waitingHours < 1 ? 'under an hour' : `${waitingHours} ${waitingHours === 1 ? 'hour' : 'hours'}`} for a reply.`
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Conversation</CardTitle>
-        <CardDescription>
-          {ticketId} · {customer.name}, {customer.company}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ol aria-label={`Conversation on ${ticketId}`} className='flex flex-col gap-4'>
-          {messages.map((message) => (
-            <li
-              key={message.id}
-              className={
-                message.kind === 'note'
-                  ? 'rounded-lg bg-amber-500/5 p-3 ring-1 ring-amber-500/20'
-                  : 'px-3'
-              }
+    <BlockStateProvider status={status} empty={messages.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {ticketId} with {customer.name}, {customer.company}.{' '}
+            <BlockReady>{waiting}</BlockReady>
+          </p>
+        </header>
+        <div>
+          {state && (
+            <div className='border-t'>
+              <BlockStateRows rows={3} />
+            </div>
+          )}
+          {!state && (
+            <ol
+              aria-label={`Conversation on ${ticketId}`}
+              className='flex flex-col gap-4 border-t pt-4'
             >
-              <CommentItem
-                comment={message}
-                now={now}
-                people={message.kind === 'note' ? people : undefined}
-                badge={badge(message.kind)}
-                onReact={
-                  message.kind === 'note'
-                    ? (emoji) => {
-                        onReact(message.id, emoji)
-                        setMessages((current) =>
-                          updateComment(current, message.id, (item) => ({
-                            ...item,
-                            reactions: toggleReaction(item.reactions, emoji),
-                          })),
-                        )
-                      }
-                    : undefined
-                }
-              />
-            </li>
-          ))}
-        </ol>
-        <p aria-live='polite' className='sr-only'>
-          {status}
-        </p>
-      </CardContent>
-      <CardFooter className='border-t'>
-        <Tabs
-          value={mode}
-          onValueChange={(value) => setMode(value as Mode)}
-          className='w-full'
-        >
-          <TabsList>
-            <TabsTrigger value='reply'>Reply</TabsTrigger>
-            <TabsTrigger value='note'>Internal note</TabsTrigger>
-          </TabsList>
-          <TabsContent value='reply'>
-            <CommentComposer
-              label={`Reply to ${customer.name}`}
-              placeholder={`Reply to ${customer.name.split(' ')[0]}…`}
-              submitLabel='Send reply'
-              pendingLabel='Sending…'
-              value={drafts.reply}
-              footer={
-                <span className='text-muted-foreground block truncate'>
-                  Emailed to {customer.email}
-                </span>
-              }
-              onValueChange={(reply) => setDrafts((current) => ({ ...current, reply }))}
-              onSubmit={(body) => send(body, 'reply')}
-            />
-          </TabsContent>
-          <TabsContent value='note'>
-            <CommentComposer
-              className='*:data-[slot=input-group]:bg-amber-500/5'
-              label='Internal note'
-              placeholder='Add a note for your team. Type @ to mention someone.'
-              submitLabel='Add note'
-              pendingLabel='Adding…'
-              people={people}
-              value={drafts.note}
-              footer={
-                <span className='flex min-w-0 items-center gap-1.5 text-amber-800 dark:text-amber-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
-                  {lockIcon}
-                  <span className='truncate'>
-                    {mentioned.length > 0
-                      ? `Only your team sees this. Notifies ${mentioned.join(', ')}.`
-                      : 'Only your team sees this'}
+              {messages.map((message) => (
+                <li
+                  key={message.id}
+                  className={
+                    message.kind === 'note'
+                      ? 'border-l-2 border-amber-500/60 bg-amber-500/5 py-3 pr-3 pl-[calc(0.75rem-2px)]'
+                      : 'px-3'
+                  }
+                >
+                  <CommentItem
+                    comment={message}
+                    now={now}
+                    people={message.kind === 'note' ? people : undefined}
+                    badge={badge(message.kind)}
+                    onReact={
+                      message.kind === 'note'
+                        ? (emoji) => {
+                            onReact(message.id, emoji)
+                            setMessages((current) =>
+                              updateComment(current, message.id, (item) => ({
+                                ...item,
+                                reactions: toggleReaction(item.reactions, emoji),
+                              })),
+                            )
+                          }
+                        : undefined
+                    }
+                  />
+                </li>
+              ))}
+            </ol>
+          )}
+          <p aria-live='polite' className='sr-only'>
+            {announcement}
+          </p>
+        </div>
+        <div className='border-t pt-4'>
+          <Tabs
+            value={mode}
+            onValueChange={(value) => setMode(value as Mode)}
+            className='w-full'
+          >
+            <TabsList>
+              <TabsTrigger value='reply'>Reply</TabsTrigger>
+              <TabsTrigger value='note'>Internal note</TabsTrigger>
+            </TabsList>
+            <TabsContent value='reply'>
+              <CommentComposer
+                label={`Reply to ${customer.name}`}
+                placeholder={`Reply to ${customer.name.split(' ')[0]}…`}
+                submitLabel='Send reply'
+                pendingLabel='Sending…'
+                disabled={unavailable}
+                value={drafts.reply}
+                footer={
+                  <span className='text-muted-foreground block truncate'>
+                    Emailed to {customer.email}
                   </span>
-                </span>
-              }
-              onValueChange={(note) => setDrafts((current) => ({ ...current, note }))}
-              onSubmit={(body) => send(body, 'note')}
-            />
-          </TabsContent>
-        </Tabs>
-      </CardFooter>
-    </Card>
+                }
+                onValueChange={(reply) => setDrafts((current) => ({ ...current, reply }))}
+                onSubmit={(body) => send(body, 'reply')}
+              />
+            </TabsContent>
+            <TabsContent value='note'>
+              <CommentComposer
+                className='*:data-[slot=input-group]:bg-amber-500/5'
+                label='Internal note'
+                placeholder='Add a note for your team. Type @ to mention someone.'
+                submitLabel='Add note'
+                pendingLabel='Adding…'
+                disabled={unavailable}
+                people={people}
+                value={drafts.note}
+                footer={
+                  <span className='flex min-w-0 items-center gap-1.5 text-amber-800 dark:text-amber-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
+                    {lockIcon}
+                    <span className='truncate'>
+                      {mentioned.length > 0
+                        ? `Only your team sees this. Notifies ${mentioned.join(', ')}.`
+                        : 'Only your team sees this'}
+                    </span>
+                  </span>
+                }
+                onValueChange={(note) => setDrafts((current) => ({ ...current, note }))}
+                onSubmit={(body) => send(body, 'note')}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

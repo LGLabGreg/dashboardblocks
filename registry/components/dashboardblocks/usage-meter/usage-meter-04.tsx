@@ -1,35 +1,37 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
-import { Icon } from '@/registry/components/dashboardblocks/icon'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIChart } from '@/registry/components/dashboardblocks/kpi'
 import {
   UsageBar,
+  UsageMeterLimit,
   UsageMeterValue,
-  UsageStatusBadge,
+  UsageStatusLabel,
   type UsageStatus,
   formatUsage,
   getDaysLeft,
 } from '@/registry/components/dashboardblocks/usage-meter'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface UsageMeter4Props {
-  balance: number
-  /** Credits used each day, oldest first. */
-  dailyUsage: number[]
+  /** Leave out to show the empty state. */
+  balance?: number
+  /** Credits used each day, oldest first; the last is today. */
+  dailyUsage?: number[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onTopUp?: () => void
   purchased: number
+  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -43,6 +45,7 @@ const exampleProps: UsageMeter4Props = {
     1_430,
   ],
   now: new Date(Date.UTC(2026, 8, 26)),
+  onTopUp: () => {},
   purchased: 100_000,
   title: 'Credits',
 }
@@ -57,7 +60,17 @@ function getRunwayStatus(days: number): UsageStatus {
 }
 
 const UsageMeter4 = (props: UsageMeter4Props) => {
-  const { balance, dailyUsage, now, onTopUp, purchased, timeZone = 'UTC', title } = props
+  const {
+    balance = 0,
+    dailyUsage = [],
+    now,
+    onTopUp,
+    purchased,
+    status: blockStatus,
+    timeZone = 'UTC',
+    title,
+  } = props
+  const state = getBlockState(blockStatus, props.balance === undefined)
   const burn =
     dailyUsage.length > 0
       ? dailyUsage.reduce((sum, value) => sum + value, 0) / dailyUsage.length
@@ -67,45 +80,31 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
   const runsOut = Number.isFinite(daysLeft)
     ? new Date(now.getTime() + daysLeft * DAY)
     : null
-  const peak = Math.max(...dailyUsage, 1)
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'short',
     timeZone,
   })
   const formatDate = (date: Date) => dateFormatter.format(date)
+  const days = dailyUsage.map((value, index) => ({
+    label: formatDate(new Date(now.getTime() - (dailyUsage.length - 1 - index) * DAY)),
+    value,
+  }))
+  const latest = days[days.length - 1]
 
   return (
-    <Card>
-      <CardHeader>
-        <div className='flex items-center gap-2'>
-          <Icon
-            icon={
-              <IconPlaceholder
-                lucide='CoinsIcon'
-                tabler='IconCoins'
-                hugeicons='Coins01Icon'
-                phosphor='CoinsIcon'
-                remixicon='RiCoinsLine'
-              />
-            }
-            size='sm'
-            variant='secondary'
-          />
-          <CardTitle>{title}</CardTitle>
-        </div>
-        <CardAction>
-          <UsageStatusBadge
-            label={
-              Number.isFinite(daysLeft) ? `${Math.floor(daysLeft)} days left` : undefined
-            }
-            status={status}
-          />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-2'>
-          <div className='flex items-baseline justify-between gap-2'>
+    <BlockStateProvider status={blockStatus} empty={props.balance === undefined}>
+      <section className='@container flex flex-col gap-3 border-t pt-3'>
+        <header className='flex min-h-8 items-center justify-between gap-3'>
+          <p className='text-muted-foreground text-sm'>{title}</p>
+          {onTopUp && (
+            <Button variant='outline' size='sm' onClick={onTopUp}>
+              Buy credits
+            </Button>
+          )}
+        </header>
+        <div className='flex flex-col gap-1'>
+          <div className='flex flex-wrap items-baseline gap-x-2'>
             <UsageMeterValue>
               <span aria-hidden>
                 <AnimatedNumber
@@ -115,48 +114,67 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
               </span>
               <span className='sr-only'>{formatUsage(balance)}</span>
             </UsageMeterValue>
-            <span className='text-muted-foreground text-sm'>
-              of {formatUsage(purchased)} remaining
-            </span>
+            <UsageMeterLimit>of {formatUsage(purchased)} left</UsageMeterLimit>
           </div>
-          <UsageBar color='var(--color-chart-3)' limit={purchased} used={balance} />
-        </div>
-        <div className='flex items-end justify-between gap-4'>
-          <dl className='grid grid-cols-2 gap-x-6 gap-y-0.5 text-xs'>
-            <dt className='text-muted-foreground'>Avg per day</dt>
-            <dt className='text-muted-foreground'>Runs out</dt>
-            <dd className='text-sm font-medium tabular-nums'>
-              {formatUsage(Math.round(burn))}
-            </dd>
-            <dd className='text-sm font-medium'>
+          {state === 'loading' ? (
+            <BlockStateText className='text-sm' />
+          ) : state ? null : (
+            <p className='text-muted-foreground text-sm'>
               {runsOut ? (
-                <time dateTime={runsOut.toISOString()}>~{formatDate(runsOut)}</time>
+                <>
+                  <UsageStatusLabel
+                    label={`${Math.floor(daysLeft)} ${Math.floor(daysLeft) === 1 ? 'day' : 'days'} left`}
+                    status={status}
+                  />
+                  , running out around{' '}
+                  <time dateTime={runsOut.toISOString()}>{formatDate(runsOut)}</time>
+                </>
               ) : (
-                'Not at this rate'
+                'No recent use, so they won’t run out at this rate'
               )}
-            </dd>
-          </dl>
-          <div
-            role='img'
-            aria-label={`Credits used per day, last ${dailyUsage.length} days: from ${formatUsage(dailyUsage[0] ?? 0)} to ${formatUsage(dailyUsage[dailyUsage.length - 1] ?? 0)}`}
-            className='flex h-10 w-28 shrink-0 items-end gap-0.5'
-          >
-            {dailyUsage.map((value, index) => (
-              <span
-                key={index}
-                className='bg-chart-3/60 flex-1 rounded-t-[2px]'
-                style={{ height: `${Math.max(8, (value / peak) * 100)}%` }}
-              />
-            ))}
-          </div>
+            </p>
+          )}
         </div>
-      </CardContent>
-      <CardFooter className='border-t'>
-        <Button variant='outline' className='w-full' onClick={onTopUp}>
-          Buy credits
-        </Button>
-      </CardFooter>
-    </Card>
+        <UsageBar
+          color='var(--color-chart-2)'
+          limit={purchased}
+          size='sm'
+          used={balance}
+        />
+        {(state || latest) && (
+          <KPIChart
+            className='mt-2'
+            label={
+              latest
+                ? `Credits used per day, last ${days.length} days: from ${formatUsage(days[0].value)} on ${days[0].label} to ${formatUsage(latest.value)} on ${latest.label}, ${formatUsage(Math.round(burn))} a day on average`
+                : 'Credits used per day'
+            }
+          >
+            <TinyBarChart
+              accessibilityLayer={false}
+              bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
+              data={days}
+              formatter={(value) => formatUsage(value, undefined, { compact: true })}
+              height={88}
+              highlightIndex={days.length - 1}
+              reference={{
+                label: `avg ${formatUsage(Math.round(burn))}`,
+                value: burn,
+              }}
+            />
+          </KPIChart>
+        )}
+        {latest && (
+          <BlockReady className='text-xs'>
+            <p className='text-muted-foreground text-xs'>
+              Today used {formatUsage(latest.value)},{' '}
+              {latest.value > burn ? 'above' : 'below'} the {days.length}-day average of{' '}
+              {formatUsage(Math.round(burn))}.
+            </p>
+          </BlockReady>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

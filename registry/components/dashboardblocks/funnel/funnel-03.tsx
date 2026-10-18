@@ -1,32 +1,34 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
   type FunnelStage,
   formatRate,
   getBiggestDropIndex,
   getFunnelSteps,
 } from '@/registry/components/dashboardblocks/funnel'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-
-import { Badge } from '@/components/ui/badge'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
 interface Funnel3Props {
   description: string
-  stages: FunnelStage[]
+  /** Leave out, or pass none, to show the empty state. */
+  stages?: FunnelStage[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Funnel3Props = {
-  description: 'New workspaces completing each setup step',
+  description: 'New workspaces completing each setup step.',
   stages: [
     { label: 'Created workspace', value: 3_640 },
     { label: 'Invited a teammate', value: 2_510 },
@@ -38,85 +40,76 @@ const exampleProps: Funnel3Props = {
 }
 
 const Funnel3 = (props: Funnel3Props) => {
-  const { description, stages, title } = props
+  const { description, stages = [], status, title } = props
+  const state = getBlockState(status, stages.length === 0)
   const steps = getFunnelSteps(stages)
   const biggestDrop = getBiggestDropIndex(steps)
   const last = steps.at(-1)
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
-        <div className='flex flex-col gap-0.5'>
-          <span className='text-3xl font-semibold tracking-tight'>
-            {last ? formatRate(last.fromStart) : '—'}
-          </span>
-          <span className='text-muted-foreground text-xs'>finish every step</span>
-        </div>
-        <ol className='flex flex-col'>
-          {steps.map((step, index) => {
-            const isLast = index === steps.length - 1
-            const isBiggestDrop = index === biggestDrop
-            return (
-              <li key={step.label} className='relative flex gap-3 pb-5 last:pb-0'>
-                {!isLast && (
+    <BlockStateProvider status={status} empty={stages.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='flex flex-col gap-1 border-t pt-4'>
+          <dt className='text-muted-foreground text-sm'>Finish every step</dt>
+          <dd>
+            <KPIValue value={last?.fromStart} format={(value) => formatRate(value)} />
+          </dd>
+        </dl>
+        {state === 'loading' && <BlockStateRows rows={5} />}
+        {!state && (
+          <ol className='flex flex-col'>
+            {steps.map((step, index) => {
+              const isLast = index === steps.length - 1
+              const isBiggestDrop = index === biggestDrop
+              return (
+                <li key={step.label} className='relative flex gap-3 pb-5 last:pb-0'>
+                  {!isLast && (
+                    <span
+                      aria-hidden
+                      className='bg-border absolute top-7 bottom-1 left-3 w-px -translate-x-1/2'
+                    />
+                  )}
                   <span
-                    aria-hidden
-                    className='bg-border absolute top-7 bottom-1 left-3 w-px -translate-x-1/2'
-                  />
-                )}
-                <span
-                  className={cn(
-                    'relative flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',
-                    isBiggestDrop
-                      ? 'bg-foreground text-background'
-                      : 'bg-muted text-foreground',
-                  )}
-                >
-                  <span className='sr-only'>Step </span>
-                  {index + 1}
-                </span>
-                <div className='flex min-w-0 flex-1 flex-col gap-1'>
-                  <div className='flex items-baseline justify-between gap-3'>
-                    <span className='text-sm font-medium'>{step.label}</span>
-                    <span className='text-sm font-medium tabular-nums'>
-                      {step.value.toLocaleString()}
-                    </span>
-                  </div>
-                  {index > 0 && (
-                    <div className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
-                      <span className='tabular-nums'>
-                        {formatRate(step.fromPrevious)} of previous step
+                    className={cn(
+                      'relative flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',
+                      isBiggestDrop
+                        ? 'bg-foreground text-background'
+                        : 'bg-muted text-foreground',
+                    )}
+                  >
+                    <span className='sr-only'>Step </span>
+                    {index + 1}
+                  </span>
+                  <div className='flex min-w-0 flex-1 flex-col gap-1'>
+                    <div className='flex items-baseline justify-between gap-3'>
+                      <span className='text-sm font-medium'>{step.label}</span>
+                      <span className='text-sm font-medium tabular-nums'>
+                        {formatNumber(step.value)}
                       </span>
-                      <span aria-hidden>·</span>
-                      <span className='tabular-nums'>
-                        {step.dropped.toLocaleString()} dropped
-                      </span>
-                      {isBiggestDrop && (
-                        <Badge variant='outline'>
-                          <IconPlaceholder
-                            lucide='TrendingDownIcon'
-                            tabler='IconTrendingDown'
-                            hugeicons='ChartDownIcon'
-                            phosphor='TrendDownIcon'
-                            remixicon='RiArrowDownLine'
-                            data-icon='inline-start'
-                          />
-                          Biggest drop-off
-                        </Badge>
-                      )}
                     </div>
-                  )}
-                </div>
-              </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-    </Card>
+                    {index > 0 && (
+                      <Details className='text-muted-foreground text-xs tabular-nums'>
+                        {`${formatRate(step.fromPrevious)} of previous step`}
+                        {`${formatNumber(step.dropped)} dropped`}
+                        {isBiggestDrop && (
+                          <StatusLabel tone='bad' className='text-xs'>
+                            Biggest drop-off
+                          </StatusLabel>
+                        )}
+                      </Details>
+                    )}
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

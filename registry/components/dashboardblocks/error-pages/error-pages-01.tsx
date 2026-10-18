@@ -129,17 +129,14 @@ const ErrorPages1 = ({ brand, homeHref, links, onSearch, path }: ErrorPages1Prop
           </Button>
         </form>
       )}
-      <ul className='flex flex-col divide-y rounded-xl border text-left'>
+      <ul className='flex flex-col divide-y border-y'>
         {links.map((link) => (
           <li key={link.title}>
             <a
               href={link.href}
-              className='hover:bg-muted/50 focus-visible:ring-ring/50 flex items-center gap-3 p-3 outline-none first:rounded-t-xl last:rounded-b-xl focus-visible:ring-3'
+              className='hover:bg-muted focus-visible:ring-ring/50 -mx-2 flex items-center gap-3 rounded-md px-2 py-2.5 outline-none focus-visible:ring-3 focus-visible:ring-inset'
             >
-              <span
-                aria-hidden
-                className='bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg [&_svg]:size-4'
-              >
+              <span aria-hidden className='text-muted-foreground shrink-0 [&_svg]:size-4'>
                 {link.icon}
               </span>
               <span className='flex min-w-0 flex-1 flex-col'>
@@ -161,13 +158,13 @@ const ErrorPages1 = ({ brand, homeHref, links, onSearch, path }: ErrorPages1Prop
           </li>
         ))}
       </ul>
-      <div className='flex flex-wrap justify-center gap-2'>
-        <Button variant='ghost' onClick={() => window.history.back()}>
-          Go back
-        </Button>
+      <div className='flex flex-wrap gap-2'>
         <a href={homeHref} className={buttonVariants()}>
           Go to dashboards
         </a>
+        <Button variant='ghost' onClick={() => window.history.back()}>
+          Go back
+        </Button>
       </div>
     </ErrorPageLayout>
   )

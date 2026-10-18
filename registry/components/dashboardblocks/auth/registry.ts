@@ -23,7 +23,13 @@ export const examples: Registry['items'] = [
   {
     name: 'auth-02',
     type: 'registry:component',
-    registryDependencies: ['button', 'input', registryUrl('auth')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('auth'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/auth/auth-02.tsx',

@@ -1,6 +1,20 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  Leaderboard,
+  LeaderboardBar,
+  LeaderboardItem,
+  LeaderboardLabel,
+  LeaderboardValue,
+} from '@/registry/components/dashboardblocks/leaderboard'
+import {
   LiveBadge,
   LiveNumber,
   RollingBars,
@@ -10,27 +24,20 @@ import {
 } from '@/registry/components/dashboardblocks/realtime'
 import { useRef, useState } from 'react'
 
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface ActivePage {
   path: string
   users: number
 }
 
 interface Realtime1Props {
-  activeUsers: number
+  /** Leave out to show the empty state. */
+  activeUsers?: number
   description: string
-  /** Page views per second, oldest first, e.g. */
-  pageViews: number[]
-  pages: ActivePage[]
+  /** Page views per second over the last minute, oldest first. */
+  pageViews?: number[]
+  pages?: ActivePage[]
   simulate?: boolean
+  status?: BlockStatus
   title: string
 }
 
@@ -38,7 +45,7 @@ const seed = createRandom(7)
 
 const exampleProps: Realtime1Props = {
   activeUsers: 1_284,
-  description: 'Users on the site in the last 5 minutes',
+  description: 'People on the site in the last 5 minutes, and the pages they are on.',
   pageViews: Array.from({ length: 60 }, () => Math.round(28 + seed() * 34)),
   pages: [
     { path: '/pricing', users: 312 },
@@ -51,12 +58,35 @@ const exampleProps: Realtime1Props = {
   title: 'Right now',
 }
 
+const noViews: number[] = []
+const noPages: ActivePage[] = []
+
 const Realtime1 = (props: Realtime1Props) => {
-  const { description, simulate = false, title } = props
-  const [users, setUsers] = useState(props.activeUsers)
-  const [views, setViews] = useState(props.pageViews)
-  const [pages, setPages] = useState(props.pages)
+  const {
+    activeUsers,
+    description,
+    pageViews = noViews,
+    pages: loadedPages = noPages,
+    simulate = false,
+    status,
+    title,
+  } = props
+  const [users, setUsers] = useState(activeUsers ?? 0)
+  const [views, setViews] = useState(pageViews)
+  const [pages, setPages] = useState(loadedPages)
+  const [loaded, setLoaded] = useState({ activeUsers, pageViews, pages: loadedPages })
+  if (
+    loaded.activeUsers !== activeUsers ||
+    loaded.pageViews !== pageViews ||
+    loaded.pages !== loadedPages
+  ) {
+    setLoaded({ activeUsers, pageViews, pages: loadedPages })
+    setUsers(activeUsers ?? 0)
+    setViews(pageViews)
+    setPages(loadedPages)
+  }
   const random = useRef(createRandom(42))
+  const state = getBlockState(status, activeUsers === undefined)
 
   useInterval(
     () => {
@@ -74,74 +104,97 @@ const Realtime1 = (props: Realtime1Props) => {
           .sort((a, b) => b.users - a.users),
       )
     },
-    simulate ? 1_000 : null,
+    simulate && !state ? 1_000 : null,
   )
 
   const perMinute = views.slice(-60).reduce((sum, value) => sum + value, 0)
   const top = Math.max(1, ...pages.map((page) => page.users))
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <LiveBadge />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex items-end justify-between gap-4'>
-          <div className='flex flex-col'>
-            <span className='text-4xl font-semibold tracking-tight'>
-              <LiveNumber value={users} />
-            </span>
-            <span className='text-muted-foreground text-sm'>active users</span>
+    <BlockStateProvider status={status} empty={activeUsers === undefined}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
           </div>
-          <div className='flex flex-col items-end'>
-            <span className='text-lg font-semibold'>
-              <LiveNumber value={perMinute} />
-            </span>
-            <span className='text-muted-foreground text-xs'>page views, last minute</span>
+          {!state && <LiveBadge />}
+        </header>
+        <div className='flex flex-col gap-3 border-t pt-4'>
+          <div className='flex flex-wrap items-end justify-between gap-x-4 gap-y-2'>
+            <div className='flex flex-col gap-1'>
+              <span className='text-muted-foreground text-sm'>Active users</span>
+              {state ? (
+                <KPIValue />
+              ) : (
+                <span className='text-4xl font-light tracking-tight'>
+                  <LiveNumber value={users} />
+                </span>
+              )}
+            </div>
+            {state !== 'error' && state !== 'empty' && (
+              <div className='flex flex-col items-end gap-1'>
+                <span className='text-muted-foreground text-sm'>
+                  Page views, last minute
+                </span>
+                {state ? (
+                  <KPIValue className='text-2xl' />
+                ) : (
+                  <span className='text-2xl font-light tracking-tight'>
+                    <LiveNumber value={perMinute} />
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-        </div>
-        <div className='flex flex-col gap-1'>
-          <RollingBars className='h-14' values={views} />
-          <div
-            aria-hidden
-            className='text-muted-foreground flex justify-between text-[11px]'
-          >
-            <span>60s ago</span>
-            <span>now</span>
-          </div>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <div className='text-muted-foreground flex justify-between text-xs'>
-            <span>Top pages</span>
-            <span>Users</span>
-          </div>
-          <ul className='flex flex-col gap-1.5'>
-            {pages.map((page) => (
-              <li
-                key={page.path}
-                className='relative flex items-center justify-between gap-3 text-sm'
+          <div className='flex flex-col gap-1'>
+            <RollingBars
+              height={56}
+              labels={views.map((_, index) => `${views.length - 1 - index}s ago`)}
+              values={views}
+            />
+            {!state && (
+              <div
+                aria-hidden
+                className='text-muted-foreground flex justify-between text-xs'
               >
-                <span
-                  aria-hidden
-                  className='bg-muted absolute inset-y-0 left-0 rounded-sm transition-[width] duration-500 motion-reduce:transition-none'
-                  style={{ width: `${(page.users / top) * 100}%` }}
-                />
-                <span className='relative truncate px-2 py-1 font-mono text-xs'>
-                  {page.path}
-                </span>
-                <span className='relative pr-1 font-medium'>
-                  <LiveNumber value={page.users} />
-                </span>
-              </li>
-            ))}
-          </ul>
+                <span>{views.length}s ago</span>
+                <span>Now</span>
+              </div>
+            )}
+          </div>
         </div>
-      </CardContent>
-    </Card>
+        {state !== 'error' && state !== 'empty' && (
+          <div className='flex flex-col gap-1.5'>
+            <div className='text-muted-foreground flex justify-between px-2 text-xs'>
+              <span>Top pages</span>
+              <span>Users</span>
+            </div>
+            {state === 'loading' && <BlockStateRows rows={5} />}
+            {!state && (
+              <Leaderboard>
+                {pages.map((page, index) => (
+                  <LeaderboardItem key={page.path}>
+                    <LeaderboardBar
+                      className={
+                        index === 0
+                          ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                          : undefined
+                      }
+                      value={(page.users / top) * 100}
+                    />
+                    <LeaderboardLabel className='truncate'>{page.path}</LeaderboardLabel>
+                    <LeaderboardValue>
+                      <LiveNumber value={page.users} />
+                    </LeaderboardValue>
+                  </LeaderboardItem>
+                ))}
+              </Leaderboard>
+            )}
+          </div>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

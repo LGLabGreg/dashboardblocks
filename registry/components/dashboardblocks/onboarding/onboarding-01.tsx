@@ -22,7 +22,6 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, startTransition, useId, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Field,
@@ -67,7 +66,7 @@ const exampleProps: Onboarding1Props = {
   ],
   useCases: [
     {
-      badge: <Badge variant='secondary'>Popular</Badge>,
+      badge: 'Popular',
       description: 'Sign-ups, activation, feature adoption and retention.',
       icon: (
         <IconPlaceholder

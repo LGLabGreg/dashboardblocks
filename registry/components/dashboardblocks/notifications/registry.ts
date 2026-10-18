@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'notifications-01',
     type: 'registry:component',
-    registryDependencies: ['button', registryUrl('link'), registryUrl('notifications')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('link'),
+      registryUrl('notifications'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/notifications/notifications-01.tsx',
@@ -23,7 +28,13 @@ export const examples: Registry['items'] = [
   {
     name: 'notifications-02',
     type: 'registry:component',
-    registryDependencies: ['button', 'tabs', registryUrl('notifications')],
+    registryDependencies: [
+      'button',
+      'tabs',
+      registryUrl('block-state'),
+      registryUrl('notifications'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/notifications/notifications-02.tsx',
@@ -42,9 +53,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'tabs',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
       registryUrl('notifications'),
     ],
     files: [

@@ -1,11 +1,12 @@
 'use client'
 
 import {
-  DashboardHeaderTitle,
   type DateRangePreset,
   DateRangePicker,
   ExportMenu,
+  getDateRange,
 } from '@/registry/components/dashboardblocks/dashboard-header'
+import { formatDateRange } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 interface DashboardHeader2Props {
@@ -27,19 +28,23 @@ const DashboardHeader2 = (props: DashboardHeader2Props) => {
   const [preset, setPreset] = useState<DateRangePreset>(defaultPreset)
 
   return (
-    <header className='@container'>
-      <div className='flex flex-col gap-3 @lg:flex-row @lg:items-center @lg:justify-between'>
-        <DashboardHeaderTitle title={title} />
-        <div className='flex items-center gap-2'>
+    <header className='@container flex flex-col gap-1 border-b pb-4'>
+      <div className='flex items-start justify-between gap-3'>
+        <div className='flex min-w-0 flex-wrap items-baseline gap-x-2'>
+          <h2 className='text-2xl font-semibold tracking-tight'>{title}</h2>
           <DateRangePicker
-            className='flex-1 @lg:flex-none'
+            className='text-muted-foreground hover:text-foreground text-2xl font-light tracking-tight underline-offset-[6px] [&_svg]:size-5'
             onValueChange={setPreset}
             today={today}
             value={preset}
+            variant='inline'
           />
-          <ExportMenu onExport={onExport} />
         </div>
+        <ExportMenu onExport={onExport} />
       </div>
+      <p aria-live='polite' className='text-muted-foreground text-sm tabular-nums'>
+        {formatDateRange(getDateRange(preset, today))}
+      </p>
     </header>
   )
 }

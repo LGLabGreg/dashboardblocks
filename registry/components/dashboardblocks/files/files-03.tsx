@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type FileAction,
   FileActionsMenu,
   FileKindIcon,
@@ -12,22 +19,14 @@ import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/prog
 import {
   UsageMeterLimit,
   UsageMeterValue,
-  UsageStatusBadge,
+  UsageStatusLabel,
   getUsageStatus,
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { startTransition, useId, useRef, useState } from 'react'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { startTransition, useId, useMemo, useRef, useState } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -50,14 +49,15 @@ interface StorageKind {
 }
 
 interface Files3Props {
-  /** Storage used by kind, largest first. */
-  breakdown: StorageKind[]
+  /** Storage used by kind, largest first. Leave out, or pass none, to show the empty state. */
+  breakdown?: StorageKind[]
   /** The biggest files, largest first, to free up space. */
-  largestFiles: StorageFile[]
+  largestFiles?: StorageFile[]
   /** In bytes. */
   limit: number
   onDelete?: (file: StorageFile) => Promise<void>
   plan: string
+  status?: BlockStatus
   title: string
   upgradeHint: string
   upgradeHref: string
@@ -119,14 +119,23 @@ async function deleteFile() {
   await new Promise((resolve) => setTimeout(resolve, 400))
 }
 
-const KIND_COLORS = ['--chart-2', '--chart-3', '--chart-4', '--chart-5', '--chart-1']
+const noKinds: StorageKind[] = []
+const noFiles: StorageFile[] = []
+
+const KIND_COLORS = [
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-1)',
+]
 
 function getKindColors(breakdown: StorageKind[]) {
   let next = 0
   return breakdown.map((item) =>
     item.kind === 'other'
-      ? 'var(--muted-foreground)'
-      : `var(${KIND_COLORS[next++ % KIND_COLORS.length]})`,
+      ? 'var(--color-muted-foreground)'
+      : KIND_COLORS[next++ % KIND_COLORS.length],
   )
 }
 
@@ -143,24 +152,50 @@ function breakdownKind(kind: FileKind, shown: FileKind[]): FileKind {
 
 const Files3 = (props: Files3Props) => {
   const {
-    breakdown: initialBreakdown,
-    largestFiles: initialFiles,
+    breakdown: storedBreakdown = noKinds,
+    largestFiles = noFiles,
     limit,
     onDelete = deleteFile,
     plan,
+    status,
     title,
     upgradeHint,
     upgradeHref,
   } = props
   const headingId = useId()
-  const [breakdown, setBreakdown] = useState(initialBreakdown)
-  const [files, setFiles] = useState(initialFiles)
+  const [deleted, setDeleted] = useState<ReadonlySet<string>>(() => new Set())
   const [message, setMessage] = useState('')
   const deleting = useRef(new Set<string>())
+  const state = getBlockState(status, storedBreakdown.length === 0)
+
+  const files = useMemo(
+    () => largestFiles.filter((file) => !deleted.has(file.id)),
+    [deleted, largestFiles],
+  )
+  const breakdown = useMemo(() => {
+    const kinds = storedBreakdown.map((item) => item.kind)
+    const freed = new Map<FileKind, number>()
+    for (const file of largestFiles) {
+      if (!deleted.has(file.id)) continue
+      const kind = breakdownKind(file.kind, kinds)
+      freed.set(kind, (freed.get(kind) ?? 0) + file.size)
+    }
+    return storedBreakdown.map((item) => ({
+      ...item,
+      size: Math.max(0, item.size - (freed.get(item.kind) ?? 0)),
+    }))
+  }, [deleted, largestFiles, storedBreakdown])
 
   const used = breakdown.reduce((sum, item) => sum + item.size, 0)
+  const free = Math.max(0, limit - used)
   const kindColors = getKindColors(breakdown)
-  const status = getUsageStatus(used, limit)
+  const usage = getUsageStatus(used, limit)
+  const largest = breakdown.reduce<StorageKind | undefined>(
+    (top, item) => (top && top.size >= item.size ? top : item),
+    undefined,
+  )
+  const labelOf = (item: StorageKind) => item.label ?? fileKindConfig[item.kind].label
+  const reclaimable = files.reduce((sum, file) => sum + file.size, 0)
 
   async function remove(file: StorageFile) {
     if (deleting.current.has(file.id)) return
@@ -171,19 +206,8 @@ const Files3 = (props: Files3Props) => {
     } finally {
       deleting.current.delete(file.id)
     }
-    const kind = breakdownKind(
-      file.kind,
-      breakdown.map((item) => item.kind),
-    )
     startTransition(() => {
-      setFiles((current) => current.filter((item) => item.id !== file.id))
-      setBreakdown((current) =>
-        current.map((item) =>
-          item.kind === kind
-            ? { ...item, size: Math.max(0, item.size - file.size) }
-            : item,
-        ),
-      )
+      setDeleted((current) => new Set([...current, file.id]))
       setMessage(`Deleted ${file.name}, freeing ${formatFileSize(file.size)}`)
     })
   }
@@ -219,19 +243,29 @@ const Files3 = (props: Files3Props) => {
   ]
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {plan} · {formatFileSize(Math.max(0, limit - used))} free
-        </CardDescription>
-        <CardAction>
-          <UsageStatusBadge status={status} />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='@container/storage flex flex-col gap-6'>
-        <div className='flex flex-col gap-3'>
-          <div className='flex items-baseline justify-between gap-2'>
+    <BlockStateProvider status={status} empty={storedBreakdown.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>
+                {largest ? (
+                  <>
+                    {labelOf(largest)} use the most space, and{' '}
+                    <span className='tabular-nums'>{formatFileSize(free)}</span> of the{' '}
+                    {plan} is free.
+                  </>
+                ) : (
+                  `Nothing stored on the ${plan} yet.`
+                )}
+              </p>
+            </BlockReady>
+          </div>
+          <UsageStatusLabel className='mt-0.5' status={usage} />
+        </header>
+        <div className='flex flex-col gap-3 border-t pt-4'>
+          <div className='flex flex-wrap items-baseline gap-x-2'>
             <UsageMeterValue>{formatFileSize(used)}</UsageMeterValue>
             <UsageMeterLimit>of {formatFileSize(limit)}</UsageMeterLimit>
           </div>
@@ -243,79 +277,96 @@ const Files3 = (props: Files3Props) => {
                 label: item.kind,
                 value: item.size,
               }))}
-              total={limit}
+              total={Math.max(limit, used)}
             />
           </div>
-          <ul className='grid gap-x-4 gap-y-1.5 text-xs @xs/storage:grid-cols-2'>
-            {breakdown.map((item, index) => (
-              <li key={item.kind} className='flex min-w-0 items-center gap-2'>
-                <span
-                  aria-hidden
-                  className='size-2.5 shrink-0 rounded-[3px]'
-                  style={{ backgroundColor: kindColors[index] }}
-                />
-                <span className='text-muted-foreground truncate'>
-                  {item.label ?? fileKindConfig[item.kind].label}
-                </span>
-                <span className='ml-auto font-medium tabular-nums'>
-                  {formatFileSize(item.size)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <section aria-labelledby={headingId} className='flex flex-col gap-1'>
-          <h3 id={headingId} className='text-sm font-medium'>
-            Largest files
-          </h3>
-          {files.length > 0 ? (
-            <ul className='-mx-2 flex flex-col'>
-              {files.map((file) => (
+          {state === 'loading' && <BlockStateRows rows={4} />}
+          {!state && (
+            <ul className='grid gap-x-6 text-sm @sm:grid-cols-2'>
+              {breakdown.map((item, index) => (
                 <li
-                  key={file.id}
-                  className='hover:bg-muted/50 focus-within:bg-muted/50 flex items-center gap-3 rounded-md px-2 py-2 transition-colors'
+                  key={item.kind}
+                  className='flex min-w-0 items-center gap-2 border-b py-2'
                 >
-                  <FileKindIcon kind={file.kind} size='sm' />
-                  <div className='flex min-w-0 flex-1 flex-col'>
-                    <a
-                      href={file.href}
-                      className='truncate text-sm underline-offset-4 outline-none hover:underline focus-visible:underline'
-                    >
-                      {file.name}
-                    </a>
-                    <span className='text-muted-foreground truncate text-xs'>
-                      <span className='tabular-nums @sm/storage:hidden'>
-                        {formatFileSize(file.size)} ·{' '}
-                      </span>
-                      {file.location}
-                    </span>
-                  </div>
-                  <span className='hidden text-sm tabular-nums @sm/storage:inline'>
-                    {formatFileSize(file.size)}
-                  </span>
-                  <FileActionsMenu
-                    actions={actionsFor(file)}
-                    label={`Actions for ${file.name}`}
+                  <span
+                    aria-hidden
+                    className='size-2.5 shrink-0 rounded-[3px]'
+                    style={{ backgroundColor: kindColors[index] }}
                   />
+                  <span className='text-muted-foreground truncate'>{labelOf(item)}</span>
+                  <span className='ml-auto font-medium tabular-nums'>
+                    {formatFileSize(item.size)}
+                  </span>
+                  <span className='text-muted-foreground w-9 text-right text-xs tabular-nums'>
+                    {formatPercent(limit > 0 ? item.size / limit : 0, {
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
                 </li>
               ))}
             </ul>
-          ) : (
-            <p className='text-muted-foreground py-2 text-sm'>
-              No large files left to review.
-            </p>
           )}
-        </section>
-      </CardContent>
-      <CardFooter className='flex flex-wrap items-center justify-between gap-3'>
-        <p aria-live='polite' className='text-muted-foreground min-w-48 flex-1 text-xs'>
-          {message || upgradeHint}
-        </p>
-        <a href={upgradeHref} className={cn(buttonVariants({ size: 'sm' }))}>
-          Upgrade storage
-        </a>
-      </CardFooter>
-    </Card>
+        </div>
+        {(state === undefined || state === 'loading') && (
+          <section aria-labelledby={headingId} className='flex flex-col gap-1'>
+            <div className='flex flex-col gap-0.5'>
+              <h3 id={headingId} className='text-sm font-medium'>
+                Largest files
+              </h3>
+              {!state && files.length > 0 && (
+                <p className='text-muted-foreground text-sm'>
+                  Deleting these {files.length === 1 ? 'file' : `${files.length} files`}{' '}
+                  would free{' '}
+                  <span className='tabular-nums'>{formatFileSize(reclaimable)}</span>.
+                </p>
+              )}
+            </div>
+            {state === 'loading' ? (
+              <BlockStateRows className='mt-1 border-t' rows={4} />
+            ) : files.length > 0 ? (
+              <ul className='mt-1 flex flex-col border-t'>
+                {files.map((file) => (
+                  <li key={file.id} className='flex items-center gap-3 border-b py-2.5'>
+                    <FileKindIcon kind={file.kind} size='sm' />
+                    <div className='flex min-w-0 flex-1 flex-col'>
+                      <a
+                        href={file.href}
+                        className='truncate text-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:underline'
+                      >
+                        {file.name}
+                      </a>
+                      <span className='text-muted-foreground truncate text-sm'>
+                        {file.location}
+                      </span>
+                    </div>
+                    <span className='text-sm tabular-nums'>
+                      {formatFileSize(file.size)}
+                    </span>
+                    <FileActionsMenu
+                      actions={actionsFor(file)}
+                      label={`Actions for ${file.name}`}
+                      className='-mr-2'
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className='text-muted-foreground border-t py-2.5 text-sm'>
+                No large files left to review.
+              </p>
+            )}
+          </section>
+        )}
+        <footer className='flex flex-wrap items-center justify-between gap-3'>
+          <p aria-live='polite' className='text-muted-foreground min-w-48 flex-1 text-sm'>
+            {message || upgradeHint}
+          </p>
+          <a href={upgradeHref} className={cn(buttonVariants({ size: 'sm' }))}>
+            Upgrade storage
+          </a>
+        </footer>
+      </section>
+    </BlockStateProvider>
   )
 }
 

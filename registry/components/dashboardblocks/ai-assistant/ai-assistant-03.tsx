@@ -22,15 +22,17 @@ import {
   getTokenCost,
   tokenPartColors,
 } from '@/registry/components/dashboardblocks/ai-usage'
-import { useState } from 'react'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { useId, useState } from 'react'
 
 interface AiAssistant3Props {
   description: string
@@ -38,14 +40,16 @@ interface AiAssistant3Props {
   /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
   prices: TokenPrices
+  status?: BlockStatus
   suggestions: SuggestedPrompt[]
   title: string
-  tokens: TokenCounts
+  /** Leave out to show the empty state. */
+  tokens?: TokenCounts
   usage: Record<string, TokenCounts>
 }
 
 const exampleProps: AiAssistant3Props = {
-  description: 'All models, this month',
+  description: 'All models this month. Output is 8% of the tokens and 38% of the cost.',
   messages: [
     {
       content: 'What drove the cost this month?',
@@ -62,7 +66,10 @@ Capping summaries at 400 tokens would save roughly **$150** a month.`,
   ],
   prices: { cached: 0.3, input: 3, output: 15 },
   suggestions: [
-    { label: 'Raise the cache hit rate', prompt: 'How can we raise the cache hit rate?' },
+    {
+      label: 'Raise the cache hit rate',
+      prompt: 'How can we raise the cache hit rate?',
+    },
     { label: 'Forecast next month’s cost' },
   ],
   title: 'Token usage',
@@ -87,7 +94,7 @@ Together they could lift the hit rate to about 55%, saving around $180 a month.`
 }
 
 const fallbackReply =
-  'This is a demo reply. Pass `onSend` to stream answers from your own model, with the card’s data as context.'
+  'This is a demo reply. Pass `onSend` to stream answers from your own model, with this data as context.'
 
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
@@ -126,10 +133,10 @@ function estimateUsage(conversation: ChatMessageData[]): TokenCounts {
   }
 }
 
-const legend = [
-  { color: tokenPartColors.input, key: 'input', label: 'Input' },
-  { color: tokenPartColors.cached, key: 'cached', label: 'Cached' },
-  { color: tokenPartColors.output, key: 'output', label: 'Output' },
+const tokenParts = [
+  { key: 'input', label: 'Input' },
+  { key: 'cached', label: 'Cached' },
+  { key: 'output', label: 'Output' },
 ] as const
 
 const AiAssistant3 = (props: AiAssistant3Props) => {
@@ -138,16 +145,22 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
     messages: initialMessages,
     onSend = simulateStream,
     prices,
+    status: blockStatus,
     suggestions,
     title,
-    tokens,
+    tokens = { input: 0, output: 0 },
     usage: initialUsage,
   } = props
+  const state = getBlockState(blockStatus, props.tokens === undefined)
+  const askId = useId()
   const [usage, setUsage] = useState(initialUsage)
   const chat = useChatStream({
     initialMessages,
     onFinish: (reply, { messages: conversation }) =>
-      setUsage((current) => ({ ...current, [reply.id]: estimateUsage(conversation) })),
+      setUsage((current) => ({
+        ...current,
+        [reply.id]: estimateUsage(conversation),
+      })),
     onSend,
   })
   const { messages, status } = chat
@@ -159,110 +172,149 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
   const total = tokens.input + (tokens.cached ?? 0) + tokens.output
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-3 gap-4'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Tokens</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatTokens(total)}
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Cost</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatUsd(getTokenCost(tokens, prices))}
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Cache hits</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {Math.round(getCacheHitRate(tokens) * 100)}%
-            </dd>
-          </div>
-        </dl>
-        <div className='flex flex-col gap-2'>
-          <TokenSplitBar tokens={tokens} />
-          <ul className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs tabular-nums'>
-            {legend.map((part) => (
-              <li key={part.key} className='flex items-center gap-1.5'>
-                <span
-                  aria-hidden
-                  className='size-2.5 rounded-[3px]'
-                  style={{ backgroundColor: part.color }}
-                />
-                {part.label} {formatTokens(tokens[part.key] ?? 0)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </CardContent>
-      <section aria-label='Ask about this data' className='flex flex-col border-t'>
-        <ChatMessages
-          status={status}
-          latest={latest}
-          label='Questions about this data'
-          className='max-h-96'
-          contentClassName='gap-5 px-(--card-spacing)'
-        >
-          {messages.map((message, index) => {
-            const isLast = index === messages.length - 1
-            const streaming = isLast && status === 'streaming'
-            const replyUsage = usage[message.id]
-            return (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                streaming={streaming}
-                footer={
-                  replyUsage &&
-                  !streaming && (
-                    <p className='text-muted-foreground text-xs tabular-nums'>
-                      {formatTokens(replyUsage.input + (replyUsage.cached ?? 0))} in ·{' '}
-                      {formatTokens(replyUsage.output)} out ·{' '}
-                      {formatUsd(getTokenCost(replyUsage, prices))}
-                    </p>
-                  )
-                }
-                actions={
-                  message.role === 'assistant' &&
-                  !streaming && (
-                    <ChatMessageActions
-                      content={message.content}
-                      onRegenerate={isLast ? chat.regenerate : undefined}
-                    />
-                  )
-                }
+    <BlockStateProvider status={blockStatus} empty={props.tokens === undefined}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-3'>
+          <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
+            <dt className='text-muted-foreground text-sm'>Tokens</dt>
+            <dd>
+              <KPIValue
+                className='whitespace-nowrap'
+                value={total}
+                format={formatTokens}
               />
-            )
-          })}
-          {status === 'submitted' && <TypingIndicator />}
-          {status === 'error' && (
-            <ChatError message={chat.error} onRetry={chat.regenerate} />
+            </dd>
+          </div>
+          {state !== 'empty' && state !== 'error' && (
+            <>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Cost</dt>
+                <dd>
+                  <KPIValue
+                    className='text-2xl'
+                    value={getTokenCost(tokens, prices)}
+                    format={formatUsd}
+                  />
+                </dd>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>From the cache</dt>
+                <dd>
+                  <KPIValue
+                    className='text-2xl'
+                    value={getCacheHitRate(tokens)}
+                    format={(rate) => formatPercent(rate, { maximumFractionDigits: 0 })}
+                  />
+                </dd>
+              </div>
+            </>
           )}
-        </ChatMessages>
-        <div className='flex flex-col gap-3 px-(--card-spacing)'>
-          {status === 'ready' && remaining.length > 0 && (
-            <SuggestedPrompts
-              label='Suggested questions'
-              prompts={remaining}
-              onSelect={chat.send}
-            />
-          )}
-          <ChatComposer
-            status={status}
-            onSubmit={chat.send}
-            onStop={chat.stop}
-            label='Ask about this data'
-            placeholder='Ask about token usage…'
-          />
-        </div>
+        </dl>
+        {state !== 'empty' && state !== 'error' && (
+          <>
+            <div className='flex flex-col gap-2'>
+              <TokenSplitBar tokens={tokens} />
+              <BlockReady className='text-xs'>
+                <ul className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs tabular-nums'>
+                  {tokenParts.map((part) => (
+                    <li key={part.key} className='flex items-center gap-1.5'>
+                      <span
+                        aria-hidden
+                        className='size-2.5 rounded-[3px]'
+                        style={{ backgroundColor: tokenPartColors[part.key] }}
+                      />
+                      {part.label}
+                      <span className='text-foreground font-medium'>
+                        {formatTokens(tokens[part.key] ?? 0)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </BlockReady>
+            </div>
+            <section
+              aria-labelledby={askId}
+              className='flex flex-col gap-3 border-t pt-4'
+            >
+              <h3 id={askId} className='text-sm font-medium'>
+                Ask about this data
+              </h3>
+              <ChatMessages
+                status={status}
+                latest={latest}
+                label='Questions about this data'
+                className='max-h-96'
+                contentClassName='gap-5 ps-0 pe-4 pt-0'
+              >
+                {state && <BlockStateRows rows={2} />}
+                {!state &&
+                  messages.map((message, index) => {
+                    const isLast = index === messages.length - 1
+                    const streaming = isLast && status === 'streaming'
+                    const replyUsage = usage[message.id]
+                    return (
+                      <ChatMessage
+                        key={message.id}
+                        message={message}
+                        streaming={streaming}
+                        footer={
+                          replyUsage &&
+                          !streaming && (
+                            <p className='text-muted-foreground flex justify-between gap-3 text-xs tabular-nums'>
+                              <Details>
+                                <span>
+                                  {formatTokens(
+                                    replyUsage.input + (replyUsage.cached ?? 0),
+                                  )}{' '}
+                                  in
+                                </span>
+                                <span>{formatTokens(replyUsage.output)} out</span>
+                              </Details>
+                              <span>{formatUsd(getTokenCost(replyUsage, prices))}</span>
+                            </p>
+                          )
+                        }
+                        actions={
+                          message.role === 'assistant' &&
+                          !streaming && (
+                            <ChatMessageActions
+                              content={message.content}
+                              onRegenerate={isLast ? chat.regenerate : undefined}
+                            />
+                          )
+                        }
+                      />
+                    )
+                  })}
+                {!state && status === 'submitted' && <TypingIndicator />}
+                {!state && status === 'error' && (
+                  <ChatError message={chat.error} onRetry={chat.regenerate} />
+                )}
+              </ChatMessages>
+              {!state && status === 'ready' && remaining.length > 0 && (
+                <SuggestedPrompts
+                  label='Suggested questions'
+                  prompts={remaining}
+                  onSelect={chat.send}
+                />
+              )}
+              <ChatComposer
+                disabled={!!state}
+                status={status}
+                onSubmit={chat.send}
+                onStop={chat.stop}
+                label='Ask about this data'
+                placeholder='Ask about token usage…'
+              />
+            </section>
+          </>
+        )}
       </section>
-    </Card>
+    </BlockStateProvider>
   )
 }
 

@@ -16,3 +16,10 @@ export const invoiceExampleProps = {
   'invoice-03': invoice3ExampleProps,
   'invoice-04': invoice4ExampleProps,
 }
+
+export const invoiceEmptyProps = {
+  'invoice-01': { lines: [] },
+  'invoice-02': { lines: [], refunds: [] },
+  'invoice-03': { lines: [] },
+  'invoice-04': { lines: [] },
+}

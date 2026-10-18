@@ -1,19 +1,22 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: 24d8980ec559
+// source-hash: 586abe6271bd
 
 'use client'
 
+import type { ActivityTone } from '@/registry/components/dashboardblocks/activity-feed'
 import {
-  type ActivityTone,
-  activityToneClasses,
-} from '@/registry/components/dashboardblocks/activity-feed'
+  BlockStateText,
+  Skeleton,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
-  UrgencyBadge,
+  UrgencyLabel,
   formatDay,
   getDay,
   getDayOffset,
   getUrgency,
 } from '@/registry/components/dashboardblocks/schedule'
+import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
@@ -648,10 +651,11 @@ function KanbanBoard({
           // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
           tabIndex={0}
           className={cn(
-            'focus-visible:ring-ring/50 @container relative flex snap-x snap-proximity items-start gap-3 overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
+            'focus-visible:ring-ring/50 @container relative flex snap-x snap-proximity items-start gap-4 overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
             className,
           )}
         >
+          <BlockStateText className='sr-only' />
           {children}
         </div>
         {drag?.mode === 'keyboard' && (
@@ -706,12 +710,12 @@ function KanbanCount({
     <span
       data-state={state}
       className={cn(
-        'inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3 [&_svg]:shrink-0',
+        'inline-flex shrink-0 items-center gap-1 text-sm whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
         state === 'over'
-          ? 'bg-red-500/10 text-red-700 dark:text-red-400'
+          ? cn('font-medium', statusToneClasses.bad)
           : state === 'at'
-            ? 'bg-amber-500/10 text-amber-800 dark:text-amber-400'
-            : 'bg-muted text-foreground',
+            ? cn('font-medium', statusToneClasses.warning)
+            : statusToneClasses.neutral,
         className,
       )}
     >
@@ -762,6 +766,7 @@ function KanbanColumn({
 }: KanbanColumnProps) {
   const headingId = useId()
   const { drag, items, itemName } = useKanban()
+  const loading = useBlockState() === 'loading'
   const count = getColumnItems(items, column.id).length
   const target = drag?.target?.column === column.id ? drag.target : null
   const isOver =
@@ -801,7 +806,7 @@ function KanbanColumn({
     </Button>
   )
   const columnClassName =
-    'bg-muted/50 flex shrink-0 snap-start flex-col rounded-xl transition-[background-color,box-shadow] data-over:bg-muted data-over:ring-2 data-over:ring-primary/25 data-blocked:ring-2 data-blocked:ring-red-500/40'
+    'flex shrink-0 snap-start flex-col border-t pt-3 transition-colors data-over:border-primary data-blocked:border-red-500'
 
   if (collapsed) {
     return (
@@ -812,10 +817,12 @@ function KanbanColumn({
         tabIndex={-1}
         data-over={isOver ? '' : undefined}
         data-blocked={target?.blocked ? '' : undefined}
-        className={cn(columnClassName, 'w-11 items-center gap-3 px-1 py-2', className)}
+        className={cn(columnClassName, 'w-9 items-center gap-3', className)}
       >
         {toggle}
-        <KanbanCount count={count} itemName={itemName} limit={column.wipLimit} />
+        {!loading && (
+          <KanbanCount count={count} itemName={itemName} limit={column.wipLimit} />
+        )}
         <h3
           id={headingId}
           className='flex items-center gap-2 text-sm font-medium whitespace-nowrap [writing-mode:vertical-rl]'
@@ -833,13 +840,9 @@ function KanbanColumn({
       data-kanban-column={column.id}
       data-over={isOver ? '' : undefined}
       data-blocked={target?.blocked ? '' : undefined}
-      className={cn(
-        columnClassName,
-        'w-72 max-w-[calc(100cqw-2.5rem)] gap-2 p-2',
-        className,
-      )}
+      className={cn(columnClassName, 'w-72 max-w-[calc(100cqw-2.5rem)] gap-3', className)}
     >
-      <div className='flex min-h-7 items-center gap-2 pl-1.5'>
+      <div className='flex min-h-7 items-center gap-2'>
         <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
           <h3
             id={headingId}
@@ -848,11 +851,20 @@ function KanbanColumn({
             {dot}
             <span className='truncate'>{column.title}</span>
           </h3>
-          {summary && (
-            <div className='text-muted-foreground text-xs tabular-nums'>{summary}</div>
+          {summary && !loading && (
+            <div
+              className={cn(
+                'text-muted-foreground text-xs tabular-nums',
+                dot && 'pl-4.5',
+              )}
+            >
+              {summary}
+            </div>
           )}
         </div>
-        <KanbanCount count={count} itemName={itemName} limit={column.wipLimit} />
+        {!loading && (
+          <KanbanCount count={count} itemName={itemName} limit={column.wipLimit} />
+        )}
         {(action || toggle) && (
           <div className='-my-1 flex shrink-0 items-center'>
             {action}
@@ -861,11 +873,16 @@ function KanbanColumn({
         )}
       </div>
       {target?.blocked && (
-        <p aria-hidden className='px-1.5 text-xs text-red-700 dark:text-red-400'>
+        <p aria-hidden className='text-xs text-red-700 dark:text-red-400'>
           At its limit of {column.wipLimit}
         </p>
       )}
-      {count > 0 ? (
+      {loading ? (
+        <div aria-hidden className='flex flex-col gap-2'>
+          <Skeleton className='h-24 rounded-xl' />
+          <Skeleton className='h-24 rounded-xl' />
+        </div>
+      ) : count > 0 ? (
         <ul aria-labelledby={headingId} className='flex flex-col gap-2'>
           {children}
         </ul>
@@ -873,14 +890,14 @@ function KanbanColumn({
         <div
           data-kanban-indicator={isOver ? '' : undefined}
           className={cn(
-            'text-muted-foreground border-foreground/15 flex min-h-20 items-center justify-center rounded-lg border border-dashed px-3 py-4 text-center text-xs transition-colors',
+            'text-muted-foreground flex min-h-20 items-center justify-center rounded-xl border border-dashed px-3 py-6 text-center text-xs transition-colors',
             isOver && 'border-primary/60 bg-primary/5',
           )}
         >
           {empty ?? `No ${itemName.other}`}
         </div>
       )}
-      {footer}
+      {!loading && footer}
     </section>
   )
 }
@@ -934,10 +951,10 @@ function KanbanCard({ children, className, item }: KanbanCardProps) {
         <div
           onPointerDown={(event) => onPointerDown(event, item.id)}
           className={cn(
-            'bg-card text-card-foreground relative flex cursor-grab flex-col gap-2.5 rounded-lg p-3 text-sm shadow-xs ring-1 ring-foreground/10 transition-[box-shadow,translate,scale] select-none [-webkit-touch-callout:none]',
+            'bg-muted/50 relative flex cursor-grab flex-col gap-2.5 rounded-xl p-3 text-sm transition-[box-shadow,translate,scale] select-none [--kanban-card-surface:color-mix(in_oklab,var(--color-muted)_50%,var(--color-background))] [-webkit-touch-callout:none]',
             lifted === 'pointer' &&
-              'pointer-events-none z-30 scale-[1.02] shadow-lg transition-none',
-            lifted === 'keyboard' && '-translate-y-0.5 shadow-md ring-2 ring-primary',
+              'bg-muted pointer-events-none [--kanban-card-surface:var(--color-muted)] z-30 scale-[1.02] shadow-lg ring-1 ring-foreground/10 transition-none',
+            lifted === 'keyboard' && '-translate-y-0.5 ring-2 ring-primary',
             !lifted &&
               'has-[[data-kanban-handle]:focus-visible]:ring-3 has-[[data-kanban-handle]:focus-visible]:ring-ring/50',
             className,
@@ -947,10 +964,7 @@ function KanbanCard({ children, className, item }: KanbanCardProps) {
         </div>
       </KanbanCardContext.Provider>
       {lifted === 'pointer' && (
-        <span
-          aria-hidden
-          className='border-foreground/15 absolute inset-0 rounded-lg border-2 border-dashed'
-        />
+        <span aria-hidden className='absolute inset-0 rounded-xl border border-dashed' />
       )}
       {edge === 'after' && <DropIndicator edge='after' over={over} />}
     </li>
@@ -1058,6 +1072,15 @@ interface KanbanLabelDef {
   tone?: ActivityTone
 }
 
+const labelDotClasses: Record<ActivityTone, string> = {
+  accent: 'bg-chart-2',
+  danger: 'bg-red-500',
+  info: 'bg-sky-500',
+  neutral: 'bg-muted-foreground',
+  success: 'bg-emerald-500',
+  warning: 'bg-amber-500',
+}
+
 function KanbanLabels({
   className,
   labels,
@@ -1066,15 +1089,22 @@ function KanbanLabels({
   labels: KanbanLabelDef[]
 }) {
   return (
-    <ul aria-label='Labels' className={cn('flex flex-wrap gap-1', className)}>
+    <ul
+      aria-label='Labels'
+      className={cn(
+        'text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-xs',
+        className,
+      )}
+    >
       {labels.map((label) => (
-        <li
-          key={label.name}
-          className={cn(
-            'rounded-md px-1.5 py-0.5 text-xs font-medium',
-            activityToneClasses[label.tone ?? 'neutral'],
-          )}
-        >
+        <li key={label.name} className='inline-flex items-center gap-1.5'>
+          <span
+            aria-hidden
+            className={cn(
+              'size-1.5 shrink-0 rounded-full',
+              labelDotClasses[label.tone ?? 'neutral'],
+            )}
+          />
           {label.name}
         </li>
       ))}
@@ -1108,7 +1138,10 @@ function KanbanAssignees({
   const rest = names.length - shown.length
   return (
     <span className={cn('inline-flex', className)}>
-      <AvatarGroup aria-hidden className='-space-x-1 *:data-[slot=avatar]:ring-card'>
+      <AvatarGroup
+        aria-hidden
+        className='-space-x-1 *:data-[slot=avatar]:ring-[var(--kanban-card-surface,var(--color-background))]'
+      >
         {shown.map((name) => (
           <Avatar key={name} size='sm' title={name}>
             <AvatarFallback>{getInitials(name)}</AvatarFallback>
@@ -1117,7 +1150,7 @@ function KanbanAssignees({
         {rest > 0 && (
           <AvatarGroupCount
             // Not the primitive's colour: the ring cuts the count out of the card behind it
-            className='ring-card'
+            className='ring-[var(--kanban-card-surface,var(--color-background))]'
           >
             +{rest}
           </AvatarGroupCount>
@@ -1159,7 +1192,7 @@ function KanbanDueDate({
   return (
     <span className={cn('inline-flex', className)}>
       <span className='sr-only'>Due </span>
-      <UrgencyBadge urgency={urgency} label={label} />
+      <UrgencyLabel className='text-xs' urgency={urgency} label={label} />
       {urgency === 'overdue' && <span className='sr-only'>, overdue</span>}
     </span>
   )
@@ -1333,11 +1366,7 @@ function KanbanSubtasks({
 }) {
   return (
     <KanbanCardStat
-      className={cn(
-        done === total &&
-          'rounded-md bg-emerald-500/10 px-1 text-emerald-700 dark:text-emerald-400',
-        className,
-      )}
+      className={cn(done === total && statusToneClasses.good, className)}
       icon={
         <IconPlaceholder
           lucide='ListChecksIcon'
@@ -1435,8 +1464,6 @@ function KanbanAddCard({
           event.preventDefault()
           close()
         }}
-        // Not the primitive's colour: the input replaces a card's title in place, so it takes the card's surface
-        className='bg-card'
       />
       <p role='status' className='sr-only'>
         {status}

@@ -1,20 +1,23 @@
 'use client'
 
 import {
-  StatusBadge,
+  ActivityFeed,
+  ActivityFeedItem,
+} from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  StatusIndicator,
   type StatusLevel,
 } from '@/registry/components/dashboardblocks/status'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -29,8 +32,10 @@ interface Status3Props {
   onSubscribe?: () => void
   severity: StatusLevel
   started: string
+  status?: BlockStatus
   title: string
-  updates: IncidentUpdate[]
+  /** Newest first. Leave out, or pass none, to show the empty state. */
+  updates?: IncidentUpdate[]
 }
 
 const exampleProps: Status3Props = {
@@ -59,76 +64,82 @@ const exampleProps: Status3Props = {
   ],
 }
 
+const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
+
 const Status3 = (props: Status3Props) => {
-  const { affected, onSubscribe, severity, started, title, updates } = props
+  const { affected, onSubscribe, severity, started, status, title, updates = [] } = props
+  const state = getBlockState(status, updates.length === 0)
 
   return (
-    <Card>
-      <CardHeader className='gap-2'>
-        <StatusBadge className='w-fit' status={severity} />
-        <CardTitle className='text-base'>{title}</CardTitle>
-        <CardDescription>{started}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-wrap items-center gap-2 text-xs'>
-          <span className='text-muted-foreground'>Affected</span>
-          {affected.map((component) => (
-            <span key={component} className='bg-muted rounded-md px-2 py-0.5 font-medium'>
-              {component}
-            </span>
-          ))}
-        </div>
-        <ol className='flex flex-col'>
-          {updates.map((update, index) => {
-            const isLatest = index === 0
-            return (
-              <li
+    <BlockStateProvider status={status} empty={updates.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-1'>
+            <BlockReady className='w-32 text-sm'>
+              <StatusIndicator status={severity} />
+            </BlockReady>
+            <h2 className='font-semibold tracking-tight text-balance'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>
+                {[
+                  started,
+                  affected.length > 0 && `Affects ${listFormat.format(affected)}`,
+                ]
+                  .filter(Boolean)
+                  .map((sentence) => `${sentence}.`)
+                  .join(' ')}
+              </p>
+            </BlockReady>
+          </div>
+          <Button variant='outline' size='sm' onClick={onSubscribe}>
+            <IconPlaceholder
+              lucide='BellIcon'
+              tabler='IconBell'
+              hugeicons='NotificationIcon'
+              phosphor='BellIcon'
+              remixicon='RiNotificationLine'
+              data-icon='inline-start'
+            />
+            Subscribe
+          </Button>
+        </header>
+        {state && (
+          <div className='border-t'>
+            <BlockStateRows rows={3} />
+          </div>
+        )}
+        {!state && (
+          <ActivityFeed className='border-t pt-4 [--activity-marker:0.75rem]'>
+            {updates.map((update, index) => (
+              <ActivityFeedItem
                 key={`${update.stage}-${update.time}`}
-                className='relative flex gap-3 pb-5 last:pb-0'
+                connector
+                className='pb-5 last:pb-0'
               >
-                {index < updates.length - 1 && (
-                  <span
-                    aria-hidden
-                    className='bg-border absolute top-4 bottom-0 left-[5px] w-px'
-                  />
-                )}
                 <span
                   aria-hidden
                   className={cn(
-                    'ring-card relative mt-1 size-[11px] shrink-0 rounded-full ring-4',
-                    isLatest ? 'bg-foreground' : 'bg-muted-foreground/40',
+                    'ring-background relative mt-1 size-(--activity-marker) shrink-0 rounded-full ring-4',
+                    index === 0 ? 'bg-foreground' : 'bg-muted-foreground/40',
                   )}
                 />
                 <div className='flex min-w-0 flex-col gap-1'>
-                  <div className='flex flex-wrap items-baseline gap-x-2 text-sm'>
+                  <p className='flex flex-wrap items-baseline gap-x-2 text-sm'>
                     <span className='font-medium'>{update.stage}</span>
                     <span className='text-muted-foreground text-xs tabular-nums'>
                       {update.time}
                     </span>
-                  </div>
+                  </p>
                   <p className='text-muted-foreground text-sm text-pretty'>
                     {update.message}
                   </p>
                 </div>
-              </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-      <CardFooter className='border-t'>
-        <Button variant='outline' size='sm' onClick={onSubscribe}>
-          <IconPlaceholder
-            lucide='BellIcon'
-            tabler='IconBell'
-            hugeicons='NotificationIcon'
-            phosphor='BellIcon'
-            remixicon='RiNotificationLine'
-            data-icon='inline-start'
-          />
-          Subscribe to updates
-        </Button>
-      </CardFooter>
-    </Card>
+              </ActivityFeedItem>
+            ))}
+          </ActivityFeed>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

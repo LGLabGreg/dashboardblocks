@@ -16,3 +16,7 @@ export const statesExampleProps = {
   'states-03': states3ExampleProps,
   'states-04': states4ExampleProps,
 }
+
+export const statesEmptyProps = {
+  'states-03': { orders: [] },
+}

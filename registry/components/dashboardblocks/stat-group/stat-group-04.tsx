@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   Stat,
   StatChange,
   StatGroup,
@@ -8,21 +12,22 @@ import {
   type StatMetric,
   StatValue,
   formatStatValue,
+  getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
-
-import { Card } from '@/components/ui/card'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface StatGroup4Props {
-  metrics: StatMetric[]
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: StatMetric[]
+  /** How many metrics to sketch while loading. @default 5 */
+  placeholders?: number
+  status?: BlockStatus
 }
-
-const compactCurrency = (value: number) =>
-  `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, notation: 'compact' }).format(value)}`
 
 const exampleProps: StatGroup4Props = {
   metrics: [
     {
-      formatter: compactCurrency,
+      formatter: (value) => formatCurrency(value, { compact: true }),
       key: 'mrr',
       label: 'MRR',
       previous: 80_800,
@@ -30,7 +35,11 @@ const exampleProps: StatGroup4Props = {
     },
     { key: 'customers', label: 'Customers', previous: 1_186, value: 1_241 },
     {
-      formatter: (value) => `$${value.toFixed(2)}`,
+      formatter: (value) =>
+        formatCurrency(value, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }),
       key: 'arpu',
       label: 'ARPU',
       previous: 68.13,
@@ -38,7 +47,7 @@ const exampleProps: StatGroup4Props = {
     },
     {
       changeType: 'points',
-      formatter: (value) => `${value}%`,
+      formatter: (value) => formatPercent(value / 100),
       goodDirection: 'down',
       key: 'churn',
       label: 'Churn',
@@ -56,20 +65,28 @@ const exampleProps: StatGroup4Props = {
 }
 
 const StatGroup4 = (props: StatGroup4Props) => {
-  const { metrics } = props
+  const { metrics = [], placeholders = 5, status } = props
+  const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <Card className='@container gap-0 py-0'>
-      <StatGroup className='grid-cols-2 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none [&>:last-child:nth-child(odd)]:col-span-2 @2xl:[&>:last-child:nth-child(odd)]:col-span-1'>
-        {metrics.map((metric) => (
-          <Stat key={metric.key} className='gap-0.5 px-4 py-3'>
-            <StatLabel className='text-xs'>{metric.label}</StatLabel>
-            <StatValue className='text-lg'>{formatStatValue(metric)}</StatValue>
-            <StatChange metric={metric} showPrevious={false} />
-          </Stat>
-        ))}
-      </StatGroup>
-    </Card>
+    <BlockStateProvider status={status} empty={metrics.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <StatGroup className='grid-cols-2 gap-x-4 gap-y-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
+          {shown.map((metric) => (
+            <Stat
+              key={metric.key}
+              className='flex-row flex-wrap items-baseline gap-x-2 gap-y-0.5 pt-2'
+            >
+              <StatLabel className='basis-full truncate text-xs'>
+                {metric.label}
+              </StatLabel>
+              <StatValue className='text-2xl'>{formatStatValue(metric)}</StatValue>
+              <StatChange className='text-xs' metric={metric} variant='short' />
+            </Stat>
+          ))}
+        </StatGroup>
+      </section>
+    </BlockStateProvider>
   )
 }
 

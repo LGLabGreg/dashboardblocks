@@ -9,10 +9,12 @@ import {
   getDateParts,
   getDay,
   getDayKey,
+  getEventStyle,
   getMonthWeeks,
 } from '@/registry/components/dashboardblocks/schedule'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { joinDetails } from '@/registry/lib/dashboardblocks/format'
 import {
   type CSSProperties,
   type KeyboardEvent,
@@ -44,6 +46,7 @@ const LOCATION_EVENT_MINUTES = 90
 const TEXT_LINE_MINUTES = 20
 const TEXT_PADDING_MINUTES = 5
 const HOUR_LABEL_OFFSET_PX = 12
+const GUTTER = '4rem'
 
 const toKey = (day: Date) => day.toISOString().slice(0, 10)
 const getEnd = (event: ScheduleEvent) => (event.end ?? event.start).getTime()
@@ -256,7 +259,7 @@ function formatEventDate(
   timeZone = 'UTC',
   style: 'long' | 'short' = 'short',
 ) {
-  return getEventWhen(event, timeZone, style).join(' · ')
+  return joinDetails(...getEventWhen(event, timeZone, style))
 }
 
 function getEventLabel(event: ScheduleEvent, timeZone = 'UTC') {
@@ -280,9 +283,11 @@ function formatShortTime(date: Date, timeZone: string) {
   return `${time}${hour < 12 ? 'a' : 'p'}`
 }
 
-const eventStyle = (event: ScheduleEvent, amount = 28): CSSProperties => ({
-  backgroundColor: `color-mix(in oklab, ${event.color ?? 'var(--chart-2)'} ${amount}%, var(--card))`,
-})
+const SURFACE = 'var(--calendar-surface, var(--color-card))'
+const SURFACE_BG = 'bg-[var(--calendar-surface,var(--color-card))]'
+
+const eventStyle = (event: ScheduleEvent, ended = false) =>
+  getEventStyle(event, ended, SURFACE)
 
 const eventFocus =
   'outline-none focus-visible:z-20 focus-visible:ring-[3px] focus-visible:ring-ring/50'
@@ -319,15 +324,15 @@ function CalendarToolbar({
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center justify-between gap-x-4 gap-y-3',
+        'flex flex-wrap items-start justify-between gap-x-4 gap-y-3',
         className,
       )}
     >
-      <div className='flex min-w-0 flex-col'>
-        <h2 aria-live='polite' className='text-lg font-semibold'>
+      <div className='flex min-w-0 flex-col gap-0.5'>
+        <h2 aria-live='polite' className='font-semibold tracking-tight'>
           {title}
         </h2>
-        {description && <p className='text-muted-foreground text-xs'>{description}</p>}
+        {description && <p className='text-muted-foreground text-sm'>{description}</p>}
       </div>
       <div className='flex flex-wrap items-center gap-2'>
         <Button variant='outline' size='sm' onClick={onToday}>
@@ -417,14 +422,14 @@ function EventBar({
       onClick={onSelect}
       className={cn(
         'flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
-        continuesBefore && 'rounded-l-none',
+        continuesBefore ? 'rounded-l-none' : 'border-s-2',
         continuesAfter && 'rounded-r-none',
         ended && 'text-foreground/70',
         selected && 'ring-primary ring-2',
         eventFocus,
         className,
       )}
-      style={{ ...eventStyle(event, ended ? 14 : 28), ...style }}
+      style={{ ...eventStyle(event, ended), ...style }}
     >
       {!event.allDay && !continuesBefore && (
         <span aria-hidden className='text-foreground/70 shrink-0 tabular-nums'>
@@ -433,7 +438,7 @@ function EventBar({
       )}
       <span
         aria-hidden
-        className={cn('truncate', stickyTitle && 'sticky left-[3.875rem]')}
+        className={cn('truncate', stickyTitle && 'sticky left-[4.375rem]')}
       >
         {event.title}
       </span>
@@ -580,18 +585,15 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
           ?.dataset.day
         if (key) setCursor(new Date(key))
       }}
-      className={cn(
-        'bg-border @container flex flex-col gap-px overflow-hidden rounded-lg border',
-        className,
-      )}
+      className={cn('@container flex flex-col border-b', className)}
     >
-      <div role='row' className='grid grid-cols-7 gap-px'>
+      <div role='row' className='grid grid-cols-7'>
         {weeks[0].map((day) => (
           <div
             key={day.getTime()}
             role='columnheader'
             aria-label={formatDay(day, { weekday: 'long' })}
-            className='bg-card text-muted-foreground py-1.5 text-center text-xs font-medium'
+            className='text-muted-foreground pb-2 text-center text-xs font-medium @2xl:px-1.5 @2xl:text-left'
           >
             <span className='@2xl:hidden'>{formatDay(day, { weekday: 'narrow' })}</span>
             <span className='hidden @2xl:inline'>
@@ -604,7 +606,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
         const segments = layoutSegments(spanning, week, timeZone)
         const activeColumn = week.findIndex((day) => day.getTime() === active.getTime())
         return (
-          <div key={week[0].getTime()} role='row' className='grid grid-cols-7 gap-px'>
+          <div key={week[0].getTime()} role='row' className='grid grid-cols-7 border-t'>
             {week.map((day, column) => {
               const key = toKey(day)
               const covering = segments.filter(
@@ -647,7 +649,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                   role='gridcell'
                   aria-selected={isSelected}
                   data-day={key}
-                  className='group/day bg-card relative flex min-h-12 min-w-0 flex-col items-center gap-0.5 p-1 @2xl:min-h-28 @2xl:items-stretch'
+                  className='group/day relative flex min-h-12 min-w-0 flex-col items-center gap-0.5 border-l p-1 first:border-l-0 @2xl:min-h-28 @2xl:items-stretch'
                 >
                   <button
                     type='button'
@@ -669,7 +671,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                     }}
                     className={cn(
                       'focus-visible:ring-ring/50 absolute inset-0 outline-none focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-inset',
-                      outside ? 'bg-muted/40 hover:bg-muted' : 'hover:bg-muted/50',
+                      outside ? 'bg-muted/30 hover:bg-muted' : 'hover:bg-muted/50',
                     )}
                   />
                   <span
@@ -696,7 +698,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                           key={event.id}
                           className='size-1.5 rounded-full'
                           style={{
-                            backgroundColor: event.color ?? 'var(--chart-2)',
+                            backgroundColor: event.color ?? 'var(--color-chart-2)',
                           }}
                         />
                       ))}
@@ -780,7 +782,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
                                 aria-hidden
                                 className='size-1.5 shrink-0 rounded-full'
                                 style={{
-                                  backgroundColor: event.color ?? 'var(--chart-2)',
+                                  backgroundColor: event.color ?? 'var(--color-chart-2)',
                                 }}
                               />
                               <span
@@ -868,7 +870,7 @@ function TimeGrid<T extends ScheduleEvent>({
     nowMinutes >= 0 &&
     nowMinutes <= hours * 60 &&
     columns.some((column) => toKey(column.day) === todayKey)
-  const template = `3.5rem repeat(${columns.length}, minmax(${minColumnWidth}, 1fr))`
+  const template = `${GUTTER} repeat(${columns.length}, minmax(${minColumnWidth}, 1fr))`
   const percent = (minutes: number) => `${(minutes / (hours * 60)) * 100}%`
 
   useEffect(() => {
@@ -885,18 +887,18 @@ function TimeGrid<T extends ScheduleEvent>({
   return (
     <div
       ref={scroller}
-      className={cn('relative h-[32rem] overflow-auto rounded-lg border', className)}
+      className={cn('relative h-[32rem] overflow-auto border-y', className)}
     >
       <div
         style={{
-          minWidth: `calc(3.5rem + ${columns.length} * ${minColumnWidth})`,
+          minWidth: `calc(${GUTTER} + ${columns.length} * ${minColumnWidth})`,
         }}
       >
         <div
-          className='bg-card sticky top-0 z-30 grid border-b'
+          className={cn('sticky top-0 z-30 grid border-b', SURFACE_BG)}
           style={{ gridTemplateColumns: template }}
         >
-          <div className='bg-card sticky left-0 z-10' />
+          <div className={cn('sticky left-0 z-10', SURFACE_BG)} />
           {columns.map((column) => (
             <div key={column.key} className='min-w-0 border-l px-1 py-2'>
               {column.header}
@@ -906,7 +908,10 @@ function TimeGrid<T extends ScheduleEvent>({
             <>
               <div
                 aria-hidden
-                className='bg-card text-muted-foreground sticky left-0 z-10 border-t py-1.5 pr-2 text-right text-[10px]'
+                className={cn(
+                  'text-muted-foreground sticky left-0 z-10 border-t py-1 pr-2 text-right text-xs',
+                  SURFACE_BG,
+                )}
               >
                 All day
               </div>
@@ -954,13 +959,13 @@ function TimeGrid<T extends ScheduleEvent>({
           className='relative grid'
           style={{ gridTemplateColumns: template, height: `${hours * 3}rem` }}
         >
-          <div aria-hidden className='bg-card sticky left-0 z-20'>
+          <div aria-hidden className={cn('sticky left-0 z-20', SURFACE_BG)}>
             {Array.from({ length: hours - 1 }, (_, index) => {
               const hour = startHour + index + 1
               return (
                 <span
                   key={hour}
-                  className='text-muted-foreground absolute right-2 -translate-y-1/2 text-[10px] whitespace-nowrap tabular-nums'
+                  className='text-muted-foreground absolute right-2 -translate-y-1/2 text-xs whitespace-nowrap tabular-nums'
                   style={{ top: percent((index + 1) * 60) }}
                 >
                   {hour % 12 || 12} {hour < 12 || hour === 24 ? 'AM' : 'PM'}
@@ -969,7 +974,7 @@ function TimeGrid<T extends ScheduleEvent>({
             })}
             {showNow && (
               <span
-                className='absolute right-1 z-10 -translate-y-1/2 rounded-sm bg-red-600 px-1 text-[10px] font-medium text-white tabular-nums'
+                className='absolute right-1 z-10 -translate-y-1/2 rounded-sm bg-red-600 px-1 text-xs font-medium text-white tabular-nums'
                 style={{ top: percent(nowMinutes) }}
               >
                 {formatTime(now, timeZone).replace(' ', ' ')}
@@ -987,7 +992,7 @@ function TimeGrid<T extends ScheduleEvent>({
                 className='relative min-w-0 border-l'
                 style={{
                   backgroundImage:
-                    'linear-gradient(to bottom, var(--border) 1px, transparent 1px)',
+                    'linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)',
                   backgroundSize: `100% ${100 / hours}%`,
                 }}
               >
@@ -1028,14 +1033,14 @@ function TimeGrid<T extends ScheduleEvent>({
                               aria-current={selected ? 'true' : undefined}
                               onClick={() => onSelectEvent?.(event)}
                               className={cn(
-                                'ring-card flex size-full min-w-0 overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-xs leading-4 ring-1',
+                                'flex size-full min-w-0 overflow-hidden rounded-sm border-s-2 px-1.5 py-0.5 text-left text-xs leading-4 ring-1 ring-[var(--calendar-surface,var(--color-card))]',
                                 short ? 'gap-1' : 'flex-col',
                                 short && minutes < SHORT_EVENT_MINUTES && 'items-center',
                                 ended && 'text-foreground/70',
                                 selected && 'ring-primary relative z-10 ring-2',
                                 eventFocus,
                               )}
-                              style={eventStyle(event, ended ? 14 : 28)}
+                              style={eventStyle(event, ended)}
                             >
                               <span aria-hidden className='truncate font-medium'>
                                 {event.title}
@@ -1223,7 +1228,7 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
       {events.map((event) => {
         const ended = now !== undefined && getEnd(event) <= now.getTime()
         const selected = event.id === selectedEventId
-        const meta = [event.calendar, event.location].filter(Boolean).join(' · ')
+        const meta = joinDetails(event.calendar, event.location)
         return (
           <li key={event.id}>
             <button
@@ -1250,7 +1255,7 @@ function CalendarEventList<T extends ScheduleEvent = CalendarEvent>({
               <span
                 aria-hidden
                 className={cn('w-1 shrink-0 rounded-full', ended && 'opacity-40')}
-                style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
+                style={{ backgroundColor: event.color ?? 'var(--color-chart-2)' }}
               />
               <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
                 <span
@@ -1298,7 +1303,7 @@ function CalendarEventDetails({
   timeZone = 'UTC',
 }: CalendarEventDetailsProps) {
   const id = useId()
-  const color = event.color ?? 'var(--chart-2)'
+  const color = event.color ?? 'var(--color-chart-2)'
   return (
     <section
       aria-labelledby={id}
@@ -1311,7 +1316,7 @@ function CalendarEventDetails({
           style={{ backgroundColor: color }}
         />
         <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-          <h3 id={id} className='text-base leading-snug font-semibold break-words'>
+          <h3 id={id} className='leading-snug font-semibold tracking-tight break-words'>
             {event.title}
           </h3>
           {getEventWhen(event, timeZone, 'long').map((line) => (
@@ -1326,7 +1331,7 @@ function CalendarEventDetails({
             size='icon-sm'
             aria-label='Close details'
             onClick={onClose}
-            className='-mt-1 -mr-1'
+            className='-mt-1'
           >
             <IconPlaceholder
               lucide='XIcon'

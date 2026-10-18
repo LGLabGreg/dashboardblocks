@@ -16,3 +16,7 @@ export const dashboardHeaderExampleProps = {
   'dashboard-header-03': dashboardHeader3ExampleProps,
   'dashboard-header-04': dashboardHeader4ExampleProps,
 }
+
+export const dashboardHeaderEmptyProps = {
+  'dashboard-header-04': { description: undefined },
+}

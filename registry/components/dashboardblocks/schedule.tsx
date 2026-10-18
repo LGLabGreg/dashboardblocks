@@ -1,14 +1,26 @@
 'use client'
 
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type KeyboardEvent, type ReactNode, useEffect, useRef, useState } from 'react'
+import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { cn } from '@/lib/utils'
 
 interface ScheduleEvent {
   allDay?: boolean
   calendar?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   /** Leave out for a point in time, such as a deadline. */
   end?: Date
@@ -156,12 +168,25 @@ function getMonthWeeks(month: Date, weekStartsOn: 0 | 1 = 0) {
   )
 }
 
+/** Tints an event chip with its colour over `surface`, the colour behind it, and fades it once it has ended. */
+function getEventStyle(
+  event: ScheduleEvent,
+  ended = false,
+  surface = 'var(--color-card)',
+): CSSProperties {
+  const color = event.color ?? 'var(--color-chart-2)'
+  return {
+    backgroundColor: `color-mix(in oklab, ${color} ${ended ? 12 : 24}%, ${surface})`,
+    borderColor: ended ? `color-mix(in oklab, ${color} 45%, ${surface})` : color,
+  }
+}
+
 function EventSwatch({ className, color }: { className?: string; color?: string }) {
   return (
     <span
       aria-hidden
       className={cn('size-2 shrink-0 rounded-full', className)}
-      style={{ backgroundColor: color ?? 'var(--chart-2)' }}
+      style={{ backgroundColor: color ?? 'var(--color-chart-2)' }}
     />
   )
 }
@@ -194,7 +219,7 @@ function EventRow({
     event.end !== undefined &&
     event.start <= now &&
     now < event.end
-  const meta = [event.calendar, event.location].filter(Boolean).join(' · ')
+  const meta = joinDetails(event.calendar, event.location)
 
   return (
     <li className={cn('flex items-stretch gap-3', selected && 'bg-muted', className)}>
@@ -218,7 +243,7 @@ function EventRow({
       <span
         aria-hidden
         className={cn('w-1 shrink-0 rounded-full', ended && 'opacity-40')}
-        style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
+        style={{ backgroundColor: event.color ?? 'var(--color-chart-2)' }}
       />
       <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
         <p
@@ -229,13 +254,9 @@ function EventRow({
         >
           <span className='min-w-0 break-words'>{event.title}</span>
           {live && (
-            <span className='inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400'>
-              <span
-                aria-hidden
-                className='size-1.5 rounded-full bg-current motion-safe:animate-pulse'
-              />
+            <StatusLabel tone='good' className='text-xs'>
               Now
-            </span>
+            </StatusLabel>
           )}
           {ended && <span className='sr-only'>(ended)</span>}
         </p>
@@ -343,6 +364,29 @@ function UrgencyBadge({
       {config.icon}
       {label ?? config.label}
     </span>
+  )
+}
+
+const urgencyTones: Record<Urgency, StatusTone> = {
+  later: 'neutral',
+  overdue: 'bad',
+  soon: 'warning',
+  today: 'warning',
+}
+
+function UrgencyLabel({
+  className,
+  label,
+  urgency,
+}: {
+  className?: string
+  label?: string
+  urgency: Urgency
+}) {
+  return (
+    <StatusLabel tone={urgencyTones[urgency]} className={className}>
+      {label ?? urgencyConfig[urgency].label}
+    </StatusLabel>
   )
 }
 
@@ -542,7 +586,9 @@ function MonthCalendar({
                             'size-1 rounded-full',
                             isSelected && 'ring-primary-foreground/80 ring-1',
                           )}
-                          style={{ backgroundColor: event.color ?? 'var(--chart-2)' }}
+                          style={{
+                            backgroundColor: event.color ?? 'var(--color-chart-2)',
+                          }}
                         />
                       ))}
                     </span>
@@ -562,6 +608,7 @@ export {
   EventSwatch,
   MonthCalendar,
   UrgencyBadge,
+  UrgencyLabel,
   addDays,
   formatCountdown,
   formatDay,
@@ -574,10 +621,12 @@ export {
   getDay,
   getDayKey,
   getDayOffset,
+  getEventStyle,
   getMonthWeeks,
   getUrgency,
   groupByDay,
   urgencyConfig,
+  urgencyTones,
 }
 
 export type { EventRowProps, MonthCalendarProps, ScheduleDay, ScheduleEvent, Urgency }

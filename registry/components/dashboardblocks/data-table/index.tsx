@@ -22,3 +22,12 @@ export const dataTableExampleProps = {
   'data-table-05': dataTable5ExampleProps,
   'data-table-06': dataTable6ExampleProps,
 }
+
+export const dataTableEmptyProps = {
+  'data-table-01': { rows: [] },
+  'data-table-02': { rows: [] },
+  'data-table-03': { rows: [] },
+  'data-table-04': { rows: [] },
+  'data-table-05': { rows: [] },
+  'data-table-06': { rows: [] },
+}

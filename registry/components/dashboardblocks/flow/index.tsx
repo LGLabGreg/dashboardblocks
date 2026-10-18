@@ -16,3 +16,10 @@ export const flowExampleProps = {
   'flow-03': flow3ExampleProps,
   'flow-04': flow4ExampleProps,
 }
+
+export const flowEmptyProps = {
+  'flow-01': { links: [], nodes: [] },
+  'flow-02': { links: [], nodes: [] },
+  'flow-03': { links: [], nodes: [] },
+  'flow-04': { paths: [], total: undefined },
+}

@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  ChartTooltipFrame,
+  ChartTooltipItem,
+} from '@/registry/components/dashboardblocks/chart'
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -52,11 +56,11 @@ function getMedian(values: number[]) {
 }
 
 const scatterPalette = [
-  'var(--chart-2)',
-  'var(--chart-3)',
-  'var(--chart-4)',
-  'var(--chart-5)',
-  'var(--chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-1)',
 ]
 
 interface ScatterTooltipRow {
@@ -74,24 +78,21 @@ function ScatterTooltipContent({
   title: ReactNode
 }) {
   return (
-    <div className='bg-popover text-popover-foreground ring-foreground/10 grid min-w-36 gap-1 rounded-lg px-3 py-2 text-xs shadow-md ring-1'>
+    <ChartTooltipFrame>
       <span className='flex items-center gap-1.5 font-medium'>
         {color && (
           <span
             aria-hidden
-            className='size-2 rounded-full'
+            className='size-2.5 shrink-0 rounded-full'
             style={{ backgroundColor: color }}
           />
         )}
         {title}
       </span>
       {rows.map((row) => (
-        <span key={row.label} className='flex justify-between gap-4'>
-          <span className='text-muted-foreground'>{row.label}</span>
-          <span className='font-medium tabular-nums'>{row.value}</span>
-        </span>
+        <ChartTooltipItem key={row.label} name={row.label} value={row.value} />
       ))}
-    </div>
+    </ChartTooltipFrame>
   )
 }
 

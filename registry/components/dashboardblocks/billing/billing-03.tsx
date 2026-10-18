@@ -1,11 +1,16 @@
 'use client'
 
 import {
-  InvoiceStatusBadge,
   type InvoiceStatus,
+  InvoiceStatusLabel,
   formatBillingDate,
-  formatCurrency,
 } from '@/registry/components/dashboardblocks/billing'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   DataTable,
   DataTableBody,
@@ -13,22 +18,20 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface Invoice {
   amount: number
   date: Date
   description: string
+  /** A muted line under the description, such as the period it covers. */
+  detail?: string
   id: string
   number: string
   status: InvoiceStatus
@@ -37,9 +40,11 @@ interface Invoice {
 interface Billing3Props {
   /** @default 'USD' */
   currency?: string
-  invoices: Invoice[]
+  /** Leave out, or pass none, to show the empty state. */
+  invoices?: Invoice[]
   onDownload?: (id: string) => void
   onViewAll?: () => void
+  status?: BlockStatus
   title: string
 }
 
@@ -50,7 +55,8 @@ const exampleProps: Billing3Props = {
     {
       amount: 612,
       date: invoiceDate(8, 14),
-      description: 'Growth · Sep 14 – Oct 14',
+      description: 'Growth',
+      detail: 'Sep 14 – Oct 14',
       id: 'in_0926',
       number: 'INV-2026-0926',
       status: 'due',
@@ -58,7 +64,8 @@ const exampleProps: Billing3Props = {
     {
       amount: 180,
       date: invoiceDate(8, 2),
-      description: 'Extra seats · 4 seats, prorated',
+      description: 'Extra seats',
+      detail: 'Prorated for 4 seats',
       id: 'in_0914',
       number: 'INV-2026-0914',
       status: 'failed',
@@ -66,7 +73,8 @@ const exampleProps: Billing3Props = {
     {
       amount: 588,
       date: invoiceDate(7, 14),
-      description: 'Growth · Aug 14 – Sep 14',
+      description: 'Growth',
+      detail: 'Aug 14 – Sep 14',
       id: 'in_0871',
       number: 'INV-2026-0871',
       status: 'overdue',
@@ -74,7 +82,8 @@ const exampleProps: Billing3Props = {
     {
       amount: 604.5,
       date: invoiceDate(6, 14),
-      description: 'Growth · Jul 14 – Aug 14',
+      description: 'Growth',
+      detail: 'Jul 14 – Aug 14',
       id: 'in_0813',
       number: 'INV-2026-0813',
       status: 'paid',
@@ -82,7 +91,8 @@ const exampleProps: Billing3Props = {
     {
       amount: 541.2,
       date: invoiceDate(5, 14),
-      description: 'Growth · Jun 14 – Jul 14',
+      description: 'Growth',
+      detail: 'Jun 14 – Jul 14',
       id: 'in_0760',
       number: 'INV-2026-0760',
       status: 'paid',
@@ -92,90 +102,110 @@ const exampleProps: Billing3Props = {
 }
 
 const Billing3 = (props: Billing3Props) => {
-  const { currency = 'USD', invoices, onDownload, onViewAll, title } = props
+  const { currency = 'USD', invoices = [], onDownload, onViewAll, status, title } = props
+  const state = getBlockState(status, invoices.length === 0)
   const unpaid = invoices.filter((invoice) => invoice.status !== 'paid')
   const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0)
+  const money = (value: number) =>
+    formatCurrency(value, {
+      currency,
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    })
+  const oldest = unpaid.reduce<Invoice | undefined>(
+    (first, invoice) => (!first || invoice.date < first.date ? invoice : first),
+    undefined,
+  )
+  const description =
+    unpaid.length === 0 || !oldest
+      ? 'Every invoice is paid.'
+      : `${money(outstanding)} outstanding across ${unpaid.length} ${unpaid.length === 1 ? 'invoice' : 'invoices'}, the oldest from ${formatBillingDate(oldest.date)}.`
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {unpaid.length === 0
-            ? 'All invoices paid'
-            : `${formatCurrency(outstanding, { currency, fractionDigits: 2 })} outstanding across ${unpaid.length} ${unpaid.length === 1 ? 'invoice' : 'invoices'}`}
-        </CardDescription>
-        {onViewAll && (
-          <CardAction>
+    <BlockStateProvider status={status} empty={invoices.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
+          </div>
+          {onViewAll && (
             <Button variant='outline' size='sm' onClick={onViewAll}>
               View all
             </Button>
-          </CardAction>
-        )}
-      </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{title}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Invoice</DataTableHead>
-            <DataTableHead>Date</DataTableHead>
-            <DataTableHead align='end'>Amount</DataTableHead>
-            <DataTableHead>Status</DataTableHead>
-            <DataTableHead align='end'>
-              <span className='sr-only'>Download</span>
-            </DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {invoices.map((invoice) => (
-            <DataTableRow key={invoice.id}>
-              <DataTableCell primary truncate>
-                <span className='block truncate font-mono text-xs'>{invoice.number}</span>
-                <span className='text-muted-foreground block truncate text-xs font-normal'>
-                  {invoice.description}
-                </span>
-              </DataTableCell>
-              <DataTableCell
-                label='Date'
-                className='text-muted-foreground whitespace-nowrap'
-              >
-                <time dateTime={invoice.date.toISOString()}>
-                  {formatBillingDate(invoice.date)}
-                </time>
-              </DataTableCell>
-              <DataTableCell align='end' label='Amount' className='font-medium'>
-                {formatCurrency(invoice.amount, { currency, fractionDigits: 2 })}
-              </DataTableCell>
-              <DataTableCell label='Status'>
-                <InvoiceStatusBadge status={invoice.status} />
-              </DataTableCell>
-              <DataTableCell
-                align='end'
-                className='@max-2xl/data-table:items-end @max-2xl/data-table:justify-end'
-              >
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => onDownload?.(invoice.id)}
-                >
-                  <IconPlaceholder
-                    lucide='DownloadIcon'
-                    tabler='IconDownload'
-                    hugeicons='Download01Icon'
-                    phosphor='DownloadIcon'
-                    remixicon='RiDownloadLine'
-                    aria-hidden
-                  />
-                  <span className='sr-only'>Download </span>
-                  PDF
-                  <span className='sr-only'> for {invoice.number}</span>
-                </Button>
-              </DataTableCell>
+          )}
+        </header>
+        <DataTable>
+          <caption className='sr-only'>
+            {state ? title : `${title}: ${description}`}
+          </caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Invoice</DataTableHead>
+              <DataTableHead>Date</DataTableHead>
+              <DataTableHead align='end'>Amount</DataTableHead>
+              <DataTableHead>Status</DataTableHead>
+              <DataTableHead align='end'>
+                <span className='sr-only'>Download</span>
+              </DataTableHead>
             </DataTableRow>
-          ))}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={5} />
+            {!state &&
+              invoices.map((invoice) => (
+                <DataTableRow key={invoice.id}>
+                  <DataTableCell primary truncate>
+                    <span className='block truncate'>{invoice.description}</span>
+                    <Details className='text-muted-foreground block truncate text-xs font-normal tabular-nums'>
+                      {invoice.detail}
+                      {invoice.number}
+                    </Details>
+                  </DataTableCell>
+                  <DataTableCell
+                    label='Date'
+                    className='text-muted-foreground whitespace-nowrap'
+                  >
+                    <time dateTime={invoice.date.toISOString()}>
+                      {formatBillingDate(invoice.date)}
+                    </time>
+                  </DataTableCell>
+                  <DataTableCell align='end' label='Amount'>
+                    {money(invoice.amount)}
+                  </DataTableCell>
+                  <DataTableCell label='Status'>
+                    <InvoiceStatusLabel status={invoice.status} />
+                  </DataTableCell>
+                  <DataTableCell
+                    align='end'
+                    className='@max-2xl/data-table:items-end @max-2xl/data-table:justify-end'
+                  >
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => onDownload?.(invoice.id)}
+                    >
+                      <IconPlaceholder
+                        lucide='DownloadIcon'
+                        tabler='IconDownload'
+                        hugeicons='Download01Icon'
+                        phosphor='DownloadIcon'
+                        remixicon='RiDownloadLine'
+                        aria-hidden
+                      />
+                      <span className='sr-only'>Download </span>
+                      PDF
+                      <span className='sr-only'> for {invoice.number}</span>
+                    </Button>
+                  </DataTableCell>
+                </DataTableRow>
+              ))}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

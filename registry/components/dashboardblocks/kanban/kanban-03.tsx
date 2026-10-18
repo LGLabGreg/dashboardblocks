@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   KanbanAddCard,
   KanbanAssignees,
   KanbanBoard,
@@ -15,18 +22,9 @@ import {
   getColumnItems,
   moveItem,
 } from '@/registry/components/dashboardblocks/kanban'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { useState } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+import { useMemo, useState } from 'react'
 
 interface Ticket extends KanbanItem {
   assignee?: string
@@ -45,20 +43,29 @@ interface Kanban3Props {
   onMove?: (id: string, column: string, index: number) => void
   pausedColumns: string[]
   slaHours: number
-  tickets: Ticket[]
+  status?: BlockStatus
+  /** Leave out, or pass none, to show the empty state. */
+  tickets?: Ticket[]
   title: string
 }
 
 const NOW = Date.UTC(2026, 8, 28, 10)
+const noTickets: Ticket[] = []
+
 const inMinutes = (minutes: number) => new Date(NOW + minutes * 60_000)
 
 const exampleProps: Kanban3Props = {
   columns: [
-    { color: 'var(--chart-3)', id: 'new', title: 'New' },
-    { color: 'var(--chart-2)', id: 'open', title: 'Open', wipLimit: 5 },
-    { color: 'var(--chart-5)', id: 'waiting', title: 'Waiting on customer' },
-    { color: 'var(--destructive)', id: 'escalated', title: 'Escalated', wipLimit: 2 },
-    { color: 'var(--chart-4)', id: 'solved', title: 'Solved' },
+    { color: 'var(--color-chart-3)', id: 'new', title: 'New' },
+    { color: 'var(--color-chart-2)', id: 'open', title: 'Open', wipLimit: 5 },
+    { color: 'var(--color-chart-5)', id: 'waiting', title: 'Waiting on customer' },
+    {
+      color: 'var(--color-destructive)',
+      id: 'escalated',
+      title: 'Escalated',
+      wipLimit: 2,
+    },
+    { color: 'var(--color-chart-4)', id: 'solved', title: 'Solved' },
   ],
   now: new Date(NOW),
   pausedColumns: ['waiting', 'solved'],
@@ -175,60 +182,27 @@ function formatSpan(minutes: number) {
   return `${Math.round(minutes / 1_440)}d`
 }
 
-function SlaBadge({ due, now, paused }: { due: Date; now: Date; paused: boolean }) {
+function SlaLabel({ due, now, paused }: { due: Date; now: Date; paused: boolean }) {
   const minutes = Math.round((due.getTime() - now.getTime()) / 60_000)
-  const state = paused
-    ? 'paused'
-    : minutes < 0
-      ? 'breached'
-      : minutes < 60
-        ? 'soon'
-        : 'ok'
-  const label =
-    state === 'paused'
-      ? 'SLA paused'
-      : state === 'breached'
-        ? `${formatSpan(-minutes)} over SLA`
-        : `${formatSpan(minutes)} to SLA`
+  if (paused)
+    return (
+      <StatusLabel className='text-xs' tone='neutral'>
+        SLA paused
+      </StatusLabel>
+    )
+  if (minutes < 0)
+    return (
+      <StatusLabel className='text-xs tabular-nums' tone='bad'>
+        {formatSpan(-minutes)} over SLA
+      </StatusLabel>
+    )
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
-        state === 'breached' && 'bg-red-500/10 text-red-700 dark:text-red-400',
-        state === 'soon' && 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-        (state === 'ok' || state === 'paused') && 'bg-muted text-foreground',
-      )}
+    <StatusLabel
+      className='text-xs tabular-nums'
+      tone={minutes < 60 ? 'warning' : 'neutral'}
     >
-      {state === 'paused' ? (
-        <IconPlaceholder
-          lucide='CirclePauseIcon'
-          tabler='IconPlayerPause'
-          hugeicons='PauseIcon'
-          phosphor='PauseCircleIcon'
-          remixicon='RiPauseCircleLine'
-          aria-hidden
-        />
-      ) : state === 'breached' ? (
-        <IconPlaceholder
-          lucide='ClockAlertIcon'
-          tabler='IconClockExclamation'
-          hugeicons='TimeQuarterPassIcon'
-          phosphor='ClockCountdownIcon'
-          remixicon='RiTimerFlashLine'
-          aria-hidden
-        />
-      ) : (
-        <IconPlaceholder
-          lucide='ClockIcon'
-          tabler='IconClock'
-          hugeicons='Clock01Icon'
-          phosphor='ClockIcon'
-          remixicon='RiTimeLine'
-          aria-hidden
-        />
-      )}
-      {label}
-    </span>
+      {formatSpan(minutes)} to SLA
+    </StatusLabel>
   )
 }
 
@@ -263,10 +237,21 @@ const Kanban3 = (props: Kanban3Props) => {
     onMove,
     pausedColumns,
     slaHours,
-    tickets: initialTickets,
+    status,
+    tickets: loadedTickets = noTickets,
     title,
   } = props
-  const [tickets, setTickets] = useState(initialTickets)
+  const [added, setAdded] = useState<Ticket[]>([])
+  const [moves, setMoves] = useState<{ column: string; id: string; index: number }[]>([])
+  const tickets = useMemo(
+    () =>
+      moves.reduce(
+        (current, move) => moveItem(current, move.id, move.column, move.index),
+        [...added, ...loadedTickets],
+      ),
+    [added, loadedTickets, moves],
+  )
+  const state = getBlockState(status, tickets.length === 0)
   const unsolved = tickets.filter((ticket) => !pausedColumns.includes(ticket.column))
   const breached = unsolved.filter((ticket) => ticket.slaDueAt < now).length
   const [firstColumn] = columns
@@ -282,87 +267,110 @@ const Kanban3 = (props: Kanban3Props) => {
       slaDueAt: new Date(now.getTime() + slaHours * 3_600_000),
       title: ticketTitle,
     }
-    setTickets((current) => [ticket, ...current])
+    setAdded((current) => [ticket, ...current])
     await onAdd(ticket)
   }
 
+  const addTicket = (
+    <KanbanAddCard
+      label='Add ticket'
+      onAdd={(value) => void add(value)}
+      placeholder='Subject'
+    />
+  )
+
   return (
-    <Card className='gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {unsolved.length} tickets need a reply ·{' '}
-          <span className={cn(breached > 0 && 'text-red-700 dark:text-red-400')}>
-            {breached} over SLA
-          </span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='px-0'>
-        <KanbanBoard
-          className='scroll-px-6 px-6 py-4'
-          columns={columns}
-          itemName={{ one: 'ticket', other: 'tickets' }}
-          items={tickets}
-          label={`${title} board`}
-          onMove={(id, column, index) => {
-            setTickets((current) => moveItem(current, id, column, index))
-            onMove?.(id, column, index)
-          }}
-          wipLimitMode='block'
-        >
-          {columns.map((column) => (
-            <KanbanColumn
-              key={column.id}
-              column={column}
-              empty={column.id === 'escalated' ? 'Nothing escalated' : undefined}
-              footer={
-                column.id === firstColumn.id && (
-                  <KanbanAddCard
-                    label='Add ticket'
-                    onAdd={(value) => void add(value)}
-                    placeholder='Subject'
-                  />
-                )
-              }
-            >
-              {getColumnItems(tickets, column.id).map((ticket) => (
-                <KanbanCard key={ticket.id} item={ticket}>
-                  <div className='text-muted-foreground flex min-h-6 items-center gap-2 pr-7 text-xs [&_svg]:size-3.5'>
-                    {channelIcons[ticket.channel]}
-                    <span className='sr-only'>By {ticket.channel}, </span>
-                    <span className='font-mono'>#{ticket.number}</span>
-                    <KanbanPriority priority={ticket.priority} showLabel />
-                  </div>
-                  <div className='flex flex-col gap-0.5'>
-                    <KanbanCardTitle />
-                    <p className='text-muted-foreground truncate text-xs'>
-                      {ticket.customer ?? 'Added on the board'}
-                    </p>
-                  </div>
-                  <KanbanCardMenu className='absolute top-3 right-2' />
-                  {column.id !== 'solved' && (
-                    <div className='flex min-h-6 items-center gap-2'>
-                      <SlaBadge
-                        due={ticket.slaDueAt}
-                        now={now}
-                        paused={pausedColumns.includes(column.id)}
-                      />
-                      {ticket.assignee ? (
-                        <KanbanAssignees className='ml-auto' names={[ticket.assignee]} />
-                      ) : (
-                        <span className='text-muted-foreground ml-auto text-xs'>
-                          Unassigned
-                        </span>
-                      )}
+    <BlockStateProvider status={status} empty={tickets.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {unsolved.length} {unsolved.length === 1 ? 'ticket needs' : 'tickets need'}{' '}
+              a reply
+              {breached > 0 ? (
+                <>
+                  , and{' '}
+                  <StatusLabel tone='bad'>
+                    {breached} {breached === 1 ? 'is' : 'are'} over SLA
+                  </StatusLabel>
+                  .
+                </>
+              ) : (
+                ', all within SLA.'
+              )}
+            </p>
+          </BlockReady>
+        </header>
+        {state === 'error' && <BlockStateRows className='border-t pt-3' />}
+        {state === 'empty' && (
+          <div className='flex flex-col gap-2 border-t pt-3'>
+            <BlockStateRows className='py-0' />
+            <div className='w-72 max-w-full'>{addTicket}</div>
+          </div>
+        )}
+        {(state === undefined || state === 'loading') && (
+          <KanbanBoard
+            className='pb-2'
+            columns={columns}
+            itemName={{ one: 'ticket', other: 'tickets' }}
+            items={tickets}
+            label={`${title} board`}
+            onMove={(id, column, index) => {
+              setMoves((current) => [...current, { column, id, index }])
+              onMove?.(id, column, index)
+            }}
+            wipLimitMode='block'
+          >
+            {columns.map((column) => (
+              <KanbanColumn
+                key={column.id}
+                column={column}
+                empty={column.id === 'escalated' ? 'Nothing escalated' : undefined}
+                footer={column.id === firstColumn.id && addTicket}
+              >
+                {getColumnItems(tickets, column.id).map((ticket) => (
+                  <KanbanCard key={ticket.id} item={ticket}>
+                    <div className='text-muted-foreground flex min-h-6 items-center gap-2 pr-7 text-xs [&_svg]:size-3.5'>
+                      {channelIcons[ticket.channel]}
+                      <span className='sr-only'>By {ticket.channel}, </span>
+                      <span className='font-mono'>#{ticket.number}</span>
+                      <KanbanPriority priority={ticket.priority} showLabel />
                     </div>
-                  )}
-                </KanbanCard>
-              ))}
-            </KanbanColumn>
-          ))}
-        </KanbanBoard>
-      </CardContent>
-    </Card>
+                    <div className='flex flex-col gap-0.5'>
+                      <KanbanCardTitle />
+                      <p className='text-muted-foreground truncate text-xs'>
+                        {ticket.customer ?? 'Added on the board'}
+                      </p>
+                    </div>
+                    <KanbanCardMenu className='absolute top-3 right-2' />
+                    {column.id !== 'solved' && (
+                      <div className='flex min-h-6 items-center gap-2'>
+                        <SlaLabel
+                          due={ticket.slaDueAt}
+                          now={now}
+                          paused={pausedColumns.includes(column.id)}
+                        />
+                        {ticket.assignee ? (
+                          <KanbanAssignees
+                            className='ml-auto'
+                            names={[ticket.assignee]}
+                          />
+                        ) : (
+                          <span className='text-muted-foreground ml-auto text-xs'>
+                            Unassigned
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </KanbanCard>
+                ))}
+              </KanbanColumn>
+            ))}
+          </KanbanBoard>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

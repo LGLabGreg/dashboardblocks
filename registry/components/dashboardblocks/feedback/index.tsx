@@ -16,3 +16,10 @@ export const feedbackExampleProps = {
   'feedback-03': feedback3ExampleProps,
   'feedback-04': feedback4ExampleProps,
 }
+
+export const feedbackEmptyProps = {
+  'feedback-01': { counts: undefined, previousAverage: undefined },
+  'feedback-02': { topics: [] },
+  'feedback-03': { reviews: [] },
+  'feedback-04': { periods: [] },
+}

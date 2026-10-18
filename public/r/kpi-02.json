@@ -1,21 +1,20 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kpi-02",
-  "description": "A value with its change shown as a badge beside the label.",
+  "description": "A value with its change written beside the label, for a tight grid of KPIs.",
   "registryDependencies": [
-    "card",
     "https://www.dashboardblocks.com/r/kpi.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/kpi/kpi-02.tsx",
-      "content": "'use client'\n\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\nimport { CardDescription } from '@/components/ui/card'\n\ninterface KPI2Props {\n  comparison: string\n  format?: KPIFormat\n  previous: number\n  title: string\n  value: number\n}\n\nconst exampleProps: KPI2Props = {\n  comparison: 'vs last week',\n  format: 'number',\n  previous: 2_151,\n  title: 'Active users',\n  value: 2_420,\n}\n\nconst KPI2 = (props: KPI2Props) => {\n  const { comparison, format, previous, title, value } = props\n\n  return (\n    <KPI>\n      <KPIContent className='gap-2'>\n        <div className='flex items-center justify-between gap-2'>\n          <CardDescription>{title}</CardDescription>\n          <KPIChange comparison={comparison} previous={previous} value={value} />\n        </div>\n        <KPIValue value={value} format={format} animated />\n      </KPIContent>\n    </KPI>\n  )\n}\n\nexport { KPI2, exampleProps as kpi2ExampleProps, type KPI2Props }\n",
+      "content": "'use client'\n\nimport {\n  BlockStateProvider,\n  type BlockStatus,\n} from '@/registry/components/dashboardblocks/block-state'\nimport {\n  KPI,\n  KPIChange,\n  KPIContent,\n  KPITitle,\n  type KPIFormat,\n  KPIValue,\n} from '@/registry/components/dashboardblocks/kpi'\n\ninterface KPI2Props {\n  comparison: string\n  format?: KPIFormat\n  previous?: number\n  status?: BlockStatus\n  title: string\n  /** Leave out to show the empty state. */\n  value?: number\n}\n\nconst exampleProps: KPI2Props = {\n  comparison: 'last week',\n  format: 'number',\n  previous: 2_151,\n  title: 'Active users',\n  value: 2_420,\n}\n\nconst KPI2 = (props: KPI2Props) => {\n  const { comparison, format, previous, status, title, value } = props\n\n  return (\n    <BlockStateProvider status={status} empty={value === undefined}>\n      <KPI>\n        <KPIContent className='gap-1'>\n          <div className='flex items-baseline justify-between gap-3'>\n            <KPITitle className='truncate'>{title}</KPITitle>\n            <KPIChange\n              className='shrink-0'\n              comparison={comparison}\n              format={format}\n              previous={previous}\n              value={value}\n              variant='short'\n            />\n          </div>\n          <KPIValue value={value} format={format} animated />\n        </KPIContent>\n      </KPI>\n    </BlockStateProvider>\n  )\n}\n\nexport { KPI2, exampleProps as kpi2ExampleProps, type KPI2Props }\n",
       "type": "registry:component",
       "target": "@components/dashboardblocks/kpi/kpi-02.tsx"
     }
   ],
   "meta": {
-    "shows": "A value with its change shown as a badge beside the label.",
+    "shows": "A value with its change written beside the label, for a tight grid of KPIs.",
     "size": "compact",
     "usedWith": [
       "kpi-01",
@@ -23,7 +22,7 @@
       "stat-group-04"
     ],
     "component": "KPI2",
-    "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous: number; title: string; value: number }"
+    "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous?: number; status?: \"loading\" | \"error\"; title: string; value?: number }"
   },
   "type": "registry:component"
 }

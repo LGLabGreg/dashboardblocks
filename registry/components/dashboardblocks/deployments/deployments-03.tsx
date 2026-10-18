@@ -1,36 +1,46 @@
 'use client'
 
 import {
-  DoraBadge,
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  DoraLabel,
   type DoraInput,
   getDoraLevels,
 } from '@/registry/components/dashboardblocks/deployments'
-
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+  Stat,
+  StatChange,
+  StatGroup,
+  StatLabel,
+  type StatMetric,
+  StatValue,
+} from '@/registry/components/dashboardblocks/stat-group'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Deployments3Props {
-  current: DoraInput
-  description: string
+  /** Follows the previous value in each change, such as `the 30 days before`. */
+  comparison?: string
+  /** Leave out to show the empty state. */
+  current?: DoraInput
+  /** Defaults to a sentence counting the elite metrics and naming any that got worse. */
+  description?: string
   previous?: DoraInput
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Deployments3Props = {
+  comparison: 'the 30 days before',
   current: {
     changeFailureRate: 0.08,
     deploysPerDay: 3.4,
     leadTimeHours: 19,
     restoreHours: 2.5,
   },
-  description: 'Last 30 days, against the 30 days before',
   previous: {
     changeFailureRate: 0.11,
     deploysPerDay: 2.6,
@@ -41,102 +51,126 @@ const exampleProps: Deployments3Props = {
 }
 
 function formatHours(hours: number) {
-  if (hours < 1) return `${Math.round(hours * 60)} min`
-  if (hours < 48) return `${hours.toFixed(hours < 10 ? 1 : 0)} h`
-  return `${(hours / 24).toFixed(1)} days`
+  if (hours < 1) return `${formatNumber(hours * 60, { maximumFractionDigits: 0 })} min`
+  if (hours < 48)
+    return `${formatNumber(hours, { maximumFractionDigits: hours < 10 ? 1 : 0 })} h`
+  return `${formatNumber(hours / 24)} days`
 }
 
-const METRICS: {
-  better: 'up' | 'down'
-  format: (value: number) => string
+const formatFrequency = (perDay: number) =>
+  perDay >= 1 ? `${formatNumber(perDay)} a day` : `${formatNumber(perDay * 7)} a week`
+
+interface DoraMetric {
+  goodDirection: 'up' | 'down'
   hint: string
   key: keyof DoraInput
   label: string
-}[] = [
+  toStat: (value: number) => Pick<StatMetric, 'changeType' | 'formatter' | 'value'>
+}
+
+const METRICS: DoraMetric[] = [
   {
-    better: 'up',
-    format: (value) =>
-      value >= 1 ? `${value.toFixed(1)}/day` : `${(value * 7).toFixed(1)}/week`,
+    goodDirection: 'up',
     hint: 'How often you ship to production',
     key: 'deploysPerDay',
     label: 'Deployment frequency',
+    toStat: (value) => ({ formatter: formatFrequency, value }),
   },
   {
-    better: 'down',
-    format: formatHours,
-    hint: 'Median time from commit to production',
+    goodDirection: 'down',
+    hint: 'From commit to production',
     key: 'leadTimeHours',
     label: 'Lead time for changes',
+    toStat: (value) => ({ formatter: formatHours, value }),
   },
   {
-    better: 'down',
-    format: (value) => `${(value * 100).toFixed(0)}%`,
-    hint: 'Share of deployments causing a failure',
+    goodDirection: 'down',
+    hint: 'Deploys that caused a failure',
     key: 'changeFailureRate',
     label: 'Change failure rate',
+    toStat: (value) => ({
+      changeType: 'points',
+      formatter: (percent) => formatPercent(percent / 100),
+      value: value * 100,
+    }),
   },
   {
-    better: 'down',
-    format: formatHours,
-    hint: 'Median time to restore after a failure',
+    goodDirection: 'down',
+    hint: 'To restore service after a failure',
     key: 'restoreHours',
     label: 'Time to restore',
+    toStat: (value) => ({ formatter: formatHours, value }),
   },
 ]
 
-const Deployments3 = (props: Deployments3Props) => {
-  const { current, description, previous, title } = props
+const summarize = (current: DoraInput, previous: DoraInput | undefined) => {
   const levels = getDoraLevels(current)
+  const elite = METRICS.filter((metric) => levels[metric.key] === 'elite').length
+  const worse = previous
+    ? METRICS.filter((metric) => {
+        const change = current[metric.key] - previous[metric.key]
+        return metric.goodDirection === 'up' ? change < 0 : change > 0
+      })
+    : []
+  const lead = `Elite on ${elite} of the ${METRICS.length} DORA metrics.`
+  if (worse.length === 0) return lead
+  const names = worse.map((metric) => metric.label.toLowerCase()).join(' and ')
+  return `${lead} ${names.charAt(0).toUpperCase()}${names.slice(1)} got worse.`
+}
+
+const Deployments3 = (props: Deployments3Props) => {
+  const { comparison = 'the period before', current, previous, status, title } = props
+  const { description = current ? summarize(current, previous) : undefined } = props
+  const levels = current ? getDoraLevels(current) : undefined
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <dl className='grid grid-cols-1 gap-3 @sm:grid-cols-2 @3xl:grid-cols-4'>
+    <BlockStateProvider status={status} empty={current === undefined}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <StatGroup className='grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'>
           {METRICS.map((metric) => {
-            const value = current[metric.key]
+            const stat: ReturnType<DoraMetric['toStat']> = current
+              ? metric.toStat(current[metric.key])
+              : { value: 0 }
             const before = previous?.[metric.key]
-            const change = before ? value / before - 1 : null
-            const improved =
-              change === null ? null : metric.better === 'up' ? change > 0 : change < 0
             return (
-              <div
-                key={metric.key}
-                className='flex flex-col gap-1.5 rounded-lg border p-3'
-              >
-                <dt className='flex items-start justify-between gap-2'>
-                  <span className='text-sm font-medium'>{metric.label}</span>
-                  <DoraBadge level={levels[metric.key]} />
-                </dt>
-                <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                  {metric.format(value)}
-                </dd>
-                {change !== null && Math.abs(change) >= 0.005 && (
-                  <dd
-                    className={cn(
-                      'text-xs font-medium tabular-nums',
-                      improved
-                        ? 'text-emerald-700 dark:text-emerald-400'
-                        : 'text-red-700 dark:text-red-400',
+              <Stat key={metric.key}>
+                <StatLabel>{metric.label}</StatLabel>
+                <StatValue className='text-3xl @2xl:text-4xl'>
+                  {stat.formatter?.(stat.value)}
+                </StatValue>
+                <StatChange
+                  comparison={comparison}
+                  metric={{
+                    ...stat,
+                    goodDirection: metric.goodDirection,
+                    key: metric.key,
+                    label: metric.label,
+                    previous:
+                      before === undefined ? undefined : metric.toStat(before).value,
+                  }}
+                />
+                <dd className='text-muted-foreground text-xs'>
+                  <BlockReady className='text-xs'>
+                    {levels && (
+                      <Details>
+                        <DoraLabel className='text-xs' level={levels[metric.key]} />
+                        {metric.hint}
+                      </Details>
                     )}
-                  >
-                    {change > 0 ? '↑' : '↓'} {Math.abs(change * 100).toFixed(0)}%{' '}
-                    {improved ? 'better' : 'worse'}
-                    <span className='text-muted-foreground font-normal'>
-                      , was {metric.format(before ?? 0)}
-                    </span>
-                  </dd>
-                )}
-                <dd className='text-muted-foreground text-xs'>{metric.hint}</dd>
-              </div>
+                  </BlockReady>
+                </dd>
+              </Stat>
             )
           })}
-        </dl>
-      </CardContent>
-    </Card>
+        </StatGroup>
+      </section>
+    </BlockStateProvider>
   )
 }
 

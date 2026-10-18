@@ -16,3 +16,10 @@ export const commentsExampleProps = {
   'comments-03': comments3ExampleProps,
   'comments-04': comments4ExampleProps,
 }
+
+export const commentsEmptyProps = {
+  'comments-01': { comments: [] },
+  'comments-02': { updates: [] },
+  'comments-03': { comments: [] },
+  'comments-04': { messages: [] },
+}

@@ -1,21 +1,29 @@
-import { ActivityFeed01, activityFeed01ExampleProps } from './activity-feed-01'
-import { ActivityFeed02, activityFeed02ExampleProps } from './activity-feed-02'
-import { ActivityFeed03, activityFeed03ExampleProps } from './activity-feed-03'
-import { ActivityFeed04, activityFeed04ExampleProps } from './activity-feed-04'
-import { ActivityFeed05, activityFeed05ExampleProps } from './activity-feed-05'
+import { ActivityFeed1, activityFeed1ExampleProps } from './activity-feed-01'
+import { ActivityFeed2, activityFeed2ExampleProps } from './activity-feed-02'
+import { ActivityFeed3, activityFeed3ExampleProps } from './activity-feed-03'
+import { ActivityFeed4, activityFeed4ExampleProps } from './activity-feed-04'
+import { ActivityFeed5, activityFeed5ExampleProps } from './activity-feed-05'
 
 export const activityFeedComponents = {
-  'activity-feed-01': ActivityFeed01,
-  'activity-feed-02': ActivityFeed02,
-  'activity-feed-03': ActivityFeed03,
-  'activity-feed-04': ActivityFeed04,
-  'activity-feed-05': ActivityFeed05,
+  'activity-feed-01': ActivityFeed1,
+  'activity-feed-02': ActivityFeed2,
+  'activity-feed-03': ActivityFeed3,
+  'activity-feed-04': ActivityFeed4,
+  'activity-feed-05': ActivityFeed5,
 }
 
 export const activityFeedExampleProps = {
-  'activity-feed-01': activityFeed01ExampleProps,
-  'activity-feed-02': activityFeed02ExampleProps,
-  'activity-feed-03': activityFeed03ExampleProps,
-  'activity-feed-04': activityFeed04ExampleProps,
-  'activity-feed-05': activityFeed05ExampleProps,
+  'activity-feed-01': activityFeed1ExampleProps,
+  'activity-feed-02': activityFeed2ExampleProps,
+  'activity-feed-03': activityFeed3ExampleProps,
+  'activity-feed-04': activityFeed4ExampleProps,
+  'activity-feed-05': activityFeed5ExampleProps,
+}
+
+export const activityFeedEmptyProps = {
+  'activity-feed-01': { activities: [] },
+  'activity-feed-02': { events: [] },
+  'activity-feed-03': { notifications: [] },
+  'activity-feed-04': { contributors: [], counts: [], days: [] },
+  'activity-feed-05': { events: [] },
 }

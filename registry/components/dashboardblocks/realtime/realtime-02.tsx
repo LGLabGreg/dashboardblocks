@@ -1,11 +1,23 @@
 'use client'
 
 import {
-  ChartPanelFigure,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipContent,
+  chartActiveDot,
   chartAxisProps,
   chartGridProps,
-  formatCompact,
-} from '@/registry/components/dashboardblocks/chart-panel'
+  chartLastDot,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
 import {
   LiveBadge,
   LiveNumber,
@@ -14,17 +26,27 @@ import {
   pushWindow,
   useInterval,
 } from '@/registry/components/dashboardblocks/realtime'
-import { useRef, useState } from 'react'
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, YAxis } from 'recharts'
-
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  Stat,
+  StatGroup,
+  StatLabel,
+  StatValue,
+} from '@/registry/components/dashboardblocks/stat-group'
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
+import { useRef, useState } from 'react'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  YAxis,
+} from 'recharts'
 
 interface ThroughputSample {
   errors: number
@@ -33,13 +55,18 @@ interface ThroughputSample {
 
 interface Realtime2Props {
   description: string
-  /** One sample per interval, oldest first. */
-  samples: ThroughputSample[]
+  /** One sample per interval, oldest first. Leave out, or pass none, to show the empty state. */
+  samples?: ThroughputSample[]
   /** Seconds between samples. */
   interval?: number
   simulate?: boolean
+  status?: BlockStatus
   title: string
 }
+
+const CHART_RIGHT = 6
+const CHART_HEIGHT = 160
+const noSamples: ThroughputSample[] = []
 
 const seed = createRandom(11)
 const makeSample = (random: () => number, index: number): ThroughputSample => {
@@ -53,17 +80,31 @@ const makeSample = (random: () => number, index: number): ThroughputSample => {
 }
 
 const exampleProps: Realtime2Props = {
-  description: 'Requests per second across all regions, last 5 minutes',
+  description: 'Requests per second across all regions over the last 5 minutes.',
   samples: Array.from({ length: 60 }, (_, index) => makeSample(seed, index)),
   simulate: true,
   title: 'Throughput',
 }
 
 const Realtime2 = (props: Realtime2Props) => {
-  const { description, interval = 5, simulate = false, title } = props
-  const [samples, setSamples] = useState(props.samples)
+  const {
+    description,
+    interval = 5,
+    samples: loadedSamples = noSamples,
+    simulate = false,
+    status,
+    title,
+  } = props
+  const id = useChartId()
+  const [samples, setSamples] = useState(loadedSamples)
+  const [loaded, setLoaded] = useState(loadedSamples)
+  if (loadedSamples !== loaded) {
+    setLoaded(loadedSamples)
+    setSamples(loadedSamples)
+  }
   const random = useRef(createRandom(99))
-  const tick = useRef(props.samples.length)
+  const tick = useRef(loadedSamples.length)
+  const state = getBlockState(status, samples.length === 0)
 
   useInterval(
     () => {
@@ -72,7 +113,7 @@ const Realtime2 = (props: Realtime2Props) => {
         pushWindow(values, makeSample(random.current, tick.current), values.length),
       )
     },
-    simulate ? 1_500 : null,
+    simulate && !state ? 1_500 : null,
   )
 
   const latest = samples[samples.length - 1] ?? { errors: 0, requests: 0 }
@@ -85,51 +126,72 @@ const Realtime2 = (props: Realtime2Props) => {
     { errors: 0, requests: 0 },
   )
   const errorRate = totals.requests > 0 ? totals.errors / totals.requests : 0
-  const rows = samples.map((sample, index) => ({ ...sample, index }))
+  const average = samples.length > 0 ? totals.requests / samples.length : 0
+  const labels = samples.map((_, index) => {
+    const seconds = (samples.length - 1 - index) * interval
+    return seconds === 0 ? 'Now' : `${seconds}s ago`
+  })
+  const rows = samples.map((sample, index) => ({ ...sample, label: labels[index] }))
   const minutes = Math.round((samples.length * interval) / 60)
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <LiveBadge />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-3 gap-4'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Requests/s</dt>
-            <dd className='text-2xl font-semibold tracking-tight'>
+    <BlockStateProvider status={status} empty={samples.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
+          {!state && <LiveBadge />}
+        </header>
+        <StatGroup className='grid-cols-2 @md:grid-cols-[2fr_1fr_1fr]'>
+          <Stat className='col-span-2 @md:col-span-1'>
+            <StatLabel>Requests per second</StatLabel>
+            <StatValue>
               <LiveNumber value={latest.requests} />
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Peak, {minutes} min</dt>
-            <dd className='text-2xl font-semibold tracking-tight'>
+            </StatValue>
+          </Stat>
+          <Stat className='justify-end'>
+            <StatLabel>Peak, {minutes} min</StatLabel>
+            <StatValue className='text-2xl'>
               <LiveNumber value={peak} />
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Error rate</dt>
-            <dd className='text-2xl font-semibold tracking-tight'>
+            </StatValue>
+          </Stat>
+          <Stat className='justify-end'>
+            <StatLabel>Error rate</StatLabel>
+            <StatValue className='text-2xl'>
               <LiveNumber
-                format={(value) => `${value.toFixed(2)}%`}
-                value={errorRate * 100}
+                format={(value) => formatPercent(value, { maximumFractionDigits: 2 })}
+                value={errorRate}
               />
-            </dd>
-          </div>
-        </dl>
-        <div className='flex flex-col gap-1'>
-          <span className='text-muted-foreground text-xs'>Requests per second</span>
-          <ChartPanelFigure className='h-40'>
+            </StatValue>
+          </Stat>
+        </StatGroup>
+        {state && <ChartPlaceholder height={CHART_HEIGHT} />}
+        {!state && (
+          <div
+            aria-hidden
+            className='w-full tabular-nums'
+            style={{ height: CHART_HEIGHT }}
+          >
             <ResponsiveContainer width='100%' height='100%'>
-              <AreaChart data={rows} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+              <AreaChart
+                accessibilityLayer={false}
+                data={rows}
+                margin={{ top: 8, right: CHART_RIGHT, bottom: 0, left: 0 }}
+              >
                 <defs>
-                  <linearGradient id='realtime-2-fill' x1='0' x2='0' y1='0' y2='1'>
-                    <stop offset='0%' stopColor='var(--chart-2)' stopOpacity={0.35} />
-                    <stop offset='100%' stopColor='var(--chart-2)' stopOpacity={0.02} />
+                  <linearGradient id={`${id}-fill`} x1='0' x2='0' y1='0' y2='1'>
+                    <stop
+                      offset='0%'
+                      stopColor='var(--color-chart-2)'
+                      stopOpacity={0.35}
+                    />
+                    <stop
+                      offset='100%'
+                      stopColor='var(--color-chart-2)'
+                      stopOpacity={0.02}
+                    />
                   </linearGradient>
                 </defs>
                 <CartesianGrid {...chartGridProps} />
@@ -137,41 +199,76 @@ const Realtime2 = (props: Realtime2Props) => {
                   {...chartAxisProps}
                   domain={[0, 'auto']}
                   tickFormatter={formatCompact}
-                  width={44}
+                  width={chartValueAxisWidth}
+                />
+                <ReferenceLine
+                  {...chartReferenceProps}
+                  y={average}
+                  label={{
+                    ...chartReferenceLabel,
+                    dy: -6,
+                    position: 'insideBottomLeft',
+                    value: `avg ${formatNumber(Math.round(average))}/s`,
+                  }}
+                />
+                <Tooltip
+                  content={({ active, payload }) => (
+                    <ChartTooltipContent
+                      active={active}
+                      label={
+                        (payload?.[0]?.payload as { label?: string } | undefined)?.label
+                      }
+                      payload={payload}
+                      valueFormatter={(value) => `${formatNumber(value)}/s`}
+                    />
+                  )}
+                  cursor={chartLineCursor}
                 />
                 <Area
+                  activeDot={chartActiveDot}
                   dataKey='requests'
-                  fill='url(#realtime-2-fill)'
+                  dot={chartLastDot(rows.length, 'var(--color-chart-2)')}
+                  fill={`url(#${id}-fill)`}
                   isAnimationActive={false}
-                  stroke='var(--chart-2)'
+                  name='Requests'
+                  stroke='var(--color-chart-2)'
                   strokeWidth={2}
                   type='monotone'
                 />
               </AreaChart>
             </ResponsiveContainer>
-          </ChartPanelFigure>
-        </div>
-        <div className='flex flex-col gap-1'>
+          </div>
+        )}
+        <div
+          className='flex flex-col gap-1'
+          style={{ paddingLeft: chartValueAxisWidth, paddingRight: CHART_RIGHT }}
+        >
           <span className='text-muted-foreground text-xs'>Errors per second</span>
           <RollingBars
-            className='h-8 pl-[52px]'
-            color='var(--destructive)'
+            color='var(--color-destructive)'
+            formatter={(value) => `${formatNumber(value)}/s`}
+            height={32}
             highlightLatest={false}
+            labels={labels}
             values={samples.map((sample) => sample.errors)}
           />
-          <div
-            aria-hidden
-            className='text-muted-foreground flex justify-between pl-[52px] text-[11px]'
-          >
-            <span>{minutes} min ago</span>
-            <span>now</span>
-          </div>
+          {!state && (
+            <div
+              aria-hidden
+              className='text-muted-foreground flex justify-between text-xs'
+            >
+              <span>{minutes} min ago</span>
+              <span>Now</span>
+            </div>
+          )}
         </div>
-        <p className='sr-only'>
-          {`Latest: ${latest.requests} requests and ${latest.errors} errors per second. Peak ${peak} requests per second in the last ${minutes} minutes.`}
-        </p>
-      </CardContent>
-    </Card>
+        {!state && (
+          <p className='sr-only'>
+            {`Latest: ${formatNumber(latest.requests)} requests and ${formatNumber(latest.errors)} errors per second. Peak ${formatNumber(peak)} and average ${formatNumber(Math.round(average))} requests per second in the last ${minutes} minutes.`}
+          </p>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

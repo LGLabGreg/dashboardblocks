@@ -16,3 +16,10 @@ export const heatmapExampleProps = {
   'heatmap-03': heatmap3ExampleProps,
   'heatmap-04': heatmap4ExampleProps,
 }
+
+export const heatmapEmptyProps = {
+  'heatmap-01': { values: [] },
+  'heatmap-02': { cohorts: [] },
+  'heatmap-03': { daily: [] },
+  'heatmap-04': { endpoints: [], values: [] },
+}

@@ -1,22 +1,26 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CommentAuthor,
   CommentThread,
   type ThreadComment,
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
-import { Fragment, type ReactNode, startTransition, useRef, useState } from 'react'
-
-import { Badge } from '@/components/ui/badge'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { Fragment, type ReactNode, startTransition, useId, useRef, useState } from 'react'
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ReviewComment extends ThreadComment {
@@ -25,12 +29,24 @@ interface ReviewComment extends ThreadComment {
 
 type Filter = 'open' | 'resolved'
 
+type DocumentStatusTone = 'success' | 'warning' | 'info' | 'neutral'
+
+const statusTones: Record<DocumentStatusTone, StatusTone> = {
+  info: 'info',
+  neutral: 'neutral',
+  success: 'good',
+  warning: 'warning',
+}
+
 interface Comments3Props {
-  comments: ReviewComment[]
+  /** Leave out, or pass none, to show the empty state. */
+  comments?: ReviewComment[]
   currentUser: CommentAuthor
   document: {
     paragraphs: string[]
     status: string
+    /** @default 'warning' */
+    statusTone?: DocumentStatusTone
     title: string
     updated: string
   }
@@ -40,16 +56,17 @@ interface Comments3Props {
   onResolve?: (commentId: string, resolved: boolean) => void
   onSubmit?: (body: string, options: { parentId: string }) => Promise<void>
   people: CommentAuthor[]
+  status?: BlockStatus
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)
 
 const amara = { name: 'Amara Okafor' }
-const priya = { name: 'Priya Nair' }
-const lena = { name: 'Lena Fischer' }
+const priya = { avatar: '/images/avatar-02.webp', name: 'Priya Nair' }
+const lena = { avatar: '/images/avatar-03.webp', name: 'Lena Fischer' }
 const mateo = { name: 'Mateo Silva' }
-const jonas = { name: 'Jonas Weber' }
+const jonas = { avatar: '/images/avatar-07.webp', name: 'Jonas Weber' }
 
 const exampleProps: Comments3Props = {
   comments: [
@@ -107,8 +124,16 @@ const exampleProps: Comments3Props = {
     updated: 'Edited 2 hours ago by Sofia Rossi',
   },
   now: exampleNow,
-  people: [priya, lena, mateo, jonas, { name: 'Sofia Rossi' }],
+  people: [
+    priya,
+    lena,
+    mateo,
+    jonas,
+    { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
+  ],
 }
+
+const noComments: ReviewComment[] = []
 
 async function saveReply() {
   await new Promise((resolve) => setTimeout(resolve, 500))
@@ -143,7 +168,7 @@ function highlight(paragraph: string, comments: ReviewComment[], activeId?: stri
 
 const Comments3 = (props: Comments3Props) => {
   const {
-    comments: initialComments,
+    comments: initialComments = noComments,
     currentUser,
     document,
     now,
@@ -151,11 +176,19 @@ const Comments3 = (props: Comments3Props) => {
     onResolve = () => {},
     onSubmit = saveReply,
     people,
+    status,
   } = props
   const [comments, setComments] = useState(initialComments)
+  const [loaded, setLoaded] = useState(initialComments)
+  if (initialComments !== loaded) {
+    setLoaded(initialComments)
+    setComments(initialComments)
+  }
   const [filter, setFilter] = useState<Filter>('open')
   const [activeId, setActiveId] = useState<string>()
-  const [status, setStatus] = useState('')
+  const [announcement, setAnnouncement] = useState('')
+  const state = getBlockState(status, comments.length === 0)
+  const headingId = useId()
   const listRef = useRef<HTMLDivElement>(null)
   const open = comments.filter((comment) => !comment.resolved)
   const resolved = comments.filter((comment) => comment.resolved)
@@ -168,7 +201,7 @@ const Comments3 = (props: Comments3Props) => {
     onResolve(comment.id, next)
     update(comment.id, (item) => ({ ...item, resolved: next }))
     setActiveId(undefined)
-    setStatus(
+    setAnnouncement(
       next
         ? `Resolved. ${open.length - 1} open ${open.length - 1 === 1 ? 'comment' : 'comments'} left.`
         : 'Reopened. It’s under Open.',
@@ -182,35 +215,53 @@ const Comments3 = (props: Comments3Props) => {
   ]
 
   return (
-    <div className='@container'>
-      <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem]'>
-        <Card className='self-start'>
-          <CardHeader>
-            <CardTitle className='flex flex-wrap items-center gap-2'>
-              {document.title}
-              <Badge variant='secondary'>{document.status}</Badge>
-            </CardTitle>
-            <CardDescription>{document.updated}</CardDescription>
-          </CardHeader>
-          <CardContent className='flex flex-col gap-4 text-sm leading-relaxed'>
-            {document.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{highlight(paragraph, open, activeId)}</p>
-            ))}
-          </CardContent>
-        </Card>
-        <Card className='self-start'>
-          <CardHeader>
-            <CardTitle>Comments</CardTitle>
-          </CardHeader>
-          <CardContent>
+    <BlockStateProvider status={status} empty={comments.length === 0}>
+      <section className='@container'>
+        <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem] @3xl:gap-8'>
+          <article className='flex flex-col gap-4 self-start'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{document.title}</h2>
+              <Details className='text-muted-foreground text-sm'>
+                <StatusLabel tone={statusTones[document.statusTone ?? 'warning']}>
+                  {document.status}
+                </StatusLabel>
+                {document.updated}
+              </Details>
+            </header>
+            <div className='flex flex-col gap-4 border-t pt-4 text-sm leading-relaxed'>
+              {document.paragraphs.map((paragraph) => (
+                <p key={paragraph}>
+                  {state ? paragraph : highlight(paragraph, open, activeId)}
+                </p>
+              ))}
+            </div>
+          </article>
+          <section
+            aria-labelledby={headingId}
+            className='flex flex-col gap-3 self-start border-t pt-4 @3xl:border-t-0 @3xl:border-l @3xl:pt-0 @3xl:pl-6'
+          >
+            <header className='flex flex-col gap-0.5'>
+              <h3 id={headingId} className='text-sm font-medium'>
+                Comments
+              </h3>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {open.length === 0
+                    ? 'Everything is resolved.'
+                    : `${open.length} open, ${resolved.length} resolved.`}
+                </p>
+              </BlockReady>
+            </header>
             <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
               <TabsList className='w-full'>
                 {filters.map((item) => (
                   <TabsTrigger key={item.value} value={item.value}>
                     {item.label}
-                    <span className='text-muted-foreground tabular-nums'>
-                      {item.items.length}
-                    </span>
+                    {!state && (
+                      <span className='text-muted-foreground tabular-nums'>
+                        {item.items.length}
+                      </span>
+                    )}
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -222,7 +273,9 @@ const Comments3 = (props: Comments3Props) => {
                     aria-label={`${item.label} comments`}
                     className='flex flex-col divide-y outline-none'
                   >
-                    {item.items.length === 0 ? (
+                    {state ? (
+                      <BlockStateRows rows={3} />
+                    ) : item.items.length === 0 ? (
                       <p className='text-muted-foreground py-10 text-center text-sm'>
                         {item.value === 'open'
                           ? 'All comments are resolved.'
@@ -289,13 +342,18 @@ const Comments3 = (props: Comments3Props) => {
               ))}
             </Tabs>
             <p aria-live='polite' className='sr-only'>
-              {status}
+              {announcement}
             </p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          </section>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 
-export { Comments3, exampleProps as comments3ExampleProps, type Comments3Props }
+export {
+  Comments3,
+  exampleProps as comments3ExampleProps,
+  type Comments3Props,
+  type DocumentStatusTone,
+}

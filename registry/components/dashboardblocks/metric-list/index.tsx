@@ -16,3 +16,10 @@ export const metricListExampleProps = {
   'metric-list-03': metricList3ExampleProps,
   'metric-list-04': metricList4ExampleProps,
 }
+
+export const metricListEmptyProps = {
+  'metric-list-01': { metrics: [] },
+  'metric-list-02': { sections: [] },
+  'metric-list-03': { metrics: [] },
+  'metric-list-04': { metrics: [] },
+}

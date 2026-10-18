@@ -1,7 +1,33 @@
 'use client'
 
+import {
+  BlockStateRows,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipFrame,
+  useChartId,
+  chartTimeGridProps,
+} from '@/registry/components/dashboardblocks/chart'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useState } from 'react'
+import { formatDateRange, formatPercent } from '@/registry/lib/dashboardblocks/format'
+import type { ReactNode } from 'react'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 import { cn } from '@/lib/utils'
 
@@ -65,17 +91,16 @@ function formatTimelineDate(date: Date) {
 }
 
 function formatTimelineRange(start: Date, end: Date) {
-  return `${dayFormatter.format(start)} – ${dayFormatter.format(end)}`
+  return formatDateRange({ end, start })
 }
 
 type TimelineStatus = 'done' | 'in-progress' | 'planned' | 'at-risk'
 
 const timelineStatusConfig: Record<
   TimelineStatus,
-  { className: string; icon: ReactNode; label: string }
+  { icon: ReactNode; label: string; tone: StatusTone }
 > = {
   'at-risk': {
-    className: 'text-amber-800 dark:text-amber-400',
     icon: (
       <IconPlaceholder
         lucide='TriangleAlertIcon'
@@ -87,9 +112,9 @@ const timelineStatusConfig: Record<
       />
     ),
     label: 'At risk',
+    tone: 'warning',
   },
   done: {
-    className: 'text-emerald-700 dark:text-emerald-400',
     icon: (
       <IconPlaceholder
         lucide='CircleCheckIcon'
@@ -101,9 +126,9 @@ const timelineStatusConfig: Record<
       />
     ),
     label: 'Done',
+    tone: 'good',
   },
   'in-progress': {
-    className: 'text-foreground',
     icon: (
       <IconPlaceholder
         lucide='CircleDotIcon'
@@ -115,9 +140,9 @@ const timelineStatusConfig: Record<
       />
     ),
     label: 'In progress',
+    tone: 'info',
   },
   planned: {
-    className: 'text-muted-foreground',
     icon: (
       <IconPlaceholder
         lucide='CircleDashedIcon'
@@ -129,6 +154,7 @@ const timelineStatusConfig: Record<
       />
     ),
     label: 'Planned',
+    tone: 'neutral',
   },
 }
 
@@ -143,26 +169,17 @@ function TimelineStatusLabel({
 }) {
   const config = timelineStatusConfig[status]
   return (
-    <span
+    <StatusLabel
       className={cn(
-        'inline-flex items-center gap-1 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
+        'inline-flex items-center gap-1 text-xs [&_svg]:size-3.5 [&_svg]:shrink-0',
         className,
       )}
+      tone={config.tone}
     >
       {config.icon}
       <span className={cn(!showLabel && 'sr-only')}>{config.label}</span>
-    </span>
+    </StatusLabel>
   )
-}
-
-interface TimelineAxisProps {
-  className?: string
-  end: Date
-  /** @default month names, e.g. "Sep" */
-  format?: (date: Date) => string
-  start: Date
-  ticks: Date[]
 }
 
 const monthFormatter = new Intl.DateTimeFormat('en-US', {
@@ -170,87 +187,199 @@ const monthFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-function TimelineAxis({
-  className,
-  end,
-  format = (date) => monthFormatter.format(date),
-  start,
-  ticks,
-}: TimelineAxisProps) {
-  const position = getTimelineScale(start, end)
+const formatMonth = (date: Date) => monthFormatter.format(date)
+
+const TIMELINE_AXIS_HEIGHT = 20
+const TIMELINE_NOW_Z_INDEX = 550
+
+interface TimelineAxisTickProps {
+  format?: (date: Date) => string
+  payload?: { value: number }
+  x?: number
+}
+
+function TimelineAxisTick({
+  format = formatMonth,
+  payload,
+  x = 0,
+}: TimelineAxisTickProps) {
+  if (!payload) return null
   return (
-    <div
-      aria-hidden
-      className={cn(
-        'text-muted-foreground relative h-5 text-[11px] tabular-nums',
-        className,
-      )}
-    >
-      {ticks.map((tick) => (
-        <span
-          key={tick.getTime()}
-          className='absolute top-0 border-l pl-1 leading-5 whitespace-nowrap'
-          style={{ left: `${position(tick)}%` }}
-        >
-          {format(tick)}
-        </span>
-      ))}
-    </div>
+    <g>
+      <line stroke='var(--color-border)' x1={x} x2={x} y1={0} y2={TIMELINE_AXIS_HEIGHT} />
+      <text fill='var(--color-muted-foreground)' fontSize={11} x={x + 4} y={14}>
+        {format(new Date(payload.value))}
+      </text>
+    </g>
   )
 }
 
-function TimelineGridLines({
-  end,
-  start,
-  ticks,
-}: {
+interface TimelineNowLabelProps {
+  label: string
+  viewBox?: { x?: number }
+}
+
+function TimelineNowLabel({ label, viewBox }: TimelineNowLabelProps) {
+  const x = viewBox?.x ?? 0
+  const width = label.length * 6 + 8
+  return (
+    <g>
+      <rect
+        fill='var(--color-foreground)'
+        height={16}
+        rx={3}
+        width={width}
+        x={x - width / 2}
+        y={2}
+      />
+      <text
+        fill='var(--color-background)'
+        fontSize={10}
+        fontWeight={500}
+        textAnchor='middle'
+        x={x}
+        y={13}
+      >
+        {label}
+      </text>
+    </g>
+  )
+}
+
+interface TimelineBand {
+  active: boolean
+  height: number
+  index: number
+  /** Maps a date to its position across the chart, in pixels. */
+  x: (date: Date) => number
+  y: number
+}
+
+interface TimelineChartProps<Row> {
+  className?: string
   end: Date
+  /** @default month names, e.g. "Sep" */
+  formatTick?: (date: Date) => string
+  now?: Date
+  /** @default 'Today' */
+  nowLabel?: string
+  /** Draws a row's bars inside its band, in SVG. */
+  renderRow: (row: Row, band: TimelineBand) => ReactNode
+  /** In pixels; match it in any column drawn beside the chart. */
+  rowHeight: number
+  rows: Row[]
   start: Date
   ticks: Date[]
-}) {
-  const position = getTimelineScale(start, end)
-  return (
-    <div aria-hidden className='pointer-events-none absolute inset-0'>
-      {ticks.map((tick) => (
-        <span
-          key={tick.getTime()}
-          className='bg-border/70 absolute inset-y-0 w-px'
-          style={{ left: `${position(tick)}%` }}
-        />
-      ))}
-    </div>
-  )
+  /** The hovered row's tooltip, or `null` for none. */
+  tooltip: (row: Row) => ReactNode
 }
 
-function TimelineToday({
+interface TimelineBarShapeProps {
+  height?: number
+  index?: number
+  payload?: { row: unknown }
+  width?: number
+  x?: number
+  y?: number
+}
+
+function TimelineChart<Row>({
+  className,
   end,
-  label = 'Today',
+  formatTick,
   now,
+  nowLabel = 'Today',
+  renderRow,
+  rowHeight,
+  rows,
   start,
-}: {
-  end: Date
-  label?: string
-  now: Date
-  start: Date
-}) {
-  if (now < start || now > end) return null
-  const left = getTimelineScale(start, end)(now)
+  ticks,
+  tooltip,
+}: TimelineChartProps<Row>) {
+  const from = start.getTime()
+  const to = Math.max(from + DAY, end.getTime())
+  const data = rows.map((row, index) => ({ index, range: [from, to], row }))
+  const shape =
+    (active: boolean) =>
+    ({
+      height = 0,
+      index = 0,
+      payload,
+      width = 0,
+      x = 0,
+      y = 0,
+    }: TimelineBarShapeProps) => (
+      <g>
+        {payload &&
+          renderRow(payload.row as Row, {
+            active,
+            height,
+            index,
+            x: (date) => x + ((date.getTime() - from) / (to - from)) * width,
+            y,
+          })}
+      </g>
+    )
+
   return (
     <div
       aria-hidden
-      className='pointer-events-none absolute inset-y-0 z-10 flex -translate-x-1/2 flex-col items-center'
-      style={{ left: `${left}%` }}
+      className={cn('w-full', className)}
+      style={{ height: TIMELINE_AXIS_HEIGHT + rows.length * rowHeight }}
     >
-      <span className='bg-foreground text-background rounded-sm px-1 text-[10px] leading-4 font-medium'>
-        {label}
-      </span>
-      <span className='bg-foreground w-px flex-1' />
+      <ResponsiveContainer height='100%' width='100%'>
+        <BarChart
+          accessibilityLayer={false}
+          barCategoryGap={0}
+          data={data}
+          layout='vertical'
+          margin={{ bottom: 0, left: 0, right: 0, top: 0 }}
+        >
+          <CartesianGrid {...chartTimeGridProps} />
+          <XAxis
+            allowDataOverflow
+            axisLine={false}
+            domain={[from, to]}
+            height={TIMELINE_AXIS_HEIGHT}
+            interval={0}
+            orientation='top'
+            tick={<TimelineAxisTick format={formatTick} />}
+            tickLine={false}
+            ticks={ticks.map((tick) => tick.getTime())}
+            type='number'
+          />
+          <YAxis dataKey='index' hide type='category' />
+          <Tooltip
+            content={({ active, payload }) => {
+              const row = payload?.[0]?.payload?.row as Row | undefined
+              const body = active && row !== undefined ? tooltip(row) : null
+              return body ? <ChartTooltipFrame>{body}</ChartTooltipFrame> : null
+            }}
+            cursor={false}
+          />
+          <Bar
+            activeBar={shape(true)}
+            dataKey='range'
+            isAnimationActive={false}
+            shape={shape(false)}
+          />
+          {now && now >= start && now <= end && (
+            <ReferenceLine
+              ifOverflow='hidden'
+              label={<TimelineNowLabel label={nowLabel} />}
+              stroke='var(--color-foreground)'
+              x={now.getTime()}
+              zIndex={TIMELINE_NOW_Z_INDEX}
+            />
+          )}
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 }
 
 interface TimelineItem {
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   end: Date
   /** Names a group; consecutive items with the same group sit under one heading. */
@@ -264,7 +393,7 @@ interface TimelineItem {
 }
 
 interface TimelineProps {
-  /** Shown under the chart when nothing is hovered. */
+  /** A note under the chart. */
   children?: ReactNode
   className?: string
   describe?: (item: TimelineItem) => string
@@ -273,12 +402,42 @@ interface TimelineProps {
   items: TimelineItem[]
   /** Names the sideways scroll region `minWidth` adds. @default 'Timeline' */
   label?: string
-  /** Keeps bars legible in narrow cards: below this width the track scrolls sideways. */
+  /** Keeps bars legible in narrow containers: below this width the track scrolls sideways. */
   minWidth?: string
   now?: Date
+  /** How many rows to sketch while loading. @default 6 */
+  placeholderRows?: number
   start: Date
   /** @default 'month' */
   unit?: TimelineUnit
+}
+
+const TIMELINE_ROW_HEIGHT = 32
+const TIMELINE_BAR_INSET = 6
+const TIMELINE_MIN_BAR_WIDTH = 6
+
+const formatProgress = (share: number) =>
+  formatPercent(share, { maximumFractionDigits: 0 })
+
+type TimelineRow = { group: string; kind: 'group' } | { item: TimelineItem; kind: 'item' }
+
+function TimelineItemTooltip({ item }: { item: TimelineItem }) {
+  return (
+    <>
+      <span className='font-medium'>{item.label}</span>
+      <span className='text-muted-foreground tabular-nums'>
+        {formatTimelineRange(item.start, item.end)}
+      </span>
+      {(item.status || item.progress !== undefined) && (
+        <Details>
+          {item.status && <TimelineStatusLabel showLabel status={item.status} />}
+          {item.progress !== undefined && (
+            <span className='tabular-nums'>{formatProgress(item.progress)} done</span>
+          )}
+        </Details>
+      )}
+    </>
+  )
 }
 
 function Timeline({
@@ -291,11 +450,30 @@ function Timeline({
   label = 'Timeline',
   minWidth,
   now,
+  placeholderRows = 6,
   start,
   unit = 'month',
 }: TimelineProps) {
-  const [active, setActive] = useState<string | null>(null)
-  const position = getTimelineScale(start, end)
+  const id = useChartId()
+  const state = useBlockState()
+
+  if (state) {
+    return (
+      <div className={cn('flex flex-col gap-3', className)}>
+        {state === 'loading' ? (
+          <ChartPlaceholder
+            height={TIMELINE_AXIS_HEIGHT + placeholderRows * TIMELINE_ROW_HEIGHT}
+          />
+        ) : (
+          <BlockStateRows />
+        )}
+        {state === 'loading' && children && (
+          <p className='text-muted-foreground text-sm'>{children}</p>
+        )}
+      </div>
+    )
+  }
+
   const ticks = getTimelineTicks(start, end, unit)
   const describeItem =
     describe ??
@@ -303,11 +481,18 @@ function Timeline({
       [
         `${item.label}: ${formatTimelineRange(item.start, item.end)}`,
         item.status && timelineStatusConfig[item.status].label.toLowerCase(),
-        item.progress !== undefined && `${Math.round(item.progress * 100)}% done`,
+        item.progress !== undefined && `${formatProgress(item.progress)} done`,
       ]
         .filter(Boolean)
         .join(', '))
-  const activeItem = items.find((item) => item.id === active)
+  const rows = items.flatMap<TimelineRow>((item, index) =>
+    item.group && item.group !== items[index - 1]?.group
+      ? [
+          { group: item.group, kind: 'group' },
+          { item, kind: 'item' },
+        ]
+      : [{ item, kind: 'item' }],
+  )
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
@@ -324,109 +509,131 @@ function Timeline({
         <div
           className='grid grid-cols-[minmax(6rem,11rem)_minmax(0,1fr)] gap-x-3'
           style={{ minWidth }}
-          onPointerLeave={() => setActive(null)}
         >
-          <span
-            aria-hidden
+          <ul
             className={cn(
-              'col-start-1 row-start-1',
-              minWidth && 'bg-card sticky left-0 z-20',
+              'flex flex-col',
+              minWidth && 'bg-background sticky left-0 z-20',
             )}
-          />
-          <TimelineAxis
-            className='col-start-2 row-start-1'
+          >
+            <li aria-hidden style={{ height: TIMELINE_AXIS_HEIGHT }} />
+            {rows.map((row) =>
+              row.kind === 'group' ? (
+                <li
+                  key={`group-${row.group}`}
+                  className='text-muted-foreground flex items-end pb-1 text-xs font-medium'
+                  style={{ height: TIMELINE_ROW_HEIGHT }}
+                >
+                  {row.group}
+                </li>
+              ) : (
+                <li
+                  key={row.item.id}
+                  className='flex min-w-0 items-center gap-1.5 text-sm'
+                  style={{ height: TIMELINE_ROW_HEIGHT }}
+                >
+                  {row.item.status && <TimelineStatusLabel status={row.item.status} />}
+                  <span className='truncate'>{row.item.label}</span>
+                  <span className='sr-only'>, {describeItem(row.item)}</span>
+                </li>
+              ),
+            )}
+          </ul>
+          <TimelineChart
             end={end}
-            format={formatTick}
+            formatTick={formatTick}
+            now={now}
+            renderRow={(row, band) => {
+              if (row.kind === 'group') return null
+              const { item } = row
+              const color = item.color ?? 'var(--color-chart-2)'
+              const planned = item.status === 'planned'
+              const left = band.x(item.start)
+              const width = Math.max(TIMELINE_MIN_BAR_WIDTH, band.x(item.end) - left)
+              const top = band.y + TIMELINE_BAR_INSET
+              const height = band.height - 2 * TIMELINE_BAR_INSET
+              const progress = Math.min(1, Math.max(0, item.progress ?? 0))
+              const key = `${id}-${band.index}`
+              return (
+                <>
+                  <defs>
+                    <clipPath id={`${key}-clip`}>
+                      <rect height={height} rx={6} width={width} x={left} y={top} />
+                    </clipPath>
+                    <linearGradient id={`${key}-fill`} x1='0' x2='1' y1='0' y2='0'>
+                      <stop
+                        offset='0%'
+                        style={{
+                          stopColor: `color-mix(in oklab, ${color} 55%, var(--color-background))`,
+                        }}
+                      />
+                      <stop offset='100%' style={{ stopColor: color }} />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    height={height}
+                    rx={6}
+                    style={{
+                      fill: `color-mix(in oklab, ${color} ${planned ? 10 : 22}%, var(--color-background))`,
+                      stroke: planned ? 'var(--color-border)' : 'none',
+                    }}
+                    strokeDasharray={planned ? '3 3' : undefined}
+                    width={width}
+                    x={left}
+                    y={top}
+                  />
+                  {progress > 0 && (
+                    <rect
+                      clipPath={`url(#${key}-clip)`}
+                      fill={`url(#${key}-fill)`}
+                      height={height}
+                      width={width * progress}
+                      x={left}
+                      y={top}
+                    />
+                  )}
+                  {band.active && (
+                    <rect
+                      fill='none'
+                      height={height + 4}
+                      rx={8}
+                      stroke='var(--color-foreground)'
+                      strokeWidth={2}
+                      width={width + 4}
+                      x={left - 2}
+                      y={top - 2}
+                    />
+                  )}
+                </>
+              )
+            }}
+            rowHeight={TIMELINE_ROW_HEIGHT}
+            rows={rows}
             start={start}
             ticks={ticks}
-          />
-          <ul className='col-span-full row-start-2 grid grid-cols-subgrid'>
-            {items.map((item, index) => {
-              const heading = item.group && item.group !== items[index - 1]?.group
-              const color = item.color ?? 'var(--chart-2)'
-              const left = position(item.start)
-              const width = Math.max(1.5, position(item.end) - left)
-              return (
-                <li key={item.id} className='col-span-full grid grid-cols-subgrid'>
-                  {heading && (
-                    <span
-                      className={cn(
-                        'text-muted-foreground col-span-full pt-3 pb-1 text-[11px] font-medium tracking-wide uppercase',
-                        minWidth && 'bg-card sticky left-0 w-max pr-2',
-                      )}
-                    >
-                      {item.group}
-                    </span>
-                  )}
-                  <span
-                    className={cn(
-                      'flex min-w-0 items-center gap-1.5 py-1 text-sm',
-                      minWidth && 'bg-card sticky left-0 z-20',
-                    )}
-                  >
-                    {item.status && <TimelineStatusLabel status={item.status} />}
-                    <span className='truncate'>{item.label}</span>
-                    <span className='sr-only'>, {describeItem(item)}</span>
-                  </span>
-                  <span className='relative h-8'>
-                    <TimelineGridLines end={end} start={start} ticks={ticks} />
-                    <span
-                      aria-hidden
-                      className={cn(
-                        'ring-offset-card absolute top-1.5 bottom-1.5 overflow-hidden rounded-md',
-                        item.status === 'planned' && 'border border-dashed',
-                        active === item.id && 'ring-foreground ring-2 ring-offset-1',
-                      )}
-                      style={{
-                        backgroundColor: `color-mix(in oklab, ${color} ${item.status === 'planned' ? 10 : 22}%, var(--card))`,
-                        left: `${left}%`,
-                        width: `${width}%`,
-                      }}
-                      onPointerEnter={() => setActive(item.id)}
-                      onPointerDown={() => setActive(item.id)}
-                    >
-                      {item.progress !== undefined && (
-                        <span
-                          className='absolute inset-y-0 left-0'
-                          style={{
-                            backgroundColor: color,
-                            width: `${Math.min(1, Math.max(0, item.progress)) * 100}%`,
-                          }}
-                        />
-                      )}
-                    </span>
-                  </span>
-                </li>
+            tooltip={(row) =>
+              row.kind === 'group' ? null : describe ? (
+                describe(row.item)
+              ) : (
+                <TimelineItemTooltip item={row.item} />
               )
-            })}
-          </ul>
-          {now && (
-            <div
-              aria-hidden
-              className='pointer-events-none relative col-start-2 row-start-1 row-end-3'
-            >
-              <TimelineToday end={end} now={now} start={start} />
-            </div>
-          )}
+            }
+          />
         </div>
       </div>
-      <p className='text-muted-foreground min-h-5 text-sm'>
-        {activeItem ? (
-          <span className='text-foreground'>{describeItem(activeItem)}</span>
-        ) : (
-          children
-        )}
-      </p>
+      {children && <p className='text-muted-foreground text-sm'>{children}</p>}
     </div>
   )
 }
 
 export {
   Timeline,
-  TimelineAxis,
-  TimelineGridLines,
+  TimelineAxisTick,
+  TimelineChart,
+  TimelineNowLabel,
   TimelineStatusLabel,
-  TimelineToday,
+  TIMELINE_AXIS_HEIGHT,
+  TIMELINE_NOW_Z_INDEX,
   formatTimelineDate,
   formatTimelineRange,
   getDaysBetween,
@@ -436,7 +643,10 @@ export {
 }
 
 export type {
-  TimelineAxisProps,
+  TimelineAxisTickProps,
+  TimelineBand,
+  TimelineChartProps,
+  TimelineNowLabelProps,
   TimelineItem,
   TimelineProps,
   TimelineStatus,

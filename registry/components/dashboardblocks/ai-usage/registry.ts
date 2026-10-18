@@ -7,7 +7,13 @@ export const examples: Registry['items'] = [
     name: 'ai-usage-01',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('ai-usage'), registryUrl('chart-panel')],
+    registryDependencies: [
+      registryUrl('ai-usage'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-usage/ai-usage-01.tsx',
@@ -16,7 +22,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Tokens per day stacked by model, with the total cost and the cost per million tokens.',
+        'Tokens per day stacked by model against the daily average, with the total cost and the cost per million tokens; hovering a day splits it by model.',
       size: 'full',
       usedWith: ['ai-usage-02', 'ai-usage-03', 'ai-usage-04'],
     },
@@ -24,7 +30,12 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-usage-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-usage')],
+    registryDependencies: [
+      registryUrl('ai-usage'),
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-usage/ai-usage-02.tsx',
@@ -41,7 +52,11 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-usage-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-usage')],
+    registryDependencies: [
+      registryUrl('ai-usage'),
+      registryUrl('block-state'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-usage/ai-usage-03.tsx',
@@ -49,7 +64,8 @@ export const examples: Registry['items'] = [
       },
     ],
     meta: {
-      shows: 'Requests, time to first token, output speed and error rate for each model.',
+      shows:
+        'Requests, time to first token from the median to the 95th percentile, output speed and error rate for each model.',
       size: 'full',
       usedWith: ['ai-usage-01', 'ai-usage-02'],
     },
@@ -57,7 +73,11 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-usage-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-usage'), registryUrl('ring')],
+    registryDependencies: [
+      registryUrl('ai-usage'),
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-usage/ai-usage-04.tsx',

@@ -1,14 +1,19 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type Metric,
   MetricList,
   MetricRow,
   getMetricChange,
 } from '@/registry/components/dashboardblocks/metric-list'
 import { useId } from 'react'
-
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface MetricSection {
   key: string
@@ -17,15 +22,18 @@ interface MetricSection {
 }
 
 interface MetricList2Props {
+  /** Follows the previous value in each change, such as `in August`. */
   comparison?: string
   description: string
-  sections: MetricSection[]
+  /** Leave out, or pass none, to show the empty state. */
+  sections?: MetricSection[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: MetricList2Props = {
-  comparison: 'vs August',
-  description: 'September, compared with August',
+  comparison: 'in August',
+  description: 'September against August.',
   sections: [
     {
       key: 'acquisition',
@@ -119,49 +127,68 @@ const exampleProps: MetricList2Props = {
 }
 
 const MetricList2 = (props: MetricList2Props) => {
-  const { comparison, description, sections, title } = props
+  const { comparison, description, sections = [], status, title } = props
   const id = useId()
+  const isBetter = (metric: Metric) => {
+    const change = getMetricChange(metric) ?? 0
+    return metric.goodDirection === 'down' ? change < 0 : change > 0
+  }
+  const total = sections.reduce((sum, section) => sum + section.metrics.length, 0)
+  const improving = sections.reduce(
+    (sum, section) => sum + section.metrics.filter(isBetter).length,
+    0,
+  )
+  const state = getBlockState(status, total === 0)
 
   return (
-    <Card className='@container gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      {sections.map((section) => {
-        const headingId = `${id}-${section.key}`
-        const improving = section.metrics.filter((metric) => {
-          const change = getMetricChange(metric) ?? 0
-          return metric.goodDirection === 'down' ? change < 0 : change > 0
-        }).length
-        return (
-          <section
-            key={section.key}
-            aria-labelledby={headingId}
-            className='border-b last:border-b-0'
-          >
-            <div className='bg-muted/50 flex items-baseline justify-between gap-3 border-b px-6 py-2'>
-              <h3 id={headingId} className='text-xs font-medium'>
-                {section.label}
-              </h3>
-              <p className='text-muted-foreground text-xs'>
-                {improving} of {section.metrics.length} improving
-              </p>
-            </div>
-            <MetricList className='px-6'>
-              {section.metrics.map((metric) => (
-                <MetricRow
-                  key={metric.key}
-                  comparison={comparison}
-                  metric={metric}
-                  showSparkline={false}
-                />
-              ))}
-            </MetricList>
-          </section>
-        )
-      })}
-    </Card>
+    <BlockStateProvider status={status} empty={total === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {description}{' '}
+              <span className='tabular-nums'>
+                {improving} of {total}
+              </span>{' '}
+              metrics improved.
+            </p>
+          </BlockReady>
+        </header>
+        <BlockStateRows className='border-t' rows={6} />
+        {!state &&
+          sections.map((section) => {
+            const headingId = `${id}-${section.key}`
+            const better = section.metrics.filter(isBetter).length
+            return (
+              <section
+                key={section.key}
+                aria-labelledby={headingId}
+                className='flex flex-col border-t pt-3'
+              >
+                <div className='flex items-baseline justify-between gap-3'>
+                  <h3 id={headingId} className='text-sm font-medium'>
+                    {section.label}
+                  </h3>
+                  <p className='text-muted-foreground text-xs tabular-nums'>
+                    {better} of {section.metrics.length} improved
+                  </p>
+                </div>
+                <MetricList>
+                  {section.metrics.map((metric) => (
+                    <MetricRow
+                      key={metric.key}
+                      comparison={comparison}
+                      metric={metric}
+                      showSparkline={false}
+                    />
+                  ))}
+                </MetricList>
+              </section>
+            )
+          })}
+      </section>
+    </BlockStateProvider>
   )
 }
 

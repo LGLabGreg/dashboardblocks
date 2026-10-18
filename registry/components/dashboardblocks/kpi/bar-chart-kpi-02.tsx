@@ -1,16 +1,30 @@
 'use client'
 
-import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipFrame,
+  ChartTooltipItem,
+  chartAxisProps,
+  chartBarCursor,
+} from '@/registry/components/dashboardblocks/chart'
 import {
   KPI,
   KPIChart,
   KPIContent,
+  KPITitle,
   type KPIFormat,
   KPIValue,
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
-
-import { CardDescription } from '@/components/ui/card'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { cn } from '@/lib/utils'
 
@@ -21,10 +35,12 @@ interface DailyGoal {
 }
 
 interface BarChartKPI2Props {
-  data: DailyGoal[]
+  /** Leave out, or pass no days, to show the empty state. */
+  data?: DailyGoal[]
   format?: KPIFormat
-  /** @default 160 */
+  /** @default 144 */
   height?: number
+  status?: BlockStatus
   title: string
 }
 
@@ -42,42 +58,79 @@ const exampleProps: BarChartKPI2Props = {
   title: 'Revenue vs goal',
 }
 
-const series = [
-  { color: 'var(--color-chart-2)', key: 'value', label: 'Actual' },
-  { color: 'var(--color-chart-3)', key: 'goal', label: 'Goal' },
-] as const
+const MISSED_COLOR = 'color-mix(in oklab, var(--color-chart-2) 30%, transparent)'
+
+function BarWithGoal({
+  x = 0,
+  y = 0,
+  width = 0,
+  height = 0,
+  payload,
+}: {
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  payload?: DailyGoal
+}) {
+  if (!payload) return null
+  const met = payload.value >= payload.goal
+  const base = y + height
+  const goalY = payload.value > 0 ? base - (height * payload.goal) / payload.value : base
+  const radius = Math.min(4, width / 2, height)
+
+  return (
+    <g>
+      <path
+        d={`M${x},${base}V${y + radius}a${radius},${radius} 0 0 1 ${radius},${-radius}H${x + width - radius}a${radius},${radius} 0 0 1 ${radius},${radius}V${base}Z`}
+        fill={met ? 'var(--color-chart-2)' : MISSED_COLOR}
+      />
+      <rect
+        x={x - 3}
+        y={goalY - 1}
+        width={width + 6}
+        height={2}
+        rx={1}
+        fill='var(--color-foreground)'
+      />
+    </g>
+  )
+}
 
 const BarChartKPI2 = (props: BarChartKPI2Props) => {
-  const { data, format, height = 160, title } = props
+  const { data = [], format, height = 144, status, title } = props
+  const state = getBlockState(status, data.length === 0)
   const formatter = getKPIFormatter(format)
   const total = data.reduce((sum, point) => sum + point.value, 0)
   const goal = data.reduce((sum, point) => sum + point.goal, 0)
-  const share = goal > 0 ? Math.round((total / goal) * 100) : 0
+  const share = goal > 0 ? total / goal : 0
   const daysMet = data.filter((point) => point.value >= point.goal).length
 
   return (
-    <KPI>
-      <KPIContent className='gap-4'>
-        <div className='flex flex-col gap-1'>
-          <div className='flex items-center justify-between gap-2'>
-            <CardDescription>{title}</CardDescription>
-            <span
-              className={cn(
-                'rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums',
-                share >= 100
-                  ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
-                  : 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-              )}
-            >
-              {share}% of goal
-            </span>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <KPI>
+        <KPIContent className='gap-3'>
+          <div className='flex flex-col gap-1'>
+            <KPITitle>{title}</KPITitle>
+            <KPIValue value={total} format={format} animated />
+            {state === 'loading' ? (
+              <BlockStateText className='text-sm' />
+            ) : state ? null : (
+              <p className='text-muted-foreground text-sm'>
+                <span
+                  className={cn(
+                    'font-medium tabular-nums',
+                    share >= 1
+                      ? 'text-emerald-700 dark:text-emerald-400'
+                      : 'text-amber-800 dark:text-amber-400',
+                  )}
+                >
+                  {formatPercent(share, { maximumFractionDigits: 0 })} of goal
+                </span>{' '}
+                of <span className='tabular-nums'>{formatter(goal)}</span>
+              </p>
+            )}
           </div>
-          <KPIValue value={total} format={format} animated />
-          <p className='text-muted-foreground text-xs'>
-            Goal {formatter(goal)} · met on {daysMet} of {data.length} days
-          </p>
-        </div>
-        <div className='flex flex-col gap-2'>
           <KPIChart
             label={`${title} by day: ${data
               .map(
@@ -86,33 +139,73 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
               )
               .join(', ')}`}
           >
-            <TinyBarChart
-              accessibilityLayer={false}
-              bars={series.map((item) => ({
-                dataKey: item.key,
-                fill: item.color,
-                name: item.label,
-              }))}
-              data={data}
-              formatter={formatter}
-              height={height}
-            />
+            {state ? (
+              <ChartPlaceholder height={height} />
+            ) : (
+              <div className='w-full' style={{ height }}>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart
+                    accessibilityLayer={false}
+                    data={data}
+                    barCategoryGap='28%'
+                    margin={{ top: 4, right: 4, bottom: 0, left: 4 }}
+                  >
+                    <XAxis
+                      {...chartAxisProps}
+                      dataKey='label'
+                      tickFormatter={(value: string) => String(value).charAt(0)}
+                      interval={0}
+                    />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        const point = payload?.[0]?.payload as DailyGoal | undefined
+                        if (!active || !point) return null
+                        return (
+                          <ChartTooltipFrame>
+                            <span className='font-medium'>{point.label}</span>
+                            <ChartTooltipItem
+                              color={
+                                point.value >= point.goal
+                                  ? 'var(--color-chart-2)'
+                                  : MISSED_COLOR
+                              }
+                              name='Actual'
+                              value={formatter(point.value)}
+                            />
+                            <ChartTooltipItem
+                              color='var(--color-foreground)'
+                              name='Goal'
+                              value={formatter(point.goal)}
+                            />
+                          </ChartTooltipFrame>
+                        )
+                      }}
+                      cursor={chartBarCursor}
+                    />
+                    <YAxis
+                      hide
+                      domain={[
+                        0,
+                        Math.max(
+                          ...data.map((point) => Math.max(point.value, point.goal)),
+                        ),
+                      ]}
+                    />
+                    <Bar dataKey='value' name='Actual' shape={BarWithGoal} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </KPIChart>
-          <div className='text-muted-foreground flex items-center gap-4 text-xs'>
-            {series.map((item) => (
-              <span key={item.key} className='inline-flex items-center gap-1.5'>
-                <span
-                  aria-hidden
-                  className='size-2.5 rounded-[2px]'
-                  style={{ backgroundColor: item.color }}
-                />
-                {item.label}
-              </span>
-            ))}
-          </div>
-        </div>
-      </KPIContent>
-    </KPI>
+          <BlockReady className='text-xs'>
+            <p className='text-muted-foreground text-xs'>
+              Met the goal on {daysMet} of {data.length} days. Solid bars met it; the line
+              on each bar is that day&apos;s goal.
+            </p>
+          </BlockReady>
+        </KPIContent>
+      </KPI>
+    </BlockStateProvider>
   )
 }
 

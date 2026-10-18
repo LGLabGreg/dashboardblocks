@@ -22,3 +22,12 @@ export const chartPanelExampleProps = {
   'chart-panel-05': chartPanel5ExampleProps,
   'chart-panel-06': chartPanel6ExampleProps,
 }
+
+export const chartPanelEmptyProps = {
+  'chart-panel-01': { data: [] },
+  'chart-panel-02': { data: [], metrics: [] },
+  'chart-panel-03': { data: [] },
+  'chart-panel-04': { data: [] },
+  'chart-panel-05': { segments: [] },
+  'chart-panel-06': { data: [], previous: undefined },
+}

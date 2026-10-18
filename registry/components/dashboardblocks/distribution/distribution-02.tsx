@@ -1,24 +1,19 @@
 'use client'
 
+import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   BoxPlot,
-  DistributionAxis,
   DistributionKey,
   getNiceTicks,
   quantile,
 } from '@/registry/components/dashboardblocks/distribution'
-import { useState } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 interface DistributionGroup {
   count: number
@@ -33,7 +28,9 @@ interface DistributionGroup {
 interface Distribution2Props {
   description: string
   formatter?: (value: number) => string
-  groups: DistributionGroup[]
+  /** Leave out, or pass none, to show the empty state. */
+  groups?: DistributionGroup[]
+  status?: BlockStatus
   tickFormatter?: (value: number) => string
   whiskerLabel?: string
   title: string
@@ -41,7 +38,6 @@ interface Distribution2Props {
   unit?: string
 }
 
-// Integer hashing, not Math.sin, so the server and the browser get the same numbers.
 function sample(count: number, scale: number, seed: number) {
   return Array.from({ length: count }, (_, index) => {
     const u = ((index * 2_654_435_761 + seed * 40_503) % 4_294_967_296) / 4_294_967_296
@@ -52,8 +48,11 @@ function sample(count: number, scale: number, seed: number) {
 const round = (value: number) => Math.round(value * 100) / 100
 
 const exampleProps: Distribution2Props = {
-  description: 'Hours from opened to resolved, last 30 days',
-  formatter: (value) => `${value.toFixed(value < 10 ? 1 : 0)} h`,
+  description: 'Hours from opened to resolved for each team over the last 30 days.',
+  formatter: (value) => {
+    const digits = value < 10 ? 1 : 0
+    return `${formatNumber(value, { maximumFractionDigits: digits, minimumFractionDigits: digits })} h`
+  },
   groups: [
     { count: 386, label: 'Billing', scale: 3.1 },
     { count: 512, label: 'Account', scale: 4.6 },
@@ -71,7 +70,7 @@ const exampleProps: Distribution2Props = {
       q3: round(quantile(values, 0.75)),
     }
   }),
-  tickFormatter: (value) => `${value} h`,
+  tickFormatter: (value) => `${formatNumber(value)} h`,
   title: 'Resolution time by team',
   unit: 'tickets',
 }
@@ -79,95 +78,76 @@ const exampleProps: Distribution2Props = {
 const Distribution2 = (props: Distribution2Props) => {
   const {
     description,
-    formatter = (value) => value.toLocaleString(),
-    groups,
+    formatter = (value) => formatNumber(value),
+    groups = [],
+    status,
     tickFormatter = formatter,
     title,
     unit = 'tickets',
     whiskerLabel = '5th–95th percentile',
   } = props
-  const [active, setActive] = useState<number | null>(null)
-
+  const state = getBlockState(status, groups.length === 0)
   const ticks = getNiceTicks(0, Math.max(0, ...groups.map((group) => group.high)), 5)
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]]
   const slowest = groups.reduce<DistributionGroup | undefined>(
     (best, group) => (best && best.median >= group.median ? best : group),
     undefined,
   )
-  const describe = (group: DistributionGroup) =>
-    `${group.label}: median ${formatter(group.median)}, middle half ${formatter(group.q1)}–${formatter(group.q3)}, ${whiskerLabel} ${formatter(group.low)}–${formatter(group.high)}, ${group.count.toLocaleString()} ${unit}`
+  const fastest = groups.reduce<DistributionGroup | undefined>(
+    (best, group) => (best && best.median <= group.median ? best : group),
+    undefined,
+  )
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='box' />
-            Middle half
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='median' />
-            Median
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='whisker' />
-            {whiskerLabel}
-          </li>
-        </ul>
-        <div
-          className='grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3'
-          onPointerLeave={() => setActive(null)}
-        >
-          <span className='text-muted-foreground col-start-3 pb-1 text-right text-[11px]'>
-            Median
-          </span>
-          {groups.map((group, index) => (
-            <div
-              key={group.label}
-              aria-hidden
-              className={cn(
-                'col-span-full grid grid-cols-subgrid items-center rounded-md py-1.5',
-                active === index && 'bg-muted/60',
-              )}
-              onPointerEnter={() => setActive(index)}
-              onPointerDown={() => setActive(index)}
-            >
-              <span className='text-muted-foreground pl-1 text-sm whitespace-nowrap'>
-                {group.label}
-              </span>
-              <BoxPlot
-                domain={domain}
-                high={group.high}
-                low={group.low}
-                median={group.median}
-                q1={group.q1}
-                q3={group.q3}
-              />
-              <span className='pr-1 text-right text-sm font-medium tabular-nums'>
-                {formatter(group.median)}
-              </span>
-            </div>
-          ))}
-          <DistributionAxis
-            className='col-start-2 mt-1'
-            domain={domain}
-            format={tickFormatter}
-            ticks={ticks}
-          />
+    <BlockStateProvider status={status} empty={groups.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-col gap-3 border-t pt-4'>
+          {state ? (
+            <BlockStateText className='text-sm' />
+          ) : (
+            slowest &&
+            fastest &&
+            slowest !== fastest && (
+              <p className='text-muted-foreground text-sm'>
+                <span className='text-foreground font-medium'>{slowest.label}</span> is
+                slowest, with half its {unit} taking over {formatter(slowest.median)}.{' '}
+                {fastest.label} is quickest, at {formatter(fastest.median)}.
+              </p>
+            )
+          )}
+          {state !== 'empty' && state !== 'error' && (
+            <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+              <li className='flex items-center gap-1.5'>
+                <DistributionKey shape='box' />
+                Middle half
+              </li>
+              <li className='flex items-center gap-1.5'>
+                <DistributionKey shape='median' />
+                Median
+              </li>
+              <li className='flex items-center gap-1.5'>
+                <DistributionKey shape='whisker' />
+                {whiskerLabel}
+              </li>
+            </ul>
+          )}
         </div>
-        <p className='text-muted-foreground min-h-5 text-sm'>
-          {active !== null ? (
-            <span className='text-foreground'>{describe(groups[active])}</span>
-          ) : slowest ? (
-            `${slowest.label} is slowest, with half its ${unit} taking over ${formatter(slowest.median)}`
-          ) : null}
-        </p>
+        <BoxPlot
+          aria-label={`${title} chart`}
+          domain={domain}
+          format={formatter}
+          rows={groups}
+          tickFormat={tickFormatter}
+          ticks={ticks}
+          unit={unit}
+          whiskerLabel={whiskerLabel}
+        />
         <ChartPanelTable
-          caption={`${title}: ${description}.`}
+          caption={`${title}: ${description}`}
           columns={[
             { key: 'label', label: 'Group' },
             { format: formatter, key: 'low', label: 'Low' },
@@ -179,8 +159,8 @@ const Distribution2 = (props: Distribution2Props) => {
           ]}
           rows={groups}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

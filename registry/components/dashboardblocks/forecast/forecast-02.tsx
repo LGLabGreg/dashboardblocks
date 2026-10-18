@@ -1,27 +1,64 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  chartActiveDot,
+  chartAxisProps,
+  chartGridProps,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  ChartPanelFigure,
+  ChartPanelTable,
+} from '@/registry/components/dashboardblocks/chart-panel'
+import {
   type ConfidenceLevel,
-  ForecastBadge,
   ForecastLegend,
+  ForecastStatusLabel,
+  ForecastTooltip,
+  buildForecast,
   fitLinear,
   forecastColors,
+  forecastDash,
   getDeadlineStatus,
+  getForecastAxis,
   solveForTarget,
 } from '@/registry/components/dashboardblocks/forecast'
-
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  formatCompact,
+  formatDateRange,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
+import {
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ReferenceDot,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 interface Forecast2Props {
-  /** Running totals so far, oldest first, one step apart. */
-  actuals: number[]
+  /** Running totals so far, oldest first, one step apart. Leave out, or pass none, to show the empty state. */
+  actuals?: number[]
   deadline: Date
   formatter?: (value: number) => string
   lastDate: Date
@@ -29,6 +66,7 @@ interface Forecast2Props {
   level?: ConfidenceLevel
   metric: string
   now: Date
+  status?: BlockStatus
   stepDays?: number
   target: number
   title: string
@@ -41,7 +79,7 @@ const exampleProps: Forecast2Props = {
     ),
   ),
   deadline: new Date(Date.UTC(2026, 11, 31)),
-  formatter: (value) => Math.round(value).toLocaleString('en-US'),
+  formatter: (value) => formatNumber(value, { maximumFractionDigits: 0 }),
   lastDate: new Date(Date.UTC(2026, 8, 20)),
   metric: 'paying customers',
   now: new Date(Date.UTC(2026, 8, 26)),
@@ -56,39 +94,23 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
-const yearFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-
-function formatDateRange(start: Date, end: Date) {
-  if (start.getUTCFullYear() !== end.getUTCFullYear()) {
-    return `${yearFormatter.format(start)} – ${yearFormatter.format(end)}`
-  }
-  const first = dateFormatter.format(start)
-  if (start.getUTCMonth() !== end.getUTCMonth()) {
-    return `${first} – ${dateFormatter.format(end)}`
-  }
-  if (start.getUTCDate() !== end.getUTCDate()) return `${first} – ${end.getUTCDate()}`
-  return first
-}
-
 const Forecast2 = (props: Forecast2Props) => {
   const {
-    actuals,
+    actuals = [],
     deadline,
-    formatter = (value) => Math.round(value).toLocaleString(),
+    formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     lastDate,
     level = 0.8,
     metric,
     now,
+    status: blockStatus,
     stepDays = 7,
     target,
     title,
   } = props
+  const state = getBlockState(blockStatus, actuals.length === 0)
 
+  const gradientId = useChartId()
   const stepMs = stepDays * DAY
   const deadlineSteps = (deadline.getTime() - lastDate.getTime()) / stepMs
   const forecast = solveForTarget(actuals, target, {
@@ -111,125 +133,239 @@ const Forecast2 = (props: Forecast2Props) => {
   const margin = expected
     ? Math.round((deadline.getTime() - expected.getTime()) / DAY)
     : null
-
-  const start = now.getTime()
-  const finish =
-    Math.max(deadline.getTime(), (latest ?? earliest ?? deadline).getTime()) + 14 * DAY
-  const position = (date: Date) =>
-    Math.min(100, Math.max(0, ((date.getTime() - start) / (finish - start)) * 100))
   const percent = `${level * 100}%`
 
+  const horizon = Math.max(
+    1,
+    Math.ceil(
+      Math.min(Math.max(deadlineSteps, forecast.expected ?? 0), deadlineSteps * 1.5 + 4) +
+        1,
+    ),
+  )
+  const last = actuals.length - 1
+  const rows = buildForecast(actuals, horizon, level).rows.map((row, index) => ({
+    ...row,
+    date: lastDate.getTime() + (index - last) * stepMs,
+  }))
+  const yAxis = getForecastAxis([
+    ...rows.flatMap((row) => [row.actual, row.forecast]),
+    target,
+  ])
+  const ticks = rows
+    .filter((_, index) => (rows.length - 1 - index) % 4 === 0)
+    .map((row) => row.date)
+
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {formatter(target)} {metric} by {dateFormatter.format(deadline)}
-        </CardDescription>
-        <CardAction>
-          <ForecastBadge status={status} />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-col gap-1'>
-          <p className='text-xl font-semibold tracking-tight text-balance'>
-            {forecast.reached
-              ? `Reached ${formatter(target)} ${metric}`
-              : expected
-                ? `Projected to reach ${formatter(target)} by ${dateFormatter.format(expected)}`
-                : `Not projected to reach ${formatter(target)} at the current trend`}
-          </p>
-          {!forecast.reached && margin !== null && (
+    <BlockStateProvider status={blockStatus} empty={actuals.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-4'>
+          <div className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
             <p className='text-muted-foreground text-sm'>
-              {margin === 0
-                ? 'On the deadline'
-                : `${Math.abs(margin)} ${Math.abs(margin) === 1 ? 'day' : 'days'} ${margin > 0 ? 'before' : 'after'} the deadline`}
-              , with {formatter(current)} {metric} now.
+              {formatter(target)} {metric} by {dateFormatter.format(deadline)}.
             </p>
-          )}
-        </div>
-        {!forecast.reached && (
-          <div className='flex flex-col gap-2'>
-            <div aria-hidden className='relative h-8'>
-              <div className='bg-muted absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full' />
-              {earliest && (
-                <div
-                  className='absolute top-1/2 h-4 -translate-y-1/2 rounded-full border border-dashed border-chart-2'
-                  style={{
-                    backgroundColor: forecastColors.band,
-                    left: `${position(earliest)}%`,
-                    right: `${100 - (latest ? position(latest) : 100)}%`,
-                  }}
-                />
-              )}
-              {expected && (
-                <span
-                  className='ring-card absolute top-1/2 size-3 -translate-1/2 rounded-full ring-2'
-                  style={{
-                    backgroundColor: forecastColors.forecast,
-                    left: `${position(expected)}%`,
-                  }}
-                />
-              )}
-              <span
-                className='bg-foreground ring-card absolute inset-y-0 w-0.5 -translate-x-1/2 rounded-full ring-2'
-                style={{ left: `${position(deadline)}%` }}
-              />
-            </div>
-            <div
-              aria-hidden
-              className='text-muted-foreground relative flex h-4 justify-between text-xs'
-            >
-              <span>Today</span>
-              <span
-                className='absolute -translate-x-full pr-1 whitespace-nowrap'
-                style={{ left: `${position(deadline)}%` }}
-              >
-                Deadline
-              </span>
-            </div>
-            <ForecastLegend
-              items={[
-                { label: 'Projected date', shape: 'dot' },
-                { label: `${percent} range`, shape: 'band' },
-                { label: 'Deadline', shape: 'marker' },
-              ]}
-            />
           </div>
-        )}
-        <dl className='grid grid-cols-2 gap-4 border-t pt-4'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Projected date</dt>
-            <dd className='text-sm font-medium'>
-              {expected ? dateFormatter.format(expected) : 'Not in view'}
+          <ForecastStatusLabel status={status} />
+        </header>
+        <dl className='flex flex-wrap items-end gap-x-10 gap-y-3 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <dt className='text-muted-foreground text-sm'>
+              {forecast.reached && !state
+                ? `Reached ${formatter(target)}`
+                : `Projected to reach ${formatter(target)}`}
+            </dt>
+            <dd className='text-4xl font-light tracking-tight tabular-nums'>
+              {state === 'loading' ? (
+                <SkeletonText className='w-[4.5em]' />
+              ) : state ? (
+                <BlockStateText variant='short' />
+              ) : forecast.reached ? (
+                formatter(current)
+              ) : expected ? (
+                dateFormatter.format(expected)
+              ) : (
+                'Not in view'
+              )}
             </dd>
+            {!state && !forecast.reached && margin !== null && (
+              <dd className='text-muted-foreground text-xs'>
+                {margin === 0
+                  ? 'On the deadline'
+                  : `${Math.abs(margin)} ${Math.abs(margin) === 1 ? 'day' : 'days'} ${margin > 0 ? 'before' : 'after'} the deadline`}
+              </dd>
+            )}
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>{percent} range</dt>
-            <dd className='text-sm font-medium'>
+          {state !== 'empty' && state !== 'error' && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Now</dt>
+              <dd>
+                <KPIValue className='text-2xl' value={current} format={formatter} />
+              </dd>
+              <dd className='text-muted-foreground text-xs tabular-nums'>
+                <BlockReady className='text-xs'>
+                  {formatPercent(current / (target || 1), { maximumFractionDigits: 0 })}{' '}
+                  of the goal
+                </BlockReady>
+              </dd>
+            </div>
+          )}
+        </dl>
+        <ForecastLegend
+          items={[
+            { label: 'Actual', shape: 'line' },
+            { label: 'Forecast', shape: 'dashed' },
+            { label: `${percent} range`, shape: 'band' },
+            { label: 'Goal', shape: 'dotted' },
+          ]}
+        />
+        {state ? (
+          <ChartPlaceholder height={208} />
+        ) : (
+          <ChartPanelFigure className='h-52'>
+            <ResponsiveContainer width='100%' height='100%'>
+              <ComposedChart
+                aria-label={title}
+                data={rows}
+                margin={{ top: 20, right: 12, bottom: 0, left: 0 }}
+              >
+                <defs>
+                  <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
+                    <stop
+                      offset='0%'
+                      stopColor={forecastColors.actual}
+                      stopOpacity={0.3}
+                    />
+                    <stop
+                      offset='100%'
+                      stopColor={forecastColors.actual}
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid {...chartGridProps} />
+                <XAxis
+                  {...chartAxisProps}
+                  dataKey='date'
+                  domain={['dataMin', 'dataMax']}
+                  interval='preserveStartEnd'
+                  minTickGap={24}
+                  scale='time'
+                  tickFormatter={(value: number) => dateFormatter.format(value)}
+                  ticks={ticks}
+                  type='number'
+                />
+                <YAxis
+                  {...chartAxisProps}
+                  domain={yAxis.domain}
+                  tickFormatter={(value: number) => formatCompact(value)}
+                  ticks={yAxis.ticks}
+                  width={chartValueAxisWidth}
+                />
+                <ReferenceLine
+                  {...chartReferenceProps}
+                  y={target}
+                  label={{
+                    ...chartReferenceLabel,
+                    position: 'insideTopLeft',
+                    value: `Goal ${formatter(target)}`,
+                  }}
+                />
+                <ReferenceLine
+                  x={deadline.getTime()}
+                  stroke={forecastColors.marker}
+                  strokeWidth={1}
+                  label={{
+                    fill: 'var(--color-foreground)',
+                    fontSize: 11,
+                    position: 'top',
+                    value: 'Deadline',
+                  }}
+                />
+                <Tooltip
+                  content={(tooltipProps) => (
+                    <ForecastTooltip
+                      {...tooltipProps}
+                      formatLabel={(label) => dateFormatter.format(Number(label))}
+                      level={level}
+                      valueFormatter={formatter}
+                    />
+                  )}
+                  cursor={chartLineCursor}
+                />
+                <Area
+                  activeDot={false}
+                  dataKey='band'
+                  fill={forecastColors.band}
+                  fillOpacity={1}
+                  name={`${percent} range`}
+                  stroke='none'
+                  type='linear'
+                />
+                <Line
+                  activeDot={chartActiveDot}
+                  dataKey='forecast'
+                  dot={false}
+                  name='Forecast'
+                  stroke={forecastColors.forecast}
+                  strokeDasharray={forecastDash.forecast}
+                  strokeWidth={2}
+                  type='linear'
+                />
+                <Area
+                  activeDot={chartActiveDot}
+                  dataKey='actual'
+                  dot={false}
+                  fill={`url(#${gradientId})`}
+                  fillOpacity={1}
+                  name='Actual'
+                  stroke={forecastColors.actual}
+                  strokeLinecap='round'
+                  strokeWidth={2}
+                  type='monotone'
+                />
+                {expected && !forecast.reached && (
+                  <ReferenceDot
+                    x={expected.getTime()}
+                    y={target}
+                    r={5}
+                    fill={forecastColors.forecast}
+                    stroke='var(--color-background)'
+                    strokeWidth={2}
+                  />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </ChartPanelFigure>
+        )}
+        {!forecast.reached && (
+          <BlockReady className='text-sm'>
+            <p className='text-sm text-pretty'>
+              {`Growing by ${formatter(Math.max(0, trend))} a ${unit}. Hitting the deadline takes ${formatter(needed)} a ${unit}`}
               {earliest
                 ? latest
-                  ? formatDateRange(earliest, latest)
-                  : `${dateFormatter.format(earliest)} or later`
-                : 'Not in view'}
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Current trend</dt>
-            <dd className='text-sm font-medium'>
-              {trend >= 0 ? '+' : '−'}
-              {formatter(Math.abs(trend))} per {unit}
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Needed to hit the deadline</dt>
-            <dd className='text-sm font-medium'>
-              +{formatter(needed)} per {unit}
-            </dd>
-          </div>
-        </dl>
-      </CardContent>
-    </Card>
+                  ? `, and the ${percent} range is ${formatDateRange({ end: latest, start: earliest })}.`
+                  : `, and the ${percent} range starts on ${dateFormatter.format(earliest)}.`
+                : '.'}
+            </p>
+          </BlockReady>
+        )}
+        {!state && (
+          <ChartPanelTable
+            caption={`${title}: ${formatter(target)} ${metric} by ${dateFormatter.format(deadline)}. The forecast is a straight-line fit with a ${percent} range.`}
+            columns={[
+              { key: 'label', label: 'Week ending' },
+              { format: formatter, key: 'actual', label: 'Actual' },
+              { format: formatter, key: 'forecast', label: 'Forecast' },
+            ]}
+            rows={rows.map((row, index) => ({
+              actual: row.actual ?? '—',
+              forecast: index > last ? (row.forecast ?? '—') : '—',
+              label: dateFormatter.format(row.date),
+            }))}
+          />
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

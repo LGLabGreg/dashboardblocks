@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-reveal",
+  "title": "Use Reveal",
+  "description": "A hook that turns true the frame after an element scrolls into view, so a bar or ring can animate from zero.",
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/use-in-view.json"
+  ],
+  "files": [
+    {
+      "path": "registry/hooks/use-reveal.tsx",
+      "content": "'use client'\n\nimport { useInView } from '@/registry/hooks/use-in-view'\nimport { type RefObject, useEffect, useState } from 'react'\n\n/** `revealed` turns true the frame after the element scrolls into view, so a bar can animate from zero; it starts true when `animated` is off. */\nfunction useReveal<T extends HTMLElement = HTMLDivElement>(animated: boolean) {\n  const { isInView, ref } = useInView({ threshold: 0.3 })\n  const [revealed, setRevealed] = useState(!animated)\n\n  useEffect(() => {\n    if (!animated || !isInView) return\n    const frame = requestAnimationFrame(() => setRevealed(true))\n    return () => cancelAnimationFrame(frame)\n  }, [animated, isInView])\n\n  return { ref: ref as RefObject<T>, revealed }\n}\n\nexport { useReveal }\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-reveal.tsx"
+    }
+  ],
+  "type": "registry:hook"
+}

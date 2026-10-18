@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'inventory-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('inventory')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('inventory'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/inventory/inventory-01.tsx',
@@ -23,7 +28,12 @@ export const examples: Registry['items'] = [
   {
     name: 'inventory-02',
     type: 'registry:component',
-    registryDependencies: ['card'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('goals'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/inventory/inventory-02.tsx',
@@ -40,7 +50,13 @@ export const examples: Registry['items'] = [
   {
     name: 'inventory-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('billing'), registryUrl('inventory')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('chart'),
+      registryUrl('format'),
+      registryUrl('inventory'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/inventory/inventory-03.tsx',
@@ -58,7 +74,13 @@ export const examples: Registry['items'] = [
     name: 'inventory-04',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('inventory')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('inventory'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/inventory/inventory-04.tsx',

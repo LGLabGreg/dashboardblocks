@@ -2,22 +2,30 @@
 
 import {
   type AlertSeverity,
-  SeverityIcon,
+  SeverityLabel,
   formatRelativeTime,
   severityConfig,
 } from '@/registry/components/dashboardblocks/alerts'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
 
 interface Alerts4Props {
-  counts: Partial<Record<Exclude<AlertSeverity, 'resolved'>, number>>
+  /** Leave out to show the empty state. */
+  counts?: Partial<Record<Exclude<AlertSeverity, 'resolved'>, number>>
   latest?: { firedAt: Date; severity: AlertSeverity; source: string; title: string }
   now: Date
   onViewAll?: () => void
+  status?: BlockStatus
 }
 
 const NOW = Date.UTC(2026, 8, 25, 14, 30)
@@ -36,47 +44,74 @@ const exampleProps: Alerts4Props = {
 const SEVERITIES = ['critical', 'warning', 'info'] as const
 
 const Alerts4 = (props: Alerts4Props) => {
-  const { counts, latest, now, onViewAll } = props
-  const total = SEVERITIES.reduce((sum, severity) => sum + (counts[severity] ?? 0), 0)
+  const { counts, latest, now, onViewAll, status } = props
+  const state = getBlockState(status, counts === undefined)
+  const total = SEVERITIES.reduce((sum, severity) => sum + (counts?.[severity] ?? 0), 0)
 
   return (
-    <Card className='@container py-4'>
-      <CardContent className='flex flex-col gap-4 px-4 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
-        <div className='flex items-center gap-3'>
-          <SeverityIcon
-            severity={total === 0 ? 'resolved' : (latest?.severity ?? 'warning')}
-          />
-          <div className='flex flex-col'>
-            <span className='text-sm font-medium'>
-              {total === 0 ? 'No open alerts' : `${total} open alerts`}
-            </span>
-            <ul className='text-muted-foreground flex flex-wrap gap-x-3 text-xs'>
-              {SEVERITIES.map((severity) => (
-                <li key={severity} className='flex items-center gap-1'>
-                  <span
-                    aria-hidden
-                    className={cn('size-2 rounded-full', severityConfig[severity].fill)}
-                  />
-                  {counts[severity] ?? 0} {severityConfig[severity].label.toLowerCase()}
-                </li>
-              ))}
-            </ul>
-          </div>
+    <BlockStateProvider status={status} empty={counts === undefined}>
+      <section className='@container flex flex-col gap-3 border-y py-3 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
+        <div className='flex shrink-0 flex-col gap-0.5'>
+          {state === 'error' || state === 'empty' ? (
+            <p className='flex items-baseline gap-2'>
+              <span className='text-sm font-medium'>Open alerts</span>
+              <BlockStateText
+                className='text-2xl font-light tracking-tight'
+                variant='short'
+              />
+            </p>
+          ) : (
+            <p className='flex items-baseline gap-2'>
+              <span className='text-2xl font-light tracking-tight tabular-nums'>
+                {state === 'loading' ? <SkeletonText className='w-[1.5em]' /> : total}
+              </span>
+              <span className='text-sm font-medium'>
+                {total === 1 ? 'open alert' : 'open alerts'}
+              </span>
+            </p>
+          )}
+          <BlockReady className='w-40 text-sm'>
+            <Details className='text-sm'>
+              {SEVERITIES.map((severity) => {
+                const count = counts?.[severity] ?? 0
+                return count > 0 ? (
+                  <SeverityLabel key={severity} severity={severity}>
+                    {count} {severityConfig[severity].label.toLowerCase()}
+                  </SeverityLabel>
+                ) : (
+                  <span key={severity} className='text-muted-foreground tabular-nums'>
+                    0 {severityConfig[severity].label.toLowerCase()}
+                  </span>
+                )
+              })}
+            </Details>
+          </BlockReady>
         </div>
-        {latest && total > 0 && (
-          <p className='min-w-0 flex-1 text-sm @2xl:border-l @2xl:pl-6'>
-            <span className='text-muted-foreground'>Latest: </span>
-            <span className={cn('font-medium', severityConfig[latest.severity].text)}>
-              {severityConfig[latest.severity].label}
-            </span>{' '}
-            {latest.title}{' '}
-            <span className='text-muted-foreground'>
-              · {latest.source} ·{' '}
-              <time dateTime={latest.firedAt.toISOString()}>
-                {formatRelativeTime(latest.firedAt, now)}
-              </time>
-            </span>
-          </p>
+        {state === 'loading' && (
+          <BlockReady className='min-w-0 flex-1 text-sm @2xl:border-l @2xl:pl-6'>
+            {null}
+          </BlockReady>
+        )}
+        {!state && (
+          <div className='flex min-w-0 flex-1 flex-col gap-0.5 text-sm @2xl:border-l @2xl:pl-6'>
+            {latest && total > 0 ? (
+              <>
+                <p>
+                  <span className='text-muted-foreground'>Latest </span>
+                  <SeverityLabel severity={latest.severity} />{' '}
+                  <span className='font-medium'>{latest.title}</span>
+                </p>
+                <Details className='text-muted-foreground text-xs'>
+                  {latest.source}
+                  <time dateTime={latest.firedAt.toISOString()}>
+                    {formatRelativeTime(latest.firedAt, now)}
+                  </time>
+                </Details>
+              </>
+            ) : (
+              <p className='text-muted-foreground'>Nothing needs a response.</p>
+            )}
+          </div>
         )}
         <Button
           variant='outline'
@@ -94,8 +129,8 @@ const Alerts4 = (props: Alerts4Props) => {
             data-icon='inline-end'
           />
         </Button>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "details",
+  "title": "Details",
+  "description": "Two or three short facts about one subject on one line, joined by a middle dot that screen readers skip and that never ends a line.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/details.tsx",
+      "content": "import { Children, type ComponentProps, Fragment } from 'react'\n\nimport { cn } from '@/lib/utils'\n\nfunction Details({ children, className, ...props }: ComponentProps<'span'>) {\n  const parts = Children.toArray(children)\n\n  return (\n    <span data-slot='details' className={cn(className)} {...props}>\n      {parts.map((part, index) => (\n        <Fragment key={index}>\n          {index > 0 && (\n            <>\n              {' '}\n              <span aria-hidden>·</span>\n              {' '}\n            </>\n          )}\n          {part}\n        </Fragment>\n      ))}\n    </span>\n  )\n}\n\nexport { Details }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/details.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

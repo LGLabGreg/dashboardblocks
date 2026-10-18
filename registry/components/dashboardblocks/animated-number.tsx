@@ -33,7 +33,7 @@ export function AnimatedNumber({
     from,
   })
 
-  const displayValue = formatter ? formatter(value) : value.toLocaleString()
+  const displayValue = formatter ? formatter(value) : value.toLocaleString('en-US')
 
   return (
     <span ref={ref as React.RefObject<HTMLSpanElement>} className={className}>

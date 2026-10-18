@@ -1,26 +1,25 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
   CopyButton,
   daysBetween,
   formatDate,
   formatRelative,
   maskSecret,
 } from '@/registry/components/dashboardblocks/settings'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, type RefObject, useEffect, useId, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
 type KeyScope = 'read' | 'write'
@@ -38,13 +37,16 @@ interface ApiKey {
 interface Settings2Props {
   /** Creates a key and returns it with its secret, which is shown once. */
   createKey: (name: string, scope: KeyScope) => { key: ApiKey; secret: string }
-  description: string
-  keys: ApiKey[]
+  /** @default a sentence counting the keys and any unused ones */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  keys?: ApiKey[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onRevoke?: (id: string) => void
   /** @default 90 */
   staleAfterDays?: number
+  status?: BlockStatus
   title: string
 }
 
@@ -72,7 +74,6 @@ const exampleProps: Settings2Props = {
       secret,
     }
   },
-  description: 'Keys let your services call the API. Treat them like passwords.',
   keys: [
     {
       createdAt: daysAgo(210),
@@ -120,9 +121,15 @@ const scopeLabel: Record<KeyScope, string> = {
 }
 
 const Settings2 = (props: Settings2Props) => {
-  const { createKey, description, now, onRevoke, staleAfterDays = 90, title } = props
+  const { createKey, now, onRevoke, staleAfterDays = 90, status, title } = props
   const id = useId()
-  const [keys, setKeys] = useState(props.keys)
+  const [keys, setKeys] = useState(props.keys ?? [])
+  const unused = keys.filter(
+    (key) => daysBetween(key.lastUsedAt ?? key.createdAt, now) >= staleAfterDays,
+  ).length
+  const description =
+    props.description ??
+    `${keys.length} ${keys.length === 1 ? 'key' : 'keys'} can call the API${unused > 0 ? `, ${unused} unused for ${staleAfterDays} days or more` : ''}. Treat them like passwords.`
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState<string | null>(null)
@@ -155,16 +162,21 @@ const Settings2 = (props: Settings2Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        {!creating && (
-          <CardAction>
+    <BlockStateProvider status={status} empty={keys.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
+          </div>
+          {!creating && (
             <Button
               ref={createButton}
               variant='outline'
               size='sm'
+              disabled={status !== undefined}
               onClick={() => {
                 setCreating(true)
                 setRevealed(null)
@@ -181,184 +193,173 @@ const Settings2 = (props: Settings2Props) => {
               />
               Create key
             </Button>
-          </CardAction>
-        )}
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        {creating && (
-          <form
-            method='post'
-            onSubmit={create}
-            className='flex flex-col gap-3 rounded-lg border p-4'
-          >
-            <div className='flex flex-col gap-2'>
-              <label htmlFor={`${id}-name`} className='text-sm font-medium'>
-                Key name
-              </label>
-              <Input
-                ref={nameInput}
-                id={`${id}-name`}
-                autoComplete='off'
-                placeholder='e.g. Production backend'
-                value={name}
-                onChange={(event) => {
-                  setName(event.target.value)
-                  setNameError(null)
-                }}
-                aria-invalid={nameError ? true : undefined}
-                aria-describedby={nameError ? `${id}-name-error` : undefined}
-              />
-              {nameError && (
-                <p
-                  id={`${id}-name-error`}
-                  role='alert'
-                  className='text-destructive text-sm'
-                >
-                  {nameError}
-                </p>
-              )}
-            </div>
-            <fieldset className='flex flex-col gap-2'>
-              <legend className='mb-2 text-sm font-medium'>Access</legend>
-              <div className='flex flex-wrap gap-x-4 gap-y-2'>
-                {(Object.keys(scopeLabel) as KeyScope[]).map((option) => (
-                  <label key={option} className='flex items-center gap-2 text-sm'>
-                    <input
-                      type='radio'
-                      name={`${id}-scope`}
-                      value={option}
-                      checked={scope === option}
-                      onChange={() => setScope(option)}
-                      className='accent-primary size-4'
-                    />
-                    {scopeLabel[option]}
-                  </label>
-                ))}
+          )}
+        </header>
+        <div className='flex flex-col gap-4'>
+          {creating && (
+            <form
+              method='post'
+              onSubmit={create}
+              className='flex flex-col gap-3 rounded-lg border p-4'
+            >
+              <div className='flex flex-col gap-2'>
+                <label htmlFor={`${id}-name`} className='text-sm font-medium'>
+                  Key name
+                </label>
+                <Input
+                  ref={nameInput}
+                  id={`${id}-name`}
+                  autoComplete='off'
+                  placeholder='e.g. Production backend'
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value)
+                    setNameError(null)
+                  }}
+                  aria-invalid={nameError ? true : undefined}
+                  aria-describedby={nameError ? `${id}-name-error` : undefined}
+                />
+                {nameError && (
+                  <p
+                    id={`${id}-name-error`}
+                    role='alert'
+                    className='text-destructive text-sm'
+                  >
+                    {nameError}
+                  </p>
+                )}
               </div>
-            </fieldset>
-            <div className='flex justify-end gap-2'>
+              <fieldset className='flex flex-col gap-2'>
+                <legend className='mb-2 text-sm font-medium'>Access</legend>
+                <div className='flex flex-wrap gap-x-4 gap-y-2'>
+                  {(Object.keys(scopeLabel) as KeyScope[]).map((option) => (
+                    <label key={option} className='flex items-center gap-2 text-sm'>
+                      <input
+                        type='radio'
+                        name={`${id}-scope`}
+                        value={option}
+                        checked={scope === option}
+                        onChange={() => setScope(option)}
+                        className='accent-primary size-4'
+                      />
+                      {scopeLabel[option]}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <div className='flex justify-end gap-2'>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  onClick={() => {
+                    setCreating(false)
+                    setNameError(null)
+                    focusAfterRender.current = createButton
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type='submit'>Create key</Button>
+              </div>
+            </form>
+          )}
+
+          {revealed && (
+            <div
+              ref={revealedPanel}
+              role='group'
+              aria-labelledby={`${id}-revealed`}
+              tabIndex={-1}
+              className='flex flex-col gap-2 rounded-lg border p-4 outline-none'
+            >
+              <p id={`${id}-revealed`} className='text-sm font-medium'>
+                <StatusLabel tone='good'>Created</StatusLabel> “{revealed.name}”
+              </p>
+              <p className='text-muted-foreground text-sm'>
+                Copy the key now. You won’t be able to see it again.
+              </p>
+              <div className='bg-background flex items-center gap-2 rounded-md border py-1 pr-1 pl-3'>
+                <span className='min-w-0 flex-1 truncate font-mono text-xs'>
+                  {revealed.secret}
+                </span>
+                <CopyButton label='Copy API key' value={revealed.secret} />
+              </div>
               <Button
-                type='button'
                 variant='ghost'
+                size='sm'
+                className='self-end'
                 onClick={() => {
-                  setCreating(false)
-                  setNameError(null)
+                  setRevealed(null)
                   focusAfterRender.current = createButton
                 }}
               >
-                Cancel
+                Done
               </Button>
-              <Button type='submit'>Create key</Button>
             </div>
-          </form>
-        )}
+          )}
 
-        {revealed && (
-          <div
-            ref={revealedPanel}
-            role='group'
-            aria-labelledby={`${id}-revealed`}
-            tabIndex={-1}
-            className='flex flex-col gap-2 rounded-lg border border-emerald-600/30 bg-emerald-500/5 p-4 outline-none'
-          >
-            <p id={`${id}-revealed`} className='text-sm font-medium'>
-              “{revealed.name}” is ready
-            </p>
-            <p className='text-muted-foreground text-sm'>
-              Copy the key now. You won’t be able to see it again.
-            </p>
-            <div className='bg-background flex items-center gap-2 rounded-md border py-1 pr-1 pl-3'>
-              <span className='min-w-0 flex-1 truncate font-mono text-xs'>
-                {revealed.secret}
-              </span>
-              <CopyButton label='Copy API key' value={revealed.secret} />
+          {status || keys.length === 0 ? (
+            <div className='border-t'>
+              <BlockStateRows rows={4} />
             </div>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='self-end'
-              onClick={() => {
-                setRevealed(null)
-                focusAfterRender.current = createButton
-              }}
-            >
-              Done
-            </Button>
-          </div>
-        )}
-
-        {keys.length === 0 ? (
-          <p className='text-muted-foreground py-6 text-center text-sm'>
-            No keys yet. Create one to start calling the API.
-          </p>
-        ) : (
-          <ul className='flex flex-col divide-y border-t'>
-            {keys.map((key) => {
-              const idle = daysBetween(key.lastUsedAt ?? key.createdAt, now)
-              const stale = idle >= staleAfterDays
-              return (
-                <li
-                  key={key.id}
-                  className='flex flex-col gap-2 py-3 @md:flex-row @md:items-center @md:gap-4'
-                >
-                  <div className='flex min-w-0 flex-1 flex-col gap-1'>
-                    <div className='flex flex-wrap items-center gap-2'>
-                      <span className='truncate text-sm font-medium'>{key.name}</span>
-                      <Badge variant='outline'>{scopeLabel[key.scope]}</Badge>
-                      {stale && (
-                        <Badge variant='outline'>
-                          <span
-                            aria-hidden
-                            className='size-1.5 shrink-0 rounded-full bg-amber-500'
-                          />
-                          Unused {idle} days
-                        </Badge>
-                      )}
-                    </div>
-                    <span className='text-muted-foreground font-mono text-xs'>
-                      {key.masked}
-                    </span>
-                  </div>
-                  <div className='text-muted-foreground flex flex-col text-xs @md:w-44 @md:items-end'>
-                    <span>
-                      {key.lastUsedAt ? (
+          ) : (
+            <ul className='flex flex-col divide-y border-t'>
+              {keys.map((key) => {
+                const idle = daysBetween(key.lastUsedAt ?? key.createdAt, now)
+                const stale = idle >= staleAfterDays
+                return (
+                  <li key={key.id} className='flex items-center gap-3 py-2.5'>
+                    <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                      <span className='flex min-w-0 flex-wrap items-baseline gap-x-2'>
+                        <span className='truncate text-sm font-medium'>{key.name}</span>
+                        {stale && (
+                          <StatusLabel tone='warning' className='text-xs'>
+                            Unused for {idle} days
+                          </StatusLabel>
+                        )}
+                      </span>
+                      <Details className='text-muted-foreground text-xs'>
+                        <span className='font-mono'>{key.masked}</span>
+                        {scopeLabel[key.scope]}
+                      </Details>
+                      <Details className='text-muted-foreground text-xs'>
+                        {key.lastUsedAt ? (
+                          <>
+                            Used{' '}
+                            <time dateTime={key.lastUsedAt.toISOString()}>
+                              {formatRelative(key.lastUsedAt, now)}
+                            </time>
+                          </>
+                        ) : (
+                          'Never used'
+                        )}
                         <>
-                          Last used{' '}
-                          <time dateTime={key.lastUsedAt.toISOString()}>
-                            {formatRelative(key.lastUsedAt, now)}
+                          Created by {key.createdBy} on{' '}
+                          <time dateTime={key.createdAt.toISOString()}>
+                            {formatDate(key.createdAt)}
                           </time>
                         </>
-                      ) : (
-                        'Never used'
-                      )}
-                    </span>
-                    <span>
-                      Created{' '}
-                      <time dateTime={key.createdAt.toISOString()}>
-                        {formatDate(key.createdAt)}
-                      </time>{' '}
-                      by {key.createdBy}
-                    </span>
-                  </div>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    className='self-start @md:self-center'
-                    aria-label={`Revoke ${key.name}`}
-                    onClick={() => {
-                      setKeys((current) => current.filter((item) => item.id !== key.id))
-                      onRevoke?.(key.id)
-                    }}
-                  >
-                    Revoke
-                  </Button>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </CardContent>
-    </Card>
+                      </Details>
+                    </div>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      aria-label={`Revoke ${key.name}`}
+                      onClick={() => {
+                        setKeys((current) => current.filter((item) => item.id !== key.id))
+                        onRevoke?.(key.id)
+                      }}
+                    >
+                      Revoke
+                    </Button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

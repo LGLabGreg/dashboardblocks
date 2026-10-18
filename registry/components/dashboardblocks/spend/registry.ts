@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'spend-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('billing'), registryUrl('spend')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+      registryUrl('spend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/spend/spend-01.tsx',
@@ -23,7 +28,12 @@ export const examples: Registry['items'] = [
   {
     name: 'spend-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('billing'), registryUrl('spend')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+      registryUrl('spend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/spend/spend-02.tsx',
@@ -32,7 +42,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'One budget bar per service, each with its own status, and the total underneath.',
+        'The total spent and where it is heading, then one budget bar per service, naming the ones over budget.',
       size: 'half',
       usedWith: ['spend-01', 'data-table-04'],
     },
@@ -42,14 +52,15 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
-      'card',
-      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
       registryUrl('chart-panel'),
+      registryUrl('kpi'),
       registryUrl('spend'),
     ],
     meta: {
       shows:
-        'Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.',
+        'Monthly spend as bars against a stepped budget line, with months over budget in red and labelled with the overspend, and the year-to-date variance.',
       size: 'full',
       usedWith: ['spend-01', 'spend-02'],
     },
@@ -65,14 +76,15 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
-      'card',
-      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
       registryUrl('chart-panel'),
+      registryUrl('kpi'),
       registryUrl('spend'),
     ],
     meta: {
       shows:
-        'The cash balance, the average net burn and the months of runway left, with the balance projected to zero.',
+        'The cash balance, the average net burn and the months of runway left, with the balance projected to the month it runs out.',
       size: 'half',
       usedWith: ['forecast-02', 'billing-04'],
     },

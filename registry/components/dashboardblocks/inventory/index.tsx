@@ -16,3 +16,10 @@ export const inventoryExampleProps = {
   'inventory-03': inventory3ExampleProps,
   'inventory-04': inventory4ExampleProps,
 }
+
+export const inventoryEmptyProps = {
+  'inventory-01': { items: [] },
+  'inventory-02': { warehouses: [] },
+  'inventory-03': { counts: undefined, value: undefined },
+  'inventory-04': { incoming: [], onHand: undefined },
+}

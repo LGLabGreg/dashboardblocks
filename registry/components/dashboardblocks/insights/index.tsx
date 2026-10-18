@@ -16,3 +16,10 @@ export const insightsExampleProps = {
   'insights-03': insights3ExampleProps,
   'insights-04': insights4ExampleProps,
 }
+
+export const insightsEmptyProps = {
+  'insights-01': { insights: [] },
+  'insights-02': { readings: [] },
+  'insights-03': { contributions: [] },
+  'insights-04': { takeaways: [] },
+}

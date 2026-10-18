@@ -13,3 +13,9 @@ export const kanbanExampleProps = {
   'kanban-02': kanban2ExampleProps,
   'kanban-03': kanban3ExampleProps,
 }
+
+export const kanbanEmptyProps = {
+  'kanban-01': { issues: [] },
+  'kanban-02': { deals: [] },
+  'kanban-03': { tickets: [] },
+}

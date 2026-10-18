@@ -2,6 +2,11 @@
 
 import { ActivityTime } from '@/registry/components/dashboardblocks/activity-feed'
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   createDataTableColumnHelper,
   createDataTableSelectColumn,
   DataTableContent,
@@ -22,12 +27,11 @@ import {
   formatFileSize,
   getFileKind,
 } from '@/registry/components/dashboardblocks/files'
+import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { createContext, startTransition, useContext, useState } from 'react'
+import { createContext, startTransition, useContext, useMemo, useState } from 'react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface DriveFile {
   href: string
@@ -35,6 +39,7 @@ interface DriveFile {
   modified: Date
   name: string
   owner: string
+  ownerAvatar?: string
   /** In bytes. */
   size: number
 }
@@ -44,13 +49,16 @@ interface FileRow extends DriveFile {
 }
 
 interface Files2Props {
-  description: string
-  files: DriveFile[]
+  /** Leave out to describe the files shown. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  files?: DriveFile[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onCopyLink?: (file: DriveFile) => Promise<void>
   onDelete?: (files: DriveFile[]) => Promise<void>
   onDownload?: (files: DriveFile[]) => void
+  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -59,8 +67,15 @@ const exampleNow = new Date(Date.UTC(2026, 8, 26, 15, 30))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)
 const MB = 1024 * 1024
 
+const avatars: Record<string, string> = {
+  'Hannah Okafor': '/images/avatar-03.webp',
+  'Jonas Berg': '/images/avatar-04.webp',
+  'Lena Fischer': '/images/avatar-05.webp',
+  'Mateo Silva': '/images/avatar-02.webp',
+  'Priya Nair': '/images/avatar-01.webp',
+}
+
 const exampleProps: Files2Props = {
-  description: 'Marketing team drive',
   files: [
     ['Q3 board deck.pptx', 'Priya Nair', 1.5, 18.4 * MB],
     ['Fall launch brief.pdf', 'Mateo Silva', 5, 2.4 * MB],
@@ -78,10 +93,11 @@ const exampleProps: Files2Props = {
     modified: hoursAgo(hours as number),
     name: name as string,
     owner: owner as string,
+    ownerAvatar: avatars[owner as string],
     size: Math.round(size as number),
   })),
   now: exampleNow,
-  title: 'Files',
+  title: 'Marketing drive',
 }
 
 async function copyLink(file: DriveFile) {
@@ -92,15 +108,16 @@ async function deleteFiles() {
   await new Promise((resolve) => setTimeout(resolve, 400))
 }
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('')
-}
+const noFiles: DriveFile[] = []
 
 const plural = (count: number) => `${count} ${count === 1 ? 'file' : 'files'}`
+
+function summarize(rows: DriveFile[]) {
+  if (rows.length === 0) return 'No files yet.'
+  const owners = new Set(rows.map((row) => row.owner)).size
+  const total = rows.reduce((sum, row) => sum + row.size, 0)
+  return `${plural(rows.length)} from ${owners} ${owners === 1 ? 'person' : 'people'}, ${formatFileSize(total)} in all, newest first.`
+}
 
 const KIND_OPTIONS: DataTableFacetOption[] = (
   [
@@ -196,12 +213,13 @@ const columns = columnHelper.columns([
     meta: { cellClassName: 'text-muted-foreground' },
   }),
   columnHelper.accessor('owner', {
-    cell: ({ getValue }) => (
+    cell: ({ row }) => (
       <span className='flex items-center gap-2 whitespace-nowrap'>
-        <Avatar size='sm'>
-          <AvatarFallback>{initials(getValue())}</AvatarFallback>
-        </Avatar>
-        {getValue()}
+        <PersonAvatar
+          person={{ avatar: row.original.ownerAvatar, name: row.original.owner }}
+          size='sm'
+        />
+        {row.original.owner}
       </span>
     ),
     header: 'Owner',
@@ -218,7 +236,7 @@ const columns = columnHelper.columns([
     cell: ({ getValue }) => formatFileSize(getValue()),
     enableGlobalFilter: false,
     header: 'Size',
-    meta: { align: 'end' },
+    meta: { align: 'end', cellClassName: 'tabular-nums' },
     sortDescFirst: true,
   }),
   columnHelper.display({
@@ -227,7 +245,7 @@ const columns = columnHelper.columns([
     id: 'actions',
     meta: {
       cellClassName:
-        'w-px pl-0 @max-2xl/data-table:absolute @max-2xl/data-table:right-4.5 @max-2xl/data-table:bottom-3 @max-2xl/data-table:w-auto',
+        'w-px pl-0 @max-2xl/data-table:absolute @max-2xl/data-table:right-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:bottom-3 @max-2xl/data-table:-mr-2 @max-2xl/data-table:w-auto',
       headerClassName: 'w-px',
       hideLabelWhenStacked: true,
     },
@@ -237,16 +255,22 @@ const columns = columnHelper.columns([
 const Files2 = (props: Files2Props) => {
   const {
     description,
-    files,
+    files = noFiles,
     now,
     onCopyLink = copyLink,
     onDelete = deleteFiles,
     onDownload = () => {},
+    status,
     timeZone = 'UTC',
     title,
   } = props
-  const [rows, setRows] = useState<FileRow[]>(() =>
-    files.map((file) => ({ ...file, kind: getFileKind(file.name) })),
+  const [deleted, setDeleted] = useState<ReadonlySet<string>>(() => new Set())
+  const rows = useMemo<FileRow[]>(
+    () =>
+      files
+        .filter((file) => !deleted.has(file.id))
+        .map((file) => ({ ...file, kind: getFileKind(file.name) })),
+    [deleted, files],
   )
   const [message, setMessage] = useState('')
 
@@ -257,7 +281,7 @@ const Files2 = (props: Files2Props) => {
     )
     await onDelete(targets)
     startTransition(() => {
-      setRows((current) => current.filter((row) => !ids.has(row.id)))
+      setDeleted((current) => new Set([...current, ...ids]))
       table.setRowSelection((current) =>
         Object.fromEntries(Object.entries(current).filter(([id]) => !ids.has(id))),
       )
@@ -313,53 +337,54 @@ const Files2 = (props: Files2Props) => {
     initialState: { sorting: [{ desc: true, id: 'modified' }] },
   })
   const selected = table.getSelectedRowModel().rows.map((row) => row.original)
-  const total = rows.reduce((sum, row) => sum + row.size, 0)
+  const shownDescription = description ?? summarize(rows)
 
   return (
-    <FileTable value={{ actionsFor, now, timeZone }}>
-      <Card className='@container/data-table gap-0 pb-0'>
-        <CardHeader className='border-b'>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <div className='flex min-h-15 flex-wrap items-center gap-2 border-b px-6 py-3'>
-          {selected.length > 0 ? (
-            <DataTableSelectionBar className='w-full' table={table}>
-              <Button variant='outline' size='sm' onClick={() => download(selected)}>
-                {downloadIcon}
-                Download
-              </Button>
-              <Button variant='outline' size='sm' onClick={() => void remove(selected)}>
-                {deleteIcon}
-                Delete
-              </Button>
-            </DataTableSelectionBar>
-          ) : (
-            <>
-              <DataTableSearch table={table} placeholder='Search files…' />
-              <DataTableFacetFilter
-                column={table.getColumn('kind')}
-                options={KIND_OPTIONS.filter((option) =>
-                  rows.some((row) => row.kind === option.value),
-                )}
-              />
-              <DataTableReset table={table} />
-              <DataTableSortMenu
-                className='ml-auto @2xl/data-table:hidden'
-                table={table}
-              />
-            </>
-          )}
-        </div>
-        <DataTableContent caption={`${title}: ${description}`} table={table} />
-        <div className='text-muted-foreground flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t px-6 py-3 text-xs'>
-          <span className='tabular-nums'>
-            {plural(rows.length)} · {formatFileSize(total)}
-          </span>
-          <span aria-live='polite'>{message}</span>
-        </div>
-      </Card>
-    </FileTable>
+    <BlockStateProvider status={status} empty={files.length === 0}>
+      <FileTable value={{ actionsFor, now, timeZone }}>
+        <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+          <header className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{shownDescription}</p>
+            </BlockReady>
+          </header>
+          <div className='flex min-h-9 flex-wrap items-center gap-2'>
+            {selected.length > 0 ? (
+              <DataTableSelectionBar className='w-full' table={table}>
+                <Button variant='outline' size='sm' onClick={() => download(selected)}>
+                  {downloadIcon}
+                  Download
+                </Button>
+                <Button variant='outline' size='sm' onClick={() => void remove(selected)}>
+                  {deleteIcon}
+                  Delete
+                </Button>
+              </DataTableSelectionBar>
+            ) : (
+              <>
+                <DataTableSearch table={table} placeholder='Search files…' />
+                <DataTableFacetFilter
+                  column={table.getColumn('kind')}
+                  options={KIND_OPTIONS.filter((option) =>
+                    rows.some((row) => row.kind === option.value),
+                  )}
+                />
+                <DataTableReset table={table} />
+                <DataTableSortMenu
+                  className='ml-auto @2xl/data-table:hidden'
+                  table={table}
+                />
+              </>
+            )}
+          </div>
+          <DataTableContent caption={`${title}: ${shownDescription}`} table={table} />
+          <p aria-live='polite' className='text-muted-foreground min-h-5 text-sm'>
+            {message}
+          </p>
+        </section>
+      </FileTable>
+    </BlockStateProvider>
   )
 }
 

@@ -16,3 +16,10 @@ export const forecastExampleProps = {
   'forecast-03': forecast3ExampleProps,
   'forecast-04': forecast4ExampleProps,
 }
+
+export const forecastEmptyProps = {
+  'forecast-01': { actuals: [] },
+  'forecast-02': { actuals: [] },
+  'forecast-03': { current: undefined },
+  'forecast-04': { actuals: [] },
+}

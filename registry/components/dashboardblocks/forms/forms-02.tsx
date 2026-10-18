@@ -1,6 +1,12 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type FormErrors,
   FormSheet,
   isEmail,
@@ -9,16 +15,7 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
@@ -39,9 +36,12 @@ interface Customer {
 }
 
 interface Forms2Props {
-  customers: Customer[]
+  /** Leave out, or pass none, to show the empty state. */
+  customers?: Customer[]
   onCreate?: (values: NewCustomer) => Promise<FormErrors<NewCustomer> | void>
   plans: string[]
+  status?: BlockStatus
+  title: string
 }
 
 const exampleProps: Forms2Props = {
@@ -51,6 +51,7 @@ const exampleProps: Forms2Props = {
     { email: 'mateo@fieldnote.co', name: 'Mateo Silva', plan: 'Free' },
   ],
   plans: ['Free', 'Pro', 'Enterprise'],
+  title: 'Customers',
 }
 
 async function createCustomer(values: NewCustomer) {
@@ -72,7 +73,13 @@ function validate(values: NewCustomer): FormErrors<NewCustomer> {
 }
 
 const Forms2 = (props: Forms2Props) => {
-  const { customers: initialCustomers, onCreate = createCustomer, plans } = props
+  const {
+    customers: initialCustomers = [],
+    onCreate = createCustomer,
+    plans,
+    status,
+    title,
+  } = props
   const [customers, setCustomers] = useState(initialCustomers)
   const [open, setOpen] = useState(false)
   const emptyValues: NewCustomer = {
@@ -100,12 +107,24 @@ const Forms2 = (props: Forms2Props) => {
   })
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Customers</CardTitle>
-        <CardDescription>{customers.length} customers</CardDescription>
-        <CardAction>
-          <Button size='sm' onClick={() => setOpen(true)}>
+    <BlockStateProvider status={status} empty={customers.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>
+                {customers.length} {customers.length === 1 ? 'customer' : 'customers'},
+                newest first.
+              </p>
+            </BlockReady>
+          </div>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={status !== undefined}
+            onClick={() => setOpen(true)}
+          >
             <IconPlaceholder
               lucide='PlusIcon'
               tabler='IconPlus'
@@ -116,75 +135,79 @@ const Forms2 = (props: Forms2Props) => {
             />
             New customer
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <ul className='divide-y'>
-          {customers.map((customer) => (
-            <li
-              key={customer.email}
-              className='flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0'
-            >
-              <div className='flex min-w-0 flex-col'>
-                <span className='truncate text-sm font-medium'>{customer.name}</span>
-                <span className='text-muted-foreground truncate text-xs'>
-                  {customer.email}
-                </span>
-              </div>
-              <Badge variant='secondary'>{customer.plan}</Badge>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <FormSheet
-        open={open}
-        onOpenChange={setOpen}
-        onSubmit={(event) => void form.submit(event)}
-        title='New customer'
-        description='Add a customer to your workspace. You can invite them later.'
-        footer={
-          <>
-            <Button type='submit' disabled={form.isSubmitting}>
-              {form.isSubmitting ? 'Creating…' : 'Create customer'}
-            </Button>
-            <Button type='button' variant='outline' onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-          </>
-        }
-      >
-        <FieldGroup>
-          <Field data-invalid={form.errors.name ? true : undefined}>
-            <FieldLabel htmlFor={form.getId('name')}>Name</FieldLabel>
-            <Input autoComplete='off' {...form.field('name')} />
-            <FieldError {...form.error('name')} />
-          </Field>
-          <Field data-invalid={form.errors.email ? true : undefined}>
-            <FieldLabel htmlFor={form.getId('email')}>Email</FieldLabel>
-            <Input type='email' autoComplete='off' {...form.field('email')} />
-            <FieldError {...form.error('email')} />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={form.getId('company')}>Company</FieldLabel>
-            <Input {...form.field('company')} />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={form.getId('plan')}>Plan</FieldLabel>
-            <NativeSelect className='w-full' {...form.field('plan')}>
-              {plans.map((plan) => (
-                <NativeSelectOption key={plan} value={plan}>
-                  {plan}
-                </NativeSelectOption>
+        </header>
+        <div className='border-t'>
+          <BlockStateRows rows={4} />
+          <ul className='divide-y empty:hidden'>
+            {!status &&
+              customers.map((customer) => (
+                <li
+                  key={customer.email}
+                  className='flex items-center justify-between gap-3 py-2.5'
+                >
+                  <div className='flex min-w-0 flex-col'>
+                    <span className='truncate text-sm font-medium'>{customer.name}</span>
+                    <span className='text-muted-foreground truncate text-xs'>
+                      {customer.email}
+                    </span>
+                  </div>
+                  <span className='text-muted-foreground shrink-0 text-sm'>
+                    {customer.plan}
+                  </span>
+                </li>
               ))}
-            </NativeSelect>
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={form.getId('notes')}>Notes</FieldLabel>
-            <Textarea rows={4} {...form.field('notes')} />
-          </Field>
-        </FieldGroup>
-      </FormSheet>
-    </Card>
+          </ul>
+        </div>
+        <FormSheet
+          open={open}
+          onOpenChange={setOpen}
+          onSubmit={(event) => void form.submit(event)}
+          title='New customer'
+          description='Add a customer to your workspace. You can invite them later.'
+          footer={
+            <>
+              <Button type='submit' disabled={form.isSubmitting}>
+                {form.isSubmitting ? 'Creating…' : 'Create customer'}
+              </Button>
+              <Button type='button' variant='outline' onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+            </>
+          }
+        >
+          <FieldGroup>
+            <Field data-invalid={form.errors.name ? true : undefined}>
+              <FieldLabel htmlFor={form.getId('name')}>Name</FieldLabel>
+              <Input autoComplete='off' {...form.field('name')} />
+              <FieldError {...form.error('name')} />
+            </Field>
+            <Field data-invalid={form.errors.email ? true : undefined}>
+              <FieldLabel htmlFor={form.getId('email')}>Email</FieldLabel>
+              <Input type='email' autoComplete='off' {...form.field('email')} />
+              <FieldError {...form.error('email')} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={form.getId('company')}>Company</FieldLabel>
+              <Input {...form.field('company')} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={form.getId('plan')}>Plan</FieldLabel>
+              <NativeSelect className='w-full' {...form.field('plan')}>
+                {plans.map((plan) => (
+                  <NativeSelectOption key={plan} value={plan}>
+                    {plan}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={form.getId('notes')}>Notes</FieldLabel>
+              <Textarea rows={4} {...form.field('notes')} />
+            </Field>
+          </FieldGroup>
+        </FormSheet>
+      </section>
+    </BlockStateProvider>
   )
 }
 

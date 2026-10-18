@@ -1,7 +1,8 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
-import { type RefObject, useEffect, useState } from 'react'
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import { useReveal } from '@/registry/hooks/use-reveal'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -18,9 +19,9 @@ interface FunnelStep extends FunnelStage {
   fromPrevious: number
 }
 
-const FUNNEL_COLOR = 'var(--chart-2)'
+const FUNNEL_COLOR = 'var(--color-chart-2)'
 
-const FUNNEL_TRACK_COLOR = 'color-mix(in oklab, var(--chart-2) 14%, transparent)'
+const FUNNEL_TRACK_COLOR = 'color-mix(in oklab, var(--color-chart-2) 14%, transparent)'
 
 function getFunnelSteps(stages: FunnelStage[]): FunnelStep[] {
   const first = stages[0]?.value ?? 0
@@ -36,7 +37,10 @@ function getFunnelSteps(stages: FunnelStage[]): FunnelStep[] {
 }
 
 function formatRate(rate: number, fractionDigits = 1) {
-  return `${(rate * 100).toFixed(fractionDigits)}%`
+  return formatPercent(rate, {
+    maximumFractionDigits: fractionDigits,
+    minimumFractionDigits: fractionDigits,
+  })
 }
 
 function getBiggestDropIndex(steps: FunnelStep[]) {
@@ -52,8 +56,6 @@ interface FunnelBarProps {
   className?: string
   color?: string
   delay?: number
-  orientation?: 'horizontal' | 'vertical'
-  track?: boolean
   /** Fill as a percentage of the track (0–100). */
   value: number
 }
@@ -63,45 +65,29 @@ function FunnelBar({
   className,
   color = FUNNEL_COLOR,
   delay = 0,
-  orientation = 'horizontal',
-  track = true,
   value,
 }: FunnelBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
+  const { ref, revealed } = useReveal<HTMLDivElement>(animated)
+  const state = useBlockState()
   const size = Math.min(100, Math.max(0, Number.isFinite(value) ? value : 0))
-  const vertical = orientation === 'vertical'
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
 
   return (
     <div
-      ref={ref as RefObject<HTMLDivElement>}
+      ref={ref}
       aria-hidden
       className={cn(
-        'relative overflow-hidden',
-        vertical
-          ? 'flex h-full w-full items-end rounded-t-[4px]'
-          : 'h-2.5 w-full rounded-full',
+        'h-2 w-full overflow-hidden rounded-full',
+        state === 'loading' && 'animate-pulse motion-reduce:animate-none',
         className,
       )}
-      style={{ backgroundColor: track ? FUNNEL_TRACK_COLOR : undefined }}
+      style={{ backgroundColor: FUNNEL_TRACK_COLOR }}
     >
       <div
-        className={cn(
-          'duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none',
-          vertical
-            ? 'w-full rounded-t-[4px] transition-[height]'
-            : 'h-full rounded-full transition-[width]',
-        )}
+        className='h-full rounded-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
         style={{
           backgroundColor: color,
-          [vertical ? 'height' : 'width']: `${revealed ? size : 0}%`,
           transitionDelay: animated ? `${delay}ms` : undefined,
+          width: `${revealed && !state ? size : 0}%`,
         }}
       />
     </div>

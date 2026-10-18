@@ -1,34 +1,38 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  chartAxisProps,
+  chartBarCursor,
+  chartBarValueLabel,
+  chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
-  chartValueAxisWidth,
-  formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
+import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatCompact, formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  LabelList,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface StackSeries {
   color: string
@@ -37,11 +41,12 @@ interface StackSeries {
 }
 
 interface ChartPanel3Props {
-  data: Array<Record<string, number | string> & { label: string }>
+  /** Leave out, or pass no months, to show the empty state. */
+  data?: Array<Record<string, number | string> & { label: string }>
   description: string
   series: StackSeries[]
+  status?: BlockStatus
   title: string
-  trend: number
 }
 
 const exampleProps: ChartPanel3Props = {
@@ -59,49 +64,58 @@ const exampleProps: ChartPanel3Props = {
     { enterprise: 116, free: 786, label: 'Aug', pro: 318 },
     { enterprise: 132, free: 834, label: 'Sep', pro: 347 },
   ],
-  description: 'New accounts per month, last 12 months',
+  description: 'New accounts each month over the last 12 months, by plan.',
   series: [
-    { color: 'var(--chart-2)', key: 'free', label: 'Free' },
-    { color: 'var(--chart-3)', key: 'pro', label: 'Pro' },
-    { color: 'var(--chart-4)', key: 'enterprise', label: 'Enterprise' },
+    { color: 'var(--color-chart-2)', key: 'free', label: 'Free' },
+    { color: 'var(--color-chart-3)', key: 'pro', label: 'Pro' },
+    { color: 'var(--color-chart-4)', key: 'enterprise', label: 'Enterprise' },
   ],
   title: 'Signups by plan',
-  trend: 9.2,
 }
 
 const ChartPanel3 = (props: ChartPanel3Props) => {
-  const { data, description, series, title, trend } = props
-  const latest = data.at(-1)
-  const latestTotal = latest
-    ? series.reduce((sum, item) => sum + Number(latest[item.key] ?? 0), 0)
-    : 0
+  const { data = [], description, series, status, title } = props
+  const totals = data.map((point) =>
+    series.reduce((sum, item) => sum + Number(point[item.key] ?? 0), 0),
+  )
+  const lastIndex = data.length - 1
+  const latest = data[lastIndex]
+  const prior = data[lastIndex - 1]
+  const average =
+    totals.length > 0 ? totals.reduce((sum, total) => sum + total, 0) / totals.length : 0
+  const format = (value: number) => formatNumber(value, { maximumFractionDigits: 0 })
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <Trend trend={trend} variant='badge' />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3'>
-          <div className='flex flex-col gap-0.5'>
-            <span className='text-3xl font-semibold tracking-tight'>
-              {latestTotal.toLocaleString()}
-            </span>
-            <span className='text-muted-foreground text-xs'>
-              signups in {latest?.label}
-            </span>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <BlockReady className='w-16 text-sm'>
+              <p className='text-muted-foreground text-sm'>{latest?.label}</p>
+            </BlockReady>
+            <KPIValue value={totals[lastIndex]} format={format} />
+            <KPIChange
+              comparison={`in ${prior?.label}`}
+              format={format}
+              previous={totals[lastIndex - 1]}
+              value={totals[lastIndex]}
+            />
           </div>
           <ChartPanelLegend
             items={series.map((item) => ({ color: item.color, label: item.label }))}
           />
         </div>
-        <ChartPanelFigure className='h-60'>
+        <ChartPanelFigure className='h-64'>
           <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+            <BarChart
+              aria-label={`${title} chart`}
+              data={data}
+              margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
+            >
               <CartesianGrid {...chartGridProps} />
               <XAxis {...chartAxisProps} dataKey='label' />
               <YAxis
@@ -110,22 +124,43 @@ const ChartPanel3 = (props: ChartPanel3Props) => {
                 width={chartValueAxisWidth}
               />
               <Tooltip
-                content={(tooltipProps) => <ChartPanelTooltip {...tooltipProps} />}
-                cursor={{ fill: 'var(--color-muted)', fillOpacity: 0.6 }}
+                content={(tooltipProps) => <ChartTooltipContent {...tooltipProps} />}
+                cursor={chartBarCursor}
               />
               {series.map((item, index) => (
                 <Bar
                   key={item.key}
                   dataKey={item.key}
                   fill={item.color}
-                  maxBarSize={24}
+                  maxBarSize={28}
                   name={item.label}
                   radius={index === series.length - 1 ? [4, 4, 0, 0] : 0}
                   stackId='stack'
-                  stroke='var(--color-card)'
-                  strokeWidth={2}
-                />
+                  stroke='var(--color-background)'
+                  strokeWidth={1}
+                >
+                  {index === series.length - 1 && (
+                    <LabelList
+                      dataKey={item.key}
+                      content={chartBarValueLabel(lastIndex, () =>
+                        format(totals[lastIndex] ?? 0),
+                      )}
+                    />
+                  )}
+                </Bar>
               ))}
+              {average > 0 && (
+                <ReferenceLine
+                  {...chartReferenceProps}
+                  y={average}
+                  label={{
+                    ...chartReferenceLabel,
+                    value: `avg ${format(average)}`,
+                    position: 'insideBottomLeft',
+                    dy: -4,
+                  }}
+                />
+              )}
             </BarChart>
           </ResponsiveContainer>
         </ChartPanelFigure>
@@ -137,8 +172,8 @@ const ChartPanel3 = (props: ChartPanel3Props) => {
           ]}
           rows={data}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

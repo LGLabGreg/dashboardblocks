@@ -40,8 +40,6 @@ export const examples: Registry['items'] = [
     description:
       'A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.',
     registryDependencies: [
-      'button',
-      'button-group',
       registryUrl('billing-01'),
       registryUrl('block-state'),
       registryUrl('dashboard-header'),
@@ -100,8 +98,6 @@ export const examples: Registry['items'] = [
     description:
       'A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.',
     registryDependencies: [
-      'button',
-      'button-group',
       registryUrl('activity-feed-01'),
       registryUrl('block-state'),
       registryUrl('chart-panel-04'),

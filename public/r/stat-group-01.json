@@ -1,21 +1,20 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-group-01",
-  "description": "Three metrics side by side, each with its change and previous value.",
+  "description": "Metrics side by side, each with its change written as a sentence.",
   "registryDependencies": [
-    "card",
     "https://www.dashboardblocks.com/r/stat-group.json"
   ],
   "files": [
     {
       "path": "registry/components/dashboardblocks/stat-group/stat-group-01.tsx",
-      "content": "'use client'\n\nimport {\n  Stat,\n  StatChange,\n  StatGroup,\n  StatLabel,\n  type StatMetric,\n  StatValue,\n  formatStatValue,\n} from '@/registry/components/dashboardblocks/stat-group'\n\nimport { Card } from '@/components/ui/card'\n\ninterface StatGroup1Props {\n  metrics: StatMetric[]\n}\n\nconst currency = (value: number) =>\n  `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`\n\nconst exampleProps: StatGroup1Props = {\n  metrics: [\n    {\n      formatter: currency,\n      key: 'revenue',\n      label: 'Revenue',\n      previous: 42_890,\n      value: 48_210,\n    },\n    { key: 'orders', label: 'Orders', previous: 1_210, value: 1_284 },\n    {\n      changeType: 'points',\n      formatter: (value) => `${value}%`,\n      goodDirection: 'down',\n      key: 'refundRate',\n      label: 'Refund rate',\n      previous: 2.1,\n      value: 1.8,\n    },\n  ],\n}\n\nconst StatGroup1 = (props: StatGroup1Props) => {\n  const { metrics } = props\n\n  return (\n    <Card className='@container gap-0 py-0'>\n      <StatGroup\n        style={{ gridTemplateColumns: `repeat(${metrics.length}, minmax(0, 1fr))` }}\n      >\n        {metrics.map((metric) => (\n          <Stat key={metric.key} className='p-4 @xl:p-6'>\n            <StatLabel className='text-xs @xl:text-sm'>{metric.label}</StatLabel>\n            <StatValue className='text-xl @xl:text-3xl'>\n              {formatStatValue(metric)}\n            </StatValue>\n            <StatChange metric={metric} />\n          </Stat>\n        ))}\n      </StatGroup>\n    </Card>\n  )\n}\n\nexport { StatGroup1, exampleProps as statGroup1ExampleProps, type StatGroup1Props }\n",
+      "content": "'use client'\n\nimport {\n  BlockStateProvider,\n  type BlockStatus,\n} from '@/registry/components/dashboardblocks/block-state'\nimport {\n  Stat,\n  StatChange,\n  StatGroup,\n  StatLabel,\n  type StatMetric,\n  StatValue,\n  formatStatValue,\n  getStatPlaceholders,\n} from '@/registry/components/dashboardblocks/stat-group'\nimport { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'\n\ninterface StatGroup1Props {\n  /** Follows each previous value, such as `last month`. */\n  comparison: string\n  /** Leave out, or pass none, to show the empty state. */\n  metrics?: StatMetric[]\n  /** How many metrics to sketch while loading. @default 3 */\n  placeholders?: number\n  status?: BlockStatus\n}\n\nconst exampleProps: StatGroup1Props = {\n  comparison: 'last month',\n  metrics: [\n    {\n      formatter: (value) => formatCurrency(value),\n      key: 'revenue',\n      label: 'Revenue',\n      previous: 42_890,\n      value: 48_210,\n    },\n    { key: 'orders', label: 'Orders', previous: 1_210, value: 1_284 },\n    {\n      changeType: 'points',\n      formatter: (value) => formatPercent(value / 100),\n      goodDirection: 'down',\n      key: 'refundRate',\n      label: 'Refund rate',\n      previous: 2.1,\n      value: 1.8,\n    },\n  ],\n}\n\nconst StatGroup1 = (props: StatGroup1Props) => {\n  const { comparison, metrics = [], placeholders = 3, status } = props\n  const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics\n\n  return (\n    <BlockStateProvider status={status} empty={metrics.length === 0}>\n      <section className='@container flex flex-col gap-4'>\n        <StatGroup className='grid-cols-1 @md:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]'>\n          {shown.map((metric) => (\n            <Stat key={metric.key}>\n              <StatLabel>{metric.label}</StatLabel>\n              <StatValue className='text-3xl @2xl:text-4xl'>\n                {formatStatValue(metric)}\n              </StatValue>\n              <StatChange comparison={comparison} metric={metric} />\n            </Stat>\n          ))}\n        </StatGroup>\n      </section>\n    </BlockStateProvider>\n  )\n}\n\nexport { StatGroup1, exampleProps as statGroup1ExampleProps, type StatGroup1Props }\n",
       "type": "registry:component",
       "target": "@components/dashboardblocks/stat-group/stat-group-01.tsx"
     }
   ],
   "meta": {
-    "shows": "Three metrics side by side, each with its change and previous value.",
+    "shows": "Metrics side by side, each with its change written as a sentence.",
     "size": "full",
     "usedWith": [
       "chart-panel-01",
@@ -23,7 +22,7 @@
       "comparison-01"
     ],
     "component": "StatGroup1",
-    "props": "{ metrics: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[] }"
+    "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

@@ -12,7 +12,7 @@ body:
     id: item
     attributes:
       label: Pro item
-      description: The item's name, as in its install command, such as `data-grid` or `saas-admin`.
+      description: The item's name, as in its install command, such as `data-grid` or `filter-builder`.
     validations:
       required: true
   - type: input

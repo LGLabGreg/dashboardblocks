@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'insights-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('insights')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('insights'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights/insights-01.tsx',
@@ -15,7 +20,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.',
+        'A list of plain-language insights, each with its kind as a coloured word, its topic, the key figures picked out, an optional line on the drivers and a link to explore.',
       size: 'half',
       usedWith: ['insights-02', 'insights-03', 'stat-group-02'],
     },
@@ -26,9 +31,11 @@ export const examples: Registry['items'] = [
     dependencies: ['recharts'],
     registryDependencies: [
       'button',
-      'card',
+      registryUrl('block-state'),
+      registryUrl('chart'),
       registryUrl('chart-panel'),
       registryUrl('insights'),
+      registryUrl('kpi'),
     ],
     files: [
       {
@@ -38,7 +45,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.',
+        'An unusual reading against the range it was expected to fall in, with the days outside it shaded, the worst day labelled on the chart, the explanation and likely causes.',
       size: 'half',
       usedWith: ['insights-03', 'chart-panel-01', 'alerts-01'],
     },
@@ -46,7 +53,13 @@ export const examples: Registry['items'] = [
   {
     name: 'insights-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('comparison'), registryUrl('insights')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('comparison'),
+      registryUrl('format'),
+      registryUrl('insights'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights/insights-03.tsx',
@@ -63,7 +76,7 @@ export const examples: Registry['items'] = [
   {
     name: 'insights-04',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('insights')],
+    registryDependencies: ['button', registryUrl('block-state'), registryUrl('insights')],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights/insights-04.tsx',

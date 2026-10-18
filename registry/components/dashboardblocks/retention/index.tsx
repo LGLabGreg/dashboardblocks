@@ -16,3 +16,10 @@ export const retentionExampleProps = {
   'retention-03': retention3ExampleProps,
   'retention-04': retention4ExampleProps,
 }
+
+export const retentionEmptyProps = {
+  'retention-01': { cohorts: [] },
+  'retention-02': { cohorts: [] },
+  'retention-03': { milestones: [] },
+  'retention-04': { periods: [] },
+}

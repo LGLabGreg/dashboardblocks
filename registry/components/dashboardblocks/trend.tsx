@@ -87,7 +87,7 @@ interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction
 
 const defaultFormatter = (value: number): string => {
   const prefix = value > 0 ? '+' : ''
-  return `${prefix}${value.toLocaleString()}%`
+  return `${prefix}${value.toLocaleString('en-US')}%`
 }
 
 function getTrendDirection(value: number): TrendDirection {

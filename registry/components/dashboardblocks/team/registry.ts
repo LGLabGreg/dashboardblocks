@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'team-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('team')],
+    registryDependencies: ['button', registryUrl('block-state'), registryUrl('team')],
     files: [
       {
         path: 'registry/components/dashboardblocks/team/team-01.tsx',
@@ -23,7 +23,14 @@ export const examples: Registry['items'] = [
   {
     name: 'team-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('team')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+      registryUrl('team'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/team/team-02.tsx',
@@ -40,7 +47,11 @@ export const examples: Registry['items'] = [
   {
     name: 'team-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('team')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/team/team-03.tsx',
@@ -49,7 +60,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'How many people are online, shown as avatars, with the team split by presence.',
+        'How many people are online, with their avatars and the team split by presence.',
       size: 'half',
       usedWith: ['team-01', 'team-04'],
     },
@@ -59,7 +70,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
+      registryUrl('block-state'),
       registryUrl('progress-bar'),
       registryUrl('team'),
     ],
@@ -78,7 +89,7 @@ export const examples: Registry['items'] = [
   {
     name: 'team-05',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', 'checkbox'],
+    registryDependencies: ['checkbox', registryUrl('block-state'), registryUrl('forms')],
     files: [
       {
         path: 'registry/components/dashboardblocks/team/team-05.tsx',
@@ -87,7 +98,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.',
+        'A grid of what each role can do, with permissions in rows and roles in columns, unsaved changes highlighted and a save bar that shows once something changes.',
       size: 'full',
       usedWith: ['team-01', 'settings-01', 'security-02'],
     },
@@ -97,9 +108,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'input',
       'native-select',
+      registryUrl('block-state'),
       registryUrl('settings'),
       registryUrl('team'),
     ],

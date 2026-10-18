@@ -1,6 +1,11 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   DataTable,
   DataTableBar,
   DataTableBody,
@@ -8,9 +13,13 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
-
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface ProductRow {
   category: string
@@ -20,13 +29,18 @@ interface ProductRow {
 }
 
 interface DataTable2Props {
-  description: string
-  rows: ProductRow[]
+  /** Defaults to a sentence with the total and the top product's share. */
+  description?: string
+  /** Follows the total in the default description. */
+  period?: string
+  /** Leave out, or pass none, to show the empty state. */
+  rows?: ProductRow[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: DataTable2Props = {
-  description: 'Units sold, revenue and share of total, last 30 days',
+  period: 'in the last 30 days',
   rows: [
     { category: 'Displays', name: 'Studio Display 27"', revenue: 48_920, units: 112 },
     { category: 'Audio', name: 'Wireless headphones', revenue: 41_370, units: 287 },
@@ -38,68 +52,77 @@ const exampleProps: DataTable2Props = {
   title: 'Revenue by product',
 }
 
-const currency = (value: number) => `$${value.toLocaleString('en-US')}`
+const share = (value: number, total: number) =>
+  formatPercent(total > 0 ? value / total : 0, { maximumFractionDigits: 0 })
 
 const DataTable2 = (props: DataTable2Props) => {
-  const { description, rows, title } = props
+  const { period, rows = [], status, title } = props
   const sorted = [...rows].sort((a, b) => b.revenue - a.revenue)
   const total = rows.reduce((sum, row) => sum + row.revenue, 0)
-  const max = sorted[0]?.revenue ?? 0
+  const top = sorted[0]
+  const {
+    description = top
+      ? `${formatCurrency(total)} from ${rows.length} products${period ? ` ${period}` : ''}; ${top.name} brings in ${share(top.revenue, total)}.`
+      : `No sales${period ? ` ${period}` : ''}.`,
+  } = props
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{`${title}: ${description}`}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Product</DataTableHead>
-            <DataTableHead align='end'>Units</DataTableHead>
-            <DataTableHead className='w-2/5'>Revenue</DataTableHead>
-            <DataTableHead align='end'>Share</DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {sorted.map((row) => {
-            const share = total > 0 ? (row.revenue / total) * 100 : 0
-            return (
-              <DataTableRow key={row.name}>
-                <DataTableCell primary>
-                  <span className='block'>{row.name}</span>
-                  <span className='text-muted-foreground block text-xs font-normal'>
-                    {row.category}
-                  </span>
-                </DataTableCell>
-                <DataTableCell align='end' label='Units'>
-                  {row.units.toLocaleString()}
-                </DataTableCell>
-                <DataTableCell
-                  label='Revenue'
-                  className='@max-2xl/data-table:order-last @max-2xl/data-table:col-span-2'
-                >
-                  <span className='flex w-full items-center gap-3'>
-                    <DataTableBar max={max} value={row.revenue} className='flex-1' />
-                    <span className='w-16 text-right tabular-nums'>
-                      {currency(row.revenue)}
+    <BlockStateProvider status={status} empty={rows.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <DataTable>
+          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Product</DataTableHead>
+              <DataTableHead align='end'>Units</DataTableHead>
+              <DataTableHead className='w-2/5'>Revenue</DataTableHead>
+              <DataTableHead align='end'>Share</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={4} rows={6} />
+            {!status &&
+              sorted.map((row) => (
+                <DataTableRow key={row.name}>
+                  <DataTableCell primary>
+                    <span className='block'>{row.name}</span>
+                    <span className='text-muted-foreground block text-xs font-normal'>
+                      {row.category}
                     </span>
-                  </span>
-                </DataTableCell>
-                <DataTableCell
-                  align='end'
-                  label='Share'
-                  className='text-muted-foreground'
-                >
-                  {share.toFixed(0)}%
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+                  </DataTableCell>
+                  <DataTableCell align='end' label='Units'>
+                    {formatNumber(row.units)}
+                  </DataTableCell>
+                  <DataTableCell
+                    label='Revenue'
+                    className='@max-2xl/data-table:order-last @max-2xl/data-table:col-span-2'
+                  >
+                    <span className='flex w-full items-center gap-3'>
+                      <DataTableBar max={top?.revenue ?? 0} value={row.revenue} />
+                      <span className='w-16 shrink-0 text-right tabular-nums'>
+                        {formatCurrency(row.revenue)}
+                      </span>
+                    </span>
+                  </DataTableCell>
+                  <DataTableCell
+                    align='end'
+                    label='Share'
+                    className='text-muted-foreground'
+                  >
+                    {share(row.revenue, total)}
+                  </DataTableCell>
+                </DataTableRow>
+              ))}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

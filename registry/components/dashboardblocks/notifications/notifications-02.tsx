@@ -1,12 +1,20 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type AppNotification,
   NotificationBell,
   NotificationItem,
   NotificationList,
   NotificationsHeader,
 } from '@/registry/components/dashboardblocks/notifications'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
@@ -20,10 +28,13 @@ interface ActionableNotification extends AppNotification {
 }
 
 interface Notifications2Props {
-  notifications: ActionableNotification[]
+  /** Leave out, or pass none, to show the empty state. */
+  notifications?: ActionableNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onDecide?: (id: string, decision: Decision) => Promise<void>
+  status?: BlockStatus
+  title: string
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
@@ -54,7 +65,7 @@ const exampleProps: Notifications2Props = {
     },
     {
       at: minutesAgo(55),
-      body: 'Order #0931 · Item arrived damaged',
+      body: 'Item arrived damaged on order #0931.',
       icon: (
         <IconPlaceholder
           lucide='CreditCardIcon'
@@ -93,6 +104,7 @@ const exampleProps: Notifications2Props = {
     },
   ],
   now: exampleNow,
+  title: 'Dashboard',
 }
 
 async function saveDecision() {
@@ -100,22 +112,32 @@ async function saveDecision() {
 }
 
 const Notifications2 = (props: Notifications2Props) => {
-  const { notifications: initial, now, onDecide = saveDecision } = props
-  const [notifications, setNotifications] = useState(initial)
+  const {
+    notifications: loaded = [],
+    now,
+    onDecide = saveDecision,
+    status,
+    title,
+  } = props
+  const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set())
   const [decisions, setDecisions] = useState<Record<string, Decision>>({})
   const [pending, setPending] = useState<string | null>(null)
   const [tab, setTab] = useState<'all' | 'requests'>('all')
-  const unread = notifications.filter((notification) => !notification.read).length
-  const requests = notifications.filter(
-    (notification) => notification.request && !decisions[notification.id],
+  const state = getBlockState(status, loaded.length === 0)
+  const notifications = loaded.map((notification) =>
+    readIds.has(notification.id) ? { ...notification, read: true } : notification,
   )
+  const unread = state
+    ? 0
+    : notifications.filter((notification) => !notification.read).length
+  const requests = state
+    ? []
+    : notifications.filter(
+        (notification) => notification.request && !decisions[notification.id],
+      )
 
   function markRead(id: string) {
-    setNotifications((current) =>
-      current.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification,
-      ),
-    )
+    setReadIds((current) => new Set(current).add(id))
   }
 
   async function decide(id: string, decision: Decision) {
@@ -132,6 +154,13 @@ const Notifications2 = (props: Notifications2Props) => {
   }
 
   function renderList(items: ActionableNotification[], empty: string) {
+    if (state) {
+      return (
+        <div className='px-4'>
+          <BlockStateRows rows={3} />
+        </div>
+      )
+    }
     if (items.length === 0) {
       return (
         <p className='text-muted-foreground px-4 py-10 text-center text-sm'>{empty}</p>
@@ -151,13 +180,16 @@ const Notifications2 = (props: Notifications2Props) => {
               actions={
                 request &&
                 (decision ? (
-                  <p className='text-muted-foreground text-sm' role='status'>
-                    {decision === 'approved' ? 'Approved' : 'Declined'}
+                  <p role='status'>
+                    <StatusLabel tone={decision === 'approved' ? 'good' : 'neutral'}>
+                      {decision === 'approved' ? 'Approved' : 'Declined'}
+                    </StatusLabel>
                   </p>
                 ) : (
                   <>
                     <Button
                       size='sm'
+                      variant='outline'
                       disabled={pending === notification.id}
                       onClick={() => void decide(notification.id, 'approved')}
                     >
@@ -165,7 +197,7 @@ const Notifications2 = (props: Notifications2Props) => {
                     </Button>
                     <Button
                       size='sm'
-                      variant='outline'
+                      variant='ghost'
                       disabled={pending === notification.id}
                       onClick={() => void decide(notification.id, 'declined')}
                     >
@@ -182,31 +214,44 @@ const Notifications2 = (props: Notifications2Props) => {
   }
 
   return (
-    <div className='bg-card text-card-foreground flex items-center justify-between rounded-xl px-4 py-2 ring-1 ring-foreground/10'>
-      <span className='text-sm font-medium'>Dashboard</span>
-      <NotificationBell unreadCount={unread}>
-        <NotificationsHeader />
-        <Tabs value={tab} onValueChange={(value) => setTab(value as 'all' | 'requests')}>
-          <TabsList className='mx-4 mb-2'>
-            <TabsTrigger value='all'>All</TabsTrigger>
-            <TabsTrigger value='requests'>
-              Requests
-              {requests.length > 0 && (
-                <span className='text-muted-foreground tabular-nums'>
-                  {requests.length}
-                </span>
-              )}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value='all' className='border-t'>
-            {renderList(notifications, 'You’re all caught up.')}
-          </TabsContent>
-          <TabsContent value='requests' className='border-t'>
-            {renderList(requests, 'No requests waiting for you.')}
-          </TabsContent>
-        </Tabs>
-      </NotificationBell>
-    </div>
+    <BlockStateProvider status={status} empty={loaded.length === 0}>
+      <section className='@container flex items-center justify-between gap-3 border-b pb-2'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <NotificationBell unreadCount={unread}>
+          <NotificationsHeader
+            description={
+              <BlockReady>
+                {requests.length > 0
+                  ? `${requests.length} ${requests.length === 1 ? 'request is' : 'requests are'} waiting on you.`
+                  : 'No requests waiting on you.'}
+              </BlockReady>
+            }
+          />
+          <Tabs
+            value={tab}
+            onValueChange={(value) => setTab(value as 'all' | 'requests')}
+          >
+            <TabsList className='mx-4 mb-2'>
+              <TabsTrigger value='all'>All</TabsTrigger>
+              <TabsTrigger value='requests'>
+                Requests
+                {requests.length > 0 && (
+                  <span className='text-muted-foreground tabular-nums'>
+                    {requests.length}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value='all' className='border-t'>
+              {renderList(notifications, 'You’re all caught up.')}
+            </TabsContent>
+            <TabsContent value='requests' className='border-t'>
+              {renderList(requests, 'No requests waiting for you.')}
+            </TabsContent>
+          </Tabs>
+        </NotificationBell>
+      </section>
+    </BlockStateProvider>
   )
 }
 

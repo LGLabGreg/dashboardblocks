@@ -7,12 +7,15 @@ export const examples: Registry['items'] = [
     name: 'record-detail-01',
     type: 'registry:component',
     registryDependencies: [
-      'avatar',
       'badge',
       'button',
-      'card',
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
       registryUrl('page-header'),
       registryUrl('record-detail'),
+      registryUrl('status-label'),
+      registryUrl('team'),
     ],
     files: [
       {
@@ -31,12 +34,15 @@ export const examples: Registry['items'] = [
     name: 'record-detail-02',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
-      'card',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('details'),
+      registryUrl('format'),
       registryUrl('page-header'),
       registryUrl('record-detail'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -55,14 +61,16 @@ export const examples: Registry['items'] = [
     name: 'record-detail-03',
     type: 'registry:component',
     registryDependencies: [
-      'avatar',
       'badge',
       'button',
-      'card',
       'textarea',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('format'),
       registryUrl('page-header'),
       registryUrl('record-detail'),
+      registryUrl('status-label'),
+      registryUrl('team'),
     ],
     files: [
       {
@@ -72,7 +80,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.',
+        'A ticket page with a description, activity and comments, a comment box, and properties such as priority, assignee and labels.',
       size: 'full',
       usedWith: ['page-header-03', 'comments-01', 'activity-feed-02'],
     },

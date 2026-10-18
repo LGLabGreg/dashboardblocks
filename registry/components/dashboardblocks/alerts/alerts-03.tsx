@@ -2,9 +2,15 @@
 
 import {
   type AlertSeverity,
-  SeverityBadge,
+  SeverityLabel,
   formatRelativeTime,
 } from '@/registry/components/dashboardblocks/alerts'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   DataTable,
   DataTableBody,
@@ -12,10 +18,10 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
 import { useState } from 'react'
 
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 
 interface AlertRule {
@@ -29,9 +35,13 @@ interface AlertRule {
 }
 
 interface Alerts3Props {
+  /** Defaults to a sentence counting the active rules and the last one to fire. */
+  description?: string
   now: Date
   onEnabledChange?: (id: string, enabled: boolean) => void
-  rules: AlertRule[]
+  /** Leave out, or pass none, to show the empty state. */
+  rules?: AlertRule[]
+  status?: BlockStatus
   title: string
 }
 
@@ -80,85 +90,105 @@ const exampleProps: Alerts3Props = {
   title: 'Alert rules',
 }
 
+const summarize = (rules: AlertRule[], active: number, now: Date) => {
+  const fired = rules
+    .filter((rule) => rule.lastTriggered)
+    .sort(
+      (a, b) => (b.lastTriggered?.getTime() ?? 0) - (a.lastTriggered?.getTime() ?? 0),
+    )[0]
+  const count = `${active} of ${rules.length} rules active.`
+  if (!fired?.lastTriggered) return count
+  return `${count} ${fired.name} fired last, ${formatRelativeTime(fired.lastTriggered, now)}.`
+}
+
 const Alerts3 = (props: Alerts3Props) => {
-  const { now, onEnabledChange, rules, title } = props
-  const [enabled, setEnabled] = useState(
-    () => new Map(rules.map((rule) => [rule.id, rule.enabled])),
-  )
-  const active = [...enabled.values()].filter(Boolean).length
+  const { now, onEnabledChange, rules = [], status, title } = props
+  const [enabled, setEnabled] = useState<ReadonlyMap<string, boolean>>(() => new Map())
+  const state = getBlockState(status, rules.length === 0)
+  const isEnabled = (rule: AlertRule) => enabled.get(rule.id) ?? rule.enabled
+  const active = rules.filter(isEnabled).length
+  const { description = summarize(rules, active, now) } = props
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription aria-live='polite'>
-          {active} of {rules.length} rules active
-        </CardDescription>
-      </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{title}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Rule</DataTableHead>
-            <DataTableHead>Severity</DataTableHead>
-            <DataTableHead>Notifies</DataTableHead>
-            <DataTableHead>Last triggered</DataTableHead>
-            <DataTableHead>Status</DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {rules.map((rule) => {
-            const isEnabled = enabled.get(rule.id) ?? false
-            return (
-              <DataTableRow key={rule.id}>
-                <DataTableCell primary truncate>
-                  <span className='block truncate'>{rule.name}</span>
-                  <span className='text-muted-foreground block font-mono text-xs font-normal whitespace-normal'>
-                    {rule.condition}
-                  </span>
-                </DataTableCell>
-                <DataTableCell label='Severity'>
-                  <SeverityBadge severity={rule.severity} />
-                </DataTableCell>
-                <DataTableCell
-                  label='Notifies'
-                  className='text-muted-foreground whitespace-nowrap'
-                >
-                  {rule.channels.join(', ')}
-                </DataTableCell>
-                <DataTableCell
-                  label='Last triggered'
-                  className='text-muted-foreground whitespace-nowrap'
-                >
-                  {rule.lastTriggered ? (
-                    <time dateTime={rule.lastTriggered.toISOString()}>
-                      {formatRelativeTime(rule.lastTriggered, now)}
-                    </time>
-                  ) : (
-                    'Never'
-                  )}
-                </DataTableCell>
-                <DataTableCell label='Status'>
-                  <div className='inline-flex min-h-6 items-center gap-2 text-sm whitespace-nowrap'>
-                    <Switch
-                      aria-label={rule.name}
-                      checked={isEnabled}
-                      onCheckedChange={(checked) => {
-                        setEnabled((current) => new Map(current).set(rule.id, checked))
-                        onEnabledChange?.(rule.id, checked)
-                      }}
-                    />
-                    <span aria-hidden className='w-12'>
-                      {isEnabled ? 'Active' : 'Paused'}
-                    </span>
-                  </div>
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+    <BlockStateProvider status={status} empty={rules.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p aria-live='polite' className='text-muted-foreground text-sm'>
+              {description}
+            </p>
+          </BlockReady>
+        </header>
+        <DataTable>
+          <caption className='sr-only'>{title}</caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Rule</DataTableHead>
+              <DataTableHead>Severity</DataTableHead>
+              <DataTableHead>Notifies</DataTableHead>
+              <DataTableHead>Last triggered</DataTableHead>
+              <DataTableHead>Status</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={5} rows={4} />
+            {!state &&
+              rules.map((rule) => {
+                const ruleEnabled = isEnabled(rule)
+                return (
+                  <DataTableRow key={rule.id}>
+                    <DataTableCell primary truncate>
+                      <span className='block truncate'>{rule.name}</span>
+                      <span className='text-muted-foreground block font-mono text-xs font-normal whitespace-normal'>
+                        {rule.condition}
+                      </span>
+                    </DataTableCell>
+                    <DataTableCell label='Severity'>
+                      <SeverityLabel severity={rule.severity} />
+                    </DataTableCell>
+                    <DataTableCell
+                      label='Notifies'
+                      className='text-muted-foreground whitespace-nowrap'
+                    >
+                      {rule.channels.join(', ')}
+                    </DataTableCell>
+                    <DataTableCell
+                      label='Last triggered'
+                      className='text-muted-foreground whitespace-nowrap'
+                    >
+                      {rule.lastTriggered ? (
+                        <time dateTime={rule.lastTriggered.toISOString()}>
+                          {formatRelativeTime(rule.lastTriggered, now)}
+                        </time>
+                      ) : (
+                        'Never'
+                      )}
+                    </DataTableCell>
+                    <DataTableCell label='Status'>
+                      <div className='inline-flex min-h-6 items-center gap-2 text-sm whitespace-nowrap'>
+                        <Switch
+                          aria-label={rule.name}
+                          checked={ruleEnabled}
+                          onCheckedChange={(checked) => {
+                            setEnabled((current) =>
+                              new Map(current).set(rule.id, checked),
+                            )
+                            onEnabledChange?.(rule.id, checked)
+                          }}
+                        />
+                        <span aria-hidden className='w-12'>
+                          {ruleEnabled ? 'Active' : 'Paused'}
+                        </span>
+                      </div>
+                    </DataTableCell>
+                  </DataTableRow>
+                )
+              })}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -6,7 +6,14 @@ export const examples: Registry['items'] = [
   {
     name: 'billing-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('billing'), registryUrl('chart-panel')],
+    registryDependencies: [
+      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/billing/billing-01.tsx',
@@ -15,7 +22,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.',
+        'Starting to ending monthly recurring revenue as a waterfall chart, with ending MRR against the start of the month, net new revenue and net revenue retention.',
       size: 'full',
       usedWith: ['billing-04', 'chart-panel-01', 'retention-03'],
     },
@@ -23,7 +30,15 @@ export const examples: Registry['items'] = [
   {
     name: 'billing-02',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('billing')],
+    registryDependencies: [
+      'button',
+      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/billing/billing-02.tsx',
@@ -42,9 +57,11 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('billing'),
+      registryUrl('block-state'),
       registryUrl('data-table'),
+      registryUrl('details'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -62,7 +79,12 @@ export const examples: Registry['items'] = [
   {
     name: 'billing-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('billing'), registryUrl('stat-group')],
+    registryDependencies: [
+      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/billing/billing-04.tsx',
@@ -79,7 +101,13 @@ export const examples: Registry['items'] = [
   {
     name: 'billing-05',
     type: 'registry:component',
-    registryDependencies: ['badge', 'button', 'card', 'input', registryUrl('billing')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/billing/billing-05.tsx',

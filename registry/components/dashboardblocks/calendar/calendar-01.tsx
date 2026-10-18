@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CalendarEvent,
   CalendarLegend,
   CalendarMonthView,
@@ -9,6 +16,7 @@ import {
   getEventsForDay,
   startOfMonth,
 } from '@/registry/components/dashboardblocks/calendar'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   EventRow,
   formatDay,
@@ -17,14 +25,14 @@ import {
 } from '@/registry/components/dashboardblocks/schedule'
 import { useId, useState } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
-
 interface Calendar1Props {
   calendars: { color: string; name: string }[]
-  events: CalendarEvent[]
+  /** Leave out, or pass none, to show the empty state. */
+  events?: CalendarEvent[]
   now: Date
   onSelectDay?: (day: Date) => void
   onSelectEvent?: (event: CalendarEvent) => void
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   /** 0 for Sunday, 1 for Monday. */
@@ -36,11 +44,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
-  holidays: { calendar: 'Holidays', color: 'var(--chart-5)' },
-  launches: { calendar: 'Launches', color: 'var(--chart-2)' },
-  team: { calendar: 'Team', color: 'var(--chart-4)' },
-  travel: { calendar: 'Travel', color: 'var(--chart-1)' },
+  customers: { calendar: 'Customers', color: 'var(--color-chart-3)' },
+  holidays: { calendar: 'Holidays', color: 'var(--color-chart-5)' },
+  launches: { calendar: 'Launches', color: 'var(--color-chart-2)' },
+  team: { calendar: 'Team', color: 'var(--color-chart-4)' },
+  travel: { calendar: 'Travel', color: 'var(--color-chart-1)' },
 }
 
 const teamSyncs: CalendarEvent[] = Array.from({ length: 9 }, (_, week) => ({
@@ -252,13 +260,16 @@ const exampleProps: Calendar1Props = {
 const Calendar1 = (props: Calendar1Props) => {
   const {
     calendars,
-    events,
+    events: data = [],
     now,
     onSelectDay,
     onSelectEvent,
+    status,
     timeZone = 'UTC',
     weekStartsOn = 0,
   } = props
+  const state = getBlockState(status, data.length === 0)
+  const events = state ? [] : data
   const today = getDay(now, timeZone)
   const [month, setMonth] = useState(() => startOfMonth(today))
   const [selectedDay, setSelectedDay] = useState(today)
@@ -266,6 +277,12 @@ const Calendar1 = (props: Calendar1Props) => {
   const id = useId()
 
   const monthLabel = formatDay(month, { month: 'long', year: 'numeric' })
+  const monthEvents = events.filter((event) => {
+    const { first, last } = getEventDays(event, timeZone)
+    return first < startOfMonth(month, 1) && last >= month
+  })
+  const todayEvents = getEventsForDay(events, today, timeZone)
+  const showsToday = today >= month && today < startOfMonth(month, 1)
   const dayEvents = getEventsForDay(events, selectedDay, timeZone)
   const relative = formatRelativeDay(selectedDay, today)
 
@@ -276,10 +293,17 @@ const Calendar1 = (props: Calendar1Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardContent className='flex flex-col gap-4'>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={monthLabel}
+          description={
+            state ? (
+              <BlockStateText />
+            ) : (
+              `${monthEvents.length} ${monthEvents.length === 1 ? 'event' : 'events'} in ${formatDay(month, { month: 'long' })}${showsToday ? `, ${todayEvents.length} of them today` : ''}.`
+            )
+          }
           onToday={() => {
             setMonth(startOfMonth(today))
             selectDay(today)
@@ -309,22 +333,24 @@ const Calendar1 = (props: Calendar1Props) => {
           />
           <section
             aria-labelledby={id}
-            className='flex min-w-0 flex-col gap-3 @4xl:border-l @4xl:pl-6'
+            className='flex min-w-0 flex-col gap-3 border-t pt-4 @4xl:border-t-0 @4xl:border-l @4xl:pt-0 @4xl:pl-6'
           >
             <h3
               id={id}
               aria-live='polite'
-              className='flex flex-col text-sm font-semibold'
+              className='flex flex-col gap-0.5 px-2 text-sm font-medium'
             >
               {formatDay(selectedDay, { day: 'numeric', month: 'long', weekday: 'long' })}
-              <span className='text-muted-foreground text-xs font-normal'>
-                {['Today', 'Tomorrow', 'Yesterday'].includes(relative) &&
-                  `${relative} · `}
-                {dayEvents.length} {dayEvents.length === 1 ? 'event' : 'events'}
-              </span>
+              <Details className='text-muted-foreground font-normal'>
+                {['Today', 'Tomorrow', 'Yesterday'].includes(relative) && relative}
+                {!state &&
+                  `${dayEvents.length} ${dayEvents.length === 1 ? 'event' : 'events'}`}
+              </Details>
             </h3>
-            {dayEvents.length === 0 ? (
-              <p className='text-muted-foreground text-sm'>Nothing scheduled.</p>
+            {state ? (
+              state === 'loading' && <BlockStateRows className='px-2' rows={3} />
+            ) : dayEvents.length === 0 ? (
+              <p className='text-muted-foreground px-2 text-sm'>Nothing scheduled.</p>
             ) : (
               <ul className='flex flex-col gap-1'>
                 {dayEvents.map((event) => (
@@ -334,16 +360,16 @@ const Calendar1 = (props: Calendar1Props) => {
                     now={now}
                     timeZone={timeZone}
                     selected={event.id === selectedEventId}
-                    className='-mx-2 rounded-md px-2 py-1.5'
+                    className='rounded-md px-2 py-1.5'
                   />
                 ))}
               </ul>
             )}
           </section>
         </div>
-        <CalendarLegend calendars={calendars} />
-      </CardContent>
-    </Card>
+        {!state && <CalendarLegend calendars={calendars} />}
+      </section>
+    </BlockStateProvider>
   )
 }
 

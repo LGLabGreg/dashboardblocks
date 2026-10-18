@@ -16,3 +16,10 @@ export const goalsExampleProps = {
   'goals-03': goals3ExampleProps,
   'goals-04': goals4ExampleProps,
 }
+
+export const goalsEmptyProps = {
+  'goals-01': { current: undefined },
+  'goals-02': { goals: [] },
+  'goals-03': { daily: [] },
+  'goals-04': { goals: [] },
+}

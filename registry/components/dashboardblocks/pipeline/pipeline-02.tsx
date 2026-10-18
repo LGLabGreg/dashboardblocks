@@ -1,15 +1,25 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { BreakdownBar } from '@/registry/components/dashboardblocks/breakdown'
+import { ChartPlaceholder } from '@/registry/components/dashboardblocks/chart'
+import { getStageColor } from '@/registry/components/dashboardblocks/pipeline'
+import {
   formatCurrency,
-  getStageColor,
-} from '@/registry/components/dashboardblocks/pipeline'
-import { useInView } from '@/registry/hooks/use-in-view'
-import { type RefObject, useEffect, useState } from 'react'
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
+import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
-import { Card, CardContent } from '@/components/ui/card'
 
 interface StageTotal {
   count: number
@@ -18,8 +28,12 @@ interface StageTotal {
 }
 
 interface Pipeline2Props {
+  /** Defaults to a sentence naming the stage that holds the most value. */
+  description?: string
   noun?: string
-  stages: StageTotal[]
+  /** Leave out, or pass none, to show the empty state. */
+  stages?: StageTotal[]
+  status?: BlockStatus
   title: string
 }
 
@@ -43,41 +57,40 @@ const MEASURES: { label: string; value: Measure }[] = [
 ]
 
 const Pipeline2 = (props: Pipeline2Props) => {
-  const { noun = 'items', stages, title } = props
+  const { noun = 'items', stages = [], status, title } = props
+  const state = getBlockState(status, stages.length === 0)
   const [measure, setMeasure] = useState<Measure>('value')
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(false)
-
-  useEffect(() => {
-    if (!isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [isInView])
 
   const totalCount = stages.reduce((sum, stage) => sum + stage.count, 0)
   const totalValue = stages.reduce((sum, stage) => sum + stage.value, 0)
   const total = measure === 'value' ? totalValue : totalCount
+  const largest = stages.reduce<StageTotal | undefined>(
+    (best, stage) => (best && best.value >= stage.value ? best : stage),
+    undefined,
+  )
+  const last = stages[stages.length - 1]
+  const {
+    description = largest && last
+      ? `${largest.label} holds the most value; ${formatCurrency(last.value, { compact: true })} is in ${last.label}, the last stage before closing.`
+      : `No open ${noun}.`,
+  } = props
 
   return (
-    <Card className='@container py-4'>
-      <CardContent className='flex flex-col gap-4 px-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex flex-col'>
-            <span className='text-muted-foreground text-sm'>{title}</span>
-            <p className='flex flex-wrap items-baseline gap-x-2'>
-              <span className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {formatCurrency(totalValue)}
-              </span>
-              <span className='text-muted-foreground text-sm'>
-                {totalCount} {noun} in {stages.length} stages
-              </span>
-            </p>
+    <BlockStateProvider status={status} empty={stages.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
           </div>
           <ButtonGroup aria-label='Size stages by'>
             {MEASURES.map((option) => (
               <Button
                 key={option.value}
                 aria-pressed={measure === option.value}
+                disabled={state !== undefined}
                 className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
                 onClick={() => setMeasure(option.value)}
                 size='sm'
@@ -87,56 +100,69 @@ const Pipeline2 = (props: Pipeline2Props) => {
               </Button>
             ))}
           </ButtonGroup>
-        </div>
-        <div
-          ref={ref as RefObject<HTMLDivElement>}
-          aria-hidden
-          className='flex h-3 w-full gap-0.5 overflow-hidden rounded-full'
-        >
-          {stages.map((stage, index) => {
-            const amount = measure === 'value' ? stage.value : stage.count
-            return (
-              <div
-                key={stage.label}
-                className='h-full min-w-0 transition-[flex-grow] duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
-                style={{
-                  backgroundColor: getStageColor(index, stages.length),
-                  flexBasis: 0,
-                  flexGrow: revealed && total > 0 ? amount / total : 0,
-                }}
-              />
-            )
-          })}
-        </div>
-        <ol className='grid grid-cols-2 gap-x-4 gap-y-3 @md:grid-cols-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
-          {stages.map((stage, index) => {
-            const amount = measure === 'value' ? stage.value : stage.count
-            return (
-              <li key={stage.label} className='flex min-w-0 flex-col gap-0.5'>
-                <span className='flex items-center gap-1.5 text-xs font-medium'>
-                  <span
-                    aria-hidden
-                    className='size-2 shrink-0 rounded-full'
-                    style={{ backgroundColor: getStageColor(index, stages.length) }}
-                  />
-                  <span className='truncate'>{stage.label}</span>
-                  <span className='text-muted-foreground ml-auto font-normal tabular-nums'>
-                    {total > 0 ? Math.round((amount / total) * 100) : 0}%
-                    <span className='sr-only'> of {measure}</span>
-                  </span>
-                </span>
-                <span className='pl-3.5 text-sm font-medium tabular-nums'>
-                  {formatCurrency(stage.value)}
-                </span>
-                <span className='text-muted-foreground pl-3.5 text-xs tabular-nums'>
-                  {stage.count} {noun}
-                </span>
-              </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-    </Card>
+        </header>
+        <p className='flex flex-wrap items-baseline gap-x-2 border-t pt-4'>
+          <span className='text-4xl font-light tracking-tight tabular-nums'>
+            {state ? (
+              <BlockStateText variant='short' />
+            ) : (
+              formatCurrency(totalValue, { compact: true })
+            )}
+          </span>
+          {!state && (
+            <span className='text-muted-foreground text-sm'>
+              in {formatNumber(totalCount)} open {noun}
+            </span>
+          )}
+        </p>
+        {state === 'loading' && (
+          <>
+            <ChartPlaceholder className='rounded-full' height={12} />
+            <BlockStateRows rows={3} />
+          </>
+        )}
+        {!state && (
+          <>
+            <BreakdownBar
+              segments={stages.map((stage, index) => ({
+                color: getStageColor(index, stages.length),
+                label: stage.label,
+                value: measure === 'value' ? stage.value : stage.count,
+              }))}
+            />
+            <ol className='grid grid-cols-2 gap-x-4 gap-y-3 @md:grid-cols-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
+              {stages.map((stage, index) => {
+                const amount = measure === 'value' ? stage.value : stage.count
+                return (
+                  <li key={stage.label} className='flex min-w-0 flex-col gap-0.5'>
+                    <span className='flex items-center gap-1.5 text-xs font-medium'>
+                      <span
+                        aria-hidden
+                        className='size-2 shrink-0 rounded-full'
+                        style={{ backgroundColor: getStageColor(index, stages.length) }}
+                      />
+                      <span className='truncate'>{stage.label}</span>
+                      <span className='text-muted-foreground ml-auto font-normal tabular-nums'>
+                        {formatPercent(total > 0 ? amount / total : 0, {
+                          maximumFractionDigits: 0,
+                        })}
+                        <span className='sr-only'> of {measure}</span>
+                      </span>
+                    </span>
+                    <span className='pl-3.5 text-sm tabular-nums'>
+                      {formatCurrency(stage.value, { compact: true })}
+                    </span>
+                    <span className='text-muted-foreground pl-3.5 text-xs tabular-nums'>
+                      {formatNumber(stage.count)} {noun}
+                    </span>
+                  </li>
+                )
+              })}
+            </ol>
+          </>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

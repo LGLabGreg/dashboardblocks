@@ -19,3 +19,11 @@ export const statGroupExampleProps = {
   'stat-group-04': statGroup4ExampleProps,
   'stat-group-05': statGroup5ExampleProps,
 }
+
+export const statGroupEmptyProps = {
+  'stat-group-01': { metrics: [] },
+  'stat-group-02': { metrics: [] },
+  'stat-group-03': { metrics: [] },
+  'stat-group-04': { metrics: [] },
+  'stat-group-05': { metrics: [] },
+}

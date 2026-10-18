@@ -6,7 +6,13 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('ai-assistant')],
+    registryDependencies: [
+      'button',
+      registryUrl('ai-assistant'),
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-01.tsx',
@@ -23,7 +29,7 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-assistant')],
+    registryDependencies: [registryUrl('ai-assistant'), registryUrl('block-state')],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-02.tsx',
@@ -40,7 +46,14 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-assistant'), registryUrl('ai-usage')],
+    registryDependencies: [
+      registryUrl('ai-assistant'),
+      registryUrl('ai-usage'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-03.tsx',
@@ -49,7 +62,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Questions about an AI usage card, with the tokens and cost shown for each answer.',
+        'Questions about token usage numbers, with the tokens and cost shown for each answer.',
       size: 'half',
       usedWith: ['ai-usage-01', 'ai-assistant-02'],
     },
@@ -57,7 +70,7 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ai-assistant')],
+    registryDependencies: [registryUrl('ai-assistant'), registryUrl('block-state')],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-04.tsx',

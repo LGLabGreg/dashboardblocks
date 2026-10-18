@@ -7,13 +7,14 @@ export const examples: Registry['items'] = [
     name: 'distribution-01',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('distribution'),
+      registryUrl('kpi'),
     ],
     meta: {
       shows:
-        'Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.',
+        'Response times in buckets that widen as times grow, with p50, p95 and p99 lines, the buckets over the target in red and the share over it as the headline.',
       size: 'half',
       usedWith: ['distribution-03', 'alerts-02'],
     },
@@ -28,7 +29,7 @@ export const examples: Registry['items'] = [
     name: 'distribution-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('distribution'),
     ],
@@ -48,7 +49,11 @@ export const examples: Registry['items'] = [
   {
     name: 'distribution-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('distribution')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('distribution'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/distribution/distribution-03.tsx',
@@ -66,13 +71,14 @@ export const examples: Registry['items'] = [
     name: 'distribution-04',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('distribution'),
+      registryUrl('kpi'),
     ],
     meta: {
       shows:
-        "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
+        "This week's distribution against last week's as a dashed line, with both medians and the change at the median and p90.",
       size: 'half',
       usedWith: ['distribution-01', 'stat-group-02'],
     },

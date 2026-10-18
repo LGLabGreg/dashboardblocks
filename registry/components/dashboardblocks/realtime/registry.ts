@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'realtime-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('realtime')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('leaderboard'),
+      registryUrl('realtime'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime/realtime-01.tsx',
@@ -24,7 +29,12 @@ export const examples: Registry['items'] = [
     name: 'realtime-02',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('realtime')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('realtime'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime/realtime-02.tsx',
@@ -41,7 +51,12 @@ export const examples: Registry['items'] = [
   {
     name: 'realtime-03',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('realtime')],
+    registryDependencies: [
+      'button',
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('realtime'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime/realtime-03.tsx',
@@ -58,7 +73,13 @@ export const examples: Registry['items'] = [
   {
     name: 'realtime-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('realtime')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('realtime'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime/realtime-04.tsx',
@@ -67,7 +88,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Running totals since midnight against yesterday at the same time, with orders per hour.',
+        'Running totals since midnight against yesterday at the same time, with orders per hour beside yesterday as a dashed line.',
       size: 'half',
       usedWith: ['realtime-03', 'chart-panel-01'],
     },

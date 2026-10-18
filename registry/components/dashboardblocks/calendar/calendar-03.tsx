@@ -1,6 +1,12 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CalendarEvent,
   CalendarEventDetails,
   CalendarEventList,
@@ -9,6 +15,7 @@ import {
   CalendarToolbar,
   CalendarWeekView,
   formatDayRange,
+  getEventDays,
   getEventsForDay,
   getWeekDays,
   startOfMonth,
@@ -20,15 +27,15 @@ import {
 } from '@/registry/components/dashboardblocks/schedule'
 import { useId, useRef, useState } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
-
 type View = 'month' | 'week'
 
 interface Calendar3Props {
   calendars: { color: string; name: string }[]
-  events: CalendarEvent[]
+  /** Leave out, or pass none, to show the empty state. */
+  events?: CalendarEvent[]
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   /** @default 'month' */
@@ -42,11 +49,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  campaigns: { calendar: 'Campaigns', color: 'var(--chart-2)' },
-  content: { calendar: 'Content', color: 'var(--chart-3)' },
-  holidays: { calendar: 'Holidays', color: 'var(--chart-1)' },
-  social: { calendar: 'Social', color: 'var(--chart-5)' },
-  webinars: { calendar: 'Webinars', color: 'var(--chart-4)' },
+  campaigns: { calendar: 'Campaigns', color: 'var(--color-chart-2)' },
+  content: { calendar: 'Content', color: 'var(--color-chart-3)' },
+  holidays: { calendar: 'Holidays', color: 'var(--color-chart-1)' },
+  social: { calendar: 'Social', color: 'var(--color-chart-5)' },
+  webinars: { calendar: 'Webinars', color: 'var(--color-chart-4)' },
 }
 
 const exampleProps: Calendar3Props = {
@@ -272,12 +279,15 @@ const exampleProps: Calendar3Props = {
 const Calendar3 = (props: Calendar3Props) => {
   const {
     calendars,
-    events,
+    events: data = [],
     now,
     onSelectEvent,
+    status,
     timeZone = 'UTC',
     weekStartsOn = 0,
   } = props
+  const state = getBlockState(status, data.length === 0)
+  const events = state ? [] : data
   const today = getDay(now, timeZone)
   const [view, setView] = useState<View>(props.view ?? 'month')
   const [anchor, setAnchor] = useState(today)
@@ -291,6 +301,17 @@ const Calendar3 = (props: Calendar3Props) => {
   const selected = visible.find((event) => event.id === selectedId)
   const days = getWeekDays(anchor, weekStartsOn)
   const monthLabel = formatDay(month, { month: 'long', year: 'numeric' })
+  const [rangeStart, rangeEnd] =
+    view === 'month' ? [month, startOfMonth(month, 1)] : [days[0], addDays(days[6], 1)]
+  const inView = visible.filter((event) => {
+    const { first, last } = getEventDays(event, timeZone)
+    return first < rangeEnd && last >= rangeStart
+  }).length
+  const items = `${inView} ${inView === 1 ? 'item' : 'items'}`
+  const description =
+    hidden.length === 0
+      ? `${items} across ${calendars.length} calendars.`
+      : `${items}, with ${hidden.length} of ${calendars.length} calendars hidden.`
 
   const goTo = (day: Date) => {
     setAnchor(day)
@@ -313,110 +334,124 @@ const Calendar3 = (props: Calendar3Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardContent className='grid gap-6 @4xl:grid-cols-[13rem_minmax(0,1fr)] @4xl:grid-rows-[auto_1fr]'>
-        <section aria-labelledby={id} className='flex flex-col gap-2'>
-          <h3 id={id} className='text-sm font-semibold'>
-            Calendars
-          </h3>
-          <CalendarLegend
-            calendars={calendars}
-            hidden={hidden}
-            label='Show calendars'
-            onToggle={(name) =>
-              setHidden((current) =>
-                current.includes(name)
-                  ? current.filter((item) => item !== name)
-                  : [...current, name],
-              )
-            }
-            className='-mx-2 gap-x-0 gap-y-0 @4xl:flex-col'
-          />
-        </section>
-        <div
-          ref={container}
-          className='flex min-w-0 flex-col gap-4 @4xl:col-start-2 @4xl:row-span-2 @4xl:row-start-1'
-        >
-          <CalendarToolbar
-            title={view === 'month' ? monthLabel : formatDayRange(days[0], days[6])}
-            onToday={() => goTo(today)}
-            onPrevious={() => move(-1)}
-            onNext={() => move(1)}
-            previousLabel={view === 'month' ? 'Previous month' : 'Previous week'}
-            nextLabel={view === 'month' ? 'Next month' : 'Next week'}
-            view={view}
-            views={[
-              { label: 'Month', value: 'month' },
-              { label: 'Week', value: 'week' },
-            ]}
-            onViewChange={(next) => {
-              if (next === 'month') setMonth(startOfMonth(anchor))
-              setView(next as View)
-            }}
-          />
-          {view === 'month' ? (
-            <div className='@container flex flex-col gap-4'>
-              <CalendarMonthView
-                events={visible}
-                label={monthLabel}
-                month={month}
-                now={now}
-                onMonthChange={setMonth}
-                onSelectDay={setAnchor}
-                onSelectEvent={select}
-                onShowMore={(day) => {
-                  setAnchor(day)
-                  setView('week')
-                }}
-                selectedDay={anchor}
-                selectedEventId={selected?.id}
-                timeZone={timeZone}
-                weekStartsOn={weekStartsOn}
-              />
-              <section
-                aria-labelledby={`${id}-day`}
-                className='flex flex-col gap-2 @2xl:hidden'
-              >
-                <h3 id={`${id}-day`} aria-live='polite' className='text-sm font-semibold'>
-                  {formatDay(anchor, { day: 'numeric', month: 'long', weekday: 'long' })}
-                </h3>
-                <CalendarEventList
-                  events={getEventsForDay(visible, anchor, timeZone)}
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
+        <CalendarToolbar
+          title={view === 'month' ? monthLabel : formatDayRange(days[0], days[6])}
+          description={state ? <BlockStateText /> : description}
+          onToday={() => goTo(today)}
+          onPrevious={() => move(-1)}
+          onNext={() => move(1)}
+          previousLabel={view === 'month' ? 'Previous month' : 'Previous week'}
+          nextLabel={view === 'month' ? 'Next month' : 'Next week'}
+          view={view}
+          views={[
+            { label: 'Month', value: 'month' },
+            { label: 'Week', value: 'week' },
+          ]}
+          onViewChange={(next) => {
+            if (next === 'month') setMonth(startOfMonth(anchor))
+            setView(next as View)
+          }}
+        />
+        <div className='grid gap-6 @4xl:grid-cols-[13rem_minmax(0,1fr)] @4xl:grid-rows-[auto_1fr]'>
+          <section aria-labelledby={id} className='flex flex-col gap-2'>
+            <h3 id={id} className='px-2 text-sm font-medium'>
+              Calendars
+            </h3>
+            <CalendarLegend
+              calendars={calendars}
+              hidden={hidden}
+              label='Show calendars'
+              onToggle={(name) =>
+                setHidden((current) =>
+                  current.includes(name)
+                    ? current.filter((item) => item !== name)
+                    : [...current, name],
+                )
+              }
+              className='gap-x-0 gap-y-0 @4xl:flex-col'
+            />
+          </section>
+          <div
+            ref={container}
+            className='flex min-w-0 flex-col gap-4 @4xl:col-start-2 @4xl:row-span-2 @4xl:row-start-1'
+          >
+            {view === 'month' ? (
+              <div className='@container flex flex-col gap-4'>
+                <CalendarMonthView
+                  events={visible}
+                  label={monthLabel}
+                  month={month}
                   now={now}
+                  onMonthChange={setMonth}
+                  onSelectDay={setAnchor}
                   onSelectEvent={select}
+                  onShowMore={(day) => {
+                    setAnchor(day)
+                    setView('week')
+                  }}
+                  selectedDay={anchor}
                   selectedEventId={selected?.id}
                   timeZone={timeZone}
-                  className='-mx-2'
+                  weekStartsOn={weekStartsOn}
                 />
-              </section>
-            </div>
-          ) : (
-            <CalendarWeekView
-              days={days}
-              events={visible}
-              now={now}
-              onSelectEvent={select}
-              selectedEventId={selected?.id}
-              timeZone={timeZone}
-              className='h-[34rem]'
-            />
-          )}
+                <section
+                  aria-labelledby={`${id}-day`}
+                  className='flex flex-col gap-2 @2xl:hidden'
+                >
+                  <h3
+                    id={`${id}-day`}
+                    aria-live='polite'
+                    className='px-2 text-sm font-medium'
+                  >
+                    {formatDay(anchor, {
+                      day: 'numeric',
+                      month: 'long',
+                      weekday: 'long',
+                    })}
+                  </h3>
+                  {!state && (
+                    <CalendarEventList
+                      events={getEventsForDay(visible, anchor, timeZone)}
+                      now={now}
+                      onSelectEvent={select}
+                      selectedEventId={selected?.id}
+                      timeZone={timeZone}
+                    />
+                  )}
+                </section>
+              </div>
+            ) : (
+              <CalendarWeekView
+                days={days}
+                events={visible}
+                now={now}
+                onSelectEvent={select}
+                selectedEventId={selected?.id}
+                timeZone={timeZone}
+                className='h-[34rem]'
+              />
+            )}
+          </div>
+          <div className='min-w-0 border-t pt-4 @4xl:col-start-1 @4xl:row-start-2'>
+            {selected ? (
+              <CalendarEventDetails
+                event={selected}
+                timeZone={timeZone}
+                onClose={closeDetails}
+              />
+            ) : (
+              !state && (
+                <p className='text-muted-foreground text-sm'>
+                  Select an event to see its details.
+                </p>
+              )
+            )}
+          </div>
         </div>
-        <div className='min-w-0 border-t pt-4 @4xl:col-start-1 @4xl:row-start-2'>
-          {selected ? (
-            <CalendarEventDetails
-              event={selected}
-              timeZone={timeZone}
-              onClose={closeDetails}
-            />
-          ) : (
-            <p className='text-muted-foreground text-sm'>
-              Select an event to see its details.
-            </p>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,19 +1,18 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   GoalProgress,
   GoalProgressKey,
-  PaceBadge,
+  PaceLabel,
   getPace,
 } from '@/registry/components/dashboardblocks/goals'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Goal {
   current: number
@@ -27,12 +26,14 @@ interface Goals2Props {
   description: string
   /** Share of the period that has passed, 0–1. */
   elapsed: number
-  goals: Goal[]
+  /** Leave out, or pass none, to show the empty state. */
+  goals?: Goal[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Goals2Props = {
-  description: 'Q3, week 12 of 13',
+  description: 'Q3, week 12 of 13.',
   elapsed: 12 / 13,
   goals: [
     {
@@ -43,7 +44,7 @@ const exampleProps: Goals2Props = {
     },
     {
       current: 71,
-      formatter: (value) => `${Math.round(value)}`,
+      formatter: (value) => formatNumber(value, { maximumFractionDigits: 0 }),
       label: 'Enterprise deals closed',
       owner: 'Sales',
       target: 60,
@@ -56,7 +57,7 @@ const exampleProps: Goals2Props = {
     },
     {
       current: 9,
-      formatter: (value) => `${Math.round(value)}`,
+      formatter: (value) => formatNumber(value, { maximumFractionDigits: 0 }),
       label: 'Integrations shipped',
       owner: 'Platform',
       target: 12,
@@ -66,31 +67,42 @@ const exampleProps: Goals2Props = {
 }
 
 const Goals2 = (props: Goals2Props) => {
-  const { description, elapsed, goals, title } = props
+  const { description, elapsed, goals = [], status, title } = props
+  const rows = goals.map((goal) => ({
+    format:
+      goal.formatter ??
+      ((value: number) => formatNumber(value, { maximumFractionDigits: 0 })),
+    goal,
+    pace: getPace({ current: goal.current, elapsed, target: goal.target }),
+  }))
+  const onPace = rows.filter((row) => row.pace.status !== 'behind').length
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <ul className='flex flex-col'>
-          {goals.map((goal) => {
-            const format =
-              goal.formatter ?? ((value: number) => Math.round(value).toLocaleString())
-            const pace = getPace({ current: goal.current, elapsed, target: goal.target })
-            return (
-              <li
-                key={goal.label}
-                className='flex flex-col gap-2.5 border-b py-4 first:pt-0 last:border-b-0 last:pb-0'
-              >
+    <BlockStateProvider status={status} empty={goals.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {description}{' '}
+            <BlockReady className='text-sm'>
+              <span className='tabular-nums'>
+                {onPace} of {goals.length}
+              </span>{' '}
+              {goals.length === 1 ? 'goal is' : 'goals are'} on pace or better.
+            </BlockReady>
+          </p>
+        </header>
+        <BlockStateRows className='border-y' rows={goals.length || 4} />
+        {!status && goals.length > 0 && (
+          <ul className='flex flex-col divide-y border-y'>
+            {rows.map(({ format, goal, pace }) => (
+              <li key={goal.label} className='flex flex-col gap-2 py-3'>
                 <div className='flex items-start justify-between gap-3'>
-                  <div className='flex min-w-0 flex-col'>
+                  <p className='flex min-w-0 flex-col'>
                     <span className='text-sm font-medium'>{goal.label}</span>
                     <span className='text-muted-foreground text-xs'>{goal.owner}</span>
-                  </div>
-                  <PaceBadge status={pace.status} />
+                  </p>
+                  <PaceLabel className='text-xs' status={pace.status} />
                 </div>
                 <GoalProgress
                   current={goal.current}
@@ -105,15 +117,19 @@ const Goals2 = (props: Goals2Props) => {
                     </span>{' '}
                     of {format(goal.target)}
                   </span>
-                  <span>{Math.round((goal.current / goal.target) * 100)}%</span>
+                  <span>
+                    {formatPercent(goal.current / goal.target, {
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
                 </p>
               </li>
-            )
-          })}
-        </ul>
-        <GoalProgressKey className='border-t pt-4' />
-      </CardContent>
-    </Card>
+            ))}
+          </ul>
+        )}
+        <GoalProgressKey />
+      </section>
+    </BlockStateProvider>
   )
 }
 

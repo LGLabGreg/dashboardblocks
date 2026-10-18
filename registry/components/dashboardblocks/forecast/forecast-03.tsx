@@ -1,27 +1,32 @@
 'use client'
 
 import {
-  ForecastBadge,
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   ForecastLegend,
+  ForecastStatusLabel,
   ProjectionBar,
   getProjectionStatus,
   getRunRate,
 } from '@/registry/components/dashboardblocks/forecast'
-
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface Forecast3Props {
-  current: number
+  /** Leave out to show the empty state. */
+  current?: number
   description: string
   elapsed: number
   formatter?: (value: number) => string
+  status?: BlockStatus
   target: number
   title: string
   total: number
@@ -29,9 +34,9 @@ interface Forecast3Props {
 
 const exampleProps: Forecast3Props = {
   current: 38_420,
-  description: 'Month to date through Sep 25, projected at the daily run-rate',
+  description: 'Month to date through Sep 25, projected at the daily run-rate.',
   elapsed: 25,
-  formatter: (value) => `$${Math.round(value).toLocaleString('en-US')}`,
+  formatter: (value) => formatCurrency(value),
   target: 48_000,
   title: 'September revenue',
   total: 30,
@@ -39,14 +44,16 @@ const exampleProps: Forecast3Props = {
 
 const Forecast3 = (props: Forecast3Props) => {
   const {
-    current,
+    current = 0,
     description,
     elapsed,
-    formatter = (value) => Math.round(value).toLocaleString(),
+    formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
+    status: blockStatus,
     target,
     title,
     total,
   } = props
+  const state = getBlockState(blockStatus, props.current === undefined)
 
   const { projected, rate, remaining, required } = getRunRate({
     current,
@@ -56,29 +63,43 @@ const Forecast3 = (props: Forecast3Props) => {
   })
   const status = current >= target ? 'reached' : getProjectionStatus(projected, target)
   const gap = projected - target
-  const share = target > 0 ? Math.round((projected / target) * 100) : 0
+  const share = formatPercent(target > 0 ? projected / target : 0, {
+    maximumFractionDigits: 0,
+  })
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
-          <ForecastBadge status={status} />
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
-          <p className='flex flex-wrap items-baseline gap-x-2'>
-            <span className='text-3xl font-semibold tracking-tight'>
-              {formatter(current)}
-            </span>
-            <span className='text-muted-foreground text-sm'>so far</span>
-          </p>
-          <span className='text-muted-foreground text-sm tabular-nums'>
-            Day {elapsed} of {total}
-          </span>
-        </div>
+    <BlockStateProvider status={blockStatus} empty={props.current === undefined}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-4'>
+          <div className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
+          <ForecastStatusLabel status={status} />
+        </header>
+        <dl className='flex flex-wrap items-end gap-x-10 gap-y-3 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <dt className='text-muted-foreground text-sm'>
+              So far, day {elapsed} of {total}
+            </dt>
+            <dd>
+              <KPIValue value={props.current} format={formatter} />
+            </dd>
+          </div>
+          {state !== 'empty' && state !== 'error' && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Projected</dt>
+              <dd>
+                <KPIValue className='text-2xl' value={projected} format={formatter} />
+              </dd>
+              <dd className='text-muted-foreground text-xs tabular-nums'>
+                <BlockReady className='text-xs'>
+                  {share} of {formatter(target)}
+                </BlockReady>
+              </dd>
+            </div>
+          )}
+        </dl>
         <div className='flex flex-col gap-2'>
           <ProjectionBar
             current={current}
@@ -90,42 +111,24 @@ const Forecast3 = (props: Forecast3Props) => {
             items={[
               { label: 'So far', shape: 'bar' },
               { label: 'Projected', shape: 'striped' },
-              { label: `Target ${formatter(target)}`, shape: 'marker' },
+              { label: 'Target', shape: 'marker' },
             ]}
           />
         </div>
-        <dl className='grid grid-cols-2 gap-4 border-t pt-4 @md:grid-cols-4'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Projected total</dt>
-            <dd className='text-sm font-medium'>{formatter(projected)}</dd>
-            <dd className='text-muted-foreground text-xs'>{share}% of target</dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>
-              {gap >= 0 ? 'Projected over' : 'Projected short'}
-            </dt>
-            <dd className='text-sm font-medium'>{formatter(Math.abs(gap))}</dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Daily run-rate</dt>
-            <dd className='text-sm font-medium'>{formatter(rate)}</dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Needed per day</dt>
-            <dd className='text-sm font-medium'>
-              {required === null
-                ? '—'
-                : required === 0
-                  ? 'Target met'
-                  : formatter(required)}
-            </dd>
-            <dd className='text-muted-foreground text-xs'>
-              {remaining} {remaining === 1 ? 'day' : 'days'} left
-            </dd>
-          </div>
-        </dl>
-      </CardContent>
-    </Card>
+        <BlockReady className='text-sm'>
+          <p className='text-sm text-pretty'>
+            {status === 'reached'
+              ? `Target met with ${remaining} ${remaining === 1 ? 'day' : 'days'} to go, at ${formatter(rate)} a day.`
+              : `At ${formatter(rate)} a day the month ends ${formatter(Math.abs(gap))} ${gap >= 0 ? 'over' : 'short'}.`}
+            {status !== 'reached' && required !== null && required > 0 && (
+              <span className='text-muted-foreground'>
+                {` Hitting the target takes ${formatter(required)} a day for the last ${remaining} ${remaining === 1 ? 'day' : 'days'}.`}
+              </span>
+            )}
+          </p>
+        </BlockReady>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,0 +1,136 @@
+// Override of registry/components/dashboardblocks/kpi-provenance.tsx for React Aria
+// source-hash: fa512bb65e45
+
+'use client'
+
+import {
+  formatProvenanceFilters,
+  formatProvenanceWindow,
+} from '@/registry/components/dashboardblocks/kpi-provenance-format'
+import { Link } from '@/registry/components/dashboardblocks/link'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { useId, useState } from 'react'
+import { Dialog, Heading } from 'react-aria-components'
+
+import { Button } from '@/components/ui/button'
+import { Popover, PopoverTrigger } from '@/components/ui/popover'
+
+import { cn } from '@/lib/utils'
+
+interface Provenance {
+  query: string
+  description: string
+  /** The time range counted, shown as dates in the reader's time zone with `to` as the last day counted, or null for all time. */
+  window: { from: Date; to: Date } | null
+  filters: Record<string, string>
+  href: string
+}
+
+interface KPIProvenanceProps {
+  className?: string
+  /** The button's name and the popover's title, 'How is this computed?' by default. */
+  label?: string
+  provenance: Provenance
+}
+
+function KPIProvenance({
+  className,
+  label = 'How is this computed?',
+  provenance,
+}: KPIProvenanceProps) {
+  const descriptionId = useId()
+  const [open, setOpen] = useState(false)
+  return (
+    <span className={cn('inline-flex h-lh items-center align-top', className)}>
+      <PopoverTrigger isOpen={open} onOpenChange={setOpen}>
+        <Button variant='ghost' size='icon-sm' aria-label={label}>
+          <IconPlaceholder
+            lucide='CircleHelpIcon'
+            tabler='IconHelp'
+            hugeicons='HelpCircleIcon'
+            phosphor='QuestionIcon'
+            remixicon='RiQuestionLine'
+          />
+        </Button>
+        <Popover placement='bottom start' className='max-w-[calc(100vw-2rem)]'>
+          <Dialog
+            aria-describedby={descriptionId}
+            className='flex flex-col gap-[inherit] outline-none'
+          >
+            <div className='flex flex-col gap-1'>
+              <Heading slot='title' className='font-medium'>
+                {label}
+              </Heading>
+              <p id={descriptionId} className='text-muted-foreground text-pretty'>
+                {provenance.description}
+              </p>
+            </div>
+            <KPIProvenanceDetails
+              provenance={provenance}
+              onFollowLink={() => setOpen(false)}
+            />
+          </Dialog>
+        </Popover>
+      </PopoverTrigger>
+    </span>
+  )
+}
+
+function KPIProvenanceDetails({
+  onFollowLink,
+  provenance,
+}: {
+  onFollowLink: () => void
+  provenance: Provenance
+}) {
+  const filters = formatProvenanceFilters(provenance.filters)
+  return (
+    <>
+      <div
+        role='region'
+        aria-label='Details'
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can scroll it
+        tabIndex={0}
+        className='max-h-60 overflow-y-auto rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+      >
+        <dl className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-0.5'>
+            <dt className='text-muted-foreground'>Window</dt>
+            <dd className='tabular-nums'>{formatProvenanceWindow(provenance.window)}</dd>
+          </div>
+          <div className='flex flex-col gap-0.5'>
+            <dt className='text-muted-foreground'>Filters</dt>
+            {filters.length === 0 ? (
+              <dd>None</dd>
+            ) : (
+              filters.map((filter) => (
+                <dd key={filter} className='break-words'>
+                  {filter}
+                </dd>
+              ))
+            )}
+          </div>
+          <div className='flex flex-col gap-0.5'>
+            <dt className='text-muted-foreground'>Query</dt>
+            <dd>
+              <code dir='ltr' className='font-mono break-all'>
+                {provenance.query}
+              </code>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <Link
+        href={provenance.href}
+        className='self-start font-medium underline underline-offset-4'
+        onClick={onFollowLink}
+      >
+        View the rows
+      </Link>
+    </>
+  )
+}
+
+export { KPIProvenance }
+
+export type { KPIProvenanceProps, Provenance }

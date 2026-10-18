@@ -1,6 +1,10 @@
 'use client'
 
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  StatusLabel,
+  type StatusTone,
+  statusToneClasses,
+} from '@/registry/components/dashboardblocks/status-label'
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -10,87 +14,41 @@ type InsightKind = 'positive' | 'negative' | 'neutral' | 'anomaly'
 type InsightTone = 'positive' | 'negative' | 'neutral'
 
 interface InsightKindConfig {
-  icon: React.ReactNode
-  label: string
-  soft: string
-  text: string
   fill: string
+  label: string
+  tone: StatusTone
 }
 
 const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
   anomaly: {
-    fill: 'var(--chart-3)',
-    icon: (
-      <IconPlaceholder
-        lucide='ActivityIcon'
-        tabler='IconActivity'
-        hugeicons='ActivityIcon'
-        phosphor='ActivityIcon'
-        remixicon='RiPulseLine'
-        aria-hidden
-      />
-    ),
+    fill: 'var(--color-amber-500)',
     label: 'Anomaly',
-    soft: 'bg-chart-3/15 text-foreground',
-    text: 'text-foreground',
+    tone: 'warning',
   },
   negative: {
     fill: 'var(--color-red-600)',
-    icon: (
-      <IconPlaceholder
-        lucide='TrendingDownIcon'
-        tabler='IconTrendingDown'
-        hugeicons='ChartDownIcon'
-        phosphor='TrendDownIcon'
-        remixicon='RiArrowDownLine'
-        aria-hidden
-      />
-    ),
     label: 'Negative',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    text: 'text-red-700 dark:text-red-400',
+    tone: 'bad',
   },
   neutral: {
     fill: 'var(--color-muted-foreground)',
-    icon: (
-      <IconPlaceholder
-        lucide='LightbulbIcon'
-        tabler='IconBulb'
-        hugeicons='BulbIcon'
-        phosphor='LightbulbIcon'
-        remixicon='RiLightbulbLine'
-        aria-hidden
-      />
-    ),
     label: 'Neutral',
-    soft: 'bg-muted text-foreground',
-    text: 'text-muted-foreground',
+    tone: 'neutral',
   },
   positive: {
     fill: 'var(--color-emerald-600)',
-    icon: (
-      <IconPlaceholder
-        lucide='TrendingUpIcon'
-        tabler='IconTrendingUp'
-        hugeicons='ChartUpIcon'
-        phosphor='TrendUpIcon'
-        remixicon='RiLineChartLine'
-        aria-hidden
-      />
-    ),
     label: 'Positive',
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    text: 'text-emerald-700 dark:text-emerald-400',
+    tone: 'good',
   },
 }
 
 const toneClassNames: Record<InsightTone, string> = {
-  negative: 'bg-red-500/10 text-red-700 dark:text-red-400',
-  neutral: 'bg-muted text-foreground',
-  positive: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+  negative: statusToneClasses.bad,
+  neutral: 'text-foreground',
+  positive: statusToneClasses.good,
 }
 
-function InsightBadge({
+function InsightLabel({
   className,
   kind,
   label,
@@ -101,32 +59,9 @@ function InsightBadge({
 }) {
   const config = insightKindConfig[kind]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel className={className} tone={config.tone}>
       {label ?? config.label}
-    </span>
-  )
-}
-
-function InsightIcon({ className, kind }: { className?: string; kind: InsightKind }) {
-  const config = insightKindConfig[kind]
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-    </span>
+    </StatusLabel>
   )
 }
 
@@ -148,15 +83,9 @@ function InsightHighlight({
   tone?: InsightTone
 }) {
   return (
-    <mark
-      className={cn(
-        'rounded-sm px-0.5 py-px font-medium tabular-nums box-decoration-clone',
-        toneClassNames[tone],
-        className,
-      )}
-    >
+    <strong className={cn('font-medium tabular-nums', toneClassNames[tone], className)}>
       {children}
-    </mark>
+    </strong>
   )
 }
 
@@ -227,23 +156,16 @@ function InsightDrivers({
   )
 }
 
-function formatSigned(value: number, formatter: (value: number) => string) {
-  const sign = value > 0 ? '+' : value < 0 ? '−' : ''
-  return `${sign}${formatter(Math.abs(value))}`
-}
-
 function getChangeTone(value: number, goodDirection: 'up' | 'down' = 'up'): InsightTone {
   if (value === 0) return 'neutral'
   return value > 0 === (goodDirection === 'up') ? 'positive' : 'negative'
 }
 
 export {
-  InsightBadge,
   InsightDrivers,
   InsightHighlight,
-  InsightIcon,
+  InsightLabel,
   InsightText,
-  formatSigned,
   getChangeTone,
   insightKindConfig,
   insightToString,

@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'files-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('files')],
+    registryDependencies: ['button', registryUrl('files'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/files/files-01.tsx',
@@ -24,12 +24,12 @@ export const examples: Registry['items'] = [
     name: 'files-02',
     type: 'registry:component',
     registryDependencies: [
-      'avatar',
       'button',
-      'card',
       registryUrl('activity-feed'),
+      registryUrl('block-state'),
       registryUrl('data-table'),
       registryUrl('files'),
+      registryUrl('team'),
     ],
     files: [
       {
@@ -49,8 +49,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
+      registryUrl('block-state'),
       registryUrl('files'),
+      registryUrl('format'),
       registryUrl('progress-bar'),
       registryUrl('usage-meter'),
     ],
@@ -62,7 +63,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Storage used against the plan, split by kind of file, with the largest files listed to delete.',
+        'Storage used against the plan, split by kind of file, with the largest files and the space deleting them would free.',
       size: 'half',
       usedWith: ['files-02', 'usage-meter-01'],
     },
@@ -70,7 +71,13 @@ export const examples: Registry['items'] = [
   {
     name: 'files-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('activity-feed'), registryUrl('files')],
+    registryDependencies: [
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('files'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/files/files-04.tsx',
@@ -79,7 +86,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Folders and files in a grid with a path back to the top, and a menu on each file.',
+        'Folders as tiles over a list of files with their size and last change, a path back to the top, and a menu on each file.',
       size: 'full',
       usedWith: ['files-01', 'files-02'],
     },

@@ -1,18 +1,32 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  chartAxisProps,
+  chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  chartAxisProps,
-  chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   ScatterTooltipContent,
   scatterPalette,
 } from '@/registry/components/dashboardblocks/scatter'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
   CartesianGrid,
+  LabelList,
+  ReferenceLine,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
@@ -21,14 +35,6 @@ import {
   YAxis,
   ZAxis,
 } from 'recharts'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface Campaign {
   channel: string
@@ -40,9 +46,13 @@ interface Campaign {
 }
 
 interface Scatter3Props {
-  campaigns: Campaign[]
+  /** Leave out, or pass none, to show the empty state. */
+  campaigns?: Campaign[]
   channels: string[]
   description: string
+  /** A cost per acquisition to stay under, drawn as a line. */
+  status?: BlockStatus
+  target?: { label: string; value: number }
   title: string
 }
 
@@ -106,49 +116,76 @@ const exampleProps: Scatter3Props = {
     },
   ],
   channels: ['Search', 'Social', 'Partners'],
-  description: 'Each bubble is a campaign, sized by spend, last quarter',
+  description: 'Each bubble is a campaign from last quarter, sized by what it spent.',
+  target: { label: 'Target', value: 100 },
   title: 'Campaign efficiency',
 }
 
-const money = (value: number) =>
-  value >= 1_000 ? `$${(value / 1_000).toFixed(1)}K` : `$${Math.round(value)}`
-const percent = (value: number) => `${(value * 100).toFixed(1)}%`
+const money = (value: number) => formatCurrency(value, { compact: value >= 1_000 })
+const percent = (value: number) => formatPercent(value, { minimumFractionDigits: 1 })
 
 const Scatter3 = (props: Scatter3Props) => {
-  const { campaigns, channels, description, title } = props
+  const { campaigns = [], channels, description, status, target, title } = props
+  const state = getBlockState(status, campaigns.length === 0)
   const colorOf = (channel: string) =>
     scatterPalette[Math.max(0, channels.indexOf(channel)) % scatterPalette.length]
   const totalSpend = campaigns.reduce((sum, campaign) => sum + campaign.spend, 0)
   const best = [...campaigns].sort((a, b) => a.cpa - b.cpa)[0]
   const worst = [...campaigns].sort((a, b) => b.cpa - a.cpa)[0]
+  const overTarget = target
+    ? campaigns.filter((campaign) => campaign.cpa > target.value)
+    : []
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
-          <ChartPanelLegend
-            items={channels.map((channel) => ({
-              color: colorOf(channel),
-              label: channel,
-            }))}
-          />
-          <span className='text-muted-foreground flex items-center gap-1.5 text-xs'>
-            <span aria-hidden className='flex items-end gap-0.5'>
-              <span className='border-muted-foreground size-1.5 rounded-full border' />
-              <span className='border-muted-foreground size-2.5 rounded-full border' />
-              <span className='border-muted-foreground size-3.5 rounded-full border' />
+    <BlockStateProvider status={status} empty={campaigns.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state ? (
+          <div className='border-t pt-4'>
+            <BlockStateText className='text-sm' />
+          </div>
+        ) : (
+          best &&
+          worst && (
+            <p className='text-muted-foreground border-t pt-4 text-sm'>
+              <span className='text-foreground font-medium'>{best.label}</span> acquires
+              at {money(best.cpa)} and{' '}
+              <span className='text-foreground font-medium'>{worst.label}</span> at{' '}
+              {money(worst.cpa)}.
+              {target &&
+                ` ${overTarget.length} of ${campaigns.length} campaigns cost more than the ${money(target.value)} ${target.label.toLowerCase()}.`}{' '}
+              Further left and higher up is better.
+            </p>
+          )
+        )}
+        {state !== 'empty' && state !== 'error' && (
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <ChartPanelLegend
+              items={channels.map((channel) => ({
+                color: colorOf(channel),
+                label: channel,
+              }))}
+            />
+            <span className='text-muted-foreground flex items-center gap-1.5 text-xs'>
+              <span aria-hidden className='flex items-end gap-0.5'>
+                <span className='border-muted-foreground size-1.5 rounded-full border' />
+                <span className='border-muted-foreground size-2.5 rounded-full border' />
+                <span className='border-muted-foreground size-3.5 rounded-full border' />
+              </span>
+              Size is spend
             </span>
-            Size is spend
-          </span>
-        </div>
+          </div>
+        )}
         <ChartPanelFigure className='h-72'>
           <ResponsiveContainer width='100%' height='100%'>
-            <ScatterChart margin={{ top: 12, right: 16, bottom: 16, left: 0 }}>
-              <CartesianGrid {...chartGridProps} vertical />
+            <ScatterChart
+              aria-label={`${title} chart`}
+              margin={{ top: 12, right: 16, bottom: 16, left: 0 }}
+            >
+              <CartesianGrid {...chartGridProps} />
               <XAxis
                 {...chartAxisProps}
                 dataKey='cpa'
@@ -171,9 +208,20 @@ const Scatter3 = (props: Scatter3Props) => {
                 name='Conversion'
                 tickFormatter={percent}
                 type='number'
-                width={48}
+                width={chartValueAxisWidth}
               />
               <ZAxis dataKey='spend' name='Spend' range={[80, 1_200]} />
+              {target && (
+                <ReferenceLine
+                  {...chartReferenceProps}
+                  x={target.value}
+                  label={{
+                    ...chartReferenceLabel,
+                    value: `${target.label} ${money(target.value)}`,
+                    position: 'insideTopRight',
+                  }}
+                />
+              )}
               <Tooltip
                 content={({ active, payload }) => {
                   const campaign = payload?.[0]?.payload as Campaign | undefined
@@ -201,19 +249,29 @@ const Scatter3 = (props: Scatter3Props) => {
                   name={channel}
                   stroke={colorOf(channel)}
                   strokeWidth={1.5}
-                />
+                >
+                  <LabelList
+                    dataKey='label'
+                    content={({ value, width, x, y }) =>
+                      value === best?.label || value === worst?.label ? (
+                        <text
+                          x={Number(x) + Number(width ?? 0) / 2}
+                          y={Number(y) - 4}
+                          textAnchor='middle'
+                          fontSize={11}
+                          fontWeight={500}
+                          fill='var(--color-foreground)'
+                        >
+                          {value}
+                        </text>
+                      ) : null
+                    }
+                  />
+                </Scatter>
               ))}
             </ScatterChart>
           </ResponsiveContainer>
         </ChartPanelFigure>
-        {best && worst && (
-          <p className='text-muted-foreground text-sm'>
-            <span className='text-foreground font-medium'>{best.label}</span> acquires at{' '}
-            {money(best.cpa)},{' '}
-            <span className='text-foreground font-medium'>{worst.label}</span> at{' '}
-            {money(worst.cpa)}. Further left and higher up is better.
-          </p>
-        )}
         <ChartPanelTable
           caption={`${title}: ${description}. ${money(totalSpend)} spent in total.`}
           columns={[
@@ -225,8 +283,8 @@ const Scatter3 = (props: Scatter3Props) => {
           ]}
           rows={campaigns}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

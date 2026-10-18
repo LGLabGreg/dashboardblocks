@@ -8,7 +8,6 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('block-state'),
       registryUrl('stat-group'),
     ],
@@ -31,9 +30,9 @@ export const examples: Registry['items'] = [
     dependencies: ['recharts'],
     registryDependencies: [
       'button',
-      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
+      registryUrl('kpi'),
     ],
     files: [
       {
@@ -53,10 +52,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('block-state'),
       registryUrl('dashboard-header'),
       registryUrl('data-table'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -76,10 +75,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
-      'button',
-      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
+      registryUrl('kpi'),
     ],
     files: [
       {
@@ -89,7 +87,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A card that says what went wrong when loading fails and offers to try again.',
+        'A chart that loads its own data and, when the request fails, says so where the number and the chart go.',
       size: 'half',
       usedWith: ['states-01', 'alerts-01'],
     },

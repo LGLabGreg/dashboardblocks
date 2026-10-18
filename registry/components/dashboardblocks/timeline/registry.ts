@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'timeline-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('timeline')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('timeline')],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline/timeline-01.tsx',
@@ -23,7 +23,12 @@ export const examples: Registry['items'] = [
   {
     name: 'timeline-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('timeline')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+      registryUrl('timeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline/timeline-02.tsx',
@@ -40,7 +45,14 @@ export const examples: Registry['items'] = [
   {
     name: 'timeline-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('timeline')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('details'),
+      registryUrl('kpi'),
+      registryUrl('timeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline/timeline-03.tsx',
@@ -49,7 +61,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.',
+        'Every release on one line, sized as major, minor or patch, with the median gap and when the next one is due.',
       size: 'full',
       usedWith: ['deployments-01', 'deployments-03'],
     },
@@ -57,7 +69,13 @@ export const examples: Registry['items'] = [
   {
     name: 'timeline-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('timeline')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+      registryUrl('timeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline/timeline-04.tsx',

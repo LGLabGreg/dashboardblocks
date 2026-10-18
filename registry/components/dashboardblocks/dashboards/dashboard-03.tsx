@@ -1,6 +1,10 @@
 'use client'
 
-import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockBusy,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import { BREAKDOWN_OTHER_COLOR } from '@/registry/components/dashboardblocks/breakdown'
 import { Breakdown1 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
 import { ChartPanel2 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-02'
@@ -10,18 +14,24 @@ import {
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
+  getPreviousRange,
 } from '@/registry/components/dashboardblocks/dashboard-header'
 import { Flow1 } from '@/registry/components/dashboardblocks/flow/flow-01'
 import { Geo2 } from '@/registry/components/dashboardblocks/geo/geo-02'
-import { Leaderboard01 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-01'
+import { Leaderboard1 } from '@/registry/components/dashboardblocks/leaderboard/leaderboard-01'
 import { Realtime1 } from '@/registry/components/dashboardblocks/realtime/realtime-01'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatDateRange,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
 interface Dashboard3Props {
+  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -85,10 +95,10 @@ const COUNTRIES = [
 ]
 
 const BROWSERS = [
-  { color: 'var(--chart-2)', label: 'Chrome', shares: [0.63, 0.47, 0.34] },
-  { color: 'var(--chart-3)', label: 'Safari', shares: [0.13, 0.43, 0.6] },
-  { color: 'var(--chart-4)', label: 'Edge', shares: [0.13, 0.01, 0.01] },
-  { color: 'var(--chart-5)', label: 'Firefox', shares: [0.07, 0.02, 0.01] },
+  { color: 'var(--color-chart-2)', label: 'Chrome', shares: [0.63, 0.47, 0.34] },
+  { color: 'var(--color-chart-3)', label: 'Safari', shares: [0.13, 0.43, 0.6] },
+  { color: 'var(--color-chart-4)', label: 'Edge', shares: [0.13, 0.01, 0.01] },
+  { color: 'var(--color-chart-5)', label: 'Firefox', shares: [0.07, 0.02, 0.01] },
 ]
 
 interface Query {
@@ -116,9 +126,6 @@ const splitTotal = (total: number, shares: number[]) => {
     total - parts.slice(0, -1).reduce((acc, part) => acc + part, 0)
   return parts
 }
-
-const percentChange = (current: number, previous: number) =>
-  Number((((current - previous) / (previous || 1)) * 100).toFixed(1))
 
 function buildAnalyticsData({ device, preset }: Query, today: Date) {
   const hourly = preset === 'today'
@@ -202,14 +209,20 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
     ...browserShares,
     1 - browserShares.reduce((sum, value) => sum + value, 0),
   ])
-  const scope = `${hourly ? 'Today' : formatDateRange(range)}${device ? `, ${device}` : ''}`
+  const peak = current.reduce(
+    (top, item, index) => (item.visitors > current[top].visitors ? index : top),
+    0,
+  )
+  const browserSegments = browsers.map((value, index) => ({
+    color: BROWSERS[index]?.color ?? BREAKDOWN_OTHER_COLOR,
+    label: BROWSERS[index]?.label ?? 'Other',
+    value,
+  }))
+  const [first, second] = [...browserSegments].sort((a, b) => b.value - a.value)
 
   return {
-    browsers: browsers.map((value, index) => ({
-      color: BROWSERS[index]?.color ?? BREAKDOWN_OTHER_COLOR,
-      label: BROWSERS[index]?.label ?? 'Other',
-      value,
-    })),
+    browsers: browserSegments,
+    browserSummary: `${first.label} and ${second.label} together serve ${formatPercent((first.value + second.value) / now.visitors, { maximumFractionDigits: 0 })} of visitors.`,
     countries: splitTotal(
       now.visitors,
       COUNTRIES.map((country) => country.share),
@@ -223,8 +236,8 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
       nodes: [
         ...SOURCES.map(({ id, label }) => ({ id, label })),
         ...PAGES.map(({ id, label }) => ({ id, label })),
-        { color: 'var(--chart-3)', id: 'signed-up', label: 'Signed up' },
-        { color: 'var(--chart-5)', id: 'browsed', label: 'Kept browsing' },
+        { color: 'var(--color-chart-3)', id: 'signed-up', label: 'Signed up' },
+        { color: 'var(--color-chart-5)', id: 'browsed', label: 'Kept browsing' },
         { id: 'bounced', kind: 'exit' as const, label: 'Bounced' },
       ],
     },
@@ -232,29 +245,30 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
       Math.round(now.visitors * TOP_PAGES.reduce((sum, page) => sum + page.share, 0)),
       TOP_PAGES.map((page) => page.share),
     ).map((visitors, index) => ({ path: TOP_PAGES[index].path, visitors })),
-    scope,
     traffic: {
+      summary: `${hourly ? 'The busiest hour was' : 'The busiest day was'} ${labelAt(peak)}, with ${formatNumber(current[peak].visitors)} visitors.`,
       data: current.map((item, index) => ({ ...item, label: labelAt(index) })),
       metrics: [
         {
           key: 'visitors',
           label: 'Visitors',
-          total: now.visitors,
-          trend: percentChange(now.visitors, before.visitors),
+          previous: before.visitors,
+          value: now.visitors,
         },
         {
           key: 'pageviews',
           label: 'Page views',
-          total: now.pageviews,
-          trend: percentChange(now.pageviews, before.pageviews),
+          previous: before.pageviews,
+          value: now.pageviews,
         },
         {
-          formatter: (value: number) => `${value}%`,
+          changeType: 'points' as const,
+          formatter: (value: number) => formatPercent(value / 100),
           goodDirection: 'down' as const,
           key: 'bounceRate',
           label: 'Bounce rate',
-          total: now.bounceRate,
-          trend: percentChange(now.bounceRate, before.bounceRate),
+          previous: before.bounceRate,
+          value: now.bounceRate,
         },
       ],
     },
@@ -262,7 +276,7 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
 }
 
 const Dashboard3 = (props: Dashboard3Props) => {
-  const { title, today } = props
+  const { status, title, today } = props
   const [query, setQuery] = useState<Query>({ device: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -279,107 +293,115 @@ const Dashboard3 = (props: Dashboard3Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <div className='@container flex w-full flex-col gap-6'>
-      <header className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground text-sm' aria-live='polite'>
-              {formatDateRange(range)}
-              {query.device && ` · ${query.device}`}
+    <BlockStateProvider status={status}>
+      <div className='@container flex w-full flex-col gap-8'>
+        <header className='flex flex-col gap-3 border-b pb-4'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+            </div>
+            <p className='text-muted-foreground leading-relaxed'>
+              Showing{' '}
+              <DateRangePicker
+                onValueChange={(preset) => update({ preset })}
+                today={today}
+                value={query.preset}
+                variant='inline'
+              />
+              <span aria-live='polite'>
+                , {formatDateRange(range)}, compared with{' '}
+                {formatDateRange(getPreviousRange(range))}.
+              </span>
             </p>
           </div>
-          <ExportMenu onExport={() => {}} />
-        </div>
-        <div className='flex flex-wrap items-center gap-2'>
-          <DateRangePicker
-            onValueChange={(preset) => update({ preset })}
-            today={today}
-            value={query.preset}
-          />
-          <FilterMenu
-            allLabel='All devices'
-            label='Device'
-            onValueChange={(device) => update({ device })}
-            options={DEVICES.map((item) => item.name)}
-            value={query.device}
-          >
-            <IconPlaceholder
-              lucide='SmartphoneIcon'
-              tabler='IconDeviceMobile'
-              hugeicons='SmartPhone01Icon'
-              phosphor='DeviceMobileIcon'
-              remixicon='RiSmartphoneLine'
-            />
-            {query.device ? 'Change device' : 'Filter by device'}
-          </FilterMenu>
-          {query.device && (
-            <FilterChip
-              field='Device'
+          <div className='flex flex-wrap items-center gap-2'>
+            {query.device && (
+              <FilterChip
+                field='Device'
+                value={query.device}
+                onRemove={() => update({ device: null })}
+              />
+            )}
+            <FilterMenu
+              allLabel='All devices'
+              label='Device'
+              onValueChange={(device) => update({ device })}
+              options={DEVICES.map((item) => item.name)}
               value={query.device}
-              onRemove={() => update({ device: null })}
+            >
+              <IconPlaceholder
+                lucide='SmartphoneIcon'
+                tabler='IconDeviceMobile'
+                hugeicons='SmartPhone01Icon'
+                phosphor='DeviceMobileIcon'
+                remixicon='RiSmartphoneLine'
+              />
+              {query.device ? 'Change device' : 'Filter by device'}
+            </FilterMenu>
+          </div>
+        </header>
+        <div className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'>
+          <BlockBusy busy={busy} label='Updating traffic' className='@4xl:col-span-2'>
+            <ChartPanel2
+              status={status}
+              data={data.traffic.data}
+              description={status ? '' : data.traffic.summary}
+              metrics={data.traffic.metrics}
+              title='Traffic'
             />
-          )}
-        </div>
-      </header>
-      <div className='grid gap-4 @4xl:grid-cols-3'>
-        <BlockBusy busy={busy} label='Updating traffic' className='@4xl:col-span-2'>
-          <ChartPanel2
-            data={data.traffic.data}
-            metrics={data.traffic.metrics}
-            title={`Traffic, ${data.scope}`}
+          </BlockBusy>
+          <Realtime1
+            status={status}
+            activeUsers={284}
+            description='People on the site in the last 5 minutes, on every device.'
+            pageViews={Array.from({ length: 60 }, (_, second) =>
+              Math.round(44 + Math.sin(second / 4) * 12 + Math.cos(second / 1.7) * 5),
+            )}
+            pages={[
+              { path: '/pricing', users: 71 },
+              { path: '/', users: 63 },
+              { path: '/docs/getting-started', users: 44 },
+              { path: '/blog/launch-week', users: 32 },
+              { path: '/changelog', users: 18 },
+            ]}
+            simulate
+            title='Right now'
           />
-        </BlockBusy>
-        <Realtime1
-          activeUsers={284}
-          description='Users on the site in the last 5 minutes, all devices'
-          pageViews={Array.from({ length: 60 }, (_, second) =>
-            Math.round(44 + Math.sin(second / 4) * 12 + Math.cos(second / 1.7) * 5),
-          )}
-          pages={[
-            { path: '/pricing', users: 71 },
-            { path: '/', users: 63 },
-            { path: '/docs/getting-started', users: 44 },
-            { path: '/blog/launch-week', users: 32 },
-            { path: '/changelog', users: 18 },
-          ]}
-          simulate
-          title='Right now'
-        />
+          <BlockBusy
+            busy={busy}
+            label='Updating sources, pages and locations'
+            className='grid gap-x-8 gap-y-12 @4xl:col-span-3 @4xl:grid-cols-3'
+          >
+            <div className='@4xl:col-span-3'>
+              <Flow1
+                status={status}
+                description='Sessions from each source, through the page they landed on, to how the visit ended.'
+                goal='signed-up'
+                links={data.flow.links}
+                nodes={data.flow.nodes}
+                title='Traffic flow'
+              />
+            </div>
+            <Leaderboard1 status={status} pages={data.pages} title='Top pages' />
+            <Geo2
+              status={status}
+              countries={data.countries}
+              limit={6}
+              title='Top countries'
+              unit='visitors'
+            />
+            <Breakdown1
+              status={status}
+              description={status ? '' : data.browserSummary}
+              formatter={(value) => formatNumber(value)}
+              segments={data.browsers}
+              title='Browsers'
+            />
+          </BlockBusy>
+        </div>
       </div>
-      <BlockBusy
-        busy={busy}
-        label='Updating sources, pages and locations'
-        className='grid gap-4 @4xl:grid-cols-3'
-      >
-        <div className='@4xl:col-span-3'>
-          <Flow1
-            description={`Sessions from each source, through the landing page, to the outcome, ${data.scope}`}
-            goal='signed-up'
-            links={data.flow.links}
-            nodes={data.flow.nodes}
-            title='Traffic flow'
-          />
-        </div>
-        <Leaderboard01
-          description={`Unique visitors, ${data.scope}`}
-          pages={data.pages}
-          title='Top pages'
-        />
-        <Geo2
-          countries={data.countries}
-          description={`Visitors, ${data.scope}`}
-          limit={6}
-          title='Top countries'
-        />
-        <Breakdown1
-          description={`Visitors, ${data.scope}`}
-          formatter={(value) => value.toLocaleString('en-US')}
-          segments={data.browsers}
-          title='Browsers'
-        />
-      </BlockBusy>
-    </div>
+    </BlockStateProvider>
   )
 }
 

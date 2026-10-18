@@ -16,3 +16,10 @@ export const gaugeExampleProps = {
   'gauge-03': gauge3ExampleProps,
   'gauge-04': gauge4ExampleProps,
 }
+
+export const gaugeEmptyProps = {
+  'gauge-01': { responses: undefined },
+  'gauge-02': { factors: [] },
+  'gauge-03': { resources: [] },
+  'gauge-04': { value: undefined },
+}

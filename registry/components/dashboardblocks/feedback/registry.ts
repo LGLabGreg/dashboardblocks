@@ -6,7 +6,14 @@ export const examples: Registry['items'] = [
   {
     name: 'feedback-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('feedback')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('feedback'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/feedback/feedback-01.tsx',
@@ -15,7 +22,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'The average rating as stars, the number of ratings and the share of each star, with the change on the last period.',
+        'The average rating as stars, the number of ratings and the share of each star, with the change on the last period and the share rating 4 or 5.',
       size: 'half',
       usedWith: ['feedback-03', 'feedback-04'],
     },
@@ -23,7 +30,12 @@ export const examples: Registry['items'] = [
   {
     name: 'feedback-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('feedback')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('feedback'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/feedback/feedback-02.tsx',
@@ -32,7 +44,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.',
+        'A diverging bar chart of negative and positive mentions for each topic, sorted by net sentiment, with the best and worst topic in a sentence.',
       size: 'half',
       usedWith: ['feedback-03', 'feedback-01'],
     },
@@ -40,7 +52,13 @@ export const examples: Registry['items'] = [
   {
     name: 'feedback-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('feedback'), registryUrl('team')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('feedback'),
+      registryUrl('status-label'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/feedback/feedback-03.tsx',
@@ -58,7 +76,13 @@ export const examples: Registry['items'] = [
     name: 'feedback-04',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/feedback/feedback-04.tsx',

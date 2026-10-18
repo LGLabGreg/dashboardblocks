@@ -28,6 +28,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 
+import { cn } from '@/lib/utils'
+
 interface AppShell2Props {
   breadcrumbs: Crumb[]
   children?: ReactNode
@@ -157,7 +159,11 @@ const exampleProps: AppShell2Props = {
       ],
     },
   ],
-  user: { email: 'lena@northwind.io', name: 'Lena Fischer' },
+  user: {
+    avatar: '/images/avatar-01.webp',
+    email: 'lena@northwind.io',
+    name: 'Lena Fischer',
+  },
   userLinks: [
     {
       href: '/account',
@@ -262,17 +268,37 @@ const AppShell2 = (props: AppShell2Props) => {
   )
 }
 
+const PLACEHOLDER_STATS = ['w-20', 'w-24', 'w-16', 'w-20']
+const PLACEHOLDER_BARS = [
+  34, 41, 38, 47, 44, 52, 49, 58, 55, 61, 57, 66, 63, 70, 67, 74, 71, 79, 76, 83, 80, 88,
+  85, 92,
+]
+
 function PagePlaceholder() {
   return (
-    <>
-      <div className='grid auto-rows-min gap-4 md:grid-cols-4'>
-        <div className='bg-muted/50 h-28 rounded-xl' />
-        <div className='bg-muted/50 h-28 rounded-xl' />
-        <div className='bg-muted/50 h-28 rounded-xl' />
-        <div className='bg-muted/50 h-28 rounded-xl' />
+    <div className='flex flex-1 flex-col gap-8'>
+      <div className='flex flex-col gap-2'>
+        <div className='bg-muted h-7 w-40 rounded-md' />
+        <div className='bg-muted/60 h-4 w-80 max-w-full rounded-md' />
       </div>
-      <div className='bg-muted/50 min-h-64 flex-1 rounded-xl' />
-    </>
+      <div className='grid grid-cols-2 gap-6 @3xl/inset:grid-cols-4'>
+        {PLACEHOLDER_STATS.map((width, index) => (
+          <div key={index} className='flex flex-col gap-3 border-t pt-3'>
+            <div className={cn('bg-muted/60 h-3.5 rounded-sm', width)} />
+            <div className='bg-muted h-9 w-28 rounded-md' />
+          </div>
+        ))}
+      </div>
+      <div className='flex h-64 items-end gap-1 border-t pt-6 sm:gap-2'>
+        {PLACEHOLDER_BARS.map((height, index) => (
+          <div
+            key={index}
+            className='bg-muted flex-1 rounded-t-sm'
+            style={{ height: `${height}%` }}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 

@@ -10,27 +10,26 @@ import {
   TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 
 interface AiAssistant4Props {
   description: string
   error?: string
-  messages: ChatMessageData[]
+  /** Leave out, or pass none, to show the empty state. */
+  messages?: ChatMessageData[]
   /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: AiAssistant4Props = {
-  description: 'Answers from incidents, deploys and runbooks',
+  description: 'Answers from incidents, deploys and runbooks.',
   error:
     'The assistant didn’t reply in time. Your question is saved, so you can try again.',
   messages: [
@@ -94,61 +93,64 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
   const {
     description,
     error: initialError,
-    messages: initialMessages,
+    messages: initialMessages = [],
     onSend = simulateStream,
+    status: blockStatus,
     title,
   } = props
   const chat = useChatStream({ initialError, initialMessages, onSend })
   const { messages, status } = chat
+  const state = getBlockState(blockStatus, messages.length === 0)
 
   return (
-    <Card className='h-[34rem] gap-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex min-h-0 flex-1 flex-col px-0'>
+    <BlockStateProvider status={blockStatus} empty={messages.length === 0}>
+      <section className='@container flex h-[34rem] flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
         <ChatMessages
           status={status}
           latest={messages.at(-1)}
-          contentClassName='px-(--card-spacing)'
+          className='min-h-0 border-t'
+          contentClassName='ps-0 pe-4'
         >
-          {messages.map((message, index) => {
-            const isLast = index === messages.length - 1
-            const streaming = isLast && status === 'streaming'
-            return (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                streaming={streaming}
-                actions={
-                  message.role === 'assistant' &&
-                  !streaming && (
-                    <ChatMessageActions
-                      content={message.content}
-                      onRegenerate={isLast ? chat.regenerate : undefined}
-                    />
-                  )
-                }
-              />
-            )
-          })}
-          {status === 'submitted' && <TypingIndicator />}
-          {status === 'error' && (
+          {state && <BlockStateRows rows={3} />}
+          {!state &&
+            messages.map((message, index) => {
+              const isLast = index === messages.length - 1
+              const streaming = isLast && status === 'streaming'
+              return (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  streaming={streaming}
+                  actions={
+                    message.role === 'assistant' &&
+                    !streaming && (
+                      <ChatMessageActions
+                        content={message.content}
+                        onRegenerate={isLast ? chat.regenerate : undefined}
+                      />
+                    )
+                  }
+                />
+              )
+            })}
+          {!state && status === 'submitted' && <TypingIndicator />}
+          {!state && status === 'error' && (
             <ChatError message={chat.error} onRetry={chat.regenerate} />
           )}
         </ChatMessages>
-      </CardContent>
-      <CardFooter className='border-t'>
         <ChatComposer
-          className='w-full'
+          disabled={blockStatus !== undefined}
           status={status}
           onSubmit={chat.send}
           onStop={chat.stop}
           placeholder='Ask about incidents or deploys…'
         />
-      </CardFooter>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

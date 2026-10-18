@@ -7,7 +7,13 @@ export const examples: Registry['items'] = [
     name: 'security-01',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/security/security-01.tsx',
@@ -16,7 +22,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.',
+        'Failed and blocked sign-ins per day against a typical day, with the failure rate, the spike in blocked attempts called out, and two-factor coverage.',
       size: 'full',
       usedWith: ['security-02', 'security-04', 'alerts-01'],
     },
@@ -24,7 +30,13 @@ export const examples: Registry['items'] = [
   {
     name: 'security-02',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('security')],
+    registryDependencies: [
+      'button',
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('security'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/security/security-02.tsx',
@@ -41,7 +53,14 @@ export const examples: Registry['items'] = [
   {
     name: 'security-03',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('security')],
+    registryDependencies: [
+      'button',
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('security'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/security/security-03.tsx',
@@ -58,7 +77,11 @@ export const examples: Registry['items'] = [
   {
     name: 'security-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('ring'), registryUrl('security')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('gauge'),
+      registryUrl('security'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/security/security-04.tsx',
@@ -67,7 +90,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A security score built from workspace checks, with failing checks first and what to do about each.',
+        'A security score on a banded gauge, built from workspace checks, with failing checks first and what to do about each.',
       size: 'half',
       usedWith: ['security-05', 'security-06', 'security-01'],
     },
@@ -75,7 +98,13 @@ export const examples: Registry['items'] = [
   {
     name: 'security-05',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', 'input', registryUrl('settings')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('block-state'),
+      registryUrl('settings'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/security/security-05.tsx',
@@ -94,11 +123,11 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'input',
       'native-select',
       'switch',
       'textarea',
+      registryUrl('block-state'),
       registryUrl('settings'),
     ],
     files: [

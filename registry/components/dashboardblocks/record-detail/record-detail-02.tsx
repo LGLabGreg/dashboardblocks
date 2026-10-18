@@ -8,6 +8,22 @@ import {
   type ActivityTone,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+} from '@/registry/components/dashboardblocks/data-table'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
   ActionsMenu,
   BackLink,
   PageHeader,
@@ -19,13 +35,22 @@ import {
   Property,
   PropertyList,
   RecordLayout,
+  RecordPlaceholder,
+  RecordSection,
 } from '@/registry/components/dashboardblocks/record-detail'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface LineItem {
   name: string
@@ -41,28 +66,46 @@ interface OrderEvent {
   tone: ActivityTone
 }
 
+type Fulfilment = 'Delivered' | 'Shipped' | 'Unfulfilled'
+type PaymentStatus = 'Paid' | 'Pending' | 'Refunded'
+
 interface RecordDetail2Props {
-  customer: { email: string; href: string; name: string; orders: number }
-  events: OrderEvent[]
-  items: LineItem[]
+  customer?: { email: string; href: string; name: string; orders: number }
+  events?: OrderEvent[]
+  items?: LineItem[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onCancel?: () => void
   onPrint?: () => void
   onRefund?: () => void
-  order: {
-    fulfilment: string
+  /** Leave out to show the empty state. */
+  order?: {
+    fulfilment: Fulfilment
     id: string
     payment: string
     placed: string
     shipping: number
     shippingAddress: string[]
-    status: string
+    status: PaymentStatus
     taxRate: number
   }
+  status?: BlockStatus
 }
 
-const currency = new Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' })
+const FULFILMENT_TONE: Record<Fulfilment, StatusTone> = {
+  Delivered: 'good',
+  Shipped: 'info',
+  Unfulfilled: 'warning',
+}
+
+const PAYMENT_TONE: Record<PaymentStatus, StatusTone> = {
+  Paid: 'good',
+  Pending: 'warning',
+  Refunded: 'neutral',
+}
+
+const money = (value: number) =>
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)
@@ -150,193 +193,196 @@ const exampleProps: RecordDetail2Props = {
   },
 }
 
-const head = 'h-10 px-2 font-medium whitespace-nowrap'
-const amount = 'p-2 text-end whitespace-nowrap tabular-nums'
-
 const RecordDetail2 = (props: RecordDetail2Props) => {
   const {
     customer,
-    events,
-    items,
+    events = [],
+    items = [],
     now,
     onCancel = () => {},
     onPrint = () => {},
     onRefund = () => {},
     order,
+    status,
   } = props
+  const state = getBlockState(status, order === undefined)
+  const ready = order !== undefined && state === undefined
+  const taxRate = order?.taxRate ?? 0
+  const shipping = order?.shipping ?? 0
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const tax = subtotal * order.taxRate
+  const tax = subtotal * taxRate
+  const total = subtotal + shipping + tax
+  const units = items.reduce((sum, item) => sum + item.quantity, 0)
+  const totals = [
+    { label: 'Subtotal', value: subtotal },
+    { label: 'Shipping', value: shipping },
+    {
+      label: `Tax, ${formatPercent(taxRate, { maximumFractionDigits: 0 })}`,
+      value: tax,
+    },
+  ]
 
   return (
-    <div className='flex flex-col gap-6'>
-      <PageHeader>
-        <BackLink href='#'>Orders</BackLink>
-        <PageHeaderRow>
-          <PageHeaderHeading
-            title={`Order ${order.id}`}
-            description={order.placed}
-            badge={
-              <span className='flex gap-1.5'>
-                <Badge variant='secondary'>{order.status}</Badge>
-                <Badge variant='outline'>{order.fulfilment}</Badge>
-              </span>
+    <BlockStateProvider status={status} empty={order === undefined}>
+      <div className='flex flex-col gap-8'>
+        <PageHeader>
+          <BackLink href='#'>Orders</BackLink>
+          <PageHeaderRow className='@2xl/page-header:items-end'>
+            {ready ? (
+              <PageHeaderHeading
+                title={`Order ${order.id}`}
+                description={order.placed}
+                badge={
+                  <Details className='text-muted-foreground text-sm'>
+                    <StatusLabel tone={PAYMENT_TONE[order.status]}>
+                      {order.status}
+                    </StatusLabel>
+                    <StatusLabel tone={FULFILMENT_TONE[order.fulfilment]}>
+                      {order.fulfilment}
+                    </StatusLabel>
+                  </Details>
+                }
+              />
+            ) : (
+              <PageHeaderHeading
+                title={<BlockStateText variant='short' />}
+                description={state === 'loading' && <SkeletonText className='w-48' />}
+              />
+            )}
+            <PageHeaderActions>
+              <Button variant='outline' disabled={!ready} onClick={onPrint}>
+                Print
+              </Button>
+              <Button variant='outline' disabled={!ready} onClick={onRefund}>
+                Refund
+              </Button>
+              <ActionsMenu
+                disabled={!ready}
+                items={[
+                  { label: 'Cancel order', onSelect: onCancel, variant: 'destructive' },
+                ]}
+              />
+            </PageHeaderActions>
+          </PageHeaderRow>
+        </PageHeader>
+        <RecordPlaceholder
+          aside={['Customer', 'Shipping and payment']}
+          sections={['Items', 'Timeline']}
+        />
+        {ready && (
+          <RecordLayout
+            aside={
+              <>
+                {customer && (
+                  <RecordSection title='Customer'>
+                    <p className='flex flex-col gap-0.5 text-sm'>
+                      <a
+                        href={customer.href}
+                        className='font-medium underline-offset-4 hover:underline'
+                      >
+                        {customer.name}
+                      </a>
+                      <span className='text-muted-foreground'>{customer.email}</span>
+                      <span className='text-muted-foreground'>
+                        {formatNumber(customer.orders)} orders
+                      </span>
+                    </p>
+                  </RecordSection>
+                )}
+                <RecordSection title='Shipping and payment'>
+                  <PropertyList>
+                    <Property label='Ship to'>
+                      <address className='not-italic'>
+                        {order.shippingAddress.map((line) => (
+                          <span key={line} className='block'>
+                            {line}
+                          </span>
+                        ))}
+                      </address>
+                    </Property>
+                    <Property label='Payment'>{order.payment}</Property>
+                  </PropertyList>
+                </RecordSection>
+              </>
             }
-          />
-          <PageHeaderActions>
-            <Button variant='outline' onClick={onPrint}>
-              Print
-            </Button>
-            <Button variant='outline' onClick={onRefund}>
-              Refund
-            </Button>
-            <ActionsMenu
-              items={[
-                { label: 'Cancel order', onSelect: onCancel, variant: 'destructive' },
-              ]}
-            />
-          </PageHeaderActions>
-        </PageHeaderRow>
-      </PageHeader>
-      <RecordLayout
-        aside={
-          <>
-            <Card>
-              <CardHeader>
-                <CardTitle>Customer</CardTitle>
-              </CardHeader>
-              <CardContent className='flex flex-col gap-1 text-sm'>
-                <a
-                  href={customer.href}
-                  className='font-medium underline-offset-4 hover:underline'
-                >
-                  {customer.name}
-                </a>
-                <span className='text-muted-foreground'>{customer.email}</span>
-                <span className='text-muted-foreground'>{customer.orders} orders</span>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Shipping and payment</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <PropertyList>
-                  <Property label='Ship to'>
-                    <address className='not-italic'>
-                      {order.shippingAddress.map((line) => (
-                        <span key={line} className='block'>
-                          {line}
-                        </span>
-                      ))}
-                    </address>
-                  </Property>
-                  <Property label='Payment'>{order.payment}</Property>
-                </PropertyList>
-              </CardContent>
-            </Card>
-          </>
-        }
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>Items</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div
-              role='region'
-              aria-label='Items'
-              // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
-              tabIndex={0}
-              className='focus-visible:ring-ring/50 w-full overflow-x-auto outline-none focus-visible:ring-3'
+          >
+            <RecordSection
+              className='[--data-table-inset:0px]'
+              description={`${formatNumber(units)} items from ${items.length} products, ${money(total)} with shipping and tax.`}
+              title='Items'
             >
-              <table className='w-full text-sm'>
-                <thead>
-                  <tr className='border-b'>
-                    <th scope='col' className={`${head} text-start`}>
-                      Product
-                    </th>
-                    <th scope='col' className={`${head} text-end`}>
-                      Qty
-                    </th>
-                    <th scope='col' className={`${head} text-end`}>
-                      Price
-                    </th>
-                    <th scope='col' className={`${head} text-end`}>
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
+              <DataTable>
+                <caption className='sr-only'>Items in order {order.id}</caption>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>Product</DataTableHead>
+                    <DataTableHead align='end'>Qty</DataTableHead>
+                    <DataTableHead align='end'>Price</DataTableHead>
+                    <DataTableHead align='end'>Total</DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
                   {items.map((item) => (
-                    <tr key={item.sku} className='border-b last:border-0'>
-                      <td className='p-2 whitespace-nowrap'>
-                        <span className='block font-medium'>{item.name}</span>
-                        <span className='text-muted-foreground text-xs'>{item.sku}</span>
-                      </td>
-                      <td className={amount}>{item.quantity}</td>
-                      <td className={amount}>{currency.format(item.price)}</td>
-                      <td className={amount}>
-                        {currency.format(item.price * item.quantity)}
-                      </td>
-                    </tr>
+                    <DataTableRow key={item.sku}>
+                      <DataTableCell primary>
+                        <span className='block'>{item.name}</span>
+                        <span className='text-muted-foreground block font-mono text-xs font-normal'>
+                          {item.sku}
+                        </span>
+                      </DataTableCell>
+                      <DataTableCell align='end' label='Qty'>
+                        {formatNumber(item.quantity)}
+                      </DataTableCell>
+                      <DataTableCell align='end' label='Price'>
+                        {money(item.price)}
+                      </DataTableCell>
+                      <DataTableCell align='end' label='Total'>
+                        {money(item.price * item.quantity)}
+                      </DataTableCell>
+                    </DataTableRow>
                   ))}
-                </tbody>
-                <tfoot className='bg-muted/50 border-t font-medium'>
-                  <tr className='border-b'>
-                    <td colSpan={3} className='p-2'>
-                      Subtotal
-                    </td>
-                    <td className={amount}>{currency.format(subtotal)}</td>
-                  </tr>
-                  <tr className='border-b'>
-                    <td colSpan={3} className='p-2'>
-                      Shipping
-                    </td>
-                    <td className={amount}>{currency.format(order.shipping)}</td>
-                  </tr>
-                  <tr className='border-b'>
-                    <td colSpan={3} className='p-2'>
-                      Tax ({Math.round(order.taxRate * 100)}%)
-                    </td>
-                    <td className={amount}>{currency.format(tax)}</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={3} className='p-2 font-semibold'>
-                      Total
-                    </td>
-                    <td className={`${amount} font-semibold`}>
-                      {currency.format(subtotal + order.shipping + tax)}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Timeline</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ActivityFeed aria-label={`History of order ${order.id}`}>
-              {events.map((event) => (
-                <ActivityFeedItem
-                  key={event.at.getTime()}
-                  className='pb-5 last:pb-0'
-                  connector
-                >
-                  <ActivityIcon icon={event.icon} tone={event.tone} />
-                  <div className='flex min-w-0 flex-1 flex-wrap items-baseline justify-between gap-x-3 pt-1.5'>
-                    <p className='text-sm'>{event.text}</p>
-                    <ActivityTime date={event.at} now={now} />
+                </DataTableBody>
+              </DataTable>
+              <dl className='ml-auto grid w-full max-w-xs grid-cols-[1fr_auto] gap-x-6 gap-y-1.5 border-t pt-3 text-sm tabular-nums'>
+                {totals.map((row) => (
+                  <div key={row.label} className='contents'>
+                    <dt className='text-muted-foreground'>{row.label}</dt>
+                    <dd className='text-right'>{money(row.value)}</dd>
                   </div>
-                </ActivityFeedItem>
-              ))}
-            </ActivityFeed>
-          </CardContent>
-        </Card>
-      </RecordLayout>
-    </div>
+                ))}
+                <div className='contents'>
+                  <dt className='pt-1.5 font-medium'>Total</dt>
+                  <dd className='pt-1.5 text-right text-2xl font-light tracking-tight'>
+                    {money(total)}
+                  </dd>
+                </div>
+              </dl>
+            </RecordSection>
+            <RecordSection title='Timeline'>
+              <ActivityFeed aria-label={`History of order ${order.id}`}>
+                {events.map((event) => (
+                  <ActivityFeedItem
+                    key={event.at.getTime()}
+                    className='pb-5 last:pb-0'
+                    connector
+                  >
+                    <ActivityIcon
+                      className='ring-background'
+                      icon={event.icon}
+                      tone={event.tone}
+                    />
+                    <div className='flex min-w-0 flex-1 flex-wrap items-baseline justify-between gap-x-3 pt-1.5'>
+                      <p className='text-sm'>{event.text}</p>
+                      <ActivityTime date={event.at} now={now} />
+                    </div>
+                  </ActivityFeedItem>
+                ))}
+              </ActivityFeed>
+            </RecordSection>
+          </RecordLayout>
+        )}
+      </div>
+    </BlockStateProvider>
   )
 }
 

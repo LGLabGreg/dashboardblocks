@@ -22,6 +22,7 @@ export const components: Registry['items'] = [
     title: 'AI Usage',
     description:
       'Primitives for LLM usage: token cost at per-million prices with cached input billed separately, cache savings and hit rate, compact token and dollar formatting, model colours in a fixed order and an input, cached and output token bar.',
+    registryDependencies: [registryUrl('format'), registryUrl('block-state')],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-usage.tsx',
@@ -34,7 +35,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Alerts',
     description:
-      'Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.',
+      'Primitives for alerts: critical, warning, info and resolved severities written as coloured words, plus relative time formatting.',
+    registryDependencies: [registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/alerts.tsx',
@@ -82,7 +84,9 @@ export const components: Registry['items'] = [
       'kbd',
       'progress',
       'sidebar',
+      registryUrl('format'),
       registryUrl('link'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -101,6 +105,7 @@ export const components: Registry['items'] = [
     title: 'Chart',
     description: 'Chart components.',
     dependencies: ['recharts'],
+    registryDependencies: [registryUrl('block-state'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/chart.tsx',
@@ -127,8 +132,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Billing',
     description:
-      'Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for subscription billing: billing dates, MRR movement from starting to ending MRR, net revenue retention, a waterfall chart of the movement and an invoice status label.',
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/billing.tsx',
@@ -155,7 +166,7 @@ export const components: Registry['items'] = [
     title: 'Breakdown',
     description:
       'Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.',
-    registryDependencies: [registryUrl('use-in-view')],
+    registryDependencies: [registryUrl('chart-panel'), registryUrl('use-reveal')],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown.tsx',
@@ -170,6 +181,7 @@ export const components: Registry['items'] = [
     description:
       'Primitives for full-size chart panels: tooltip, legend, axis defaults and an accessible data table.',
     dependencies: ['recharts'],
+    registryDependencies: [registryUrl('chart')],
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel.tsx',
@@ -182,7 +194,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Checklist',
     description:
-      'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.',
+      'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and a status word, progress maths and wording that leave skipped steps out, and a styled checkbox.',
+    registryDependencies: [registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/checklist.tsx',
@@ -197,7 +210,14 @@ export const components: Registry['items'] = [
     description:
       'Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.',
     dependencies: ['@tanstack/react-table@^9.2.4'],
-    registryDependencies: ['button', 'checkbox', 'dropdown-menu', 'input'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      'button',
+      'checkbox',
+      'dropdown-menu',
+      'input',
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table.tsx',
@@ -225,7 +245,7 @@ export const components: Registry['items'] = [
     title: 'Comparison',
     description:
       'Primitives for comparisons: deltas, a two-proportion test with a 95% interval, diverging bars, dumbbells and an interval bar.',
-    registryDependencies: [registryUrl('use-in-view')],
+    registryDependencies: [registryUrl('kpi'), registryUrl('use-reveal')],
     files: [
       {
         path: 'registry/components/dashboardblocks/comparison.tsx',
@@ -239,7 +259,7 @@ export const components: Registry['items'] = [
     title: 'Dashboard Header',
     description:
       'Primitives for dashboard headers: a date range preset menu, a compare switch, filter menus, filter chips and an export menu.',
-    registryDependencies: ['button', 'dropdown-menu', 'switch'],
+    registryDependencies: ['button', 'dropdown-menu', 'switch', registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/dashboard-header.tsx',
@@ -252,7 +272,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Deployments',
     description:
-      'Primitives for deployments: ready, failed, running, queued and rolled back statuses each with an icon and label, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA badge and a run history strip.',
+      'Primitives for deployments: ready, failed, building, queued and rolled back statuses written as coloured words, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA band label and a run history strip.',
+    registryDependencies: [registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/deployments.tsx',
@@ -265,8 +286,9 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Distribution',
     description:
-      'Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and a line for an earlier period, box plots and legend keys.',
+    dependencies: ['recharts'],
+    registryDependencies: [registryUrl('chart')],
     files: [
       {
         path: 'registry/components/dashboardblocks/distribution.tsx',
@@ -292,8 +314,13 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Feedback',
     description:
-      'Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a recharts diverging bar chart of sentiment by topic with a tooltip.',
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/feedback.tsx',
@@ -306,7 +333,9 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Flow',
     description:
-      "Primitives for flows: a Sankey layout that places nodes in columns and links as bands, keeping each flow's colour downstream and drawing drop-offs muted, a Sankey chart with hover highlighting and a readout, and path steps as chips.",
+      "Primitives for flows: a recharts Sankey chart that keeps each flow's colour downstream, draws drop-offs muted and highlights what a hovered node or band connects, with a tooltip, plus path steps joined by arrows.",
+    dependencies: ['recharts'],
+    registryDependencies: [registryUrl('chart'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/flow.tsx',
@@ -319,9 +348,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Forecast',
     description:
-      'Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.',
+      'Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status label.',
     dependencies: ['recharts'],
-    registryDependencies: [registryUrl('chart-panel'), registryUrl('use-in-view')],
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/forecast.tsx',
@@ -344,12 +378,29 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'format',
+    type: 'registry:lib',
+    title: 'Format',
+    description:
+      'en-US formatting for numbers, compact numbers, currency, percentages from ratios, signed differences with a real minus, percentage points, UTC date ranges and details joined with a middle dot.',
+    files: [
+      {
+        path: 'registry/lib/dashboardblocks/format.ts',
+        type: 'registry:lib',
+      },
+    ],
+  },
+  {
     name: 'funnel',
     type: 'registry:component',
     title: 'Funnel',
     description:
-      'Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for conversion funnels: step conversion maths, the biggest drop and a stage bar.',
+    registryDependencies: [
+      registryUrl('format'),
+      registryUrl('use-reveal'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel.tsx',
@@ -362,8 +413,13 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Gauge',
     description:
-      'Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, band labels as coloured words, plus band, weighted score and NPS helpers.',
+    registryDependencies: [
+      registryUrl('format'),
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/gauge.tsx',
@@ -376,8 +432,12 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Geo',
     description:
-      'Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.',
-    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+      'Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.',
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('format'),
+      registryUrl('heatmap'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/geo.tsx',
@@ -390,8 +450,12 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Goals',
     description:
-      'Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker and the projection hatched, and the pace as a coloured word.',
+    registryDependencies: [
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/goals.tsx',
@@ -404,7 +468,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Heatmap',
     description:
-      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.',
+      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with the shared chart tooltip, optional bars above its columns and dots on flagged cells, and a legend.',
+    registryDependencies: [registryUrl('chart'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/heatmap.tsx',
@@ -430,7 +495,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Insights',
     description:
-      'Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a "why" line of drivers.',
+      'Primitives for insights: positive, negative, neutral and anomaly kinds, each named by a coloured word, sentences with their metrics picked out in colour, and a "why" line of drivers.',
+    registryDependencies: [registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights.tsx',
@@ -443,8 +509,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Inventory',
     description:
-      'Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each as a coloured label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.',
+    registryDependencies: [registryUrl('status-label'), registryUrl('use-reveal')],
     files: [
       {
         path: 'registry/components/dashboardblocks/inventory.tsx',
@@ -457,11 +523,33 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'KPI',
     description:
-      'Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.',
-    registryDependencies: ['card', registryUrl('animated-number'), registryUrl('trend')],
+      'Primitives for KPIs: a block with a top rule, a value that counts up with the final value read out, the change vs the previous period written as a sentence, in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.',
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('animated-number'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'kpi-provenance',
+    type: 'registry:component',
+    title: 'KPI Provenance',
+    description:
+      'A button beside a number that shows how it was computed: what’s counted, the date range, the filters, the query’s name and a link to the rows.',
+    registryDependencies: ['button', 'popover', registryUrl('link')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kpi-provenance.tsx',
+        type: 'registry:component',
+      },
+      {
+        path: 'registry/components/dashboardblocks/kpi-provenance-format.ts',
         type: 'registry:component',
       },
     ],
@@ -472,7 +560,7 @@ export const components: Registry['items'] = [
     title: 'Leaderboard',
     description: 'Primitives for composing ranked lists and leaderboards.',
     dependencies: ['class-variance-authority'],
-    registryDependencies: [registryUrl('use-in-view')],
+    registryDependencies: [registryUrl('use-reveal')],
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard.tsx',
@@ -498,8 +586,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Metric List',
     description:
-      'Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.',
-    registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
+      'Primitives for compact lists of metrics: a row with value, the change written as words and a sparkline, a bar against a target with its status, and value formatting helpers.',
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/metric-list.tsx',
@@ -518,6 +612,7 @@ export const components: Registry['items'] = [
       'popover',
       registryUrl('activity-feed'),
       registryUrl('link'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -531,7 +626,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Page Header',
     description:
-      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.',
+      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs and a more-actions menu.',
     registryDependencies: ['button', 'dropdown-menu', registryUrl('link')],
     files: [
       {
@@ -545,7 +640,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Pipeline',
     description:
-      'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.',
+      'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.',
+    registryDependencies: [registryUrl('team')],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline.tsx',
@@ -558,7 +654,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Progress Bar',
     description: 'A progress bar component.',
-    registryDependencies: [registryUrl('use-in-view')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('use-in-view')],
     files: [
       {
         path: 'registry/components/dashboardblocks/progress-bar.tsx',
@@ -571,7 +667,12 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Realtime',
     description:
-      'Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live badge that stays still for reduced motion, a number that counts to each new value, rolling bars and a short time-ago format.',
+      'Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live label that stays still for reduced motion, a number that counts to each new value, rolling bars on recharts and a short time-ago format.',
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/realtime.tsx',
@@ -584,7 +685,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Record Detail',
     description:
-      "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+      "Primitives for a record's page: a layout with a details column beside the main content, titled sections under a rule and a list of labelled properties.",
+    registryDependencies: [registryUrl('block-state')],
     files: [
       {
         path: 'registry/components/dashboardblocks/record-detail.tsx',
@@ -597,8 +699,12 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Retention',
     description:
-      'Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.',
-    registryDependencies: [registryUrl('heatmap'), registryUrl('use-in-view')],
+      'Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table with a hover tooltip, a bar and a change in percentage points.',
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('heatmap'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/retention.tsx',
@@ -611,7 +717,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Ring',
     description: 'A ring component.',
-    registryDependencies: [registryUrl('use-in-view')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('use-in-view')],
     files: [
       {
         path: 'registry/components/dashboardblocks/ring.tsx',
@@ -625,6 +731,7 @@ export const components: Registry['items'] = [
     title: 'Scatter',
     description:
       'Primitives for scatter plots and matrices: a least-squares line with the correlation coefficient described in words, a median, categorical colours in a fixed order, point tooltip content, and risk levels from likelihood and impact with a labelled swatch.',
+    registryDependencies: [registryUrl('chart')],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter.tsx',
@@ -637,7 +744,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Schedule',
     description:
-      'Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.',
+      'Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency labels and badges, and a keyboard-navigable month calendar.',
+    registryDependencies: [registryUrl('status-label'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/schedule.tsx',
@@ -650,7 +758,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Security',
     description:
-      'Primitives for security: info, warning and critical audit severities and passing, attention and failing check results, each with an icon and label, a desktop or phone device icon, a weighted security score and a time-since format.',
+      'Primitives for security: info, warning and critical audit severities and passing, attention and failing check results as coloured words, a desktop or phone device icon, and a weighted security score.',
+    registryDependencies: [registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/security.tsx',
@@ -664,7 +773,7 @@ export const components: Registry['items'] = [
     title: 'Settings',
     description:
       'Primitives for settings pages: owner, admin, member and viewer roles with what each can do and a menu to pick one, a row that puts a label and description beside its control, connected, needs attention, paused and not connected statuses each with an icon and label, secret masking, a copy button that announces itself, and relative and UTC date formatting.',
-    registryDependencies: ['button', 'dropdown-menu'],
+    registryDependencies: ['button', 'dropdown-menu', registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings.tsx',
@@ -677,11 +786,41 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Spend',
     description:
-      'Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, the status as a coloured word, and legend keys.',
+    registryDependencies: [
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/spend.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'details',
+    type: 'registry:component',
+    title: 'Details',
+    description:
+      'Two or three short facts about one subject on one line, joined by a middle dot that screen readers skip and that never ends a line.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/details.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'status-label',
+    type: 'registry:component',
+    title: 'Status Label',
+    description:
+      'A status written as a coloured word: good, warning, bad, info and neutral tones in the shades every block uses.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/status-label.tsx',
         type: 'registry:component',
       },
     ],
@@ -691,8 +830,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Stat Group',
     description:
-      'Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.',
-    registryDependencies: [registryUrl('trend'), registryUrl('use-in-view')],
+      'Primitives for a row of related stats: ruled columns, labels, light values, the change vs the previous period as a sentence or an arrow, and sparklines.',
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('kpi'),
+      registryUrl('trend'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group.tsx',
@@ -705,7 +850,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Status',
     description:
-      'Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.',
+      'Primitives for service status: status levels written as a coloured dot and word, a legend, and a 90-day uptime bar with a tooltip for each day.',
+    registryDependencies: [registryUrl('chart'), registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/status.tsx',
@@ -718,8 +864,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Team',
     description:
-      'Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a "+N" overflow.',
-    registryDependencies: ['avatar'],
+      'Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, and an avatar stack with a "+N" overflow.',
+    registryDependencies: ['avatar', registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/team.tsx',
@@ -732,7 +878,13 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Timeline',
     description:
-      'Primitives for timelines: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis, grid lines, a today line and a Gantt-style timeline with grouped rows, progress fills and a readout.',
+      'Primitives for timelines on recharts: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis tick, a today label, a chart of dated rows with tooltips, and a Gantt-style timeline with grouped rows and progress fills.',
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('chart'),
+      registryUrl('status-label'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline.tsx',
@@ -759,8 +911,13 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Usage Meter',
     description:
-      'Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.',
-    registryDependencies: [registryUrl('use-in-view')],
+      'Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with a label (a coloured word, or a badge with an icon), the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.',
+    registryDependencies: [
+      registryUrl('format'),
+      registryUrl('status-label'),
+      registryUrl('use-reveal'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter.tsx',
@@ -782,6 +939,8 @@ export const components: Registry['items'] = [
       'kbd',
       registryUrl('activity-feed'),
       registryUrl('schedule'),
+      registryUrl('status-label'),
+      registryUrl('block-state'),
     ],
     files: [
       {
@@ -822,6 +981,7 @@ export const components: Registry['items'] = [
       'tabs',
       registryUrl('schedule'),
       registryUrl('team'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -835,8 +995,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Files',
     description:
-      'Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.',
-    registryDependencies: ['button', 'dropdown-menu'],
+      'Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, ruled upload rows with a progress bar and their status in words, icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.',
+    registryDependencies: [
+      'button',
+      'dropdown-menu',
+      registryUrl('format'),
+      registryUrl('status-label'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/files.tsx',
@@ -873,8 +1039,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Invoice',
     description:
-      'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
-    registryDependencies: ['badge', 'button', 'card', 'checkbox', registryUrl('billing')],
+      'Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, a headline amount with a sentence, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.',
+    registryDependencies: [
+      'button',
+      'checkbox',
+      registryUrl('format'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/invoice.tsx',
@@ -887,10 +1059,9 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Onboarding',
     description:
-      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.',
+      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.',
     registryDependencies: [
       'button',
-      'card',
       'field',
       'input',
       'native-select',

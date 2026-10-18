@@ -13,24 +13,23 @@ import {
   TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
-import { useState } from 'react'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { useState } from 'react'
 
 interface AiAssistant2Props {
   description: string
   followUps: SuggestedPrompt[]
-  messages: ChatMessageData[]
+  /** Leave out, or pass none, to show the empty state. */
+  messages?: ChatMessageData[]
   onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
   /** Streams the reply to the conversation as chunks of text. */
   onSend?: (messages: ChatMessageData[], signal: AbortSignal) => AsyncIterable<string>
+  status?: BlockStatus
   title: string
 }
 
@@ -38,11 +37,17 @@ const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const minutesAgo = (minutes: number) => new Date(exampleNow.getTime() - minutes * 60_000)
 
 const exampleProps: AiAssistant2Props = {
-  description: 'Ask questions about your product analytics',
+  description: 'Answers from your product analytics, with the query behind each one.',
   followUps: [
     { label: 'Compare with last week', prompt: 'Compare with the week before' },
-    { label: 'Pages that lost sessions', prompt: 'Which pages lost the most sessions?' },
-    { label: 'Note for payments', prompt: 'Draft a note for the payments team' },
+    {
+      label: 'Pages that lost sessions',
+      prompt: 'Which pages lost the most sessions?',
+    },
+    {
+      label: 'Note for payments',
+      prompt: 'Draft a note for the payments team',
+    },
   ],
   messages: [
     {
@@ -161,13 +166,15 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
   const {
     description,
     followUps,
-    messages: initialMessages,
+    messages: initialMessages = [],
     onFeedback = () => {},
     onSend = simulateStream,
+    status: blockStatus,
     title,
   } = props
   const chat = useChatStream({ initialMessages, onSend })
   const { messages, status } = chat
+  const state = getBlockState(blockStatus, messages.length === 0)
   const [feedback, setFeedback] = useState<Record<string, ChatFeedback | null>>({})
   const latest = messages.at(-1)
   const asked = new Set(messages.map((message) => message.content))
@@ -178,44 +185,47 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
   }
 
   return (
-    <Card className='h-[40rem] gap-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex min-h-0 flex-1 flex-col px-0'>
+    <BlockStateProvider status={blockStatus} empty={messages.length === 0}>
+      <section className='@container flex h-[40rem] flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
         <ChatMessages
           status={status}
           latest={latest}
-          contentClassName='px-(--card-spacing)'
+          className='min-h-0 border-t'
+          contentClassName='ps-0 pe-4'
         >
-          {messages.map((message, index) => {
-            const isLast = index === messages.length - 1
-            const streaming = isLast && status === 'streaming'
-            return (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                streaming={streaming}
-                actions={
-                  message.role === 'assistant' &&
-                  !streaming && (
-                    <ChatMessageActions
-                      content={message.content}
-                      feedback={feedback[message.id]}
-                      onFeedback={(value) => rate(message.id, value)}
-                      onRegenerate={isLast ? chat.regenerate : undefined}
-                    />
-                  )
-                }
-              />
-            )
-          })}
-          {status === 'submitted' && <TypingIndicator />}
-          {status === 'error' && (
+          {state && <BlockStateRows rows={3} />}
+          {!state &&
+            messages.map((message, index) => {
+              const isLast = index === messages.length - 1
+              const streaming = isLast && status === 'streaming'
+              return (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  streaming={streaming}
+                  actions={
+                    message.role === 'assistant' &&
+                    !streaming && (
+                      <ChatMessageActions
+                        content={message.content}
+                        feedback={feedback[message.id]}
+                        onFeedback={(value) => rate(message.id, value)}
+                        onRegenerate={isLast ? chat.regenerate : undefined}
+                      />
+                    )
+                  }
+                />
+              )
+            })}
+          {!state && status === 'submitted' && <TypingIndicator />}
+          {!state && status === 'error' && (
             <ChatError message={chat.error} onRetry={chat.regenerate} />
           )}
-          {status === 'ready' && latest?.role === 'assistant' && (
+          {!state && status === 'ready' && latest?.role === 'assistant' && (
             <SuggestedPrompts
               label='Follow-up questions'
               prompts={followUps.filter(
@@ -225,17 +235,15 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
             />
           )}
         </ChatMessages>
-      </CardContent>
-      <CardFooter className='border-t'>
         <ChatComposer
-          className='w-full'
+          disabled={blockStatus !== undefined}
           status={status}
           onSubmit={chat.send}
           onStop={chat.stop}
           placeholder='Ask a follow-up…'
         />
-      </CardFooter>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

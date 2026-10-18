@@ -67,7 +67,12 @@ export const examples: Registry['items'] = [
   {
     name: 'error-pages-04',
     type: 'registry:component',
-    registryDependencies: ['button', 'input', registryUrl('error-pages')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('error-pages'),
+      registryUrl('usage-meter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/error-pages/error-pages-04.tsx',

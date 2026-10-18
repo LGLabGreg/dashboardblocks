@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 8a1ebe4680ff
+// source-hash: 94a9b9d7834e
 
 'use client'
 
@@ -86,7 +86,8 @@ function useSimpleForm<T extends FormValues>({
       ((touched[name] || submitted) && clientErrors[name]) || serverErrors[name]
     if (error) errors[name] = error
   }
-  const isDirty = names.some((name) => values[name] !== savedValues[name])
+  const changedFields = names.filter((name) => values[name] !== savedValues[name])
+  const isDirty = changedFields.length > 0
 
   const getId = (name: keyof T & string) => `${formId}-${name}`
 
@@ -180,6 +181,7 @@ function useSimpleForm<T extends FormValues>({
   }
 
   return {
+    changedFields,
     error,
     errors,
     field,
@@ -203,10 +205,10 @@ interface FormSectionProps {
 
 function FormSection({ children, className, description, title }: FormSectionProps) {
   return (
-    <section className={cn('@container', className)}>
+    <section className={cn('@container border-t pt-4', className)}>
       <div className='grid gap-4 @3xl:grid-cols-[16rem_1fr] @3xl:gap-8'>
-        <div className='flex flex-col gap-1'>
-          <h3 className='font-medium'>{title}</h3>
+        <div className='flex flex-col gap-0.5'>
+          <h3 className='text-sm font-medium'>{title}</h3>
           {description && (
             <p className='text-muted-foreground text-sm text-pretty'>{description}</p>
           )}
@@ -277,7 +279,7 @@ interface FormStepsProps {
 
 function FormSteps({ className, current, steps }: FormStepsProps) {
   return (
-    <ol className={cn('flex gap-2', className)}>
+    <ol className={cn('@container flex gap-3', className)}>
       {steps.map((step, index) => {
         const state =
           index < current ? 'done' : index === current ? 'current' : 'upcoming'
@@ -286,25 +288,23 @@ function FormSteps({ className, current, steps }: FormStepsProps) {
             key={step.title}
             aria-current={state === 'current' ? 'step' : undefined}
             data-state={state}
-            className='group/step flex min-w-0 flex-1 flex-col gap-2'
+            className='group/step data-[state=upcoming]:border-border border-foreground flex min-w-0 flex-1 flex-col gap-0.5 border-t-2 pt-2'
           >
-            <span className='bg-muted group-data-[state=current]/step:bg-primary group-data-[state=done]/step:bg-primary h-1 rounded-full' />
             <span className='flex min-w-0 items-center gap-1.5 text-sm'>
               {state === 'done' ? (
                 <IconPlaceholder
-                  lucide='CircleCheckIcon'
-                  tabler='IconCircleCheckFilled'
-                  hugeicons='CheckmarkCircle01Icon'
-                  phosphor='CheckCircleIcon'
-                  remixicon='RiCheckboxCircleFill'
-                  className='text-primary size-4 shrink-0'
+                  lucide='CheckIcon'
+                  tabler='IconCheck'
+                  hugeicons='Tick02Icon'
+                  phosphor='CheckIcon'
+                  remixicon='RiCheckLine'
+                  aria-hidden
+                  className='text-muted-foreground size-3.5 shrink-0'
                 />
               ) : (
-                <span className='text-muted-foreground group-data-[state=current]/step:text-foreground text-xs tabular-nums'>
-                  {index + 1}.
-                </span>
+                <span className='text-muted-foreground tabular-nums'>{index + 1}</span>
               )}
-              <span className='text-muted-foreground group-data-[state=current]/step:text-foreground truncate font-medium'>
+              <span className='group-data-[state=upcoming]/step:text-muted-foreground truncate font-medium'>
                 {step.title}
               </span>
               <span className='sr-only'>
@@ -316,7 +316,7 @@ function FormSteps({ className, current, steps }: FormStepsProps) {
               </span>
             </span>
             {step.description && (
-              <span className='text-muted-foreground hidden text-xs sm:block'>
+              <span className='text-muted-foreground hidden truncate text-xs @md:block'>
                 {step.description}
               </span>
             )}
@@ -439,7 +439,7 @@ function InlineEditField({
   }
 
   return (
-    <div className={cn('@container py-3', className)}>
+    <div className={cn('@container py-2.5', className)}>
       <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-4'>
         <span id={`${id}-label`} className='text-muted-foreground pt-2 text-sm'>
           {label}

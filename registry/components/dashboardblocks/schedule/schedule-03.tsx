@@ -1,36 +1,38 @@
 'use client'
 
 import {
-  UrgencyBadge,
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  UrgencyLabel,
   formatCountdown,
   formatDay,
   getDay,
   getDayOffset,
   getUrgency,
-  urgencyConfig,
 } from '@/registry/components/dashboardblocks/schedule'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 interface Deadline {
+  /** What is owed or renewed, in dollars. */
+  amount?: number
+  /** Shows the amount as a recurring price, such as `a year`. */
+  billed?: 'month' | 'year'
+  detail?: string
   due: Date
   id: string
-  detail?: string
   title: string
 }
 
 interface Schedule3Props {
-  deadlines: Deadline[]
+  /** Leave out, or pass none, to show the empty state. */
+  deadlines?: Deadline[]
   now: Date
   soonDays?: number
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -42,19 +44,22 @@ const inDays = (days: number) => new Date(NOW + days * 86_400_000)
 const exampleProps: Schedule3Props = {
   deadlines: [
     {
-      detail: 'Invoice INV-2291 · $4,200',
+      amount: 4_200,
+      detail: 'Invoice INV-2291',
       due: inDays(-2),
       id: 'd1',
       title: 'Payment to Cloudline Hosting',
     },
     {
-      detail: 'Certificate · api.example.com',
+      detail: 'api.example.com',
       due: inDays(0),
       id: 'd2',
       title: 'TLS certificate expires',
     },
     {
-      detail: 'Contract renewal · $12,480 / year',
+      amount: 12_480,
+      billed: 'year',
+      detail: 'Contract renewal',
       due: inDays(3),
       id: 'd3',
       title: 'Figma Organization',
@@ -66,13 +71,17 @@ const exampleProps: Schedule3Props = {
       title: 'VAT return Q3',
     },
     {
-      detail: 'Contract renewal · $38,000 / year',
+      amount: 38_000,
+      billed: 'year',
+      detail: 'Contract renewal',
       due: inDays(17),
       id: 'd5',
       title: 'Datadog Pro',
     },
     {
-      detail: 'Domain renewal · $24 / year',
+      amount: 24,
+      billed: 'year',
+      detail: 'Domain renewal',
       due: inDays(41),
       id: 'd6',
       title: 'example.com',
@@ -83,7 +92,7 @@ const exampleProps: Schedule3Props = {
 }
 
 const Schedule3 = (props: Schedule3Props) => {
-  const { deadlines, now, soonDays = 7, timeZone = 'UTC', title } = props
+  const { deadlines = [], now, soonDays = 7, status, timeZone = 'UTC', title } = props
   const rows = [...deadlines]
     .sort((a, b) => a.due.getTime() - b.due.getTime())
     .map((deadline) => ({
@@ -95,65 +104,71 @@ const Schedule3 = (props: Schedule3Props) => {
   const soon = rows.filter(
     (row) => row.urgency === 'today' || row.urgency === 'soon',
   ).length
+  const hasAmounts = rows.some((row) => row.amount !== undefined)
 
   return (
-    <Card className='@container gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {overdue} overdue, {soon} due in the next {soonDays} days
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='px-0'>
-        <ul>
-          {rows.map((row) => {
-            const countdown =
-              row.urgency === 'overdue'
-                ? `${-row.offset} ${row.offset === -1 ? 'day' : 'days'} overdue`
-                : row.urgency === 'today'
-                  ? 'Due today'
-                  : `Due ${formatCountdown(row.due, now, timeZone)}`
-            return (
-              <li
-                key={row.id}
-                className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-b px-6 py-3.5 last:border-b-0 @lg:grid-cols-[minmax(0,1fr)_8rem_7rem]'
-              >
-                <div className='flex min-w-0 flex-col gap-0.5'>
-                  <span className='text-sm font-medium break-words'>{row.title}</span>
-                  {row.detail && (
-                    <span className='text-muted-foreground truncate text-xs'>
-                      {row.detail}
-                    </span>
-                  )}
-                </div>
-                <p className='col-start-1 row-start-2 flex flex-wrap gap-x-2 text-xs @lg:col-start-2 @lg:row-start-1 @lg:flex-col @lg:text-right'>
-                  <span
-                    className={cn(
-                      'font-medium',
-                      row.urgency === 'later'
-                        ? 'text-foreground'
-                        : urgencyConfig[row.urgency].text,
+    <BlockStateProvider status={status} empty={deadlines.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {overdue === 0 ? 'Nothing overdue' : `${overdue} overdue`}, and {soon} due
+              in the next {soonDays} days.
+            </p>
+          </BlockReady>
+        </header>
+        <div className='border-t'>
+          <BlockStateRows rows={5} />
+          <ul className='empty:hidden'>
+            {!status &&
+              rows.map((row) => {
+                const countdown =
+                  row.urgency === 'overdue'
+                    ? `${-row.offset} ${row.offset === -1 ? 'day' : 'days'} overdue`
+                    : row.urgency === 'today'
+                      ? 'Due today'
+                      : `Due ${formatCountdown(row.due, now, timeZone)}`
+                return (
+                  <li key={row.id} className='flex items-start gap-4 border-b py-2.5'>
+                    <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                      <span className='text-sm font-medium break-words'>{row.title}</span>
+                      {row.detail && (
+                        <span className='text-muted-foreground truncate text-sm'>
+                          {row.detail}
+                        </span>
+                      )}
+                    </div>
+                    {hasAmounts && (
+                      <p className='flex w-20 shrink-0 flex-col items-end gap-0.5 text-right text-sm tabular-nums'>
+                        {row.amount !== undefined && (
+                          <>
+                            <span>{formatCurrency(row.amount)}</span>
+                            {row.billed && (
+                              <span className='text-muted-foreground'>
+                                a {row.billed}
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </p>
                     )}
-                  >
-                    {countdown}
-                  </span>
-                  <time
-                    dateTime={getDay(row.due, timeZone).toISOString().slice(0, 10)}
-                    className='text-muted-foreground whitespace-nowrap tabular-nums'
-                  >
-                    {formatDay(getDay(row.due, timeZone))}
-                  </time>
-                </p>
-                <UrgencyBadge
-                  className='col-start-2 row-span-2 row-start-1 justify-self-end @lg:col-start-3 @lg:row-span-1'
-                  urgency={row.urgency}
-                />
-              </li>
-            )
-          })}
-        </ul>
-      </CardContent>
-    </Card>
+                    <p className='flex shrink-0 flex-col items-end gap-0.5 text-right'>
+                      <UrgencyLabel urgency={row.urgency} label={countdown} />
+                      <time
+                        dateTime={getDay(row.due, timeZone).toISOString().slice(0, 10)}
+                        className='text-muted-foreground text-sm whitespace-nowrap tabular-nums'
+                      >
+                        {formatDay(getDay(row.due, timeZone))}
+                      </time>
+                    </p>
+                  </li>
+                )
+              })}
+          </ul>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

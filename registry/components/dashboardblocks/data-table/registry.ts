@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('data-table')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-01.tsx',
@@ -23,7 +27,11 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('data-table')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-02.tsx',
@@ -41,10 +49,11 @@ export const examples: Registry['items'] = [
     name: 'data-table-03',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
       registryUrl('data-table'),
+      registryUrl('format'),
+      registryUrl('kpi'),
       registryUrl('stat-group'),
-      registryUrl('trend'),
     ],
     files: [
       {
@@ -62,7 +71,13 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('data-table'), registryUrl('status')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
+      registryUrl('status'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-04.tsx',
@@ -79,7 +94,13 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-05',
     type: 'registry:component',
-    registryDependencies: ['badge', 'card', registryUrl('data-table')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-05.tsx',
@@ -96,7 +117,14 @@ export const examples: Registry['items'] = [
   {
     name: 'data-table-06',
     type: 'registry:component',
-    registryDependencies: ['badge', 'card', registryUrl('data-table')],
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/data-table/data-table-06.tsx',

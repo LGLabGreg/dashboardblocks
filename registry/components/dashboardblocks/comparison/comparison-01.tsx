@@ -1,6 +1,10 @@
 'use client'
 
-import { getDelta } from '@/registry/components/dashboardblocks/comparison'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   DataTable,
   DataTableBody,
@@ -8,10 +12,16 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
-
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
+import {
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+  formatPoints,
+  formatSigned,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface ComparedMetric {
   current: number
@@ -25,38 +35,44 @@ interface ComparedMetric {
 
 interface Comparison1Props {
   currentLabel: string
-  description: string
-  metrics: ComparedMetric[]
+  /** Defaults to a sentence saying how many metrics improved. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: ComparedMetric[]
   previousLabel: string
+  status?: BlockStatus
   title: string
 }
 
-const currency = (value: number) => `$${Math.round(value).toLocaleString('en-US')}`
-
 const exampleProps: Comparison1Props = {
   currentLabel: 'September',
-  description: 'September compared with August',
   metrics: [
-    { current: 48_210, formatter: currency, label: 'Revenue', previous: 42_890 },
+    {
+      current: 48_210,
+      formatter: (value) => formatCurrency(value),
+      label: 'Revenue',
+      previous: 42_890,
+    },
     { current: 1_284, label: 'Orders', previous: 1_210 },
     {
       current: 37.55,
-      formatter: (value) => `$${value.toFixed(2)}`,
+      formatter: (value) =>
+        formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
       label: 'Avg order value',
       previous: 35.45,
     },
     { current: 342, label: 'New customers', previous: 318 },
     {
       current: 2.1,
-      differenceFormatter: (value) => `${value.toFixed(1)} pts`,
-      formatter: (value) => `${value.toFixed(1)}%`,
+      differenceFormatter: (value) => formatPoints(value, { minimumFractionDigits: 1 }),
+      formatter: (value) => formatPercent(value / 100, { minimumFractionDigits: 1 }),
       goodDirection: 'down',
       label: 'Refund rate',
       previous: 2.4,
     },
     {
       current: 4.2,
-      formatter: (value) => `${value.toFixed(1)} h`,
+      formatter: (value) => `${formatNumber(value, { minimumFractionDigits: 1 })} h`,
       goodDirection: 'down',
       label: 'First response time',
       previous: 3.8,
@@ -66,62 +82,92 @@ const exampleProps: Comparison1Props = {
   title: 'Month over month',
 }
 
+const isGood = (metric: ComparedMetric, difference: number) =>
+  metric.goodDirection === 'down' ? difference < 0 : difference > 0
+
+function summarize(metrics: ComparedMetric[], previousLabel: string) {
+  const improved = metrics.filter((metric) =>
+    isGood(metric, metric.current - metric.previous),
+  ).length
+  const worse = metrics.filter(
+    (metric) =>
+      metric.current !== metric.previous &&
+      !isGood(metric, metric.current - metric.previous),
+  )
+  const lead = `${improved} of ${metrics.length} metrics improved on ${previousLabel}`
+  if (worse.length === 0) return `${lead}.`
+  return `${lead}; ${worse.map((metric) => metric.label.toLowerCase()).join(' and ')} got worse.`
+}
+
 const Comparison1 = (props: Comparison1Props) => {
-  const { currentLabel, description, metrics, previousLabel, title } = props
+  const { currentLabel, metrics = [], previousLabel, status, title } = props
+  const { description = summarize(metrics, previousLabel) } = props
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <DataTable>
-        <caption className='sr-only'>{`${title}: ${description}`}</caption>
-        <DataTableHeader>
-          <DataTableRow>
-            <DataTableHead>Metric</DataTableHead>
-            <DataTableHead align='end'>{currentLabel}</DataTableHead>
-            <DataTableHead align='end'>{previousLabel}</DataTableHead>
-            <DataTableHead align='end'>Difference</DataTableHead>
-            <DataTableHead align='end'>Change</DataTableHead>
-          </DataTableRow>
-        </DataTableHeader>
-        <DataTableBody>
-          {metrics.map((metric) => {
-            const format = metric.formatter ?? ((value: number) => value.toLocaleString())
-            const { difference, percent } = getDelta(metric.current, metric.previous)
-            const sign = difference > 0 ? '+' : difference < 0 ? '−' : ''
-            return (
-              <DataTableRow key={metric.label}>
-                <DataTableCell primary>{metric.label}</DataTableCell>
-                <DataTableCell align='end' label={currentLabel} className='font-medium'>
-                  {format(metric.current)}
-                </DataTableCell>
-                <DataTableCell
-                  align='end'
-                  label={previousLabel}
-                  className='text-muted-foreground'
-                >
-                  {format(metric.previous)}
-                </DataTableCell>
-                <DataTableCell align='end' label='Difference'>
-                  {sign}
-                  {(metric.differenceFormatter ?? format)(Math.abs(difference))}
-                </DataTableCell>
-                <DataTableCell align='end' label='Change'>
-                  <Trend
-                    className='justify-end text-xs @max-2xl/data-table:justify-start [&_svg]:size-3.5'
-                    goodDirection={metric.goodDirection}
-                    trend={percent}
-                    trendIcon='arrow'
-                  />
-                </DataTableCell>
-              </DataTableRow>
-            )
-          })}
-        </DataTableBody>
-      </DataTable>
-    </Card>
+    <BlockStateProvider status={status} empty={metrics.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <DataTable className='border-t'>
+          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Metric</DataTableHead>
+              <DataTableHead align='end'>{currentLabel}</DataTableHead>
+              <DataTableHead align='end'>{previousLabel}</DataTableHead>
+              <DataTableHead align='end'>Difference</DataTableHead>
+              <DataTableHead align='end'>Change</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={5} rows={6} />
+            {!status &&
+              metrics.map((metric) => {
+                const format =
+                  metric.formatter ?? ((value: number) => formatNumber(value))
+                const difference = metric.current - metric.previous
+                return (
+                  <DataTableRow key={metric.label}>
+                    <DataTableCell primary>{metric.label}</DataTableCell>
+                    <DataTableCell
+                      align='end'
+                      label={currentLabel}
+                      className='font-medium'
+                    >
+                      {format(metric.current)}
+                    </DataTableCell>
+                    <DataTableCell
+                      align='end'
+                      label={previousLabel}
+                      className='text-muted-foreground'
+                    >
+                      {format(metric.previous)}
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Difference'>
+                      {formatSigned(difference, metric.differenceFormatter ?? format)}
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Change'>
+                      <KPIChange
+                        comparison={`in ${previousLabel}`}
+                        format={format}
+                        goodDirection={metric.goodDirection}
+                        inline
+                        previous={metric.previous}
+                        value={metric.current}
+                        variant='short'
+                      />
+                    </DataTableCell>
+                  </DataTableRow>
+                )
+              })}
+          </DataTableBody>
+        </DataTable>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,20 +1,20 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type RiskLevel,
   RiskLevelLabel,
   getRiskLevel,
   riskLevelConfig,
 } from '@/registry/components/dashboardblocks/scatter'
 import { useState } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -30,12 +30,14 @@ interface Risk {
 
 interface Scatter4Props {
   description: string
-  risks: Risk[]
+  /** Leave out, or pass none, to show the empty state. */
+  risks?: Risk[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Scatter4Props = {
-  description: 'Open risks by likelihood and impact',
+  description: 'Open risks placed by how likely they are and how much they would hurt.',
   risks: [
     {
       id: 'r1',
@@ -109,7 +111,8 @@ const IMPACT = ['Minor', 'Moderate', 'Major', 'Severe', 'Critical']
 const LEVELS: RiskLevel[] = ['critical', 'high', 'medium', 'low']
 
 const Scatter4 = (props: Scatter4Props) => {
-  const { description, risks, title } = props
+  const { description, risks = [], status, title } = props
+  const state = getBlockState(status, risks.length === 0)
   const [selected, setSelected] = useState<{ impact: number; likelihood: number } | null>(
     null,
   )
@@ -122,30 +125,34 @@ const Scatter4 = (props: Scatter4Props) => {
         .slice(0, 3)
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <ul className='flex flex-wrap gap-x-4 gap-y-1'>
-          {LEVELS.map((level) => (
-            <li key={level} className='flex items-center gap-1.5'>
-              <RiskLevelLabel level={level} />
-              <span className='text-muted-foreground text-xs tabular-nums'>
-                {
-                  risks.filter(
-                    (risk) => getRiskLevel(risk.likelihood, risk.impact) === level,
-                  ).length
-                }
-              </span>
-            </li>
-          ))}
-        </ul>
+    <BlockStateProvider status={status} empty={risks.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state !== 'empty' && state !== 'error' && (
+          <ul className='flex flex-wrap gap-x-4 gap-y-1 border-t pt-4'>
+            {LEVELS.map((level) => (
+              <li key={level} className='flex items-center gap-1.5'>
+                <RiskLevelLabel level={level} />
+                <span className='text-muted-foreground text-xs tabular-nums'>
+                  {state ? (
+                    <SkeletonText className='w-3' />
+                  ) : (
+                    risks.filter(
+                      (risk) => getRiskLevel(risk.likelihood, risk.impact) === level,
+                    ).length
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className='grid grid-cols-[auto_repeat(5,minmax(0,1fr))] gap-1'>
           {[5, 4, 3, 2, 1].map((likelihood) => (
             <div key={likelihood} className='contents'>
-              <span className='text-muted-foreground flex max-w-16 items-center pr-1 text-[11px] leading-tight @sm:max-w-none'>
+              <span className='text-muted-foreground flex max-w-16 items-center pr-1 text-xs leading-tight @sm:max-w-none'>
                 {LIKELIHOOD[likelihood - 1]}
               </span>
               {[1, 2, 3, 4, 5].map((impact) => {
@@ -157,13 +164,15 @@ const Scatter4 = (props: Scatter4Props) => {
                   <button
                     key={impact}
                     type='button'
-                    aria-label={`${LIKELIHOOD[likelihood - 1]} likelihood, ${IMPACT[impact - 1].toLowerCase()} impact: ${riskLevelConfig[level].label.toLowerCase()} risk, ${cell.length} ${cell.length === 1 ? 'risk' : 'risks'}`}
+                    aria-label={`${LIKELIHOOD[likelihood - 1]} likelihood, ${IMPACT[impact - 1].toLowerCase()} impact: ${riskLevelConfig[level].label.toLowerCase()} risk${state ? '' : `, ${cell.length} ${cell.length === 1 ? 'risk' : 'risks'}`}`}
                     aria-pressed={isSelected}
+                    disabled={Boolean(state)}
                     className={cn(
-                      'ring-offset-card focus-visible:ring-foreground flex h-9 min-w-0 items-center @sm:aspect-[4/3] @sm:h-auto justify-center rounded-md text-sm font-semibold tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
+                      'ring-offset-background focus-visible:ring-foreground flex h-9 min-w-0 items-center @sm:aspect-[4/3] @sm:h-auto justify-center rounded-md text-sm font-semibold tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
                       riskLevelConfig[level].cell,
                       isSelected && 'ring-foreground ring-2 ring-offset-1',
-                      cell.length === 0 && 'text-transparent',
+                      (state || cell.length === 0) && 'text-transparent',
+                      state === 'loading' && 'animate-pulse motion-reduce:animate-none',
                     )}
                     onClick={() =>
                       setSelected(isSelected ? null : { impact, likelihood })
@@ -179,30 +188,34 @@ const Scatter4 = (props: Scatter4Props) => {
           {IMPACT.map((label) => (
             <span
               key={label}
-              className='text-muted-foreground truncate pt-1 text-center text-[11px]'
+              className='text-muted-foreground truncate pt-1 text-center text-xs'
             >
               {label}
             </span>
           ))}
           <span />
-          <span className='text-muted-foreground col-span-5 text-center text-[11px]'>
+          <span className='text-muted-foreground col-span-5 text-center text-xs'>
             Impact →
           </span>
         </div>
-        <div className='flex flex-col gap-2 border-t pt-4'>
-          <span className='text-muted-foreground text-xs'>
-            {selected
-              ? `${LIKELIHOOD[selected.likelihood - 1]} and ${IMPACT[selected.impact - 1].toLowerCase()}`
-              : 'Highest risks. Select a cell to see its risks.'}
-          </span>
-          {shown.length === 0 ? (
-            <span className='text-muted-foreground text-sm'>No risks here.</span>
+        <div className='flex flex-col gap-1 border-t pt-4'>
+          <BlockReady className='text-sm'>
+            <span className='text-muted-foreground text-sm'>
+              {selected
+                ? `${LIKELIHOOD[selected.likelihood - 1]} and ${IMPACT[selected.impact - 1].toLowerCase()}.`
+                : 'The three highest risks. Select a cell to see its risks.'}
+            </span>
+          </BlockReady>
+          {state ? (
+            <BlockStateRows rows={3} />
+          ) : shown.length === 0 ? (
+            <span className='text-muted-foreground py-2.5 text-sm'>No risks here.</span>
           ) : (
-            <ul className='flex flex-col gap-1.5'>
+            <ul className='flex flex-col'>
               {shown.map((risk) => (
                 <li
                   key={risk.id}
-                  className='flex items-center justify-between gap-3 text-sm'
+                  className='flex items-center justify-between gap-3 border-b py-2.5 text-sm last:border-b-0'
                 >
                   <span className='min-w-0 truncate'>{risk.title}</span>
                   <span className='flex shrink-0 items-center gap-2'>
@@ -216,8 +229,8 @@ const Scatter4 = (props: Scatter4Props) => {
             </ul>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

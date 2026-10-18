@@ -16,3 +16,11 @@ export const filesExampleProps = {
   'files-03': files3ExampleProps,
   'files-04': files4ExampleProps,
 }
+
+export const filesEmptyProps = {
+  'files-02': { files: [] },
+  'files-03': { breakdown: [], largestFiles: [] },
+  'files-04': {
+    root: { children: [], id: 'marketing', name: 'Marketing', type: 'folder' },
+  },
+}

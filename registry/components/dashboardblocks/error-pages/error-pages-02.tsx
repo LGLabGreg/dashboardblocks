@@ -37,7 +37,7 @@ const exampleProps: ErrorPages2Props = {
   ),
   homeHref: '#',
   onRequestAccess: () => new Promise((resolve) => setTimeout(resolve, 800)),
-  owner: { name: 'Amara Okafor' },
+  owner: { avatar: '/images/avatar-02.webp', name: 'Amara Okafor' },
   resource: 'the Revenue overview dashboard',
   signedInAs: 'noah@acme.co',
   switchAccountHref: '#',
@@ -77,19 +77,10 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
     <ErrorPageLayout
       brand={brand}
       code='403'
-      icon={
-        <IconPlaceholder
-          lucide='LockIcon'
-          tabler='IconLock'
-          hugeicons='SquareLock02Icon'
-          phosphor='LockIcon'
-          remixicon='RiLockLine'
-        />
-      }
       title='You don’t have access'
       description={`You need permission to view ${resource}.`}
     >
-      <div className='flex flex-col gap-4 rounded-xl border p-4 text-left'>
+      <div className='flex flex-col gap-4 border-t pt-6'>
         <div className='flex items-center gap-3'>
           <PersonAvatar person={owner} />
           <p className='text-sm'>
@@ -135,13 +126,13 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
                 {error}
               </p>
             )}
-            <Button type='submit' disabled={sending}>
+            <Button type='submit' disabled={sending} className='self-start'>
               {sending ? 'Sending…' : 'Request access'}
             </Button>
           </form>
         )}
       </div>
-      <div className='flex flex-col items-center gap-3 text-sm'>
+      <div className='flex flex-col items-start gap-3 border-t pt-6 text-sm'>
         <p className='text-muted-foreground'>
           Signed in as <span className='text-foreground font-medium'>{signedInAs}</span>.{' '}
           <a
@@ -151,7 +142,7 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
             Switch account
           </a>
         </p>
-        <a href={homeHref} className={buttonVariants({ variant: 'ghost' })}>
+        <a href={homeHref} className={buttonVariants({ variant: 'outline' })}>
           Back to dashboards
         </a>
       </div>

@@ -1,43 +1,42 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   BoxPlot,
-  DistributionAxis,
   DistributionKey,
   getNiceTicks,
   quantile,
   summarize,
 } from '@/registry/components/dashboardblocks/distribution'
-
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 
 interface Distribution3Props {
   description: string
   formatter?: (value: number) => string
+  status?: BlockStatus
   title: string
   /** @default 'orders' */
   unit?: string
-  /** Raw values, in any order. */
-  values: number[]
+  /** Raw values, in any order. Leave out, or pass none, to show the empty state. */
+  values?: number[]
 }
 
 const exampleProps: Distribution3Props = {
-  description: 'Orders placed in the last 7 days',
-  formatter: (value) =>
-    value.toLocaleString('en-US', {
-      currency: 'USD',
-      maximumFractionDigits: 0,
-      style: 'currency',
-    }),
+  description: 'The value of every order placed in the last 7 days.',
+  formatter: (value) => formatCurrency(value),
   title: 'Order value',
   unit: 'orders',
-  // Integer hashing, not Math.sin, so the server and the browser agree.
   values: Array.from({ length: 420 }, (_, index) => {
     const u = ((index * 2_654_435_761 + 12_345) % 4_294_967_296) / 4_294_967_296
     return Math.round(
@@ -51,11 +50,14 @@ const PERCENTILES = [0.1, 0.25, 0.5, 0.75, 0.9]
 const Distribution3 = (props: Distribution3Props) => {
   const {
     description,
-    formatter = (value) => value.toLocaleString(),
+    formatter = (value) => formatNumber(value),
+    status,
     title,
     unit = 'orders',
-    values,
+    values = [],
   } = props
+  const state = getBlockState(status, values.length === 0)
+  const blank = state === 'empty' || state === 'error'
 
   const sorted = [...values].sort((a, b) => a - b)
   const summary = summarize(sorted)
@@ -65,84 +67,109 @@ const Distribution3 = (props: Distribution3Props) => {
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]]
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='flex flex-wrap gap-x-8 gap-y-3'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Median</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatter(summary.median)}
+    <BlockStateProvider status={status} empty={values.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-3'>
+          <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
+            <dt className='text-muted-foreground text-sm'>Median</dt>
+            <dd>
+              <KPIValue value={summary.median} format={formatter} />
             </dd>
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Mean</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {formatter(summary.mean)}
-            </dd>
-          </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>
-              {unit.charAt(0).toUpperCase()}
-              {unit.slice(1)}
-            </dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {summary.count.toLocaleString()}
-            </dd>
-          </div>
-        </dl>
-        <div className='flex flex-col gap-1.5'>
-          <BoxPlot
-            domain={domain}
-            high={p90}
-            low={p10}
-            mean={summary.mean}
-            median={p50}
-            q1={p25}
-            q3={p75}
-          />
-          <DistributionAxis domain={domain} format={formatter} ticks={ticks} />
-        </div>
-        <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='box' />
-            Middle half
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='median' />
-            Median
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='mean' />
-            Mean
-          </li>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='whisker' />
-            10th–90th percentile
-          </li>
-        </ul>
-        <dl className='grid grid-cols-5 divide-x rounded-lg border text-center'>
-          {[p10, p25, p50, p75, p90].map((value, index) => (
-            <div key={PERCENTILES[index]} className='flex flex-col gap-0.5 px-1 py-2'>
-              <dt className='text-muted-foreground text-[11px]'>
-                p{Math.round(PERCENTILES[index] * 100)}
-              </dt>
-              <dd className='text-sm font-medium tabular-nums'>{formatter(value)}</dd>
+          {!blank && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Mean</dt>
+              <dd>
+                <KPIValue className='text-2xl' value={summary.mean} format={formatter} />
+              </dd>
             </div>
-          ))}
+          )}
+          {!blank && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>
+                {unit.charAt(0).toUpperCase()}
+                {unit.slice(1)}
+              </dt>
+              <dd>
+                <KPIValue
+                  className='text-2xl'
+                  value={summary.count}
+                  format={(value) => formatNumber(value)}
+                />
+              </dd>
+            </div>
+          )}
         </dl>
-        <p className='text-muted-foreground text-sm'>
-          {skew > 0.1
-            ? `The mean is ${Math.round(skew * 100)}% above the median: a few large ${unit} pull it up, so the median is the typical one.`
-            : skew < -0.1
-              ? `The mean is ${Math.round(-skew * 100)}% below the median: a few small ${unit} pull it down, so the median is the typical one.`
-              : 'The mean and median are close, so the spread is fairly even.'}
-        </p>
-      </CardContent>
-    </Card>
+        <BlockReady className='text-sm'>
+          <p className='text-muted-foreground text-sm'>
+            {skew > 0.1
+              ? `The mean is ${formatPercent(skew, { maximumFractionDigits: 0 })} above the median: a few large ${unit} pull it up, so the median is the typical one.`
+              : skew < -0.1
+                ? `The mean is ${formatPercent(-skew, { maximumFractionDigits: 0 })} below the median: a few small ${unit} pull it down, so the median is the typical one.`
+                : 'The mean and median are close, so the spread is fairly even.'}
+          </p>
+        </BlockReady>
+        {!blank && (
+          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+            <li className='flex items-center gap-1.5'>
+              <DistributionKey shape='box' />
+              Middle half
+            </li>
+            <li className='flex items-center gap-1.5'>
+              <DistributionKey shape='median' />
+              Median
+            </li>
+            <li className='flex items-center gap-1.5'>
+              <DistributionKey shape='mean' />
+              Mean
+            </li>
+            <li className='flex items-center gap-1.5'>
+              <DistributionKey shape='whisker' />
+              10th–90th percentile
+            </li>
+          </ul>
+        )}
+        <BoxPlot
+          aria-label={`${title} chart`}
+          domain={domain}
+          format={formatter}
+          rowHeight={56}
+          rows={[
+            {
+              count: summary.count,
+              high: p90,
+              label: title,
+              low: p10,
+              mean: summary.mean,
+              median: p50,
+              q1: p25,
+              q3: p75,
+            },
+          ]}
+          ticks={ticks}
+          unit={unit}
+          whiskerLabel='10th–90th percentile'
+        />
+        {!blank && (
+          <dl className='grid grid-cols-5 border-t pt-3'>
+            {[p10, p25, p50, p75, p90].map((value, index) => (
+              <div key={PERCENTILES[index]} className='flex flex-col gap-0.5'>
+                <dt className='text-muted-foreground text-xs'>
+                  p{Math.round(PERCENTILES[index] * 100)}
+                </dt>
+                <dd className='text-sm tabular-nums'>
+                  {state ? <SkeletonText className='w-[3em]' /> : formatter(value)}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -25,3 +25,12 @@ export const settingsExampleProps = {
   'settings-06': settings6ExampleProps,
   'settings-07': settings7ExampleProps,
 }
+
+export const settingsEmptyProps = {
+  'settings-01': { invites: [], members: [] },
+  'settings-02': { keys: [] },
+  'settings-03': { groups: [] },
+  'settings-04': { integrations: [] },
+  'settings-05': { endpoints: [] },
+  'settings-07': { profile: undefined },
+}

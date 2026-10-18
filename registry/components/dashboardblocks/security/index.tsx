@@ -22,3 +22,12 @@ export const securityExampleProps = {
   'security-05': security5ExampleProps,
   'security-06': security6ExampleProps,
 }
+
+export const securityEmptyProps = {
+  'security-01': { days: [] },
+  'security-02': { events: [] },
+  'security-03': { sessions: [] },
+  'security-04': { checks: [] },
+  'security-05': { securityKeys: undefined },
+  'security-06': { connection: undefined },
+}

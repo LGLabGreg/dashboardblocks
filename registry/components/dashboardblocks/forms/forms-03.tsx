@@ -11,14 +11,6 @@ import { type FormEvent, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   Field,
   FieldContent,
   FieldDescription,
@@ -49,6 +41,7 @@ interface Forms3Props {
   environments: Option[]
   onCreate?: (values: NewProject) => Promise<FormErrors<NewProject> | void>
   regions: Option[]
+  title: string
 }
 
 const exampleProps: Forms3Props = {
@@ -63,16 +56,28 @@ const exampleProps: Forms3Props = {
     { label: 'Oregon (us-west-2)', value: 'us-west-2' },
     { label: 'Singapore (ap-southeast-1)', value: 'ap-southeast-1' },
   ],
+  title: 'New project',
 }
 
-const STEPS: (FormStep & { fields: (keyof NewProject)[] })[] = [
-  { description: 'Name and purpose', fields: ['name', 'description'], title: 'Details' },
+const STEPS: (FormStep & { fields: (keyof NewProject)[]; summary: string })[] = [
+  {
+    description: 'Name and purpose',
+    fields: ['name', 'description'],
+    summary: 'Name the project and say what it’s for.',
+    title: 'Details',
+  },
   {
     description: 'Where it runs',
     fields: ['region', 'environment', 'isPublic'],
+    summary: 'Choose where it runs and who can see its dashboard.',
     title: 'Setup',
   },
-  { description: 'Check and create', fields: [], title: 'Review' },
+  {
+    description: 'Check and create',
+    fields: [],
+    summary: 'Check everything, then create the project.',
+    title: 'Review',
+  },
 ]
 
 async function createProject() {
@@ -96,7 +101,7 @@ function labelOf(options: Option[], value: string) {
 }
 
 const Forms3 = (props: Forms3Props) => {
-  const { environments, onCreate = createProject, regions } = props
+  const { environments, onCreate = createProject, regions, title } = props
   const [step, setStep] = useState(0)
   const [created, setCreated] = useState<string | null>(null)
   const emptyValues: NewProject = {
@@ -131,124 +136,128 @@ const Forms3 = (props: Forms3Props) => {
 
   if (created) {
     return (
-      <Card>
-        <CardContent className='flex flex-col items-center gap-3 py-8 text-center'>
-          <IconPlaceholder
-            lucide='CircleCheckIcon'
-            tabler='IconCircleCheckFilled'
-            hugeicons='CheckmarkCircle01Icon'
-            phosphor='CheckCircleIcon'
-            remixicon='RiCheckboxCircleFill'
-            className='text-primary size-8'
-          />
-          <div className='flex flex-col gap-1'>
-            <p className='font-medium' role='status'>
-              {created} is ready
-            </p>
-            <p className='text-muted-foreground text-sm'>
-              Your project was created in {labelOf(regions, values.region)}.
-            </p>
-          </div>
-          <Button variant='outline' onClick={startOver}>
+      <section className='@container flex flex-col gap-3'>
+        <div role='status' className='flex flex-col gap-0.5'>
+          <h2 className='flex items-center gap-2 font-semibold tracking-tight'>
+            <IconPlaceholder
+              lucide='CircleCheckIcon'
+              tabler='IconCircleCheckFilled'
+              hugeicons='CheckmarkCircle01Icon'
+              phosphor='CheckCircleIcon'
+              remixicon='RiCheckboxCircleFill'
+              aria-hidden
+              className='size-4 shrink-0 text-emerald-700 dark:text-emerald-400'
+            />
+            {created} is ready
+          </h2>
+          <p className='text-muted-foreground text-sm'>
+            Created in {labelOf(regions, values.region)}, for{' '}
+            {labelOf(environments, values.environment).toLowerCase()}, with a{' '}
+            {values.isPublic ? 'public' : 'private'} dashboard.
+          </p>
+        </div>
+        <div className='border-t pt-4'>
+          <Button variant='outline' size='sm' onClick={startOver}>
             Create another project
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     )
   }
 
   return (
-    <Card>
+    <section className='@container flex flex-col gap-4'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <p className='text-muted-foreground text-sm'>
+          Step {step + 1} of {STEPS.length}. {STEPS[step].summary}
+        </p>
+      </header>
+      <FormSteps current={step} steps={STEPS} />
       <form
         method='post'
         noValidate
         onSubmit={(event) => void onSubmit(event)}
-        className='contents'
+        className='flex flex-col gap-4'
       >
-        <CardHeader>
-          <CardTitle>New project</CardTitle>
-          <CardDescription>
-            Step {step + 1} of {STEPS.length}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='flex flex-col gap-6'>
-          <FormSteps current={step} steps={STEPS} />
-          {step === 0 && (
-            <FieldGroup>
-              <Field data-invalid={form.errors.name ? true : undefined}>
-                <FieldLabel htmlFor={form.getId('name')}>Project name</FieldLabel>
-                <Input autoComplete='off' {...form.field('name')} />
-                <FieldError {...form.error('name')} />
-              </Field>
-              <Field data-invalid={form.errors.description ? true : undefined}>
-                <FieldLabel htmlFor={form.getId('description')}>Description</FieldLabel>
-                <Textarea rows={3} {...form.field('description')} />
-                <FieldDescription>
-                  Optional. Shown to everyone in the workspace.
+        {step === 0 && (
+          <FieldGroup>
+            <Field data-invalid={form.errors.name ? true : undefined}>
+              <FieldLabel htmlFor={form.getId('name')}>Project name</FieldLabel>
+              <Input autoComplete='off' {...form.field('name')} />
+              <FieldError {...form.error('name')} />
+            </Field>
+            <Field data-invalid={form.errors.description ? true : undefined}>
+              <FieldLabel htmlFor={form.getId('description')}>Description</FieldLabel>
+              <Textarea rows={3} {...form.field('description')} />
+              <FieldDescription>
+                Optional. Shown to everyone in the workspace.
+              </FieldDescription>
+              <FieldError {...form.error('description')} />
+            </Field>
+          </FieldGroup>
+        )}
+        {step === 1 && (
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor={form.getId('region')}>Region</FieldLabel>
+              <NativeSelect className='w-full' {...form.field('region')}>
+                {regions.map((region) => (
+                  <NativeSelectOption key={region.value} value={region.value}>
+                    {region.label}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+              <FieldDescription>Pick the region closest to your users.</FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={form.getId('environment')}>Environment</FieldLabel>
+              <NativeSelect className='w-full' {...form.field('environment')}>
+                {environments.map((environment) => (
+                  <NativeSelectOption key={environment.value} value={environment.value}>
+                    {environment.label}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </Field>
+            <Field orientation='horizontal'>
+              <FieldContent>
+                <FieldTitle id={`${form.getId('isPublic')}-label`}>
+                  Public dashboard
+                </FieldTitle>
+                <FieldDescription id={`${form.getId('isPublic')}-description`}>
+                  Anyone with the link can view it, without signing in.
                 </FieldDescription>
-                <FieldError {...form.error('description')} />
-              </Field>
-            </FieldGroup>
-          )}
-          {step === 1 && (
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor={form.getId('region')}>Region</FieldLabel>
-                <NativeSelect className='w-full' {...form.field('region')}>
-                  {regions.map((region) => (
-                    <NativeSelectOption key={region.value} value={region.value}>
-                      {region.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-                <FieldDescription>
-                  Pick the region closest to your users.
-                </FieldDescription>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor={form.getId('environment')}>Environment</FieldLabel>
-                <NativeSelect className='w-full' {...form.field('environment')}>
-                  {environments.map((environment) => (
-                    <NativeSelectOption key={environment.value} value={environment.value}>
-                      {environment.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldContent>
-                  <FieldTitle id={`${form.getId('isPublic')}-label`}>
-                    Public dashboard
-                  </FieldTitle>
-                  <FieldDescription id={`${form.getId('isPublic')}-description`}>
-                    Anyone with the link can view it, without signing in.
-                  </FieldDescription>
-                </FieldContent>
-                <Switch
-                  aria-labelledby={`${form.getId('isPublic')}-label`}
-                  aria-describedby={`${form.getId('isPublic')}-description`}
-                  checked={values.isPublic}
-                  onCheckedChange={(checked) => form.setValue('isPublic', checked)}
-                />
-              </Field>
-            </FieldGroup>
-          )}
-          {step === 2 && (
-            <dl className='grid gap-x-6 gap-y-3 text-sm sm:grid-cols-[10rem_1fr]'>
-              <dt className='text-muted-foreground'>Name</dt>
-              <dd className='font-medium'>{values.name}</dd>
-              <dt className='text-muted-foreground'>Description</dt>
-              <dd>{values.description || 'None'}</dd>
-              <dt className='text-muted-foreground'>Region</dt>
-              <dd>{labelOf(regions, values.region)}</dd>
-              <dt className='text-muted-foreground'>Environment</dt>
-              <dd>{labelOf(environments, values.environment)}</dd>
-              <dt className='text-muted-foreground'>Dashboard</dt>
-              <dd>{values.isPublic ? 'Public' : 'Private'}</dd>
-            </dl>
-          )}
-        </CardContent>
-        <CardFooter className='justify-between gap-2'>
+              </FieldContent>
+              <Switch
+                aria-labelledby={`${form.getId('isPublic')}-label`}
+                aria-describedby={`${form.getId('isPublic')}-description`}
+                checked={values.isPublic}
+                onCheckedChange={(checked) => form.setValue('isPublic', checked)}
+              />
+            </Field>
+          </FieldGroup>
+        )}
+        {step === 2 && (
+          <dl className='divide-y border-y text-sm'>
+            {[
+              ['Name', values.name],
+              ['Description', values.description || 'None'],
+              ['Region', labelOf(regions, values.region)],
+              ['Environment', labelOf(environments, values.environment)],
+              ['Dashboard', values.isPublic ? 'Public' : 'Private'],
+            ].map(([term, detail]) => (
+              <div
+                key={term}
+                className='grid gap-1 py-2.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:gap-4'
+              >
+                <dt className='text-muted-foreground'>{term}</dt>
+                <dd className='min-w-0 break-words'>{detail}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        <div className='flex items-center justify-between gap-2 border-t pt-4'>
           <Button
             type='button'
             variant='outline'
@@ -266,9 +275,9 @@ const Forms3 = (props: Forms3Props) => {
               Next
             </Button>
           )}
-        </CardFooter>
+        </div>
       </form>
-    </Card>
+    </section>
   )
 }
 

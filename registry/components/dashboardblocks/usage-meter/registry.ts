@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('icon'), registryUrl('usage-meter')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('status-label'),
+      registryUrl('usage-meter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-01.tsx',
@@ -24,8 +28,10 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-02',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       registryUrl('animated-number'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
       registryUrl('ring'),
       registryUrl('usage-meter'),
     ],
@@ -44,7 +50,11 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('usage-meter')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('usage-meter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/usage-meter/usage-meter-03.tsx',
@@ -61,11 +71,13 @@ export const examples: Registry['items'] = [
   {
     name: 'usage-meter-04',
     type: 'registry:component',
+    dependencies: ['recharts'],
     registryDependencies: [
       'button',
-      'card',
       registryUrl('animated-number'),
-      registryUrl('icon'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('kpi'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -76,7 +88,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A credit balance with the average daily use, the date it runs out and a strip of recent days.',
+        'A credit balance with the days left, the date it runs out and recent daily use against the average.',
       size: 'compact',
       usedWith: ['billing-02', 'usage-meter-01', 'ai-usage-02'],
     },
@@ -85,7 +97,8 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-05',
     type: 'registry:component',
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
+      registryUrl('format'),
       registryUrl('progress-bar'),
       registryUrl('usage-meter'),
     ],
@@ -97,7 +110,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        "Storage split into categories as one segmented bar, with each category's size and share.",
+        "Storage split into categories as one segmented bar, with each category's size and share, and the space that is free.",
       size: 'compact',
       usedWith: ['usage-meter-02', 'files-01', 'breakdown-01'],
     },
@@ -107,8 +120,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
-      registryUrl('icon'),
+      registryUrl('block-state'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -129,10 +141,9 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('animated-number'),
       registryUrl('animated-wave'),
-      registryUrl('icon'),
+      registryUrl('block-state'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -153,10 +164,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       registryUrl('animated-number'),
       registryUrl('animated-wave'),
-      registryUrl('icon'),
+      registryUrl('block-state'),
+      registryUrl('format'),
       registryUrl('usage-meter'),
     ],
     files: [
@@ -167,7 +178,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'What is left as a round wave that drains as usage grows, with used, available and days until reset below.',
+        'What is left as a round wave that drains as usage grows, with used, free and days until reset below.',
       size: 'compact',
       usedWith: ['usage-meter-07', 'billing-01', 'usage-meter-06'],
     },

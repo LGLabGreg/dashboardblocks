@@ -1,47 +1,34 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type RefObject, useEffect, useState } from 'react'
-
-import { cn } from '@/lib/utils'
-
-interface CurrencyFormatOptions {
-  compact?: boolean
-  /** @default 'USD' */
-  currency?: string
-  fractionDigits?: number
-  /** @default 'en-US' */
-  locale?: string
-  signed?: boolean
-}
-
-const currencyFormatters = new Map<string, Intl.NumberFormat>()
-
-function formatCurrency(value: number, options: CurrencyFormatOptions = {}) {
-  const {
-    compact = false,
-    currency = 'USD',
-    fractionDigits,
-    locale = 'en-US',
-    signed = false,
-  } = options
-  const digits = fractionDigits ?? (compact ? 1 : Number.isInteger(value) ? 0 : 2)
-  const key = [locale, currency, compact, digits, signed].join('|')
-  let formatter = currencyFormatters.get(key)
-  if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, {
-      currency,
-      maximumFractionDigits: digits,
-      minimumFractionDigits: compact ? 0 : digits,
-      notation: compact ? 'compact' : 'standard',
-      signDisplay: signed ? 'exceptZero' : 'auto',
-      style: 'currency',
-    })
-    currencyFormatters.set(key, formatter)
-  }
-  return formatter.format(value).replace('-', '−')
-}
+import {
+  ChartTooltipFrame,
+  ChartTooltipItem,
+  type ChartValueFormatter,
+  chartAxisProps,
+  chartBarCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+} from '@/registry/components/dashboardblocks/chart'
+import { ChartPanelFigure } from '@/registry/components/dashboardblocks/chart-panel'
+import {
+  StatusLabel,
+  type StatusLabelProps,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { formatCurrency, formatSigned } from '@/registry/lib/dashboardblocks/format'
+import {
+  Bar,
+  BarChart,
+  Cell,
+  LabelList,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  type TooltipContentProps,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
@@ -56,6 +43,12 @@ function formatBillingDate(date: Date) {
 
 function getDaysUntil(date: Date, now: Date) {
   return Math.ceil((date.getTime() - now.getTime()) / 86_400_000)
+}
+
+function formatDaysUntil(days: number) {
+  if (days > 1) return `in ${days} days`
+  if (days === 1) return 'tomorrow'
+  return 'today'
 }
 
 interface MrrMovementInput {
@@ -131,6 +124,8 @@ function getRevenueMetrics({ customers, mrr }: { customers: number; mrr: number 
   return { arpu: customers > 0 ? mrr / customers : 0, arr: mrr * 12 }
 }
 
+const MAX_WATERFALL_TICKS = 5
+
 function getWaterfallScale(steps: MrrStep[]) {
   const levels = steps.flatMap((step) =>
     step.kind === 'total' ? [step.to] : [step.from, step.to],
@@ -138,226 +133,177 @@ function getWaterfallScale(steps: MrrStep[]) {
   const lowest = Math.min(...levels, Infinity)
   const highest = Math.max(...levels, 0)
   const span = highest - lowest || highest || 1
-  const unit = 10 ** Math.floor(Math.log10(span))
-  const floor = Math.max(0, Math.floor((lowest - span * 0.75) / unit) * unit)
-  const ceiling = highest + span * 0.1
-  return { ceiling, floor }
+  let unit = 10 ** Math.floor(Math.log10(span))
+  const floorFor = (step: number) =>
+    Math.max(0, Math.floor((lowest - span * 0.75) / step) * step)
+  while ((highest - floorFor(unit)) / unit > MAX_WATERFALL_TICKS) unit *= 2
+  const floor = floorFor(unit)
+  const ceiling = floor + Math.ceil((highest - floor) / unit) * unit
+  const ticks: number[] = []
+  for (let tick = floor; tick <= ceiling; tick += unit) ticks.push(tick)
+  return { ceiling, floor, ticks }
 }
 
-const stepColor: Record<MrrStep['kind'], string> = {
-  decrease: 'bg-red-600 dark:bg-red-500',
-  increase: 'bg-emerald-600 dark:bg-emerald-500',
-  total: 'bg-muted-foreground',
+const mrrStepColors: Record<MrrStep['kind'], string> = {
+  decrease: 'var(--color-red-500)',
+  increase: 'var(--color-emerald-500)',
+  total: 'var(--color-chart-2)',
 }
 
-function MrrStepSwatch({
-  className,
-  kind,
-}: {
-  className?: string
-  kind: MrrStep['kind']
-}) {
+interface MrrWaterfallRow extends MrrStep {
+  display: string
+  range: [number, number]
+}
+
+type MrrWaterfallTooltipProps = Partial<
+  Pick<TooltipContentProps<ValueType, NameType>, 'active' | 'payload'>
+> & {
+  formatter: ChartValueFormatter
+}
+
+function MrrWaterfallTooltip({ active, formatter, payload }: MrrWaterfallTooltipProps) {
+  const step = payload?.[0]?.payload as MrrWaterfallRow | undefined
+  if (!active || !step) return null
   return (
-    <span
-      aria-hidden
-      className={cn(
-        'inline-block size-2.5 shrink-0 rounded-[3px]',
-        stepColor[kind],
-        className,
+    <ChartTooltipFrame>
+      <span className='font-medium'>{step.label}</span>
+      {step.kind !== 'total' && (
+        <ChartTooltipItem
+          color={mrrStepColors[step.kind]}
+          name='Change'
+          value={formatSigned(step.value, formatter)}
+        />
       )}
-    />
+      <ChartTooltipItem
+        color={step.kind === 'total' ? mrrStepColors.total : undefined}
+        name='MRR'
+        value={formatter(step.to)}
+      />
+    </ChartTooltipFrame>
   )
 }
 
 interface MrrWaterfallProps {
+  /** @default true */
   animated?: boolean
   className?: string
-  formatter?: (value: number) => string
+  /** Formats the axis and the labels beside each bar. */
+  formatter?: ChartValueFormatter
+  label: string
   steps: MrrStep[]
+  /** Formats the values in the tooltip. */
+  tooltipFormatter?: ChartValueFormatter
 }
 
 function MrrWaterfall({
   animated = true,
   className,
   formatter = (value) => formatCurrency(value, { compact: true }),
+  label,
   steps,
+  tooltipFormatter = (value) => formatCurrency(value),
 }: MrrWaterfallProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  const { ceiling, floor } = getWaterfallScale(steps)
-  const range = ceiling - floor || 1
-  const position = (value: number) => ((Math.max(value, floor) - floor) / range) * 100
+  const { ceiling, floor, ticks } = getWaterfallScale(steps)
+  const starting = steps.find((step) => step.key === 'starting')
+  const rows: MrrWaterfallRow[] = steps.map((step) => ({
+    ...step,
+    display:
+      step.kind === 'total' ? formatter(step.to) : formatSigned(step.value, formatter),
+    range:
+      step.kind === 'total'
+        ? [floor, step.to]
+        : [Math.min(step.from, step.to), Math.max(step.from, step.to)],
+  }))
 
   return (
-    <div
-      ref={ref as RefObject<HTMLDivElement>}
-      aria-hidden
-      className={cn('flex flex-col gap-1.5', className)}
-    >
-      <div
-        className='grid h-full min-h-0 flex-1 border-b'
-        style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}
-      >
-        {steps.map((step, index) => {
-          const low = step.kind === 'total' ? floor : Math.min(step.from, step.to)
-          const high = step.kind === 'total' ? step.to : Math.max(step.from, step.to)
-          const next = steps[index + 1]
-          return (
-            <div key={step.key} className='relative'>
-              <span
-                className={cn(
-                  'absolute inset-x-[18%] origin-bottom rounded-[3px] transition-transform duration-700 ease-out motion-reduce:transition-none',
-                  step.kind === 'total' && 'rounded-b-none',
-                  stepColor[step.kind],
-                )}
-                style={{
-                  bottom: `${position(low)}%`,
-                  height: `max(2px, ${position(high) - position(low)}%)`,
-                  transform: `scaleY(${revealed ? 1 : 0})`,
-                  transitionDelay: `${index * 90}ms`,
-                }}
-              >
-                {step.kind === 'total' && floor > 0 && (
-                  <span className='bg-card absolute inset-x-0 bottom-2 h-1 -skew-y-12' />
-                )}
-              </span>
-              {next && (
-                <span
-                  className='border-muted-foreground/60 absolute left-[82%] w-[36%] border-t border-dashed transition-opacity duration-300 motion-reduce:transition-none'
-                  style={{
-                    bottom: `${position(step.to)}%`,
-                    opacity: revealed ? 1 : 0,
-                    transitionDelay: `${(index + 1) * 90 + 400}ms`,
-                  }}
-                />
-              )}
-            </div>
-          )
-        })}
-      </div>
-      {floor > 0 && (
-        <span className='text-muted-foreground text-[11px]'>
-          Axis starts at {formatter(floor)}
-        </span>
-      )}
-    </div>
+    <ChartPanelFigure className={className}>
+      <ResponsiveContainer width='100%' height='100%'>
+        <BarChart
+          accessibilityLayer
+          aria-label={label}
+          data={rows}
+          layout='vertical'
+          margin={{ top: 20, right: 56, bottom: 0, left: 0 }}
+          barCategoryGap='30%'
+        >
+          <XAxis
+            {...chartAxisProps}
+            allowDataOverflow
+            domain={[floor, ceiling]}
+            tickFormatter={formatter}
+            ticks={ticks}
+            type='number'
+          />
+          <YAxis {...chartAxisProps} dataKey='label' type='category' width={104} />
+          <Tooltip
+            content={(tooltipProps) => (
+              <MrrWaterfallTooltip {...tooltipProps} formatter={tooltipFormatter} />
+            )}
+            cursor={chartBarCursor}
+          />
+          {starting && (
+            <ReferenceLine
+              {...chartReferenceProps}
+              x={starting.to}
+              label={{ ...chartReferenceLabel, position: 'top', value: 'Start' }}
+            />
+          )}
+          <Bar dataKey='range' isAnimationActive={animated} name='MRR' radius={3}>
+            {rows.map((row) => (
+              <Cell key={row.key} fill={mrrStepColors[row.kind]} />
+            ))}
+            <LabelList
+              dataKey='display'
+              position='right'
+              fill='var(--color-muted-foreground)'
+              fontSize={12}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartPanelFigure>
   )
 }
 
 type InvoiceStatus = 'paid' | 'due' | 'overdue' | 'failed'
 
-interface InvoiceStatusConfig {
-  className: string
-  icon: React.ReactNode
-  label: string
+const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTone }> = {
+  due: { label: 'Due', tone: 'neutral' },
+  failed: { label: 'Failed', tone: 'bad' },
+  overdue: { label: 'Overdue', tone: 'warning' },
+  paid: { label: 'Paid', tone: 'good' },
 }
 
-const invoiceStatusConfig: Record<InvoiceStatus, InvoiceStatusConfig> = {
-  due: {
-    className: 'bg-muted text-foreground',
-    icon: (
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-        aria-hidden
-      />
-    ),
-    label: 'Due',
-  },
-  failed: {
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Failed',
-  },
-  overdue: {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Overdue',
-  },
-  paid: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Paid',
-  },
-}
-
-function InvoiceStatusBadge({
-  className,
-  status,
-}: {
-  className?: string
+interface InvoiceStatusLabelProps extends Omit<StatusLabelProps, 'children' | 'tone'> {
   status: InvoiceStatus
-}) {
+}
+
+function InvoiceStatusLabel({ status, ...props }: InvoiceStatusLabelProps) {
   const config = invoiceStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel tone={config.tone} {...props}>
       {config.label}
-    </span>
+    </StatusLabel>
   )
 }
 
 export {
-  InvoiceStatusBadge,
-  MrrStepSwatch,
+  InvoiceStatusLabel,
   MrrWaterfall,
   formatBillingDate,
-  formatCurrency,
+  formatDaysUntil,
   getDaysUntil,
   getMrrMovement,
   getNetRevenueRetention,
   getRevenueMetrics,
   getWaterfallScale,
   invoiceStatusConfig,
+  mrrStepColors,
 }
 
 export type {
-  CurrencyFormatOptions,
   InvoiceStatus,
-  InvoiceStatusConfig,
+  InvoiceStatusLabelProps,
   MrrMovementInput,
   MrrStep,
   MrrStepName,

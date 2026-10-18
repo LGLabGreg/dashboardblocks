@@ -1,5 +1,12 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   FlowChart,
@@ -7,21 +14,17 @@ import {
   type FlowNode,
   getFlowTotals,
 } from '@/registry/components/dashboardblocks/flow'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Flow1Props {
   description: string
-  links: FlowLink[]
+  /** Leave out, or pass none, to show the empty state. */
+  links?: FlowLink[]
   /** Sources first, then each step, then outcomes. */
-  nodes: FlowNode[]
+  nodes?: FlowNode[]
   goal: string
+  status?: BlockStatus
   title: string
   /** @default 'sessions' */
   unit?: string
@@ -29,7 +32,7 @@ interface Flow1Props {
 
 const exampleProps: Flow1Props = {
   description:
-    'Sessions from each source, through the landing page, to the outcome, last 30 days',
+    'Sessions from each source, through the landing page, to the outcome, last 30 days.',
   goal: 'signed-up',
   links: [
     { source: 'organic', target: 'home', value: 18_400 },
@@ -59,8 +62,8 @@ const exampleProps: Flow1Props = {
     { id: 'home', label: 'Home' },
     { id: 'pricing', label: 'Pricing' },
     { id: 'blog', label: 'Blog' },
-    { color: 'var(--chart-3)', id: 'signed-up', label: 'Signed up' },
-    { color: 'var(--chart-5)', id: 'browsed', label: 'Kept browsing' },
+    { color: 'var(--color-chart-3)', id: 'signed-up', label: 'Signed up' },
+    { color: 'var(--color-chart-5)', id: 'browsed', label: 'Kept browsing' },
     { id: 'bounced', kind: 'exit', label: 'Bounced' },
   ],
   title: 'Traffic flow',
@@ -68,7 +71,17 @@ const exampleProps: Flow1Props = {
 }
 
 const Flow1 = (props: Flow1Props) => {
-  const { description, goal, links, nodes, title, unit = 'sessions' } = props
+  const {
+    description,
+    goal,
+    links = [],
+    nodes = [],
+    status,
+    title,
+    unit = 'sessions',
+  } = props
+  const empty = links.length === 0
+  const state = getBlockState(status, empty)
   const totals = getFlowTotals(nodes, links)
   const labels = new Map(nodes.map((node) => [node.id, node.label]))
   const sessions = nodes
@@ -78,49 +91,77 @@ const Flow1 = (props: Flow1Props) => {
   const bounced = nodes
     .filter((node) => node.kind === 'exit')
     .reduce((sum, node) => sum + (totals.get(node.id)?.in ?? 0), 0)
-  const percent = (value: number) => `${((value / (sessions || 1)) * 100).toFixed(1)}%`
+  const percent = (value: number) => formatPercent(value / (sessions || 1))
+  const best = nodes
+    .filter((node) =>
+      links.some((link) => link.source === node.id && link.target === goal),
+    )
+    .map((node) => ({
+      label: node.label,
+      rate:
+        (links.find((link) => link.source === node.id && link.target === goal)?.value ??
+          0) / (totals.get(node.id)?.out || 1),
+    }))
+    .sort((a, b) => b.rate - a.rate)[0]
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>
-              {unit.charAt(0).toUpperCase()}
-              {unit.slice(1)}
-            </dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {sessions.toLocaleString()}
-            </dd>
+    <BlockStateProvider status={status} empty={empty}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state === 'empty' || state === 'error' ? (
+          <div className='border-t pt-4'>
+            <KPIValue />
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>{labels.get(goal)}</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {percent(converted)}
-            </dd>
-          </div>
-          <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
-            <dt className='text-muted-foreground text-xs'>Dropped off</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {percent(bounced)}
-            </dd>
-          </div>
-        </dl>
+        ) : (
+          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+              <dt className='text-muted-foreground text-sm'>
+                {state ? <SkeletonText className='w-20' /> : labels.get(goal)}
+              </dt>
+              <dd>
+                <KPIValue value={converted} format={percent} />
+              </dd>
+              <BlockReady className='text-xs'>
+                <dd className='text-muted-foreground text-xs tabular-nums'>
+                  {formatNumber(converted)} of {formatNumber(sessions)} {unit}
+                </dd>
+              </BlockReady>
+            </div>
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Dropped off</dt>
+              <dd>
+                <KPIValue className='text-2xl' value={bounced} format={percent} />
+              </dd>
+            </div>
+            {(state || best) && (
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Converts best</dt>
+                <dd className='text-2xl font-light tracking-tight'>
+                  {state ? <SkeletonText className='w-[4em]' /> : best?.label}
+                </dd>
+                <BlockReady className='text-xs'>
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    {formatPercent(best?.rate ?? 0, { maximumFractionDigits: 0 })} of its{' '}
+                    {unit}
+                  </dd>
+                </BlockReady>
+              </div>
+            )}
+          </dl>
+        )}
         <FlowChart
-          label={title}
+          emphasis={goal}
           height={300}
+          label={title}
           links={links}
           minWidth='36rem'
           nodes={nodes}
-        >
-          Hover a source, page or band to follow it.
-        </FlowChart>
+        />
         <ChartPanelTable
-          caption={`${title}: ${description}.`}
+          caption={`${title}: ${description}`}
           columns={[
             { key: 'source', label: 'From' },
             { key: 'target', label: 'To' },
@@ -129,11 +170,11 @@ const Flow1 = (props: Flow1Props) => {
           rows={links.map((link) => ({
             source: labels.get(link.source) ?? link.source,
             target: labels.get(link.target) ?? link.target,
-            value: link.value.toLocaleString(),
+            value: formatNumber(link.value),
           }))}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

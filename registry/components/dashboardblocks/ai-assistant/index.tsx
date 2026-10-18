@@ -16,3 +16,10 @@ export const aiAssistantExampleProps = {
   'ai-assistant-03': aiAssistant3ExampleProps,
   'ai-assistant-04': aiAssistant4ExampleProps,
 }
+
+export const aiAssistantEmptyProps = {
+  'ai-assistant-01': { accounts: [], metrics: [] },
+  'ai-assistant-02': { messages: [] },
+  'ai-assistant-03': { messages: [], tokens: undefined, usage: {} },
+  'ai-assistant-04': { error: undefined, messages: [] },
+}

@@ -1,6 +1,12 @@
 'use client'
 
-import { formatCurrency } from '@/registry/components/dashboardblocks/billing'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   FlowChart,
@@ -8,31 +14,27 @@ import {
   type FlowNode,
   getFlowTotals,
 } from '@/registry/components/dashboardblocks/flow'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Flow3Props {
   /** @default 'USD' */
   currency?: string
   description: string
-  links: FlowLink[]
-  nodes: FlowNode[]
+  /** Leave out, or pass none, to show the empty state. */
+  links?: FlowLink[]
+  nodes?: FlowNode[]
+  status?: BlockStatus
   /** Node ids for the headline figures. */
   totals: { grossProfit?: string; profit: string; revenue: string }
   title: string
 }
 
-const COST = 'color-mix(in oklab, var(--destructive) 75%, var(--card))'
-const PROFIT = 'var(--chart-3)'
+const COST = 'color-mix(in oklab, var(--color-destructive) 75%, var(--color-background))'
+const PROFIT = 'var(--color-chart-3)'
 
 const exampleProps: Flow3Props = {
-  description: 'Where revenue went, Q3 2026',
+  description: 'Where revenue went, Q3 2026.',
   links: [
     { source: 'subscriptions', target: 'revenue', value: 3_860_000 },
     { source: 'services', target: 'revenue', value: 940_000 },
@@ -48,7 +50,7 @@ const exampleProps: Flow3Props = {
     { id: 'subscriptions', label: 'Subscriptions' },
     { id: 'services', label: 'Services' },
     { id: 'marketplace', label: 'Marketplace' },
-    { color: 'var(--primary)', id: 'revenue', label: 'Revenue' },
+    { color: 'var(--color-primary)', id: 'revenue', label: 'Revenue' },
     { color: PROFIT, id: 'gross-profit', label: 'Gross profit' },
     { color: COST, id: 'cost-of-revenue', label: 'Cost of revenue' },
     { color: PROFIT, id: 'operating-profit', label: 'Operating profit' },
@@ -61,63 +63,80 @@ const exampleProps: Flow3Props = {
 }
 
 const Flow3 = (props: Flow3Props) => {
-  const { currency = 'USD', description, links, nodes, title, totals: ids } = props
+  const {
+    currency = 'USD',
+    description,
+    links = [],
+    nodes = [],
+    status,
+    title,
+    totals: ids,
+  } = props
+  const empty = links.length === 0
+  const state = getBlockState(status, empty)
   const totals = getFlowTotals(nodes, links)
   const labels = new Map(nodes.map((node) => [node.id, node.label]))
   const format = (value: number) => formatCurrency(value, { compact: true, currency })
   const revenue = totals.get(ids.revenue)?.in ?? 0
   const profit = totals.get(ids.profit)?.in ?? 0
   const gross = ids.grossProfit ? totals.get(ids.grossProfit)?.in : undefined
-  const margin = (value: number) => `${((value / (revenue || 1)) * 100).toFixed(1)}%`
+  const margin = (value: number) => formatPercent(value / (revenue || 1))
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>{labels.get(ids.revenue)}</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {format(revenue)}
-            </dd>
+    <BlockStateProvider status={status} empty={empty}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state === 'empty' || state === 'error' ? (
+          <div className='border-t pt-4'>
+            <KPIValue />
           </div>
-          {gross !== undefined && (
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-xs'>Gross margin</dt>
-              <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {margin(gross)}
+        ) : (
+          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+              <dt className='text-muted-foreground text-sm'>
+                {state ? <SkeletonText className='w-16' /> : labels.get(ids.revenue)}
+              </dt>
+              <dd>
+                <KPIValue value={revenue} format={format} />
               </dd>
             </div>
-          )}
-          <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
-            <dt className='text-muted-foreground text-xs'>Operating margin</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {margin(profit)}
-            </dd>
-          </div>
-        </dl>
+            {(state ? ids.grossProfit : gross !== undefined) && (
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Gross margin</dt>
+                <dd>
+                  <KPIValue className='text-2xl' value={gross} format={margin} />
+                </dd>
+              </div>
+            )}
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Operating margin</dt>
+              <dd>
+                <KPIValue className='text-2xl' value={profit} format={margin} />
+              </dd>
+              <BlockReady className='text-xs'>
+                <dd className='text-muted-foreground text-xs tabular-nums'>
+                  {format(profit)} kept
+                </dd>
+              </BlockReady>
+            </div>
+          </dl>
+        )}
         <FlowChart
-          label={title}
           colorBy='target'
-          describeLink={(link, source, target) =>
-            `${source.label} → ${target.label}: ${format(link.value)} (${margin(link.value)} of revenue)`
-          }
-          describeNode={(node) =>
-            `${node.label}: ${format(node.value)} (${margin(node.value)} of revenue)`
-          }
+          describeLink={(link) => `${margin(link.value)} of revenue`}
+          describeNode={(node) => `${margin(node.value)} of revenue`}
           format={format}
           height={300}
+          label={title}
           links={links}
           minWidth='36rem'
           nodes={nodes}
-        >
-          Hover any part to see its share of revenue.
-        </FlowChart>
+        />
         <ChartPanelTable
-          caption={`${title}: ${description}.`}
+          caption={`${title}: ${description}`}
           columns={[
             { key: 'source', label: 'From' },
             { key: 'target', label: 'To' },
@@ -131,8 +150,8 @@ const Flow3 = (props: Flow3Props) => {
             value: format(link.value),
           }))}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

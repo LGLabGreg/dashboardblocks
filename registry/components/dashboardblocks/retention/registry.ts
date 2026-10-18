@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'retention-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('heatmap'), registryUrl('retention')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('heatmap'),
+      registryUrl('kpi'),
+      registryUrl('retention'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/retention/retention-01.tsx',
@@ -24,7 +29,12 @@ export const examples: Registry['items'] = [
     name: 'retention-02',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('retention')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('kpi'),
+      registryUrl('retention'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/retention/retention-02.tsx',
@@ -41,7 +51,11 @@ export const examples: Registry['items'] = [
   {
     name: 'retention-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('retention')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('retention'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/retention/retention-03.tsx',
@@ -50,7 +64,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.',
+        'Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before written out.',
       size: 'compact',
       usedWith: ['heatmap-01', 'retention-01', 'funnel-01'],
     },
@@ -59,7 +73,12 @@ export const examples: Registry['items'] = [
     name: 'retention-04',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('retention')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('kpi'),
+      registryUrl('retention'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/retention/retention-04.tsx',

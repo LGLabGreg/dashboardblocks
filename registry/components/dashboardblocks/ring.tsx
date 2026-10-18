@@ -1,5 +1,6 @@
 'use client'
 
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import { useInView } from '@/registry/hooks/use-in-view'
 import { type ReactNode, type RefObject, useEffect, useState } from 'react'
 
@@ -28,8 +29,10 @@ export const Ring = ({
 }: RingProps) => {
   const [value, setValue] = useState(0)
   const { isInView, ref } = useInView()
+  const state = useBlockState()
   const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (value / 100) * circumference
+  const shown = state ? 0 : value
+  const strokeDashoffset = circumference - (shown / 100) * circumference
 
   useEffect(() => {
     if (isInView) {
@@ -44,10 +47,16 @@ export const Ring = ({
     <div
       ref={ref as RefObject<HTMLDivElement>}
       className={cn('relative shrink-0', className)}
-      aria-label={ariaLabel}
-      role={ariaLabel ? 'img' : undefined}
+      aria-label={state ? undefined : ariaLabel}
+      role={ariaLabel && !state ? 'img' : undefined}
     >
-      <svg className='h-full w-full -rotate-90' viewBox='0 0 100 100'>
+      <svg
+        className={cn(
+          'h-full w-full -rotate-90',
+          state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+        )}
+        viewBox='0 0 100 100'
+      >
         <circle
           cx='50'
           cy='50'
@@ -69,7 +78,9 @@ export const Ring = ({
           className='transition-[stroke-dashoffset] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
         />
       </svg>
-      <div className='absolute inset-0 flex items-center justify-center'>{children}</div>
+      <div className='absolute inset-0 flex items-center justify-center'>
+        {state ? null : children}
+      </div>
     </div>
   )
 }

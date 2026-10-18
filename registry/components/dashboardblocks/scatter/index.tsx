@@ -16,3 +16,10 @@ export const scatterExampleProps = {
   'scatter-03': scatter3ExampleProps,
   'scatter-04': scatter4ExampleProps,
 }
+
+export const scatterEmptyProps = {
+  'scatter-01': { points: [] },
+  'scatter-02': { items: [] },
+  'scatter-03': { campaigns: [] },
+  'scatter-04': { risks: [] },
+}

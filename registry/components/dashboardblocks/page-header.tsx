@@ -53,7 +53,7 @@ interface PageHeaderHeadingProps {
   className?: string
   description?: ReactNode
   media?: ReactNode
-  title: string
+  title: ReactNode
   wrap?: boolean
 }
 
@@ -68,7 +68,7 @@ function PageHeaderHeading({
   return (
     <div className={cn('flex min-w-0 items-start gap-3', className)}>
       {media}
-      <div className='flex min-w-0 flex-col gap-1'>
+      <div className='flex min-w-0 flex-col gap-0.5'>
         <div className='flex min-w-0 flex-wrap items-center gap-2'>
           <h1
             className={cn(
@@ -102,32 +102,38 @@ function PageHeaderActions({
   )
 }
 
-interface PageHeaderMetaItem {
-  icon: ReactNode
-  label: ReactNode
+interface PageHeaderFact {
+  detail?: ReactNode
+  label: string
+  value: ReactNode
 }
 
-function PageHeaderMeta({
+function PageHeaderFacts({
   className,
   items,
 }: {
   className?: string
-  items: PageHeaderMetaItem[]
+  items: PageHeaderFact[]
 }) {
   return (
-    <ul
+    <dl
       className={cn(
-        'text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-sm [&_svg]:size-4 [&_svg]:shrink-0',
+        'grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @2xl/page-header:flex @2xl/page-header:gap-x-12',
         className,
       )}
     >
-      {items.map((item, index) => (
-        <li key={index} className='flex items-center gap-1.5'>
-          {item.icon}
-          {item.label}
-        </li>
+      {items.map((item) => (
+        <div key={item.label} className='flex min-w-0 flex-col gap-1'>
+          <dt className='text-muted-foreground text-sm'>{item.label}</dt>
+          <dd className='text-2xl font-light tracking-tight tabular-nums'>
+            {item.value}
+          </dd>
+          {item.detail && (
+            <dd className='text-muted-foreground text-xs text-pretty'>{item.detail}</dd>
+          )}
+        </div>
       ))}
-    </ul>
+    </dl>
   )
 }
 
@@ -192,7 +198,7 @@ function PageTabs({
             >
               {item.title}
               {item.badge !== undefined && (
-                <span className='bg-muted text-foreground rounded-full px-1.5 text-xs tabular-nums'>
+                <span className='text-muted-foreground font-normal tabular-nums'>
                   {item.badge}
                 </span>
               )}
@@ -212,9 +218,11 @@ interface ActionsMenuItem {
 }
 
 function ActionsMenu({
+  disabled = false,
   items,
   label = 'More actions',
 }: {
+  disabled?: boolean
   items: ActionsMenuItem[]
   /** @default 'More actions' */
   label?: string
@@ -223,6 +231,7 @@ function ActionsMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        disabled={disabled}
         render={<Button variant='outline' size='icon' aria-label={label} />}
       >
         <IconPlaceholder
@@ -253,10 +262,10 @@ export {
   BackLink,
   PageHeader,
   PageHeaderActions,
+  PageHeaderFacts,
   PageHeaderHeading,
-  PageHeaderMeta,
   PageHeaderRow,
   PageTabs,
 }
 
-export type { ActionsMenuItem, PageHeaderHeadingProps, PageHeaderMetaItem, PageTab }
+export type { ActionsMenuItem, PageHeaderFact, PageHeaderHeadingProps, PageTab }

@@ -16,3 +16,9 @@ export const formsExampleProps = {
   'forms-03': forms3ExampleProps,
   'forms-04': forms4ExampleProps,
 }
+
+export const formsEmptyProps = {
+  'forms-01': { defaultValues: undefined },
+  'forms-02': { customers: [] },
+  'forms-04': { defaultValues: undefined },
+}

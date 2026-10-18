@@ -1,25 +1,30 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   KPI,
   KPIChange,
   KPIContent,
+  KPITitle,
   type KPIFormat,
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
-import { CardDescription } from '@/components/ui/card'
-
 interface KPI2Props {
   comparison: string
   format?: KPIFormat
-  previous: number
+  previous?: number
+  status?: BlockStatus
   title: string
-  value: number
+  /** Leave out to show the empty state. */
+  value?: number
 }
 
 const exampleProps: KPI2Props = {
-  comparison: 'vs last week',
+  comparison: 'last week',
   format: 'number',
   previous: 2_151,
   title: 'Active users',
@@ -27,18 +32,27 @@ const exampleProps: KPI2Props = {
 }
 
 const KPI2 = (props: KPI2Props) => {
-  const { comparison, format, previous, title, value } = props
+  const { comparison, format, previous, status, title, value } = props
 
   return (
-    <KPI>
-      <KPIContent className='gap-2'>
-        <div className='flex items-center justify-between gap-2'>
-          <CardDescription>{title}</CardDescription>
-          <KPIChange comparison={comparison} previous={previous} value={value} />
-        </div>
-        <KPIValue value={value} format={format} animated />
-      </KPIContent>
-    </KPI>
+    <BlockStateProvider status={status} empty={value === undefined}>
+      <KPI>
+        <KPIContent className='gap-1'>
+          <div className='flex items-baseline justify-between gap-3'>
+            <KPITitle className='truncate'>{title}</KPITitle>
+            <KPIChange
+              className='shrink-0'
+              comparison={comparison}
+              format={format}
+              previous={previous}
+              value={value}
+              variant='short'
+            />
+          </div>
+          <KPIValue value={value} format={format} animated />
+        </KPIContent>
+      </KPI>
+    </BlockStateProvider>
   )
 }
 

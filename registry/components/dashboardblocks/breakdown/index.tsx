@@ -16,3 +16,10 @@ export const breakdownExampleProps = {
   'breakdown-03': breakdown3ExampleProps,
   'breakdown-04': breakdown4ExampleProps,
 }
+
+export const breakdownEmptyProps = {
+  'breakdown-01': { segments: [] },
+  'breakdown-02': { groups: [] },
+  'breakdown-03': { segments: [] },
+  'breakdown-04': { items: [] },
+}

@@ -1,12 +1,30 @@
 'use client'
 
 import {
-  ChartPanelFigure,
-  ChartPanelTable,
-  ChartPanelTooltip,
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipContent,
+  chartActiveDot,
   chartAxisProps,
   chartGridProps,
+  chartLastDot,
+  chartLineCursor,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  ChartPanelFigure,
+  ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   type Metric,
   MetricChange,
@@ -20,13 +38,12 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -36,12 +53,15 @@ interface WatchedMetric extends Metric {
 }
 
 interface MetricList4Props {
+  /** Follows the previous value in each change, such as `30 days ago`. */
   comparison: string
   defaultSelected?: string
   description: string
   labels: string[]
-  metrics: WatchedMetric[]
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: WatchedMetric[]
   onSelectedChange?: (key: string) => void
+  status?: BlockStatus
   title: string
 }
 
@@ -72,8 +92,8 @@ const fromHistory = (history: number[]) => ({
 })
 
 const exampleProps: MetricList4Props = {
-  comparison: 'vs 30 days ago',
-  description: 'Daily, last 30 days',
+  comparison: '30 days ago',
+  description: 'Daily over the last 30 days. Pick a metric to chart it.',
   labels: Array.from({ length: 30 }, (_, day) =>
     dayFormatter.format(new Date(NOW - (29 - day) * 86_400_000)),
   ),
@@ -120,142 +140,205 @@ const MetricList4 = (props: MetricList4Props) => {
     defaultSelected,
     description,
     labels,
-    metrics,
+    metrics = [],
     onSelectedChange,
+    status,
     title,
   } = props
   const id = useId()
+  const gradient = useChartId()
   const [selected, setSelected] = useState(defaultSelected ?? metrics[0]?.key)
   const metric = metrics.find((item) => item.key === selected) ?? metrics[0]
+  const state = getBlockState(status, !metric)
+  const showHeading = state === undefined || state === 'loading'
 
-  if (!metric) return null
-
-  const format = getMetricFormatter(metric.format)
-  const data = metric.history.map((value, index) => ({
+  const format = getMetricFormatter(metric?.format)
+  const data = (metric?.history ?? []).map((value, index) => ({
     label: labels[index] ?? String(index + 1),
     value,
   }))
+  const average =
+    data.reduce((sum, point) => sum + point.value, 0) / Math.max(1, data.length)
+  const last = data.length - 1
 
   return (
-    <Card className='@container gap-0 py-0'>
-      <CardHeader className='border-b pt-6'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <div className='grid @2xl:grid-cols-[20rem_minmax(0,1fr)]'>
-        <fieldset className='min-w-0 border-b @2xl:border-r @2xl:border-b-0'>
-          <legend className='sr-only'>Metric to chart</legend>
-          <ul className='divide-y @2xl:border-b'>
-            {metrics.map((item) => (
-              <li key={item.key}>
-                <label className='hover:bg-muted/50 has-checked:bg-muted/60 has-focus-visible:outline-ring relative grid cursor-pointer grid-cols-[minmax(0,1fr)_3rem_5.5rem] items-center gap-x-3 px-6 py-3 transition-colors has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 motion-reduce:transition-none'>
-                  <input
-                    type='radio'
-                    name={id}
-                    value={item.key}
-                    checked={item.key === metric.key}
-                    onChange={() => {
-                      setSelected(item.key)
-                      onSelectedChange?.(item.key)
-                    }}
-                    className='sr-only'
-                  />
-                  <span
-                    aria-hidden
-                    className={cn(
-                      'bg-foreground absolute inset-y-0 left-0 w-0.5',
-                      item.key !== metric.key && 'hidden',
-                    )}
-                  />
-                  <span
-                    className={cn('text-sm', item.key === metric.key && 'font-medium')}
-                  >
-                    {item.label}
-                  </span>
-                  <span aria-hidden>
-                    <MetricSparkline
-                      animated={false}
-                      className='w-full'
-                      color='var(--color-muted-foreground)'
-                      data={item.history}
-                      label={describeHistory(item)}
-                    />
-                  </span>
-                  <span className='flex flex-col items-end gap-0.5'>
-                    <span className='text-sm font-medium whitespace-nowrap tabular-nums'>
-                      {formatMetricValue(item, item.value)}
-                    </span>
-                    <MetricChange comparison={comparison} metric={item} />
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </fieldset>
-        <section
-          aria-labelledby={`${id}-heading`}
-          className='flex min-w-0 flex-col gap-4 px-6 pt-5 pb-6'
-        >
-          <div className='flex flex-col gap-0.5'>
-            <h3 id={`${id}-heading`} className='text-muted-foreground text-sm'>
-              {metric.label}
-            </h3>
-            <p className='text-3xl font-semibold tracking-tight tabular-nums'>
-              {format(metric.value)}
-            </p>
-            <div className='flex flex-wrap items-center gap-x-1.5 text-xs'>
-              <MetricChange comparison={comparison} metric={metric} />
-              <span aria-hidden className='text-muted-foreground'>
-                {comparison}
-              </span>
+    <BlockStateProvider status={status} empty={!metric}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <div className='grid border-t @2xl:grid-cols-[19rem_minmax(0,1fr)] @2xl:gap-8'>
+          <fieldset className='min-w-0'>
+            <legend className='sr-only'>Metric to chart</legend>
+            {state === 'loading' && (
+              <BlockStateRows className='border-b' rows={Math.max(metrics.length, 5)} />
+            )}
+            {!state && metric && (
+              <ul className='divide-y border-b'>
+                {metrics.map((item) => (
+                  <li key={item.key}>
+                    <label className='hover:bg-muted/50 has-checked:bg-muted/60 has-focus-visible:outline-ring relative grid cursor-pointer grid-cols-[minmax(0,1fr)_3rem_5.5rem] items-center gap-x-3 py-2.5 pr-2 pl-3 transition-colors has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 motion-reduce:transition-none'>
+                      <input
+                        type='radio'
+                        name={id}
+                        value={item.key}
+                        checked={item.key === metric.key}
+                        onChange={() => {
+                          setSelected(item.key)
+                          onSelectedChange?.(item.key)
+                        }}
+                        className='sr-only'
+                      />
+                      <span
+                        aria-hidden
+                        className={cn(
+                          'bg-foreground absolute inset-y-0 left-0 w-0.5',
+                          item.key !== metric.key && 'hidden',
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          'text-sm',
+                          item.key === metric.key && 'font-medium',
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                      <span aria-hidden>
+                        <MetricSparkline
+                          animated={false}
+                          className='w-full'
+                          color={
+                            item.key === metric.key
+                              ? 'var(--color-chart-2)'
+                              : 'var(--color-muted-foreground)'
+                          }
+                          data={item.history}
+                          formatter={getMetricFormatter(item.format)}
+                          label={describeHistory(item)}
+                          labels={labels}
+                        />
+                      </span>
+                      <span className='flex flex-col items-end gap-0.5'>
+                        <span className='text-sm font-medium whitespace-nowrap tabular-nums'>
+                          {formatMetricValue(item, item.value)}
+                        </span>
+                        <MetricChange comparison={comparison} metric={item} />
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </fieldset>
+          <section
+            aria-labelledby={showHeading ? `${id}-heading` : undefined}
+            className='flex min-w-0 flex-col gap-4 pt-5'
+          >
+            <div className='flex flex-col gap-1'>
+              {showHeading && (
+                <h3 id={`${id}-heading`} className='text-sm font-medium'>
+                  <BlockReady className='text-sm'>{metric?.label}</BlockReady>
+                </h3>
+              )}
+              <KPIValue format={format} value={metric?.value} />
+              {metric && (
+                <MetricChange
+                  comparison={comparison}
+                  metric={metric}
+                  variant='sentence'
+                />
+              )}
             </div>
-          </div>
-          <ChartPanelFigure className='h-48 @2xl:h-56'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-                <CartesianGrid {...chartGridProps} />
-                <XAxis
-                  {...chartAxisProps}
-                  dataKey='label'
-                  interval='preserveStartEnd'
-                  minTickGap={40}
+            {state || !metric ? (
+              <ChartPanelFigure className='h-48 @2xl:h-56'>
+                <ChartPlaceholder height='100%' />
+              </ChartPanelFigure>
+            ) : (
+              <>
+                <ChartPanelFigure className='h-48 @2xl:h-56'>
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <AreaChart
+                      aria-label={metric.label}
+                      data={data}
+                      margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id={gradient} x1='0' x2='0' y1='0' y2='1'>
+                          <stop
+                            offset='0%'
+                            stopColor='var(--color-chart-2)'
+                            stopOpacity={0.3}
+                          />
+                          <stop
+                            offset='100%'
+                            stopColor='var(--color-chart-2)'
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid {...chartGridProps} />
+                      <XAxis
+                        {...chartAxisProps}
+                        dataKey='label'
+                        interval='preserveStartEnd'
+                        minTickGap={40}
+                      />
+                      <YAxis
+                        {...chartAxisProps}
+                        domain={['auto', 'auto']}
+                        tickFormatter={(value: number) => format(value)}
+                        width={chartValueAxisWidth}
+                      />
+                      <Tooltip
+                        content={(tooltipProps) => (
+                          <ChartTooltipContent
+                            {...tooltipProps}
+                            valueFormatter={format}
+                          />
+                        )}
+                        cursor={chartLineCursor}
+                      />
+                      <ReferenceLine
+                        {...chartReferenceProps}
+                        y={average}
+                        label={{
+                          ...chartReferenceLabel,
+                          position: 'insideBottomLeft',
+                          value: `30-day average ${format(average)}`,
+                        }}
+                      />
+                      <Area
+                        key={metric.key}
+                        activeDot={chartActiveDot}
+                        dataKey='value'
+                        dot={chartLastDot(data.length, 'var(--color-chart-2)')}
+                        fill={`url(#${gradient})`}
+                        name={metric.label}
+                        stroke='var(--color-chart-2)'
+                        strokeWidth={2}
+                        type='monotone'
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </ChartPanelFigure>
+                <ChartPanelTable
+                  caption={`${metric.label} by day, ${data[0]?.label ?? ''} to ${data[last]?.label ?? ''}`}
+                  columns={[
+                    { key: 'label', label: 'Day' },
+                    { format, key: 'value', label: metric.label },
+                  ]}
+                  rows={data}
                 />
-                <YAxis
-                  {...chartAxisProps}
-                  domain={['auto', 'auto']}
-                  tickFormatter={(value: number) => format(value)}
-                  width={56}
-                />
-                <Tooltip
-                  content={(tooltipProps) => (
-                    <ChartPanelTooltip {...tooltipProps} valueFormatter={format} />
-                  )}
-                  cursor={{ stroke: 'var(--color-border)' }}
-                />
-                <Area
-                  activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
-                  dataKey='value'
-                  fill='var(--chart-2)'
-                  fillOpacity={0.1}
-                  name={metric.label}
-                  stroke='var(--chart-2)'
-                  strokeWidth={2}
-                  type='monotone'
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-          <ChartPanelTable
-            caption={`${metric.label}, ${description.toLowerCase()}`}
-            columns={[
-              { key: 'label', label: 'Day' },
-              { format, key: 'value', label: metric.label },
-            ]}
-            rows={data}
-          />
-        </section>
-      </div>
-    </Card>
+              </>
+            )}
+          </section>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

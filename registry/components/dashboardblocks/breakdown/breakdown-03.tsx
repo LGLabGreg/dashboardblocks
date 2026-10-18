@@ -1,40 +1,61 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   BREAKDOWN_OTHER_COLOR,
   BreakdownKey,
   type BreakdownSegment,
   formatShare,
   getTotal,
-  useReveal,
 } from '@/registry/components/dashboardblocks/breakdown'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  ChartPlaceholder,
+  ChartTooltipFrame,
+  ChartTooltipItem,
+} from '@/registry/components/dashboardblocks/chart'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber, joinDetails } from '@/registry/lib/dashboardblocks/format'
+import { useState } from 'react'
+import { Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
+
+import { cn } from '@/lib/utils'
 
 interface Breakdown3Props {
   description: string
-  segments: BreakdownSegment[]
+  /** Leave out, or pass none, to show the empty state. */
+  segments?: BreakdownSegment[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Breakdown3Props = {
-  description: 'Active workspaces by plan',
+  description: 'Active workspaces on each plan.',
   segments: [
-    { color: 'var(--chart-2)', label: 'Free', value: 5_840 },
-    { color: 'var(--chart-3)', label: 'Pro', value: 2_310 },
-    { color: 'var(--chart-4)', label: 'Team', value: 1_120 },
+    { color: 'var(--color-chart-2)', label: 'Free', value: 5_840 },
+    { color: 'var(--color-chart-3)', label: 'Pro', value: 2_310 },
+    { color: 'var(--color-chart-4)', label: 'Team', value: 1_120 },
     { color: BREAKDOWN_OTHER_COLOR, label: 'Enterprise', value: 430 },
   ],
   title: 'Plan distribution',
 }
 
-const CELLS = 100
+const SIDE = 10
+const CELLS = SIDE * SIDE
+const GRID_PX = 176
+const CELL_PX = GRID_PX / SIDE
+const GAP_PX = 2
+
+interface Square {
+  segment: number
+  x: number
+  y: number
+}
 
 function toCells(segments: BreakdownSegment[]) {
   const total = getTotal(segments)
@@ -54,60 +75,134 @@ function toCells(segments: BreakdownSegment[]) {
 }
 
 const Breakdown3 = (props: Breakdown3Props) => {
-  const { description, segments, title } = props
-  const { ref, revealed } = useReveal<HTMLDivElement>(true)
+  const { description, segments = [], status, title } = props
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const state = getBlockState(status, segments.length === 0)
   const total = getTotal(segments)
-  const cells = toCells(segments).flatMap((count, index) =>
-    Array.from({ length: count }, () => segments[index].color),
-  )
+  const squares: Square[] = toCells(segments)
+    .flatMap((count, segment) => Array.from({ length: count }, () => segment))
+    .map((segment, cell) => ({ segment, x: cell % SIDE, y: Math.floor(cell / SIDE) }))
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col items-center gap-6 @sm:flex-row @sm:items-start'>
-        <div ref={ref} aria-hidden className='grid w-40 shrink-0 grid-cols-10 gap-0.5'>
-          {cells.map((color, index) => (
-            <span
-              key={index}
-              className='aspect-square rounded-[3px] transition-[opacity,scale] duration-300 ease-out motion-reduce:transition-none'
-              style={{
-                backgroundColor: color,
-                opacity: revealed ? 1 : 0,
-                scale: revealed ? '1' : '0.6',
-                transitionDelay: revealed ? `${index * 6}ms` : undefined,
-              }}
-            />
-          ))}
-        </div>
-        <div className='flex w-full min-w-0 flex-col gap-4'>
-          <div className='flex flex-col gap-0.5'>
-            <span className='text-3xl font-semibold tracking-tight'>
-              {total.toLocaleString()}
-            </span>
-            <span className='text-muted-foreground text-xs'>
-              Each square is 1% of the total
-            </span>
+    <BlockStateProvider status={status} empty={segments.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-col items-center gap-6 border-t pt-4 @sm:flex-row @sm:items-start'>
+          {state ? (
+            <ChartPlaceholder className='w-44 shrink-0' height={GRID_PX} />
+          ) : (
+            <div
+              role='img'
+              aria-label={`${title}: ${segments
+                .map((segment) => `${segment.label} ${formatShare(segment.value, total)}`)
+                .join(', ')}`}
+              className='shrink-0'
+            >
+              <ScatterChart
+                accessibilityLayer={false}
+                height={GRID_PX}
+                margin={{ bottom: 0, left: 0, right: 0, top: 0 }}
+                width={GRID_PX}
+              >
+                <XAxis dataKey='x' domain={[-0.5, SIDE - 0.5]} hide type='number' />
+                <YAxis
+                  dataKey='y'
+                  domain={[-0.5, SIDE - 0.5]}
+                  hide
+                  reversed
+                  type='number'
+                />
+                <Tooltip
+                  content={({ active: shown, payload }) => {
+                    const square = payload?.[0]?.payload as Square | undefined
+                    const segment = square ? segments[square.segment] : undefined
+                    if (!shown || !segment) return null
+                    return (
+                      <ChartTooltipFrame>
+                        <span className='font-medium'>{segment.label}</span>
+                        <ChartTooltipItem
+                          color={segment.color}
+                          value={joinDetails(
+                            formatNumber(segment.value),
+                            formatShare(segment.value, total),
+                          )}
+                        />
+                      </ChartTooltipFrame>
+                    )
+                  }}
+                  cursor={false}
+                />
+                {segments.map((segment, index) => (
+                  <Scatter
+                    key={segment.label}
+                    data={squares.filter((square) => square.segment === index)}
+                    fill={segment.color}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onMouseLeave={() => setActiveIndex(null)}
+                    shape={({ cx = 0, cy = 0 }: { cx?: number; cy?: number }) => (
+                      <g>
+                        <rect
+                          x={cx - CELL_PX / 2}
+                          y={cy - CELL_PX / 2}
+                          width={CELL_PX}
+                          height={CELL_PX}
+                          fill='transparent'
+                        />
+                        <rect
+                          x={cx - CELL_PX / 2 + GAP_PX / 2}
+                          y={cy - CELL_PX / 2 + GAP_PX / 2}
+                          width={CELL_PX - GAP_PX}
+                          height={CELL_PX - GAP_PX}
+                          rx={3}
+                          fill={segment.color}
+                          opacity={
+                            activeIndex === null || activeIndex === index ? 1 : 0.35
+                          }
+                        />
+                      </g>
+                    )}
+                  />
+                ))}
+              </ScatterChart>
+            </div>
+          )}
+          <div className='flex w-full min-w-0 flex-col gap-3'>
+            <div className='flex flex-col gap-1'>
+              <KPIValue value={total} format={(value) => formatNumber(value)} />
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  Each square is 1% of the total.
+                </p>
+              </BlockReady>
+            </div>
+            {state === 'loading' && <BlockStateRows rows={4} />}
+            {!state && (
+              <ul className='flex flex-col text-sm'>
+                {segments.map((segment, index) => (
+                  <li
+                    key={segment.label}
+                    className={cn(
+                      'flex items-center gap-2 border-b py-2.5 transition-colors last:border-b-0',
+                      activeIndex === index && 'bg-muted/50',
+                    )}
+                  >
+                    <BreakdownKey color={segment.color} />
+                    <span className='min-w-0 flex-1 truncate'>{segment.label}</span>
+                    <span className='tabular-nums'>{formatNumber(segment.value)}</span>
+                    <span className='text-muted-foreground w-10 text-right tabular-nums'>
+                      {formatShare(segment.value, total)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <ul className='flex flex-col gap-2 text-sm'>
-            {segments.map((segment) => (
-              <li key={segment.label} className='flex items-center gap-2'>
-                <BreakdownKey color={segment.color} />
-                <span className='min-w-0 flex-1 truncate'>{segment.label}</span>
-                <span className='font-medium tabular-nums'>
-                  {segment.value.toLocaleString()}
-                </span>
-                <span className='text-muted-foreground w-10 text-right tabular-nums'>
-                  {formatShare(segment.value, total)}
-                </span>
-              </li>
-            ))}
-          </ul>
         </div>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

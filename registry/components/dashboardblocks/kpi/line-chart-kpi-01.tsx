@@ -1,18 +1,22 @@
 'use client'
 
-import { TinyLineChart } from '@/registry/components/dashboardblocks/chart'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
 import {
   KPI,
   KPIChange,
   KPIChart,
   KPIContent,
+  KPITitle,
   type KPIFormat,
   KPIValue,
   describeSeries,
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
-
-import { CardDescription } from '@/components/ui/card'
 
 interface DailyComparison {
   label: string
@@ -22,15 +26,19 @@ interface DailyComparison {
 
 interface LineChartKPI1Props {
   comparison: string
-  data: DailyComparison[]
+  /** @default 'This week' */
+  currentLabel?: string
+  /** Leave out, or pass no days, to show the empty state. */
+  data?: DailyComparison[]
   format?: KPIFormat
-  /** @default 120 */
+  /** @default 112 */
   height?: number
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: LineChartKPI1Props = {
-  comparison: 'vs last week',
+  comparison: 'last week',
   data: [
     { label: 'Mon', previous: 6_100, value: 6_420 },
     { label: 'Tue', previous: 6_650, value: 7_180 },
@@ -44,62 +52,92 @@ const exampleProps: LineChartKPI1Props = {
   title: 'Visitors',
 }
 
+const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
+
+function describeLead(data: DailyComparison[]): [string, string] {
+  const behind = data.filter((point) => point.value < point.previous)
+  const ahead = data.length - behind.length
+  if (behind.length === 0) return ['ahead of', 'every day.']
+  if (ahead === 0) return ['behind', 'every day.']
+  return [
+    'ahead of',
+    `on ${ahead} of ${data.length} days, behind on ${listFormat.format(behind.map((point) => point.label))}.`,
+  ]
+}
+
 const LineChartKPI1 = (props: LineChartKPI1Props) => {
-  const { comparison, data, format, height = 120, title } = props
+  const {
+    comparison,
+    currentLabel = 'This week',
+    data = [],
+    format,
+    height = 112,
+    status,
+    title,
+  } = props
   const total = data.reduce((sum, point) => sum + point.value, 0)
   const previous = data.reduce((sum, point) => sum + point.previous, 0)
+  const [lead, rest] = describeLead(data)
 
   return (
-    <KPI>
-      <KPIContent className='gap-4'>
-        <div className='flex flex-col gap-1'>
-          <div className='flex items-center justify-between gap-2'>
-            <CardDescription>{title}</CardDescription>
-            <KPIChange comparison={comparison} previous={previous} value={total} />
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <KPI>
+        <KPIContent className='gap-3'>
+          <div className='flex flex-col gap-1'>
+            <KPITitle>{title}</KPITitle>
+            <KPIValue value={total} format={format} animated />
+            <KPIChange
+              comparison={comparison}
+              format={format}
+              previous={previous}
+              value={total}
+            />
           </div>
-          <KPIValue value={total} format={format} animated />
-        </div>
-        <div className='flex flex-col gap-2'>
           <KPIChart label={describeSeries(`${title} by day`, data, format)}>
-            <TinyLineChart
+            <TinyAreaChart
               accessibilityLayer={false}
-              data={data}
-              formatter={getKPIFormatter(format)}
-              height={height}
-              lines={[
+              areas={[
                 {
                   dataKey: 'previous',
-                  dot: false,
-                  name: 'Previous',
+                  fill: 'none',
+                  name: comparison.charAt(0).toUpperCase() + comparison.slice(1),
                   stroke: 'var(--color-muted-foreground)',
-                  strokeDasharray: '4 4',
-                  strokeOpacity: 0.6,
+                  strokeDasharray: '3 3',
+                  strokeWidth: 1.5,
                 },
                 {
                   dataKey: 'value',
-                  dot: false,
-                  name: 'Current',
+                  fill: 'var(--color-chart-2)',
+                  fillOpacity: 0.3,
+                  name: currentLabel,
                   stroke: 'var(--color-chart-2)',
                 },
               ]}
+              data={data}
+              formatter={getKPIFormatter(format)}
+              height={height}
+              markLast='value'
+              scale='data'
+              xAxisKey='label'
             />
           </KPIChart>
-          <div className='text-muted-foreground flex items-center gap-4 text-xs'>
-            <span className='inline-flex items-center gap-1.5'>
-              <span aria-hidden className='bg-chart-2 h-0.5 w-3 rounded-full' />
-              This period
-            </span>
-            <span className='inline-flex items-center gap-1.5'>
+          <BlockReady className='text-xs'>
+            <p className='text-muted-foreground text-xs'>
               <span
                 aria-hidden
-                className='border-muted-foreground w-3 border-t-2 border-dashed'
+                className='bg-chart-2 mr-1.5 inline-block h-0.5 w-3 align-middle'
               />
-              Previous
-            </span>
-          </div>
-        </div>
-      </KPIContent>
-    </KPI>
+              {currentLabel} was {lead}
+              <span
+                aria-hidden
+                className='border-muted-foreground mx-1.5 inline-block w-3 border-t-[1.5px] border-dashed align-middle'
+              />
+              {comparison} {rest}
+            </p>
+          </BlockReady>
+        </KPIContent>
+      </KPI>
+    </BlockStateProvider>
   )
 }
 

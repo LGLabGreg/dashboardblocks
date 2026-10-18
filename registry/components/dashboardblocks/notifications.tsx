@@ -1,12 +1,12 @@
 'use client'
 
 import {
-  ActivityIcon,
   ActivityTime,
   type ActivityTone,
   UnreadDot,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Link } from '@/registry/components/dashboardblocks/link'
+import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type MouseEvent, type ReactNode, useState } from 'react'
 
@@ -81,7 +81,7 @@ function NotificationBell({
           remixicon='RiNotificationLine'
         />
         {unreadCount > 0 && (
-          <span className='bg-primary text-primary-foreground ring-background absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[0.625rem] font-medium tabular-nums ring-2'>
+          <span className='bg-primary text-primary-foreground ring-background absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-xs font-medium tabular-nums ring-2'>
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -102,16 +102,23 @@ function NotificationBell({
 function NotificationsHeader({
   action,
   className,
+  description,
   title = 'Notifications',
 }: {
   action?: ReactNode
   className?: string
+  description?: ReactNode
   /** @default 'Notifications' */
   title?: string
 }) {
   return (
-    <div className={cn('flex items-center justify-between gap-2 px-4 py-3', className)}>
-      <h2 className='text-sm font-semibold'>{title}</h2>
+    <div
+      className={cn('flex items-start justify-between gap-3 px-4 pt-4 pb-3', className)}
+    >
+      <div className='flex min-w-0 flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        {description && <p className='text-muted-foreground text-sm'>{description}</p>}
+      </div>
       {action}
     </div>
   )
@@ -128,10 +135,19 @@ function NotificationList({
   label?: string
 }) {
   return (
-    <ul aria-label={label} className={cn('flex flex-col', className)}>
+    <ul aria-label={label} className={cn('flex flex-col divide-y', className)}>
       {children}
     </ul>
   )
+}
+
+const toneClasses: Record<ActivityTone, string> = {
+  accent: 'text-foreground',
+  danger: statusToneClasses.bad,
+  info: statusToneClasses.info,
+  neutral: statusToneClasses.neutral,
+  success: statusToneClasses.good,
+  warning: statusToneClasses.warning,
 }
 
 interface NotificationItemProps {
@@ -162,17 +178,21 @@ function NotificationItem({
     <li
       data-read={notification.read || undefined}
       className={cn(
-        'hover:bg-muted/50 focus-within:bg-muted/50 relative flex gap-3 px-4 py-3 transition-colors [--activity-marker:2rem]',
+        'hover:bg-muted/50 focus-within:bg-muted/50 relative flex gap-3 px-4 py-3 transition-colors',
         className,
       )}
     >
-      <ActivityIcon
-        icon={notification.icon}
-        tone={notification.tone}
-        className='ring-0'
-      />
+      <span
+        aria-hidden
+        className={cn(
+          'flex h-5 shrink-0 items-center [&_svg]:size-4',
+          toneClasses[notification.tone ?? 'neutral'],
+        )}
+      >
+        {notification.icon}
+      </span>
       <div className='flex min-w-0 flex-1 flex-col gap-1'>
-        <p className='text-sm'>
+        <p className={cn('text-sm', notification.read && 'text-muted-foreground')}>
           {notification.href ? (
             <Link
               href={notification.href}
@@ -196,12 +216,14 @@ function NotificationItem({
             {notification.body}
           </p>
         )}
-        <ActivityTime date={notification.at} now={now} />
+        <ActivityTime className='tabular-nums' date={notification.at} now={now} />
         {actions && <div className='relative mt-1 flex flex-wrap gap-2'>{actions}</div>}
       </div>
-      <div className='relative flex shrink-0 flex-col items-end gap-2'>
-        {!notification.read && <UnreadDot className='mt-1.5' />}
-        {trailing}
+      <div className='relative flex shrink-0 items-center gap-2 self-start'>
+        {trailing && <div className='-my-1'>{trailing}</div>}
+        <span className='flex h-5 w-2 items-center'>
+          {!notification.read && <UnreadDot />}
+        </span>
       </div>
     </li>
   )

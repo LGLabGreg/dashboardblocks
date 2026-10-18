@@ -1,24 +1,31 @@
 'use client'
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 import {
   UsageMeterLimit,
   UsageMeterValue,
-  UsageStatusBadge,
+  UsageStatusLabel,
   formatUsage,
   getUsageShare,
   getUsageStatus,
   usageStatusConfig,
 } from '@/registry/components/dashboardblocks/usage-meter'
-
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface UsageMeter2Props {
   limit: number
+  status?: BlockStatus
   title: string
   unit: string
-  used: number
+  /** Leave out to show the empty state. */
+  used?: number
 }
 
 const exampleProps: UsageMeter2Props = {
@@ -29,42 +36,46 @@ const exampleProps: UsageMeter2Props = {
 }
 
 const UsageMeter2 = (props: UsageMeter2Props) => {
-  const { limit, title, unit, used } = props
+  const { limit, status: blockStatus, title, unit, used = 0 } = props
   const share = getUsageShare(used, limit)
   const status = getUsageStatus(used, limit)
   const free = Math.max(0, limit - used)
 
   return (
-    <Card>
-      <CardContent className='flex items-center gap-6'>
+    <BlockStateProvider status={blockStatus} empty={props.used === undefined}>
+      <section className='@container flex items-center gap-6 border-t pt-4'>
         <Ring
-          ariaLabel={`${Math.round(share)}% of ${title.toLowerCase()} used`}
+          ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}
           className='size-24'
           percentage={Math.min(100, share)}
           ringColor={usageStatusConfig[status].color}
-          strokeWidth={10}
+          strokeWidth={8}
         >
           <AnimatedNumber
-            className='text-lg font-semibold tabular-nums'
+            className='text-2xl font-light tracking-tight tabular-nums'
             value={Math.round(share)}
-            formatter={(value) => `${Math.round(value)}%`}
+            formatter={(value) =>
+              formatPercent(value / 100, { maximumFractionDigits: 0 })
+            }
           />
         </Ring>
         <div className='flex min-w-0 flex-col gap-1'>
-          <CardTitle>{title}</CardTitle>
-          <div className='flex flex-wrap items-baseline gap-x-1'>
+          <p className='text-muted-foreground text-sm'>{title}</p>
+          <div className='flex flex-wrap items-baseline gap-x-1.5'>
             <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
             <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
           </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            <span className='text-muted-foreground text-sm tabular-nums'>
-              {formatUsage(free, unit)} free
-            </span>
-            {status !== 'ok' && <UsageStatusBadge status={status} />}
-          </div>
+          <BlockReady className='text-sm'>
+            <Details className='text-muted-foreground block text-sm'>
+              <span>
+                <span className='tabular-nums'>{formatUsage(free, unit)}</span> free
+              </span>
+              {status !== 'ok' && <UsageStatusLabel status={status} />}
+            </Details>
+          </BlockReady>
         </div>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,15 +1,12 @@
 'use client'
 
+import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import { InlineEditField, isEmail } from '@/registry/components/dashboardblocks/forms'
 import { startTransition, useState } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface CustomerDetails {
   company: string
@@ -20,8 +17,11 @@ interface CustomerDetails {
 }
 
 interface Forms4Props {
-  defaultValues: CustomerDetails
+  /** Leave out to show the empty state. */
+  defaultValues?: CustomerDetails
   onSave?: (field: keyof CustomerDetails, value: string) => Promise<string | void>
+  status?: BlockStatus
+  title: string
 }
 
 const exampleProps: Forms4Props = {
@@ -32,13 +32,14 @@ const exampleProps: Forms4Props = {
     phone: '',
     website: 'https://northwind.io',
   },
+  title: 'Customer details',
 }
 
 async function saveField() {
   await new Promise((resolve) => setTimeout(resolve, 600))
 }
 
-const Forms4 = (props: Forms4Props) => {
+function Forms4Content(props: Forms4Props & { defaultValues: CustomerDetails }) {
   const { defaultValues, onSave = saveField } = props
   const [details, setDetails] = useState(defaultValues)
 
@@ -51,12 +52,8 @@ const Forms4 = (props: Forms4Props) => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Customer details</CardTitle>
-        <CardDescription>Changes save as soon as you confirm them.</CardDescription>
-      </CardHeader>
-      <CardContent className='divide-y'>
+    <>
+      <div className='divide-y border-y'>
         <InlineEditField
           label='Name'
           value={details.name}
@@ -94,8 +91,33 @@ const Forms4 = (props: Forms4Props) => {
               : 'Enter a full address, starting with https://.'
           }
         />
-      </CardContent>
-    </Card>
+      </div>
+    </>
+  )
+}
+
+const Forms4 = (props: Forms4Props) => {
+  const { defaultValues, status, title } = props
+  const ready = !status && defaultValues !== undefined
+
+  return (
+    <BlockStateProvider status={status} empty={defaultValues === undefined}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            Each change saves as soon as you confirm it.
+          </p>
+        </header>
+        {ready ? (
+          <Forms4Content {...props} defaultValues={defaultValues} />
+        ) : (
+          <div className='border-t'>
+            <BlockStateRows rows={5} />
+          </div>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -6,10 +6,10 @@ import {
   type DateRangePreset,
   ExportMenu,
   FilterChip,
-  formatDateRange,
   getDateRange,
   getPreviousRange,
 } from '@/registry/components/dashboardblocks/dashboard-header'
+import { formatDateRange } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -58,14 +58,14 @@ const DashboardHeader3 = (props: DashboardHeader3Props) => {
   const range = getDateRange(preset, today)
 
   return (
-    <header className='@container flex flex-col gap-4'>
+    <header className='@container flex flex-col gap-4 border-b pb-4'>
       <div className='flex items-start justify-between gap-3'>
         <DashboardHeaderTitle
           title={title}
           description={
             <span aria-live='polite'>
               {formatDateRange(range)}
-              {compare && ` vs ${formatDateRange(getPreviousRange(range))}`}
+              {compare && `, compared with ${formatDateRange(getPreviousRange(range))}`}
             </span>
           }
         />

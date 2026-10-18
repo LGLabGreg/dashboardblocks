@@ -16,3 +16,10 @@ export const comparisonExampleProps = {
   'comparison-03': comparison3ExampleProps,
   'comparison-04': comparison4ExampleProps,
 }
+
+export const comparisonEmptyProps = {
+  'comparison-01': { metrics: [] },
+  'comparison-02': { control: undefined, variant: undefined },
+  'comparison-03': { segments: [] },
+  'comparison-04': { rows: [] },
+}

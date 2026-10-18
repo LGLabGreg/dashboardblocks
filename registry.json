@@ -25,7 +25,7 @@
       "name": "alerts",
       "type": "registry:component",
       "title": "Alerts",
-      "description": "Primitives for alerts: critical, warning, info and resolved severities, each with an icon and label, plus relative time formatting.",
+      "description": "Primitives for alerts: critical, warning, info and resolved severities written as coloured words, plus relative time formatting.",
       "registryDependencies": [
         "@dashboardblocks/alerts"
       ]
@@ -79,7 +79,7 @@
       "name": "billing",
       "type": "registry:component",
       "title": "Billing",
-      "description": "Primitives for subscription billing: currency formatting, MRR movement from starting to ending MRR, net revenue retention, a waterfall of the movement and an invoice status badge.",
+      "description": "Primitives for subscription billing: billing dates, MRR movement from starting to ending MRR, net revenue retention, a waterfall chart of the movement and an invoice status label.",
       "registryDependencies": [
         "@dashboardblocks/billing"
       ]
@@ -115,7 +115,7 @@
       "name": "checklist",
       "type": "registry:component",
       "title": "Checklist",
-      "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and label, progress maths that leaves skipped steps out, and a styled checkbox.",
+      "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and a status word, progress maths and wording that leave skipped steps out, and a styled checkbox.",
       "registryDependencies": [
         "@dashboardblocks/checklist"
       ]
@@ -160,7 +160,7 @@
       "name": "deployments",
       "type": "registry:component",
       "title": "Deployments",
-      "description": "Primitives for deployments: ready, failed, running, queued and rolled back statuses each with an icon and label, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA badge and a run history strip.",
+      "description": "Primitives for deployments: ready, failed, building, queued and rolled back statuses written as coloured words, duration and short commit formatting, DORA bands for deployment frequency, lead time, change failure rate and time to restore, a DORA band label and a run history strip.",
       "registryDependencies": [
         "@dashboardblocks/deployments"
       ]
@@ -169,7 +169,7 @@
       "name": "distribution",
       "type": "registry:component",
       "title": "Distribution",
-      "description": "Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and an outline for an earlier period, a box plot, an axis and legend keys.",
+      "description": "Primitives for distributions: quantiles from raw values or from binned counts, binning, a five-number summary, the share above a limit, round ticks, a histogram with labelled percentile and threshold lines and a line for an earlier period, box plots and legend keys.",
       "registryDependencies": [
         "@dashboardblocks/distribution"
       ]
@@ -187,7 +187,7 @@
       "name": "feedback",
       "type": "registry:component",
       "title": "Feedback",
-      "description": "Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a stacked or diverging sentiment bar with legend keys.",
+      "description": "Primitives for customer feedback: a rating summary with the average and share of each rating, CSAT as the share of 4 and 5 ratings, net sentiment, stars filled to a fractional rating, and a recharts diverging bar chart of sentiment by topic with a tooltip.",
       "registryDependencies": [
         "@dashboardblocks/feedback"
       ]
@@ -196,7 +196,7 @@
       "name": "flow",
       "type": "registry:component",
       "title": "Flow",
-      "description": "Primitives for flows: a Sankey layout that places nodes in columns and links as bands, keeping each flow's colour downstream and drawing drop-offs muted, a Sankey chart with hover highlighting and a readout, and path steps as chips.",
+      "description": "Primitives for flows: a recharts Sankey chart that keeps each flow's colour downstream, draws drop-offs muted and highlights what a hovered node or band connects, with a tooltip, plus path steps joined by arrows.",
       "registryDependencies": [
         "@dashboardblocks/flow"
       ]
@@ -205,7 +205,7 @@
       "name": "forecast",
       "type": "registry:component",
       "title": "Forecast",
-      "description": "Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status badge.",
+      "description": "Primitives for forecasts: a straight-line fit with a prediction interval that widens with the horizon, run-rate projection, date-to-target solving, a striped projection bar, legend keys, a tooltip and a status label.",
       "registryDependencies": [
         "@dashboardblocks/forecast"
       ]
@@ -220,10 +220,19 @@
       ]
     },
     {
+      "name": "format",
+      "type": "registry:lib",
+      "title": "Format",
+      "description": "en-US formatting for numbers, compact numbers, currency, percentages from ratios, signed differences with a real minus, percentage points, UTC date ranges and details joined with a middle dot.",
+      "registryDependencies": [
+        "@dashboardblocks/format"
+      ]
+    },
+    {
       "name": "funnel",
       "type": "registry:component",
       "title": "Funnel",
-      "description": "Primitives for conversion funnels: step conversion maths and horizontal or vertical stage bars.",
+      "description": "Primitives for conversion funnels: step conversion maths, the biggest drop and a stage bar.",
       "registryDependencies": [
         "@dashboardblocks/funnel"
       ]
@@ -232,7 +241,7 @@
       "name": "gauge",
       "type": "registry:component",
       "title": "Gauge",
-      "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, plus band, weighted score and NPS helpers.",
+      "description": "Primitives for gauges and scores: a semicircle or three-quarter arc gauge built as a meter, with labelled bands, a target tick and an animated fill, band labels as coloured words, plus band, weighted score and NPS helpers.",
       "registryDependencies": [
         "@dashboardblocks/gauge"
       ]
@@ -241,7 +250,7 @@
       "name": "geo",
       "type": "registry:component",
       "title": "Geo",
-      "description": "Primitives for location metrics: a US state tile map, a dotted world map from an embedded land mask with markers sized by value, country flags and share bars.",
+      "description": "Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.",
       "registryDependencies": [
         "@dashboardblocks/geo"
       ]
@@ -250,7 +259,7 @@
       "name": "goals",
       "type": "registry:component",
       "title": "Goals",
-      "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker, and a pace badge.",
+      "description": "Primitives for goals and targets: pace against a straight line to the target, a progress bar with an expected-by-now marker and the projection hatched, and the pace as a coloured word.",
       "registryDependencies": [
         "@dashboardblocks/goals"
       ]
@@ -259,7 +268,7 @@
       "name": "heatmap",
       "type": "registry:component",
       "title": "Heatmap",
-      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with a readout line, a legend and an accessible data table.",
+      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with the shared chart tooltip, optional bars above its columns and dots on flagged cells, and a legend.",
       "registryDependencies": [
         "@dashboardblocks/heatmap"
       ]
@@ -277,7 +286,7 @@
       "name": "insights",
       "type": "registry:component",
       "title": "Insights",
-      "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each with an icon and label, sentences with highlighted metrics, and a \"why\" line of drivers.",
+      "description": "Primitives for insights: positive, negative, neutral and anomaly kinds, each named by a coloured word, sentences with their metrics picked out in colour, and a \"why\" line of drivers.",
       "registryDependencies": [
         "@dashboardblocks/insights"
       ]
@@ -286,7 +295,7 @@
       "name": "inventory",
       "type": "registry:component",
       "title": "Inventory",
-      "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each with an icon and label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
+      "description": "Primitives for inventory: out of stock, low, in stock and overstock from on-hand stock and the reorder point, each as a coloured label, days of cover, a reorder quantity for the lead time plus a target, and a stock bar with a reorder point tick.",
       "registryDependencies": [
         "@dashboardblocks/inventory"
       ]
@@ -295,9 +304,18 @@
       "name": "kpi",
       "type": "registry:component",
       "title": "KPI",
-      "description": "Primitives for KPI cards: a card, a value that counts up with the final value read out, change vs the previous period in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
+      "description": "Primitives for KPIs: a block with a top rule, a value that counts up with the final value read out, the change vs the previous period written as a sentence, in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
       "registryDependencies": [
         "@dashboardblocks/kpi"
+      ]
+    },
+    {
+      "name": "kpi-provenance",
+      "type": "registry:component",
+      "title": "KPI Provenance",
+      "description": "A button beside a number that shows how it was computed: what’s counted, the date range, the filters, the query’s name and a link to the rows.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi-provenance"
       ]
     },
     {
@@ -322,7 +340,7 @@
       "name": "metric-list",
       "type": "registry:component",
       "title": "Metric List",
-      "description": "Primitives for compact lists of metrics: a row with value, direction-aware change and sparkline, a bar against a target with its status, and value formatting helpers.",
+      "description": "Primitives for compact lists of metrics: a row with value, the change written as words and a sparkline, a bar against a target with its status, and value formatting helpers.",
       "registryDependencies": [
         "@dashboardblocks/metric-list"
       ]
@@ -340,7 +358,7 @@
       "name": "page-header",
       "type": "registry:component",
       "title": "Page Header",
-      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, facts with icons, a back link, section tabs and a more-actions menu.",
+      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs and a more-actions menu.",
       "registryDependencies": [
         "@dashboardblocks/page-header"
       ]
@@ -349,7 +367,7 @@
       "name": "pipeline",
       "type": "registry:component",
       "title": "Pipeline",
-      "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card and currency and age formatting.",
+      "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.",
       "registryDependencies": [
         "@dashboardblocks/pipeline"
       ]
@@ -367,7 +385,7 @@
       "name": "realtime",
       "type": "registry:component",
       "title": "Realtime",
-      "description": "Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live badge that stays still for reduced motion, a number that counts to each new value, rolling bars and a short time-ago format.",
+      "description": "Primitives for live data: an interval hook, a seeded random generator for demo streams, a rolling window, a pulsing live label that stays still for reduced motion, a number that counts to each new value, rolling bars on recharts and a short time-ago format.",
       "registryDependencies": [
         "@dashboardblocks/realtime"
       ]
@@ -376,7 +394,7 @@
       "name": "record-detail",
       "type": "registry:component",
       "title": "Record Detail",
-      "description": "Primitives for a record's page: a layout with a details column beside the main content, a list of labelled properties and a row of headline numbers.",
+      "description": "Primitives for a record's page: a layout with a details column beside the main content, titled sections under a rule and a list of labelled properties.",
       "registryDependencies": [
         "@dashboardblocks/record-detail"
       ]
@@ -385,7 +403,7 @@
       "name": "retention",
       "type": "registry:component",
       "title": "Retention",
-      "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table, a bar with an earlier-value tick and a change in percentage points.",
+      "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table with a hover tooltip, a bar and a change in percentage points.",
       "registryDependencies": [
         "@dashboardblocks/retention"
       ]
@@ -412,7 +430,7 @@
       "name": "schedule",
       "type": "registry:component",
       "title": "Schedule",
-      "description": "Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency badges and a keyboard-navigable month calendar.",
+      "description": "Primitives for schedules: date helpers that take a fixed now and a time zone, an event row, urgency labels and badges, and a keyboard-navigable month calendar.",
       "registryDependencies": [
         "@dashboardblocks/schedule"
       ]
@@ -421,7 +439,7 @@
       "name": "security",
       "type": "registry:component",
       "title": "Security",
-      "description": "Primitives for security: info, warning and critical audit severities and passing, attention and failing check results, each with an icon and label, a desktop or phone device icon, a weighted security score and a time-since format.",
+      "description": "Primitives for security: info, warning and critical audit severities and passing, attention and failing check results as coloured words, a desktop or phone device icon, and a weighted security score.",
       "registryDependencies": [
         "@dashboardblocks/security"
       ]
@@ -439,16 +457,34 @@
       "name": "spend",
       "type": "registry:component",
       "title": "Spend",
-      "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, a status badge with an icon and label, and legend keys.",
+      "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, the status as a coloured word, and legend keys.",
       "registryDependencies": [
         "@dashboardblocks/spend"
+      ]
+    },
+    {
+      "name": "details",
+      "type": "registry:component",
+      "title": "Details",
+      "description": "Two or three short facts about one subject on one line, joined by a middle dot that screen readers skip and that never ends a line.",
+      "registryDependencies": [
+        "@dashboardblocks/details"
+      ]
+    },
+    {
+      "name": "status-label",
+      "type": "registry:component",
+      "title": "Status Label",
+      "description": "A status written as a coloured word: good, warning, bad, info and neutral tones in the shades every block uses.",
+      "registryDependencies": [
+        "@dashboardblocks/status-label"
       ]
     },
     {
       "name": "stat-group",
       "type": "registry:component",
       "title": "Stat Group",
-      "description": "Primitives for a row of related stats: a divided grid, labels, values, change vs the previous period and sparklines.",
+      "description": "Primitives for a row of related stats: ruled columns, labels, light values, the change vs the previous period as a sentence or an arrow, and sparklines.",
       "registryDependencies": [
         "@dashboardblocks/stat-group"
       ]
@@ -457,7 +493,7 @@
       "name": "status",
       "type": "registry:component",
       "title": "Status",
-      "description": "Primitives for service status: status levels with icons and labels, badges, indicators and a 90-day uptime bar.",
+      "description": "Primitives for service status: status levels written as a coloured dot and word, a legend, and a 90-day uptime bar with a tooltip for each day.",
       "registryDependencies": [
         "@dashboardblocks/status"
       ]
@@ -466,7 +502,7 @@
       "name": "team",
       "type": "registry:component",
       "title": "Team",
-      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence with a dot and a label, and an avatar stack with a \"+N\" overflow.",
+      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, and an avatar stack with a \"+N\" overflow.",
       "registryDependencies": [
         "@dashboardblocks/team"
       ]
@@ -475,7 +511,7 @@
       "name": "timeline",
       "type": "registry:component",
       "title": "Timeline",
-      "description": "Primitives for timelines: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis, grid lines, a today line and a Gantt-style timeline with grouped rows, progress fills and a readout.",
+      "description": "Primitives for timelines on recharts: a UTC date scale, week, month and quarter ticks, days between dates, done, in progress, planned and at risk statuses each with an icon and label, an axis tick, a today label, a chart of dated rows with tooltips, and a Gantt-style timeline with grouped rows and progress fills.",
       "registryDependencies": [
         "@dashboardblocks/timeline"
       ]
@@ -493,7 +529,7 @@
       "name": "usage-meter",
       "type": "registry:component",
       "title": "Usage Meter",
-      "description": "Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with an icon and label, the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.",
+      "description": "Primitives for usage against a limit: within limit, nearing it, critical and over limit, each with a label (a coloured word, or a badge with an icon), the share used, usage projected to the end of the period, days left at a daily rate, en-US number formatting, and a usage bar with overage, a striped projection and a limit tick.",
       "registryDependencies": [
         "@dashboardblocks/usage-meter"
       ]
@@ -529,7 +565,7 @@
       "name": "files",
       "type": "registry:component",
       "title": "Files",
-      "description": "Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, upload rows with a progress bar, tinted icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.",
+      "description": "Primitives for files: a dropzone around a real file input that checks type, size and count, a provider-agnostic upload hook with progress, cancel, retry and a concurrency limit, ruled upload rows with a progress bar and their status in words, icons for eleven kinds of file from the name or MIME type, en-US file sizes, a file actions menu and folder breadcrumbs.",
       "registryDependencies": [
         "@dashboardblocks/files"
       ]
@@ -547,7 +583,7 @@
       "name": "invoice",
       "type": "registry:component",
       "title": "Invoice",
-      "description": "Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.",
+      "description": "Primitives for printable documents such as invoices, receipts, quotes and packing slips: totals that add up to the cent with discounts, tax per rate, shipping and balance due, a sheet that prints black on white, a toolbar hidden in print, a header, a headline amount with a sentence, parties, dates, a line items table with optional checkboxes, totals, notes and a Code 39 barcode.",
       "registryDependencies": [
         "@dashboardblocks/invoice"
       ]
@@ -556,7 +592,7 @@
       "name": "onboarding",
       "type": "registry:component",
       "title": "Onboarding",
-      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, large action cards for quick starts, and a URL slug helper.",
+      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.",
       "registryDependencies": [
         "@dashboardblocks/onboarding"
       ]
@@ -572,7 +608,7 @@
     {
       "name": "kpi-02",
       "type": "registry:component",
-      "description": "A value with its change shown as a badge beside the label.",
+      "description": "A value with its change written beside the label, for a tight grid of KPIs.",
       "registryDependencies": [
         "@dashboardblocks/kpi-02"
       ]
@@ -580,15 +616,23 @@
     {
       "name": "kpi-03",
       "type": "registry:component",
-      "description": "A rate with its previous value underneath and the change in percentage points.",
+      "description": "A rate beside its previous value, with the change in percentage points.",
       "registryDependencies": [
         "@dashboardblocks/kpi-03"
       ]
     },
     {
+      "name": "kpi-04",
+      "type": "registry:component",
+      "description": "A value with its change and a button beside it that shows the date range, filters and query behind the number.",
+      "registryDependencies": [
+        "@dashboardblocks/kpi-04"
+      ]
+    },
+    {
       "name": "progress-kpi-01",
       "type": "registry:component",
-      "description": "Progress to a monthly target, with a tick where an even pace would be by today and the total you are on pace for.",
+      "description": "Progress to a monthly target, with the projected total hatched ahead of it and a line where an even pace would be by today.",
       "registryDependencies": [
         "@dashboardblocks/progress-kpi-01"
       ]
@@ -596,7 +640,7 @@
     {
       "name": "progress-kpi-02",
       "type": "registry:component",
-      "description": "The share of work done, with a bar for each status.",
+      "description": "The share of work done, as one bar split by status with a count for each.",
       "registryDependencies": [
         "@dashboardblocks/progress-kpi-02"
       ]
@@ -604,7 +648,7 @@
     {
       "name": "progress-kpi-03",
       "type": "registry:component",
-      "description": "A count against a goal as a ring, with how many are left to go.",
+      "description": "A count against a goal as a ring, with how many are left and how many a day that takes.",
       "registryDependencies": [
         "@dashboardblocks/progress-kpi-03"
       ]
@@ -620,7 +664,7 @@
     {
       "name": "bar-chart-kpi-02",
       "type": "registry:component",
-      "description": "Each day's value next to its goal, with the share of the goal reached and how many days met it.",
+      "description": "Each day's value with its goal marked on the bar, the share of the goal reached and how many days met it.",
       "registryDependencies": [
         "@dashboardblocks/bar-chart-kpi-02"
       ]
@@ -628,7 +672,7 @@
     {
       "name": "line-chart-kpi-01",
       "type": "registry:component",
-      "description": "This week against the same days last week, drawn as a solid and a dashed line.",
+      "description": "This week as a filled area over last week as a dashed line, with the days it fell behind.",
       "registryDependencies": [
         "@dashboardblocks/line-chart-kpi-01"
       ]
@@ -636,7 +680,7 @@
     {
       "name": "area-chart-kpi-01",
       "type": "registry:component",
-      "description": "Gross profit with its margin, and revenue and profit by day as stacked areas.",
+      "description": "Gross profit with its margin, and profit inside revenue by day, with the best margin day.",
       "registryDependencies": [
         "@dashboardblocks/area-chart-kpi-01"
       ]
@@ -644,7 +688,7 @@
     {
       "name": "area-chart-kpi-02",
       "type": "registry:component",
-      "description": "A total with a faint area chart behind it, as a headline card at the top of a dashboard.",
+      "description": "A large total with an area chart along the bottom, as a hero number at the top of a dashboard.",
       "registryDependencies": [
         "@dashboardblocks/area-chart-kpi-02"
       ]
@@ -676,7 +720,7 @@
     {
       "name": "activity-feed-04",
       "type": "registry:component",
-      "description": "A week of activity by kind with the change on the week before, and the most active people.",
+      "description": "A week of activity as daily bars with the busiest day labelled, by kind, with the most active people.",
       "registryDependencies": [
         "@dashboardblocks/activity-feed-04"
       ]
@@ -716,7 +760,7 @@
     {
       "name": "usage-meter-04",
       "type": "registry:component",
-      "description": "A credit balance with the average daily use, the date it runs out and a strip of recent days.",
+      "description": "A credit balance with the days left, the date it runs out and recent daily use against the average.",
       "registryDependencies": [
         "@dashboardblocks/usage-meter-04"
       ]
@@ -724,7 +768,7 @@
     {
       "name": "usage-meter-05",
       "type": "registry:component",
-      "description": "Storage split into categories as one segmented bar, with each category's size and share.",
+      "description": "Storage split into categories as one segmented bar, with each category's size and share, and the space that is free.",
       "registryDependencies": [
         "@dashboardblocks/usage-meter-05"
       ]
@@ -748,7 +792,7 @@
     {
       "name": "usage-meter-08",
       "type": "registry:component",
-      "description": "What is left as a round wave that drains as usage grows, with used, available and days until reset below.",
+      "description": "What is left as a round wave that drains as usage grows, with used, free and days until reset below.",
       "registryDependencies": [
         "@dashboardblocks/usage-meter-08"
       ]
@@ -764,7 +808,7 @@
     {
       "name": "leaderboard-02",
       "type": "registry:component",
-      "description": "People ranked by revenue with badges for the top three and the change since the last period.",
+      "description": "People ranked by revenue with a bar to their quota and the change since the last period.",
       "registryDependencies": [
         "@dashboardblocks/leaderboard-02"
       ]
@@ -772,7 +816,7 @@
     {
       "name": "leaderboard-03",
       "type": "registry:component",
-      "description": "The top three on a podium, with the rest of the field listed below.",
+      "description": "The top three on a podium sized by their totals, with the rest of the field listed below.",
       "registryDependencies": [
         "@dashboardblocks/leaderboard-03"
       ]
@@ -796,7 +840,7 @@
     {
       "name": "chart-panel-01",
       "type": "registry:component",
-      "description": "This period's line against the previous period's, muted, so the current trend leads.",
+      "description": "This period's area against the previous period's dashed line, with the change written as a sentence.",
       "registryDependencies": [
         "@dashboardblocks/chart-panel-01"
       ]
@@ -804,7 +848,7 @@
     {
       "name": "chart-panel-02",
       "type": "registry:component",
-      "description": "A chart with tabs for related metrics, each tab showing its total and change.",
+      "description": "Tabs for related metrics, each showing its total and change, over a chart of the chosen one with its average.",
       "registryDependencies": [
         "@dashboardblocks/chart-panel-02"
       ]
@@ -812,7 +856,7 @@
     {
       "name": "chart-panel-03",
       "type": "registry:component",
-      "description": "Monthly totals as stacked bars split by category, with a legend.",
+      "description": "Monthly totals as stacked bars split by category, with the average and the latest total labelled.",
       "registryDependencies": [
         "@dashboardblocks/chart-panel-03"
       ]
@@ -820,7 +864,7 @@
     {
       "name": "chart-panel-04",
       "type": "registry:component",
-      "description": "A single series of bars with the latest period highlighted and labelled.",
+      "description": "A single series of bars with the latest period highlighted and labelled, against a goal line.",
       "registryDependencies": [
         "@dashboardblocks/chart-panel-04"
       ]
@@ -836,7 +880,7 @@
     {
       "name": "chart-panel-06",
       "type": "registry:component",
-      "description": "Several ordered lines, such as percentiles, in one hue from light to full strength, each labelled at its end.",
+      "description": "Several ordered lines, such as percentiles, in one hue from light to full strength, labelled at their ends, against an SLO line.",
       "registryDependencies": [
         "@dashboardblocks/chart-panel-06"
       ]
@@ -852,7 +896,7 @@
     {
       "name": "breakdown-02",
       "type": "registry:component",
-      "description": "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
+      "description": "One bar per group showing its mix of categories, sorted by a chosen category's share, which is labelled on every row.",
       "registryDependencies": [
         "@dashboardblocks/breakdown-02"
       ]
@@ -868,7 +912,7 @@
     {
       "name": "breakdown-04",
       "type": "registry:component",
-      "description": "How each category's share of a total moved between two periods.",
+      "description": "How each category's share of a total moved between two periods, as a dot for each period joined by a line.",
       "registryDependencies": [
         "@dashboardblocks/breakdown-04"
       ]
@@ -884,7 +928,7 @@
     {
       "name": "funnel-02",
       "type": "registry:component",
-      "description": "Stages as vertical columns, with the share lost at each step shown as the empty track above the column.",
+      "description": "Stages as columns against a 0 to 100% axis, each topped by the share that left at that step, with the biggest drop named.",
       "registryDependencies": [
         "@dashboardblocks/funnel-02"
       ]
@@ -900,7 +944,7 @@
     {
       "name": "funnel-04",
       "type": "registry:component",
-      "description": "Two segments side by side at every stage, each as a share of its first step, to compare how they convert.",
+      "description": "Two segments as lines through every stage, each as a share of its first step, with the gap between them shaded.",
       "registryDependencies": [
         "@dashboardblocks/funnel-04"
       ]
@@ -908,7 +952,7 @@
     {
       "name": "status-01",
       "type": "registry:component",
-      "description": "Each service with its current status, and an overall badge showing the worst one.",
+      "description": "Each service with its current status, the worst one above the title, and a sentence naming the services that are not operational.",
       "registryDependencies": [
         "@dashboardblocks/status-01"
       ]
@@ -932,7 +976,7 @@
     {
       "name": "status-04",
       "type": "registry:component",
-      "description": "A grid of regions, each with its status, latency and error rate.",
+      "description": "Regions, each with its status, p95 latency bar and error rate.",
       "registryDependencies": [
         "@dashboardblocks/status-04"
       ]
@@ -948,7 +992,7 @@
     {
       "name": "stat-group-01",
       "type": "registry:component",
-      "description": "Three metrics side by side, each with its change and previous value.",
+      "description": "Metrics side by side, each with its change written as a sentence.",
       "registryDependencies": [
         "@dashboardblocks/stat-group-01"
       ]
@@ -956,7 +1000,7 @@
     {
       "name": "stat-group-02",
       "type": "registry:component",
-      "description": "A row of metrics, each with its change and a 14-day sparkline.",
+      "description": "A row of metrics, each with its change and a 14-day sparkline, under a sentence saying how many improved.",
       "registryDependencies": [
         "@dashboardblocks/stat-group-02"
       ]
@@ -964,7 +1008,7 @@
     {
       "name": "stat-group-03",
       "type": "registry:component",
-      "description": "A row of metrics where picking one charts it against the previous period.",
+      "description": "A row of metrics where picking one charts it by day against the previous period.",
       "registryDependencies": [
         "@dashboardblocks/stat-group-03"
       ]
@@ -980,7 +1024,7 @@
     {
       "name": "stat-group-05",
       "type": "registry:component",
-      "description": "Four metrics that sit in a row, then a 2×2 grid, then a single stack as the card narrows.",
+      "description": "Four metrics, each with a bar for this period over a bar for the one before.",
       "registryDependencies": [
         "@dashboardblocks/stat-group-05"
       ]
@@ -1124,7 +1168,7 @@
     {
       "name": "states-04",
       "type": "registry:component",
-      "description": "A card that says what went wrong when loading fails and offers to try again.",
+      "description": "A chart that loads its own data and, when the request fails, says so where the number and the chart go.",
       "registryDependencies": [
         "@dashboardblocks/states-04"
       ]
@@ -1177,7 +1221,7 @@
     {
       "name": "goals-01",
       "type": "registry:component",
-      "description": "One target with an expected-by-today marker, what is left and a projection at the current pace.",
+      "description": "One target with an expected-by-today marker, the projection at the current pace hatched on the bar, and what is left to do each day.",
       "registryDependencies": [
         "@dashboardblocks/goals-01"
       ]
@@ -1193,7 +1237,7 @@
     {
       "name": "goals-03",
       "type": "registry:component",
-      "description": "Cumulative progress this month, projected to the end of the month at the current daily rate, against the target line.",
+      "description": "Cumulative progress this month, projected to the end of the month at the current daily rate, with the day it reaches the target or how far short it ends.",
       "registryDependencies": [
         "@dashboardblocks/goals-03"
       ]
@@ -1201,7 +1245,7 @@
     {
       "name": "goals-04",
       "type": "registry:component",
-      "description": "Small daily goals as rings, with a check mark once a goal is met.",
+      "description": "Small daily goals as rings, with what is left to do or how far past the goal each one is.",
       "registryDependencies": [
         "@dashboardblocks/goals-04"
       ]
@@ -1209,7 +1253,7 @@
     {
       "name": "comparison-01",
       "type": "registry:component",
-      "description": "Each metric this period and last, with the difference and the change, coloured by whether a rise is good.",
+      "description": "Each metric this period and last, with the difference and the change, under a sentence saying how many improved.",
       "registryDependencies": [
         "@dashboardblocks/comparison-01"
       ]
@@ -1217,7 +1261,7 @@
     {
       "name": "comparison-02",
       "type": "registry:component",
-      "description": "The lift of a variant over the control, with a 95% confidence interval drawn against zero.",
+      "description": "The lift of a variant over the control, with a 95% confidence interval drawn against zero and what it means.",
       "registryDependencies": [
         "@dashboardblocks/comparison-02"
       ]
@@ -1225,7 +1269,7 @@
     {
       "name": "comparison-03",
       "type": "registry:component",
-      "description": "The change in each segment as bars either side of zero, sorted from the biggest gain to the biggest drop.",
+      "description": "The net change, then the change in each segment as bars either side of zero, from the biggest gain to the biggest drop.",
       "registryDependencies": [
         "@dashboardblocks/comparison-03"
       ]
@@ -1233,7 +1277,7 @@
     {
       "name": "comparison-04",
       "type": "registry:component",
-      "description": "Two values per row on a shared scale, with a hollow dot for before and a filled dot for after.",
+      "description": "Two values per row on a shared scale, a hollow dot for before and a filled one for after, with the rows that got worse in grey.",
       "registryDependencies": [
         "@dashboardblocks/comparison-04"
       ]
@@ -1289,7 +1333,7 @@
     {
       "name": "geo-03",
       "type": "registry:component",
-      "description": "Active users by city right now as markers sized by value on a dotted world map.",
+      "description": "Active users by city right now as markers sized by value on a dotted world map, with the busiest city named.",
       "registryDependencies": [
         "@dashboardblocks/geo-03"
       ]
@@ -1305,7 +1349,7 @@
     {
       "name": "billing-01",
       "type": "registry:component",
-      "description": "Starting to ending monthly recurring revenue as a waterfall, with net new revenue and net revenue retention for the month.",
+      "description": "Starting to ending monthly recurring revenue as a waterfall chart, with ending MRR against the start of the month, net new revenue and net revenue retention.",
       "registryDependencies": [
         "@dashboardblocks/billing-01"
       ]
@@ -1345,7 +1389,7 @@
     {
       "name": "insights-01",
       "type": "registry:component",
-      "description": "A list of plain-language insights, each with its topic, the key figures highlighted, an optional line on the drivers and a link to explore.",
+      "description": "A list of plain-language insights, each with its kind as a coloured word, its topic, the key figures picked out, an optional line on the drivers and a link to explore.",
       "registryDependencies": [
         "@dashboardblocks/insights-01"
       ]
@@ -1353,7 +1397,7 @@
     {
       "name": "insights-02",
       "type": "registry:component",
-      "description": "An unusual reading against the range it was expected to fall in, with the days outside it marked, the explanation and likely causes.",
+      "description": "An unusual reading against the range it was expected to fall in, with the days outside it shaded, the worst day labelled on the chart, the explanation and likely causes.",
       "registryDependencies": [
         "@dashboardblocks/insights-02"
       ]
@@ -1385,7 +1429,7 @@
     {
       "name": "pipeline-02",
       "type": "registry:component",
-      "description": "A slim strip with each stage as a segment sized by value or by count, for the top of a dashboard.",
+      "description": "Open value across stages, with each stage as a segment sized by value or by count.",
       "registryDependencies": [
         "@dashboardblocks/pipeline-02"
       ]
@@ -1457,7 +1501,7 @@
     {
       "name": "team-03",
       "type": "registry:component",
-      "description": "How many people are online, shown as avatars, with the team split by presence.",
+      "description": "How many people are online, with their avatars and the team split by presence.",
       "registryDependencies": [
         "@dashboardblocks/team-03"
       ]
@@ -1473,7 +1517,7 @@
     {
       "name": "team-05",
       "type": "registry:component",
-      "description": "A grid of what each role can do, with permissions in rows and roles in columns, and unsaved changes highlighted.",
+      "description": "A grid of what each role can do, with permissions in rows and roles in columns, unsaved changes highlighted and a save bar that shows once something changes.",
       "registryDependencies": [
         "@dashboardblocks/team-05"
       ]
@@ -1489,7 +1533,7 @@
     {
       "name": "checklist-01",
       "type": "registry:component",
-      "description": "Setup steps with a progress ring, where each step expands to show what it involves and the current step has its action.",
+      "description": "Setup steps with a progress bar, where each step expands to show what it involves and the current step has its action.",
       "registryDependencies": [
         "@dashboardblocks/checklist-01"
       ]
@@ -1497,7 +1541,7 @@
     {
       "name": "checklist-02",
       "type": "registry:component",
-      "description": "The stages of a multi-stage setup, side by side on wide cards and stacked on narrow ones.",
+      "description": "The stages of a multi-stage setup as a row of rules, side by side when wide and stacked when narrow.",
       "registryDependencies": [
         "@dashboardblocks/checklist-02"
       ]
@@ -1505,7 +1549,7 @@
     {
       "name": "checklist-03",
       "type": "registry:component",
-      "description": "A small card with how many setup steps are done and the next one, to bring people back to finish.",
+      "description": "A small block with how many setup steps are done and the next one, to bring people back to finish.",
       "registryDependencies": [
         "@dashboardblocks/checklist-03"
       ]
@@ -1513,7 +1557,7 @@
     {
       "name": "checklist-04",
       "type": "registry:component",
-      "description": "Tasks grouped by team with due dates and checkboxes, flagging overdue and due-today tasks.",
+      "description": "Tasks grouped by team with owners, due dates and checkboxes, with overdue and due-soon tasks written in colour.",
       "registryDependencies": [
         "@dashboardblocks/checklist-04"
       ]
@@ -1529,7 +1573,7 @@
     {
       "name": "gauge-02",
       "type": "registry:component",
-      "description": "A health score weighted from its contributing factors, marked on poor, fair and good bands.",
+      "description": "A health score weighted from its contributing factors, marked on poor, fair and good bands, with the factors that pull it down most.",
       "registryDependencies": [
         "@dashboardblocks/gauge-02"
       ]
@@ -1577,7 +1621,7 @@
     {
       "name": "metric-list-04",
       "type": "registry:component",
-      "description": "A list of metrics where picking one charts it in the same card.",
+      "description": "A list of metrics where picking one charts it beside the list, against its 30-day average.",
       "registryDependencies": [
         "@dashboardblocks/metric-list-04"
       ]
@@ -1593,7 +1637,7 @@
     {
       "name": "forecast-02",
       "type": "registry:component",
-      "description": "The date the trend reaches a target, with an 80% range of dates, against the deadline.",
+      "description": "The running total heading for a goal line, with the forecast, its 80% range, the deadline and the date it gets there.",
       "registryDependencies": [
         "@dashboardblocks/forecast-02"
       ]
@@ -1633,7 +1677,7 @@
     {
       "name": "retention-03",
       "type": "registry:component",
-      "description": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before.",
+      "description": "Day 1, 7 and 30 retention for the latest cohort, with the change against the cohort before written out.",
       "registryDependencies": [
         "@dashboardblocks/retention-03"
       ]
@@ -1649,7 +1693,7 @@
     {
       "name": "distribution-01",
       "type": "registry:component",
-      "description": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines and the buckets over the target in red.",
+      "description": "Response times in buckets that widen as times grow, with p50, p95 and p99 lines, the buckets over the target in red and the share over it as the headline.",
       "registryDependencies": [
         "@dashboardblocks/distribution-01"
       ]
@@ -1673,7 +1717,7 @@
     {
       "name": "distribution-04",
       "type": "registry:component",
-      "description": "This week's distribution over last week's outline, with both medians and the change at the median and p90.",
+      "description": "This week's distribution against last week's as a dashed line, with both medians and the change at the median and p90.",
       "registryDependencies": [
         "@dashboardblocks/distribution-04"
       ]
@@ -1689,7 +1733,7 @@
     {
       "name": "spend-02",
       "type": "registry:component",
-      "description": "One budget bar per service, each with its own status, and the total underneath.",
+      "description": "The total spent and where it is heading, then one budget bar per service, naming the ones over budget.",
       "registryDependencies": [
         "@dashboardblocks/spend-02"
       ]
@@ -1697,7 +1741,7 @@
     {
       "name": "spend-03",
       "type": "registry:component",
-      "description": "Monthly spend as bars against a stepped budget line, with months over budget in red and the year-to-date variance.",
+      "description": "Monthly spend as bars against a stepped budget line, with months over budget in red and labelled with the overspend, and the year-to-date variance.",
       "registryDependencies": [
         "@dashboardblocks/spend-03"
       ]
@@ -1705,7 +1749,7 @@
     {
       "name": "spend-04",
       "type": "registry:component",
-      "description": "The cash balance, the average net burn and the months of runway left, with the balance projected to zero.",
+      "description": "The cash balance, the average net burn and the months of runway left, with the balance projected to the month it runs out.",
       "registryDependencies": [
         "@dashboardblocks/spend-04"
       ]
@@ -1761,7 +1805,7 @@
     {
       "name": "timeline-03",
       "type": "registry:component",
-      "description": "Every release on one line, sized as major, minor or patch, with the median gap and days since the last one.",
+      "description": "Every release on one line, sized as major, minor or patch, with the median gap and when the next one is due.",
       "registryDependencies": [
         "@dashboardblocks/timeline-03"
       ]
@@ -1801,7 +1845,7 @@
     {
       "name": "realtime-04",
       "type": "registry:component",
-      "description": "Running totals since midnight against yesterday at the same time, with orders per hour.",
+      "description": "Running totals since midnight against yesterday at the same time, with orders per hour beside yesterday as a dashed line.",
       "registryDependencies": [
         "@dashboardblocks/realtime-04"
       ]
@@ -1809,7 +1853,7 @@
     {
       "name": "feedback-01",
       "type": "registry:component",
-      "description": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period.",
+      "description": "The average rating as stars, the number of ratings and the share of each star, with the change on the last period and the share rating 4 or 5.",
       "registryDependencies": [
         "@dashboardblocks/feedback-01"
       ]
@@ -1817,7 +1861,7 @@
     {
       "name": "feedback-02",
       "type": "registry:component",
-      "description": "Negative and positive mentions for each topic either side of a centre line, sorted by net sentiment.",
+      "description": "A diverging bar chart of negative and positive mentions for each topic, sorted by net sentiment, with the best and worst topic in a sentence.",
       "registryDependencies": [
         "@dashboardblocks/feedback-02"
       ]
@@ -1889,7 +1933,7 @@
     {
       "name": "scatter-03",
       "type": "registry:component",
-      "description": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.",
+      "description": "Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel, against a target cost.",
       "registryDependencies": [
         "@dashboardblocks/scatter-03"
       ]
@@ -1905,7 +1949,7 @@
     {
       "name": "security-01",
       "type": "registry:component",
-      "description": "Succeeded, failed and blocked sign-ins per day, with the failure rate, spikes in blocked attempts and two-factor coverage.",
+      "description": "Failed and blocked sign-ins per day against a typical day, with the failure rate, the spike in blocked attempts called out, and two-factor coverage.",
       "registryDependencies": [
         "@dashboardblocks/security-01"
       ]
@@ -1929,7 +1973,7 @@
     {
       "name": "security-04",
       "type": "registry:component",
-      "description": "A security score built from workspace checks, with failing checks first and what to do about each.",
+      "description": "A security score on a banded gauge, built from workspace checks, with failing checks first and what to do about each.",
       "registryDependencies": [
         "@dashboardblocks/security-04"
       ]
@@ -1985,7 +2029,7 @@
     {
       "name": "ai-usage-01",
       "type": "registry:component",
-      "description": "Tokens per day stacked by model, with the total cost and the cost per million tokens.",
+      "description": "Tokens per day stacked by model against the daily average, with the total cost and the cost per million tokens; hovering a day splits it by model.",
       "registryDependencies": [
         "@dashboardblocks/ai-usage-01"
       ]
@@ -2001,7 +2045,7 @@
     {
       "name": "ai-usage-03",
       "type": "registry:component",
-      "description": "Requests, time to first token, output speed and error rate for each model.",
+      "description": "Requests, time to first token from the median to the 95th percentile, output speed and error rate for each model.",
       "registryDependencies": [
         "@dashboardblocks/ai-usage-03"
       ]
@@ -2041,7 +2085,7 @@
     {
       "name": "settings-04",
       "type": "registry:component",
-      "description": "Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.",
+      "description": "Connected and available integrations in tabs, one row each with what it does, its status and a prompt for ones that need reconnecting.",
       "registryDependencies": [
         "@dashboardblocks/settings-04"
       ]
@@ -2049,7 +2093,7 @@
     {
       "name": "settings-05",
       "type": "registry:component",
-      "description": "Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.",
+      "description": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.",
       "registryDependencies": [
         "@dashboardblocks/settings-05"
       ]
@@ -2065,7 +2109,7 @@
     {
       "name": "settings-07",
       "type": "registry:component",
-      "description": "A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.",
+      "description": "A profile form with your photo, name, email, time zone and theme, a save bar that shows once something changes, and a new email confirmed before it takes effect.",
       "registryDependencies": [
         "@dashboardblocks/settings-07"
       ]
@@ -2153,7 +2197,7 @@
     {
       "name": "record-detail-03",
       "type": "registry:component",
-      "description": "A ticket page with a description, activity and comments, a comment box, and properties such as status, assignee and labels.",
+      "description": "A ticket page with a description, activity and comments, a comment box, and properties such as priority, assignee and labels.",
       "registryDependencies": [
         "@dashboardblocks/record-detail-03"
       ]
@@ -2169,7 +2213,7 @@
     {
       "name": "page-header-02",
       "type": "registry:component",
-      "description": "A page title with a status badge and links to the page's sections, each with a count.",
+      "description": "A page title with its status as a coloured word and links to the page's sections, each with a count.",
       "registryDependencies": [
         "@dashboardblocks/page-header-02"
       ]
@@ -2177,7 +2221,7 @@
     {
       "name": "page-header-03",
       "type": "registry:component",
-      "description": "A record header with a back link, an avatar, facts about the record and a menu for less common actions such as delete.",
+      "description": "A record header with a back link, a photo, the record's key numbers in a row and a menu for less common actions such as delete.",
       "registryDependencies": [
         "@dashboardblocks/page-header-03"
       ]
@@ -2185,7 +2229,7 @@
     {
       "name": "page-header-04",
       "type": "registry:component",
-      "description": "A page title with a count beside it, and search and the main action on the same row.",
+      "description": "A page title with its count beside it, and search and the main action on the same row.",
       "registryDependencies": [
         "@dashboardblocks/page-header-04"
       ]
@@ -2297,7 +2341,7 @@
     {
       "name": "calendar-02",
       "type": "registry:component",
-      "description": "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
+      "description": "A week on an hour axis that opens at working hours, with all-day events on top and the selected event's details.",
       "registryDependencies": [
         "@dashboardblocks/calendar-02"
       ]
@@ -2337,7 +2381,7 @@
     {
       "name": "files-03",
       "type": "registry:component",
-      "description": "Storage used against the plan, split by kind of file, with the largest files listed to delete.",
+      "description": "Storage used against the plan, split by kind of file, with the largest files and the space deleting them would free.",
       "registryDependencies": [
         "@dashboardblocks/files-03"
       ]
@@ -2345,7 +2389,7 @@
     {
       "name": "files-04",
       "type": "registry:component",
-      "description": "Folders and files in a grid with a path back to the top, and a menu on each file.",
+      "description": "Folders as tiles over a list of files with their size and last change, a path back to the top, and a menu on each file.",
       "registryDependencies": [
         "@dashboardblocks/files-04"
       ]
@@ -2369,7 +2413,7 @@
     {
       "name": "ai-assistant-03",
       "type": "registry:component",
-      "description": "Questions about an AI usage card, with the tokens and cost shown for each answer.",
+      "description": "Questions about token usage numbers, with the tokens and cost shown for each answer.",
       "registryDependencies": [
         "@dashboardblocks/ai-assistant-03"
       ]
@@ -2534,6 +2578,15 @@
       "description": "A hook that tracks whether an element is visible in the viewport using IntersectionObserver.",
       "registryDependencies": [
         "@dashboardblocks/use-in-view"
+      ]
+    },
+    {
+      "name": "use-reveal",
+      "type": "registry:hook",
+      "title": "Use Reveal",
+      "description": "A hook that turns true the frame after an element scrolls into view, so a bar or ring can animate from zero.",
+      "registryDependencies": [
+        "@dashboardblocks/use-reveal"
       ]
     }
   ]

@@ -1,23 +1,24 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type DeployStatus,
   DeployStatusLabel,
+  deployStatusConfig,
   formatDuration,
   shortSha,
 } from '@/registry/components/dashboardblocks/deployments'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface Deployment {
   author: string
+  authorAvatar?: string
   /** Seconds the build and deploy took, or have taken so far. */
   duration: number
   environment: string
@@ -29,10 +30,13 @@ interface Deployment {
 }
 
 interface Deployments1Props {
-  deployments: Deployment[]
-  description: string
+  /** Leave out, or pass none, to show the empty state. */
+  deployments?: Deployment[]
+  /** Defaults to a sentence counting the deploys and any that need a look. */
+  description?: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
+  status?: BlockStatus
   title: string
 }
 
@@ -43,6 +47,7 @@ const exampleProps: Deployments1Props = {
   deployments: [
     {
       author: 'Ana Lima',
+      authorAvatar: '/images/avatar-01.webp',
       duration: 94,
       environment: 'Production',
       id: 'd1',
@@ -53,6 +58,7 @@ const exampleProps: Deployments1Props = {
     },
     {
       author: 'Ana Lima',
+      authorAvatar: '/images/avatar-01.webp',
       duration: 212,
       environment: 'Preview',
       id: 'd2',
@@ -63,6 +69,7 @@ const exampleProps: Deployments1Props = {
     },
     {
       author: 'Kenji Mori',
+      authorAvatar: '/images/avatar-04.webp',
       duration: 187,
       environment: 'Production',
       id: 'd3',
@@ -73,6 +80,7 @@ const exampleProps: Deployments1Props = {
     },
     {
       author: 'Sara Okafor',
+      authorAvatar: '/images/avatar-05.webp',
       duration: 66,
       environment: 'Production',
       id: 'd4',
@@ -83,6 +91,7 @@ const exampleProps: Deployments1Props = {
     },
     {
       author: 'Sara Okafor',
+      authorAvatar: '/images/avatar-05.webp',
       duration: 143,
       environment: 'Preview',
       id: 'd5',
@@ -92,7 +101,6 @@ const exampleProps: Deployments1Props = {
       status: 'failed',
     },
   ],
-  description: 'The latest builds across environments',
   now: NOW,
   title: 'Deployments',
 }
@@ -106,56 +114,94 @@ function formatStarted(date: Date, now: Date) {
   return relative.format(-Math.round(minutes / 1_440), 'day')
 }
 
+const summarize = (deployments: Deployment[], now: Date) => {
+  if (deployments.length === 0) return 'Nothing deployed yet.'
+  const oldest = Math.min(
+    ...deployments.map((deployment) => deployment.startedAt.getTime()),
+  )
+  const hours = Math.max(1, Math.ceil((now.getTime() - oldest) / 3_600_000))
+  const span =
+    hours <= 48
+      ? `${hours} ${hours === 1 ? 'hour' : 'hours'}`
+      : `${Math.ceil(hours / 24)} days`
+  const count = `${deployments.length} ${deployments.length === 1 ? 'deploy' : 'deploys'} in the last ${span}.`
+  const notable = (['running', 'failed', 'rolled-back'] as const)
+    .map((status) => {
+      const matching = deployments.filter(
+        (deployment) => deployment.status === status,
+      ).length
+      return matching > 0
+        ? `${matching} ${deployStatusConfig[status].label.toLowerCase()}`
+        : null
+    })
+    .filter(Boolean)
+  return notable.length > 0 ? `${count} ${notable.join(', ')}.` : `${count} All ready.`
+}
+
 const Deployments1 = (props: Deployments1Props) => {
-  const { deployments, description, now, title } = props
+  const { deployments = [], now, status, title } = props
+  const { description = summarize(deployments, now) } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ul className='flex flex-col divide-y'>
-          {deployments.map((deployment) => (
-            <li
-              key={deployment.id}
-              className='flex items-start gap-3 py-3 first:pt-0 last:pb-0'
-            >
-              <PersonAvatar
-                className='mt-0.5'
-                person={{ name: deployment.author }}
-                size='sm'
-              />
-              <div className='flex min-w-0 flex-1 flex-col gap-1'>
-                <div className='flex items-start justify-between gap-3'>
-                  <span className='truncate text-sm font-medium'>
-                    {deployment.message}
-                  </span>
-                  <DeployStatusLabel className='shrink-0' status={deployment.status} />
-                </div>
-                <div className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs'>
-                  <span className='bg-muted text-foreground rounded px-1.5 py-0.5 font-medium'>
-                    {deployment.environment}
-                  </span>
-                  <span className='font-mono'>{shortSha(deployment.sha)}</span>
-                  <span>{deployment.author}</span>
-                  <span aria-hidden>·</span>
-                  <time dateTime={deployment.startedAt.toISOString()}>
-                    {formatStarted(deployment.startedAt, now)}
-                  </time>
-                  <span aria-hidden>·</span>
-                  <span className='tabular-nums'>
-                    {deployment.status === 'running' ? 'running for ' : 'took '}
-                    {formatDuration(deployment.duration)}
-                  </span>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+    <BlockStateProvider status={status} empty={deployments.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <div className='border-t'>
+          <BlockStateRows rows={5} />
+          <ul className='flex flex-col empty:hidden'>
+            {!status &&
+              deployments.map((deployment) => (
+                <li
+                  key={deployment.id}
+                  className='flex items-start gap-3 border-b py-2.5'
+                >
+                  <PersonAvatar
+                    className='mt-0.5'
+                    person={{ avatar: deployment.authorAvatar, name: deployment.author }}
+                    size='sm'
+                  />
+                  <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                    <div className='flex items-baseline justify-between gap-3'>
+                      <span className='truncate text-sm font-medium'>
+                        {deployment.message}
+                      </span>
+                      <DeployStatusLabel
+                        className='shrink-0'
+                        status={deployment.status}
+                      />
+                    </div>
+                    <div className='flex items-baseline justify-between gap-3 text-xs'>
+                      <p className='text-muted-foreground min-w-0'>
+                        <span className='text-foreground me-2'>
+                          {deployment.environment}
+                        </span>
+                        <Details>
+                          <span className='font-mono'>{shortSha(deployment.sha)}</span>
+                          {deployment.author}
+                          <time dateTime={deployment.startedAt.toISOString()}>
+                            {formatStarted(deployment.startedAt, now)}
+                          </time>
+                        </Details>
+                      </p>
+                      <span className='text-muted-foreground shrink-0 tabular-nums'>
+                        <span className='sr-only'>
+                          {deployment.status === 'running' ? 'Building for ' : 'Took '}
+                        </span>
+                        {formatDuration(deployment.duration)}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

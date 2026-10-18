@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   Stat,
   StatChange,
   StatGroup,
@@ -8,21 +12,25 @@ import {
   type StatMetric,
   StatValue,
   formatStatValue,
+  getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
-
-import { Card } from '@/components/ui/card'
+import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface StatGroup1Props {
-  metrics: StatMetric[]
+  /** Follows each previous value, such as `last month`. */
+  comparison: string
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: StatMetric[]
+  /** How many metrics to sketch while loading. @default 3 */
+  placeholders?: number
+  status?: BlockStatus
 }
 
-const currency = (value: number) =>
-  `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
-
 const exampleProps: StatGroup1Props = {
+  comparison: 'last month',
   metrics: [
     {
-      formatter: currency,
+      formatter: (value) => formatCurrency(value),
       key: 'revenue',
       label: 'Revenue',
       previous: 42_890,
@@ -31,7 +39,7 @@ const exampleProps: StatGroup1Props = {
     { key: 'orders', label: 'Orders', previous: 1_210, value: 1_284 },
     {
       changeType: 'points',
-      formatter: (value) => `${value}%`,
+      formatter: (value) => formatPercent(value / 100),
       goodDirection: 'down',
       key: 'refundRate',
       label: 'Refund rate',
@@ -42,24 +50,25 @@ const exampleProps: StatGroup1Props = {
 }
 
 const StatGroup1 = (props: StatGroup1Props) => {
-  const { metrics } = props
+  const { comparison, metrics = [], placeholders = 3, status } = props
+  const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <Card className='@container gap-0 py-0'>
-      <StatGroup
-        style={{ gridTemplateColumns: `repeat(${metrics.length}, minmax(0, 1fr))` }}
-      >
-        {metrics.map((metric) => (
-          <Stat key={metric.key} className='p-4 @xl:p-6'>
-            <StatLabel className='text-xs @xl:text-sm'>{metric.label}</StatLabel>
-            <StatValue className='text-xl @xl:text-3xl'>
-              {formatStatValue(metric)}
-            </StatValue>
-            <StatChange metric={metric} />
-          </Stat>
-        ))}
-      </StatGroup>
-    </Card>
+    <BlockStateProvider status={status} empty={metrics.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <StatGroup className='grid-cols-1 @md:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]'>
+          {shown.map((metric) => (
+            <Stat key={metric.key}>
+              <StatLabel>{metric.label}</StatLabel>
+              <StatValue className='text-3xl @2xl:text-4xl'>
+                {formatStatValue(metric)}
+              </StatValue>
+              <StatChange comparison={comparison} metric={metric} />
+            </Stat>
+          ))}
+        </StatGroup>
+      </section>
+    </BlockStateProvider>
   )
 }
 

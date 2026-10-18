@@ -151,14 +151,14 @@ const CommandMenu1 = (props: CommandMenu1Props) => {
   ]
 
   return (
-    <div className='flex flex-col items-center gap-3'>
+    <section className='@container flex flex-col items-center gap-3'>
       <CommandMenuTrigger
         onClick={openMenu}
         placeholder='Search or run a command…'
         shortcut={`⌘${shortcutKey.toUpperCase()}`}
       />
       <p role='status' className='text-muted-foreground min-h-5 text-sm'>
-        {lastCommand && `Ran: ${lastCommand}`}
+        {lastCommand && `Last command: ${lastCommand}.`}
       </p>
       <CommandMenu
         open={open}
@@ -167,7 +167,7 @@ const CommandMenu1 = (props: CommandMenu1Props) => {
         onNavigate={onNavigate}
         placeholder='Search pages and actions…'
       />
-    </div>
+    </section>
   )
 }
 

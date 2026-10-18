@@ -1,18 +1,36 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  chartAxisProps,
+  chartGridProps,
+  chartLineCursor,
+  chartReferenceProps,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  chartAxisProps,
-  chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   ScatterTooltipContent,
   describeCorrelation,
   fitLine,
   scatterPalette,
 } from '@/registry/components/dashboardblocks/scatter'
+import {
+  formatNumber,
+  formatPercent,
+  formatPoints,
+  formatSigned,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   CartesianGrid,
   ReferenceLine,
@@ -24,14 +42,6 @@ import {
   YAxis,
 } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface CorrelationPoint {
   group: string
   label: string
@@ -42,7 +52,9 @@ interface CorrelationPoint {
 interface Scatter1Props {
   description: string
   groups: string[]
-  points: CorrelationPoint[]
+  /** Leave out, or pass none, to show the empty state. */
+  points?: CorrelationPoint[]
+  status?: BlockStatus
   title: string
   x: { format: (value: number) => string; label: string }
   y: {
@@ -59,7 +71,7 @@ const GROUPS = ['Marketing', 'Docs', 'Checkout']
 
 const exampleProps: Scatter1Props = {
   description:
-    'Each dot is a page: median load time against conversion rate, last 30 days',
+    'Each dot is a page: its median load time against its conversion rate, over the last 30 days.',
   groups: GROUPS,
   points: Array.from({ length: 42 }, (_, index) => {
     const group = GROUPS[index % 3]
@@ -73,16 +85,26 @@ const exampleProps: Scatter1Props = {
     }
   }),
   title: 'Load time vs conversion',
-  x: { format: (value) => `${value.toFixed(1)} s`, label: 'Load time' },
+  x: {
+    format: (value) => `${formatNumber(value, { minimumFractionDigits: 1 })} s`,
+    label: 'Load time',
+  },
   y: {
-    format: (value) => `${value.toFixed(1)}%`,
-    formatChange: (value) => `${value.toFixed(1)} pts`,
+    format: (value) => formatPercent(value / 100, { minimumFractionDigits: 1 }),
+    formatChange: (value) => formatPoints(value, { minimumFractionDigits: 1 }),
     label: 'Conversion',
   },
 }
 
+const formatCorrelation = (r: number) =>
+  `${r < 0 ? '−' : ''}${formatNumber(Math.abs(r), {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  })}`
+
 const Scatter1 = (props: Scatter1Props) => {
-  const { description, groups, points, title, x, y } = props
+  const { description, groups, points = [], status, title, x, y } = props
+  const state = getBlockState(status, points.length === 0)
   const fit = fitLine(points)
   const xs = points.map((point) => point.x)
   const minX = Math.min(...xs)
@@ -93,32 +115,42 @@ const Scatter1 = (props: Scatter1Props) => {
   const perUnit = fit.slope
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Correlation</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              r = {fit.r.toFixed(2)}
+    <BlockStateProvider status={status} empty={points.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <dt className='text-muted-foreground text-sm'>Correlation (r)</dt>
+            <dd>
+              <KPIValue value={fit.r} format={formatCorrelation} />
             </dd>
-            <dd className='text-muted-foreground text-xs'>
-              {describeCorrelation(fit.r)}
-            </dd>
+            <BlockReady className='text-sm'>
+              <dd className='text-muted-foreground text-sm first-letter:uppercase'>
+                {describeCorrelation(fit.r)}
+              </dd>
+            </BlockReady>
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Trend</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {perUnit >= 0 ? '+' : '−'}
-              {(y.formatChange ?? y.format)(Math.abs(perUnit))}
-            </dd>
-            <dd className='text-muted-foreground text-xs'>
-              {y.label.toLowerCase()} per {x.format(1)} more {x.label.toLowerCase()}
-            </dd>
-          </div>
+          {state !== 'empty' && state !== 'error' && (
+            <div className='flex flex-col gap-1'>
+              <dt className='text-muted-foreground text-sm'>Trend</dt>
+              <dd>
+                <KPIValue
+                  className='text-2xl'
+                  value={perUnit}
+                  format={(value) => formatSigned(value, y.formatChange ?? y.format)}
+                />
+              </dd>
+              <BlockReady className='text-sm'>
+                <dd className='text-muted-foreground text-sm'>
+                  {y.label.toLowerCase()} for each {x.format(1)} more{' '}
+                  {x.label.toLowerCase()}
+                </dd>
+              </BlockReady>
+            </div>
+          )}
         </dl>
         <ChartPanelLegend
           items={[
@@ -127,13 +159,20 @@ const Scatter1 = (props: Scatter1Props) => {
               label: group,
               shape: 'rect' as const,
             })),
-            { color: 'var(--muted-foreground)', label: 'Trend', shape: 'line' as const },
+            {
+              color: 'var(--color-muted-foreground)',
+              label: 'Trend',
+              shape: 'line' as const,
+            },
           ]}
         />
         <ChartPanelFigure className='h-64'>
           <ResponsiveContainer width='100%' height='100%'>
-            <ScatterChart margin={{ top: 8, right: 12, bottom: 16, left: 0 }}>
-              <CartesianGrid {...chartGridProps} vertical />
+            <ScatterChart
+              aria-label={`${title} chart`}
+              margin={{ top: 8, right: 12, bottom: 16, left: 0 }}
+            >
+              <CartesianGrid {...chartGridProps} />
               <XAxis
                 {...chartAxisProps}
                 dataKey='x'
@@ -157,16 +196,15 @@ const Scatter1 = (props: Scatter1Props) => {
                 name={y.label}
                 tickFormatter={y.format}
                 type='number'
-                width={44}
+                width={chartValueAxisWidth}
               />
               <ReferenceLine
+                {...chartReferenceProps}
                 ifOverflow='hidden'
                 segment={[
                   { x: minX, y: fit.intercept + fit.slope * minX },
                   { x: maxX, y: fit.intercept + fit.slope * maxX },
                 ]}
-                stroke='var(--color-muted-foreground)'
-                strokeDasharray='5 4'
                 strokeWidth={1.5}
               />
               <Tooltip
@@ -184,7 +222,7 @@ const Scatter1 = (props: Scatter1Props) => {
                     />
                   )
                 }}
-                cursor={{ stroke: 'var(--color-border)', strokeDasharray: '3 3' }}
+                cursor={chartLineCursor}
               />
               {groups.map((group) => (
                 <Scatter
@@ -193,7 +231,7 @@ const Scatter1 = (props: Scatter1Props) => {
                   fill={colorOf(group)}
                   fillOpacity={0.8}
                   name={group}
-                  stroke='var(--color-card)'
+                  stroke='var(--color-background)'
                   strokeWidth={1.5}
                 />
               ))}
@@ -201,7 +239,7 @@ const Scatter1 = (props: Scatter1Props) => {
           </ResponsiveContainer>
         </ChartPanelFigure>
         <ChartPanelTable
-          caption={`${title}: ${description}. Correlation r = ${fit.r.toFixed(2)}.`}
+          caption={`${title}: ${description}. Correlation r = ${formatCorrelation(fit.r)}.`}
           columns={[
             { key: 'label', label: 'Page' },
             { key: 'group', label: 'Group' },
@@ -210,8 +248,8 @@ const Scatter1 = (props: Scatter1Props) => {
           ]}
           rows={points}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -240,16 +240,12 @@ const Auth3 = (props: Auth3Props) => {
           </div>
         )}
         {error && (
-          <p
-            id={`${id}-error`}
-            role='alert'
-            className='text-destructive text-center text-sm'
-          >
+          <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
             {error}
           </p>
         )}
         {trustDays !== undefined && (
-          <div className='flex items-center justify-between gap-4 rounded-lg border p-3'>
+          <div className='flex items-center justify-between gap-4 border-y py-3'>
             <span id={`${id}-trust`} className='text-sm'>
               Trust this device for {trustDays} days
             </span>

@@ -1,6 +1,13 @@
 'use client'
 
-import { BlockMessage } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockMessage,
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type ChoiceCardOption,
@@ -17,16 +24,7 @@ import {
   useState,
 } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { FieldError } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
@@ -44,7 +42,9 @@ interface Onboarding3Props {
   onConnect?: (id: string) => Promise<void>
   onContinue?: (id: string) => void
   requestHref: string
-  sources: DataSource[]
+  /** Leave out, or pass none, to show the empty state. */
+  sources?: DataSource[]
+  status?: BlockStatus
 }
 
 const exampleProps: Onboarding3Props = {
@@ -125,7 +125,7 @@ type Status =
 
 function toOption(source: DataSource): ChoiceCardOption {
   return {
-    badge: source.popular ? <Badge variant='secondary'>Popular</Badge> : undefined,
+    badge: source.popular ? 'Popular' : undefined,
     description: source.description,
     icon: source.logo ?? <span className='text-sm font-semibold'>{source.name[0]}</span>,
     title: source.name,
@@ -134,7 +134,14 @@ function toOption(source: DataSource): ChoiceCardOption {
 }
 
 const Onboarding3 = (props: Onboarding3Props) => {
-  const { onConnect = connectSource, onContinue, requestHref, sources } = props
+  const {
+    onConnect = connectSource,
+    onContinue,
+    requestHref,
+    sources = [],
+    status: blockStatus,
+  } = props
+  const blockState = getBlockState(blockStatus, sources.length === 0)
   const id = useId()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
@@ -218,194 +225,215 @@ const Onboarding3 = (props: Onboarding3Props) => {
           : ''
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle id={`${id}-title`}>Connect a data source</CardTitle>
-        <CardDescription>
-          Pick where your data lives. You can add more sources later.
-        </CardDescription>
-      </CardHeader>
-      <p role='status' className='sr-only'>
-        {announcement}
-      </p>
-      {status.state === 'picking' ? (
-        <form method='post' noValidate onSubmit={onSubmit} className='contents'>
-          <CardContent className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-2 @md:flex-row'>
-              <InputGroup className='@md:flex-1'>
-                <InputGroupAddon>
-                  <IconPlaceholder
-                    lucide='SearchIcon'
-                    tabler='IconSearch'
-                    hugeicons='SearchIcon'
-                    phosphor='MagnifyingGlassIcon'
-                    remixicon='RiSearchLine'
-                  />
-                </InputGroupAddon>
-                <InputGroupInput
-                  id={`${id}-search`}
-                  type='search'
-                  aria-label='Search sources'
-                  aria-controls={`${id}-results`}
-                  placeholder='Search sources…'
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                />
-              </InputGroup>
-              <NativeSelect
-                aria-label='Category'
-                className='w-full @md:w-44'
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-              >
-                <NativeSelectOption value=''>All categories</NativeSelectOption>
-                {categories.map((item) => (
-                  <NativeSelectOption key={item} value={item}>
-                    {item}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-            </div>
-            <p role='status' className='sr-only'>
-              {visible.length === 1 ? '1 source' : `${visible.length} sources`}
+    <BlockStateProvider status={blockStatus} empty={sources.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 id={`${id}-title`} className='font-semibold tracking-tight'>
+            Connect a data source
+          </h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              Pick one of {sources.length} sources to start. You can add more later.
             </p>
-            <div id={`${id}-results`}>
-              {visible.length > 0 ? (
-                <ChoiceCards
-                  id={`${id}-sources`}
-                  aria-labelledby={`${id}-title`}
-                  aria-invalid={error ? true : undefined}
-                  aria-describedby={error ? `${id}-error` : undefined}
-                  className='@lg:grid-cols-2 @3xl:grid-cols-3'
-                  options={visible.map(toOption)}
-                  value={selected}
-                  onValueChange={(value) => {
-                    setSelected(value)
-                    setError(undefined)
-                  }}
-                />
-              ) : (
-                <BlockMessage
-                  className='rounded-lg border border-dashed'
-                  icon={
+          </BlockReady>
+        </header>
+        <p role='status' className='sr-only'>
+          {announcement}
+        </p>
+        {status.state === 'picking' ? (
+          <form
+            method='post'
+            noValidate
+            onSubmit={onSubmit}
+            className='flex flex-col gap-4'
+          >
+            <div className='flex flex-col gap-4'>
+              <div className='flex flex-col gap-2 @md:flex-row'>
+                <InputGroup className='@md:flex-1'>
+                  <InputGroupAddon>
                     <IconPlaceholder
-                      lucide='SearchXIcon'
-                      tabler='IconZoomCancel'
-                      hugeicons='SearchRemoveIcon'
-                      phosphor='MagnifyingGlassMinusIcon'
+                      lucide='SearchIcon'
+                      tabler='IconSearch'
+                      hugeicons='SearchIcon'
+                      phosphor='MagnifyingGlassIcon'
                       remixicon='RiSearchLine'
                     />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    id={`${id}-search`}
+                    type='search'
+                    aria-label='Search sources'
+                    aria-controls={`${id}-results`}
+                    placeholder='Search sources…'
+                    disabled={blockState !== undefined}
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                  />
+                </InputGroup>
+                <NativeSelect
+                  aria-label='Category'
+                  className='w-full @md:w-44'
+                  disabled={blockState !== undefined}
+                  value={category}
+                  onChange={(event) => setCategory(event.target.value)}
+                >
+                  <NativeSelectOption value=''>All categories</NativeSelectOption>
+                  {categories.map((item) => (
+                    <NativeSelectOption key={item} value={item}>
+                      {item}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+              </div>
+              <p role='status' className='sr-only'>
+                {blockState
+                  ? ''
+                  : visible.length === 1
+                    ? '1 source'
+                    : `${visible.length} sources`}
+              </p>
+              <div id={`${id}-results`}>
+                {blockState ? (
+                  <BlockStateRows className='border-t' rows={6} />
+                ) : visible.length > 0 ? (
+                  <ChoiceCards
+                    id={`${id}-sources`}
+                    aria-labelledby={`${id}-title`}
+                    aria-invalid={error ? true : undefined}
+                    aria-describedby={error ? `${id}-error` : undefined}
+                    className='@lg:grid-cols-2 @3xl:grid-cols-3'
+                    options={visible.map(toOption)}
+                    value={selected}
+                    onValueChange={(value) => {
+                      setSelected(value)
+                      setError(undefined)
+                    }}
+                  />
+                ) : (
+                  <BlockMessage
+                    className='rounded-lg border border-dashed'
+                    icon={
+                      <IconPlaceholder
+                        lucide='SearchXIcon'
+                        tabler='IconZoomCancel'
+                        hugeicons='SearchRemoveIcon'
+                        phosphor='MagnifyingGlassMinusIcon'
+                        remixicon='RiSearchLine'
+                      />
+                    }
+                    title='No sources match'
+                    description='Check the spelling or try another category.'
+                    action={
+                      <Button
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        onClick={() => {
+                          setQuery('')
+                          setCategory('')
+                          document.getElementById(`${id}-search`)?.focus()
+                        }}
+                      >
+                        Clear filters
+                      </Button>
+                    }
+                  />
+                )}
+              </div>
+              <FieldError id={`${id}-error`}>{error}</FieldError>
+            </div>
+            <div className='flex flex-col items-stretch gap-3 border-t pt-4 @md:flex-row @md:items-center @md:justify-between'>
+              <p className='text-muted-foreground text-sm'>
+                Can&apos;t find yours?{' '}
+                <Link
+                  href={requestHref}
+                  className='text-foreground font-medium underline underline-offset-4'
+                >
+                  Request a source
+                </Link>
+              </p>
+              <Button type='submit' disabled={blockState !== undefined}>
+                {source ? `Connect ${source.name}` : 'Connect'}
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <div className='border-t pt-4'>
+            <div ref={messageRef} tabIndex={-1} className='outline-none'>
+              {status.state === 'connecting' && (
+                <BlockMessage
+                  icon={
+                    <IconPlaceholder
+                      lucide='LoaderCircleIcon'
+                      tabler='IconLoader2'
+                      hugeicons='Loading03Icon'
+                      phosphor='CircleNotchIcon'
+                      remixicon='RiLoader4Line'
+                      className='animate-spin motion-reduce:animate-none'
+                    />
                   }
-                  title='No sources match'
-                  description='Check the spelling or try another category.'
+                  title={`Connecting to ${source?.name}…`}
+                  description='Approve access in the window that opened. It usually takes less than a minute.'
                   action={
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='sm'
-                      onClick={() => {
-                        setQuery('')
-                        setCategory('')
-                        document.getElementById(`${id}-search`)?.focus()
-                      }}
-                    >
-                      Clear filters
+                    <Button variant='ghost' size='sm' onClick={backToSources}>
+                      Cancel
                     </Button>
                   }
                 />
               )}
+              {status.state === 'connected' && (
+                <BlockMessage
+                  icon={
+                    <IconPlaceholder
+                      lucide='CircleCheckIcon'
+                      tabler='IconCircleCheck'
+                      hugeicons='CheckmarkCircle02Icon'
+                      phosphor='CheckCircleIcon'
+                      remixicon='RiCheckboxCircleLine'
+                      className='text-emerald-700 dark:text-emerald-400'
+                    />
+                  }
+                  title={`${source?.name} is connected`}
+                  description="We're importing the last 90 days. Your first dashboard will be ready in a few minutes."
+                  action={
+                    <div className='flex flex-wrap justify-center gap-2'>
+                      <Button onClick={() => onContinue?.(status.id)}>Continue</Button>
+                      <Button variant='outline' onClick={backToSources}>
+                        Connect another
+                      </Button>
+                    </div>
+                  }
+                />
+              )}
+              {status.state === 'failed' && (
+                <BlockMessage
+                  tone='error'
+                  icon={
+                    <IconPlaceholder
+                      lucide='TriangleAlertIcon'
+                      tabler='IconAlertTriangle'
+                      hugeicons='Alert02Icon'
+                      phosphor='WarningIcon'
+                      remixicon='RiErrorWarningLine'
+                    />
+                  }
+                  title={`Couldn't connect to ${source?.name}`}
+                  description={status.message}
+                  action={
+                    <div className='flex flex-wrap justify-center gap-2'>
+                      <Button onClick={() => void connect(status.id)}>Try again</Button>
+                      <Button variant='outline' onClick={backToSources}>
+                        Pick another source
+                      </Button>
+                    </div>
+                  }
+                />
+              )}
             </div>
-            <FieldError id={`${id}-error`}>{error}</FieldError>
-          </CardContent>
-          <CardFooter className='flex-col items-stretch gap-3 border-t @md:flex-row @md:items-center @md:justify-between'>
-            <p className='text-muted-foreground text-sm'>
-              Can&apos;t find yours?{' '}
-              <Link
-                href={requestHref}
-                className='text-foreground font-medium underline underline-offset-4'
-              >
-                Request a source
-              </Link>
-            </p>
-            <Button type='submit'>{source ? `Connect ${source.name}` : 'Connect'}</Button>
-          </CardFooter>
-        </form>
-      ) : (
-        <CardContent>
-          <div ref={messageRef} tabIndex={-1} className='outline-none'>
-            {status.state === 'connecting' && (
-              <BlockMessage
-                icon={
-                  <IconPlaceholder
-                    lucide='LoaderCircleIcon'
-                    tabler='IconLoader2'
-                    hugeicons='Loading03Icon'
-                    phosphor='CircleNotchIcon'
-                    remixicon='RiLoader4Line'
-                    className='animate-spin motion-reduce:animate-none'
-                  />
-                }
-                title={`Connecting to ${source?.name}…`}
-                description='Approve access in the window that opened. It usually takes less than a minute.'
-                action={
-                  <Button variant='ghost' size='sm' onClick={backToSources}>
-                    Cancel
-                  </Button>
-                }
-              />
-            )}
-            {status.state === 'connected' && (
-              <BlockMessage
-                icon={
-                  <IconPlaceholder
-                    lucide='CircleCheckIcon'
-                    tabler='IconCircleCheck'
-                    hugeicons='CheckmarkCircle02Icon'
-                    phosphor='CheckCircleIcon'
-                    remixicon='RiCheckboxCircleLine'
-                    className='text-emerald-700 dark:text-emerald-400'
-                  />
-                }
-                title={`${source?.name} is connected`}
-                description="We're importing the last 90 days. Your first dashboard will be ready in a few minutes."
-                action={
-                  <div className='flex flex-wrap justify-center gap-2'>
-                    <Button onClick={() => onContinue?.(status.id)}>Continue</Button>
-                    <Button variant='outline' onClick={backToSources}>
-                      Connect another
-                    </Button>
-                  </div>
-                }
-              />
-            )}
-            {status.state === 'failed' && (
-              <BlockMessage
-                tone='error'
-                icon={
-                  <IconPlaceholder
-                    lucide='TriangleAlertIcon'
-                    tabler='IconAlertTriangle'
-                    hugeicons='Alert02Icon'
-                    phosphor='WarningIcon'
-                    remixicon='RiErrorWarningLine'
-                  />
-                }
-                title={`Couldn't connect to ${source?.name}`}
-                description={status.message}
-                action={
-                  <div className='flex flex-wrap justify-center gap-2'>
-                    <Button onClick={() => void connect(status.id)}>Try again</Button>
-                    <Button variant='outline' onClick={backToSources}>
-                      Pick another source
-                    </Button>
-                  </div>
-                }
-              />
-            )}
           </div>
-        </CardContent>
-      )}
-    </Card>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

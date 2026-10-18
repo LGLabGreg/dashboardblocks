@@ -16,3 +16,10 @@ export const funnelExampleProps = {
   'funnel-03': funnel3ExampleProps,
   'funnel-04': funnel4ExampleProps,
 }
+
+export const funnelEmptyProps = {
+  'funnel-01': { stages: [] },
+  'funnel-02': { stages: [] },
+  'funnel-03': { stages: [] },
+  'funnel-04': { stages: [] },
+}

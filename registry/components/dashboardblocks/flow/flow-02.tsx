@@ -1,25 +1,28 @@
 'use client'
 
+import {
+  BlockStateProvider,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   FlowChart,
   type FlowLink,
   type FlowNode,
+  getFlowColumns,
   getFlowTotals,
 } from '@/registry/components/dashboardblocks/flow'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Flow2Props {
   description: string
-  links: FlowLink[]
-  nodes: FlowNode[]
+  /** Leave out, or pass none, to show the empty state. */
+  links?: FlowLink[]
+  nodes?: FlowNode[]
+  status?: BlockStatus
   title: string
   /** @default 'visitors' */
   unit?: string
@@ -27,7 +30,7 @@ interface Flow2Props {
 
 const exampleProps: Flow2Props = {
   description:
-    'Where visitors go in their first three pages after landing on Home, last 7 days',
+    'Where visitors go in their first three pages after landing on Home, last 7 days. Grey bands are visitors who left.',
   links: [
     { source: 'home', target: 'pricing-2', value: 4_820 },
     { source: 'home', target: 'features-2', value: 3_640 },
@@ -45,72 +48,82 @@ const exampleProps: Flow2Props = {
     { source: 'docs-2', target: 'exit-3', value: 800 },
   ],
   nodes: [
-    { column: 0, id: 'home', label: 'Home' },
-    { column: 1, id: 'pricing-2', label: 'Pricing' },
-    { column: 1, id: 'features-2', label: 'Features' },
-    { column: 1, id: 'docs-2', label: 'Docs' },
-    { column: 1, id: 'exit-2', kind: 'exit', label: 'Left' },
-    { column: 2, id: 'signup-3', label: 'Sign up' },
-    { column: 2, id: 'sales-3', label: 'Contact sales' },
-    { column: 2, id: 'pricing-3', label: 'Pricing' },
-    { column: 2, id: 'docs-3', label: 'Docs' },
-    { column: 2, id: 'exit-3', kind: 'exit', label: 'Left' },
+    { id: 'home', label: 'Home' },
+    { id: 'pricing-2', label: 'Pricing' },
+    { id: 'features-2', label: 'Features' },
+    { id: 'docs-2', label: 'Docs' },
+    { id: 'exit-2', kind: 'exit', label: 'Left' },
+    { id: 'signup-3', label: 'Sign up' },
+    { id: 'sales-3', label: 'Contact sales' },
+    { id: 'pricing-3', label: 'Pricing' },
+    { id: 'docs-3', label: 'Docs' },
+    { id: 'exit-3', kind: 'exit', label: 'Left' },
   ],
   title: 'User paths',
   unit: 'visitors',
 }
 
 const Flow2 = (props: Flow2Props) => {
-  const { description, links, nodes, title, unit = 'visitors' } = props
+  const { description, links = [], nodes = [], status, title, unit = 'visitors' } = props
+  const empty = links.length === 0
+  const state = getBlockState(status, empty)
   const totals = getFlowTotals(nodes, links)
   const labels = new Map(nodes.map((node) => [node.id, node.label]))
   const start = nodes.find((node) => (totals.get(node.id)?.in ?? 0) === 0)
   const entered = start ? (totals.get(start.id)?.out ?? 0) : 0
-  const columns = Math.max(0, ...nodes.map((node) => node.column ?? 0))
+  const columnOf = getFlowColumns(nodes, links)
+  const columns = Math.max(0, ...columnOf.values())
   const leftAt = Array.from({ length: columns }, (_, index) =>
     nodes
-      .filter((node) => node.kind === 'exit' && node.column === index + 1)
+      .filter((node) => node.kind === 'exit' && columnOf.get(node.id) === index + 1)
       .reduce((sum, node) => sum + (totals.get(node.id)?.in ?? 0), 0),
   )
-  const percent = (value: number) => `${Math.round((value / (entered || 1)) * 100)}%`
+  const percent = (value: number) =>
+    formatPercent(value / (entered || 1), { maximumFractionDigits: 0 })
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
-          <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
-            <dt className='text-muted-foreground text-xs'>Landed on {start?.label}</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {entered.toLocaleString()}
-            </dd>
+    <BlockStateProvider status={status} empty={empty}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state === 'empty' || state === 'error' ? (
+          <div className='border-t pt-4'>
+            <KPIValue />
           </div>
-          {leftAt.map((value, index) => (
-            <div key={index} className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-xs'>
-                Left after page {index + 1}
+        ) : (
+          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+              <dt className='text-muted-foreground text-sm'>
+                Landed on {state ? <SkeletonText className='w-12' /> : start?.label}
               </dt>
-              <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {percent(value)}
+              <dd>
+                <KPIValue value={entered} format={(value) => formatNumber(value)} />
               </dd>
             </div>
-          ))}
-        </dl>
+            {(state ? [0, 0] : leftAt).map((value, index) => (
+              <div key={index} className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>
+                  Left after page {index + 1}
+                </dt>
+                <dd>
+                  <KPIValue className='text-2xl' value={value} format={percent} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
         <FlowChart
-          label={title}
           colorBy='target'
           height={300}
+          label={title}
           links={links}
           minWidth='34rem'
           nodes={nodes}
-        >
-          {`Each column is a page view. Grey bands are ${unit} who left.`}
-        </FlowChart>
+        />
         <ChartPanelTable
-          caption={`${title}: ${description}.`}
+          caption={`${title}: ${description}`}
           columns={[
             { key: 'step', label: 'Step' },
             { key: 'source', label: 'From' },
@@ -119,13 +132,13 @@ const Flow2 = (props: Flow2Props) => {
           ]}
           rows={links.map((link) => ({
             source: labels.get(link.source) ?? link.source,
-            step: `Page ${(nodes.find((node) => node.id === link.source)?.column ?? 0) + 1}`,
+            step: `Page ${(columnOf.get(link.source) ?? 0) + 1}`,
             target: labels.get(link.target) ?? link.target,
-            value: link.value.toLocaleString(),
+            value: formatNumber(link.value),
           }))}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

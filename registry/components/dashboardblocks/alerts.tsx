@@ -1,131 +1,37 @@
 'use client'
 
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-
-import { cn } from '@/lib/utils'
+import {
+  StatusLabel,
+  type StatusLabelProps,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 
 type AlertSeverity = 'critical' | 'warning' | 'info' | 'resolved'
 
 interface SeverityConfig {
-  icon: React.ReactNode
   label: string
-  soft: string
-  text: string
-  fill: string
+  tone: StatusTone
 }
 
 const severityConfig: Record<AlertSeverity, SeverityConfig> = {
-  critical: {
-    fill: 'bg-red-600',
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Critical',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    text: 'text-red-700 dark:text-red-400',
-  },
-  info: {
-    fill: 'bg-sky-600',
-    icon: (
-      <IconPlaceholder
-        lucide='InfoIcon'
-        tabler='IconInfoCircle'
-        hugeicons='AlertCircleIcon'
-        phosphor='InfoIcon'
-        remixicon='RiInformationLine'
-        aria-hidden
-      />
-    ),
-    label: 'Info',
-    soft: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
-    text: 'text-sky-700 dark:text-sky-400',
-  },
-  resolved: {
-    fill: 'bg-emerald-600',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Resolved',
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    text: 'text-emerald-700 dark:text-emerald-400',
-  },
-  warning: {
-    fill: 'bg-amber-500',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Warning',
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    text: 'text-amber-800 dark:text-amber-400',
-  },
+  critical: { label: 'Critical', tone: 'bad' },
+  info: { label: 'Info', tone: 'info' },
+  resolved: { label: 'Resolved', tone: 'good' },
+  warning: { label: 'Warning', tone: 'warning' },
 }
 
 const severityOrder: AlertSeverity[] = ['critical', 'warning', 'info', 'resolved']
 
-function SeverityBadge({
-  className,
-  label,
-  severity,
-}: {
-  className?: string
-  label?: string
+interface SeverityLabelProps extends Omit<StatusLabelProps, 'tone'> {
   severity: AlertSeverity
-}) {
-  const config = severityConfig[severity]
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-      {label ?? config.label}
-    </span>
-  )
 }
 
-function SeverityIcon({
-  className,
-  severity,
-}: {
-  className?: string
-  severity: AlertSeverity
-}) {
+function SeverityLabel({ children, severity, ...props }: SeverityLabelProps) {
   const config = severityConfig[severity]
   return (
-    <span
-      aria-hidden
-      className={cn(
-        'flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-    </span>
+    <StatusLabel data-severity={severity} tone={config.tone} {...props}>
+      {children ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -145,6 +51,6 @@ function formatRelativeTime(date: Date, now: Date) {
   return relativeFormatter.format(days, 'day')
 }
 
-export { SeverityBadge, SeverityIcon, formatRelativeTime, severityConfig, severityOrder }
+export { SeverityLabel, formatRelativeTime, severityConfig, severityOrder }
 
-export type { AlertSeverity, SeverityConfig }
+export type { AlertSeverity, SeverityConfig, SeverityLabelProps }

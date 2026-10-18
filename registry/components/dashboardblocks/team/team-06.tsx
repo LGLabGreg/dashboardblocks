@@ -1,5 +1,13 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { useCopyToClipboard } from '@/registry/components/dashboardblocks/settings'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -7,14 +15,6 @@ import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
@@ -34,12 +34,16 @@ interface SharePerson {
 interface Team6Props {
   /** The signed-in person, who can't change their own access. */
   currentPersonId: string
+  /** @default a sentence counting who has access and who can open the link */
   description?: string
-  linkAccess: LinkAccess
+  /** @default 'restricted' */
+  linkAccess?: LinkAccess
   onAccessChange?: (id: string, access: Exclude<ShareAccess, 'owner'> | null) => void
   onInvite?: (email: string, access: Exclude<ShareAccess, 'owner'>) => void
   onLinkAccessChange?: (access: LinkAccess) => void
-  people: SharePerson[]
+  /** Leave out, or pass none, to show the empty state. */
+  people?: SharePerson[]
+  status?: BlockStatus
   title: string
   url: string
   workspace: string
@@ -47,15 +51,32 @@ interface Team6Props {
 
 const exampleProps: Team6Props = {
   currentPersonId: 'p1',
-  description: 'Revenue overview',
   linkAccess: 'workspace',
   people: [
-    { access: 'owner', email: 'amara@acme.co', id: 'p1', name: 'Amara Okafor' },
-    { access: 'edit', email: 'liam@acme.co', id: 'p2', name: 'Liam Chen' },
-    { access: 'view', email: 'sofia@acme.co', id: 'p3', name: 'Sofia Rossi' },
+    {
+      access: 'owner',
+      avatar: '/images/avatar-05.webp',
+      email: 'amara@acme.co',
+      id: 'p1',
+      name: 'Amara Okafor',
+    },
+    {
+      access: 'edit',
+      avatar: '/images/avatar-04.webp',
+      email: 'liam@acme.co',
+      id: 'p2',
+      name: 'Liam Chen',
+    },
+    {
+      access: 'view',
+      avatar: '/images/avatar-01.webp',
+      email: 'sofia@acme.co',
+      id: 'p3',
+      name: 'Sofia Rossi',
+    },
     { access: 'view', email: 'board@northwind.vc', id: 'p4' },
   ],
-  title: 'Share dashboard',
+  title: 'Share Revenue overview',
   url: 'https://app.acme.co/d/revenue-overview',
   workspace: 'Acme',
 }
@@ -113,7 +134,7 @@ const linkAccessConfig: Record<
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const Team6 = (props: Team6Props) => {
+function ShareSettings(props: Team6Props) {
   const {
     currentPersonId,
     description,
@@ -125,8 +146,9 @@ const Team6 = (props: Team6Props) => {
     workspace,
   } = props
   const id = useId()
-  const [people, setPeople] = useState(props.people)
-  const [linkAccess, setLinkAccess] = useState(props.linkAccess)
+  const state = useBlockState()
+  const [people, setPeople] = useState(props.people ?? [])
+  const [linkAccess, setLinkAccess] = useState(props.linkAccess ?? 'restricted')
   const [email, setEmail] = useState('')
   const [access, setAccess] = useState<Exclude<ShareAccess, 'owner'>>('view')
   const [error, setError] = useState<string | null>(null)
@@ -166,14 +188,22 @@ const Team6 = (props: Team6Props) => {
   }
 
   const link = linkAccessConfig[linkAccess]
+  const editors = people.filter((person) => person.access !== 'view').length
+  const summary = `${people.length} ${people.length === 1 ? 'person has' : 'people have'} access, ${editors} can edit. ${link.description}`
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
+    <section className='@container flex flex-col gap-4'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        {description ? (
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        ) : (
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{summary}</p>
+          </BlockReady>
+        )}
+      </header>
+      <div className='flex flex-col gap-5'>
         <form method='post' onSubmit={invite} noValidate className='flex flex-col gap-2'>
           <label htmlFor={`${id}-email`} className='sr-only'>
             Add people by email
@@ -184,6 +214,7 @@ const Team6 = (props: Team6Props) => {
               type='email'
               autoComplete='off'
               placeholder='Add people by email'
+              disabled={state !== undefined}
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               aria-invalid={error ? true : undefined}
@@ -193,6 +224,7 @@ const Team6 = (props: Team6Props) => {
             <div className='flex gap-2'>
               <NativeSelect
                 aria-label='Access for new people'
+                disabled={state !== undefined}
                 value={access}
                 onChange={(event) =>
                   setAccess(event.target.value as Exclude<ShareAccess, 'owner'>)
@@ -201,7 +233,11 @@ const Team6 = (props: Team6Props) => {
                 <NativeSelectOption value='view'>{accessLabels.view}</NativeSelectOption>
                 <NativeSelectOption value='edit'>{accessLabels.edit}</NativeSelectOption>
               </NativeSelect>
-              <Button type='submit' className='flex-1 @md:flex-none'>
+              <Button
+                type='submit'
+                className='flex-1 @md:flex-none'
+                disabled={state !== undefined}
+              >
                 Invite
               </Button>
             </div>
@@ -213,110 +249,118 @@ const Team6 = (props: Team6Props) => {
           )}
         </form>
 
-        <section aria-labelledby={`${id}-people`} className='flex flex-col gap-2'>
+        <section aria-labelledby={`${id}-people`} className='flex flex-col gap-1'>
           <h3 id={`${id}-people`} className='text-sm font-medium'>
             People with access
           </h3>
-          <ul className='flex flex-col gap-3'>
-            {people.map((person) => {
-              const isYou = person.id === currentPersonId
-              const name = person.name ?? person.email
-              return (
-                <li key={person.id} className='flex items-center gap-3'>
-                  {person.name ? (
-                    <PersonAvatar person={{ ...person, name: person.name }} />
-                  ) : (
-                    <span
-                      aria-hidden
-                      className='bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4'
-                    >
-                      <IconPlaceholder
-                        lucide='MailIcon'
-                        tabler='IconMail'
-                        hugeicons='MailIcon'
-                        phosphor='EnvelopeIcon'
-                        remixicon='RiMailLine'
-                      />
-                    </span>
-                  )}
-                  <div className='flex min-w-0 flex-1 flex-col'>
-                    <span className='truncate text-sm font-medium'>
-                      {name}
-                      {isYou && (
-                        <span className='text-muted-foreground font-normal'> (you)</span>
-                      )}
-                    </span>
-                    <span className='text-muted-foreground truncate text-xs'>
-                      {person.name ? person.email : 'Invited'}
-                    </span>
-                  </div>
-                  {isYou || person.access === 'owner' ? (
-                    <span className='text-muted-foreground px-2.5 text-sm'>
-                      {accessLabels[person.access]}
-                    </span>
-                  ) : (
-                    <NativeSelect
-                      size='sm'
-                      aria-label={`Access for ${name}`}
-                      value={person.access}
-                      onChange={(event) => change(person, event.target.value)}
-                    >
-                      <NativeSelectOption value='view'>
-                        {accessLabels.view}
-                      </NativeSelectOption>
-                      <NativeSelectOption value='edit'>
-                        {accessLabels.edit}
-                      </NativeSelectOption>
-                      <NativeSelectOption value='remove'>Remove</NativeSelectOption>
-                    </NativeSelect>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
+          <BlockStateRows className='border-t' rows={3} />
+          {!state && (
+            <ul className='flex flex-col divide-y border-t'>
+              {people.map((person) => {
+                const isYou = person.id === currentPersonId
+                const name = person.name ?? person.email
+                return (
+                  <li key={person.id} className='flex items-center gap-3 py-2.5'>
+                    {person.name ? (
+                      <PersonAvatar person={{ ...person, name: person.name }} />
+                    ) : (
+                      <span
+                        aria-hidden
+                        className='bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4'
+                      >
+                        <IconPlaceholder
+                          lucide='MailIcon'
+                          tabler='IconMail'
+                          hugeicons='MailIcon'
+                          phosphor='EnvelopeIcon'
+                          remixicon='RiMailLine'
+                        />
+                      </span>
+                    )}
+                    <div className='flex min-w-0 flex-1 flex-col'>
+                      <span className='truncate text-sm font-medium'>
+                        {name}
+                        {isYou && (
+                          <span className='text-muted-foreground font-normal'>
+                            {' '}
+                            (you)
+                          </span>
+                        )}
+                      </span>
+                      <span className='text-muted-foreground truncate text-xs'>
+                        {person.name ? person.email : 'Invited'}
+                      </span>
+                    </div>
+                    {isYou || person.access === 'owner' ? (
+                      <span className='text-muted-foreground px-2.5 text-sm'>
+                        {accessLabels[person.access]}
+                      </span>
+                    ) : (
+                      <NativeSelect
+                        size='sm'
+                        aria-label={`Access for ${name}`}
+                        value={person.access}
+                        onChange={(event) => change(person, event.target.value)}
+                      >
+                        <NativeSelectOption value='view'>
+                          {accessLabels.view}
+                        </NativeSelectOption>
+                        <NativeSelectOption value='edit'>
+                          {accessLabels.edit}
+                        </NativeSelectOption>
+                        <NativeSelectOption value='remove'>Remove</NativeSelectOption>
+                      </NativeSelect>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
         </section>
 
-        <section aria-labelledby={`${id}-link`} className='flex flex-col gap-2'>
-          <h3 id={`${id}-link`} className='text-sm font-medium'>
-            General access
-          </h3>
-          <div className='flex items-center gap-3'>
-            <span
-              aria-hidden
-              className='bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4'
-            >
-              {link.icon}
-            </span>
-            <div className='flex min-w-0 flex-1 flex-col items-start gap-0.5'>
-              <NativeSelect
-                size='sm'
-                aria-label='Who can open the link'
-                aria-describedby={`${id}-link-description`}
-                value={linkAccess}
-                onChange={(event) => {
-                  const next = event.target.value as LinkAccess
-                  setLinkAccess(next)
-                  onLinkAccessChange?.(next)
-                }}
-              >
-                {(Object.keys(linkAccessConfig) as LinkAccess[]).map((value) => (
-                  <NativeSelectOption key={value} value={value}>
-                    {linkAccessConfig[value].label(workspace)}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+        {!state && (
+          <section aria-labelledby={`${id}-link`} className='flex flex-col gap-1'>
+            <h3 id={`${id}-link`} className='text-sm font-medium'>
+              General access
+            </h3>
+            <div className='flex items-center gap-3 border-t pt-2.5'>
               <span
-                id={`${id}-link-description`}
-                className='text-muted-foreground text-xs'
+                aria-hidden
+                className='bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full [&_svg]:size-4'
               >
-                {link.description}
+                {link.icon}
               </span>
+              <div className='flex min-w-0 flex-1 flex-col items-start gap-0.5'>
+                <NativeSelect
+                  size='sm'
+                  aria-label='Who can open the link'
+                  aria-describedby={`${id}-link-description`}
+                  value={linkAccess}
+                  onChange={(event) => {
+                    const next = event.target.value as LinkAccess
+                    setLinkAccess(next)
+                    onLinkAccessChange?.(next)
+                  }}
+                >
+                  {(Object.keys(linkAccessConfig) as LinkAccess[]).map((value) => (
+                    <NativeSelectOption key={value} value={value}>
+                      {linkAccessConfig[value].label(workspace)}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+                <span
+                  id={`${id}-link-description`}
+                  className='text-muted-foreground text-xs'
+                >
+                  {link.description}
+                </span>
+              </div>
             </div>
-          </div>
-        </section>
-      </CardContent>
-      <CardFooter className='flex items-center gap-2 border-t'>
-        <span className='text-muted-foreground min-w-0 flex-1 truncate text-sm'>
+          </section>
+        )}
+      </div>
+      <footer className='flex items-center gap-2 border-t pt-3'>
+        <span className='text-muted-foreground min-w-0 flex-1 truncate font-mono text-xs'>
           {url}
         </span>
         <Button variant='outline' size='sm' onClick={() => void copy(url)}>
@@ -343,8 +387,19 @@ const Team6 = (props: Team6Props) => {
           )}
           {copied ? 'Copied' : 'Copy link'}
         </Button>
-      </CardFooter>
-    </Card>
+      </footer>
+    </section>
+  )
+}
+
+const Team6 = (props: Team6Props) => {
+  const { people = [], status } = props
+  const state = getBlockState(status, people.length === 0)
+
+  return (
+    <BlockStateProvider status={status} empty={people.length === 0}>
+      <ShareSettings key={state ?? 'ready'} {...props} />
+    </BlockStateProvider>
   )
 }
 

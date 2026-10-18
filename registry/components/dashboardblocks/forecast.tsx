@@ -1,18 +1,20 @@
 'use client'
 
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import {
-  ChartPanelTooltip,
+  ChartTooltipFrame,
+  ChartTooltipItem,
   type ChartValueFormatter,
-} from '@/registry/components/dashboardblocks/chart-panel'
-import { useInView } from '@/registry/hooks/use-in-view'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type RefObject, useEffect, useState } from 'react'
+  chartReferenceProps,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import type { TooltipContentProps } from 'recharts'
-import type {
-  NameType,
-  Payload,
-  ValueType,
-} from 'recharts/types/component/DefaultTooltipContent'
+import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { cn } from '@/lib/utils'
 
@@ -210,73 +212,15 @@ function getProjectionStatus(projected: number, target: number, tolerance = 0.05
   return status
 }
 
-const forecastStatusConfig: Record<
-  ForecastStatus,
-  { className: string; icon: React.ReactNode; label: string; text: string }
-> = {
-  'at-risk': {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'At risk',
-    text: 'text-amber-800 dark:text-amber-400',
-  },
-  'off-track': {
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Off track',
-    text: 'text-red-700 dark:text-red-400',
-  },
-  'on-track': {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TrendingUpIcon'
-        tabler='IconTrendingUp'
-        hugeicons='ChartUpIcon'
-        phosphor='TrendUpIcon'
-        remixicon='RiLineChartLine'
-        aria-hidden
-      />
-    ),
-    label: 'On track',
-    text: 'text-emerald-700 dark:text-emerald-400',
-  },
-  reached: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Target reached',
-    text: 'text-emerald-700 dark:text-emerald-400',
-  },
-}
+const forecastStatusConfig: Record<ForecastStatus, { label: string; tone: StatusTone }> =
+  {
+    'at-risk': { label: 'At risk', tone: 'warning' },
+    'off-track': { label: 'Off track', tone: 'bad' },
+    'on-track': { label: 'On track', tone: 'good' },
+    reached: { label: 'Target reached', tone: 'good' },
+  }
 
-function ForecastBadge({
+function ForecastStatusLabel({
   className,
   label,
   status,
@@ -285,30 +229,28 @@ function ForecastBadge({
   label?: string
   status: ForecastStatus
 }) {
+  const state = useBlockState()
+  if (state) return null
   const config = forecastStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel className={className} tone={config.tone}>
       {label ?? config.label}
-    </span>
+    </StatusLabel>
   )
 }
 
 const forecastColors = {
-  actual: 'var(--chart-2)',
-  band: 'color-mix(in oklab, var(--chart-2) 20%, transparent)',
-  forecast: 'var(--chart-2)',
+  actual: 'var(--color-chart-2)',
+  band: 'color-mix(in oklab, var(--color-chart-2) 20%, transparent)',
+  forecast: 'var(--color-chart-2)',
   marker: 'var(--color-foreground)',
-  target: 'var(--color-muted-foreground)',
+  target: 'color-mix(in oklab, var(--color-foreground) 40%, transparent)',
 } as const
 
-const forecastDash = { forecast: '5 4', target: '2 3' } as const
+const forecastDash = {
+  forecast: '5 4',
+  target: chartReferenceProps.strokeDasharray,
+} as const
 
 type ForecastKeyShape =
   | 'line'
@@ -321,7 +263,7 @@ type ForecastKeyShape =
   | 'striped'
 
 function stripes(color: string) {
-  return `repeating-linear-gradient(-45deg, ${color} 0 2px, color-mix(in oklab, ${color} 25%, transparent) 2px 5px)`
+  return `repeating-linear-gradient(-45deg, color-mix(in oklab, ${color} 55%, transparent) 0 2px, color-mix(in oklab, ${color} 18%, transparent) 2px 5px)`
 }
 
 function ForecastKey({
@@ -399,6 +341,8 @@ function ForecastLegend({
   className?: string
   items: ForecastLegendItem[]
 }) {
+  const state = useBlockState()
+  if (state === 'empty' || state === 'error') return null
   return (
     <ul
       className={cn(
@@ -416,7 +360,7 @@ function ForecastLegend({
   )
 }
 
-const rangeKeyColor = 'color-mix(in oklab, var(--chart-2) 40%, transparent)'
+const rangeKeyColor = 'color-mix(in oklab, var(--color-chart-2) 40%, transparent)'
 
 type ForecastTooltipProps = Partial<
   Pick<TooltipContentProps<ValueType, NameType>, 'active' | 'label' | 'payload'>
@@ -433,60 +377,51 @@ function ForecastTooltip({
   label,
   level = 0.8,
   payload,
-  valueFormatter,
+  valueFormatter = formatNumber,
 }: ForecastTooltipProps) {
   const row = payload?.[0]?.payload as ForecastRow | undefined
   if (!active || !row) return null
   const percent = `${level * 100}%`
-  const items: Payload<ValueType, NameType>[] =
-    row.actual !== null
-      ? [
-          {
-            color: forecastColors.actual,
-            dataKey: 'actual',
-            graphicalItemId: 'actual',
-            name: 'Actual',
-            value: row.actual,
-          },
-        ]
-      : [
-          {
-            color: forecastColors.forecast,
-            dataKey: 'forecast',
-            graphicalItemId: 'forecast',
-            name: 'Forecast',
-            value: row.forecast ?? 0,
-          },
-          {
-            color: rangeKeyColor,
-            dataKey: 'high',
-            graphicalItemId: 'high',
-            name: `High (${percent})`,
-            value: row.high ?? 0,
-          },
-          {
-            color: rangeKeyColor,
-            dataKey: 'low',
-            graphicalItemId: 'low',
-            name: `Low (${percent})`,
-            value: row.low ?? 0,
-          },
-        ]
+  const heading = label !== undefined && label !== '' ? String(label) : undefined
   return (
-    <ChartPanelTooltip
-      active={active}
-      formatLabel={formatLabel}
-      label={label}
-      payload={items}
-      valueFormatter={valueFormatter}
-    />
+    <ChartTooltipFrame>
+      {heading && (
+        <span className='font-medium'>
+          {formatLabel ? formatLabel(heading) : heading}
+        </span>
+      )}
+      {row.actual !== null ? (
+        <ChartTooltipItem
+          color={forecastColors.actual}
+          value={valueFormatter(row.actual)}
+        />
+      ) : (
+        <>
+          <ChartTooltipItem
+            color={forecastColors.forecast}
+            name='Forecast'
+            value={valueFormatter(row.forecast ?? 0)}
+          />
+          <ChartTooltipItem
+            color={rangeKeyColor}
+            name={`High (${percent})`}
+            value={valueFormatter(row.high ?? 0)}
+          />
+          <ChartTooltipItem
+            color={rangeKeyColor}
+            name={`Low (${percent})`}
+            value={valueFormatter(row.low ?? 0)}
+          />
+        </>
+      )}
+    </ChartTooltipFrame>
   )
 }
 
 interface ProjectionBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   current: number
   max?: number
@@ -503,14 +438,21 @@ function ProjectionBar({
   projected,
   target,
 }: ProjectionBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
+  const { ref, revealed } = useReveal(animated)
+  const state = useBlockState()
 
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
+  if (state) {
+    return (
+      <div
+        aria-hidden
+        className={cn(
+          'bg-muted h-3 w-full rounded-full',
+          state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          className,
+        )}
+      />
+    )
+  }
 
   const scale = max ?? Math.max(current, projected, target ?? 0)
   const share = (value: number) =>
@@ -519,11 +461,7 @@ function ProjectionBar({
   const projectedWidth = Math.max(0, share(projected) - actualWidth)
 
   return (
-    <div
-      ref={ref as RefObject<HTMLDivElement>}
-      aria-hidden
-      className={cn('relative h-3 w-full', className)}
-    >
+    <div ref={ref} aria-hidden className={cn('relative h-3 w-full', className)}>
       <div className='bg-muted flex h-full w-full overflow-hidden rounded-full'>
         <div
           className='h-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
@@ -539,7 +477,7 @@ function ProjectionBar({
       </div>
       {target !== undefined && (
         <span
-          className='bg-foreground ring-card absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+          className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
           style={{ left: `${share(target)}%` }}
         />
       )}
@@ -548,7 +486,7 @@ function ProjectionBar({
 }
 
 export {
-  ForecastBadge,
+  ForecastStatusLabel,
   ForecastKey,
   ForecastLegend,
   ForecastTooltip,

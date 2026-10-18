@@ -130,7 +130,12 @@ function parseBlocks(content: string) {
         }
         index++
       }
-      blocks.push({ items, ordered, start: Number(first[1] ?? 1), type: 'list' })
+      blocks.push({
+        items,
+        ordered,
+        start: Number(first[1] ?? 1),
+        type: 'list',
+      })
       continue
     }
     const text: string[] = []
@@ -249,15 +254,7 @@ function highlightable(language: string) {
   return !Object.hasOwn(Object.prototype, language.toLowerCase())
 }
 
-function ChatCodeBlock({
-  caret,
-  code,
-  language,
-}: {
-  caret?: ReactNode
-  code: string
-  language: string
-}) {
+function ChatCodeBlock({ code, language }: { code: string; language: string }) {
   const lines = useHighlightedCode(code, highlightable(language) ? language : '')
   return (
     <CodeBlock size='sm'>
@@ -269,62 +266,35 @@ function ChatCodeBlock({
       </CodeBlockHeader>
       <CodeBlockContent className='mask-none'>
         {lines.map((line, index) => (
-          <CodeBlockLine key={index}>
-            {caret && index === lines.length - 1 ? (
-              <>
-                {line}
-                {caret}
-              </>
-            ) : (
-              line
-            )}
-          </CodeBlockLine>
+          <CodeBlockLine key={index}>{line}</CodeBlockLine>
         ))}
       </CodeBlockContent>
     </CodeBlock>
   )
 }
 
-function StreamingCaret() {
-  return (
-    <span
-      aria-hidden
-      className='bg-foreground/70 ms-0.5 inline-block h-[1em] w-[0.45em] translate-y-[0.15em] animate-pulse rounded-[1px] motion-reduce:animate-none'
-    />
-  )
-}
-
 /** Message text with light formatting: paragraphs and line breaks, bullet and numbered lists, headings, **bold**, `code` and fenced code blocks. */
 function ChatMessageContent({
-  caret,
   className,
   content,
 }: {
-  caret?: ReactNode
   className?: string
   content: string
 }) {
   const blocks = parseBlocks(content)
-  if (blocks.length === 0) return caret ? <p className={className}>{caret}</p> : null
+  if (blocks.length === 0) return null
   return (
     <div className={cn('flex flex-col gap-3 leading-relaxed break-words', className)}>
       {blocks.map((block, index) => {
-        const end = index === blocks.length - 1 ? caret : null
         switch (block.type) {
           case 'code':
             return (
-              <ChatCodeBlock
-                key={index}
-                caret={end}
-                code={block.code}
-                language={block.language}
-              />
+              <ChatCodeBlock key={index} code={block.code} language={block.language} />
             )
           case 'heading':
             return (
               <p key={index} className='font-semibold'>
                 {renderInline(block.text)}
-                {end}
               </p>
             )
           case 'list': {
@@ -341,7 +311,6 @@ function ChatMessageContent({
                 {block.items.map((item, itemIndex) => (
                   <li key={itemIndex} className='marker:text-muted-foreground ps-1'>
                     {renderInline(item)}
-                    {itemIndex === block.items.length - 1 && end}
                   </li>
                 ))}
               </List>
@@ -356,7 +325,6 @@ function ChatMessageContent({
                     {renderInline(line)}
                   </span>
                 ))}
-                {end}
               </p>
             )
         }
@@ -405,7 +373,7 @@ function ChatHeader({
     <div className={cn('flex items-center gap-3 px-4 py-3', className)}>
       <AssistantAvatar icon={icon} />
       <div className='flex min-w-0 flex-1 flex-col'>
-        <h2 className='truncate text-sm font-semibold'>{title}</h2>
+        <h2 className='truncate text-sm font-semibold tracking-tight'>{title}</h2>
         {description && (
           <p className='text-muted-foreground truncate text-xs'>{description}</p>
         )}
@@ -685,14 +653,11 @@ function ChatMessage({
     <MessageScrollerItem messageId={message.id} className={MEASURED_ITEM}>
       <Message data-role='assistant' className={className}>
         <AssistantMessageAvatar avatar={avatar} />
-        <MessageContent>
+        <MessageContent aria-busy={streaming}>
           <Bubble variant='ghost'>
             <BubbleContent>
               <span className='sr-only'>{name ?? 'Assistant'}: </span>
-              <ChatMessageContent
-                content={message.content}
-                caret={streaming ? <StreamingCaret /> : undefined}
-              />
+              <ChatMessageContent content={message.content} />
             </BubbleContent>
           </Bubble>
           {footer}
@@ -851,7 +816,7 @@ function SuggestedPrompts({
       className={cn(
         variant === 'chips'
           ? '-mx-1 flex scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain p-1'
-          : 'flex flex-col gap-2',
+          : 'flex flex-col divide-y border-y',
         className,
       )}
     >
@@ -879,7 +844,7 @@ function SuggestedPrompts({
             <button
               type='button'
               onClick={() => onSelect(prompt.prompt ?? prompt.label)}
-              className='hover:bg-muted/50 focus-visible:border-ring focus-visible:ring-ring/50 bg-background flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-start text-sm transition-colors outline-none focus-visible:ring-3 motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0'
+              className='hover:bg-muted/50 focus-visible:ring-ring/50 -mx-2 flex w-[calc(100%+1rem)] items-center gap-3 rounded-md px-2 py-2.5 text-start text-sm transition-colors outline-none focus-visible:ring-3 motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0'
             >
               {prompt.icon && (
                 <span className='text-muted-foreground flex'>{prompt.icon}</span>
@@ -908,7 +873,7 @@ function ChatWelcome({
     <div className={cn('flex flex-col items-center gap-4 text-center', className)}>
       <AssistantAvatar className='size-10 [&_svg]:size-5' />
       <div className='flex flex-col gap-1'>
-        <p className='font-medium'>{title}</p>
+        <p className='font-semibold tracking-tight'>{title}</p>
         {description && (
           <p className='text-muted-foreground text-sm text-balance'>{description}</p>
         )}
@@ -1255,6 +1220,7 @@ function useChatStream({
 
 export {
   AssistantAvatar,
+  AssistantMessageAvatar,
   ChatComposer,
   ChatContextChip,
   ChatError,

@@ -2,22 +2,20 @@
 
 import {
   type AlertSeverity,
-  SeverityIcon,
+  SeverityLabel,
   formatRelativeTime,
-  severityConfig,
 } from '@/registry/components/dashboardblocks/alerts'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -25,15 +23,20 @@ interface AlertItem {
   acknowledged?: boolean
   firedAt: Date
   id: string
+  region?: string
+  service: string
   severity: AlertSeverity
-  source: string
   title: string
 }
 
 interface Alerts1Props {
-  alerts: AlertItem[]
+  /** Leave out, or pass none, to show the empty state. */
+  alerts?: AlertItem[]
+  /** Defaults to a sentence counting what is still open. */
+  description?: string
   now: Date
   onAcknowledge?: (id: string) => void
+  status?: BlockStatus
   title: string
 }
 
@@ -45,37 +48,39 @@ const exampleProps: Alerts1Props = {
     {
       firedAt: minutesAgo(4),
       id: 'a1',
+      region: 'eu-west-1',
+      service: 'checkout-api',
       severity: 'critical',
-      source: 'checkout-api · eu-west-1',
       title: 'Error rate above 5% for 10 minutes',
     },
     {
       firedAt: minutesAgo(18),
       id: 'a2',
+      service: 'payments-worker',
       severity: 'critical',
-      source: 'payments-worker',
       title: 'Queue backlog over 10,000 jobs',
     },
     {
       firedAt: minutesAgo(52),
       id: 'a3',
+      region: 'us-east-1',
+      service: 'search',
       severity: 'warning',
-      source: 'search · us-east-1',
       title: 'p95 latency above 800 ms',
     },
     {
       acknowledged: true,
       firedAt: minutesAgo(135),
       id: 'a4',
+      service: 'postgres-primary',
       severity: 'warning',
-      source: 'postgres-primary',
       title: 'Disk usage above 80%',
     },
     {
       firedAt: minutesAgo(310),
       id: 'a5',
+      service: 'billing',
       severity: 'info',
-      source: 'billing',
       title: 'Nightly invoice run took 2× longer than usual',
     },
   ],
@@ -83,13 +88,27 @@ const exampleProps: Alerts1Props = {
   title: 'Alerts',
 }
 
-const Alerts1 = (props: Alerts1Props) => {
-  const { alerts, now, onAcknowledge, title } = props
-  const [acknowledged, setAcknowledged] = useState(
-    () => new Set(alerts.filter((alert) => alert.acknowledged).map((alert) => alert.id)),
+const summarize = (alerts: AlertItem[], now: Date) => {
+  const waiting = alerts
+  if (waiting.length === 0) return 'Every alert is acknowledged.'
+  const critical = waiting.filter((alert) => alert.severity === 'critical').length
+  const latest = waiting.reduce((newest, alert) =>
+    alert.firedAt > newest.firedAt ? alert : newest,
   )
+  const count = `${waiting.length} ${waiting.length === 1 ? 'alert needs' : 'alerts need'} a response`
+  const urgent = critical > 0 ? `, ${critical} of them critical` : ''
+  return `${count}${urgent}. The latest fired ${formatRelativeTime(latest.firedAt, now)}.`
+}
+
+const Alerts1 = (props: Alerts1Props) => {
+  const { alerts = [], now, onAcknowledge, status, title } = props
+  const [acknowledged, setAcknowledged] = useState<ReadonlySet<string>>(() => new Set())
   const [announcement, setAnnouncement] = useState('')
-  const open = alerts.filter((alert) => !acknowledged.has(alert.id)).length
+  const state = getBlockState(status, alerts.length === 0)
+  const isAcknowledged = (alert: AlertItem) =>
+    alert.acknowledged || acknowledged.has(alert.id)
+  const open = alerts.filter((alert) => !isAcknowledged(alert))
+  const { description = summarize(open, now) } = props
 
   const acknowledge = (alert: AlertItem) => {
     setAcknowledged((current) => new Set(current).add(alert.id))
@@ -97,101 +116,90 @@ const Alerts1 = (props: Alerts1Props) => {
     onAcknowledge?.(alert.id)
   }
 
+  const acknowledgeAll = () => {
+    open.forEach((alert) => onAcknowledge?.(alert.id))
+    setAcknowledged((current) => new Set([...current, ...open.map((alert) => alert.id)]))
+    setAnnouncement('All alerts acknowledged')
+  }
+
   return (
-    <Card className='@container gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {open} open, {alerts.length - open} acknowledged
-        </CardDescription>
-        <CardAction>
+    <BlockStateProvider status={status} empty={alerts.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
+          </div>
           <Button
             variant='outline'
             size='sm'
-            disabled={open === 0}
-            onClick={() => {
-              alerts
-                .filter((alert) => !acknowledged.has(alert.id))
-                .forEach((alert) => onAcknowledge?.(alert.id))
-              setAcknowledged(
-                (current) => new Set([...current, ...alerts.map((alert) => alert.id)]),
-              )
-              setAnnouncement('All alerts acknowledged')
-            }}
+            disabled={Boolean(state) || open.length === 0}
+            onClick={acknowledgeAll}
           >
             Acknowledge all
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent className='px-0'>
+        </header>
         <p role='status' className='sr-only'>
           {announcement}
         </p>
-        <ul>
-          {alerts.map((alert) => {
-            const isAcknowledged = acknowledged.has(alert.id)
-            const config = severityConfig[alert.severity]
-            return (
-              <li
-                key={alert.id}
-                className={cn(
-                  'flex flex-col gap-3 border-b px-6 py-4 last:border-b-0 @md:flex-row @md:items-center',
-                  isAcknowledged && 'bg-muted/30',
-                )}
-              >
-                <div className='flex min-w-0 flex-1 items-start gap-3'>
-                  <SeverityIcon severity={alert.severity} />
+        {state && (
+          <div className='border-t'>
+            <BlockStateRows rows={5} />
+          </div>
+        )}
+        {!state && (
+          <ul className='border-t'>
+            {alerts.map((alert) => {
+              const acknowledgedAlert = isAcknowledged(alert)
+              return (
+                <li
+                  key={alert.id}
+                  className='flex items-center justify-between gap-3 border-b py-2.5'
+                >
                   <div className='flex min-w-0 flex-col gap-0.5'>
-                    <p
-                      className={cn(
-                        'text-sm font-medium',
-                        isAcknowledged && 'text-muted-foreground',
-                      )}
-                    >
-                      <span className={cn('mr-1.5 text-xs font-semibold', config.text)}>
-                        {config.label}
+                    <p className='text-sm'>
+                      <SeverityLabel className='mr-1.5' severity={alert.severity} />
+                      <span
+                        className={cn(
+                          'font-medium break-words',
+                          acknowledgedAlert && 'text-muted-foreground font-normal',
+                        )}
+                      >
+                        {alert.title}
                       </span>
-                      {alert.title}
                     </p>
-                    <p className='text-muted-foreground text-xs'>
-                      {alert.source} ·{' '}
+                    <Details className='text-muted-foreground text-xs'>
+                      {alert.service}
+                      {alert.region}
                       <time dateTime={alert.firedAt.toISOString()}>
                         {formatRelativeTime(alert.firedAt, now)}
                       </time>
-                    </p>
+                    </Details>
                   </div>
-                </div>
-                <div className='pl-11 @md:pl-0'>
-                  {isAcknowledged ? (
-                    <span className='text-muted-foreground inline-flex h-8 items-center gap-1 text-xs'>
-                      <IconPlaceholder
-                        lucide='CheckIcon'
-                        tabler='IconCheck'
-                        hugeicons='Tick02Icon'
-                        phosphor='CheckIcon'
-                        remixicon='RiCheckLine'
-                        aria-hidden
-                        className='size-3.5'
-                      />
+                  {acknowledgedAlert ? (
+                    <span className='text-muted-foreground shrink-0 px-2.5 text-sm'>
                       Acknowledged
                     </span>
                   ) : (
                     <Button
-                      variant='outline'
+                      variant='ghost'
                       size='sm'
+                      className='shrink-0'
                       onClick={() => acknowledge(alert)}
                       aria-label={`Acknowledge: ${alert.title}`}
                     >
                       Acknowledge
                     </Button>
                   )}
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-      </CardContent>
-    </Card>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'status-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('status')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('status')],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-01.tsx',
@@ -15,7 +15,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Each service with its current status, and an overall badge showing the worst one.',
+        'Each service with its current status, the worst one above the title, and a sentence naming the services that are not operational.',
       size: 'half',
       usedWith: ['status-03', 'alerts-01', 'data-table-04'],
     },
@@ -23,7 +23,7 @@ export const examples: Registry['items'] = [
   {
     name: 'status-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('status')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('status')],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-02.tsx',
@@ -40,7 +40,12 @@ export const examples: Registry['items'] = [
   {
     name: 'status-03',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('status')],
+    registryDependencies: [
+      'button',
+      registryUrl('activity-feed'),
+      registryUrl('block-state'),
+      registryUrl('status'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-03.tsx',
@@ -57,7 +62,12 @@ export const examples: Registry['items'] = [
   {
     name: 'status-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('status')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('data-table'),
+      registryUrl('format'),
+      registryUrl('status'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-04.tsx',
@@ -65,7 +75,7 @@ export const examples: Registry['items'] = [
       },
     ],
     meta: {
-      shows: 'A grid of regions, each with its status, latency and error rate.',
+      shows: 'Regions, each with its status, p95 latency bar and error rate.',
       size: 'half',
       usedWith: ['status-01', 'status-02', 'alerts-01'],
     },
@@ -73,7 +83,11 @@ export const examples: Registry['items'] = [
   {
     name: 'status-05',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('status')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('status'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-05.tsx',

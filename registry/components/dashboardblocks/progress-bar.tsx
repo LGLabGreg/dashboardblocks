@@ -1,5 +1,6 @@
 'use client'
 
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import { useInView } from '@/registry/hooks/use-in-view'
 import { useEffect, useState } from 'react'
 
@@ -18,6 +19,8 @@ export const ProgressBar = ({
 }: ProgressBarProps) => {
   const [width, setWidth] = useState(0)
   const { isInView, ref } = useInView()
+  const state = useBlockState()
+  const loading = state === 'loading'
 
   const safePercentage = Number.isFinite(percentage) ? percentage : 0
   const normalized = Math.min(100, Math.max(0, safePercentage))
@@ -34,14 +37,18 @@ export const ProgressBar = ({
   return (
     <div
       ref={ref as React.RefObject<HTMLDivElement>}
-      className={cn('h-2 w-full rounded-full bg-muted', className)}
+      className={cn(
+        'h-2 w-full rounded-full bg-muted',
+        className,
+        loading && 'bg-muted animate-pulse motion-reduce:animate-none',
+      )}
     >
       <div
         className={cn(
           'h-full rounded-full bg-primary transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)]',
           fillClassName,
         )}
-        style={{ width: `${width}%` }}
+        style={{ width: `${state ? 0 : width}%` }}
       />
     </div>
   )
@@ -64,6 +71,8 @@ export const SegmentedProgressBar = ({
 }: SegmentedProgressBarProps) => {
   const [animatedMultiplier, setAnimatedMultiplier] = useState(0)
   const { isInView, ref } = useInView()
+  const state = useBlockState()
+  const loading = state === 'loading'
   const safeTotal = total > 0 ? total : 1
 
   useEffect(() => {
@@ -78,22 +87,27 @@ export const SegmentedProgressBar = ({
   return (
     <div
       ref={ref as React.RefObject<HTMLDivElement>}
-      className={cn('flex h-2 w-full overflow-hidden rounded-full bg-muted', className)}
+      className={cn(
+        'flex h-2 w-full overflow-hidden rounded-full bg-muted',
+        className,
+        loading && 'bg-muted animate-pulse motion-reduce:animate-none',
+      )}
     >
-      {segments.map((segment, index) => {
-        const percentage = (segment.value / safeTotal) * 100
-        const animatedWidth = Math.max(0, percentage) * animatedMultiplier
-        return (
-          <div
-            key={segment.label || index}
-            className='h-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] first:rounded-l-full last:rounded-r-full'
-            style={{
-              width: `${animatedWidth}%`,
-              backgroundColor: segment.color || 'var(--primary)',
-            }}
-          />
-        )
-      })}
+      {!state &&
+        segments.map((segment, index) => {
+          const percentage = (segment.value / safeTotal) * 100
+          const animatedWidth = Math.max(0, percentage) * animatedMultiplier
+          return (
+            <div
+              key={segment.label || index}
+              className='h-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] first:rounded-l-full last:rounded-r-full'
+              style={{
+                width: `${animatedWidth}%`,
+                backgroundColor: segment.color || 'var(--color-primary)',
+              }}
+            />
+          )
+        })}
     </div>
   )
 }

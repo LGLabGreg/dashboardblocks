@@ -40,7 +40,7 @@ function AuthLayout({
       className={cn('bg-background @container/page flex min-h-svh flex-col', className)}
     >
       <header className='flex h-16 shrink-0 items-center justify-between gap-4 px-4 sm:px-6'>
-        <div className='flex shrink-0 items-center gap-2 text-sm font-medium'>
+        <div className='flex min-w-0 shrink-0 items-center gap-2 text-sm font-medium'>
           {brand}
         </div>
         {aside && (
@@ -49,22 +49,22 @@ function AuthLayout({
           </div>
         )}
       </header>
-      <main className='flex flex-1 flex-col items-center px-4 py-10 sm:justify-center sm:px-6 sm:pb-24'>
-        <div className='flex w-full max-w-sm flex-col gap-8'>
-          <div className='flex flex-col items-center gap-4 text-center'>
+      <main className='flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6'>
+        <div className='flex w-full max-w-sm flex-col gap-6'>
+          <div className='flex flex-col items-start gap-4'>
             {media}
             <div className='flex flex-col gap-2'>
-              <h1 className='text-xl font-semibold tracking-tight text-balance'>
+              <h1 className='text-2xl font-semibold tracking-tight text-balance'>
                 {title}
               </h1>
               {description && (
-                <p className='text-muted-foreground text-sm text-pretty'>{description}</p>
+                <p className='text-muted-foreground text-pretty'>{description}</p>
               )}
             </div>
           </div>
           {children}
           {footer && (
-            <div className='text-muted-foreground flex flex-col items-center gap-1 text-center text-sm'>
+            <div className='text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm'>
               {footer}
             </div>
           )}
@@ -79,7 +79,7 @@ type WorkspaceAvatarSize = 'sm' | 'default' | 'lg'
 const workspaceAvatarSize: Record<WorkspaceAvatarSize, string> = {
   default: 'size-9 rounded-lg text-xs',
   lg: 'size-14 rounded-xl text-base',
-  sm: 'size-6 rounded-md text-[10px]',
+  sm: 'size-6 rounded-md text-xs',
 }
 
 function WorkspaceAvatar({
@@ -204,7 +204,7 @@ function OtpInput({
       role='group'
       aria-label={label}
       aria-describedby={describedBy}
-      className={cn('flex justify-center gap-2', className)}
+      className={cn('flex gap-2', className)}
     >
       {digits.map((digit, index) => (
         <Input

@@ -1,16 +1,20 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   KPI,
   KPIChange,
   KPIContent,
+  KPITitle,
   type KPIFormat,
   KPIValue,
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
-import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-
-import { CardDescription } from '@/components/ui/card'
+import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -19,14 +23,16 @@ interface ProgressKPI1Props {
   daysElapsed: number
   daysInPeriod: number
   format?: KPIFormat
-  previous: number
+  previous?: number
+  status?: BlockStatus
   target: number
   title: string
-  value: number
+  /** Leave out to show the empty state. */
+  value?: number
 }
 
 const exampleProps: ProgressKPI1Props = {
-  comparison: 'vs last month',
+  comparison: 'last month',
   daysElapsed: 18,
   daysInPeriod: 30,
   format: 'currency',
@@ -36,8 +42,6 @@ const exampleProps: ProgressKPI1Props = {
   value: 87_500,
 }
 
-const percentFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
-
 const ProgressKPI1 = (props: ProgressKPI1Props) => {
   const {
     comparison,
@@ -45,61 +49,87 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
     daysInPeriod,
     format,
     previous,
+    status,
     target,
     title,
     value,
   } = props
+  const ready = status === undefined && value !== undefined
+  const reached = ready ? value : 0
   const formatter = getKPIFormatter(format)
-  const share = target > 0 ? (value / target) * 100 : 0
+  const share = target > 0 ? reached / target : 0
   const expected = Math.min(100, (daysElapsed / daysInPeriod) * 100)
-  const projected = daysElapsed > 0 ? (value / daysElapsed) * daysInPeriod : value
-  const onPace = projected >= target
+  const projected = daysElapsed > 0 ? (reached / daysElapsed) * daysInPeriod : reached
+  const projectedShare = target > 0 ? Math.min(100, (projected / target) * 100) : 0
+  const gap = projected - target
 
   return (
-    <KPI>
-      <KPIContent className='gap-1'>
-        <div className='flex items-center justify-between gap-2'>
-          <CardDescription>{title}</CardDescription>
-          <KPIChange comparison={comparison} previous={previous} value={value} />
-        </div>
-        <KPIValue value={value} format={format} animated />
-        <div className='mt-4 flex flex-col gap-2 text-sm'>
-          <div className='text-muted-foreground flex items-center justify-between gap-2'>
-            <span>
-              <span className='text-foreground font-medium tabular-nums'>
-                {percentFormatter.format(share)}%
-              </span>{' '}
-              of target
-            </span>
-            <span className='text-foreground font-medium tabular-nums'>
-              {formatter(target)}
-            </span>
-          </div>
-          <div className='relative'>
-            <ProgressBar percentage={share} />
-            <span
+    <BlockStateProvider status={status} empty={value === undefined}>
+      <KPI>
+        <KPIContent className='gap-1'>
+          <KPITitle>{title}</KPITitle>
+          <KPIValue value={value} format={format} animated />
+          <KPIChange
+            comparison={comparison}
+            format={format}
+            previous={previous}
+            value={value}
+          />
+          <div className='mt-5 flex flex-col gap-2'>
+            <div className='text-muted-foreground flex items-baseline justify-between gap-2 text-sm'>
+              <BlockReady className='w-1/2'>
+                <span>
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {formatPercent(share, { maximumFractionDigits: 0 })}
+                  </span>{' '}
+                  of {formatter(target)}
+                </span>
+              </BlockReady>
+              <span className='ml-auto text-xs tabular-nums'>
+                Day {daysElapsed} of {daysInPeriod}
+              </span>
+            </div>
+            <div
               aria-hidden
-              className='bg-foreground ring-card absolute top-1/2 h-4 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
-              style={{ left: `${expected}%` }}
-            />
-          </div>
-          <p className='text-muted-foreground text-xs'>
-            Day {daysElapsed} of {daysInPeriod}. On pace for{' '}
-            <span
               className={cn(
-                'font-medium tabular-nums',
-                onPace
-                  ? 'text-emerald-700 dark:text-emerald-400'
-                  : 'text-amber-800 dark:text-amber-400',
+                'bg-muted relative h-2 rounded-full',
+                status === 'loading' && 'animate-pulse motion-reduce:animate-none',
               )}
             >
-              {formatter(projected)}
-            </span>
-            , {onPace ? 'above' : 'below'} target. The tick marks an even pace.
-          </p>
-        </div>
-      </KPIContent>
-    </KPI>
+              <span
+                className='absolute inset-y-0 left-0 rounded-full bg-[repeating-linear-gradient(135deg,color-mix(in_oklab,var(--color-chart-2)_45%,transparent)_0_2px,transparent_2px_5px)]'
+                style={{ width: `${projectedShare}%` }}
+              />
+              <span
+                className='bg-chart-2 absolute inset-y-0 left-0 rounded-full'
+                style={{ width: `${Math.min(100, share * 100)}%` }}
+              />
+              <span
+                className='bg-foreground absolute -top-1 -bottom-1 w-0.5 -translate-x-1/2 rounded-full'
+                style={{ left: `${expected}%` }}
+              />
+            </div>
+            <BlockReady className='text-xs'>
+              <p className='text-muted-foreground text-xs'>
+                On pace for{' '}
+                <span
+                  className={cn(
+                    'font-medium tabular-nums',
+                    gap >= 0
+                      ? 'text-emerald-700 dark:text-emerald-400'
+                      : 'text-amber-800 dark:text-amber-400',
+                  )}
+                >
+                  {formatter(projected)}
+                </span>
+                , {formatter(Math.abs(gap))} {gap >= 0 ? 'over' : 'short of'} target. The
+                hatched bar is the projection, the line an even pace.
+              </p>
+            </BlockReady>
+          </div>
+        </KPIContent>
+      </KPI>
+    </BlockStateProvider>
   )
 }
 

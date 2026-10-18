@@ -72,15 +72,6 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
     <ErrorPageLayout
       brand={brand}
       code='500'
-      icon={
-        <IconPlaceholder
-          lucide='TriangleAlertIcon'
-          tabler='IconAlertTriangle'
-          hugeicons='Alert02Icon'
-          phosphor='WarningIcon'
-          remixicon='RiErrorWarningLine'
-        />
-      }
       title='Something went wrong'
       description='This is on our side, not yours. Your data is safe. Try again in a moment.'
       footer={
@@ -94,8 +85,8 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
         )
       }
     >
-      <div className='flex flex-col items-center gap-2'>
-        <div className='flex flex-wrap justify-center gap-2'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-wrap gap-2'>
           {onRetry && (
             <Button disabled={retrying} onClick={() => void retry()}>
               <IconPlaceholder
@@ -129,50 +120,57 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
         </p>
       </div>
 
-      <div className='flex flex-col gap-3 rounded-xl border p-4 text-start text-sm'>
-        <div className='flex items-center gap-2'>
-          <div className='flex min-w-0 flex-1 flex-col'>
-            <span className='text-muted-foreground text-xs'>Error ID</span>
-            <code className='truncate font-mono'>{errorId}</code>
-          </div>
-          <CopyButton label='Copy error ID' value={errorId} />
+      <dl className='flex flex-col divide-y border-y text-sm'>
+        <div className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 py-2'>
+          <dt className='text-muted-foreground text-xs'>Error ID</dt>
+          <dd className='truncate font-mono'>{errorId}</dd>
+          <dd className='col-start-2 row-span-2 row-start-1'>
+            <CopyButton label='Copy error ID' value={errorId} />
+          </dd>
         </div>
-        <div className='flex flex-col'>
-          <span className='text-muted-foreground text-xs'>Time</span>
-          <time dateTime={occurredAt.toISOString()}>{formatTime(occurredAt)}</time>
+        <div className='flex flex-col py-2'>
+          <dt className='text-muted-foreground text-xs'>Time</dt>
+          <dd>
+            <time dateTime={occurredAt.toISOString()}>{formatTime(occurredAt)}</time>
+          </dd>
         </div>
         {details && (
-          <details className='group border-t pt-3'>
-            <summary className='text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1 text-xs font-medium [&::-webkit-details-marker]:hidden'>
-              <IconPlaceholder
-                lucide='ChevronRightIcon'
-                tabler='IconChevronRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='CaretRightIcon'
-                remixicon='RiArrowRightSLine'
-                aria-hidden
-                className='size-3.5 transition-transform group-open:rotate-90'
-              />
-              Details
-            </summary>
-            <CodeBlock size='sm' className='mt-2'>
-              <CodeBlockHeader>
-                <CodeBlockTitle>Error details</CodeBlockTitle>
-                <CodeBlockActions>
-                  <CodeBlockCopyButton
-                    size='icon-sm'
-                    aria-label='Copy details'
-                    value={details}
+          <div className='py-2'>
+            <dt className='sr-only'>Details</dt>
+            <dd>
+              <details className='group'>
+                <summary className='text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1 text-xs font-medium [&::-webkit-details-marker]:hidden'>
+                  <IconPlaceholder
+                    lucide='ChevronRightIcon'
+                    tabler='IconChevronRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='CaretRightIcon'
+                    remixicon='RiArrowRightSLine'
+                    aria-hidden
+                    className='size-3.5 transition-transform group-open:rotate-90'
                   />
-                </CodeBlockActions>
-              </CodeBlockHeader>
-              <CodeBlockContent wrap className='data-wrap:mask-none'>
-                {details}
-              </CodeBlockContent>
-            </CodeBlock>
-          </details>
+                  Details
+                </summary>
+                <CodeBlock size='sm' className='mt-2'>
+                  <CodeBlockHeader>
+                    <CodeBlockTitle>Error details</CodeBlockTitle>
+                    <CodeBlockActions>
+                      <CodeBlockCopyButton
+                        size='icon-sm'
+                        aria-label='Copy details'
+                        value={details}
+                      />
+                    </CodeBlockActions>
+                  </CodeBlockHeader>
+                  <CodeBlockContent wrap className='data-wrap:mask-none'>
+                    {details}
+                  </CodeBlockContent>
+                </CodeBlock>
+              </details>
+            </dd>
+          </div>
         )}
-      </div>
+      </dl>
     </ErrorPageLayout>
   )
 }

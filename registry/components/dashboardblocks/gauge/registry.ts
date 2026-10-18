@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'gauge-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('gauge'), registryUrl('trend')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('gauge'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/gauge/gauge-01.tsx',
@@ -23,7 +28,11 @@ export const examples: Registry['items'] = [
   {
     name: 'gauge-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('gauge')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('gauge'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/gauge/gauge-02.tsx',
@@ -32,7 +41,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A health score weighted from its contributing factors, marked on poor, fair and good bands.',
+        'A health score weighted from its contributing factors, marked on poor, fair and good bands, with the factors that pull it down most.',
       size: 'half',
       usedWith: ['status-01', 'metric-list-03', 'alerts-01'],
     },
@@ -40,7 +49,11 @@ export const examples: Registry['items'] = [
   {
     name: 'gauge-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('gauge')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('gauge'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/gauge/gauge-03.tsx',
@@ -57,7 +70,12 @@ export const examples: Registry['items'] = [
   {
     name: 'gauge-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('gauge'), registryUrl('trend')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('gauge'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/gauge/gauge-04.tsx',

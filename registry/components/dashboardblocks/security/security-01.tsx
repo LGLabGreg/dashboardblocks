@@ -1,31 +1,45 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  chartAxisProps,
+  chartBarCursor,
+  chartBarValueLabel,
+  chartFadedColor,
+  chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
-  formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  LabelList,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface SignInDay {
   blocked: number
@@ -35,10 +49,12 @@ interface SignInDay {
 }
 
 interface Security1Props {
-  days: SignInDay[]
+  /** Leave out, or pass none, to show the empty state. */
+  days?: SignInDay[]
   description: string
   /** Share of active users with multi-factor authentication, 0–1. */
   mfaCoverage?: number
+  status?: BlockStatus
   title: string
 }
 
@@ -72,21 +88,24 @@ const exampleProps: Security1Props = {
     label,
     succeeded: SUCCEEDED[index],
   })),
-  description: 'Sign-in attempts per day, last 14 days',
+  description: 'Failed and blocked sign-in attempts per day, over the last 14 days.',
   mfaCoverage: 0.87,
   title: 'Sign-in activity',
 }
 
-const COLORS = {
-  blocked: 'var(--destructive)',
-  failed: 'color-mix(in oklab, var(--destructive) 40%, var(--card))',
-  succeeded: 'color-mix(in oklab, var(--muted-foreground) 45%, var(--card))',
-}
+const BLOCKED_COLOR = 'var(--color-red-600)'
+const FAILED_COLOR = chartFadedColor(BLOCKED_COLOR)
 
 const SPIKE_MULTIPLIER = 3
 
+const median = (values: number[]) => {
+  const sorted = [...values].sort((a, b) => a - b)
+  return sorted[Math.floor(sorted.length / 2)] ?? 0
+}
+
 const Security1 = (props: Security1Props) => {
-  const { days, description, mfaCoverage, title } = props
+  const { days = [], description, mfaCoverage, status, title } = props
+  const state = getBlockState(status, days.length === 0)
   const totals = days.reduce(
     (sum, day) => ({
       blocked: sum.blocked + day.blocked,
@@ -96,105 +115,178 @@ const Security1 = (props: Security1Props) => {
     { blocked: 0, failed: 0, succeeded: 0 },
   )
   const attempts = totals.succeeded + totals.failed + totals.blocked
-  const failureRate = attempts > 0 ? (totals.failed + totals.blocked) / attempts : 0
-  const sorted = [...days].map((day) => day.blocked).sort((a, b) => a - b)
-  const median = sorted[Math.floor(sorted.length / 2)] ?? 0
-  const spikes = days.filter((day) => day.blocked > median * SPIKE_MULTIPLIER)
+  const refused = totals.failed + totals.blocked
+  const typicalBlocked = median(days.map((day) => day.blocked))
+  const typicalRefused = median(days.map((day) => day.failed + day.blocked))
+  const spikes = days.filter((day) => day.blocked > typicalBlocked * SPIKE_MULTIPLIER)
+  const peakIndex = days.reduce(
+    (best, day, index) => (day.blocked > (days[best]?.blocked ?? -1) ? index : best),
+    0,
+  )
+  const spikeBlocked = spikes.reduce((sum, day) => sum + day.blocked, 0)
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-3'>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Failed or blocked</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {(failureRate * 100).toFixed(1)}%
-            </dd>
-            <dd className='text-muted-foreground text-xs tabular-nums'>
-              {(totals.failed + totals.blocked).toLocaleString()} of{' '}
-              {attempts.toLocaleString()}
-            </dd>
+    <BlockStateProvider status={status} empty={days.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <div className='flex flex-wrap items-end gap-x-10 gap-y-4 border-t pt-4'>
+          <div className='flex flex-col gap-1'>
+            <p className='text-muted-foreground text-sm'>Failed or blocked</p>
+            <KPIValue
+              value={attempts > 0 ? refused / attempts : 0}
+              format={(value) =>
+                formatPercent(value, {
+                  maximumFractionDigits: 1,
+                  minimumFractionDigits: 1,
+                })
+              }
+            />
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm tabular-nums'>
+                {formatNumber(refused)} of {formatNumber(attempts)} attempts
+              </p>
+            </BlockReady>
           </div>
-          <div className='flex flex-col gap-0.5'>
-            <dt className='text-muted-foreground text-xs'>Blocked</dt>
-            <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-              {totals.blocked.toLocaleString()}
-            </dd>
-            <dd className='text-muted-foreground text-xs'>
-              {spikes.length > 0
-                ? `Spike on ${spikes.map((day) => day.label).join(' and ')}`
-                : 'No unusual spikes'}
-            </dd>
-          </div>
-          {mfaCoverage !== undefined && (
-            <div className='col-span-2 flex flex-col gap-0.5 @md:col-span-1'>
-              <dt className='text-muted-foreground text-xs'>Users with MFA</dt>
-              <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {Math.round(mfaCoverage * 100)}%
-              </dd>
-            </div>
+          {(!state || state === 'loading') && (
+            <dl className='flex flex-wrap gap-x-10 gap-y-4'>
+              <div className='flex flex-col gap-1'>
+                <dt className='text-muted-foreground text-sm'>Blocked</dt>
+                <dd>
+                  <KPIValue
+                    className='text-2xl'
+                    value={totals.blocked}
+                    format={(value) => formatNumber(value)}
+                  />
+                </dd>
+              </div>
+              {mfaCoverage !== undefined && (
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Users with MFA</dt>
+                  <dd>
+                    <KPIValue
+                      className='text-2xl'
+                      value={mfaCoverage}
+                      format={(value) =>
+                        formatPercent(value, { maximumFractionDigits: 0 })
+                      }
+                    />
+                  </dd>
+                </div>
+              )}
+            </dl>
           )}
-        </dl>
-        <ChartPanelLegend
-          items={[
-            { color: COLORS.succeeded, label: 'Succeeded' },
-            { color: COLORS.failed, label: 'Failed' },
-            { color: COLORS.blocked, label: 'Blocked' },
-          ]}
-        />
-        <ChartPanelFigure className='h-56'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={days} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='label'
-                interval='preserveStartEnd'
-                minTickGap={20}
-              />
-              <YAxis {...chartAxisProps} tickFormatter={formatCompact} width={40} />
-              <Tooltip
-                content={(tooltipProps) => <ChartPanelTooltip {...tooltipProps} />}
-                cursor={{ fill: 'var(--color-muted)', fillOpacity: 0.5 }}
-              />
-              <Bar
-                dataKey='succeeded'
-                fill={COLORS.succeeded}
-                name='Succeeded'
-                stackId='sign-ins'
-              />
-              <Bar
-                dataKey='failed'
-                fill={COLORS.failed}
-                name='Failed'
-                stackId='sign-ins'
-              />
-              <Bar
-                dataKey='blocked'
-                fill={COLORS.blocked}
-                name='Blocked'
-                radius={[3, 3, 0, 0]}
-                stackId='sign-ins'
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}.`}
-          columns={[
-            { key: 'label', label: 'Day' },
-            { key: 'succeeded', label: 'Succeeded' },
-            { key: 'failed', label: 'Failed' },
-            { key: 'blocked', label: 'Blocked' },
-          ]}
-          rows={days}
-        />
-      </CardContent>
-    </Card>
+        </div>
+        <BlockReady className='text-sm'>
+          <p className='text-sm text-pretty'>
+            {spikes.length > 0 ? (
+              <>
+                <span className='font-medium text-red-700 dark:text-red-400'>
+                  {formatNumber(spikeBlocked)} blocked
+                </span>{' '}
+                on {spikes.map((day) => day.label).join(' and ')},{' '}
+                <span className='text-muted-foreground'>
+                  against {formatNumber(typicalBlocked)} on a typical day.
+                </span>
+              </>
+            ) : (
+              <span className='text-muted-foreground'>
+                No unusual spikes in blocked attempts.
+              </span>
+            )}
+          </p>
+        </BlockReady>
+        {(!state || state === 'loading') && (
+          <ChartPanelLegend
+            items={[
+              { color: FAILED_COLOR, label: 'Failed' },
+              { color: BLOCKED_COLOR, label: 'Blocked' },
+            ]}
+          />
+        )}
+        {state ? (
+          <ChartPlaceholder height={224} />
+        ) : (
+          <>
+            <ChartPanelFigure className='h-56'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <BarChart
+                  aria-label={`${title} chart`}
+                  data={days}
+                  margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
+                >
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='label'
+                    interval='preserveStartEnd'
+                    minTickGap={20}
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    tickFormatter={formatCompact}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => <ChartTooltipContent {...tooltipProps} />}
+                    cursor={chartBarCursor}
+                  />
+                  <Bar
+                    dataKey='failed'
+                    fill={FAILED_COLOR}
+                    maxBarSize={28}
+                    name='Failed'
+                    stackId='refused'
+                  />
+                  <Bar
+                    dataKey='blocked'
+                    fill={BLOCKED_COLOR}
+                    maxBarSize={28}
+                    name='Blocked'
+                    radius={[4, 4, 0, 0]}
+                    stackId='refused'
+                  >
+                    {spikes.length > 0 && (
+                      <LabelList
+                        dataKey='blocked'
+                        content={chartBarValueLabel(
+                          peakIndex,
+                          (value) => `${formatNumber(value)} blocked`,
+                        )}
+                      />
+                    )}
+                  </Bar>
+                  {typicalRefused > 0 && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={typicalRefused}
+                      label={{
+                        ...chartReferenceLabel,
+                        value: `typical ${formatNumber(typicalRefused)}`,
+                        position: 'insideBottomLeft',
+                        dy: -4,
+                      }}
+                    />
+                  )}
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Day' },
+                { key: 'succeeded', label: 'Succeeded' },
+                { key: 'failed', label: 'Failed' },
+                { key: 'blocked', label: 'Blocked' },
+              ]}
+              rows={days}
+            />
+          </>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

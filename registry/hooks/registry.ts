@@ -29,4 +29,18 @@ export const hooks: Registry['items'] = [
       },
     ],
   },
+  {
+    name: 'use-reveal',
+    type: 'registry:hook',
+    title: 'Use Reveal',
+    description:
+      'A hook that turns true the frame after an element scrolls into view, so a bar or ring can animate from zero.',
+    registryDependencies: [registryUrl('use-in-view')],
+    files: [
+      {
+        path: 'registry/hooks/use-reveal.tsx',
+        type: 'registry:hook',
+      },
+    ],
+  },
 ]

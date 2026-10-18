@@ -1,9 +1,19 @@
 'use client'
 
-import { Trend } from '@/registry/components/dashboardblocks/trend'
-import { useInView } from '@/registry/hooks/use-in-view'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ComponentProps, type RefObject, useEffect, useState } from 'react'
+import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
+import { KPIChange, getKPIChange } from '@/registry/components/dashboardblocks/kpi'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
+import {
+  formatCompact,
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
+import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -32,25 +42,6 @@ interface Metric {
   value: number
 }
 
-const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
-const compactFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 0,
-  notation: 'compact',
-})
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  style: 'currency',
-})
-const currencyCompactFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 0,
-  notation: 'compact',
-  style: 'currency',
-})
-const percentFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 })
-
 function formatDuration(seconds: number) {
   const total = Math.round(Math.abs(seconds))
   const hours = Math.floor(total / 3600)
@@ -62,13 +53,14 @@ function formatDuration(seconds: number) {
 }
 
 const metricFormats: Record<MetricFormat, MetricFormatter> = {
-  compact: (value) => compactFormatter.format(value),
-  currency: (value) => currencyFormatter.format(value),
-  'currency-compact': (value) => currencyCompactFormatter.format(value),
+  compact: formatCompact,
+  currency: (value) =>
+    formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+  'currency-compact': (value) => formatCurrency(value, { compact: true }),
   duration: formatDuration,
-  milliseconds: (value) => `${numberFormatter.format(Math.round(value))} ms`,
-  number: (value) => numberFormatter.format(value),
-  percent: (value) => `${percentFormatter.format(value)}%`,
+  milliseconds: (value) => `${formatNumber(value, { maximumFractionDigits: 0 })} ms`,
+  number: (value) => formatNumber(value),
+  percent: (value) => formatPercent(value / 100, { maximumFractionDigits: 2 }),
 }
 
 function getMetricFormatter(format: Metric['format'] = 'number'): MetricFormatter {
@@ -79,21 +71,13 @@ function formatMetricValue(metric: Pick<Metric, 'format'>, value: number) {
   return getMetricFormatter(metric.format)(value)
 }
 
-const round = (value: number) => Math.round(value * 10) / 10
-
 function getMetricChange({
-  changeType = 'percent',
+  changeType,
   previous,
   value,
 }: Pick<Metric, 'changeType' | 'previous' | 'value'>) {
-  if (previous === undefined) return undefined
-  if (changeType === 'points') return round(value - previous)
-  if (previous === 0) return 0
-  return round(((value - previous) / Math.abs(previous)) * 100)
+  return getKPIChange({ changeType, previous, value })
 }
-
-const formatChange = (unit: '%' | ' pts') => (value: number) =>
-  `${value > 0 ? '+' : ''}${numberFormatter.format(value)}${unit}`
 
 function describeHistory(
   metric: Pick<Metric, 'format' | 'history' | 'label'>,
@@ -108,124 +92,83 @@ function describeHistory(
   return `${metric.label}${period ? `, ${period}` : ''}: ${direction} from ${format(first)} to ${format(last)}`
 }
 
-function useReveal(animated: boolean) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  return { ref: ref as RefObject<HTMLDivElement>, revealed }
-}
-
 function MetricList({ className, ...props }: ComponentProps<'ul'>) {
   return <ul className={cn('flex flex-col divide-y', className)} {...props} />
 }
 
 interface MetricChangeProps {
   className?: string
-  metric: Pick<Metric, 'changeType' | 'goodDirection' | 'previous' | 'value'>
+  metric: Pick<Metric, 'changeType' | 'format' | 'goodDirection' | 'previous' | 'value'>
+  /** Follows the previous value, such as `last month`. @default 'the period before' */
   comparison?: string
+  /** `sentence` also shows the previous value and the comparison. @default 'short' */
+  variant?: 'sentence' | 'short'
 }
 
 function MetricChange({
   className,
-  comparison = 'vs previous period',
+  comparison = 'the period before',
   metric,
+  variant = 'short',
 }: MetricChangeProps) {
-  const change = getMetricChange(metric)
-  if (change === undefined) return null
+  if (metric.previous === undefined) return null
 
   return (
-    <div className={cn('flex items-center justify-end whitespace-nowrap', className)}>
-      <Trend
-        className='text-xs tabular-nums [&_svg]:size-3.5'
-        formatter={formatChange(metric.changeType === 'points' ? ' pts' : '%')}
-        goodDirection={metric.goodDirection}
-        trend={change}
-        trendIcon='arrow'
-      />
-      <span className='sr-only'> {comparison}</span>
-    </div>
+    <KPIChange
+      changeType={metric.changeType}
+      className={cn(variant === 'short' && 'text-xs whitespace-nowrap', className)}
+      comparison={comparison}
+      format={getMetricFormatter(metric.format)}
+      goodDirection={metric.goodDirection}
+      previous={metric.previous}
+      value={metric.value}
+      variant={variant}
+    />
   )
 }
 
 interface MetricSparklineProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   data: number[]
+  /** Formats a point's value in the tooltip. */
+  formatter?: MetricFormatter
   label: string
+  /** Names each point in the tooltip, in the same order as `data`. */
+  labels?: string[]
 }
-
-const SPARKLINE_WIDTH = 64
-const SPARKLINE_HEIGHT = 24
-const SPARKLINE_INSET = 2
 
 function MetricSparkline({
   animated = true,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   data,
+  formatter = metricFormats.number,
   label,
+  labels,
 }: MetricSparklineProps) {
-  const { ref, revealed } = useReveal(animated)
-
   if (data.length < 2) return null
 
-  const min = Math.min(...data)
-  const max = Math.max(...data)
-  const range = max - min || 1
-  const points = data.map((value, index) => ({
-    x: (index / (data.length - 1)) * SPARKLINE_WIDTH,
-    y:
-      SPARKLINE_INSET +
-      (1 - (value - min) / range) * (SPARKLINE_HEIGHT - 2 * SPARKLINE_INSET),
-  }))
-  const line = points.map(({ x, y }, index) => `${index ? 'L' : 'M'}${x},${y}`).join('')
-  const last = points[points.length - 1]
-
   return (
-    <div
-      ref={ref}
-      role='img'
-      aria-label={label}
-      className={cn('relative h-6 w-16', className)}
-    >
-      <svg
-        aria-hidden
-        className='size-full overflow-visible transition-[clip-path] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
-        preserveAspectRatio='none'
-        style={{
-          clipPath: revealed
-            ? 'inset(-4px -4px -4px -4px)'
-            : 'inset(-4px 100% -4px -4px)',
-        }}
-        viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}
-      >
-        <path
-          d={line}
-          fill='none'
-          stroke={color}
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          strokeWidth={1.5}
-          vectorEffect='non-scaling-stroke'
-        />
-      </svg>
-      <span
-        aria-hidden
-        className='ring-card absolute size-1.5 -translate-1/2 rounded-full ring-2 transition-opacity delay-700 duration-300 motion-reduce:transition-none motion-reduce:delay-0'
-        style={{
-          backgroundColor: color,
-          left: '100%',
-          opacity: revealed ? 1 : 0,
-          top: `${(last.y / SPARKLINE_HEIGHT) * 100}%`,
-        }}
+    <div role='img' aria-label={label} className={cn('h-7 w-16', className)}>
+      <TinyAreaChart
+        accessibilityLayer={false}
+        areas={[
+          {
+            dataKey: 'value',
+            fill: color,
+            isAnimationActive: animated,
+            stroke: color,
+            strokeWidth: 1.5,
+          },
+        ]}
+        data={data.map((value, index) => ({ label: labels?.[index], value }))}
+        formatter={formatter}
+        height='100%'
+        markLast='value'
+        scale='data'
       />
     </div>
   )
@@ -233,6 +176,8 @@ function MetricSparkline({
 
 interface MetricRowProps extends Omit<ComponentProps<'li'>, 'children'> {
   comparison?: string
+  /** Names each point of the history in the sparkline's tooltip. */
+  labels?: string[]
   metric: Metric
   period?: string
   /** @default true when the metric has a history */
@@ -243,6 +188,7 @@ interface MetricRowProps extends Omit<ComponentProps<'li'>, 'children'> {
 function MetricRow({
   className,
   comparison,
+  labels,
   metric,
   period,
   showSparkline = (metric.history?.length ?? 0) > 1,
@@ -252,7 +198,7 @@ function MetricRow({
   return (
     <li
       className={cn(
-        'grid items-center gap-x-3 py-3 @md:gap-x-4',
+        'grid items-center gap-x-3 py-2.5 @md:gap-x-4',
         showSparkline
           ? 'grid-cols-[minmax(0,1fr)_3rem_5.5rem] @md:grid-cols-[minmax(0,1fr)_5rem_6rem_5rem]'
           : 'grid-cols-[minmax(0,1fr)_5.5rem] @md:grid-cols-[minmax(0,1fr)_6rem_5rem]',
@@ -268,7 +214,9 @@ function MetricRow({
               className='w-full'
               color={sparklineColor}
               data={metric.history}
+              formatter={getMetricFormatter(metric.format)}
               label={describeHistory(metric, period)}
+              labels={labels}
             />
           )}
         </div>
@@ -277,7 +225,11 @@ function MetricRow({
         <span className='text-sm font-medium whitespace-nowrap tabular-nums @md:justify-self-end'>
           {formatMetricValue(metric, metric.value)}
         </span>
-        <MetricChange comparison={comparison} metric={metric} />
+        <MetricChange
+          className='@md:justify-self-end'
+          comparison={comparison}
+          metric={metric}
+        />
       </div>
     </li>
   )
@@ -305,55 +257,13 @@ function getTargetStatus({
   return gap <= Math.abs(target) * tolerance ? 'near' : 'missed'
 }
 
-const targetStatusConfig: Record<
-  TargetStatus,
-  { className: string; icon: React.ReactNode; label: string }
-> = {
-  met: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'On target',
-  },
-  missed: {
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Off target',
-  },
-  near: {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Near target',
-  },
+const targetStatusConfig: Record<TargetStatus, { label: string; tone: StatusTone }> = {
+  met: { label: 'On target', tone: 'good' },
+  missed: { label: 'Off target', tone: 'bad' },
+  near: { label: 'Near target', tone: 'warning' },
 }
 
-function TargetStatusBadge({
+function TargetStatusLabel({
   className,
   status,
 }: {
@@ -362,23 +272,16 @@ function TargetStatusBadge({
 }) {
   const config = targetStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel className={className} tone={config.tone}>
       {config.label}
-    </span>
+    </StatusLabel>
   )
 }
 
 interface MetricTargetBarProps {
   animated?: boolean
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   domain?: [number, number]
   target: number
@@ -388,7 +291,7 @@ interface MetricTargetBarProps {
 function MetricTargetBar({
   animated = true,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   domain,
   target,
   value,
@@ -410,7 +313,7 @@ function MetricTargetBar({
         />
       </div>
       <span
-        className='bg-foreground ring-card absolute top-1/2 h-3.5 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+        className='bg-foreground ring-background absolute top-1/2 h-3.5 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
         style={{ left: `${share(target) * 100}%` }}
       />
     </div>
@@ -444,7 +347,7 @@ export {
   MetricSparkline,
   MetricTargetBar,
   MetricTargetKey,
-  TargetStatusBadge,
+  TargetStatusLabel,
   describeHistory,
   formatDuration,
   formatMetricValue,

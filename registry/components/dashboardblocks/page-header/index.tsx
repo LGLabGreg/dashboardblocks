@@ -16,3 +16,10 @@ export const pageHeaderExampleProps = {
   'page-header-03': pageHeader3ExampleProps,
   'page-header-04': pageHeader4ExampleProps,
 }
+
+export const pageHeaderEmptyProps = {
+  'page-header-01': { description: undefined },
+  'page-header-02': { description: undefined, projectStatus: undefined },
+  'page-header-03': { customer: undefined },
+  'page-header-04': { count: undefined, description: undefined },
+}

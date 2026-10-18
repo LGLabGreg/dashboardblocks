@@ -1,12 +1,19 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   DataTable,
   DataTableBody,
   DataTableCell,
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
 import {
   PipelineAge,
@@ -19,13 +26,15 @@ import {
 } from '@/registry/components/dashboardblocks/pipeline'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
 interface Pipeline3Props {
-  items: PipelineItem[]
+  /** Defaults to a sentence counting the stuck items and naming the one waiting longest. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  items?: PipelineItem[]
   noun?: string
   now: Date
   stages: PipelineStage[]
+  status?: BlockStatus
   title: string
 }
 
@@ -38,6 +47,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(2),
       id: 'c1',
       owner: 'Priya Nair',
+      ownerAvatar: '/images/avatar-02.webp',
       stage: 'screen',
       subtitle: 'Senior frontend engineer',
       title: 'Daniel Okafor',
@@ -46,6 +56,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(9),
       id: 'c2',
       owner: 'Priya Nair',
+      ownerAvatar: '/images/avatar-02.webp',
       stage: 'screen',
       subtitle: 'Product designer',
       title: 'Sofia Lindqvist',
@@ -54,6 +65,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(4),
       id: 'c3',
       owner: 'Tom Becker',
+      ownerAvatar: '/images/avatar-07.webp',
       stage: 'interview',
       subtitle: 'Data engineer',
       title: 'Ravi Menon',
@@ -62,6 +74,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(15),
       id: 'c4',
       owner: 'Tom Becker',
+      ownerAvatar: '/images/avatar-07.webp',
       stage: 'interview',
       subtitle: 'Senior frontend engineer',
       title: 'Hannah Cole',
@@ -70,6 +83,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(11),
       id: 'c5',
       owner: 'Grace Kim',
+      ownerAvatar: '/images/avatar-04.webp',
       stage: 'interview',
       subtitle: 'Engineering manager',
       title: 'Marco Bianchi',
@@ -78,6 +92,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(6),
       id: 'c6',
       owner: 'Grace Kim',
+      ownerAvatar: '/images/avatar-04.webp',
       stage: 'feedback',
       subtitle: 'Product designer',
       title: 'Amara Diallo',
@@ -86,6 +101,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(1),
       id: 'c7',
       owner: 'Tom Becker',
+      ownerAvatar: '/images/avatar-07.webp',
       stage: 'feedback',
       subtitle: 'Data engineer',
       title: 'Leo Martins',
@@ -94,6 +110,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(8),
       id: 'c8',
       owner: 'Priya Nair',
+      ownerAvatar: '/images/avatar-02.webp',
       stage: 'offer',
       subtitle: 'Support lead',
       title: 'Nora Haddad',
@@ -102,6 +119,7 @@ const exampleProps: Pipeline3Props = {
       enteredStageAt: daysAgo(3),
       id: 'c9',
       owner: 'Grace Kim',
+      ownerAvatar: '/images/avatar-04.webp',
       stage: 'offer',
       subtitle: 'Senior frontend engineer',
       title: 'Ethan Brooks',
@@ -119,7 +137,8 @@ const exampleProps: Pipeline3Props = {
 }
 
 const Pipeline3 = (props: Pipeline3Props) => {
-  const { items, noun = 'items', now, stages, title } = props
+  const { items = [], noun = 'items', now, stages, status, title } = props
+  const state = getBlockState(status, items.length === 0)
   const stageById = new Map(stages.map((stage) => [stage.id, stage]))
 
   const stuck = items
@@ -134,86 +153,97 @@ const Pipeline3 = (props: Pipeline3Props) => {
         b.days / (b.stage?.expectedDays || 1) - a.days / (a.stage?.expectedDays || 1),
     )
 
+  const longest = stuck[0]
+  const {
+    description = longest
+      ? `${stuck.length} of ${items.length} ${noun} past their stage’s time limit; ${longest.item.title} is ${formatAge(longest.days - (longest.stage?.expectedDays ?? 0), 'long')} over.`
+      : `All ${items.length} ${noun} are within their stage’s time limit.`,
+  } = props
+
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {stuck.length} of {items.length} {noun} over their expected time in stage
-        </CardDescription>
-      </CardHeader>
-      {stuck.length === 0 ? (
-        <p className='text-muted-foreground flex items-center gap-2 px-6 py-6 text-sm'>
-          <IconPlaceholder
-            lucide='CircleCheckIcon'
-            tabler='IconCircleCheck'
-            hugeicons='CheckmarkCircle02Icon'
-            phosphor='CheckCircleIcon'
-            remixicon='RiCheckboxCircleLine'
-            aria-hidden
-            className='size-4 text-emerald-700 dark:text-emerald-400'
-          />
-          Nothing is stuck: all {items.length} {noun} are within their expected time.
-        </p>
-      ) : (
-        <DataTable>
-          <caption className='sr-only'>{title}</caption>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Name</DataTableHead>
-              <DataTableHead>Stage</DataTableHead>
-              <DataTableHead>In stage</DataTableHead>
-              <DataTableHead>Over by</DataTableHead>
-              <DataTableHead>Owner</DataTableHead>
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            {stuck.map(({ days, item, stage }) => {
-              const expected = stage?.expectedDays ?? 0
-              return (
-                <DataTableRow key={item.id}>
-                  <DataTableCell primary truncate>
-                    <span className='block truncate'>{item.title}</span>
-                    {item.subtitle && (
-                      <span className='text-muted-foreground block truncate text-xs font-normal'>
-                        {item.subtitle}
-                      </span>
-                    )}
-                  </DataTableCell>
-                  <DataTableCell label='Stage' className='whitespace-nowrap'>
-                    {stage?.label}
-                  </DataTableCell>
-                  <DataTableCell label='In stage'>
-                    <span className='inline-flex flex-wrap items-center gap-x-1.5'>
-                      <PipelineAge
-                        className='-ml-1.5'
-                        days={days}
-                        expectedDays={expected}
-                      />
-                      <span
-                        aria-hidden
-                        className='text-muted-foreground text-xs whitespace-nowrap'
+    <BlockStateProvider status={status} empty={items.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        {!state && stuck.length === 0 ? (
+          <p className='text-muted-foreground flex items-center gap-2 border-t pt-4 text-sm'>
+            <IconPlaceholder
+              lucide='CircleCheckIcon'
+              tabler='IconCircleCheck'
+              hugeicons='CheckmarkCircle02Icon'
+              phosphor='CheckCircleIcon'
+              remixicon='RiCheckboxCircleLine'
+              aria-hidden
+              className='size-4 text-emerald-700 dark:text-emerald-400'
+            />
+            Nothing is stuck.
+          </p>
+        ) : (
+          <DataTable>
+            <caption className='sr-only'>{`${title}: ${description}`}</caption>
+            <DataTableHeader>
+              <DataTableRow>
+                <DataTableHead>Name</DataTableHead>
+                <DataTableHead>Stage</DataTableHead>
+                <DataTableHead>In stage</DataTableHead>
+                <DataTableHead>Over by</DataTableHead>
+                <DataTableHead>Owner</DataTableHead>
+              </DataTableRow>
+            </DataTableHeader>
+            <DataTableBody>
+              <DataTableStateRows colSpan={5} rows={3} />
+              {!state &&
+                stuck.map(({ days, item, stage }) => {
+                  const expected = stage?.expectedDays ?? 0
+                  return (
+                    <DataTableRow key={item.id}>
+                      <DataTableCell primary truncate>
+                        <span className='block truncate'>{item.title}</span>
+                        {item.subtitle && (
+                          <span className='text-muted-foreground block truncate text-xs font-normal'>
+                            {item.subtitle}
+                          </span>
+                        )}
+                      </DataTableCell>
+                      <DataTableCell label='Stage' className='whitespace-nowrap'>
+                        {stage?.label}
+                      </DataTableCell>
+                      <DataTableCell label='In stage'>
+                        <span className='inline-flex flex-wrap items-baseline gap-x-1.5'>
+                          <PipelineAge days={days} expectedDays={expected} />
+                          <span
+                            aria-hidden
+                            className='text-muted-foreground text-xs whitespace-nowrap'
+                          >
+                            of {expected}d
+                          </span>
+                        </span>
+                      </DataTableCell>
+                      <DataTableCell
+                        label='Over by'
+                        className='whitespace-nowrap tabular-nums'
                       >
-                        of {expected}d
-                      </span>
-                    </span>
-                  </DataTableCell>
-                  <DataTableCell
-                    label='Over by'
-                    className='whitespace-nowrap tabular-nums'
-                  >
-                    {formatAge(days - expected, 'long')}
-                  </DataTableCell>
-                  <DataTableCell label='Owner'>
-                    <PipelineOwner name={item.owner ?? 'Unassigned'} showName />
-                  </DataTableCell>
-                </DataTableRow>
-              )
-            })}
-          </DataTableBody>
-        </DataTable>
-      )}
-    </Card>
+                        {formatAge(days - expected, 'long')}
+                      </DataTableCell>
+                      <DataTableCell label='Owner'>
+                        <PipelineOwner
+                          avatar={item.ownerAvatar}
+                          name={item.owner ?? 'Unassigned'}
+                          showName
+                        />
+                      </DataTableCell>
+                    </DataTableRow>
+                  )
+                })}
+            </DataTableBody>
+          </DataTable>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

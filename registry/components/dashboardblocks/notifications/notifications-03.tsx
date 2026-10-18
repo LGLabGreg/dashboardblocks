@@ -2,6 +2,13 @@
 
 import { groupActivityByDay } from '@/registry/components/dashboardblocks/activity-feed'
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type AppNotification,
   NotificationItem,
   NotificationList,
@@ -10,14 +17,6 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface InboxNotification extends AppNotification {
@@ -27,11 +26,14 @@ interface InboxNotification extends AppNotification {
 type Filter = 'all' | 'unread' | 'mentions'
 
 interface Notifications3Props {
-  notifications: InboxNotification[]
+  /** Leave out, or pass none, to show the empty state. */
+  notifications?: InboxNotification[]
   /** Pass a fixed date, so times and day headings render the same on the server and in the browser. */
   now: Date
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
+  title: string
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
@@ -127,13 +129,27 @@ const exampleProps: Notifications3Props = {
     },
   ],
   now: exampleNow,
+  title: 'Inbox',
 }
 
 const Notifications3 = (props: Notifications3Props) => {
-  const { notifications: initial, now, timeZone = 'UTC' } = props
-  const [notifications, setNotifications] = useState(initial)
+  const { notifications: loaded = [], now, status, timeZone = 'UTC', title } = props
+  const [readOverrides, setReadOverrides] = useState<ReadonlyMap<string, boolean>>(
+    () => new Map(),
+  )
+  const [archived, setArchived] = useState<ReadonlySet<string>>(() => new Set())
   const [filter, setFilter] = useState<Filter>('all')
+  const state = getBlockState(status, loaded.length === 0)
+  const notifications = loaded
+    .filter((notification) => !archived.has(notification.id))
+    .map((notification) => ({
+      ...notification,
+      read: readOverrides.get(notification.id) ?? notification.read,
+    }))
   const unread = notifications.filter((notification) => !notification.read).length
+  const unreadMentions = notifications.filter(
+    (notification) => !notification.read && notification.mention,
+  ).length
 
   const filters: { items: InboxNotification[]; label: string; value: Filter }[] = [
     { items: notifications, label: 'All', value: 'all' },
@@ -150,31 +166,35 @@ const Notifications3 = (props: Notifications3Props) => {
   ]
 
   function setRead(ids: string[], read: boolean) {
-    setNotifications((current) =>
-      current.map((notification) =>
-        ids.includes(notification.id) ? { ...notification, read } : notification,
-      ),
-    )
+    setReadOverrides((current) => {
+      const next = new Map(current)
+      for (const id of ids) next.set(id, read)
+      return next
+    })
   }
 
   function archive(id: string) {
-    setNotifications((current) =>
-      current.filter((notification) => notification.id !== id),
-    )
+    setArchived((current) => new Set(current).add(id))
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Inbox</CardTitle>
-        <CardDescription>
-          {unread > 0 ? `${unread} unread` : 'All caught up'}
-        </CardDescription>
-        <CardAction>
+    <BlockStateProvider status={status} empty={loaded.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>
+                {unread === 0
+                  ? 'You’re all caught up.'
+                  : `${unread} unread${unreadMentions > 0 ? `, ${unreadMentions} mentioning you` : ''}.`}
+              </p>
+            </BlockReady>
+          </div>
           <Button
             variant='outline'
             size='sm'
-            disabled={unread === 0}
+            disabled={Boolean(state) || unread === 0}
             onClick={() =>
               setRead(
                 notifications.map((notification) => notification.id),
@@ -184,29 +204,38 @@ const Notifications3 = (props: Notifications3Props) => {
           >
             Mark all as read
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent className='px-0'>
+        </header>
         <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList className='mx-6 mb-2'>
+          <TabsList>
             {filters.map((item) => (
               <TabsTrigger key={item.value} value={item.value}>
                 {item.label}
+                {!state && item.value !== 'all' && item.items.length > 0 && (
+                  <span className='text-muted-foreground tabular-nums'>
+                    {item.items.length}
+                  </span>
+                )}
               </TabsTrigger>
             ))}
           </TabsList>
           {filters.map((item) => (
-            <TabsContent key={item.value} value={item.value}>
-              {item.items.length === 0 ? (
-                <p className='text-muted-foreground py-12 text-center text-sm'>
-                  Nothing here.
+            <TabsContent key={item.value} value={item.value} className='mt-2'>
+              {state ? (
+                <div className='border-t'>
+                  <BlockStateRows rows={5} />
+                </div>
+              ) : item.items.length === 0 ? (
+                <p className='text-muted-foreground border-t py-12 text-center text-sm'>
+                  {item.value === 'unread'
+                    ? 'You’re all caught up.'
+                    : 'Nothing here yet.'}
                 </p>
               ) : (
                 groupActivityByDay(item.items, now, timeZone).map((group) => (
                   <section key={group.key} aria-labelledby={`${item.value}-${group.key}`}>
                     <h3
                       id={`${item.value}-${group.key}`}
-                      className='text-muted-foreground bg-muted/40 border-y px-6 py-1.5 text-xs font-medium'
+                      className='text-muted-foreground border-b pt-4 pb-2 text-xs font-medium'
                     >
                       {group.label}
                     </h3>
@@ -214,7 +243,7 @@ const Notifications3 = (props: Notifications3Props) => {
                       {group.items.map((notification) => (
                         <NotificationItem
                           key={notification.id}
-                          className='px-6'
+                          className='px-2'
                           notification={notification}
                           now={now}
                           onOpen={() => setRead([notification.id], true)}
@@ -273,8 +302,8 @@ const Notifications3 = (props: Notifications3Props) => {
             </TabsContent>
           ))}
         </Tabs>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

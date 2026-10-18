@@ -1,6 +1,6 @@
 'use client'
 
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -17,6 +17,8 @@ interface PipelineItem {
   enteredStageAt: Date
   id: string
   owner?: string
+  /** A photo of the owner, shown in place of their initials. */
+  ownerAvatar?: string
   stage: string
   subtitle?: string
   title: string
@@ -62,27 +64,7 @@ function getStageSummaries(
 
 function getStageColor(index: number, count: number) {
   const share = count > 1 ? index / (count - 1) : 1
-  return `color-mix(in oklab, var(--chart-2) ${Math.round(50 + share * 50)}%, var(--card))`
-}
-
-// Set both fraction digit limits: engines disagree on the default minimum for compact currency, which would render "$42K" on the server and "$42.0K" in the browser.
-const compactCurrency = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 0,
-  notation: 'compact',
-  style: 'currency',
-})
-
-const fullCurrency = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 0,
-  minimumFractionDigits: 0,
-  style: 'currency',
-})
-
-function formatCurrency(value: number, { compact = true } = {}) {
-  return (compact ? compactCurrency : fullCurrency).format(value)
+  return `color-mix(in oklab, var(--color-chart-2) ${Math.round(50 + share * 50)}%, var(--color-card))`
 }
 
 function formatAge(days: number, style: 'short' | 'long' = 'short') {
@@ -110,33 +92,14 @@ function PipelineAge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-medium whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
+        'text-xs whitespace-nowrap tabular-nums',
         stuck
-          ? 'bg-amber-500/10 text-amber-800 dark:text-amber-400'
+          ? 'font-medium text-amber-800 dark:text-amber-400'
           : 'text-muted-foreground',
         className,
       )}
     >
-      {stuck ? (
-        <IconPlaceholder
-          lucide='ClockAlertIcon'
-          tabler='IconClockExclamation'
-          hugeicons='TimeQuarterPassIcon'
-          phosphor='ClockCountdownIcon'
-          remixicon='RiTimerFlashLine'
-          aria-hidden
-        />
-      ) : (
-        <IconPlaceholder
-          lucide='ClockIcon'
-          tabler='IconClock'
-          hugeicons='Clock01Icon'
-          phosphor='ClockIcon'
-          remixicon='RiTimeLine'
-          aria-hidden
-        />
-      )}
-      <span aria-hidden>{formatAge(days)}</span>
+      <span aria-hidden>{stuck ? `Stuck ${formatAge(days)}` : formatAge(days)}</span>
       <span className='sr-only'>
         {formatAge(days, 'long')} in stage
         {stuck && `, over the ${expectedDays}-day limit`}
@@ -145,33 +108,20 @@ function PipelineAge({
   )
 }
 
-function getInitials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('')
-}
-
 function PipelineOwner({
+  avatar,
   className,
   name,
   showName = false,
 }: {
+  avatar?: string
   className?: string
   name: string
   showName?: boolean
 }) {
   return (
     <span className={cn('inline-flex min-w-0 items-center gap-2', className)}>
-      <span
-        aria-hidden
-        title={name}
-        className='bg-muted text-foreground flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-medium'
-      >
-        {getInitials(name)}
-      </span>
+      <PersonAvatar person={{ avatar, name }} size='sm' />
       <span className={cn(showName ? 'truncate text-sm' : 'sr-only')}>
         {showName ? name : `Owner: ${name}`}
       </span>
@@ -189,7 +139,8 @@ function PipelineStageHeader({
 }: {
   className?: string
   color: string
-  count: number
+  /** Leave out while the items load. */
+  count?: number
   /** Lets the column's list point at the heading with `aria-labelledby`. */
   id?: string
   label: string
@@ -204,10 +155,12 @@ function PipelineStageHeader({
           style={{ backgroundColor: color }}
         />
         <span className='truncate'>{label}</span>
-        <span className='bg-muted text-foreground ml-auto rounded-full px-2 py-0.5 text-xs tabular-nums'>
-          {count}
-          <span className='sr-only'> {count === 1 ? 'item' : 'items'}</span>
-        </span>
+        {count !== undefined && (
+          <span className='text-muted-foreground ml-auto font-normal tabular-nums'>
+            {count}
+            <span className='sr-only'> {count === 1 ? 'item' : 'items'}</span>
+          </span>
+        )}
       </h3>
       {total !== undefined && (
         <p className='text-muted-foreground pl-4.5 text-xs tabular-nums'>
@@ -225,6 +178,7 @@ interface PipelineCardProps {
   days: number
   expectedDays?: number
   owner?: string
+  ownerAvatar?: string
   subtitle?: string
   title: string
   value?: string
@@ -236,17 +190,13 @@ function PipelineCard({
   days,
   expectedDays,
   owner,
+  ownerAvatar,
   subtitle,
   title,
   value,
 }: PipelineCardProps) {
   return (
-    <div
-      className={cn(
-        'bg-card flex flex-col gap-3 rounded-lg p-3 shadow-xs ring-1 ring-foreground/10',
-        className,
-      )}
-    >
+    <div className={cn('bg-muted/50 flex flex-col gap-3 rounded-xl p-3', className)}>
       <div className='flex items-start justify-between gap-2'>
         <div className='flex min-w-0 flex-col gap-0.5'>
           <p className='text-sm leading-snug font-medium'>{title}</p>
@@ -259,7 +209,7 @@ function PipelineCard({
           <span className='text-sm font-medium tabular-nums'>{value}</span>
         )}
         <PipelineAge className='ml-auto' days={days} expectedDays={expectedDays} />
-        {owner && <PipelineOwner name={owner} />}
+        {owner && <PipelineOwner avatar={ownerAvatar} name={owner} />}
       </div>
     </div>
   )
@@ -271,7 +221,6 @@ export {
   PipelineOwner,
   PipelineStageHeader,
   formatAge,
-  formatCurrency,
   getDaysInStage,
   getStageColor,
   getStageSummaries,

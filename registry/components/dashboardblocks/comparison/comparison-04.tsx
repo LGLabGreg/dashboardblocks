@@ -1,19 +1,18 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   Dumbbell,
   DumbbellLegend,
   getDelta,
 } from '@/registry/components/dashboardblocks/comparison'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 interface BeforeAfterRow {
   after: number
@@ -24,19 +23,23 @@ interface BeforeAfterRow {
 interface Comparison4Props {
   afterLabel: string
   beforeLabel: string
-  description: string
+  /** Defaults to a sentence saying how many rows improved and which most. */
+  description?: string
   formatter?: (value: number) => string
   /** Use `down` when a decrease is an improvement, such as load time. */
   goodDirection?: 'up' | 'down'
-  rows: BeforeAfterRow[]
+  /** Leave out, or pass none, to show the empty state. */
+  rows?: BeforeAfterRow[]
+  status?: BlockStatus
   title: string
+  /** Names what each row measures, under the title. */
+  unitLabel?: string
 }
 
 const exampleProps: Comparison4Props = {
   afterLabel: 'After, Sep 15–24',
   beforeLabel: 'Before, Sep 1–10',
-  description: 'p75 largest contentful paint by page, before and after the CDN migration',
-  formatter: (value) => `${value.toFixed(1)} s`,
+  formatter: (value) => `${formatNumber(value, { minimumFractionDigits: 1 })} s`,
   goodDirection: 'down',
   rows: [
     { after: 1.6, before: 2.9, label: 'Home' },
@@ -45,67 +48,104 @@ const exampleProps: Comparison4Props = {
     { after: 2.4, before: 2.7, label: 'Checkout' },
     { after: 1.5, before: 1.4, label: 'Account' },
   ],
-  title: 'Page speed',
+  title: 'Page speed after the CDN migration',
+  unitLabel: 'p75 largest contentful paint',
 }
 
 const Comparison4 = (props: Comparison4Props) => {
   const {
     afterLabel,
     beforeLabel,
-    description,
-    formatter = (value) => value.toLocaleString(),
+    formatter = (value) => formatNumber(value),
     goodDirection = 'up',
-    rows,
+    rows = [],
+    status,
     title,
+    unitLabel,
   } = props
   const max = Math.max(...rows.flatMap((row) => [row.before, row.after]), 0) * 1.1
+  const isGood = (row: BeforeAfterRow) =>
+    goodDirection === 'down' ? row.after < row.before : row.after > row.before
+  const improved = rows.filter(isGood)
+  const best = improved.reduce<BeforeAfterRow | undefined>(
+    (top, row) =>
+      !top ||
+      Math.abs(getDelta(row.after, row.before).percent) >
+        Math.abs(getDelta(top.after, top.before).percent)
+        ? row
+        : top,
+    undefined,
+  )
+  const {
+    description = `${improved.length} of ${rows.length} improved${
+      best
+        ? `, ${best.label} the most, from ${formatter(best.before)} to ${formatter(best.after)}`
+        : ''
+    }.`,
+  } = props
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <DumbbellLegend afterLabel={afterLabel} beforeLabel={beforeLabel} />
-        <ul className='flex flex-col gap-4'>
-          {rows.map((row) => (
-            <li
-              key={row.label}
-              className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 @md:grid-cols-[6rem_minmax(0,1fr)_12rem]'
-            >
-              <span className='truncate text-sm font-medium'>{row.label}</span>
-              <span className='flex items-center justify-end gap-2 text-sm whitespace-nowrap tabular-nums @md:order-last'>
-                <span className='text-muted-foreground'>
-                  <span className='sr-only'>{beforeLabel}: </span>
-                  {formatter(row.before)}
-                </span>
-                <span aria-hidden className='text-muted-foreground'>
-                  →
-                </span>
-                <span className='font-medium'>
-                  <span className='sr-only'>{afterLabel}: </span>
-                  {formatter(row.after)}
-                </span>
-                <Trend
-                  className='text-xs [&_svg]:size-3.5'
-                  goodDirection={goodDirection}
-                  trend={getDelta(row.after, row.before).percent}
-                  trendIcon='arrow'
-                  formatter={(value) => `${value > 0 ? '+' : ''}${value.toFixed(0)}%`}
-                />
-              </span>
-              <Dumbbell
-                after={row.after}
-                before={row.before}
-                className='col-span-2 @md:col-span-1'
-                max={max}
-              />
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+    <BlockStateProvider status={status} empty={rows.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {unitLabel && `${unitLabel.charAt(0).toUpperCase()}${unitLabel.slice(1)}. `}
+            <BlockReady>{description}</BlockReady>
+          </p>
+        </header>
+        <div className='flex flex-col border-t pt-3'>
+          <DumbbellLegend afterLabel={afterLabel} beforeLabel={beforeLabel} />
+          <BlockStateRows className='mt-1' rows={4} />
+          <ul className='mt-1 flex flex-col empty:hidden'>
+            {!status &&
+              rows.map((row) => {
+                const good = isGood(row)
+                return (
+                  <li
+                    key={row.label}
+                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b py-2.5 last:border-b-0 @md:grid-cols-[6rem_minmax(0,1fr)_12rem]'
+                  >
+                    <span className='truncate text-sm font-medium'>{row.label}</span>
+                    <span className='flex items-center justify-end gap-2 text-sm whitespace-nowrap tabular-nums @md:order-last'>
+                      <span className='text-muted-foreground'>
+                        <span className='sr-only'>{beforeLabel}: </span>
+                        {formatter(row.before)}
+                      </span>
+                      <span aria-hidden className='text-muted-foreground'>
+                        →
+                      </span>
+                      <span className='font-medium'>
+                        <span className='sr-only'>{afterLabel}: </span>
+                        {formatter(row.after)}
+                      </span>
+                      <KPIChange
+                        className='w-20 text-right text-xs'
+                        comparison={beforeLabel}
+                        format={formatter}
+                        goodDirection={goodDirection}
+                        inline
+                        previous={row.before}
+                        value={row.after}
+                        variant='short'
+                      />
+                    </span>
+                    <Dumbbell
+                      after={row.after}
+                      before={row.before}
+                      className='col-span-2 @md:col-span-1'
+                      color={
+                        good ? 'var(--color-chart-2)' : 'var(--color-muted-foreground)'
+                      }
+                      max={max}
+                    />
+                  </li>
+                )
+              })}
+          </ul>
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

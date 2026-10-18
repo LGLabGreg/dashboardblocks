@@ -1,6 +1,15 @@
 'use client'
 
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartFloatingTooltip,
+  ChartPlaceholder,
+  ChartTooltipItem,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { type KeyboardEvent, type PointerEvent, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -14,109 +23,57 @@ type StatusLevel =
   | 'unknown'
 
 interface StatusConfig {
+  /** A CSS colour for marks drawn with `style`, such as a tooltip swatch. */
+  color: string
   fill: string
-  icon: React.ReactNode
   label: string
-  soft: string
-  text: string
+  /** Follows a service's name in a sentence, such as `is running slowly`. */
+  phrase: string
+  tone: StatusTone
 }
 
 const statusConfig: Record<StatusLevel, StatusConfig> = {
   operational: {
+    color: 'var(--color-emerald-500)',
     fill: 'bg-emerald-500',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
     label: 'Operational',
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    text: 'text-emerald-700 dark:text-emerald-400',
+    phrase: 'is operational',
+    tone: 'good',
   },
   degraded: {
+    color: 'var(--color-amber-400)',
     fill: 'bg-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
     label: 'Degraded performance',
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    text: 'text-amber-800 dark:text-amber-400',
+    phrase: 'is running slowly',
+    tone: 'warning',
   },
   partial: {
+    color: 'var(--color-orange-500)',
     fill: 'bg-orange-500',
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
     label: 'Partial outage',
-    soft: 'bg-orange-500/10 text-orange-700 dark:text-orange-400',
-    text: 'text-orange-700 dark:text-orange-400',
+    phrase: 'has a partial outage',
+    tone: 'bad',
   },
   major: {
+    color: 'var(--color-red-500)',
     fill: 'bg-red-500',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
     label: 'Major outage',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    text: 'text-red-700 dark:text-red-400',
+    phrase: 'is down',
+    tone: 'bad',
   },
   maintenance: {
+    color: 'var(--color-sky-500)',
     fill: 'bg-sky-500',
-    icon: (
-      <IconPlaceholder
-        lucide='WrenchIcon'
-        tabler='IconTool'
-        hugeicons='Wrench01Icon'
-        phosphor='WrenchIcon'
-        remixicon='RiToolsLine'
-        aria-hidden
-      />
-    ),
     label: 'Maintenance',
-    soft: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
-    text: 'text-sky-700 dark:text-sky-400',
+    phrase: 'is in maintenance',
+    tone: 'info',
   },
   unknown: {
+    color: 'color-mix(in oklab, var(--color-muted-foreground) 25%, transparent)',
     fill: 'bg-muted-foreground/25',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleDashedIcon'
-        tabler='IconCircleDashed'
-        hugeicons='DashedLineCircleIcon'
-        phosphor='CircleDashedIcon'
-        remixicon='RiLoaderLine'
-        aria-hidden
-      />
-    ),
     label: 'No data',
-    soft: 'bg-muted text-foreground',
-    text: 'text-muted-foreground',
+    phrase: 'isn’t reporting',
+    tone: 'neutral',
   },
 }
 
@@ -153,32 +110,14 @@ function StatusIndicator({
   const config = statusConfig[status]
   return (
     <span
-      className={cn('inline-flex items-center gap-2 text-sm', config.text, className)}
+      data-slot='status-indicator'
+      data-status={status}
+      className={cn('inline-flex items-center gap-2', className)}
     >
       <span aria-hidden className={cn('size-2 shrink-0 rounded-full', config.fill)} />
-      <span className={cn(hideLabel && 'sr-only')}>{label ?? config.label}</span>
-    </span>
-  )
-}
-
-interface StatusBadgeProps {
-  className?: string
-  label?: string
-  status: StatusLevel
-}
-
-function StatusBadge({ className, label, status }: StatusBadgeProps) {
-  const config = statusConfig[status]
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-      {label ?? config.label}
+      <StatusLabel tone={config.tone} className={cn(hideLabel && 'sr-only')}>
+        {label ?? config.label}
+      </StatusLabel>
     </span>
   )
 }
@@ -243,6 +182,8 @@ function describeDay(day: UptimeDay | undefined) {
   return parts.join(', ')
 }
 
+const UPTIME_BAR_HEIGHT = 32
+
 interface UptimeBarProps {
   className?: string
   days: UptimeDay[]
@@ -251,15 +192,27 @@ interface UptimeBarProps {
 
 function UptimeBar({ className, days, label }: UptimeBarProps) {
   const [active, setActive] = useState<number | null>(null)
+  const [shown, setShown] = useState({ index: 0, x: 0 })
   const ref = useRef<HTMLDivElement>(null)
+  const state = useBlockState()
   const last = days.length - 1
-  const activeDay = active === null ? undefined : days[active]
+  const shownDay = days[shown.index]
+
+  if (state) {
+    return <ChartPlaceholder className={className} height={UPTIME_BAR_HEIGHT} />
+  }
+
+  const show = (index: number) => {
+    const width = ref.current?.offsetWidth ?? 0
+    setActive(index)
+    setShown({ index, x: ((index + 0.5) / days.length) * width })
+  }
 
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const rect = ref.current?.getBoundingClientRect()
     if (!rect || days.length === 0) return
     const ratio = (event.clientX - rect.left) / rect.width
-    setActive(Math.min(last, Math.max(0, Math.floor(ratio * days.length))))
+    show(Math.min(last, Math.max(0, Math.floor(ratio * days.length))))
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -276,11 +229,8 @@ function UptimeBar({ className, days, label }: UptimeBarProps) {
               : null
     if (next === null) return
     event.preventDefault()
-    setActive(Math.min(last, Math.max(0, next)))
+    show(Math.min(last, Math.max(0, next)))
   }
-
-  const position = active === null ? 0 : ((active + 0.5) / days.length) * 100
-  const align = position < 15 ? 'start' : position > 85 ? 'end' : 'center'
 
   return (
     <div className={cn('@container relative', className)}>
@@ -294,9 +244,10 @@ function UptimeBar({ className, days, label }: UptimeBarProps) {
         aria-valuemin={1}
         aria-valuenow={(active ?? last) + 1}
         aria-valuetext={describeDay(days[active ?? last])}
-        className='focus-visible:ring-ring/50 flex h-8 cursor-default gap-px rounded-[3px] @md:gap-[2px] outline-none focus-visible:ring-[3px]'
+        style={{ height: UPTIME_BAR_HEIGHT }}
+        className='focus-visible:ring-ring/50 flex cursor-default gap-px rounded-[3px] outline-none focus-visible:ring-[3px] @md:gap-[2px]'
         onBlur={() => setActive(null)}
-        onFocus={() => setActive((value) => value ?? last)}
+        onFocus={() => show(active ?? last)}
         onKeyDown={onKeyDown}
         onPointerLeave={() => setActive(null)}
         onPointerMove={onPointerMove}
@@ -313,32 +264,33 @@ function UptimeBar({ className, days, label }: UptimeBarProps) {
           />
         ))}
       </div>
-      {activeDay && (
-        <div
-          aria-hidden
-          className={cn(
-            'bg-popover text-popover-foreground pointer-events-none absolute bottom-full z-10 mb-2 grid w-max max-w-56 gap-1 rounded-lg px-3 py-2 text-xs shadow-md ring-1 ring-foreground/10',
-            align === 'center' && '-translate-x-1/2',
-            align === 'end' && '-translate-x-full',
-          )}
-          style={{ left: `${position}%` }}
+      {shownDay && (
+        <ChartFloatingTooltip
+          active={active !== null}
+          flip={shown.index > days.length / 2}
+          x={shown.x}
+          y={UPTIME_BAR_HEIGHT}
         >
-          <span className='text-muted-foreground'>{activeDay.label}</span>
-          <StatusIndicator className='text-xs font-medium' status={activeDay.status} />
-          {activeDay.uptime !== undefined && activeDay.status !== 'unknown' && (
-            <span className='tabular-nums'>{formatUptime(activeDay.uptime)} uptime</span>
+          <span className='font-medium'>{shownDay.label}</span>
+          <ChartTooltipItem
+            color={statusConfig[shownDay.status].color}
+            name={statusConfig[shownDay.status].label}
+            value={
+              shownDay.uptime !== undefined && shownDay.status !== 'unknown'
+                ? formatUptime(shownDay.uptime)
+                : ''
+            }
+          />
+          {shownDay.note && (
+            <span className='text-muted-foreground max-w-48'>{shownDay.note}</span>
           )}
-          {activeDay.note && (
-            <span className='text-muted-foreground'>{activeDay.note}</span>
-          )}
-        </div>
+        </ChartFloatingTooltip>
       )}
     </div>
   )
 }
 
 export {
-  StatusBadge,
   StatusIndicator,
   StatusLegend,
   UptimeBar,

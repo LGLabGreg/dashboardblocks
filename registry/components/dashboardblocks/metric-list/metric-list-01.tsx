@@ -1,25 +1,36 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type Metric,
   MetricList,
   MetricRow,
+  getMetricChange,
 } from '@/registry/components/dashboardblocks/metric-list'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface MetricList1Props {
-  description: string
-  metrics: Metric[]
+  /** Follows the previous value in each change, such as `the 14 days before`. */
+  comparison: string
+  /** Names each point of the histories, oldest first. */
+  labels?: string[]
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: Metric[]
   period: string
+  status?: BlockStatus
   title: string
 }
+
+const dayFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+})
 
 const exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =>
   Array.from({ length: 14 }, (_, day) =>
@@ -27,7 +38,10 @@ const exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =
   )
 
 const exampleProps: MetricList1Props = {
-  description: 'Last 14 days, compared with the previous 14 days',
+  comparison: 'the 14 days before',
+  labels: Array.from({ length: 14 }, (_, day) =>
+    dayFormatter.format(new Date(Date.UTC(2026, 8, 12 + day))),
+  ),
   metrics: [
     {
       format: 'compact',
@@ -95,22 +109,43 @@ const exampleProps: MetricList1Props = {
 }
 
 const MetricList1 = (props: MetricList1Props) => {
-  const { description, metrics, period, title } = props
+  const { comparison, labels, metrics = [], period, status, title } = props
+  const state = getBlockState(status, metrics.length === 0)
+  const improved = metrics.filter((metric) => {
+    const change = getMetricChange(metric) ?? 0
+    return metric.goodDirection === 'down' ? change < 0 : change > 0
+  }).length
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <MetricList className='-my-3'>
-          {metrics.map((metric) => (
-            <MetricRow key={metric.key} metric={metric} period={period} />
-          ))}
-        </MetricList>
-      </CardContent>
-    </Card>
+    <BlockStateProvider status={status} empty={metrics.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              <span className='tabular-nums'>
+                {improved} of {metrics.length}
+              </span>{' '}
+              improved in the {period}, against {comparison}.
+            </p>
+          </BlockReady>
+        </header>
+        <BlockStateRows className='border-y' rows={6} />
+        {!state && (
+          <MetricList className='border-y'>
+            {metrics.map((metric) => (
+              <MetricRow
+                key={metric.key}
+                comparison={comparison}
+                labels={labels}
+                metric={metric}
+                period={period}
+              />
+            ))}
+          </MetricList>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

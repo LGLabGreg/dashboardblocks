@@ -9,6 +9,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       registryUrl('billing'),
+      registryUrl('block-state'),
       registryUrl('invoice'),
       registryUrl('record-detail'),
     ],
@@ -29,10 +30,12 @@ export const examples: Registry['items'] = [
     name: 'invoice-02',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       registryUrl('billing'),
+      registryUrl('block-state'),
+      registryUrl('details'),
       registryUrl('invoice'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -51,10 +54,11 @@ export const examples: Registry['items'] = [
     name: 'invoice-03',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       registryUrl('billing'),
+      registryUrl('block-state'),
       registryUrl('invoice'),
+      registryUrl('status-label'),
     ],
     files: [
       {
@@ -73,10 +77,11 @@ export const examples: Registry['items'] = [
     name: 'invoice-04',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       registryUrl('billing'),
+      registryUrl('block-state'),
       registryUrl('invoice'),
+      registryUrl('status-label'),
     ],
     files: [
       {

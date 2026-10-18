@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'calendar-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('calendar'), registryUrl('schedule')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('calendar'),
+      registryUrl('details'),
+      registryUrl('schedule'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/calendar/calendar-01.tsx',
@@ -23,7 +28,11 @@ export const examples: Registry['items'] = [
   {
     name: 'calendar-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('calendar'), registryUrl('schedule')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('calendar'),
+      registryUrl('schedule'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/calendar/calendar-02.tsx',
@@ -32,7 +41,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        "A week on an hour axis with overlapping meetings side by side, all-day events on top and the selected event's details.",
+        "A week on an hour axis that opens at working hours, with all-day events on top and the selected event's details.",
       size: 'full',
       usedWith: ['calendar-01', 'calendar-04'],
     },
@@ -40,7 +49,11 @@ export const examples: Registry['items'] = [
   {
     name: 'calendar-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('calendar'), registryUrl('schedule')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('calendar'),
+      registryUrl('schedule'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/calendar/calendar-03.tsx',
@@ -57,7 +70,12 @@ export const examples: Registry['items'] = [
   {
     name: 'calendar-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('calendar'), registryUrl('schedule')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('calendar'),
+      registryUrl('schedule'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/calendar/calendar-04.tsx',

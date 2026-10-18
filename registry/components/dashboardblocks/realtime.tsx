@@ -1,5 +1,11 @@
 'use client'
 
+import {
+  type ChartValueFormatter,
+  TinyBarChart,
+} from '@/registry/components/dashboardblocks/chart'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -44,25 +50,18 @@ interface LiveBadgeProps {
 
 function LiveBadge({ className, label = 'Live', paused = false }: LiveBadgeProps) {
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium',
-        className,
-      )}
+    <StatusLabel
+      tone={paused ? 'neutral' : 'good'}
+      className={cn('inline-flex items-center gap-1.5', className)}
     >
       <span aria-hidden className='relative flex size-2'>
         {!paused && (
-          <span className='absolute inline-flex size-full rounded-full bg-emerald-500 opacity-60 motion-safe:animate-ping' />
+          <span className='absolute inline-flex size-full rounded-full bg-current opacity-60 motion-safe:animate-ping' />
         )}
-        <span
-          className={cn(
-            'relative inline-flex size-2 rounded-full',
-            paused ? 'bg-muted-foreground' : 'bg-emerald-500',
-          )}
-        />
+        <span className='relative inline-flex size-2 rounded-full bg-current' />
       </span>
       {paused ? 'Paused' : label}
-    </span>
+    </StatusLabel>
   )
 }
 
@@ -77,7 +76,7 @@ interface LiveNumberProps {
 function LiveNumber({
   className,
   duration = 600,
-  format = (value) => Math.round(value).toLocaleString(),
+  format = (value) => formatNumber(Math.round(value)),
   value,
 }: LiveNumberProps) {
   const [shown, setShown] = useState(value)
@@ -108,37 +107,46 @@ function LiveNumber({
 
 interface RollingBarsProps {
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
+  formatter?: ChartValueFormatter
+  /** @default 64 */
+  height?: number
+  /** Draws the newest bar in full colour and the rest faded. @default true */
   highlightLatest?: boolean
-  max?: number
+  /** Names each bar in its tooltip, in the same order as `values`. */
+  labels?: string[]
   /** Oldest first; the newest bar is on the right. */
   values: number[]
 }
 
 function RollingBars({
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
+  formatter,
+  height = 64,
   highlightLatest = true,
-  max,
+  labels,
   values,
 }: RollingBarsProps) {
-  const top = max ?? Math.max(1, ...values)
   return (
-    <div aria-hidden className={cn('flex h-16 items-end gap-px', className)}>
-      {values.map((value, index) => (
-        <span
-          key={index}
-          className='min-w-0 flex-1 rounded-t-[2px] transition-[height] duration-300 ease-out motion-reduce:transition-none'
-          style={{
-            backgroundColor:
-              highlightLatest && index < values.length - 1
-                ? `color-mix(in oklab, ${color} 55%, var(--card))`
-                : color,
-            height: `${Math.max(2, (value / top) * 100)}%`,
-          }}
-        />
-      ))}
+    <div aria-hidden className={cn('w-full', className)}>
+      <TinyBarChart
+        accessibilityLayer={false}
+        bars={[
+          {
+            dataKey: 'value',
+            fill: color,
+            isAnimationActive: false,
+            radius: [2, 2, 0, 0],
+          },
+        ]}
+        data={values.map((value, index) => ({ label: labels?.[index], value }))}
+        formatter={formatter}
+        height={height}
+        highlightIndex={highlightLatest ? values.length - 1 : undefined}
+        highlightLabel={false}
+      />
     </div>
   )
 }

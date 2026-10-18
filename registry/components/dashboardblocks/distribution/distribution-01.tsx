@@ -1,27 +1,31 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
 import {
+  DISTRIBUTION_THRESHOLD_COLOR,
   type DistributionBin,
   DistributionKey,
   Histogram,
+  formatDistributionShare,
   getShareAbove,
   quantileFromBins,
 } from '@/registry/components/dashboardblocks/distribution'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Distribution1Props {
-  bins: DistributionBin[]
+  /** Leave out, or pass none, to show the empty state. */
+  bins?: DistributionBin[]
   description: string
   formatter?: (value: number) => string
   limit?: { label: string; value: number }
+  status?: BlockStatus
   title: string
   /** @default 'requests' */
   unit?: string
@@ -35,11 +39,11 @@ const COUNTS = [
 
 const exampleProps: Distribution1Props = {
   bins: COUNTS.map((count, index) => ({ count, x0: EDGES[index], x1: EDGES[index + 1] })),
-  description: 'API response times, last 24 hours',
+  description: 'API response times over the last 24 hours. Buckets widen as times grow.',
   formatter: (value) =>
     value >= 1_000
-      ? `${(value / 1_000).toLocaleString('en-US', { maximumFractionDigits: 1 })} s`
-      : `${Math.round(value)} ms`,
+      ? `${formatNumber(value / 1_000)} s`
+      : `${formatNumber(value, { maximumFractionDigits: 0 })} ms`,
   limit: { label: 'SLO', value: 800 },
   title: 'Response time distribution',
   unit: 'requests',
@@ -47,13 +51,16 @@ const exampleProps: Distribution1Props = {
 
 const Distribution1 = (props: Distribution1Props) => {
   const {
-    bins,
+    bins = [],
     description,
-    formatter = (value) => Math.round(value).toLocaleString(),
+    formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     limit,
+    status,
     title,
     unit = 'requests',
   } = props
+  const state = getBlockState(status, bins.length === 0)
+  const blank = state === 'empty' || state === 'error'
 
   const total = bins.reduce((sum, bin) => sum + bin.count, 0)
   const percentiles = [
@@ -62,92 +69,96 @@ const Distribution1 = (props: Distribution1Props) => {
     { label: 'p99', value: quantileFromBins(bins, 0.99) },
   ]
   const over = limit ? getShareAbove(bins, limit.value) : 0
-  const share = (count: number) =>
-    `${((count / (total || 1)) * 100).toFixed(count / (total || 1) < 0.01 ? 1 : 0)}%`
   const range = (bin: DistributionBin) => `${formatter(bin.x0)}–${formatter(bin.x1)}`
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <dl className='grid grid-cols-2 gap-4 @md:grid-cols-4'>
-          {percentiles.map((percentile) => (
-            <div key={percentile.label} className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-xs'>{percentile.label}</dt>
-              <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {formatter(percentile.value)}
-              </dd>
-            </div>
-          ))}
+    <BlockStateProvider status={status} empty={bins.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        <dl className='grid grid-cols-3 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-4'>
           {limit && (
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-xs'>
-                Over {limit.label}, {formatter(limit.value)}
-              </dt>
-              <dd className='text-2xl font-semibold tracking-tight tabular-nums'>
-                {(over * 100).toFixed(1)}%
+            <div className='col-span-3 flex flex-col gap-1 @md:col-span-1'>
+              <dt className='text-muted-foreground text-sm'>Over the {limit.label}</dt>
+              <dd>
+                <KPIValue
+                  value={over}
+                  format={(value) => formatPercent(value, { minimumFractionDigits: 1 })}
+                />
               </dd>
+              <BlockReady className='text-xs'>
+                <dd className='text-muted-foreground text-xs'>
+                  of {formatNumber(total)} {unit} took over {formatter(limit.value)}
+                </dd>
+              </BlockReady>
             </div>
+          )}
+          {percentiles.map(
+            (percentile, index) =>
+              (!blank || (!limit && index === 0)) && (
+                <div key={percentile.label} className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>{percentile.label}</dt>
+                  <dd>
+                    <KPIValue
+                      className={limit || index > 0 ? 'text-2xl' : undefined}
+                      value={percentile.value}
+                      format={formatter}
+                    />
+                  </dd>
+                </div>
+              ),
           )}
         </dl>
-        <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='bar' />
-            {unit.charAt(0).toUpperCase()}
-            {unit.slice(1)}
-          </li>
-          {limit && (
+        {!blank && (
+          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
             <li className='flex items-center gap-1.5'>
-              <DistributionKey
-                color='color-mix(in oklab, var(--destructive) 70%, var(--card))'
-                shape='bar'
-              />
-              Over {limit.label}
+              <DistributionKey shape='bar' />
+              {unit.charAt(0).toUpperCase()}
+              {unit.slice(1)}
             </li>
-          )}
-          <li className='flex items-center gap-1.5'>
-            <DistributionKey shape='median' />
-            Percentiles
-          </li>
-        </ul>
+            {limit && (
+              <li className='flex items-center gap-1.5'>
+                <DistributionKey color={DISTRIBUTION_THRESHOLD_COLOR} shape='bar' />
+                Over the {limit.label}
+              </li>
+            )}
+            <li className='flex items-center gap-1.5'>
+              <DistributionKey shape='median' />
+              Percentiles
+            </li>
+          </ul>
+        )}
         <Histogram
+          aria-label={`${title} chart`}
           bins={bins}
           className='h-64'
-          describe={(index) =>
-            `${range(bins[index])}: ${bins[index].count.toLocaleString()} ${unit} (${share(bins[index].count)})`
-          }
           formatEdge={formatter}
-          markers={percentiles.map((percentile) => ({
-            label: percentile.label,
-            value: percentile.value,
-          }))}
+          markers={percentiles}
           threshold={
             limit
               ? { label: `${limit.label} ${formatter(limit.value)}`, value: limit.value }
               : undefined
           }
           tickEvery={2}
-        >
-          {`${total.toLocaleString()} ${unit}. Buckets widen as times grow, so the axis is uneven.`}
-        </Histogram>
+          unit={unit}
+        />
         <ChartPanelTable
-          caption={`${title}: ${description}. p50 ${formatter(percentiles[0].value)}, p95 ${formatter(percentiles[1].value)}, p99 ${formatter(percentiles[2].value)}.`}
+          caption={`${title}: ${description} p50 ${formatter(percentiles[0].value)}, p95 ${formatter(percentiles[1].value)}, p99 ${formatter(percentiles[2].value)}.`}
           columns={[
             { key: 'label', label: 'Response time' },
             { key: 'count', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
             { key: 'share', label: 'Share' },
           ]}
           rows={bins.map((bin) => ({
-            count: bin.count.toLocaleString(),
+            count: formatNumber(bin.count),
             label: range(bin),
-            share: share(bin.count),
+            share: formatDistributionShare(bin.count / (total || 1)),
           }))}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

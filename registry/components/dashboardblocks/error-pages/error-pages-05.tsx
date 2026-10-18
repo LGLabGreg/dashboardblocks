@@ -73,44 +73,38 @@ const ErrorPages5 = ({
 }: ErrorPages5Props) => (
   <ErrorPageLayout
     brand={brand}
-    icon={
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-      />
-    }
     title='Your session has ended'
     description={reasons[reason](idleMinutes)}
   >
-    {savedDraft && (
-      <p className='bg-muted/50 flex items-start gap-2 rounded-lg border p-3 text-left text-sm [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0'>
-        <IconPlaceholder
-          lucide='SaveIcon'
-          tabler='IconDeviceFloppy'
-          hugeicons='FloppyDiskIcon'
-          phosphor='FloppyDiskIcon'
-          remixicon='RiSave3Line'
-          aria-hidden
-          className='text-muted-foreground'
-        />
-        Your unsaved changes were kept as a draft. They’ll be there when you sign back in.
-      </p>
-    )}
-    <div className='flex flex-col items-center gap-3'>
-      <a href={withReturnTo(signInHref, returnTo)} className={buttonVariants()}>
-        {email ? `Sign in as ${email}` : 'Sign in again'}
-      </a>
-      {email && (
-        <a
-          href={signInHref}
-          className='text-muted-foreground hover:text-foreground text-sm underline underline-offset-4'
-        >
-          Use another account
-        </a>
+    <div className='flex flex-col gap-4 border-t pt-6'>
+      {savedDraft && (
+        <p className='flex items-start gap-2 text-sm [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0'>
+          <IconPlaceholder
+            lucide='SaveIcon'
+            tabler='IconDeviceFloppy'
+            hugeicons='FloppyDiskIcon'
+            phosphor='FloppyDiskIcon'
+            remixicon='RiSave3Line'
+            aria-hidden
+            className='text-muted-foreground'
+          />
+          Your unsaved changes were kept as a draft. They’ll be there when you sign back
+          in.
+        </p>
       )}
+      <div className='flex flex-wrap items-center gap-x-4 gap-y-3'>
+        <a href={withReturnTo(signInHref, returnTo)} className={buttonVariants()}>
+          {email ? `Sign in as ${email}` : 'Sign in again'}
+        </a>
+        {email && (
+          <a
+            href={signInHref}
+            className='text-muted-foreground hover:text-foreground text-sm underline underline-offset-4'
+          >
+            Use another account
+          </a>
+        )}
+      </div>
     </div>
   </ErrorPageLayout>
 )

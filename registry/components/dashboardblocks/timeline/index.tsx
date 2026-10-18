@@ -16,3 +16,10 @@ export const timelineExampleProps = {
   'timeline-03': timeline3ExampleProps,
   'timeline-04': timeline4ExampleProps,
 }
+
+export const timelineEmptyProps = {
+  'timeline-01': { items: [] },
+  'timeline-02': { milestones: [] },
+  'timeline-03': { releases: [] },
+  'timeline-04': { phases: [] },
+}

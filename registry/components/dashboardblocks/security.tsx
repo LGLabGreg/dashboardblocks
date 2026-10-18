@@ -1,79 +1,35 @@
 'use client'
 
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
 type AuditSeverity = 'info' | 'warning' | 'critical'
 
-const auditSeverityConfig: Record<
-  AuditSeverity,
-  { className: string; icon: ReactNode; label: string }
-> = {
-  critical: {
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Critical',
-  },
-  info: {
-    className: 'bg-muted text-muted-foreground',
-    icon: (
-      <IconPlaceholder
-        lucide='InfoIcon'
-        tabler='IconInfoCircle'
-        hugeicons='AlertCircleIcon'
-        phosphor='InfoIcon'
-        remixicon='RiInformationLine'
-        aria-hidden
-      />
-    ),
-    label: 'Info',
-  },
-  warning: {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Warning',
-  },
+const auditSeverityConfig: Record<AuditSeverity, { label: string; tone: StatusTone }> = {
+  critical: { label: 'Critical', tone: 'bad' },
+  info: { label: 'Info', tone: 'neutral' },
+  warning: { label: 'Warning', tone: 'warning' },
 }
 
-function AuditSeverityIcon({
+function AuditSeverityLabel({
   className,
+  label,
   severity,
 }: {
   className?: string
+  label?: string
   severity: AuditSeverity
 }) {
   const config = auditSeverityConfig[severity]
   return (
-    <span
-      className={cn(
-        'flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
-      <span className='sr-only'>{config.label}</span>
-    </span>
+    <StatusLabel className={className} tone={config.tone}>
+      {label ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -83,10 +39,8 @@ function DeviceIcon({ className, kind }: { className?: string; kind: DeviceKind 
   return (
     <span
       aria-hidden
-      className={cn(
-        'bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg [&_svg]:size-4',
-        className,
-      )}
+      data-slot='device-icon'
+      className={cn('text-muted-foreground flex shrink-0 [&_svg]:size-4', className)}
     >
       {kind === 'mobile' ? (
         <IconPlaceholder
@@ -111,75 +65,26 @@ function DeviceIcon({ className, kind }: { className?: string; kind: DeviceKind 
 
 type CheckResult = 'pass' | 'warn' | 'fail'
 
-const checkResultConfig: Record<
-  CheckResult,
-  { className: string; icon: ReactNode; label: string }
-> = {
-  fail: {
-    className: 'text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Failing',
-  },
-  pass: {
-    className: 'text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Passing',
-  },
-  warn: {
-    className: 'text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Needs attention',
-  },
+const checkResultConfig: Record<CheckResult, { label: string; tone: StatusTone }> = {
+  fail: { label: 'Failing', tone: 'bad' },
+  pass: { label: 'Passing', tone: 'good' },
+  warn: { label: 'Needs attention', tone: 'warning' },
 }
 
 function CheckResultLabel({
   className,
+  label,
   result,
-  showLabel = false,
 }: {
   className?: string
+  label?: string
   result: CheckResult
-  showLabel?: boolean
 }) {
   const config = checkResultConfig[result]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 text-xs font-medium whitespace-nowrap [&_svg]:size-4 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
-      <span className={cn(!showLabel && 'sr-only')}>{config.label}</span>
-    </span>
+    <StatusLabel className={className} tone={config.tone}>
+      {label ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -195,23 +100,12 @@ function getSecurityScore(checks: { result: CheckResult; weight?: number }[]) {
   return total > 0 ? Math.round((earned / total) * 100) : 0
 }
 
-const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
-
-function formatSince(date: Date, now: Date) {
-  const minutes = Math.round((now.getTime() - date.getTime()) / 60_000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return relative.format(-minutes, 'minute')
-  if (minutes < 60 * 24) return relative.format(-Math.round(minutes / 60), 'hour')
-  return relative.format(-Math.round(minutes / 1_440), 'day')
-}
-
 export {
-  AuditSeverityIcon,
+  AuditSeverityLabel,
   CheckResultLabel,
   DeviceIcon,
   auditSeverityConfig,
   checkResultConfig,
-  formatSince,
   getSecurityScore,
 }
 

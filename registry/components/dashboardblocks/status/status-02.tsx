@@ -1,6 +1,14 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   StatusLegend,
   UptimeBar,
   type UptimeDay,
@@ -8,24 +16,21 @@ import {
   getUptime,
 } from '@/registry/components/dashboardblocks/status'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface ServiceUptime {
   days: UptimeDay[]
   name: string
 }
 
 interface Status2Props {
-  description: string
-  services: ServiceUptime[]
+  /** Defaults to a sentence naming the service with the lowest uptime. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  services?: ServiceUptime[]
+  status?: BlockStatus
   title: string
 }
+
+const PLACEHOLDER_SERVICES = 3
 
 const END_DATE = Date.UTC(2026, 8, 25)
 const DAY = 86_400_000
@@ -49,7 +54,6 @@ const exampleDays = (
   })
 
 const exampleProps: Status2Props = {
-  description: 'Daily status over the last 90 days',
   services: [
     {
       days: exampleDays({
@@ -87,41 +91,83 @@ const exampleProps: Status2Props = {
   title: 'Uptime',
 }
 
+const summarize = (services: ServiceUptime[]) => {
+  if (services.length === 0) return 'No services yet.'
+  const rated = services.map((service) => ({
+    days: service.days.length,
+    name: service.name,
+    uptime: getUptime(service.days),
+  }))
+  const lowest = rated.reduce((low, service) =>
+    service.uptime < low.uptime ? service : low,
+  )
+  const period = `over the last ${lowest.days} days`
+  if (lowest.uptime >= 100) return `Every service was up the whole time ${period}.`
+  return `${lowest.name} had the lowest uptime ${period}, at ${formatUptime(lowest.uptime)}.`
+}
+
 const Status2 = (props: Status2Props) => {
-  const { description, services, title } = props
+  const { services = [], status, title } = props
+  const { description = summarize(services) } = props
+  const state = getBlockState(status, services.length === 0)
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
-        <StatusLegend
-          statuses={['operational', 'degraded', 'partial', 'major', 'maintenance']}
-        />
-        <ul className='flex flex-col gap-6'>
-          {services.map((service) => (
-            <li key={service.name} className='flex flex-col gap-2'>
-              <div className='flex items-baseline justify-between gap-4'>
-                <span className='text-sm font-medium'>{service.name}</span>
-                <span className='text-muted-foreground text-xs tabular-nums'>
-                  <span className='text-foreground font-medium'>
-                    {formatUptime(getUptime(service.days))}
-                  </span>{' '}
-                  uptime
-                </span>
+    <BlockStateProvider status={status} empty={services.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        {state === 'loading' && (
+          <ul aria-hidden className='flex flex-col gap-5'>
+            {Array.from({ length: PLACEHOLDER_SERVICES }, (_, index) => (
+              <li key={index} className='flex flex-col gap-2 border-t pt-3'>
+                <SkeletonText className='w-32 text-sm' />
+                <UptimeBar days={[]} label='' />
+              </li>
+            ))}
+          </ul>
+        )}
+        {(state === 'error' || state === 'empty') && (
+          <div className='border-t'>
+            <BlockStateRows />
+          </div>
+        )}
+        {!state && (
+          <ul className='flex flex-col gap-5'>
+            {services.map((service) => (
+              <li key={service.name} className='flex flex-col gap-2 border-t pt-3'>
+                <div className='flex items-baseline justify-between gap-4'>
+                  <span className='text-sm font-medium'>{service.name}</span>
+                  <span className='text-muted-foreground text-sm tabular-nums'>
+                    <span className='text-foreground font-medium'>
+                      {formatUptime(getUptime(service.days))}
+                    </span>{' '}
+                    uptime
+                  </span>
+                </div>
+                <UptimeBar days={service.days} label={service.name} />
+              </li>
+            ))}
+          </ul>
+        )}
+        {state !== 'error' && state !== 'empty' && (
+          <div className='flex flex-col gap-3'>
+            {!state && (
+              <div className='text-muted-foreground flex justify-between text-xs'>
+                <span>{services[0]?.days.length ?? 0} days ago</span>
+                <span>Today</span>
               </div>
-              <UptimeBar days={service.days} label={service.name} />
-            </li>
-          ))}
-        </ul>
-        <div className='text-muted-foreground -mt-3 flex justify-between text-xs'>
-          <span>90 days ago</span>
-          <span>Today</span>
-        </div>
-      </CardContent>
-    </Card>
+            )}
+            <StatusLegend
+              statuses={['operational', 'degraded', 'partial', 'major', 'maintenance']}
+            />
+          </div>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -1,7 +1,10 @@
 'use client'
 
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import type { ReactNode } from 'react'
+import {
+  StatusLabel,
+  type StatusLabelProps,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 
 import { cn } from '@/lib/utils'
 
@@ -9,107 +12,37 @@ type DeployStatus = 'success' | 'failed' | 'running' | 'queued' | 'rolled-back'
 
 const deployStatusConfig: Record<
   DeployStatus,
-  { cell: string; className: string; icon: ReactNode; label: string }
+  { cell: string; label: string; tone: StatusTone }
 > = {
-  failed: {
-    cell: 'bg-red-500 dark:bg-red-400',
-    className: 'text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Failed',
-  },
+  failed: { cell: 'bg-red-500 dark:bg-red-400', label: 'Failed', tone: 'bad' },
   queued: {
     cell: 'border border-dashed border-muted-foreground/60',
-    className: 'text-muted-foreground',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleDashedIcon'
-        tabler='IconCircleDashed'
-        hugeicons='DashedLineCircleIcon'
-        phosphor='CircleDashedIcon'
-        remixicon='RiLoaderLine'
-        aria-hidden
-      />
-    ),
     label: 'Queued',
+    tone: 'neutral',
   },
   'rolled-back': {
     cell: 'bg-amber-500 dark:bg-amber-400',
-    className: 'text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='Undo2Icon'
-        tabler='IconArrowBackUp'
-        hugeicons='Undo02Icon'
-        phosphor='ArrowUUpLeftIcon'
-        remixicon='RiArrowGoBackLine'
-        aria-hidden
-      />
-    ),
     label: 'Rolled back',
+    tone: 'warning',
   },
   running: {
     cell: 'bg-sky-500/60 dark:bg-sky-400/60 motion-safe:animate-pulse',
-    className: 'text-sky-700 dark:text-sky-400',
-    icon: (
-      <IconPlaceholder
-        lucide='LoaderCircleIcon'
-        tabler='IconLoader2'
-        hugeicons='Loading03Icon'
-        phosphor='CircleNotchIcon'
-        remixicon='RiLoader4Line'
-        aria-hidden
-        className='motion-safe:animate-spin'
-      />
-    ),
-    label: 'Running',
+    label: 'Building',
+    tone: 'info',
   },
-  success: {
-    cell: 'bg-emerald-600 dark:bg-emerald-500',
-    className: 'text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Ready',
-  },
+  success: { cell: 'bg-emerald-600 dark:bg-emerald-500', label: 'Ready', tone: 'good' },
 }
 
-function DeployStatusLabel({
-  className,
-  showLabel = true,
-  status,
-}: {
-  className?: string
-  showLabel?: boolean
+interface DeployStatusLabelProps extends Omit<StatusLabelProps, 'tone'> {
   status: DeployStatus
-}) {
+}
+
+function DeployStatusLabel({ children, status, ...props }: DeployStatusLabelProps) {
   const config = deployStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
-      <span className={cn(!showLabel && 'sr-only')}>{config.label}</span>
-    </span>
+    <StatusLabel data-status={status} tone={config.tone} {...props}>
+      {children ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -179,31 +112,23 @@ function getDoraLevels({
   }
 }
 
-const doraLevelConfig: Record<DoraLevel, { className: string; label: string }> = {
-  elite: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    label: 'Elite',
-  },
-  high: { className: 'bg-sky-500/10 text-sky-700 dark:text-sky-400', label: 'High' },
-  low: { className: 'bg-red-500/10 text-red-700 dark:text-red-400', label: 'Low' },
-  medium: {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    label: 'Medium',
-  },
+const doraLevelConfig: Record<DoraLevel, { label: string; tone: StatusTone }> = {
+  elite: { label: 'Elite', tone: 'good' },
+  high: { label: 'High', tone: 'info' },
+  low: { label: 'Low', tone: 'bad' },
+  medium: { label: 'Medium', tone: 'warning' },
 }
 
-function DoraBadge({ className, level }: { className?: string; level: DoraLevel }) {
+interface DoraLabelProps extends Omit<StatusLabelProps, 'tone'> {
+  level: DoraLevel
+}
+
+function DoraLabel({ children, level, ...props }: DoraLabelProps) {
   const config = doraLevelConfig[level]
   return (
-    <span
-      className={cn(
-        'inline-flex rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap',
-        config.className,
-        className,
-      )}
-    >
-      {config.label}
-    </span>
+    <StatusLabel data-level={level} tone={config.tone} {...props}>
+      {children ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -232,7 +157,7 @@ function DeployHistory({ className, runs }: DeployHistoryProps) {
 export {
   DeployHistory,
   DeployStatusLabel,
-  DoraBadge,
+  DoraLabel,
   deployStatusConfig,
   doraLevelConfig,
   formatDuration,
@@ -240,4 +165,11 @@ export {
   shortSha,
 }
 
-export type { DeployHistoryProps, DeployStatus, DoraInput, DoraLevel }
+export type {
+  DeployHistoryProps,
+  DeployStatus,
+  DeployStatusLabelProps,
+  DoraInput,
+  DoraLabelProps,
+  DoraLevel,
+}

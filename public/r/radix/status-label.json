@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-label",
+  "title": "Status Label",
+  "description": "A status written as a coloured word: good, warning, bad, info and neutral tones in the shades every block uses.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/status-label.tsx",
+      "content": "import type { ComponentProps } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ntype StatusTone = 'good' | 'warning' | 'bad' | 'info' | 'neutral'\n\nconst statusToneClasses: Record<StatusTone, string> = {\n  bad: 'text-red-700 dark:text-red-400',\n  good: 'text-emerald-700 dark:text-emerald-400',\n  info: 'text-sky-700 dark:text-sky-400',\n  neutral: 'text-muted-foreground',\n  warning: 'text-amber-800 dark:text-amber-400',\n}\n\ninterface StatusLabelProps extends ComponentProps<'span'> {\n  tone: StatusTone\n}\n\nfunction StatusLabel({ className, tone, ...props }: StatusLabelProps) {\n  return (\n    <span\n      data-slot='status-label'\n      data-tone={tone}\n      className={cn(\n        'text-sm font-medium whitespace-nowrap',\n        statusToneClasses[tone],\n        className,\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { StatusLabel, statusToneClasses }\n\nexport type { StatusLabelProps, StatusTone }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/status-label.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

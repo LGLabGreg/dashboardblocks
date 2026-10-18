@@ -1,6 +1,12 @@
 'use client'
 
-import { BlockMessage } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockMessage,
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { FilterChip } from '@/registry/components/dashboardblocks/dashboard-header'
 import {
   DataTable,
@@ -9,19 +15,26 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableStateRows,
 } from '@/registry/components/dashboardblocks/data-table'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
+type OrderStatus = 'Paid' | 'Pending' | 'Refunded'
 
 interface Order {
   amount: number
   customer: string
   id: string
   region: string
-  status: string
+  status: OrderStatus
 }
 
 interface Filter {
@@ -32,7 +45,9 @@ interface Filter {
 
 interface States3Props {
   defaultFilters: Filter[]
-  orders: Order[]
+  /** Leave out, or pass none, to show the empty state. */
+  orders?: Order[]
+  status?: BlockStatus
   title: string
 }
 
@@ -81,28 +96,45 @@ const exampleProps: States3Props = {
   title: 'Orders',
 }
 
+const STATUS_TONES: Record<OrderStatus, StatusTone> = {
+  Paid: 'good',
+  Pending: 'warning',
+  Refunded: 'neutral',
+}
+
 const currency = (value: number) =>
-  `$${value.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+
+function describe(shown: number, total: number, filters: Filter[]) {
+  const orders = `${total} ${total === 1 ? 'order' : 'orders'}`
+  if (filters.length === 0) return `All ${orders}, newest first.`
+  const matching = filters
+    .map((filter) => `${filter.label.toLowerCase()} ${filter.value}`)
+    .join(' and ')
+  return `${shown} of ${orders} with ${matching}.`
+}
 
 const States3 = (props: States3Props) => {
-  const { defaultFilters, orders, title } = props
+  const { defaultFilters, orders = [], status, title } = props
   const [filters, setFilters] = useState(defaultFilters)
+  const state = getBlockState(status, orders.length === 0)
   const rows = orders.filter((order) =>
     filters.every((filter) => order[filter.field] === filter.value),
   )
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription aria-live='polite'>
-          {rows.length} of {orders.length} orders
-        </CardDescription>
+    <BlockStateProvider status={status} empty={orders.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p aria-live='polite' className='text-muted-foreground text-sm'>
+              {describe(rows.length, orders.length, filters)}
+            </p>
+          </BlockReady>
+        </header>
         {filters.length > 0 && (
-          <ul
-            aria-label='Active filters'
-            className='col-span-full mt-2 flex flex-wrap gap-2'
-          >
+          <ul aria-label='Active filters' className='flex flex-wrap gap-2'>
             {filters.map((filter) => (
               <li key={filter.field} className='flex'>
                 <FilterChip
@@ -116,57 +148,64 @@ const States3 = (props: States3Props) => {
             ))}
           </ul>
         )}
-      </CardHeader>
-      {rows.length === 0 ? (
-        <BlockMessage
-          icon={
-            <IconPlaceholder
-              lucide='SearchXIcon'
-              tabler='IconZoomCancel'
-              hugeicons='SearchRemoveIcon'
-              phosphor='MagnifyingGlassMinusIcon'
-              remixicon='RiSearchLine'
-            />
-          }
-          title='No orders match these filters'
-          description='Remove a filter, or clear them all to see every order.'
-          action={
-            <Button variant='outline' size='sm' onClick={() => setFilters([])}>
-              Clear filters
-            </Button>
-          }
-        />
-      ) : (
-        <DataTable>
-          <caption className='sr-only'>{title}</caption>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Customer</DataTableHead>
-              <DataTableHead>Region</DataTableHead>
-              <DataTableHead>Status</DataTableHead>
-              <DataTableHead align='end'>Amount</DataTableHead>
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            {rows.map((order) => (
-              <DataTableRow key={order.id}>
-                <DataTableCell primary truncate>
-                  <span className='block truncate'>{order.customer}</span>
-                  <span className='text-muted-foreground block text-xs font-normal tabular-nums'>
-                    {order.id}
-                  </span>
-                </DataTableCell>
-                <DataTableCell label='Region'>{order.region}</DataTableCell>
-                <DataTableCell label='Status'>{order.status}</DataTableCell>
-                <DataTableCell align='end' label='Amount'>
-                  {currency(order.amount)}
-                </DataTableCell>
+        {!state && rows.length === 0 ? (
+          <BlockMessage
+            icon={
+              <IconPlaceholder
+                lucide='SearchXIcon'
+                tabler='IconZoomCancel'
+                hugeicons='SearchRemoveIcon'
+                phosphor='MagnifyingGlassMinusIcon'
+                remixicon='RiSearchLine'
+              />
+            }
+            className='border-y'
+            title='No orders match these filters'
+            description='Remove a filter, or clear them all to see every order.'
+            action={
+              <Button variant='outline' size='sm' onClick={() => setFilters([])}>
+                Clear filters
+              </Button>
+            }
+          />
+        ) : (
+          <DataTable>
+            <caption className='sr-only'>{title}</caption>
+            <DataTableHeader>
+              <DataTableRow>
+                <DataTableHead>Customer</DataTableHead>
+                <DataTableHead>Region</DataTableHead>
+                <DataTableHead>Status</DataTableHead>
+                <DataTableHead align='end'>Amount</DataTableHead>
               </DataTableRow>
-            ))}
-          </DataTableBody>
-        </DataTable>
-      )}
-    </Card>
+            </DataTableHeader>
+            <DataTableBody>
+              <DataTableStateRows colSpan={4} rows={5} />
+              {!state &&
+                rows.map((order) => (
+                  <DataTableRow key={order.id}>
+                    <DataTableCell primary truncate>
+                      <span className='block truncate'>{order.customer}</span>
+                      <span className='text-muted-foreground block text-xs font-normal tabular-nums'>
+                        {order.id}
+                      </span>
+                    </DataTableCell>
+                    <DataTableCell label='Region'>{order.region}</DataTableCell>
+                    <DataTableCell label='Status'>
+                      <StatusLabel tone={STATUS_TONES[order.status]}>
+                        {order.status}
+                      </StatusLabel>
+                    </DataTableCell>
+                    <DataTableCell align='end' label='Amount'>
+                      {currency(order.amount)}
+                    </DataTableCell>
+                  </DataTableRow>
+                ))}
+            </DataTableBody>
+          </DataTable>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

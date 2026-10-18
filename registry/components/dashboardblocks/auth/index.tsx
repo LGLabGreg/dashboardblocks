@@ -16,3 +16,7 @@ export const authExampleProps = {
   'auth-03': auth3ExampleProps,
   'auth-04': auth4ExampleProps,
 }
+
+export const authEmptyProps = {
+  'auth-02': { invites: [], workspaces: [] },
+}

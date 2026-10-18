@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   CommentAvatar,
   type CommentAuthor,
   CommentComposer,
@@ -13,14 +20,6 @@ import {
 import { startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type Tab = 'write' | 'preview'
@@ -34,7 +33,10 @@ interface Comments2Props {
   onSubmit?: (body: string, options: { mentions: string[] }) => Promise<void>
   people: CommentAuthor[]
   project: string
-  updates: ThreadComment[]
+  status?: BlockStatus
+  title: string
+  /** Newest first. Leave out, or pass none, to show the empty state. */
+  updates?: ThreadComment[]
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
@@ -48,13 +50,14 @@ const exampleProps: Comments2Props = {
     { name: 'Lena Fischer' },
     { name: 'Mateo Silva' },
     { name: 'Jonas Weber' },
-    { name: 'Sofia Rossi' },
+    { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
   ],
   project: 'Website relaunch',
+  title: 'Post an update',
   updates: [
     {
       at: hoursAgo(5),
-      author: { name: 'Sofia Rossi' },
+      author: { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
       body: 'New pricing page is on staging. @Priya Nair can you check the annual toggle copy before Thursday?',
       id: 'u1',
       reactions: [
@@ -72,8 +75,19 @@ const exampleProps: Comments2Props = {
   ],
 }
 
+const noUpdates: ThreadComment[] = []
+
 async function saveUpdate() {
   await new Promise((resolve) => setTimeout(resolve, 500))
+}
+
+const describeUpdates = (updates: ThreadComment[], now: Date) => {
+  if (updates.length === 0) return 'No updates yet. The first one shows here.'
+  const latest = Math.max(...updates.map((update) => update.at.getTime()))
+  const hours = Math.max(0, Math.round((now.getTime() - latest) / 3_600_000))
+  const when =
+    hours < 1 ? 'under an hour ago' : `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`
+  return `${updates.length} ${updates.length === 1 ? 'update' : 'updates'}, the latest ${when}.`
 }
 
 const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
@@ -86,10 +100,18 @@ const Comments2 = (props: Comments2Props) => {
     onSubmit = saveUpdate,
     people,
     project,
-    updates: initialUpdates,
+    status,
+    title,
+    updates: initialUpdates = noUpdates,
   } = props
   const headingId = useId()
   const [updates, setUpdates] = useState(initialUpdates)
+  const [loaded, setLoaded] = useState(initialUpdates)
+  if (initialUpdates !== loaded) {
+    setLoaded(initialUpdates)
+    setUpdates(initialUpdates)
+  }
+  const state = getBlockState(status, updates.length === 0)
   const [tab, setTab] = useState<Tab>('write')
   const [draft, setDraft] = useState('')
   const [isPosting, setIsPosting] = useState(false)
@@ -141,12 +163,15 @@ const Comments2 = (props: Comments2Props) => {
     )
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Post an update</CardTitle>
-        <CardDescription>{project} · Visible to everyone on the project</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
+    <BlockStateProvider status={status} empty={updates.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {project}. Everyone on the project sees it, and anyone you mention is
+            notified.
+          </p>
+        </header>
         <Tabs value={tab} onValueChange={(value) => setTab(value as Tab)}>
           <TabsList>
             <TabsTrigger value='write'>Write</TabsTrigger>
@@ -188,31 +213,43 @@ const Comments2 = (props: Comments2Props) => {
             </div>
           </TabsContent>
         </Tabs>
-        <Separator />
-        <section aria-labelledby={headingId} className='flex flex-col gap-5'>
+        <section
+          aria-labelledby={headingId}
+          className='flex flex-col gap-1 border-t pt-4'
+        >
           <h3 id={headingId} className='text-sm font-medium'>
             Recent updates
           </h3>
-          {updates.map((update) => (
-            <CommentItem
-              key={update.id}
-              comment={update}
-              now={now}
-              people={people}
-              onReact={(emoji) => {
-                onReact(update.id, emoji)
-                setUpdates((current) =>
-                  updateComment(current, update.id, (item) => ({
-                    ...item,
-                    reactions: toggleReaction(item.reactions, emoji),
-                  })),
-                )
-              }}
-            />
-          ))}
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {describeUpdates(updates, now)}
+            </p>
+          </BlockReady>
+          <div className='mt-2 flex flex-col divide-y'>
+            <BlockStateRows rows={3} />
+            {!state &&
+              updates.map((update) => (
+                <CommentItem
+                  key={update.id}
+                  className='py-4 first:pt-0 last:pb-0'
+                  comment={update}
+                  now={now}
+                  people={people}
+                  onReact={(emoji) => {
+                    onReact(update.id, emoji)
+                    setUpdates((current) =>
+                      updateComment(current, update.id, (item) => ({
+                        ...item,
+                        reactions: toggleReaction(item.reactions, emoji),
+                      })),
+                    )
+                  }}
+                />
+              ))}
+          </div>
         </section>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -7,7 +7,12 @@ export const examples: Registry['items'] = [
     name: 'scatter-01',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('scatter')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('kpi'),
+      registryUrl('scatter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter/scatter-01.tsx',
@@ -25,7 +30,11 @@ export const examples: Registry['items'] = [
     name: 'scatter-02',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('scatter')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('scatter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter/scatter-02.tsx',
@@ -43,7 +52,11 @@ export const examples: Registry['items'] = [
     name: 'scatter-03',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('scatter')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('scatter'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter/scatter-03.tsx',
@@ -52,7 +65,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel.',
+        'Campaigns plotted by cost per acquisition and conversion rate, sized by spend and coloured by channel, against a target cost.',
       size: 'full',
       usedWith: ['data-table-03', 'spend-02'],
     },
@@ -60,7 +73,7 @@ export const examples: Registry['items'] = [
   {
     name: 'scatter-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('scatter')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('scatter')],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter/scatter-04.tsx',

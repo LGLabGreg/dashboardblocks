@@ -1,17 +1,26 @@
 'use client'
 
 import {
-  InvoiceStatusBadge,
+  InvoiceStatusLabel,
   formatBillingDate,
 } from '@/registry/components/dashboardblocks/billing'
+import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   DocumentBrand,
   DocumentFooter,
   DocumentHeader,
+  DocumentHeadline,
   DocumentLayout,
   DocumentMeta,
   DocumentPage,
   DocumentSection,
+  DocumentSummary,
   DocumentToolbar,
   DocumentTotals,
   type DocumentLine,
@@ -23,10 +32,10 @@ import {
   getDocumentTotals,
   getTotalRows,
 } from '@/registry/components/dashboardblocks/invoice'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 interface Refund {
@@ -40,8 +49,10 @@ interface Invoice2Props {
   /** @default 'USD' */
   currency?: string
   email: string
-  footer: string
-  lines: DocumentLine[]
+  /** Facts about the sender, printed at the foot of the page. */
+  footer: string[]
+  /** Leave out, or pass none, to show the empty state. */
+  lines?: DocumentLine[]
   number: string
   onDownload?: () => void
   onEmail?: () => Promise<void>
@@ -51,6 +62,7 @@ interface Invoice2Props {
   refunds: Refund[]
   shipping?: number
   shippingMethod: string
+  status?: BlockStatus
   supportEmail: string
   taxRate?: number
 }
@@ -58,7 +70,7 @@ interface Invoice2Props {
 const exampleProps: Invoice2Props = {
   brand: { name: 'Fernhill Coffee Roasters', website: 'fernhill.coffee' },
   email: 'maya.okafor@fastmail.com',
-  footer: 'Fernhill Coffee Roasters LLC · 1180 Folsom Street, San Francisco, CA 94103',
+  footer: ['Fernhill Coffee Roasters LLC', '1180 Folsom Street, San Francisco, CA 94103'],
   lines: [
     {
       description: 'Ethiopia Guji, whole bean',
@@ -129,7 +141,7 @@ const Invoice2 = (props: Invoice2Props) => {
     currency = 'USD',
     email,
     footer,
-    lines,
+    lines = [],
     number,
     onDownload = () => {},
     onEmail = emailReceipt,
@@ -139,9 +151,11 @@ const Invoice2 = (props: Invoice2Props) => {
     refunds,
     shipping,
     shippingMethod,
+    status,
     supportEmail,
     taxRate,
   } = props
+  const state = getBlockState(status, lines.length === 0)
   const [emailState, setEmailState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, shipping, taxRate })
   const unit = 10 ** getCurrencyDigits(currency)
@@ -179,95 +193,116 @@ const Invoice2 = (props: Invoice2Props) => {
   }
 
   return (
-    <DocumentLayout className='max-w-md'>
-      <DocumentToolbar
-        description={
-          <p role='status' className={emailState === 'sent' ? undefined : 'sr-only'}>
-            {emailState === 'sent' ? `Sent to ${email}` : ''}
-          </p>
-        }
-      >
-        <PrintButton />
-        <Button variant='outline' onClick={onDownload}>
-          <IconPlaceholder
-            lucide='DownloadIcon'
-            tabler='IconDownload'
-            hugeicons='Download01Icon'
-            phosphor='DownloadIcon'
-            remixicon='RiDownloadLine'
-            aria-hidden
-          />
-          <span className='sr-only'>Download </span>
-          PDF
-        </Button>
-        <Button variant='outline' disabled={emailState === 'sending'} onClick={sendEmail}>
-          <IconPlaceholder
-            lucide='MailIcon'
-            tabler='IconMail'
-            hugeicons='MailIcon'
-            phosphor='EnvelopeIcon'
-            remixicon='RiMailLine'
-            aria-hidden
-          />
-          {emailState === 'sending' ? 'Sending…' : 'Email'}
-        </Button>
-      </DocumentToolbar>
-      <DocumentPage>
-        <DocumentHeader
-          brand={<DocumentBrand logo={logo} name={brand.name} detail={brand.website} />}
-          title='Receipt'
-          number={number}
-          status={
-            <>
-              <InvoiceStatusBadge status='paid' />
-              {refunded > 0 && (
-                <Badge variant='outline'>
-                  {refunded >= amounts.total ? 'Refunded' : 'Partially refunded'}
-                </Badge>
-              )}
-            </>
+    <BlockStateProvider status={status} empty={lines.length === 0}>
+      <DocumentLayout className='max-w-md'>
+        <DocumentToolbar
+          description={
+            <p role='status' className={emailState === 'sent' ? undefined : 'sr-only'}>
+              {emailState === 'sent' ? `Sent to ${email}` : ''}
+            </p>
           }
-        />
-        <div className='flex flex-col gap-1 border-y py-5'>
-          <span className='text-muted-foreground text-sm'>Amount paid</span>
-          <span className='text-3xl font-semibold tracking-tight tabular-nums'>
-            {formatDocumentAmount(amounts.total, currency)}
-          </span>
-          {refunded > 0 && (
-            <span className='text-muted-foreground text-sm tabular-nums'>
-              {formatDocumentAmount(refunded, currency)} refunded,{' '}
-              {formatDocumentAmount(netPaid, currency)} net
-            </span>
-          )}
-        </div>
-        <DocumentMeta
-          className='grid-cols-2 @xl/document:grid-flow-row @xl/document:grid-cols-2 print:grid-flow-row print:grid-cols-2'
-          items={[
-            { label: 'Date paid', value: formatBillingDate(paidAt) },
-            { label: 'Order', value: orderNumber },
-            { label: 'Payment method', value: paymentMethod },
-            { label: 'Shipping', value: shippingMethod },
-          ]}
-        />
-        <div className='flex flex-col gap-6'>
-          <LineItemsTable currency={currency} lines={lines} />
-          <DocumentTotals className='max-w-none' currency={currency} rows={rows} />
-        </div>
-        <DocumentSection title='Questions about your order?'>
-          <p className='text-muted-foreground'>
-            Reply to your receipt email or write to{' '}
-            <a
-              href={`mailto:${supportEmail}`}
-              className='text-foreground underline underline-offset-4'
+        >
+          <PrintButton />
+          <Button variant='outline' size='sm' disabled={!!state} onClick={onDownload}>
+            <IconPlaceholder
+              lucide='DownloadIcon'
+              tabler='IconDownload'
+              hugeicons='Download01Icon'
+              phosphor='DownloadIcon'
+              remixicon='RiDownloadLine'
+              aria-hidden
+            />
+            <span className='sr-only'>Download </span>
+            PDF
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={!!state || emailState === 'sending'}
+            onClick={sendEmail}
+          >
+            <IconPlaceholder
+              lucide='MailIcon'
+              tabler='IconMail'
+              hugeicons='MailIcon'
+              phosphor='EnvelopeIcon'
+              remixicon='RiMailLine'
+              aria-hidden
+            />
+            {emailState === 'sending' ? 'Sending…' : 'Email'}
+          </Button>
+        </DocumentToolbar>
+        <DocumentPage>
+          <DocumentHeader
+            brand={<DocumentBrand logo={logo} name={brand.name} detail={brand.website} />}
+            title='Receipt'
+            number={number}
+            status={
+              <Details>
+                <InvoiceStatusLabel status='paid' />
+                {refunded > 0 && (
+                  <StatusLabel tone='neutral'>
+                    {refunded >= amounts.total ? 'Refunded' : 'Partially refunded'}
+                  </StatusLabel>
+                )}
+              </Details>
+            }
+          />
+          <DocumentSummary>
+            <DocumentHeadline
+              label='Amount paid'
+              value={formatDocumentAmount(amounts.total, currency)}
             >
-              {supportEmail}
-            </a>
-            . Returns are free within 30 days.
-          </p>
-        </DocumentSection>
-        <DocumentFooter>{footer}</DocumentFooter>
-      </DocumentPage>
-    </DocumentLayout>
+              {refunded > 0 ? (
+                <>
+                  <span className='tabular-nums'>
+                    {formatDocumentAmount(refunded, currency)}
+                  </span>{' '}
+                  refunded, so you paid{' '}
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {formatDocumentAmount(netPaid, currency)}
+                  </span>
+                  .
+                </>
+              ) : (
+                `Paid with ${paymentMethod}.`
+              )}
+            </DocumentHeadline>
+            <DocumentMeta
+              items={[
+                { label: 'Date paid', value: formatBillingDate(paidAt) },
+                { label: 'Order', value: orderNumber },
+                { label: 'Payment method', value: paymentMethod },
+                { label: 'Shipping', value: shippingMethod },
+              ]}
+            />
+          </DocumentSummary>
+          {state !== 'empty' && state !== 'error' && (
+            <>
+              <div className='flex flex-col gap-6'>
+                <LineItemsTable currency={currency} lines={lines} />
+                <DocumentTotals className='max-w-none' currency={currency} rows={rows} />
+              </div>
+              <DocumentSection title='Questions about your order?'>
+                <BlockReady>
+                  <p className='text-muted-foreground'>
+                    Reply to your receipt email or write to{' '}
+                    <a
+                      href={`mailto:${supportEmail}`}
+                      className='text-foreground underline underline-offset-4'
+                    >
+                      {supportEmail}
+                    </a>
+                    . Returns are free within 30 days.
+                  </p>
+                </BlockReady>
+              </DocumentSection>
+            </>
+          )}
+          <DocumentFooter parts={footer} />
+        </DocumentPage>
+      </DocumentLayout>
+    </BlockStateProvider>
   )
 }
 

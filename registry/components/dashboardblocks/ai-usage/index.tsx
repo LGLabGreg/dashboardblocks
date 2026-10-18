@@ -16,3 +16,10 @@ export const aiUsageExampleProps = {
   'ai-usage-03': aiUsage3ExampleProps,
   'ai-usage-04': aiUsage4ExampleProps,
 }
+
+export const aiUsageEmptyProps = {
+  'ai-usage-01': { days: [], models: [] },
+  'ai-usage-02': { features: [] },
+  'ai-usage-03': { models: [] },
+  'ai-usage-04': { tokens: undefined, previousHitRate: undefined },
+}

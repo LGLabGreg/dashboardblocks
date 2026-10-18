@@ -1,36 +1,42 @@
 'use client'
 
 import {
-  BlockMessage,
-  Skeleton,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  type LoadStatus,
   useBlockData,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
+  ChartPlaceholder,
+  chartAxisProps,
+  chartBarCursor,
+  chartBarValueLabel,
+  chartFadedColor,
+  chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  ChartTooltipContent,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
 } from '@/registry/components/dashboardblocks/chart-panel'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatCompact, formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  LabelList,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
-
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface WeeklyPoint {
   label: string
@@ -43,103 +49,105 @@ interface States4Props {
   title: string
 }
 
-let exampleAttempts = 0
+const SERIES_COLOR = 'var(--color-chart-2)'
+const CHART_HEIGHT = 240
 
 const exampleProps: States4Props = {
-  description: 'New accounts per week, last 8 weeks',
-  load: () => {
-    const attempt = exampleAttempts++
-    return new Promise((resolve, reject) =>
-      setTimeout(() => {
-        if (attempt % 2 === 0) {
-          reject(new Error('The analytics service timed out.'))
-          return
-        }
-        resolve(
-          [
-            'Aug 3',
-            'Aug 10',
-            'Aug 17',
-            'Aug 24',
-            'Aug 31',
-            'Sep 7',
-            'Sep 14',
-            'Sep 21',
-          ].map((label, week) => ({
-            label,
-            value: Math.round(1_150 + week * 48 + Math.sin(week) * 90),
-          })),
-        )
-      }, 1_000),
-    )
-  },
+  description: 'New accounts each week for the last 8 weeks, against the weekly average.',
+  load: () =>
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('The analytics service timed out.')), 1_000),
+    ),
   title: 'Signups',
+}
+
+function toBlockStatus(status: LoadStatus): BlockStatus | undefined {
+  if (status === 'idle' || status === 'loading') return 'loading'
+  if (status === 'error') return 'error'
+  return undefined
 }
 
 const States4 = (props: States4Props) => {
   const { description, load, title } = props
-  const { data, error, reload, status } = useBlockData(load, { keepData: false })
-  const loading = status === 'loading' || status === 'idle'
+  const { data = [], status: loadStatus } = useBlockData(load, { keepData: false })
+  const status = toBlockStatus(loadStatus)
+  const lastIndex = data.length - 1
+  const latest = lastIndex >= 0 ? data[lastIndex] : undefined
+  const prior = lastIndex >= 1 ? data[lastIndex - 1] : undefined
+  const average = data.length
+    ? data.reduce((sum, point) => sum + point.value, 0) / data.length
+    : 0
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <span role='status' className='sr-only'>
-          {loading ? `Loading ${title.toLowerCase()}…` : ''}
-          {status === 'error' ? `Couldn't load ${title.toLowerCase()}` : ''}
-        </span>
-        {loading ? (
-          <div aria-busy className='flex h-60 items-end gap-3 pb-6 pl-10'>
-            {[55, 62, 58, 70, 66, 74, 80, 77].map((height, index) => (
-              <Skeleton key={index} className='flex-1' style={{ height: `${height}%` }} />
-            ))}
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {status || !latest ? (
+          <div className='flex flex-col gap-4 border-t pt-4'>
+            <div className='flex flex-col gap-1'>
+              <KPIValue />
+              {status === 'loading' && <BlockStateText className='text-sm' />}
+            </div>
+            <ChartPlaceholder height={CHART_HEIGHT} />
           </div>
-        ) : status === 'error' || !data ? (
-          <BlockMessage
-            className='h-60 py-0'
-            icon={
-              <IconPlaceholder
-                lucide='TriangleAlertIcon'
-                tabler='IconAlertTriangle'
-                hugeicons='Alert02Icon'
-                phosphor='WarningIcon'
-                remixicon='RiErrorWarningLine'
-              />
-            }
-            tone='error'
-            title={`Couldn't load ${title.toLowerCase()}`}
-            description={
-              error instanceof Error
-                ? error.message
-                : 'Something went wrong. Try again in a moment.'
-            }
-            action={
-              <Button variant='outline' size='sm' onClick={() => void reload()}>
-                Try again
-              </Button>
-            }
-          />
         ) : (
-          <>
+          <div className='flex flex-col gap-4 border-t pt-4'>
+            <div className='flex flex-col gap-1'>
+              <p className='text-4xl font-light tracking-tight tabular-nums'>
+                {formatNumber(latest.value)}
+              </p>
+              {prior && (
+                <KPIChange
+                  comparison={`the week of ${prior.label}`}
+                  format={(value) => formatNumber(value)}
+                  previous={prior.value}
+                  value={latest.value}
+                />
+              )}
+            </div>
             <ChartPanelFigure className='h-60'>
               <ResponsiveContainer width='100%' height='100%'>
-                <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+                <BarChart
+                  aria-label={`${title} chart`}
+                  data={data}
+                  margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
+                >
                   <CartesianGrid {...chartGridProps} />
                   <XAxis {...chartAxisProps} dataKey='label' />
-                  <YAxis {...chartAxisProps} width={40} />
-                  <Tooltip
-                    content={(tooltipProps) => <ChartPanelTooltip {...tooltipProps} />}
-                    cursor={{ fill: 'var(--color-muted)', opacity: 0.5 }}
+                  <YAxis
+                    {...chartAxisProps}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    width={chartValueAxisWidth}
                   />
-                  <Bar
-                    dataKey='value'
-                    fill='var(--chart-2)'
-                    name={title}
-                    radius={[4, 4, 0, 0]}
+                  <Tooltip
+                    content={(tooltipProps) => <ChartTooltipContent {...tooltipProps} />}
+                    cursor={chartBarCursor}
+                  />
+                  <Bar dataKey='value' maxBarSize={28} name={title} radius={[4, 4, 0, 0]}>
+                    {data.map((point, index) => (
+                      <Cell
+                        key={point.label}
+                        fill={
+                          index === lastIndex
+                            ? SERIES_COLOR
+                            : chartFadedColor(SERIES_COLOR)
+                        }
+                      />
+                    ))}
+                    <LabelList dataKey='value' content={chartBarValueLabel(lastIndex)} />
+                  </Bar>
+                  <ReferenceLine
+                    {...chartReferenceProps}
+                    y={average}
+                    label={{
+                      ...chartReferenceLabel,
+                      value: `avg ${formatNumber(Math.round(average))}`,
+                      position: 'insideBottomLeft',
+                      dy: -4,
+                    }}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -148,14 +156,14 @@ const States4 = (props: States4Props) => {
               caption={`${title}: ${description}`}
               columns={[
                 { key: 'label', label: 'Week of' },
-                { key: 'value', label: title },
+                { format: (value) => formatNumber(value), key: 'value', label: title },
               ]}
               rows={data}
             />
-          </>
+          </div>
         )}
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

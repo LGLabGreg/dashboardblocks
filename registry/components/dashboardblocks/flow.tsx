@@ -1,12 +1,25 @@
 'use client'
 
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipFrame,
+  ChartTooltipItem,
+} from '@/registry/components/dashboardblocks/chart'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { useState } from 'react'
+import {
+  ResponsiveContainer,
+  Sankey,
+  type SankeyLinkProps,
+  type SankeyNodeProps,
+  Tooltip,
+} from 'recharts'
 
 import { cn } from '@/lib/utils'
 
 interface FlowNode {
   color?: string
-  column?: number
   id: string
   kind?: 'default' | 'exit'
   label: string
@@ -21,37 +34,21 @@ interface FlowLink {
 interface FlowLayoutNode extends FlowNode {
   color: string
   column: number
-  height: number
   value: number
-  x: number
-  y: number
-}
-
-interface FlowLayoutLink extends FlowLink {
-  index: number
-  sy: number
-  thickness: number
-  ty: number
-}
-
-interface FlowLayoutOptions {
-  /** @default 'source' */
-  colorBy?: 'source' | 'target'
-  height: number
-  /** @default 8 */
-  nodeWidth?: number
-  nodePadding?: number
-  width: number
 }
 
 const flowPalette = [
-  'var(--chart-2)',
-  'var(--chart-3)',
-  'var(--chart-4)',
-  'var(--chart-5)',
-  'var(--chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-1)',
 ]
-const exitColor = 'var(--muted-foreground)'
+const exitColor = 'var(--color-muted-foreground)'
+
+const NODE_WIDTH = 8
+const LABEL_GAP = 6
+const TWO_LINE_LABEL_HEIGHT = 22
 
 function getFlowTotals(nodes: FlowNode[], links: FlowLink[]) {
   const totals = new Map(nodes.map((node) => [node.id, { in: 0, out: 0 }]))
@@ -64,140 +61,80 @@ function getFlowTotals(nodes: FlowNode[], links: FlowLink[]) {
   return totals
 }
 
-function layoutFlow(
-  nodes: FlowNode[],
-  links: FlowLink[],
-  {
-    colorBy = 'source',
-    height,
-    nodePadding = 12,
-    nodeWidth = 8,
-    width,
-  }: FlowLayoutOptions,
-) {
-  const totals = getFlowTotals(nodes, links)
-  const depth = new Map<string, number>()
+function getFlowColumns(nodes: FlowNode[], links: FlowLink[]) {
+  const columns = new Map<string, number>()
   const visit = (id: string, seen: Set<string>): number => {
-    if (depth.has(id)) return depth.get(id)!
-    const node = nodes.find((candidate) => candidate.id === id)
-    if (node?.column !== undefined) return node.column
+    const known = columns.get(id)
+    if (known !== undefined) return known
     const parents = links.filter((link) => link.target === id && !seen.has(link.source))
-    const value = parents.length
+    const column = parents.length
       ? Math.max(...parents.map((link) => visit(link.source, new Set([...seen, id])) + 1))
       : 0
-    depth.set(id, value)
-    return value
+    columns.set(id, column)
+    return column
   }
-  const columns = nodes.map((node) => node.column ?? visit(node.id, new Set()))
-  const lastColumn = Math.max(0, ...columns)
-  const byColumn = Array.from({ length: lastColumn + 1 }, (_, column) =>
-    nodes
-      .map((node, index) => ({ column: columns[index], node }))
-      .filter((entry) => entry.column === column),
-  )
-  const valueOf = (id: string) => {
-    const total = totals.get(id)
-    return total ? Math.max(total.in, total.out) : 0
-  }
-  const scale = Math.min(
-    ...byColumn
-      .filter((column) => column.length > 0)
-      .map((column) => {
-        const sum = column.reduce((total, entry) => total + valueOf(entry.node.id), 0)
-        return sum > 0 ? (height - (column.length - 1) * nodePadding) / sum : Infinity
-      }),
-  )
-  const ky = Number.isFinite(scale) ? Math.max(0, scale) : 0
+  for (const node of nodes) visit(node.id, new Set())
+  return columns
+}
 
+function getFlowNodes(
+  nodes: FlowNode[],
+  links: FlowLink[],
+  colorBy: 'source' | 'target' = 'source',
+): FlowLayoutNode[] {
+  const totals = getFlowTotals(nodes, links)
+  const columns = getFlowColumns(nodes, links)
+  const lastColumn = Math.max(0, ...columns.values())
   const placed = new Map<string, FlowLayoutNode>()
-  byColumn.forEach((column, columnIndex) => {
-    const total =
-      column.reduce((sum, entry) => sum + valueOf(entry.node.id) * ky, 0) +
-      Math.max(0, column.length - 1) * nodePadding
-    let y = (height - total) / 2
-    column.forEach((entry, index) => {
-      const value = valueOf(entry.node.id)
-      const color =
-        entry.node.color ??
-        (entry.node.kind === 'exit' ? exitColor : flowPalette[index % flowPalette.length])
-      placed.set(entry.node.id, {
-        ...entry.node,
-        color,
-        column: columnIndex,
-        height: value * ky,
-        value,
-        x: lastColumn > 0 ? (columnIndex / lastColumn) * (width - nodeWidth) : 0,
-        y,
+  for (let column = 0; column <= lastColumn; column++) {
+    nodes
+      .filter((node) => columns.get(node.id) === column)
+      .forEach((node, index) => {
+        const total = totals.get(node.id)
+        placed.set(node.id, {
+          ...node,
+          color:
+            node.color ??
+            (node.kind === 'exit' ? exitColor : flowPalette[index % flowPalette.length]),
+          column,
+          value: total ? Math.max(total.in, total.out) : 0,
+        })
       })
-      y += value * ky + nodePadding
-    })
-  })
+  }
   for (let column = 1; colorBy === 'source' && column <= lastColumn; column++) {
-    for (const entry of byColumn[column]) {
-      const node = placed.get(entry.node.id)!
-      if (entry.node.color || entry.node.kind === 'exit') continue
+    for (const original of nodes) {
+      const node = placed.get(original.id)
+      if (!node || node.column !== column || original.color || original.kind === 'exit') {
+        continue
+      }
       const largest = links
         .filter((link) => link.target === node.id)
         .sort((a, b) => b.value - a.value)[0]
       if (largest) node.color = placed.get(largest.source)?.color ?? node.color
     }
   }
-
-  const outOffset = new Map<string, number>()
-  const inOffset = new Map<string, number>()
-  const laidOut: FlowLayoutLink[] = links.map((link, index) => ({
-    ...link,
-    index,
-    sy: 0,
-    thickness: link.value * ky,
-    ty: 0,
-  }))
-  const centre = (id: string) => {
-    const node = placed.get(id)
-    return node ? node.y + node.height / 2 : 0
-  }
-  ;[...laidOut]
-    .sort((a, b) => centre(a.target) - centre(b.target))
-    .forEach((link) => {
-      const offset = outOffset.get(link.source) ?? 0
-      link.sy = (placed.get(link.source)?.y ?? 0) + offset
-      outOffset.set(link.source, offset + link.thickness)
-    })
-  ;[...laidOut]
-    .sort((a, b) => centre(a.source) - centre(b.source))
-    .forEach((link) => {
-      const offset = inOffset.get(link.target) ?? 0
-      link.ty = (placed.get(link.target)?.y ?? 0) + offset
-      inOffset.set(link.target, offset + link.thickness)
-    })
-
-  return { lastColumn, links: laidOut, nodes: [...placed.values()] }
-}
-
-function getFlowPath(x0: number, x1: number, sy: number, ty: number, thickness: number) {
-  const xm = (x0 + x1) / 2
-  return [
-    `M${x0},${sy}`,
-    `C${xm},${sy} ${xm},${ty} ${x1},${ty}`,
-    `L${x1},${ty + thickness}`,
-    `C${xm},${ty + thickness} ${xm},${sy + thickness} ${x0},${sy + thickness}`,
-    'Z',
-  ].join(' ')
+  return nodes.flatMap((node) => {
+    const laidOut = placed.get(node.id)
+    return laidOut ? [laidOut] : []
+  })
 }
 
 type FlowActive = { link: number } | { node: string } | null
 
 interface FlowChartProps {
-  children?: ReactNode
   className?: string
   /** @default 'source' */
-  colorBy?: FlowLayoutOptions['colorBy']
+  colorBy?: 'source' | 'target'
+  /** The muted text beside a hovered band's value. @default its share of the source */
   describeLink?: (
     link: FlowLink,
     source: FlowLayoutNode,
     target: FlowLayoutNode,
   ) => string
+  /** The muted text beside a hovered node's value. */
   describeNode?: (node: FlowLayoutNode) => string
+  /** Draws the bands into and out of this node id stronger than the rest. */
+  emphasis?: string
   format?: (value: number) => string
   /** @default 280 */
   height?: number
@@ -210,37 +147,38 @@ interface FlowChartProps {
 }
 
 function FlowChart({
-  children,
   className,
   colorBy = 'source',
   describeLink,
   describeNode,
-  format = (value) => value.toLocaleString(),
+  emphasis,
+  format = (value) => formatNumber(value),
   height = 280,
   label = 'Flow',
   links,
   minWidth,
   nodes,
 }: FlowChartProps) {
-  const frame = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(0)
   const [active, setActive] = useState<FlowActive>(null)
+  const state = useBlockState()
+  const laidOut = getFlowNodes(nodes, links, colorBy)
+  const byId = new Map(laidOut.map((node) => [node.id, node]))
+  const indexOf = new Map(laidOut.map((node, index) => [node.id, index]))
+  const lastColumn = Math.max(0, ...laidOut.map((node) => node.column))
+  const data = {
+    links: links.flatMap((link) => {
+      const source = indexOf.get(link.source)
+      const target = indexOf.get(link.target)
+      return source === undefined || target === undefined
+        ? []
+        : [{ source, target, value: link.value }]
+    }),
+    nodes: laidOut.map((node) => ({ ...node, name: node.label })),
+  }
 
-  useEffect(() => {
-    const element = frame.current
-    if (!element) return
-    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width))
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
-
-  const labelGap = 6
-  const layout = layoutFlow(nodes, links, { colorBy, height, width: Math.max(0, width) })
-  const byId = new Map(layout.nodes.map((node) => [node.id, node]))
-
-  const isLinkActive = (link: FlowLayoutLink) => {
+  const isLinkActive = (link: FlowLink, index: number) => {
     if (!active) return false
-    if ('link' in active) return active.link === link.index
+    if ('link' in active) return active.link === index
     return link.source === active.node || link.target === active.node
   }
   const isNodeActive = (node: FlowLayoutNode) => {
@@ -250,141 +188,171 @@ function FlowChart({
     return link?.source === node.id || link?.target === node.id
   }
 
-  const defaultDescribeLink = (
-    link: FlowLink,
-    source: FlowLayoutNode,
-    target: FlowLayoutNode,
-  ) => {
-    const share = source.value > 0 ? Math.round((link.value / source.value) * 100) : 0
-    return `${source.label} → ${target.label}: ${format(link.value)} (${share}% of ${source.label})`
+  const tooltip = () => {
+    if (!active) return null
+    if ('link' in active) {
+      const link = links[active.link]
+      const source = link && byId.get(link.source)
+      const target = link && byId.get(link.target)
+      if (!link || !source || !target) return null
+      const share = formatPercent(source.value > 0 ? link.value / source.value : 0, {
+        maximumFractionDigits: 0,
+      })
+      return {
+        color: target.kind === 'exit' ? exitColor : source.color,
+        heading: `${source.label} → ${target.label}`,
+        name: describeLink
+          ? describeLink(link, source, target)
+          : `${share} of ${source.label}`,
+        value: link.value,
+      }
+    }
+    const node = byId.get(active.node)
+    if (!node) return null
+    return {
+      color: node.color,
+      heading: node.label,
+      name: describeNode?.(node),
+      value: node.value,
+    }
   }
-  const defaultDescribeNode = (node: FlowLayoutNode) =>
-    `${node.label}: ${format(node.value)}`
 
-  let readout: ReactNode = children
-  if (active && 'link' in active) {
-    const link = links[active.link]
+  const renderLink = (shape: SankeyLinkProps) => {
+    const link = links[shape.index]
     const source = link && byId.get(link.source)
     const target = link && byId.get(link.target)
-    if (link && source && target) {
-      readout = (describeLink ?? defaultDescribeLink)(link, source, target)
-    }
-  } else if (active && 'node' in active) {
-    const node = byId.get(active.node)
-    if (node) readout = (describeNode ?? defaultDescribeNode)(node)
+    if (!link || !source || !target) return <path />
+    const emphasised =
+      emphasis !== undefined && (link.source === emphasis || link.target === emphasis)
+    const opacity = active
+      ? isLinkActive(link, shape.index)
+        ? 0.6
+        : 0.12
+      : emphasis === undefined
+        ? 0.32
+        : emphasised
+          ? 0.5
+          : 0.2
+    return (
+      <path
+        d={`M${shape.sourceX},${shape.sourceY} C${shape.sourceControlX},${shape.sourceY} ${shape.targetControlX},${shape.targetY} ${shape.targetX},${shape.targetY}`}
+        fill='none'
+        stroke={
+          target.kind === 'exit'
+            ? exitColor
+            : colorBy === 'target'
+              ? target.color
+              : source.color
+        }
+        strokeOpacity={target.kind === 'exit' ? opacity * 0.6 : opacity}
+        strokeWidth={Math.max(1, shape.linkWidth)}
+        className='transition-[stroke-opacity] duration-200'
+      />
+    )
   }
 
-  return (
-    <div className={cn('flex flex-col gap-3', className)}>
-      <div
-        role={minWidth ? 'region' : undefined}
-        aria-label={minWidth ? label : undefined}
-        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
-        tabIndex={minWidth ? 0 : undefined}
-        className={cn(
-          minWidth &&
-            'focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none focus-visible:ring-3',
-        )}
-      >
-        <div ref={frame} aria-hidden style={{ height, minWidth }}>
-          {width > 0 && (
-            <svg
-              width={width}
-              height={height}
-              className='overflow-visible'
-              onPointerLeave={() => setActive(null)}
-            >
-              <g>
-                {layout.links.map((link) => {
-                  const source = byId.get(link.source)
-                  const target = byId.get(link.target)
-                  if (!source || !target) return null
-                  const highlighted = isLinkActive(link)
-                  const opacity = active ? (highlighted ? 0.6 : 0.12) : 0.32
-                  return (
-                    <path
-                      key={link.index}
-                      d={getFlowPath(
-                        source.x + 8,
-                        target.x,
-                        link.sy,
-                        link.ty,
-                        link.thickness,
-                      )}
-                      fill={
-                        target.kind === 'exit'
-                          ? exitColor
-                          : colorBy === 'target'
-                            ? target.color
-                            : source.color
-                      }
-                      fillOpacity={target.kind === 'exit' ? opacity * 0.6 : opacity}
-                      className='transition-[fill-opacity] duration-200'
-                      onPointerEnter={() => setActive({ link: link.index })}
-                      onPointerDown={() => setActive({ link: link.index })}
-                    />
-                  )
-                })}
-              </g>
-              <g>
-                {layout.nodes.map((node) => {
-                  const last = node.column === layout.lastColumn && layout.lastColumn > 0
-                  const dimmed = active !== null && !isNodeActive(node)
-                  const textX = last ? node.x - labelGap : node.x + 8 + labelGap
-                  const centre = node.y + node.height / 2
-                  return (
-                    <g
-                      key={node.id}
-                      className='transition-opacity duration-200'
-                      opacity={dimmed ? 0.45 : 1}
-                      onPointerEnter={() => setActive({ node: node.id })}
-                      onPointerDown={() => setActive({ node: node.id })}
-                    >
-                      <rect
-                        x={node.x}
-                        y={node.y}
-                        width={8}
-                        height={Math.max(1, node.height)}
-                        rx={2}
-                        fill={node.color}
-                      />
-                      <text
-                        x={textX}
-                        y={centre}
-                        dy={node.height > 22 ? '-0.2em' : '0.35em'}
-                        textAnchor={last ? 'end' : 'start'}
-                        className='fill-foreground stroke-card text-xs font-medium [paint-order:stroke] [stroke-linejoin:round] [stroke-width:3px]'
-                      >
-                        {node.label}
-                        {node.height <= 22 && (
-                          <tspan className='fill-muted-foreground font-normal tabular-nums'>
-                            {' '}
-                            {format(node.value)}
-                          </tspan>
-                        )}
-                      </text>
-                      {node.height > 22 && (
-                        <text
-                          x={textX}
-                          y={centre}
-                          dy='1em'
-                          textAnchor={last ? 'end' : 'start'}
-                          className='fill-muted-foreground stroke-card text-xs tabular-nums [paint-order:stroke] [stroke-linejoin:round] [stroke-width:3px]'
-                        >
-                          {format(node.value)}
-                        </text>
-                      )}
-                    </g>
-                  )
-                })}
-              </g>
-            </svg>
+  const renderNode = (shape: SankeyNodeProps) => {
+    const node = byId.get(String((shape.payload as { id?: string }).id))
+    if (!node) return <g />
+    const last = node.column === lastColumn && lastColumn > 0
+    const dimmed = active !== null && !isNodeActive(node)
+    const textX = last ? shape.x - LABEL_GAP : shape.x + shape.width + LABEL_GAP
+    const centre = shape.y + shape.height / 2
+    const twoLines = shape.height > TWO_LINE_LABEL_HEIGHT
+    return (
+      <g className='transition-opacity duration-200' opacity={dimmed ? 0.45 : 1}>
+        <rect
+          x={shape.x}
+          y={shape.y}
+          width={shape.width}
+          height={Math.max(1, shape.height)}
+          rx={2}
+          fill={node.color}
+        />
+        <text
+          x={textX}
+          y={centre}
+          dy={twoLines ? '-0.2em' : '0.35em'}
+          textAnchor={last ? 'end' : 'start'}
+          className='fill-foreground stroke-background text-xs font-medium [paint-order:stroke] [stroke-linejoin:round] [stroke-width:3px]'
+        >
+          {node.label}
+          {!twoLines && (
+            <tspan className='fill-muted-foreground font-normal tabular-nums'>
+              {' '}
+              {format(node.value)}
+            </tspan>
           )}
-        </div>
+        </text>
+        {twoLines && (
+          <text
+            x={textX}
+            y={centre}
+            dy='1em'
+            textAnchor={last ? 'end' : 'start'}
+            className='fill-muted-foreground stroke-background text-xs tabular-nums [paint-order:stroke] [stroke-linejoin:round] [stroke-width:3px]'
+          >
+            {format(node.value)}
+          </text>
+        )}
+      </g>
+    )
+  }
+
+  if (state) return <ChartPlaceholder className={className} height={height} />
+
+  return (
+    <div
+      role={minWidth ? 'region' : undefined}
+      aria-label={minWidth ? label : undefined}
+      // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
+      tabIndex={minWidth ? 0 : undefined}
+      className={cn(
+        minWidth &&
+          'focus-visible:ring-ring/50 -my-1 overflow-x-auto rounded-sm py-1 outline-none focus-visible:ring-3',
+        className,
+      )}
+    >
+      <div role='img' aria-label={label} style={{ height, minWidth }}>
+        <ResponsiveContainer width='100%' height='100%'>
+          <Sankey
+            accessibilityLayer={false}
+            align='left'
+            data={data}
+            iterations={32}
+            link={renderLink}
+            margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+            node={renderNode}
+            nodePadding={12}
+            nodeWidth={NODE_WIDTH}
+            onMouseEnter={(item, type) => {
+              if (type === 'link' && 'linkWidth' in item) setActive({ link: item.index })
+              if (type === 'node' && 'payload' in item && 'id' in item.payload) {
+                setActive({ node: String(item.payload.id) })
+              }
+            }}
+            onMouseLeave={() => setActive(null)}
+            sort={false}
+          >
+            <Tooltip
+              content={({ active: shown }) => {
+                const item = tooltip()
+                if (!shown || !item) return null
+                return (
+                  <ChartTooltipFrame>
+                    <span className='font-medium'>{item.heading}</span>
+                    <ChartTooltipItem
+                      color={item.color}
+                      name={item.name}
+                      value={format(item.value)}
+                    />
+                  </ChartTooltipFrame>
+                )
+              }}
+            />
+          </Sankey>
+        </ResponsiveContainer>
       </div>
-      <p className='text-muted-foreground min-h-5 text-sm'>
-        {active ? <span className='text-foreground'>{readout}</span> : children}
-      </p>
     </div>
   )
 }
@@ -401,31 +369,28 @@ function FlowPathSteps({
   steps: FlowPathStep[]
 }) {
   return (
-    <ol className={cn('flex flex-wrap items-center gap-1 text-xs', className)}>
+    <ol className={cn('flex flex-wrap items-center gap-x-1.5 text-sm', className)}>
       {steps.map((step, index) => (
-        <li key={`${step.label}-${index}`} className='flex items-center gap-1'>
+        <li key={`${step.label}-${index}`} className='flex items-center gap-1.5'>
           {index > 0 && (
             <span aria-hidden className='text-muted-foreground'>
               →
             </span>
           )}
-          <span className='bg-muted rounded-md px-1.5 py-0.5 font-medium whitespace-nowrap'>
-            {step.label}
-          </span>
+          <span className='font-medium whitespace-nowrap'>{step.label}</span>
         </li>
       ))}
     </ol>
   )
 }
 
-export { FlowChart, FlowPathSteps, flowPalette, getFlowPath, getFlowTotals, layoutFlow }
-
-export type {
-  FlowChartProps,
-  FlowLayoutLink,
-  FlowLayoutNode,
-  FlowLayoutOptions,
-  FlowLink,
-  FlowNode,
-  FlowPathStep,
+export {
+  FlowChart,
+  FlowPathSteps,
+  flowPalette,
+  getFlowColumns,
+  getFlowNodes,
+  getFlowTotals,
 }
+
+export type { FlowChartProps, FlowLayoutNode, FlowLink, FlowNode, FlowPathStep }

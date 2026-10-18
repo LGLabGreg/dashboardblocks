@@ -1,5 +1,8 @@
 'use client'
 
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import { formatCompact, formatCurrency } from '@/registry/lib/dashboardblocks/format'
+
 import { cn } from '@/lib/utils'
 
 interface TokenCounts {
@@ -36,37 +39,31 @@ function getCacheHitRate({ cached = 0, input }: TokenCounts) {
   return total > 0 ? cached / total : 0
 }
 
-const tokenFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  notation: 'compact',
-})
-
 function formatTokens(count: number) {
-  return tokenFormatter.format(count)
+  return formatCompact(count)
 }
 
 function formatUsd(value: number) {
   if (value > 0 && value < 0.01) return `$${value.toPrecision(2)}`
-  return value.toLocaleString('en-US', {
-    currency: 'USD',
-    maximumFractionDigits: value < 10 ? 2 : 0,
-    minimumFractionDigits: value < 10 ? 2 : 0,
-    style: 'currency',
+  const digits = value < 10 ? 2 : 0
+  return formatCurrency(value, {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
   })
 }
 
 const modelPalette = [
-  'var(--chart-2)',
-  'var(--chart-3)',
-  'var(--chart-4)',
-  'var(--chart-5)',
-  'var(--chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-1)',
 ]
 
 const tokenPartColors = {
-  cached: 'var(--chart-3)',
-  input: 'var(--chart-2)',
-  output: 'var(--chart-4)',
+  cached: 'var(--color-chart-3)',
+  input: 'var(--color-chart-2)',
+  output: 'var(--color-chart-4)',
 } as const
 
 interface TokenSplitBarProps {
@@ -75,6 +72,20 @@ interface TokenSplitBarProps {
 }
 
 function TokenSplitBar({ className, tokens }: TokenSplitBarProps) {
+  const state = useBlockState()
+  if (state === 'loading') {
+    return (
+      <div
+        aria-hidden
+        className={cn(
+          'bg-muted h-2.5 animate-pulse rounded-full motion-reduce:animate-none',
+          className,
+        )}
+      />
+    )
+  }
+  if (state) return null
+
   const cached = tokens.cached ?? 0
   const total = tokens.input + cached + tokens.output || 1
   const parts = [

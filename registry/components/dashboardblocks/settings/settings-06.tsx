@@ -4,13 +4,6 @@ import { SettingsRow } from '@/registry/components/dashboardblocks/settings'
 import { type FormEvent, useEffect, useId, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
 interface DangerAction {
@@ -87,86 +80,79 @@ const Settings6 = (props: Settings6Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ul className='flex flex-col divide-y border-t'>
-          {actions.map((item) => {
-            const open = confirming === item.id
-            return (
-              <li key={item.id} className='flex flex-col gap-4 py-4 last:pb-0'>
-                <SettingsRow
-                  id={`${id}-${item.id}`}
-                  label={item.label}
-                  description={item.description}
+    <section className='@container flex flex-col gap-3'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <p className='text-muted-foreground text-sm'>{description}</p>
+      </header>
+      <ul className='flex flex-col divide-y border-t'>
+        {actions.map((item) => {
+          const open = confirming === item.id
+          return (
+            <li key={item.id} className='flex flex-col gap-3 py-3'>
+              <SettingsRow
+                id={`${id}-${item.id}`}
+                label={item.label}
+                description={item.description}
+              >
+                <Button
+                  ref={(node) => {
+                    buttons.current[item.id] = node
+                  }}
+                  variant={item.confirm ? 'destructive' : 'outline'}
+                  size='sm'
+                  aria-describedby={`${id}-${item.id}-description`}
+                  aria-expanded={item.confirm ? open : undefined}
+                  aria-controls={open ? `${id}-${item.id}-form` : undefined}
+                  onClick={() => {
+                    if (!item.confirm) return onAction?.(item.id)
+                    if (open) return close(item.id)
+                    setConfirming(item.id)
+                    setTyped('')
+                    focusAfterRender.current = () => confirmInput.current
+                  }}
                 >
-                  <Button
-                    ref={(node) => {
-                      buttons.current[item.id] = node
-                    }}
-                    variant={item.confirm ? 'destructive' : 'outline'}
-                    size='sm'
-                    aria-describedby={`${id}-${item.id}-description`}
-                    aria-expanded={item.confirm ? open : undefined}
-                    aria-controls={open ? `${id}-${item.id}-form` : undefined}
-                    onClick={() => {
-                      if (!item.confirm) return onAction?.(item.id)
-                      if (open) return close(item.id)
-                      setConfirming(item.id)
-                      setTyped('')
-                      focusAfterRender.current = () => confirmInput.current
-                    }}
-                  >
-                    {item.action}
-                  </Button>
-                </SettingsRow>
-                {open && (
-                  <form
-                    method='post'
-                    id={`${id}-${item.id}-form`}
-                    onSubmit={(event) => confirm(event, item.id)}
-                    className='bg-destructive/5 border-destructive/30 flex flex-col gap-3 rounded-lg border p-4'
-                  >
-                    <label htmlFor={`${id}-${item.id}-confirm`} className='text-sm'>
-                      Type{' '}
-                      <strong className='font-mono font-semibold'>{workspace}</strong> to
-                      confirm.
-                    </label>
-                    <Input
-                      ref={confirmInput}
-                      id={`${id}-${item.id}-confirm`}
-                      autoComplete='off'
-                      spellCheck={false}
-                      value={typed}
-                      onChange={(event) => setTyped(event.target.value)}
-                    />
-                    <div className='flex justify-end gap-2'>
-                      <Button
-                        type='button'
-                        variant='ghost'
-                        onClick={() => close(item.id)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type='submit'
-                        variant='destructive'
-                        disabled={typed !== workspace}
-                      >
-                        {item.label}
-                      </Button>
-                    </div>
-                  </form>
-                )}
-              </li>
-            )
-          })}
-        </ul>
-      </CardContent>
-    </Card>
+                  {item.action}
+                </Button>
+              </SettingsRow>
+              {open && (
+                <form
+                  method='post'
+                  id={`${id}-${item.id}-form`}
+                  onSubmit={(event) => confirm(event, item.id)}
+                  className='flex flex-col gap-3 rounded-lg border p-4'
+                >
+                  <label htmlFor={`${id}-${item.id}-confirm`} className='text-sm'>
+                    Type <strong className='font-mono font-semibold'>{workspace}</strong>{' '}
+                    to confirm.
+                  </label>
+                  <Input
+                    ref={confirmInput}
+                    id={`${id}-${item.id}-confirm`}
+                    autoComplete='off'
+                    spellCheck={false}
+                    value={typed}
+                    onChange={(event) => setTyped(event.target.value)}
+                  />
+                  <div className='flex justify-end gap-2'>
+                    <Button type='button' variant='ghost' onClick={() => close(item.id)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      type='submit'
+                      variant='destructive'
+                      disabled={typed !== workspace}
+                    >
+                      {item.label}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </section>
   )
 }
 

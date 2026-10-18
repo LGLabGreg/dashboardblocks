@@ -1,6 +1,12 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CalendarEvent,
   CalendarEventDetails,
   CalendarLegend,
@@ -9,16 +15,20 @@ import {
   formatDayRange,
   getWeekDays,
 } from '@/registry/components/dashboardblocks/calendar'
-import { addDays, getDay } from '@/registry/components/dashboardblocks/schedule'
+import {
+  addDays,
+  formatDuration,
+  getDay,
+} from '@/registry/components/dashboardblocks/schedule'
 import { useRef, useState } from 'react'
-
-import { Card, CardContent } from '@/components/ui/card'
 
 interface Calendar2Props {
   calendars: { color: string; name: string }[]
-  events: CalendarEvent[]
+  /** Leave out, or pass none, to show the empty state. */
+  events?: CalendarEvent[]
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   /** 0 for Sunday, 1 for Monday. */
@@ -30,11 +40,11 @@ const at = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(Date.UTC(2026, month, day, hour, minute))
 
 const CALENDARS = {
-  customers: { calendar: 'Customers', color: 'var(--chart-3)' },
-  focus: { calendar: 'Focus', color: 'var(--chart-5)' },
-  away: { calendar: 'Out of office', color: 'var(--chart-1)' },
-  product: { calendar: 'Product', color: 'var(--chart-2)' },
-  team: { calendar: 'Team', color: 'var(--chart-4)' },
+  customers: { calendar: 'Customers', color: 'var(--color-chart-3)' },
+  focus: { calendar: 'Focus', color: 'var(--color-chart-5)' },
+  away: { calendar: 'Out of office', color: 'var(--color-chart-1)' },
+  product: { calendar: 'Product', color: 'var(--color-chart-2)' },
+  team: { calendar: 'Team', color: 'var(--color-chart-4)' },
 }
 
 const TEAM = [
@@ -100,18 +110,18 @@ const exampleProps: Calendar2Props = {
     {
       ...CALENDARS.product,
       attendees: [{ name: 'Ana Sousa' }, { name: 'Leo Park' }],
-      end: at(8, 28, 11),
+      end: at(8, 28, 12),
       id: 'critique',
       location: 'Figma',
-      start: at(8, 28, 10),
+      start: at(8, 28, 11),
       title: 'Design critique',
     },
     {
       ...CALENDARS.team,
       attendees: [{ name: 'Maya Lindqvist' }, { name: 'Jonah Adeyemi' }],
-      end: at(8, 28, 10, 45),
+      end: at(8, 28, 11),
       id: 'one-on-one',
-      start: at(8, 28, 10, 15),
+      start: at(8, 28, 10, 30),
       title: '1:1 Maya / Jonah',
     },
     {
@@ -204,10 +214,10 @@ const exampleProps: Calendar2Props = {
     },
     {
       ...CALENDARS.product,
-      end: at(9, 1, 13),
+      end: at(9, 1, 12),
       id: 'pricing',
       location: 'Boardroom',
-      start: at(9, 1, 11),
+      start: at(9, 1, 10),
       title: 'Pricing workshop',
     },
     {
@@ -265,12 +275,15 @@ const exampleProps: Calendar2Props = {
 const Calendar2 = (props: Calendar2Props) => {
   const {
     calendars,
-    events,
+    events: data = [],
     now,
     onSelectEvent,
+    status,
     timeZone = 'UTC',
     weekStartsOn = 0,
   } = props
+  const state = getBlockState(status, data.length === 0)
+  const events = state ? [] : data
   const today = getDay(now, timeZone)
   const [anchor, setAnchor] = useState(today)
   const [selectedId, setSelectedId] = useState<string | undefined>(
@@ -284,6 +297,19 @@ const Calendar2 = (props: Calendar2Props) => {
 
   const days = getWeekDays(anchor, weekStartsOn)
   const selected = events.find((event) => event.id === selectedId)
+  const weekEnd = addDays(days[6], 1)
+  const meetings = events.filter(
+    (event) =>
+      !event.allDay &&
+      event.end !== undefined &&
+      getDay(event.start, timeZone) >= days[0] &&
+      getDay(event.start, timeZone) < weekEnd,
+  )
+  const bookedMinutes = meetings.reduce(
+    (sum, event) =>
+      sum + ((event.end ?? event.start).getTime() - event.start.getTime()) / 60_000,
+    0,
+  )
 
   const closeDetails = () => {
     container.current
@@ -293,10 +319,19 @@ const Calendar2 = (props: Calendar2Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardContent className='flex flex-col gap-4'>
+    <BlockStateProvider status={status} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={formatDayRange(days[0], days[6])}
+          description={
+            state ? (
+              <BlockStateText />
+            ) : meetings.length === 0 ? (
+              'Nothing booked this week.'
+            ) : (
+              `${meetings.length} ${meetings.length === 1 ? 'meeting' : 'meetings'} taking ${formatDuration(new Date(0), new Date(bookedMinutes * 60_000))} this week.`
+            )
+          }
           onToday={() => setAnchor(today)}
           onPrevious={() => setAnchor(addDays(anchor, -7))}
           onNext={() => setAnchor(addDays(anchor, 7))}
@@ -325,15 +360,17 @@ const Calendar2 = (props: Calendar2Props) => {
                 onClose={closeDetails}
               />
             ) : (
-              <p className='text-muted-foreground text-sm'>
-                Select an event to see its details.
-              </p>
+              !state && (
+                <p className='text-muted-foreground text-sm'>
+                  Select an event to see its details.
+                </p>
+              )
             )}
           </div>
         </div>
-        <CalendarLegend calendars={calendars} />
-      </CardContent>
-    </Card>
+        {!state && <CalendarLegend calendars={calendars} />}
+      </section>
+    </BlockStateProvider>
   )
 }
 

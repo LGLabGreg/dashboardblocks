@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'comments-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('comments')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('comments')],
     files: [
       {
         path: 'registry/components/dashboardblocks/comments/comments-01.tsx',
@@ -25,9 +25,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
-      'separator',
       'tabs',
+      registryUrl('block-state'),
       registryUrl('comments'),
     ],
     files: [
@@ -46,7 +45,13 @@ export const examples: Registry['items'] = [
   {
     name: 'comments-03',
     type: 'registry:component',
-    registryDependencies: ['badge', 'card', 'tabs', registryUrl('comments')],
+    registryDependencies: [
+      'tabs',
+      registryUrl('block-state'),
+      registryUrl('comments'),
+      registryUrl('details'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/comments/comments-03.tsx',
@@ -63,7 +68,12 @@ export const examples: Registry['items'] = [
   {
     name: 'comments-04',
     type: 'registry:component',
-    registryDependencies: ['badge', 'card', 'tabs', registryUrl('comments')],
+    registryDependencies: [
+      'tabs',
+      registryUrl('block-state'),
+      registryUrl('comments'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/comments/comments-04.tsx',

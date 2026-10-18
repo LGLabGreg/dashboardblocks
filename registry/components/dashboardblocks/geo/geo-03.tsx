@@ -1,29 +1,30 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   DotMap,
   DotMapLegend,
   type DotMapMarker,
 } from '@/registry/components/dashboardblocks/geo'
-
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Geo3Props {
-  description: string
-  locations: DotMapMarker[]
+  /** Defaults to a sentence about the most active city. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  locations?: DotMapMarker[]
+  status?: BlockStatus
   title: string
   unit: string
 }
 
 const exampleProps: Geo3Props = {
-  description: 'Right now, by city',
   locations: [
     { id: 'sfo', lat: 37.77, lon: -122.42, name: 'San Francisco, US', value: 2_840 },
     { id: 'nyc', lat: 40.71, lon: -74.01, name: 'New York, US', value: 3_460 },
@@ -43,7 +44,9 @@ const exampleProps: Geo3Props = {
 }
 
 const Geo3 = (props: Geo3Props) => {
-  const { description, locations, title, unit } = props
+  const { locations = [], status, title, unit } = props
+  const state = getBlockState(status, locations.length === 0)
+  const unitName = unit.charAt(0).toUpperCase() + unit.slice(1)
   const total = locations.reduce((sum, location) => sum + location.value, 0)
   const max = Math.max(0, ...locations.map((location) => location.value))
   const top = locations.reduce<DotMapMarker | null>(
@@ -51,39 +54,45 @@ const Geo3 = (props: Geo3Props) => {
     null,
   )
   const share = (value: number) =>
-    total > 0 ? `${Math.round((value / total) * 100)}%` : '0%'
+    formatPercent(total > 0 ? value / total : 0, { maximumFractionDigits: 0 })
+  const {
+    description = top
+      ? `${top.name} has the most ${unit} right now, ${share(top.value)} of them.`
+      : undefined,
+  } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction className='flex flex-col items-end'>
-          <span className='text-2xl font-semibold tracking-tight tabular-nums'>
-            {total.toLocaleString('en-US')}
+    <BlockStateProvider status={status} empty={locations.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </BlockReady>
+        </header>
+        <div className='flex flex-col gap-1 border-t pt-4'>
+          <span className='text-muted-foreground text-sm'>
+            {state ? unitName : `${unitName} in ${formatNumber(locations.length)} cities`}
           </span>
-          <span className='text-muted-foreground text-xs'>
-            in {locations.length} cities
-          </span>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
+          <KPIValue value={total} format={(value) => formatNumber(value)} />
+        </div>
         <DotMap
           describe={(location) =>
-            `${location.name}: ${location.value.toLocaleString('en-US')} ${unit} · ${share(location.value)}`
+            `${location.name}: ${formatNumber(location.value)} ${unit}, ${share(location.value)}`
           }
           footer={<DotMapLegend max={max} />}
-          label={`${title}, ${description.toLowerCase()}`}
+          label={`${title}, by city`}
+          labelLargest
           markers={locations}
           max={max}
           nameHeader='City'
-          valueHeader={unit.charAt(0).toUpperCase() + unit.slice(1)}
-        >
-          {top &&
-            `Most active: ${top.name}, ${top.value.toLocaleString('en-US')} ${unit}`}
-        </DotMap>
-      </CardContent>
-    </Card>
+          showShare
+          valueHeader={unitName}
+        />
+      </section>
+    </BlockStateProvider>
   )
 }
 

@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'kanban-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kanban')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kanban'),
+      registryUrl('schedule'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kanban/kanban-01.tsx',
@@ -23,7 +27,12 @@ export const examples: Registry['items'] = [
   {
     name: 'kanban-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kanban'), registryUrl('pipeline')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('kanban'),
+      registryUrl('pipeline'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kanban/kanban-02.tsx',
@@ -40,7 +49,11 @@ export const examples: Registry['items'] = [
   {
     name: 'kanban-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('kanban')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kanban'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kanban/kanban-03.tsx',

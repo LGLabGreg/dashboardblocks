@@ -4,7 +4,7 @@ Dashboardblocks is a set of open-source dashboard blocks built on [shadcn/ui](ht
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/LGLabGreg/dashboardblocks/main/.github/assets/store-dark.png">
-  <img alt="Store dashboard built from Dashboardblocks: stats with sparklines, revenue chart, revenue by channel, top products and a checkout funnel" src="https://raw.githubusercontent.com/LGLabGreg/dashboardblocks/main/.github/assets/store-light.png">
+  <img alt="Store dashboard built from Dashboardblocks: shopper stats with sparklines, revenue against the previous period, month-to-date revenue against a target, revenue by product and a checkout funnel" src="https://raw.githubusercontent.com/LGLabGreg/dashboardblocks/main/.github/assets/store-light.png">
 </picture>
 
 ## Installation

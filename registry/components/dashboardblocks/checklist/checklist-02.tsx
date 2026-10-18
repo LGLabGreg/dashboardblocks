@@ -1,23 +1,21 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type StepState,
-  StepIndicator,
+  StepStateLabel,
   getChecklistProgress,
   getNextStep,
-  stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -33,7 +31,9 @@ interface Checklist2Props {
   continueLabel?: string
   description: string
   onContinue?: () => void
-  stages: SetupStage[]
+  /** Leave out, or pass none, to show the empty state. */
+  stages?: SetupStage[]
+  status?: BlockStatus
   title: string
 }
 
@@ -59,82 +59,92 @@ const Checklist2 = (props: Checklist2Props) => {
     continueLabel = 'Continue setup',
     description,
     onContinue,
-    stages,
+    stages = [],
+    status,
     title,
   } = props
+  const state = getBlockState(status, stages.length === 0)
   const progress = getChecklistProgress(stages)
   const next = getNextStep(stages)
   const position = next ? stages.indexOf(next) + 1 : stages.length
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ol aria-label='Setup stages' className='flex flex-col @2xl:flex-row'>
-          {stages.map((stage, index) => {
-            const config = stepStateConfig[stage.state]
-            const isLast = index === stages.length - 1
-            return (
+    <BlockStateProvider status={status} empty={stages.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>
+              {description}{' '}
+              <BlockReady className='text-sm'>
+                {progress.remaining === 0
+                  ? 'Every stage is done.'
+                  : `Stage ${position} of ${stages.length}.`}
+              </BlockReady>
+            </p>
+          </div>
+          {(state || progress.remaining > 0) && (
+            <Button size='sm' disabled={state !== undefined} onClick={onContinue}>
+              {continueLabel}
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
+            </Button>
+          )}
+        </header>
+        <BlockStateRows className='border-t' rows={stages.length || 5} />
+        {!state && (
+          <ol aria-label='Setup stages' className='flex flex-col gap-3 @xl:flex-row'>
+            {stages.map((stage, index) => (
               <li
                 key={stage.id}
                 aria-current={stage.state === 'current' ? 'step' : undefined}
-                className='relative flex gap-3 pb-6 last:pb-0 @2xl:flex-1 @2xl:flex-col @2xl:gap-2 @2xl:pr-3 @2xl:pb-0'
+                data-state={stage.state}
+                className='border-border data-[state=current]:border-foreground data-[state=done]:border-foreground flex min-w-0 flex-col gap-0.5 border-l-2 pl-3 data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-2 @xl:pl-0'
               >
-                {!isLast && (
+                <span className='flex min-w-0 items-baseline gap-1.5 text-sm'>
+                  {stage.state === 'done' ? (
+                    <IconPlaceholder
+                      lucide='CheckIcon'
+                      tabler='IconCheck'
+                      hugeicons='Tick02Icon'
+                      phosphor='CheckIcon'
+                      remixicon='RiCheckLine'
+                      aria-hidden
+                      className='text-muted-foreground size-3.5 shrink-0 self-center'
+                    />
+                  ) : (
+                    <span aria-hidden className='text-muted-foreground tabular-nums'>
+                      {index + 1}
+                    </span>
+                  )}
                   <span
-                    aria-hidden
                     className={cn(
-                      'absolute top-8 bottom-1 left-3.5 w-px -translate-x-1/2 @2xl:top-3.5 @2xl:right-2 @2xl:bottom-auto @2xl:left-9 @2xl:h-px @2xl:w-auto @2xl:translate-x-0',
-                      stage.state === 'done' ? 'bg-emerald-600' : 'bg-border',
-                    )}
-                  />
-                )}
-                <StepIndicator index={index + 1} state={stage.state} />
-                <div className='flex min-w-0 flex-col gap-0.5 pt-1 @2xl:pt-0'>
-                  <span
-                    className={cn(
-                      'text-sm font-medium',
-                      stage.state === 'todo' && 'text-muted-foreground',
+                      'min-w-0 font-medium break-words',
+                      (stage.state === 'todo' || stage.state === 'skipped') &&
+                        'text-muted-foreground',
                     )}
                   >
                     {stage.title}
                   </span>
-                  <span className={cn('text-xs', config.text)}>{config.label}</span>
-                  {stage.detail && (
-                    <span className='text-muted-foreground text-xs break-words'>
-                      {stage.detail}
-                    </span>
-                  )}
-                </div>
+                </span>
+                <StepStateLabel state={stage.state} />
+                {stage.detail && (
+                  <span className='text-muted-foreground text-sm break-words'>
+                    {stage.detail}
+                  </span>
+                )}
               </li>
-            )
-          })}
-        </ol>
-      </CardContent>
-      <CardFooter className='flex-wrap justify-between gap-3 border-t'>
-        <span className='text-muted-foreground text-sm'>
-          {progress.remaining === 0
-            ? 'All stages done'
-            : `Stage ${position} of ${stages.length}`}
-        </span>
-        {progress.remaining > 0 && (
-          <Button size='sm' onClick={onContinue}>
-            {continueLabel}
-            <IconPlaceholder
-              lucide='ArrowRightIcon'
-              tabler='IconArrowRight'
-              hugeicons='ArrowRight01Icon'
-              phosphor='ArrowRightIcon'
-              remixicon='RiArrowRightLine'
-              data-icon='inline-end'
-            />
-          </Button>
+            ))}
+          </ol>
         )}
-      </CardFooter>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

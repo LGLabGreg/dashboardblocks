@@ -1,19 +1,28 @@
 'use client'
 
 import {
-  InvoiceStatusBadge,
+  InvoiceStatusLabel,
   formatBillingDate,
   getDaysUntil,
 } from '@/registry/components/dashboardblocks/billing'
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   DocumentBrand,
   DocumentFooter,
   DocumentHeader,
+  DocumentHeadline,
   DocumentLayout,
   DocumentMeta,
   DocumentPage,
   DocumentParties,
   DocumentSection,
+  DocumentSummary,
   DocumentToolbar,
   DocumentTotals,
   type DocumentLine,
@@ -43,10 +52,12 @@ interface Invoice1Props {
   /** A share off the subtotal, 0.05 for 5%. */
   discountRate?: number
   dueDate: Date
-  footer: string
+  /** Facts about the sender, printed at the foot of the page. */
+  footer: string[]
   from: DocumentParty
   issueDate: Date
-  lines: DocumentLine[]
+  /** Leave out, or pass none, to show the empty state. */
+  lines?: DocumentLine[]
   notes: string
   /** Pass a fixed date, so the status renders the same on the server and in the browser. */
   now: Date
@@ -57,6 +68,7 @@ interface Invoice1Props {
   payUrl: string
   poNumber?: string
   sentTo: string
+  status?: BlockStatus
   taxRate?: number
   terms: string
 }
@@ -81,7 +93,7 @@ const exampleProps: Invoice1Props = {
   brand: { name: 'Halden Studio', website: 'halden.studio' },
   discountRate: 0.05,
   dueDate: new Date(Date.UTC(2026, 8, 20)),
-  footer: 'Halden Studio LLC · 214 Wythe Avenue, Brooklyn, NY 11249 · EIN 88-4410273',
+  footer: ['Halden Studio LLC', '214 Wythe Avenue, Brooklyn, NY 11249', 'EIN 88-4410273'],
   from: {
     label: 'From',
     lines: ['214 Wythe Avenue, Studio 3', 'Brooklyn, NY 11249', 'billing@halden.studio'],
@@ -170,7 +182,7 @@ const Invoice1 = (props: Invoice1Props) => {
     footer,
     from,
     issueDate,
-    lines,
+    lines = [],
     notes,
     now,
     number,
@@ -180,14 +192,27 @@ const Invoice1 = (props: Invoice1Props) => {
     payUrl,
     poNumber,
     sentTo,
+    status: blockStatus,
     taxRate,
     terms,
   } = props
+  const state = getBlockState(blockStatus, lines.length === 0)
   const [reminder, setReminder] = useState<'idle' | 'sending' | 'sent'>('idle')
   const amounts = getDocumentTotals(lines, { currency, discountRate, paid, taxRate })
   const daysLeft = getDaysUntil(dueDate, now)
-  const status = amounts.balanceDue <= 0 ? 'paid' : daysLeft < 0 ? 'overdue' : 'due'
+  const status =
+    lines.length > 0 && amounts.balanceDue <= 0
+      ? 'paid'
+      : daysLeft < 0
+        ? 'overdue'
+        : 'due'
   const due = formatDocumentAmount(amounts.balanceDue, currency)
+  const dueWhen =
+    status === 'overdue'
+      ? `${-daysLeft} ${daysLeft === -1 ? 'day' : 'days'} overdue`
+      : daysLeft === 0
+        ? 'Due today'
+        : `Due in ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}`
 
   const remind = async () => {
     setReminder('sending')
@@ -200,136 +225,181 @@ const Invoice1 = (props: Invoice1Props) => {
   }
 
   return (
-    <DocumentLayout>
-      <DocumentToolbar
-        description={
-          <p role='status'>
-            {reminder === 'sent'
-              ? `Reminder sent to ${sentTo}`
-              : `Sent to ${sentTo} on ${formatBillingDate(issueDate)}`}
-          </p>
-        }
-      >
-        <PrintButton />
-        <Button variant='outline' onClick={onDownload}>
-          <IconPlaceholder
-            lucide='DownloadIcon'
-            tabler='IconDownload'
-            hugeicons='Download01Icon'
-            phosphor='DownloadIcon'
-            remixicon='RiDownloadLine'
-            aria-hidden
-          />
-          Download PDF
-        </Button>
-        {status !== 'paid' && (
-          <Button disabled={reminder !== 'idle'} onClick={remind}>
+    <BlockStateProvider status={blockStatus} empty={lines.length === 0}>
+      <DocumentLayout>
+        <DocumentToolbar
+          description={
+            <p role='status'>
+              <BlockReady className='text-sm'>
+                {reminder === 'sent'
+                  ? `Reminder sent to ${sentTo}`
+                  : `Sent to ${sentTo} on ${formatBillingDate(issueDate)}`}
+              </BlockReady>
+            </p>
+          }
+        >
+          <PrintButton />
+          <Button variant='outline' size='sm' disabled={!!state} onClick={onDownload}>
             <IconPlaceholder
-              lucide='SendIcon'
-              tabler='IconSend'
-              hugeicons='SentIcon'
-              phosphor='PaperPlaneTiltIcon'
-              remixicon='RiSendPlaneLine'
+              lucide='DownloadIcon'
+              tabler='IconDownload'
+              hugeicons='Download01Icon'
+              phosphor='DownloadIcon'
+              remixicon='RiDownloadLine'
               aria-hidden
             />
-            {reminder === 'sending'
-              ? 'Sending…'
-              : reminder === 'sent'
-                ? 'Reminder sent'
-                : 'Send reminder'}
+            Download PDF
           </Button>
-        )}
-      </DocumentToolbar>
-      <DocumentPage>
-        <DocumentHeader
-          brand={<DocumentBrand logo={logo} name={brand.name} detail={brand.website} />}
-          title='Invoice'
-          number={number}
-          status={<InvoiceStatusBadge status={status} />}
-        />
-        <DocumentMeta
-          className='border-y py-5'
-          items={[
-            { label: 'Issued', value: formatBillingDate(issueDate) },
-            {
-              label: 'Due',
-              note:
-                status === 'overdue' ? (
-                  <span className='text-amber-800 dark:text-amber-400 print:text-foreground!'>
-                    {-daysLeft} {daysLeft === -1 ? 'day' : 'days'} overdue
-                  </span>
-                ) : status === 'due' ? (
-                  <span className='text-muted-foreground'>
-                    {daysLeft === 0
-                      ? 'Today'
-                      : `In ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}`}
-                  </span>
-                ) : undefined,
-              value: formatBillingDate(dueDate),
-            },
-            ...(poNumber ? [{ label: 'PO number', value: poNumber }] : []),
-            { label: 'Amount due', value: due },
-          ]}
-        />
-        <DocumentParties parties={[from, billTo]} />
-        <div className='flex flex-col gap-6'>
-          <LineItemsTable currency={currency} lines={lines} />
-          <DocumentTotals
-            currency={currency}
-            rows={getTotalRows(amounts, {
-              discount: discountRate
-                ? `Discount (${formatRate(discountRate)})`
-                : undefined,
-              paid: 'Deposit paid',
-              tax: 'Sales tax',
-            })}
+          {status !== 'paid' && (
+            <Button size='sm' disabled={!!state || reminder !== 'idle'} onClick={remind}>
+              <IconPlaceholder
+                lucide='SendIcon'
+                tabler='IconSend'
+                hugeicons='SentIcon'
+                phosphor='PaperPlaneTiltIcon'
+                remixicon='RiSendPlaneLine'
+                aria-hidden
+              />
+              {reminder === 'sending'
+                ? 'Sending…'
+                : reminder === 'sent'
+                  ? 'Reminder sent'
+                  : 'Send reminder'}
+            </Button>
+          )}
+        </DocumentToolbar>
+        <DocumentPage>
+          <DocumentHeader
+            brand={<DocumentBrand logo={logo} name={brand.name} detail={brand.website} />}
+            title='Invoice'
+            number={number}
+            status={<InvoiceStatusLabel status={status} />}
           />
-        </div>
-        <div className='grid gap-8 border-t pt-8 @xl/document:grid-cols-2 print:grid-cols-2'>
-          <DocumentSection title='How to pay'>
-            {status !== 'paid' && (
-              <a
-                href={payUrl}
-                className={buttonVariants({ className: 'w-fit print:hidden' })}
-              >
-                Pay {due} online
-              </a>
-            )}
-            <p className='text-muted-foreground'>
-              <span className='print:hidden'>Or transfer to the account below.</span>
-              <span className='hidden print:inline'>
-                Pay online at {payUrl.replace(/^https:\/\//, '')} or transfer to the
-                account below.
-              </span>{' '}
-              Use{' '}
-              <span className='text-foreground font-mono whitespace-nowrap'>
-                {number}
-              </span>{' '}
-              as the reference.
-            </p>
-            <PropertyList className='mt-1'>
-              <Property label='Bank'>{bank.bank}</Property>
-              <Property label='Account name'>{bank.accountName}</Property>
-              <Property label='Routing'>
-                <span className='font-mono'>{bank.routing}</span>
-              </Property>
-              <Property label='Account'>
-                <span className='font-mono'>{bank.accountNumber}</span>
-              </Property>
-            </PropertyList>
-          </DocumentSection>
-          <div className='flex flex-col gap-6'>
-            <DocumentSection title='Notes'>
-              <p className='text-muted-foreground text-pretty'>{notes}</p>
-            </DocumentSection>
-            <DocumentSection title='Terms'>
-              <p className='text-muted-foreground text-pretty'>{terms}</p>
-            </DocumentSection>
-          </div>
-        </div>
-        <DocumentFooter>{footer}</DocumentFooter>
-      </DocumentPage>
-    </DocumentLayout>
+          <DocumentSummary>
+            <DocumentHeadline
+              label={status === 'paid' ? 'Total paid' : 'Amount due'}
+              value={
+                status === 'paid' ? formatDocumentAmount(amounts.total, currency) : due
+              }
+            >
+              {status === 'paid' ? (
+                'Paid in full, nothing left to pay.'
+              ) : (
+                <>
+                  <span
+                    className={
+                      status === 'overdue'
+                        ? 'font-medium text-amber-800 dark:text-amber-400 print:text-black!'
+                        : undefined
+                    }
+                  >
+                    {dueWhen}
+                  </span>
+                  {amounts.paid > 0 && (
+                    <>
+                      , with{' '}
+                      <span className='tabular-nums'>
+                        {formatDocumentAmount(amounts.paid, currency)}
+                      </span>{' '}
+                      of{' '}
+                      <span className='tabular-nums'>
+                        {formatDocumentAmount(amounts.total, currency)}
+                      </span>{' '}
+                      paid
+                    </>
+                  )}
+                  .
+                </>
+              )}
+            </DocumentHeadline>
+            <DocumentMeta
+              items={[
+                { label: 'Issued', value: formatBillingDate(issueDate) },
+                { label: 'Due', value: formatBillingDate(dueDate) },
+                ...(poNumber ? [{ label: 'PO number', value: poNumber }] : []),
+              ]}
+            />
+          </DocumentSummary>
+          {state !== 'empty' && state !== 'error' && (
+            <>
+              <DocumentParties parties={[from, billTo]} />
+              <div className='flex flex-col gap-6'>
+                <LineItemsTable currency={currency} lines={lines} />
+                <DocumentTotals
+                  currency={currency}
+                  rows={getTotalRows(amounts, {
+                    discount: discountRate
+                      ? `Discount (${formatRate(discountRate)})`
+                      : undefined,
+                    paid: 'Deposit paid',
+                    tax: 'Sales tax',
+                  })}
+                />
+              </div>
+              <div className='grid gap-8 border-t pt-8 @xl/document:grid-cols-2 print:grid-cols-2'>
+                <DocumentSection title='How to pay'>
+                  {status !== 'paid' && !state && (
+                    <a
+                      href={payUrl}
+                      className={buttonVariants({
+                        className: 'w-fit print:hidden',
+                        size: 'sm',
+                        variant: 'outline',
+                      })}
+                    >
+                      Pay {due} online
+                    </a>
+                  )}
+                  {state ? (
+                    <BlockStateRows rows={4} />
+                  ) : (
+                    <>
+                      <p className='text-muted-foreground'>
+                        <span className='print:hidden'>
+                          Or transfer to the account below.
+                        </span>
+                        <span className='hidden print:inline'>
+                          Pay online at {payUrl.replace(/^https:\/\//, '')} or transfer to
+                          the account below.
+                        </span>{' '}
+                        Use{' '}
+                        <span className='text-foreground font-mono whitespace-nowrap'>
+                          {number}
+                        </span>{' '}
+                        as the reference.
+                      </p>
+                      <PropertyList className='mt-1'>
+                        <Property label='Bank'>{bank.bank}</Property>
+                        <Property label='Account name'>{bank.accountName}</Property>
+                        <Property label='Routing'>
+                          <span className='font-mono'>{bank.routing}</span>
+                        </Property>
+                        <Property label='Account'>
+                          <span className='font-mono'>{bank.accountNumber}</span>
+                        </Property>
+                      </PropertyList>
+                    </>
+                  )}
+                </DocumentSection>
+                <div className='flex flex-col gap-6'>
+                  <DocumentSection title='Notes'>
+                    <BlockReady>
+                      <p className='text-muted-foreground text-pretty'>{notes}</p>
+                    </BlockReady>
+                  </DocumentSection>
+                  <DocumentSection title='Terms'>
+                    <BlockReady>
+                      <p className='text-muted-foreground text-pretty'>{terms}</p>
+                    </BlockReady>
+                  </DocumentSection>
+                </div>
+              </div>
+            </>
+          )}
+          <DocumentFooter parts={footer} />
+        </DocumentPage>
+      </DocumentLayout>
+    </BlockStateProvider>
   )
 }
 

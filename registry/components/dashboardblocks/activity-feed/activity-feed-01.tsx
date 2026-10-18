@@ -6,18 +6,17 @@ import {
   ActivityTime,
   groupActivityByDay,
 } from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface Activity {
   action: string
@@ -27,13 +26,15 @@ interface Activity {
   target?: string
 }
 
-interface ActivityFeed01Props {
-  /** Newest first. */
-  activities: Activity[]
-  description: string
+interface ActivityFeed1Props {
+  /** Newest first. Leave out, or pass none, to show the empty state. */
+  activities?: Activity[]
+  /** Defaults to a sentence about how many updates and people the feed holds. */
+  description?: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onViewAll?: () => void
+  status?: BlockStatus
   title: string
   timeZone?: string
 }
@@ -41,11 +42,11 @@ interface ActivityFeed01Props {
 const NOW = new Date(Date.UTC(2026, 8, 26, 15, 0))
 const minutesAgo = (minutes: number) => new Date(NOW.getTime() - minutes * 60_000)
 
-const exampleProps: ActivityFeed01Props = {
+const exampleProps: ActivityFeed1Props = {
   activities: [
     {
       action: 'commented on',
-      actor: { name: 'Priya Nair' },
+      actor: { avatar: '/images/avatar-02.webp', name: 'Priya Nair' },
       at: minutesAgo(4),
       id: 'a1',
       target: 'Q4 pricing page',
@@ -59,7 +60,7 @@ const exampleProps: ActivityFeed01Props = {
     },
     {
       action: 'moved Onboarding checklist to',
-      actor: { name: 'Mei Tanaka' },
+      actor: { avatar: '/images/avatar-04.webp', name: 'Mei Tanaka' },
       at: minutesAgo(190),
       id: 'a3',
       target: 'Done',
@@ -80,78 +81,104 @@ const exampleProps: ActivityFeed01Props = {
     },
     {
       action: 'closed 12 issues in',
-      actor: { name: 'Lucas Silva' },
+      actor: { avatar: '/images/avatar-07.webp', name: 'Lucas Silva' },
       at: minutesAgo(60 * 50),
       id: 'a6',
       target: 'Sprint 24',
     },
   ],
-  description: 'What your team did across projects',
   now: NOW,
   onViewAll: () => {},
   title: 'Recent activity',
 }
 
-const ActivityFeed01 = (props: ActivityFeed01Props) => {
-  const { activities, description, now, onViewAll, timeZone = 'UTC', title } = props
+const summarize = (activities: Activity[], days: number) => {
+  if (activities.length === 0) return 'Nothing has happened yet.'
+  const people = new Set(activities.map((activity) => activity.actor.name)).size
+  const updates = `${activities.length} ${activities.length === 1 ? 'update' : 'updates'}`
+  const from = `${people} ${people === 1 ? 'person' : 'people'}`
+  return `${updates} from ${from} over the last ${days === 1 ? 'day' : `${days} days`}.`
+}
+
+const ActivityFeed1 = (props: ActivityFeed1Props) => {
+  const { activities = [], now, onViewAll, status, timeZone = 'UTC', title } = props
   const id = useId()
   const days = groupActivityByDay(activities, now, timeZone)
+  const { description = summarize(activities, days.length) } = props
+  const state = getBlockState(status, activities.length === 0)
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        {onViewAll && (
-          <CardAction>
+    <BlockStateProvider status={status} empty={activities.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
+          </div>
+          {onViewAll && (
             <Button variant='outline' size='sm' onClick={onViewAll}>
               View all
             </Button>
-          </CardAction>
+          )}
+        </header>
+        {state && (
+          <div className='border-t'>
+            <BlockStateRows rows={6} />
+          </div>
         )}
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        {days.map((day) => (
-          <section key={day.key} aria-labelledby={`${id}-${day.key}`}>
-            <h3
-              id={`${id}-${day.key}`}
-              className='text-muted-foreground mb-3 text-xs font-medium'
+        {!state &&
+          days.map((day) => (
+            <section
+              key={day.key}
+              aria-labelledby={`${id}-${day.key}`}
+              className='flex flex-col gap-1 border-t pt-3'
             >
-              {day.label}
-            </h3>
-            <ActivityFeed className='gap-4'>
-              {day.items.map((activity) => (
-                <ActivityFeedItem key={activity.id} className='items-start'>
-                  <PersonAvatar person={activity.actor} />
-                  <p className='min-w-0 flex-1 text-sm'>
-                    <span className='font-medium'>{activity.actor.name}</span>{' '}
-                    <span className='text-muted-foreground'>{activity.action}</span>
-                    {activity.target && (
-                      <>
-                        {' '}
-                        <span className='font-medium break-words'>{activity.target}</span>
-                      </>
-                    )}
-                  </p>
-                  <ActivityTime
-                    className='mt-0.5'
-                    date={activity.at}
-                    now={now}
-                    timeZone={timeZone}
-                  />
-                </ActivityFeedItem>
-              ))}
-            </ActivityFeed>
-          </section>
-        ))}
-      </CardContent>
-    </Card>
+              <h3
+                id={`${id}-${day.key}`}
+                className='text-muted-foreground flex justify-between text-xs font-medium'
+              >
+                {day.label}
+                <span className='font-normal tabular-nums'>
+                  {day.items.length} {day.items.length === 1 ? 'update' : 'updates'}
+                </span>
+              </h3>
+              <ActivityFeed>
+                {day.items.map((activity) => (
+                  <ActivityFeedItem key={activity.id} className='items-start py-2'>
+                    <PersonAvatar className='-my-0.5' person={activity.actor} size='sm' />
+                    <p className='min-w-0 flex-1 text-sm'>
+                      <span className='font-medium'>{activity.actor.name}</span>{' '}
+                      <span className='text-muted-foreground'>{activity.action}</span>
+                      {activity.target && (
+                        <>
+                          {' '}
+                          <span className='font-medium break-words'>
+                            {activity.target}
+                          </span>
+                        </>
+                      )}
+                    </p>
+                    <ActivityTime
+                      className='pt-0.5 tabular-nums'
+                      date={activity.at}
+                      now={now}
+                      timeZone={timeZone}
+                    />
+                  </ActivityFeedItem>
+                ))}
+              </ActivityFeed>
+            </section>
+          ))}
+      </section>
+    </BlockStateProvider>
   )
 }
 
 export {
-  ActivityFeed01,
-  exampleProps as activityFeed01ExampleProps,
+  ActivityFeed1,
+  exampleProps as activityFeed1ExampleProps,
   type Activity,
-  type ActivityFeed01Props,
+  type ActivityFeed1Props,
 }

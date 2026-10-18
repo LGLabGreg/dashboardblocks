@@ -13,3 +13,9 @@ export const notificationsExampleProps = {
   'notifications-02': notifications2ExampleProps,
   'notifications-03': notifications3ExampleProps,
 }
+
+export const notificationsEmptyProps = {
+  'notifications-01': { notifications: [] },
+  'notifications-02': { notifications: [] },
+  'notifications-03': { notifications: [] },
+}

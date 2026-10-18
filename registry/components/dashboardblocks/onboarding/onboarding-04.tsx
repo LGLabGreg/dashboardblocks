@@ -17,14 +17,6 @@ import {
 
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   Field,
   FieldDescription,
   FieldError,
@@ -250,33 +242,24 @@ const Onboarding4 = (props: Onboarding4Props) => {
   if (saved) {
     const picked = goals.filter((goal) => answers.goals.includes(goal.value))
     return (
-      <Card className='@container'>
-        <CardHeader>
-          <CardTitle id={`${id}-result`} tabIndex={-1} className='outline-none'>
-            {picked.length === 1
-              ? 'Your dashboard is ready'
-              : `${picked.length} dashboards are ready`}
-          </CardTitle>
-          <CardDescription>
-            Built from your goals, with sample data until your sources sync.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className='grid gap-3 @lg:grid-cols-2'>
-            {picked.map((goal) => (
-              <li key={goal.value}>
-                <ActionCard
-                  description={goal.dashboard.description}
-                  href={goal.dashboard.href}
-                  icon={goal.icon}
-                  title={goal.dashboard.title}
-                />
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-        <CardFooter>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2
+              id={`${id}-result`}
+              tabIndex={-1}
+              className='font-semibold tracking-tight outline-none'
+            >
+              {picked.length === 1
+                ? 'Your dashboard is ready'
+                : `${picked.length} dashboards are ready`}
+            </h2>
+            <p className='text-muted-foreground text-sm'>
+              Built from your goals, with sample data until your sources sync.
+            </p>
+          </div>
           <Button
+            size='sm'
             variant='outline'
             onClick={() => {
               setSaved(false)
@@ -285,26 +268,38 @@ const Onboarding4 = (props: Onboarding4Props) => {
           >
             Change answers
           </Button>
-        </CardFooter>
-      </Card>
+        </header>
+        <ul className='grid gap-x-8 gap-y-3 @lg:grid-cols-2'>
+          {picked.map((goal) => (
+            <li key={goal.value}>
+              <ActionCard
+                description={goal.dashboard.description}
+                href={goal.dashboard.href}
+                icon={goal.icon}
+                title={goal.dashboard.title}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
     )
   }
 
   return (
-    <Card className='@container'>
+    <section className='@container'>
       <form
         method='post'
         noValidate
         onSubmit={(event) => void onSubmit(event)}
-        className='contents'
+        className='flex flex-col gap-4'
       >
-        <CardHeader>
-          <CardTitle>Tell us about your team</CardTitle>
-          <CardDescription>
-            We&apos;ll set up dashboards to match. It takes about a minute.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>Tell us about your team</h2>
+          <p className='text-muted-foreground text-sm'>
+            Three questions, and we&apos;ll set up dashboards to match.
+          </p>
+        </header>
+        <div className='border-t pt-4'>
           <FieldGroup>
             <Field data-invalid={errors.role ? true : undefined}>
               <FieldLabel htmlFor={fieldId('role')}>Your role</FieldLabel>
@@ -376,14 +371,14 @@ const Onboarding4 = (props: Onboarding4Props) => {
               <FieldError id={`${fieldId('goals')}-error`}>{errors.goals}</FieldError>
             </div>
           </FieldGroup>
-        </CardContent>
-        <CardFooter className='justify-end gap-2 border-t'>
+        </div>
+        <div className='flex justify-end border-t pt-4'>
           <Button type='submit' disabled={saving}>
             {saving ? 'Setting up…' : 'Set up my dashboards'}
           </Button>
-        </CardFooter>
+        </div>
       </form>
-    </Card>
+    </section>
   )
 }
 

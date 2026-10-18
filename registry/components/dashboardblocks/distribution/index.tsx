@@ -16,3 +16,10 @@ export const distributionExampleProps = {
   'distribution-03': distribution3ExampleProps,
   'distribution-04': distribution4ExampleProps,
 }
+
+export const distributionEmptyProps = {
+  'distribution-01': { bins: [] },
+  'distribution-02': { groups: [] },
+  'distribution-03': { values: [] },
+  'distribution-04': { current: [], previous: [] },
+}

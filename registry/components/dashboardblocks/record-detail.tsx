@@ -1,4 +1,10 @@
-import type { ReactNode } from 'react'
+'use client'
+
+import {
+  BlockStateRows,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -13,11 +19,44 @@ function RecordLayout({
 }) {
   return (
     <div className={cn('@container/record', className)}>
-      <div className='grid gap-6 @4xl/record:grid-cols-[minmax(0,1fr)_20rem]'>
-        <div className='flex min-w-0 flex-col gap-6'>{children}</div>
-        <aside className='flex min-w-0 flex-col gap-6'>{aside}</aside>
+      <div className='grid gap-8 @4xl/record:grid-cols-[minmax(0,1fr)_18rem] @4xl/record:gap-10'>
+        <div className='flex min-w-0 flex-col gap-8'>{children}</div>
+        <aside className='flex min-w-0 flex-col gap-8'>{aside}</aside>
       </div>
     </div>
+  )
+}
+
+interface RecordSectionProps extends Omit<ComponentProps<'section'>, 'title'> {
+  /** Buttons on the right of the title. */
+  action?: ReactNode
+  description?: ReactNode
+  title: string
+}
+
+function RecordSection({
+  action,
+  children,
+  className,
+  description,
+  title,
+  ...props
+}: RecordSectionProps) {
+  return (
+    <section
+      data-slot='record-section'
+      className={cn('flex flex-col gap-3 border-t pt-4', className)}
+      {...props}
+    >
+      <header className='flex items-start justify-between gap-3'>
+        <div className='flex min-w-0 flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          {description && <p className='text-muted-foreground text-sm'>{description}</p>}
+        </div>
+        {action}
+      </header>
+      {children}
+    </section>
   )
 }
 
@@ -50,34 +89,34 @@ function Property({
   )
 }
 
-interface RecordStat {
-  label: string
-  note?: ReactNode
-  value: ReactNode
+interface RecordPlaceholderProps {
+  /** Titles of the sections sketched in the side column while loading. */
+  aside?: string[]
+  /** Titles of the sections sketched in the main column while loading. */
+  sections: string[]
 }
 
-function RecordStats({ className, items }: { className?: string; items: RecordStat[] }) {
+function RecordPlaceholder({ aside = [], sections }: RecordPlaceholderProps) {
+  const state = useBlockState()
+  if (state !== 'loading') return null
+
   return (
-    <dl
-      className={cn(
-        'grid grid-cols-2 gap-4 @xl/record:auto-cols-fr @xl/record:grid-flow-col @xl/record:grid-cols-none',
-        className,
-      )}
-    >
-      {items.map((item) => (
-        <div
-          key={item.label}
-          className='bg-card text-card-foreground flex flex-col gap-1 rounded-xl p-4 ring-1 ring-foreground/10'
-        >
-          <dt className='text-muted-foreground text-sm'>{item.label}</dt>
-          <dd className='text-xl font-semibold tabular-nums'>{item.value}</dd>
-          {item.note && <dd className='text-muted-foreground text-xs'>{item.note}</dd>}
-        </div>
+    <RecordLayout
+      aside={aside.map((title) => (
+        <RecordSection key={title} title={title}>
+          <BlockStateRows rows={3} />
+        </RecordSection>
       ))}
-    </dl>
+    >
+      {sections.map((title) => (
+        <RecordSection key={title} title={title}>
+          <BlockStateRows rows={4} />
+        </RecordSection>
+      ))}
+    </RecordLayout>
   )
 }
 
-export { Property, PropertyList, RecordLayout, RecordStats }
+export { Property, PropertyList, RecordLayout, RecordPlaceholder, RecordSection }
 
-export type { RecordStat }
+export type { RecordPlaceholderProps, RecordSectionProps }

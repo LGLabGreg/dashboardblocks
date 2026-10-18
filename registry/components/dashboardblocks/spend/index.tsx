@@ -16,3 +16,10 @@ export const spendExampleProps = {
   'spend-03': spend3ExampleProps,
   'spend-04': spend4ExampleProps,
 }
+
+export const spendEmptyProps = {
+  'spend-01': { spent: undefined },
+  'spend-02': { lines: [] },
+  'spend-03': { periods: [] },
+  'spend-04': { balances: [] },
+}

@@ -1,5 +1,11 @@
 'use client'
 
+import {
+  StatusLabel,
+  type StatusLabelProps,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { cn } from '@/lib/utils'
@@ -16,35 +22,27 @@ interface Person {
 interface PresenceConfig {
   dot: string
   label: string
-  text: string
+  tone: StatusTone
 }
 
 const presenceConfig: Record<Presence, PresenceConfig> = {
-  away: {
-    dot: 'bg-amber-500',
-    label: 'Away',
-    text: 'text-amber-800 dark:text-amber-400',
-  },
+  away: { dot: 'bg-amber-500', label: 'Away', tone: 'warning' },
   offline: {
-    dot: 'border-muted-foreground bg-card border-2',
+    dot: 'border-muted-foreground bg-background border-2',
     label: 'Offline',
-    text: 'text-muted-foreground',
+    tone: 'neutral',
   },
-  online: {
-    dot: 'bg-emerald-600 dark:bg-emerald-500',
-    label: 'Online',
-    text: 'text-emerald-700 dark:text-emerald-400',
-  },
+  online: { dot: 'bg-emerald-600 dark:bg-emerald-500', label: 'Online', tone: 'good' },
 }
 
 const presenceOrder: Presence[] = ['online', 'away', 'offline']
 
 const avatarColors = [
-  'bg-[color-mix(in_oklab,var(--chart-2)_25%,var(--card))] text-foreground',
-  'bg-[color-mix(in_oklab,var(--chart-3)_25%,var(--card))] text-foreground',
-  'bg-[color-mix(in_oklab,var(--chart-4)_25%,var(--card))] text-foreground',
-  'bg-[color-mix(in_oklab,var(--chart-5)_25%,var(--card))] text-foreground',
-  'bg-[color-mix(in_oklab,var(--chart-1)_25%,var(--card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--color-chart-2)_25%,var(--color-card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--color-chart-3)_25%,var(--color-card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--color-chart-4)_25%,var(--color-card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--color-chart-5)_25%,var(--color-card))] text-foreground',
+  'bg-[color-mix(in_oklab,var(--color-chart-1)_25%,var(--color-card))] text-foreground',
 ]
 
 function fnv1a(text: string) {
@@ -85,7 +83,7 @@ type AvatarSize = 'sm' | 'default' | 'lg'
 const initialsSize: Record<AvatarSize, string> = {
   default: 'text-xs',
   lg: 'text-sm',
-  sm: 'text-[10px]',
+  sm: 'text-xs',
 }
 
 interface PersonAvatarProps {
@@ -114,42 +112,31 @@ function PersonAvatar({
       </AvatarFallback>
       {showPresence && person.presence && (
         <AvatarBadge
-          // Not the primitive's colour: the presence dot is the block's own, coloured for status, and its ring cuts it out of the card behind it
-          className={cn('ring-card', presenceConfig[person.presence].dot)}
+          // Not the primitive's colour: the presence dot is the block's own, coloured for status, and its ring cuts it out of the page behind it
+          className={cn('ring-background', presenceConfig[person.presence].dot)}
         />
       )}
     </Avatar>
   )
 }
 
-function PresenceIndicator({
-  className,
-  label,
-  presence,
-}: {
-  className?: string
-  label?: string
+interface PresenceLabelProps extends Omit<StatusLabelProps, 'tone'> {
   presence: Presence
-}) {
+}
+
+function PresenceLabel({ children, presence, ...props }: PresenceLabelProps) {
   const config = presenceConfig[presence]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1.5 text-xs font-medium whitespace-nowrap',
-        config.text,
-        className,
-      )}
-    >
-      <span aria-hidden className={cn('size-2 shrink-0 rounded-full', config.dot)} />
-      {label ?? config.label}
-    </span>
+    <StatusLabel tone={config.tone} {...props}>
+      {children ?? config.label}
+    </StatusLabel>
   )
 }
 
 const stackCountSize: Record<AvatarSize, string> = {
   default: 'size-8 text-xs',
   lg: 'size-10 text-sm',
-  sm: 'size-6 text-[10px]',
+  sm: 'size-6 text-xs',
 }
 
 const stackSpacing: Record<AvatarSize, string> = {
@@ -182,14 +169,14 @@ function AvatarStack({
     <ul aria-label={label} className={cn('flex', stackSpacing[size], className)}>
       {shown.map((person) => (
         <li key={person.id} title={person.name} className='flex'>
-          <PersonAvatar person={person} size={size} className='ring-card ring-2' />
+          <PersonAvatar person={person} size={size} className='ring-background ring-2' />
           <span className='sr-only'>{person.name}</span>
         </li>
       ))}
       {hidden > 0 && (
         <li
           className={cn(
-            'bg-muted text-foreground ring-card relative flex shrink-0 items-center justify-center rounded-full font-medium tabular-nums ring-2',
+            'bg-muted text-foreground ring-background relative flex shrink-0 items-center justify-center rounded-full font-medium tabular-nums ring-2',
             stackCountSize[size],
           )}
         >
@@ -204,7 +191,7 @@ function AvatarStack({
 export {
   AvatarStack,
   PersonAvatar,
-  PresenceIndicator,
+  PresenceLabel,
   formatLastActive,
   getAvatarColor,
   getInitials,
@@ -219,4 +206,5 @@ export type {
   PersonAvatarProps,
   Presence,
   PresenceConfig,
+  PresenceLabelProps,
 }

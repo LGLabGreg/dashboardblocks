@@ -2,18 +2,25 @@
 
 import { formatActivityTime } from '@/registry/components/dashboardblocks/activity-feed'
 import {
+  BlockMessage,
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
   type FileAction,
   FileActionsMenu,
   FileBreadcrumbs,
   FileKindIcon,
+  fileKindConfig,
   formatFileSize,
 } from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { startTransition, useEffect, useRef, useState } from 'react'
-
-import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
+import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
 interface BrowserFile {
   href: string
@@ -39,7 +46,9 @@ interface Files4Props {
   onDelete?: (file: BrowserFile) => Promise<void>
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
+  /** Pass a root with no children to show the empty state. */
   root: BrowserFolder
+  status?: BlockStatus
   timeZone?: string
 }
 
@@ -135,11 +144,17 @@ const Files4 = (props: Files4Props) => {
     now,
     onCopyLink = copyLink,
     onDelete = deleteFile,
-    root: initialRoot,
+    root: storedRoot,
+    status,
     timeZone = 'UTC',
   } = props
-  const [root, setRoot] = useState(initialRoot)
-  const [folderId, setFolderId] = useState(initialRoot.id)
+  const [deleted, setDeleted] = useState<ReadonlySet<string>>(() => new Set())
+  const root = useMemo(
+    () => [...deleted].reduce(removeItem, storedRoot),
+    [deleted, storedRoot],
+  )
+  const [folderId, setFolderId] = useState(storedRoot.id)
+  const state = getBlockState(status, storedRoot.children.length === 0)
   const [message, setMessage] = useState('')
   const contentRef = useRef<HTMLElement>(null)
   const moved = useRef(false)
@@ -169,7 +184,7 @@ const Files4 = (props: Files4Props) => {
     setMessage(`Deleting ${target.name}…`)
     await onDelete(target)
     startTransition(() => {
-      setRoot((currentRoot) => removeItem(currentRoot, target.id))
+      setDeleted((current) => new Set([...current, target.id]))
       setMessage(`Deleted ${target.name}`)
     })
   }
@@ -226,46 +241,49 @@ const Files4 = (props: Files4Props) => {
     },
   ]
 
+  const summary =
+    joinDetails(
+      folders.length > 0 && plural(folders.length, 'folder'),
+      files.length > 0 && plural(files.length, 'file'),
+      files.length > 0 && formatFileSize(files.reduce((sum, item) => sum + item.size, 0)),
+    ) || 'Empty'
+
   return (
-    <Card className='@container/files'>
-      <CardHeader className='flex flex-col gap-1'>
-        <FileBreadcrumbs
-          items={path.map((item) => ({ id: item.id, label: item.name }))}
-          onNavigate={open}
-          className='-mx-1'
-        />
-        <CardDescription className='tabular-nums'>
-          {[
-            folders.length > 0 && plural(folders.length, 'folder'),
-            files.length > 0 && plural(files.length, 'file'),
-          ]
-            .filter(Boolean)
-            .join(' · ') || 'Empty'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <BlockStateProvider status={status} empty={storedRoot.children.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <FileBreadcrumbs
+            items={path.map((item) => ({ id: item.id, label: item.name }))}
+            onNavigate={open}
+            className='-mx-1 [&_ol]:text-base [&_[aria-current]]:font-semibold [&_[aria-current]]:tracking-tight'
+          />
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm tabular-nums'>{summary}</p>
+          </BlockReady>
+        </header>
         <section
           ref={contentRef}
           tabIndex={-1}
           aria-label={current.name}
-          className='flex flex-col gap-6 outline-none'
+          className='flex flex-col gap-4 outline-none'
         >
-          {folders.length > 0 && (
+          <BlockStateRows className='border-t' rows={5} />
+          {!state && folders.length > 0 && (
             <ul
               aria-label='Folders'
-              className='grid grid-cols-1 gap-3 @xs/files:grid-cols-2 @2xl/files:grid-cols-3'
+              className='grid grid-cols-1 gap-2 @xs:grid-cols-2 @2xl:grid-cols-3 @4xl:grid-cols-4'
             >
               {folders.map((item) => (
                 <li key={item.id}>
                   <button
                     type='button'
                     onClick={() => open(item.id)}
-                    className='hover:bg-muted/50 focus-visible:border-ring focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors outline-none focus-visible:ring-3'
+                    className='bg-muted/50 hover:bg-muted focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-xl p-3 text-left transition-colors outline-none focus-visible:ring-3'
                   >
-                    <FileKindIcon kind='folder' />
+                    <FileKindIcon kind='folder' size='sm' className='bg-background' />
                     <span className='flex min-w-0 flex-col'>
                       <span className='truncate text-sm font-medium'>{item.name}</span>
-                      <span className='text-muted-foreground text-xs tabular-nums'>
+                      <span className='text-muted-foreground text-sm tabular-nums'>
                         {item.children.length === 0
                           ? 'Empty'
                           : plural(item.children.length, 'item')}
@@ -276,65 +294,63 @@ const Files4 = (props: Files4Props) => {
               ))}
             </ul>
           )}
-          {files.length > 0 && (
-            <ul
-              aria-label='Files'
-              className='grid grid-cols-1 gap-2 @sm/files:grid-cols-2 @sm/files:gap-3 @2xl/files:grid-cols-3 @4xl/files:grid-cols-4'
-            >
+          {!state && files.length > 0 && (
+            <ul aria-label='Files' className='flex flex-col border-t'>
               {files.map((item) => (
                 <li
                   key={item.id}
-                  className='hover:bg-muted/50 focus-within:bg-muted/50 relative flex flex-col gap-2 rounded-lg border p-2 transition-colors'
+                  className='relative flex items-center gap-3 border-b py-2.5'
                 >
-                  <div className='bg-muted/50 hidden aspect-2/1 items-center justify-center rounded-md @sm/files:flex'>
-                    <FileKindIcon name={item.name} size='lg' />
-                  </div>
-                  <div className='flex items-center gap-3 @sm/files:items-start @sm/files:gap-1 @sm/files:pl-1'>
-                    <FileKindIcon
-                      name={item.name}
-                      size='sm'
-                      className='@sm/files:hidden'
-                    />
-                    <div className='flex min-w-0 flex-1 flex-col'>
-                      <a
-                        href={item.href}
-                        className='truncate text-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:underline'
-                      >
-                        <span aria-hidden className='absolute inset-0 rounded-lg' />
-                        {item.name}
-                      </a>
-                      <span className='text-muted-foreground truncate text-xs tabular-nums'>
-                        {formatFileSize(item.size)} ·{' '}
+                  <FileKindIcon name={item.name} size='sm' />
+                  <div className='flex min-w-0 flex-1 flex-col @md:flex-row @md:items-baseline @md:gap-4'>
+                    <a
+                      href={item.href}
+                      className='truncate text-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:underline @md:flex-1'
+                    >
+                      <span aria-hidden className='absolute inset-0' />
+                      {item.name}
+                    </a>
+                    <span className='text-muted-foreground truncate text-sm tabular-nums @md:w-28 @md:shrink-0'>
+                      <Details className='@md:hidden'>
+                        {formatFileSize(item.size)}
                         <time dateTime={item.modified.toISOString()}>
                           {formatActivityTime(item.modified, now, timeZone)}
                         </time>
-                      </span>
-                    </div>
-                    <FileActionsMenu
-                      actions={actionsFor(item)}
-                      label={`Actions for ${item.name}`}
-                      className='relative @sm/files:-mt-0.5'
-                    />
+                      </Details>
+                      <time
+                        dateTime={item.modified.toISOString()}
+                        className='hidden @md:inline'
+                      >
+                        {formatActivityTime(item.modified, now, timeZone)}
+                      </time>
+                    </span>
+                    <span className='hidden w-20 shrink-0 text-right text-sm tabular-nums @md:inline'>
+                      {formatFileSize(item.size)}
+                    </span>
                   </div>
+                  <FileActionsMenu
+                    actions={actionsFor(item)}
+                    label={`Actions for ${item.name}`}
+                    className='relative -mr-2'
+                  />
                 </li>
               ))}
             </ul>
           )}
-          {folders.length === 0 && files.length === 0 && (
-            <div className='text-muted-foreground flex flex-col items-center gap-2 rounded-lg border border-dashed px-6 py-10 text-center text-sm'>
-              <FileKindIcon kind='folder' />
-              {current.name} is empty.
-            </div>
+          {!state && folders.length === 0 && files.length === 0 && (
+            <BlockMessage
+              className='border-t'
+              icon={fileKindConfig.folder.icon}
+              title={`${current.name} is empty`}
+              description='Files and folders added here show up in this list.'
+            />
           )}
         </section>
-        <p
-          aria-live='polite'
-          className={cn('text-muted-foreground text-xs', message && 'mt-4')}
-        >
+        <p aria-live='polite' className='text-muted-foreground min-h-5 text-sm'>
           {message}
         </p>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

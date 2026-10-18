@@ -1,10 +1,12 @@
 // Override of registry/components/dashboardblocks/dashboard-header.tsx for React Aria
-// source-hash: 78549ace052d
+// source-hash: 2dcb0c950185
 
 'use client'
 
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDateRange } from '@/registry/lib/dashboardblocks/format'
 import { Fragment, type ReactNode, useId } from 'react'
+import { Button as AriaButton } from 'react-aria-components'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -54,69 +56,70 @@ function getPreviousRange(range: DateRange): DateRange {
   return { end, start: new Date(end.getTime() - length) }
 }
 
-const dayFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-
-const yearFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-
-function formatDateRange({ start, end }: DateRange) {
-  if (start.getUTCFullYear() !== end.getUTCFullYear()) {
-    return `${yearFormatter.format(start)} – ${yearFormatter.format(end)}`
-  }
-  const first = dayFormatter.format(start)
-  if (start.getUTCMonth() !== end.getUTCMonth()) {
-    return `${first} – ${dayFormatter.format(end)}`
-  }
-  if (start.getUTCDate() !== end.getUTCDate()) return `${first} – ${end.getUTCDate()}`
-  return first
-}
-
 interface DateRangePickerProps {
   className?: string
   onValueChange: (value: DateRangePreset) => void
+  /** The ranges to offer, in order. @default every preset */
+  presets?: DateRangePreset[]
   today: Date
   value: DateRangePreset
+  /** `inline` draws the trigger as underlined text, to sit inside a sentence. */
+  variant?: 'button' | 'inline'
 }
+
+const inlineTrigger =
+  'text-foreground decoration-muted-foreground/60 hover:decoration-foreground focus-visible:ring-ring/50 inline-flex items-center gap-0.5 rounded-sm font-medium underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-3 [&_svg]:size-3.5 [&_svg]:opacity-60'
 
 function DateRangePicker({
   className,
   onValueChange,
+  presets,
   today,
   value,
+  variant = 'button',
 }: DateRangePickerProps) {
+  const options = presets
+    ? DATE_RANGE_PRESETS.filter((preset) => presets.includes(preset.value))
+    : DATE_RANGE_PRESETS
+  const chevron = (
+    <IconPlaceholder
+      lucide='ChevronDownIcon'
+      tabler='IconChevronDown'
+      hugeicons='ArrowDownIcon'
+      phosphor='CaretDownIcon'
+      remixicon='RiArrowDownSLine'
+      className='text-muted-foreground ml-auto'
+    />
+  )
+  const label = getPreset(value).label
   return (
     <DropdownMenuTrigger>
-      <Button
-        variant='outline'
-        className={cn('justify-start', className)}
-        aria-label={`Date range: ${getPreset(value).label}`}
-      >
-        <IconPlaceholder
-          lucide='CalendarIcon'
-          tabler='IconCalendar'
-          hugeicons='CalendarIcon'
-          phosphor='CalendarBlankIcon'
-          remixicon='RiCalendarLine'
-          className='text-muted-foreground'
-        />
-        {getPreset(value).label}
-        <IconPlaceholder
-          lucide='ChevronDownIcon'
-          tabler='IconChevronDown'
-          hugeicons='ArrowDownIcon'
-          phosphor='CaretDownIcon'
-          remixicon='RiArrowDownSLine'
-          className='text-muted-foreground ml-auto'
-        />
-      </Button>
+      {variant === 'inline' ? (
+        <AriaButton
+          className={cn(inlineTrigger, className)}
+          aria-label={`Date range: ${label}`}
+        >
+          {label.toLowerCase()}
+          {chevron}
+        </AriaButton>
+      ) : (
+        <Button
+          variant='outline'
+          className={cn('justify-start', className)}
+          aria-label={`Date range: ${label}`}
+        >
+          <IconPlaceholder
+            lucide='CalendarIcon'
+            tabler='IconCalendar'
+            hugeicons='CalendarIcon'
+            phosphor='CalendarBlankIcon'
+            remixicon='RiCalendarLine'
+            className='text-muted-foreground'
+          />
+          {label}
+          {chevron}
+        </Button>
+      )}
       <DropdownMenu
         className='w-auto min-w-56'
         selectionMode='single'
@@ -129,7 +132,7 @@ function DateRangePicker({
       >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Date range</DropdownMenuLabel>
-          {DATE_RANGE_PRESETS.map((preset) => (
+          {options.map((preset) => (
             <DropdownMenuItem
               key={preset.value}
               id={preset.value}
@@ -182,9 +185,39 @@ interface FilterChipProps {
   field: string
   onRemove: () => void
   value: string
+  /** `inline` reads as words, such as "region Europe", to sit inside a sentence. */
+  variant?: 'chip' | 'inline'
 }
 
-function FilterChip({ className, field, onRemove, value }: FilterChipProps) {
+function FilterChip({
+  className,
+  field,
+  onRemove,
+  value,
+  variant = 'chip',
+}: FilterChipProps) {
+  if (variant === 'inline')
+    return (
+      <span className={cn('whitespace-nowrap', className)}>
+        {field.toLowerCase()} <span className='text-foreground font-medium'>{value}</span>
+        <button
+          type='button'
+          onClick={onRemove}
+          aria-label={`Remove filter ${field}: ${value}`}
+          className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 ml-0.5 inline-flex size-5 translate-y-0.5 items-center justify-center rounded-sm outline-none focus-visible:ring-3'
+        >
+          <IconPlaceholder
+            lucide='XIcon'
+            tabler='IconX'
+            hugeicons='Cancel01Icon'
+            phosphor='XIcon'
+            remixicon='RiCloseLine'
+            className='size-3.5'
+          />
+        </button>
+      </span>
+    )
+
   return (
     <span
       className={cn(
@@ -339,6 +372,8 @@ interface ExportFormat {
 
 interface ExportMenuProps {
   className?: string
+  /** Set while there's no data to export, such as when it's loading. */
+  disabled?: boolean
   /** @default CSV and PNG */
   formats?: ExportFormat[]
   onExport: (format: string) => void
@@ -351,12 +386,13 @@ const DEFAULT_EXPORT_FORMATS: ExportFormat[] = [
 
 function ExportMenu({
   className,
+  disabled = false,
   formats = DEFAULT_EXPORT_FORMATS,
   onExport,
 }: ExportMenuProps) {
   return (
     <DropdownMenuTrigger>
-      <Button variant='outline' className={className}>
+      <Button variant='outline' className={className} isDisabled={disabled}>
         <IconPlaceholder
           lucide='DownloadIcon'
           tabler='IconDownload'
@@ -403,7 +439,7 @@ function DashboardHeaderTitle({
 }: DashboardHeaderTitleProps) {
   return (
     <div className={cn('flex min-w-0 flex-col gap-0.5', className)}>
-      <h2 className='text-xl font-semibold tracking-tight'>{title}</h2>
+      <h2 className='text-2xl font-semibold tracking-tight'>{title}</h2>
       {description && <p className='text-muted-foreground text-sm'>{description}</p>}
     </div>
   )
@@ -418,7 +454,6 @@ export {
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,

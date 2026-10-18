@@ -16,3 +16,10 @@ export const pipelineExampleProps = {
   'pipeline-03': pipeline3ExampleProps,
   'pipeline-04': pipeline4ExampleProps,
 }
+
+export const pipelineEmptyProps = {
+  'pipeline-01': { items: [] },
+  'pipeline-02': { stages: [] },
+  'pipeline-03': { items: [] },
+  'pipeline-04': { owners: [] },
+}

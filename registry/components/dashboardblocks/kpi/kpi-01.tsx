@@ -1,25 +1,29 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   KPI,
   KPIChange,
-  KPIContent,
   type KPIFormat,
+  KPITitle,
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
-
-import { CardDescription } from '@/components/ui/card'
 
 interface KPI1Props {
   comparison: string
   format?: KPIFormat
-  previous: number
+  previous?: number
+  status?: BlockStatus
   title: string
-  value: number
+  /** Leave out to show the empty state. */
+  value?: number
 }
 
 const exampleProps: KPI1Props = {
-  comparison: 'vs last month',
+  comparison: 'last month',
   format: 'currency',
   previous: 37_660,
   title: 'Total revenue',
@@ -27,22 +31,21 @@ const exampleProps: KPI1Props = {
 }
 
 const KPI1 = (props: KPI1Props) => {
-  const { comparison, format, previous, title, value } = props
+  const { comparison, format, previous, status, title, value } = props
 
   return (
-    <KPI>
-      <KPIContent className='gap-1'>
-        <CardDescription>{title}</CardDescription>
+    <BlockStateProvider status={status} empty={value === undefined}>
+      <KPI className='gap-1'>
+        <KPITitle>{title}</KPITitle>
         <KPIValue value={value} format={format} animated />
         <KPIChange
           comparison={comparison}
+          format={format}
           previous={previous}
           value={value}
-          variant='default'
-          showComparison
         />
-      </KPIContent>
-    </KPI>
+      </KPI>
+    </BlockStateProvider>
   )
 }
 

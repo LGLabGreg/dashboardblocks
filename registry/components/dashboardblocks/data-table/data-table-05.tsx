@@ -1,15 +1,21 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   createDataTableColumnHelper,
   DataTableContent,
   DataTablePagination,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-
-import { Badge } from '@/components/ui/badge'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 type OrderState = 'failed' | 'paid' | 'pending' | 'refunded'
 
@@ -23,9 +29,14 @@ interface OrderRow {
 }
 
 interface DataTable5Props {
-  description: string
+  /** Defaults to a sentence with the orders' total and any that failed. */
+  description?: string
   pageSize?: number
-  rows: OrderRow[]
+  /** Follows the totals in the default description. */
+  period?: string
+  /** Leave out, or pass none, to show the empty state. */
+  rows?: OrderRow[]
+  status?: BlockStatus
   title: string
 }
 
@@ -49,8 +60,8 @@ const STATES: OrderState[] = [
 ]
 
 const exampleProps: DataTable5Props = {
-  description: 'Orders from the last 7 days',
   pageSize: 5,
+  period: 'in the last 7 days',
   rows: Array.from({ length: 18 }, (_, index) => {
     const [customer, email] = CUSTOMERS[(index * 5) % CUSTOMERS.length]
     return {
@@ -65,67 +76,26 @@ const exampleProps: DataTable5Props = {
   title: 'Recent orders',
 }
 
-const STATE_CONFIG: Record<
-  OrderState,
-  { destructive?: boolean; icon: React.ReactNode; label: string }
-> = {
-  failed: {
-    destructive: true,
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Failed',
-  },
-  paid: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Paid',
-  },
-  pending: {
-    icon: (
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-        aria-hidden
-      />
-    ),
-    label: 'Pending',
-  },
-  refunded: {
-    icon: (
-      <IconPlaceholder
-        lucide='Undo2Icon'
-        tabler='IconArrowBackUp'
-        hugeicons='Undo02Icon'
-        phosphor='ArrowUUpLeftIcon'
-        remixicon='RiArrowGoBackLine'
-        aria-hidden
-      />
-    ),
-    label: 'Refunded',
-  },
+const STATE_CONFIG: Record<OrderState, { label: string; tone: StatusTone }> = {
+  failed: { label: 'Failed', tone: 'bad' },
+  paid: { label: 'Paid', tone: 'good' },
+  pending: { label: 'Pending', tone: 'warning' },
+  refunded: { label: 'Refunded', tone: 'neutral' },
 }
 
-const currency = (value: number) =>
-  `$${value.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
+const money = (value: number) =>
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+
+const summarize = (rows: OrderRow[], period?: string) => {
+  const paid = rows.filter((row) => row.state === 'paid')
+  const failed = rows.filter((row) => row.state === 'failed').length
+  const total = paid.reduce((sum, row) => sum + row.amount, 0)
+  const orders = `${rows.length} ${rows.length === 1 ? 'order' : 'orders'}${period ? ` ${period}` : ''}`
+  const failures = failed > 0 ? `, ${failed} failed` : ''
+  return `${orders}, ${money(total)} paid${failures}.`
+}
+
+const noRows: OrderRow[] = []
 
 const columnHelper = createDataTableColumnHelper<OrderRow>()
 
@@ -153,24 +123,20 @@ const columns = columnHelper.columns([
   columnHelper.accessor('state', {
     cell: ({ getValue }) => {
       const state = STATE_CONFIG[getValue()]
-      return (
-        <Badge variant={state.destructive ? 'destructive' : 'outline'}>
-          {state.icon}
-          {state.label}
-        </Badge>
-      )
+      return <StatusLabel tone={state.tone}>{state.label}</StatusLabel>
     },
     header: 'Status',
   }),
   columnHelper.accessor('amount', {
-    cell: ({ getValue }) => currency(getValue()),
+    cell: ({ getValue }) => money(getValue()),
     header: 'Amount',
-    meta: { align: 'end', cellClassName: 'font-medium' },
+    meta: { align: 'end' },
   }),
 ])
 
 const DataTable5 = (props: DataTable5Props) => {
-  const { description, pageSize = 5, rows, title } = props
+  const { pageSize = 5, period, rows = noRows, status, title } = props
+  const { description = summarize(rows, period) } = props
   const table = useDataTable({
     columns,
     data: rows,
@@ -180,17 +146,22 @@ const DataTable5 = (props: DataTable5Props) => {
   const { pageIndex } = table.state.pagination
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <DataTableContent
-        caption={`${title}, page ${pageIndex + 1} of ${table.getPageCount()}`}
-        table={table}
-      />
-      <DataTablePagination className='border-t px-6 py-3' table={table} />
-    </Card>
+    <BlockStateProvider status={status} empty={rows.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <DataTableContent
+          caption={`${title}: ${description} Page ${pageIndex + 1} of ${table.getPageCount()}.`}
+          loadingRows={pageSize}
+          table={table}
+        />
+        <DataTablePagination className='border-t pt-3' table={table} />
+      </section>
+    </BlockStateProvider>
   )
 }
 

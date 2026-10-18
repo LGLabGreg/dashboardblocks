@@ -2,16 +2,20 @@
 
 import {
   type Activity,
-  ActivityFeed01,
+  ActivityFeed1,
 } from '@/registry/components/dashboardblocks/activity-feed/activity-feed-01'
-import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockBusy,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanel4 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-04'
 import {
   type DateRangePreset,
+  DateRangePicker,
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,
@@ -26,12 +30,15 @@ import { Pipeline3 } from '@/registry/components/dashboardblocks/pipeline/pipeli
 import { Pipeline4 } from '@/registry/components/dashboardblocks/pipeline/pipeline-04'
 import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatCurrency,
+  formatDateRange,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { ButtonGroup } from '@/components/ui/button-group'
-
 interface Dashboard4Props {
+  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -147,12 +154,12 @@ const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
     target: 'Negotiation',
   },
   {
-    action: 'won',
+    action: 'won a $11,200 deal with',
     actor: { name: 'Luis Romero' },
     id: 'a2',
     minutesAgo: 47,
     segment: 'SMB',
-    target: 'Orchard Foods · $11,200',
+    target: 'Orchard Foods',
   },
   {
     action: 'sent a proposal to',
@@ -187,12 +194,12 @@ const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
     target: 'Silverline Energy',
   },
   {
-    action: 'won',
+    action: 'won a $42,800 deal with',
     actor: { name: 'Grace Kim' },
     id: 'a7',
     minutesAgo: 60 * 21,
     segment: 'Mid-market',
-    target: 'Lumen Clinics · $42,800',
+    target: 'Lumen Clinics',
   },
   {
     action: 'moved Pinnacle Retail to',
@@ -212,13 +219,9 @@ const ACTIVITY: (Omit<DealActivity, 'at'> & { minutesAgo: number })[] = [
   },
 ]
 
-const RANGE_OPTIONS: { label: string; value: DateRangePreset }[] = [
-  { label: '7 days', value: '7d' },
-  { label: '30 days', value: '30d' },
-  { label: '90 days', value: '90d' },
-]
+const PRESETS: DateRangePreset[] = ['7d', '30d', '90d']
 
-const currency = (value: number) => `$${Math.round(value).toLocaleString('en-US')}`
+const currency = (value: number) => formatCurrency(value)
 
 interface Query {
   preset: DateRangePreset
@@ -284,7 +287,7 @@ function buildOpenDeals(today: Date): (PipelineItem & { segment: string })[] {
           owner: owners[dealIndex % owners.length].name,
           segment: segment.name,
           stage: stage.id,
-          subtitle: `${segment.name} · ${currency(value)}`,
+          subtitle: segment.name,
           title: `${company} ${industry}`,
           value,
         }
@@ -298,7 +301,6 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
   const range = getDateRange(preset, today)
   const previousRange = getPreviousRange(range)
   const segments = segment ? SEGMENTS.filter((item) => item.name === segment) : SEGMENTS
-  const scope = `${formatDateRange(range)}${segment ? `, ${segment}` : ''}`
 
   const series = (shift: number) =>
     Array.from({ length: days }, (_, index) =>
@@ -351,9 +353,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
 
   const quarter = Math.floor(today.getUTCMonth() / 3)
   const quarterStart = Date.UTC(today.getUTCFullYear(), quarter * 3, 1)
-  const quarterEnd = Date.UTC(today.getUTCFullYear(), quarter * 3 + 3, 1)
   const elapsed = Math.floor((today.getTime() - quarterStart) / DAY) + 1
-  const quarterDays = (quarterEnd - quarterStart) / DAY
   const closedThisQuarter = (name: string) => {
     const item = SEGMENTS.find((entry) => entry.name === name)
     if (!item) return 0
@@ -365,7 +365,9 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
     (deal) => !segment || deal.segment === segment,
   )
   const reps = REPS.filter((rep) => !segment || rep.segment === segment)
-  const segmentLabel = segment ? `, ${segment}` : ''
+  const bestMonth = months.reduce((best, month) =>
+    month.value > best.value ? month : best,
+  )
 
   return {
     activity: ACTIVITY.filter((item) => !segment || item.segment === segment)
@@ -390,14 +392,9 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
       name: rep.name,
       quota: rep.quota,
     })),
+    bookingsSummary: `${bestMonth.label} was the best month of the last 12, with ${currency(bestMonth.value)} won.`,
     previousLabel: formatDateRange(previousRange),
-    quarter: {
-      label: `Q${quarter + 1} ${today.getUTCFullYear()}`,
-      day: elapsed,
-      days: quarterDays,
-    },
-    scope,
-    segmentLabel,
+    quarter: { label: `Q${quarter + 1} ${today.getUTCFullYear()}` },
     stages: STAGES.map((stage) => {
       const inStage = deals.filter((deal) => deal.stage === stage.id)
       return {
@@ -417,7 +414,8 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
       },
       {
         changeType: 'points' as const,
-        formatter: (value: number) => `${value.toFixed(1)}%`,
+        formatter: (value: number) =>
+          formatPercent(value / 100, { minimumFractionDigits: 1 }),
         history: trend.map((point) => Number(point.winRate.toFixed(1))),
         key: 'win-rate',
         label: 'Win rate',
@@ -446,7 +444,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
 }
 
 const Dashboard4 = (props: Dashboard4Props) => {
-  const { title, today } = props
+  const { status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '90d', segment: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -463,33 +461,37 @@ const Dashboard4 = (props: Dashboard4Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <div className='@container flex w-full flex-col gap-6'>
-      <header className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground text-sm' aria-live='polite'>
-              {formatDateRange(range)} vs {formatDateRange(getPreviousRange(range))}
-              {query.segment && ` · ${query.segment}`}
+    <BlockStateProvider status={status}>
+      <div className='@container flex w-full flex-col gap-8'>
+        <header className='flex flex-col gap-3 border-b pb-4'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+            </div>
+            <p className='text-muted-foreground leading-relaxed'>
+              Showing{' '}
+              <DateRangePicker
+                onValueChange={(preset) => update({ preset })}
+                presets={PRESETS}
+                today={today}
+                value={query.preset}
+                variant='inline'
+              />
+              <span aria-live='polite'>
+                , {formatDateRange(range)}, compared with{' '}
+                {formatDateRange(getPreviousRange(range))}.
+              </span>
             </p>
           </div>
-          <ExportMenu onExport={() => {}} />
-        </div>
-        <div className='flex flex-wrap items-center gap-x-4 gap-y-3'>
-          <ButtonGroup aria-label='Date range'>
-            {RANGE_OPTIONS.map((option) => (
-              <Button
-                key={option.value}
-                aria-pressed={query.preset === option.value}
-                className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
-                onClick={() => update({ preset: option.value })}
-                variant='outline'
-              >
-                {option.label}
-              </Button>
-            ))}
-          </ButtonGroup>
           <div className='flex flex-wrap items-center gap-2'>
+            {query.segment && (
+              <FilterChip
+                field='Segment'
+                value={query.segment}
+                onRemove={() => update({ segment: null })}
+              />
+            )}
             <FilterMenu
               allLabel='All segments'
               label='Segment'
@@ -506,69 +508,71 @@ const Dashboard4 = (props: Dashboard4Props) => {
               />
               {query.segment ? 'Change segment' : 'Filter by segment'}
             </FilterMenu>
-            {query.segment && (
-              <FilterChip
-                field='Segment'
-                value={query.segment}
-                onRemove={() => update({ segment: null })}
-              />
-            )}
           </div>
-        </div>
-      </header>
-      <BlockBusy
-        busy={busy}
-        label='Updating the dashboard'
-        className='grid gap-4 @4xl:grid-cols-3'
-      >
-        <div className='@4xl:col-span-3'>
-          <StatGroup2
-            description={`${data.scope}, compared with ${data.previousLabel}`}
-            metrics={data.stats}
-            title='Sales performance'
+        </header>
+        <BlockBusy
+          busy={busy}
+          label='Updating the dashboard'
+          className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
+        >
+          <div className='@4xl:col-span-3'>
+            <StatGroup2
+              status={status}
+              comparison={data.previousLabel}
+              metrics={data.stats}
+              title='Sales performance'
+            />
+          </div>
+          <div className='@4xl:col-span-3'>
+            <Pipeline2
+              status={status}
+              noun='deals'
+              stages={data.stages}
+              title='Open pipeline'
+            />
+          </div>
+          <div className='@4xl:col-span-2'>
+            <ChartPanel4
+              status={status}
+              data={data.months}
+              description={status ? '' : data.bookingsSummary}
+              formatter={currency}
+              title='Bookings'
+            />
+          </div>
+          <Funnel3
+            status={status}
+            description='How far the leads that came in got, one step at a time.'
+            stages={data.funnel}
+            title='Lead conversion'
           />
-        </div>
-        <div className='@4xl:col-span-3'>
-          <Pipeline2
-            noun='deals'
-            stages={data.stages}
-            title={`Open pipeline${data.segmentLabel}`}
+          <div className='@4xl:col-span-2'>
+            <Pipeline4
+              status={status}
+              owners={data.owners}
+              stages={STAGES}
+              title={`${data.quarter.label} forecast`}
+            />
+          </div>
+          <ActivityFeed1
+            status={status}
+            activities={data.activity}
+            now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
+            title='Deal activity'
           />
-        </div>
-        <div className='@4xl:col-span-2'>
-          <ChartPanel4
-            data={data.months}
-            description={`New business won, last 12 full months${data.segmentLabel}`}
-            formatter={currency}
-            title='Bookings'
-          />
-        </div>
-        <Funnel3 description={data.scope} stages={data.funnel} title='Lead conversion' />
-        <div className='@4xl:col-span-2'>
-          <Pipeline4
-            description={`${data.quarter.label}, day ${data.quarter.day} of ${data.quarter.days}${data.segmentLabel}: closed plus open deals weighted by stage`}
-            owners={data.owners}
-            stages={STAGES}
-            title='Quarter forecast'
-          />
-        </div>
-        <ActivityFeed01
-          activities={data.activity}
-          description={`Latest changes to deals${data.segmentLabel}`}
-          now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
-          title='Deal activity'
-        />
-        <div className='@4xl:col-span-3'>
-          <Pipeline3
-            items={data.deals}
-            noun='open deals'
-            now={today}
-            stages={STAGES}
-            title={`Stuck deals${data.segmentLabel}`}
-          />
-        </div>
-      </BlockBusy>
-    </div>
+          <div className='@4xl:col-span-3'>
+            <Pipeline3
+              status={status}
+              items={data.deals}
+              noun='open deals'
+              now={today}
+              stages={STAGES}
+              title='Stuck deals'
+            />
+          </div>
+        </BlockBusy>
+      </div>
+    </BlockStateProvider>
   )
 }
 

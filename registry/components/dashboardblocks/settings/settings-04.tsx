@@ -1,6 +1,11 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type ConnectionStatus,
   ConnectionStatusLabel,
 } from '@/registry/components/dashboardblocks/settings'
@@ -8,13 +13,6 @@ import { getAvatarColor } from '@/registry/components/dashboardblocks/team'
 import { type ReactNode, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { cn } from '@/lib/utils'
@@ -31,10 +29,12 @@ interface Integration {
 
 interface Settings4Props {
   description: string
-  integrations: Integration[]
+  /** Leave out, or pass none, to show the empty state. */
+  integrations?: Integration[]
   onConfigure?: (id: string) => void
   onConnect?: (id: string) => void
   onDisconnect?: (id: string) => void
+  status?: BlockStatus
   title: string
 }
 
@@ -94,8 +94,9 @@ const exampleProps: Settings4Props = {
 type Filter = 'all' | 'connected' | 'available'
 
 const Settings4 = (props: Settings4Props) => {
-  const { description, onConfigure, onConnect, onDisconnect, title } = props
-  const [integrations, setIntegrations] = useState(props.integrations)
+  const { description, onConfigure, onConnect, onDisconnect, status, title } = props
+  const [integrations, setIntegrations] = useState(props.integrations ?? [])
+  const ready = !status && integrations.length > 0
   const [filter, setFilter] = useState<Filter>('all')
 
   const setStatus = (id: string, status: ConnectionStatus) =>
@@ -122,71 +123,86 @@ const Settings4 = (props: Settings4Props) => {
     },
   ]
 
+  const attention = integrations.filter((item) => item.status === 'error').length
+
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {description} {connected.length} of {integrations.length} connected.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
+    <BlockStateProvider status={status} empty={integrations.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {description}
+            {ready && (
+              <>
+                {' '}
+                {connected.length} of {integrations.length} connected
+                {attention > 0 &&
+                  `, ${attention} ${attention === 1 ? 'needs' : 'need'} attention`}
+                .
+              </>
+            )}
+          </p>
+        </header>
         <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList className='mb-2'>
+          <TabsList>
             {views.map((view) => (
               <TabsTrigger key={view.value} value={view.value}>
                 {view.label}
+                {ready && view.value !== 'all' && view.items.length > 0 && (
+                  <span className='text-muted-foreground tabular-nums'>
+                    {view.items.length}
+                  </span>
+                )}
               </TabsTrigger>
             ))}
           </TabsList>
           {views.map((view) => (
-            <TabsContent key={view.value} value={view.value}>
-              {view.items.length === 0 ? (
-                <p className='text-muted-foreground py-6 text-center text-sm'>
+            <TabsContent key={view.value} value={view.value} className='mt-2'>
+              {!ready ? (
+                <div className='border-t'>
+                  <BlockStateRows rows={4} />
+                </div>
+              ) : view.items.length === 0 ? (
+                <p className='text-muted-foreground border-t py-8 text-center text-sm'>
                   {view.empty}
                 </p>
               ) : (
-                <ul className='grid gap-3 @lg:grid-cols-2'>
+                <ul className='flex flex-col divide-y border-t'>
                   {view.items.map((item) => (
                     <li
                       key={item.id}
-                      className='flex min-w-0 flex-col gap-3 rounded-lg border p-4'
+                      className='flex flex-wrap items-center gap-x-3 gap-y-2 py-2.5'
                     >
-                      <div className='flex flex-wrap items-start gap-x-3 gap-y-2'>
-                        <span
-                          aria-hidden
-                          className={cn(
-                            'flex size-9 shrink-0 items-center justify-center rounded-md text-sm font-semibold [&_svg]:size-5',
-                            !item.logo && getAvatarColor(item.name),
-                            item.logo && 'border',
-                          )}
-                        >
-                          {item.logo ?? item.name[0]}
+                      <span
+                        aria-hidden
+                        className={cn(
+                          'flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold [&_svg]:size-4',
+                          !item.logo && getAvatarColor(item.name),
+                          item.logo && 'border',
+                        )}
+                      >
+                        {item.logo ?? item.name[0]}
+                      </span>
+                      <div className='flex min-w-0 flex-1 basis-48 flex-col gap-0.5'>
+                        <span className='flex flex-wrap items-baseline gap-x-2'>
+                          <span className='text-sm font-medium'>{item.name}</span>
+                          <ConnectionStatusLabel status={item.status} />
                         </span>
-                        <div className='flex min-w-24 flex-1 flex-col gap-0.5'>
-                          <span className='text-sm font-medium break-words'>
-                            {item.name}
+                        <span className='text-muted-foreground text-xs text-pretty'>
+                          {item.description}
+                        </span>
+                        {item.detail && (
+                          <span
+                            className={cn(
+                              'text-muted-foreground text-xs',
+                              item.status === 'error' && 'text-red-700 dark:text-red-400',
+                            )}
+                          >
+                            {item.detail}
                           </span>
-                          <span className='text-muted-foreground text-xs'>
-                            {item.category}
-                          </span>
-                        </div>
-                        <ConnectionStatusLabel status={item.status} />
+                        )}
                       </div>
-                      <p className='text-muted-foreground text-sm'>{item.description}</p>
-                      {item.detail && (
-                        <p
-                          className={cn(
-                            'text-xs',
-                            item.status === 'error'
-                              ? 'text-red-700 dark:text-red-400'
-                              : 'text-muted-foreground',
-                          )}
-                        >
-                          {item.detail}
-                        </p>
-                      )}
-                      <div className='mt-auto flex flex-wrap gap-2'>
+                      <div className='ms-auto flex shrink-0 gap-1'>
                         {item.status === 'disconnected' ? (
                           <Button
                             variant='outline'
@@ -202,6 +218,17 @@ const Settings4 = (props: Settings4Props) => {
                         ) : (
                           <>
                             <Button
+                              variant='ghost'
+                              size='sm'
+                              aria-label={`Disconnect ${item.name}`}
+                              onClick={() => {
+                                setStatus(item.id, 'disconnected')
+                                onDisconnect?.(item.id)
+                              }}
+                            >
+                              Disconnect
+                            </Button>
+                            <Button
                               variant={item.status === 'error' ? 'default' : 'outline'}
                               size='sm'
                               aria-label={`${item.status === 'error' ? 'Reconnect' : 'Configure'} ${item.name}`}
@@ -213,17 +240,6 @@ const Settings4 = (props: Settings4Props) => {
                             >
                               {item.status === 'error' ? 'Reconnect' : 'Configure'}
                             </Button>
-                            <Button
-                              variant='ghost'
-                              size='sm'
-                              aria-label={`Disconnect ${item.name}`}
-                              onClick={() => {
-                                setStatus(item.id, 'disconnected')
-                                onDisconnect?.(item.id)
-                              }}
-                            >
-                              Disconnect
-                            </Button>
                           </>
                         )}
                       </div>
@@ -234,8 +250,8 @@ const Settings4 = (props: Settings4Props) => {
             </TabsContent>
           ))}
         </Tabs>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

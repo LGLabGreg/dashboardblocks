@@ -1,19 +1,31 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
+import {
+  BlockStateText,
+  SkeletonText,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  StatusLabel,
+  type StatusTone,
+  statusToneClasses,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, type RefObject, useEffect, useState } from 'react'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
 type GaugeTone = 'positive' | 'caution' | 'critical' | 'neutral'
 
 interface GaugeToneConfig {
-  icon: React.ReactNode
+  icon: ReactNode
   soft: string
   stroke: string
   swatch: string
   text: string
+  tone: StatusTone
 }
 
 const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
@@ -31,7 +43,8 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     stroke: 'stroke-amber-500',
     swatch: 'bg-amber-500',
-    text: 'text-amber-800 dark:text-amber-400',
+    text: statusToneClasses.warning,
+    tone: 'warning',
   },
   critical: {
     icon: (
@@ -47,7 +60,8 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     stroke: 'stroke-red-600',
     swatch: 'bg-red-600',
-    text: 'text-red-700 dark:text-red-400',
+    text: statusToneClasses.bad,
+    tone: 'bad',
   },
   neutral: {
     icon: (
@@ -63,7 +77,8 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
     soft: 'bg-muted text-foreground',
     stroke: 'stroke-muted-foreground',
     swatch: 'bg-muted-foreground',
-    text: 'text-muted-foreground',
+    text: statusToneClasses.neutral,
+    tone: 'neutral',
   },
   positive: {
     icon: (
@@ -79,7 +94,8 @@ const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     stroke: 'stroke-emerald-600',
     swatch: 'bg-emerald-600',
-    text: 'text-emerald-700 dark:text-emerald-400',
+    text: statusToneClasses.good,
+    tone: 'good',
   },
 }
 
@@ -141,23 +157,11 @@ function getNps({ detractors, passives, promoters }: NpsResponses) {
   }
 }
 
-function useReveal(animated: boolean) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  return { ref: ref as RefObject<HTMLDivElement>, revealed }
-}
-
 const CENTER = 50
 const TARGET_MARKER_OVERHANG = 4
 const BAND_GAP = 1.5
 const SCALE_WIDTH = 3
+const SURFACE = 'var(--gauge-surface, var(--color-card))'
 
 const round = (value: number) => Math.round(value * 100) / 100
 
@@ -182,7 +186,7 @@ interface GaugeProps {
   bands?: GaugeBand[]
   children?: ReactNode
   className?: string
-  /** Ignored when `colorByBand` is set, `var(--chart-2)` by default. */
+  /** Ignored when `colorByBand` is set, `var(--color-chart-2)` by default. */
   color?: string
   colorByBand?: boolean
   formatScale?: (value: number) => string
@@ -208,7 +212,7 @@ function Gauge({
   bands = [],
   children,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   colorByBand = false,
   formatScale,
   indicator = 'fill',
@@ -223,6 +227,7 @@ function Gauge({
   valueText,
 }: GaugeProps) {
   const { ref, revealed } = useReveal(animated)
+  const state = useBlockState()
 
   const radius = CENTER - TARGET_MARKER_OVERHANG - thickness / 2
   const startAngle = -sweep / 2
@@ -257,22 +262,25 @@ function Gauge({
   return (
     <div
       ref={ref}
-      role='meter'
-      aria-label={label}
-      aria-valuemax={max}
-      aria-valuemin={min}
-      aria-valuenow={value}
-      aria-valuetext={valueText}
+      role={state ? undefined : 'meter'}
+      aria-label={state ? undefined : label}
+      aria-valuemax={state ? undefined : max}
+      aria-valuemin={state ? undefined : min}
+      aria-valuenow={state ? undefined : value}
+      aria-valuetext={state ? undefined : valueText}
       className={cn('relative shrink-0', className)}
     >
       <div className='relative'>
         <svg
           aria-hidden
           viewBox={`0 0 100 ${height}`}
-          className='block h-auto w-full overflow-visible'
+          className={cn(
+            'block h-auto w-full overflow-visible',
+            state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          )}
           fill='none'
         >
-          {(indicator === 'fill' || bands.length === 0) && (
+          {(state || indicator === 'fill' || bands.length === 0) && (
             <path
               d={track}
               className='stroke-muted'
@@ -280,20 +288,21 @@ function Gauge({
               strokeWidth={thickness}
             />
           )}
-          {bands.map((item, index) => {
-            const from = angleOf(item.from) + (index > 0 ? gapAngle / 2 : 0)
-            const to = angleOf(item.to) - (index < bands.length - 1 ? gapAngle / 2 : 0)
-            if (to <= from) return null
-            return (
-              <path
-                key={item.label}
-                d={arcPath(from, to, bandRadius)}
-                className={gaugeToneConfig[item.tone].stroke}
-                strokeWidth={bandWidth}
-              />
-            )
-          })}
-          {indicator === 'fill' && (
+          {!state &&
+            bands.map((item, index) => {
+              const from = angleOf(item.from) + (index > 0 ? gapAngle / 2 : 0)
+              const to = angleOf(item.to) - (index < bands.length - 1 ? gapAngle / 2 : 0)
+              if (to <= from) return null
+              return (
+                <path
+                  key={item.label}
+                  d={arcPath(from, to, bandRadius)}
+                  className={gaugeToneConfig[item.tone].stroke}
+                  strokeWidth={bandWidth}
+                />
+              )
+            })}
+          {!state && indicator === 'fill' && (
             <path
               d={track}
               pathLength={100}
@@ -310,11 +319,11 @@ function Gauge({
               strokeWidth={thickness}
             />
           )}
-          {target !== undefined && target >= min && target <= max && (
+          {!state && target !== undefined && target >= min && target <= max && (
             <g strokeLinecap='round'>
               {[
-                { className: 'stroke-card', width: 5 },
-                { className: 'stroke-foreground', width: 2 },
+                { stroke: SURFACE, width: 5 },
+                { stroke: 'var(--color-foreground)', width: 2 },
               ].map((line) => {
                 const angle = angleOf(target)
                 const inner = polar(angle, radius - thickness / 2 - 2.5)
@@ -322,7 +331,7 @@ function Gauge({
                 return (
                   <line
                     key={line.width}
-                    className={line.className}
+                    stroke={line.stroke}
                     strokeWidth={line.width}
                     x1={inner.x}
                     x2={outer.x}
@@ -333,7 +342,7 @@ function Gauge({
               })}
             </g>
           )}
-          {indicator === 'marker' && (
+          {!state && indicator === 'marker' && (
             <g
               className={cn('transition-transform', motion)}
               style={{
@@ -342,8 +351,9 @@ function Gauge({
               }}
             >
               <circle
-                className='fill-card stroke-foreground'
+                className='stroke-foreground'
                 cx={CENTER}
+                fill={SURFACE}
                 cy={CENTER - radius}
                 r={thickness / 2 + 1}
                 strokeWidth={2.5}
@@ -353,7 +363,7 @@ function Gauge({
         </svg>
         {children && (
           <div
-            aria-hidden
+            aria-hidden={state ? undefined : true}
             className={cn(
               'absolute inset-x-0 flex flex-col items-center text-center',
               sweep === 180 ? 'bottom-0 justify-end' : '-translate-y-1/2',
@@ -375,6 +385,30 @@ function Gauge({
         </div>
       )}
     </div>
+  )
+}
+
+interface GaugeValueProps {
+  children: ReactNode
+  className?: string
+}
+
+function GaugeValue({ children, className }: GaugeValueProps) {
+  const state = useBlockState()
+
+  return (
+    <span
+      data-slot='gauge-value'
+      className={cn('font-light tracking-tight tabular-nums', className)}
+    >
+      {state === 'loading' ? (
+        <SkeletonText className='w-[2.5em]' />
+      ) : state ? (
+        <BlockStateText className='text-xl' variant='short' />
+      ) : (
+        children
+      )}
+    </span>
   )
 }
 
@@ -402,15 +436,34 @@ function GaugeToneBadge({
   )
 }
 
+function GaugeToneLabel({
+  className,
+  label,
+  tone,
+}: {
+  className?: string
+  label: string
+  tone: GaugeTone
+}) {
+  return (
+    <StatusLabel className={className} tone={gaugeToneConfig[tone].tone}>
+      {label}
+    </StatusLabel>
+  )
+}
+
 function GaugeLegend({
   bands,
   className,
-  format = (value) => value.toLocaleString(),
+  format = (value) => formatNumber(value),
 }: {
   bands: GaugeBand[]
   className?: string
   format?: (value: number) => string
 }) {
+  const state = useBlockState()
+  if (state === 'empty' || state === 'error') return null
+
   return (
     <ul
       className={cn(
@@ -441,6 +494,9 @@ function GaugeTargetKey({
   className?: string
   label?: string
 }) {
+  const state = useBlockState()
+  if (state === 'empty' || state === 'error') return null
+
   return (
     <span
       className={cn(
@@ -459,6 +515,8 @@ export {
   GaugeLegend,
   GaugeTargetKey,
   GaugeToneBadge,
+  GaugeToneLabel,
+  GaugeValue,
   gaugeToneConfig,
   getGaugeBand,
   getGaugeShare,
@@ -466,4 +524,11 @@ export {
   getWeightedScore,
 }
 
-export type { GaugeBand, GaugeProps, GaugeTone, GaugeToneConfig, NpsResponses }
+export type {
+  GaugeBand,
+  GaugeProps,
+  GaugeTone,
+  GaugeToneConfig,
+  GaugeValueProps,
+  NpsResponses,
+}

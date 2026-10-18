@@ -28,6 +28,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 
+import { cn } from '@/lib/utils'
+
 interface AppShell1Props {
   breadcrumbs: Crumb[]
   children?: ReactNode
@@ -150,7 +152,11 @@ const exampleProps: AppShell1Props = {
       label: 'Store',
     },
   ],
-  user: { email: 'amara@acme.com', name: 'Amara Okafor' },
+  user: {
+    avatar: '/images/avatar-05.webp',
+    email: 'amara@acme.com',
+    name: 'Amara Okafor',
+  },
   userLinks: [
     {
       href: '/account',
@@ -268,16 +274,33 @@ const AppShell1 = (props: AppShell1Props) => {
   )
 }
 
+const PLACEHOLDER_STATS = ['w-20', 'w-24', 'w-16']
+const PLACEHOLDER_ROWS = ['w-2/5', 'w-1/3', 'w-1/2', 'w-1/4', 'w-2/5', 'w-1/3']
+
 function PagePlaceholder() {
   return (
-    <>
-      <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
-        <div className='bg-muted/50 aspect-video rounded-xl' />
-        <div className='bg-muted/50 aspect-video rounded-xl' />
-        <div className='bg-muted/50 aspect-video rounded-xl' />
+    <div className='flex flex-1 flex-col gap-8'>
+      <div className='flex flex-col gap-2'>
+        <div className='bg-muted h-7 w-40 rounded-md' />
+        <div className='bg-muted/60 h-4 w-80 max-w-full rounded-md' />
       </div>
-      <div className='bg-muted/50 min-h-64 flex-1 rounded-xl' />
-    </>
+      <div className='grid gap-6 sm:grid-cols-3'>
+        {PLACEHOLDER_STATS.map((width) => (
+          <div key={width} className='flex flex-col gap-3 border-t pt-3'>
+            <div className={cn('bg-muted/60 h-3.5 rounded-sm', width)} />
+            <div className='bg-muted h-9 w-32 rounded-md' />
+          </div>
+        ))}
+      </div>
+      <div className='flex flex-col border-t'>
+        {PLACEHOLDER_ROWS.map((width, index) => (
+          <div key={index} className='flex items-center gap-4 border-b py-3.5'>
+            <div className={cn('bg-muted/60 h-3.5 rounded-sm', width)} />
+            <div className='bg-muted/60 ms-auto h-3.5 w-16 rounded-sm' />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 

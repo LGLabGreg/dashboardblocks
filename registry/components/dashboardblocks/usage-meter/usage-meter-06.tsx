@@ -1,26 +1,22 @@
 'use client'
 
-import { Icon } from '@/registry/components/dashboardblocks/icon'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   UsageBar,
+  UsageStatusLabel,
   formatUsage,
   getUsageStatus,
-  usageStatusConfig,
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
 
 interface PlanLimit {
   icon: ReactNode
@@ -31,9 +27,11 @@ interface PlanLimit {
 }
 
 interface UsageMeter6Props {
-  limits: PlanLimit[]
+  /** Leave out, or pass none, to show the empty state. */
+  limits?: PlanLimit[]
   onUpgrade?: () => void
   plan: string
+  status?: BlockStatus
 }
 
 const exampleProps: UsageMeter6Props = {
@@ -96,87 +94,76 @@ const exampleProps: UsageMeter6Props = {
       used: 450,
     },
   ],
+  onUpgrade: () => {},
   plan: 'Pro',
 }
 
 const UsageMeter6 = (props: UsageMeter6Props) => {
-  const { limits, onUpgrade, plan } = props
+  const { limits = [], onUpgrade, plan, status: blockStatus } = props
+  const state = getBlockState(blockStatus, limits.length === 0)
   const nearLimit = limits.filter(
     (item) => getUsageStatus(item.used, item.limit) !== 'ok',
   )
 
   return (
-    <Card>
-      <CardHeader>
-        <div className='flex items-center gap-3'>
-          <Icon
-            icon={
-              <IconPlaceholder
-                lucide='CrownIcon'
-                tabler='IconCrown'
-                hugeicons='CrownIcon'
-                phosphor='CrownIcon'
-                remixicon='RiVipCrownLine'
-              />
-            }
-            size='md'
-          />
-          <div className='flex flex-col gap-0.5'>
-            <CardTitle>{plan} plan</CardTitle>
-            <CardDescription>Usage this month</CardDescription>
+    <BlockStateProvider status={blockStatus} empty={limits.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{plan} plan</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>
+                {nearLimit.length === 0
+                  ? 'Every limit has room this month.'
+                  : nearLimit.length === 1
+                    ? `${nearLimit[0].name} is nearly at its limit this month.`
+                    : `${nearLimit.length} of ${limits.length} limits are nearly reached this month.`}
+              </p>
+            </BlockReady>
           </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ul className='flex flex-col gap-4'>
-          {limits.map((item) => {
-            const status = getUsageStatus(item.used, item.limit)
-            const config = usageStatusConfig[status]
-            return (
-              <li key={item.name} className='flex flex-col gap-1.5'>
-                <div className='flex items-center justify-between gap-3 text-sm'>
-                  <span className='text-muted-foreground flex items-center gap-2 [&_svg]:size-4'>
-                    {item.icon}
-                    <span className='text-foreground'>{item.name}</span>
-                  </span>
-                  <span
-                    className={cn(
-                      'flex items-center gap-1 text-xs tabular-nums [&_svg]:size-3.5',
-                      status === 'ok'
-                        ? 'text-muted-foreground'
-                        : cn('font-medium', config.text),
-                    )}
-                  >
-                    {status !== 'ok' && config.icon}
-                    {formatUsage(item.used)} /{' '}
-                    {formatUsage(item.limit, item.unit, { compact: true })}
-                    {status !== 'ok' && <span className='sr-only'>, {config.label}</span>}
-                  </span>
-                </div>
-                <UsageBar limit={item.limit} size='sm' used={item.used} />
-              </li>
-            )
-          })}
-        </ul>
-      </CardContent>
-      <CardFooter className='flex-col items-stretch gap-3 border-t'>
-        {nearLimit.length > 0 && (
-          <p className='text-muted-foreground text-xs'>
-            {nearLimit.length === 1
-              ? `${nearLimit[0].name} is nearly at its limit.`
-              : `${nearLimit.length} limits are nearly reached.`}{' '}
-            Upgrade for more room.
-          </p>
+          {onUpgrade && (
+            <Button
+              className='shrink-0'
+              onClick={onUpgrade}
+              size='sm'
+              variant={nearLimit.length > 0 ? 'default' : 'outline'}
+            >
+              Upgrade
+            </Button>
+          )}
+        </header>
+        {state && <BlockStateRows className='border-t' rows={4} />}
+        {!state && (
+          <ul className='flex flex-col border-t'>
+            {limits.map((item) => {
+              const status = getUsageStatus(item.used, item.limit)
+              return (
+                <li key={item.name} className='flex flex-col gap-2 border-b py-2.5'>
+                  <div className='flex items-center justify-between gap-3 text-sm'>
+                    <span className='text-muted-foreground flex min-w-0 items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0'>
+                      {item.icon}
+                      <span className='text-foreground truncate'>{item.name}</span>
+                    </span>
+                    <span className='flex shrink-0 items-baseline gap-3 text-xs'>
+                      {status !== 'ok' && (
+                        <UsageStatusLabel className='text-xs' status={status} />
+                      )}
+                      <span className='text-muted-foreground tabular-nums'>
+                        <span className='text-foreground font-medium'>
+                          {formatUsage(item.used)}
+                        </span>{' '}
+                        of {formatUsage(item.limit, item.unit, { compact: true })}
+                      </span>
+                    </span>
+                  </div>
+                  <UsageBar limit={item.limit} size='sm' used={item.used} />
+                </li>
+              )
+            })}
+          </ul>
         )}
-        <Button
-          className='w-full'
-          onClick={onUpgrade}
-          variant={nearLimit.length > 0 ? 'default' : 'outline'}
-        >
-          Upgrade plan
-        </Button>
-      </CardFooter>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

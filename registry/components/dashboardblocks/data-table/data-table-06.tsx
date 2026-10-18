@@ -1,6 +1,11 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   createDataTableColumnHelper,
   createDataTableSelectColumn,
   DataTableContent,
@@ -14,11 +19,15 @@ import {
   DataTableViewOptions,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
+import { Details } from '@/registry/components/dashboardblocks/details'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type CustomerPlan = 'Enterprise' | 'Free' | 'Pro' | 'Team'
 type CustomerStatus = 'active' | 'churned' | 'past-due' | 'trial'
@@ -37,11 +46,14 @@ interface CustomerRow {
 }
 
 interface DataTable6Props {
-  description: string
+  /** Defaults to a sentence counting the accounts and what they pay. */
+  description?: string
   onEmail?: (rows: CustomerRow[]) => void
   onExport?: (rows: CustomerRow[]) => void
   pageSize?: number
-  rows: CustomerRow[]
+  /** Leave out, or pass none, to show the empty state. */
+  rows?: CustomerRow[]
+  status?: BlockStatus
   title: string
 }
 
@@ -89,7 +101,6 @@ const SEAT_PRICE: Record<CustomerPlan, number> = {
 }
 
 const exampleProps: DataTable6Props = {
-  description: 'All accounts, by monthly recurring revenue',
   pageSize: 8,
   rows: COMPANIES.map(([company, domain], index) => {
     const plan = PLANS[index % PLANS.length]
@@ -111,72 +122,16 @@ const exampleProps: DataTable6Props = {
   title: 'Customers',
 }
 
-const STATUS_CONFIG: Record<
-  CustomerStatus,
-  { destructive?: boolean; icon: React.ReactNode; label: string }
-> = {
-  active: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Active',
-  },
-  churned: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Churned',
-  },
-  'past-due': {
-    destructive: true,
-    icon: (
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-        aria-hidden
-      />
-    ),
-    label: 'Past due',
-  },
-  trial: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleDashedIcon'
-        tabler='IconCircleDashed'
-        hugeicons='DashedLineCircleIcon'
-        phosphor='CircleDashedIcon'
-        remixicon='RiLoader2Line'
-        aria-hidden
-      />
-    ),
-    label: 'Trial',
-  },
+const STATUS_CONFIG: Record<CustomerStatus, { label: string; tone: StatusTone }> = {
+  active: { label: 'Active', tone: 'good' },
+  churned: { label: 'Churned', tone: 'neutral' },
+  'past-due': { label: 'Past due', tone: 'bad' },
+  trial: { label: 'Trial', tone: 'info' },
 }
 
 const STATUS_OPTIONS: DataTableFacetOption[] = (
   ['active', 'trial', 'past-due', 'churned'] as const
-).map((status) => ({
-  icon: STATUS_CONFIG[status].icon,
-  label: STATUS_CONFIG[status].label,
-  value: status,
-}))
+).map((status) => ({ label: STATUS_CONFIG[status].label, value: status }))
 
 const PLAN_OPTIONS: DataTableFacetOption[] = ['Free', 'Pro', 'Team', 'Enterprise'].map(
   (plan) => ({ label: plan, value: plan }),
@@ -188,6 +143,13 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
   year: 'numeric',
 })
+
+const summarize = (rows: CustomerRow[]) => {
+  const paying = rows.filter((row) => row.mrr > 0)
+  const total = paying.reduce((sum, row) => sum + row.mrr, 0)
+  const accounts = `${rows.length} ${rows.length === 1 ? 'account' : 'accounts'}`
+  return `${accounts}, ${paying.length} of them paying ${formatCurrency(total)} a month.`
+}
 
 const CSV_COLUMNS: (keyof CustomerRow)[] = [
   'id',
@@ -225,6 +187,8 @@ const openMailto = (rows: CustomerRow[]) => {
   window.location.href = `mailto:?bcc=${rows.map((row) => row.email).join(',')}`
 }
 
+const noRows: CustomerRow[] = []
+
 const columnHelper = createDataTableColumnHelper<CustomerRow>()
 
 const columns = columnHelper.columns([
@@ -245,28 +209,33 @@ const columns = columnHelper.columns([
   columnHelper.accessor('status', {
     cell: ({ getValue }) => {
       const status = STATUS_CONFIG[getValue()]
-      return (
-        <Badge variant={status.destructive ? 'destructive' : 'outline'}>
-          {status.icon}
-          {status.label}
-        </Badge>
-      )
+      return <StatusLabel tone={status.tone}>{status.label}</StatusLabel>
     },
     enableGlobalFilter: false,
     enableSorting: false,
     header: 'Status',
+    meta: { cellClassName: 'whitespace-nowrap' },
   }),
-  columnHelper.accessor('plan', { header: 'Plan' }),
+  columnHelper.accessor('plan', {
+    cell: ({ row }) => (
+      <Details className='text-muted-foreground'>
+        <span className='text-foreground'>{row.original.plan}</span>
+        {`${row.original.seats} ${row.original.seats === 1 ? 'seat' : 'seats'}`}
+      </Details>
+    ),
+    header: 'Plan',
+    meta: { cellClassName: 'whitespace-nowrap' },
+  }),
   columnHelper.accessor('seats', {
     enableGlobalFilter: false,
     header: 'Seats',
     meta: { align: 'end' },
   }),
   columnHelper.accessor('mrr', {
-    cell: ({ getValue }) => `$${getValue().toLocaleString('en-US')}`,
+    cell: ({ getValue }) => formatCurrency(getValue()),
     enableGlobalFilter: false,
     header: 'MRR',
-    meta: { align: 'end', cellClassName: 'font-medium' },
+    meta: { align: 'end' },
   }),
   columnHelper.accessor('signedUp', {
     cell: ({ getValue }) => dateFormat.format(new Date(getValue())),
@@ -279,13 +248,14 @@ const columns = columnHelper.columns([
 
 const DataTable6 = (props: DataTable6Props) => {
   const {
-    description,
     onEmail = openMailto,
     onExport = downloadCsv,
     pageSize = 8,
-    rows,
+    rows = noRows,
+    status,
     title,
   } = props
+  const { description = summarize(rows) } = props
   const table = useDataTable({
     columns,
     data: rows,
@@ -299,64 +269,72 @@ const DataTable6 = (props: DataTable6Props) => {
   const selected = table.getSelectedRowModel().rows.map((row) => row.original)
 
   return (
-    <Card className='@container/data-table gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <div className='flex min-h-15 flex-wrap items-center gap-2 border-b px-6 py-3'>
-        {selected.length > 0 ? (
-          <DataTableSelectionBar className='w-full' table={table}>
-            <Button variant='outline' size='sm' onClick={() => onExport(selected)}>
-              <IconPlaceholder
-                lucide='DownloadIcon'
-                tabler='IconDownload'
-                hugeicons='Download01Icon'
-                phosphor='DownloadIcon'
-                remixicon='RiDownloadLine'
+    <BlockStateProvider status={status} empty={rows.length === 0}>
+      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <div className='flex min-h-9 flex-wrap items-center gap-2'>
+          {selected.length > 0 ? (
+            <DataTableSelectionBar className='w-full' table={table}>
+              <Button variant='outline' size='sm' onClick={() => onExport(selected)}>
+                <IconPlaceholder
+                  lucide='DownloadIcon'
+                  tabler='IconDownload'
+                  hugeicons='Download01Icon'
+                  phosphor='DownloadIcon'
+                  remixicon='RiDownloadLine'
+                />
+                Export
+              </Button>
+              <Button variant='outline' size='sm' onClick={() => onEmail(selected)}>
+                <IconPlaceholder
+                  lucide='MailIcon'
+                  tabler='IconMail'
+                  hugeicons='MailIcon'
+                  phosphor='EnvelopeIcon'
+                  remixicon='RiMailLine'
+                />
+                Email
+              </Button>
+            </DataTableSelectionBar>
+          ) : (
+            <>
+              <DataTableSearch table={table} placeholder='Search customers…' />
+              <DataTableFacetFilter
+                column={table.getColumn('status')}
+                options={STATUS_OPTIONS}
               />
-              Export
-            </Button>
-            <Button variant='outline' size='sm' onClick={() => onEmail(selected)}>
-              <IconPlaceholder
-                lucide='MailIcon'
-                tabler='IconMail'
-                hugeicons='MailIcon'
-                phosphor='EnvelopeIcon'
-                remixicon='RiMailLine'
+              <DataTableFacetFilter
+                column={table.getColumn('plan')}
+                options={PLAN_OPTIONS}
               />
-              Email
-            </Button>
-          </DataTableSelectionBar>
-        ) : (
-          <>
-            <DataTableSearch table={table} placeholder='Search customers…' />
-            <DataTableFacetFilter
-              column={table.getColumn('status')}
-              options={STATUS_OPTIONS}
-            />
-            <DataTableFacetFilter
-              column={table.getColumn('plan')}
-              options={PLAN_OPTIONS}
-            />
-            <DataTableReset table={table} />
-            <div className='ml-auto flex items-center gap-2'>
-              <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
-              <DataTableViewOptions
-                className='@max-2xl/data-table:hidden'
-                table={table}
-              />
-            </div>
-          </>
-        )}
-      </div>
-      <DataTableContent caption={`${title}: ${description}`} table={table} />
-      <DataTablePagination
-        className='border-t px-6 py-3'
-        pageSizeOptions={[8, 16, 24]}
-        table={table}
-      />
-    </Card>
+              <DataTableReset table={table} />
+              <div className='ml-auto flex items-center gap-2'>
+                <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
+                <DataTableViewOptions
+                  className='@max-2xl/data-table:hidden'
+                  table={table}
+                />
+              </div>
+            </>
+          )}
+        </div>
+        <DataTableContent
+          caption={`${title}: ${description}`}
+          loadingRows={pageSize}
+          table={table}
+        />
+        <DataTablePagination
+          className='border-t pt-3'
+          pageSizeOptions={[8, 16, 24]}
+          table={table}
+        />
+      </section>
+    </BlockStateProvider>
   )
 }
 

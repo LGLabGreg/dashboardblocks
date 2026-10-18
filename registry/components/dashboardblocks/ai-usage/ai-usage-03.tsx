@@ -1,14 +1,14 @@
 'use client'
 
 import { modelPalette } from '@/registry/components/dashboardblocks/ai-usage'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -26,15 +26,17 @@ interface ModelPerformance {
 }
 
 interface AiUsage3Props {
-  description: string
+  /** Defaults to a sentence naming the busiest model and any over the error threshold. */
+  description?: string
   /** Error rate above which a model is flagged, 0–1. */
   errorThreshold?: number
-  models: ModelPerformance[]
+  /** Leave out, or pass none, to show the empty state. */
+  models?: ModelPerformance[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: AiUsage3Props = {
-  description: 'Last 24 hours, all regions',
   models: [
     {
       errorRate: 0.004,
@@ -61,106 +63,171 @@ const exampleProps: AiUsage3Props = {
       ttftP95: 2_940,
     },
   ],
-  title: 'Model performance',
+  title: 'Model performance, last 24 hours',
 }
 
 const ms = (value: number) =>
-  value >= 1_000 ? `${(value / 1_000).toFixed(2)} s` : `${Math.round(value)} ms`
+  value >= 1_000
+    ? `${formatNumber(value / 1_000, { maximumFractionDigits: 2, minimumFractionDigits: 2 })} s`
+    : `${formatNumber(value, { maximumFractionDigits: 0 })} ms`
+
+const percent = (value: number, digits = 0) =>
+  formatPercent(value, { maximumFractionDigits: digits, minimumFractionDigits: digits })
+
+const describe = (models: ModelPerformance[], errorThreshold: number) => {
+  const requests = models.reduce((sum, model) => sum + model.requests, 0)
+  const busiest = models.reduce<ModelPerformance | undefined>(
+    (top, model) => (top && top.requests >= model.requests ? top : model),
+    undefined,
+  )
+  if (!busiest || requests === 0) return 'No requests in this period.'
+  const flagged = models.filter((model) => model.errorRate > errorThreshold)
+  const errors =
+    flagged.length === 0
+      ? `Every model is under the ${percent(errorThreshold)} error threshold.`
+      : flagged.length === 1
+        ? `${flagged[0].label} errors on ${percent(flagged[0].errorRate, 1)} of requests, over the ${percent(errorThreshold)} threshold.`
+        : `${flagged.length} models are over the ${percent(errorThreshold)} error threshold.`
+  return `${busiest.label} served ${percent(busiest.requests / requests)} of ${formatNumber(requests)} requests. ${errors}`
+}
+
+function LatencyRange({ max, p50, p95 }: { max: number; p50: number; p95: number }) {
+  const at = (value: number) => `${(Math.min(value, max) / (max || 1)) * 100}%`
+  return (
+    <span
+      aria-hidden
+      className='bg-muted relative block h-1.5 w-20 shrink-0 rounded-full'
+    >
+      <span
+        className='absolute inset-y-0 rounded-full bg-chart-2/35'
+        style={{ left: at(p50), right: `calc(100% - ${at(p95)})` }}
+      />
+      <span
+        className='ring-background absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-2 ring-2'
+        style={{ left: at(p50) }}
+      />
+    </span>
+  )
+}
 
 const AiUsage3 = (props: AiUsage3Props) => {
-  const { description, errorThreshold = 0.01, models, title } = props
+  const { errorThreshold = 0.01, models = [], status, title } = props
+  const { description = describe(models, errorThreshold) } = props
+  const state = getBlockState(status, models.length === 0)
+  const slowest = Math.max(0, ...models.map((model) => model.ttftP95))
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <BlockStateProvider status={status} empty={models.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
         <div
           role='region'
           aria-label={title}
           // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
           tabIndex={0}
-          className='focus-visible:ring-ring/50 relative -mx-1 overflow-x-auto px-1 rounded-sm outline-none focus-visible:ring-3'
+          className='focus-visible:ring-ring/50 relative overflow-x-auto rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-inset'
         >
-          <table className='w-full min-w-[30rem] text-sm tabular-nums'>
+          <table className='w-full min-w-[34rem] border-t text-sm tabular-nums'>
             <thead>
               <tr className='text-muted-foreground border-b text-xs'>
-                <th scope='col' className='pb-2 text-left font-normal'>
+                <th scope='col' className='py-2.5 text-left font-normal'>
                   Model
                 </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
+                <th scope='col' className='py-2.5 text-right font-normal'>
                   Requests
                 </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
-                  <abbr title='Time to first token, median' className='no-underline'>
-                    TTFT p50
-                  </abbr>
-                </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
+                <th scope='col' className='py-2.5 text-right font-normal'>
                   <abbr
-                    title='Time to first token, 95th percentile'
+                    title='Time to first token, median and 95th percentile'
                     className='no-underline'
                   >
-                    TTFT p95
+                    TTFT, median to p95
                   </abbr>
                 </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
+                <th scope='col' className='py-2.5 text-right font-normal'>
                   Tokens/s
                 </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
+                <th scope='col' className='py-2.5 text-right font-normal'>
                   Errors
                 </th>
               </tr>
             </thead>
             <tbody>
-              {models.map((model, index) => {
-                const flagged = model.errorRate > errorThreshold
-                return (
-                  <tr key={model.label} className='border-b last:border-b-0'>
-                    <th scope='row' className='py-2.5 text-left font-medium'>
-                      <span className='flex items-center gap-2'>
-                        <span
-                          aria-hidden
-                          className='size-2.5 rounded-[3px]'
-                          style={{
-                            backgroundColor: modelPalette[index % modelPalette.length],
-                          }}
-                        />
-                        {model.label}
-                      </span>
-                    </th>
-                    <td className='text-muted-foreground py-2.5 text-right'>
-                      {model.requests.toLocaleString()}
-                    </td>
-                    <td className='py-2.5 text-right'>{ms(model.ttftP50)}</td>
-                    <td className='py-2.5 text-right'>{ms(model.ttftP95)}</td>
-                    <td className='py-2.5 text-right'>{Math.round(model.outputSpeed)}</td>
-                    <td
-                      className={cn(
-                        'py-2.5 text-right',
-                        flagged && 'font-medium text-red-700 dark:text-red-400',
-                      )}
-                    >
-                      {(model.errorRate * 100).toFixed(2)}%
-                      {flagged && (
-                        <span className='sr-only'>
-                          , above the {errorThreshold * 100}% threshold
+              {state && (
+                <tr className='border-b'>
+                  <td colSpan={5}>
+                    <BlockStateRows rows={3} />
+                  </td>
+                </tr>
+              )}
+              {!state &&
+                models.map((model, index) => {
+                  const flagged = model.errorRate > errorThreshold
+                  return (
+                    <tr key={model.label} className='border-b'>
+                      <th scope='row' className='py-2.5 text-left font-medium'>
+                        <span className='flex items-center gap-2'>
+                          <span
+                            aria-hidden
+                            className='size-2.5 rounded-[3px]'
+                            style={{
+                              backgroundColor: modelPalette[index % modelPalette.length],
+                            }}
+                          />
+                          {model.label}
                         </span>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
+                      </th>
+                      <td className='text-muted-foreground py-2.5 text-right'>
+                        {formatNumber(model.requests)}
+                      </td>
+                      <td className='py-2.5'>
+                        <span className='flex items-center justify-end gap-2.5'>
+                          <span>{ms(model.ttftP50)}</span>
+                          <LatencyRange
+                            max={slowest}
+                            p50={model.ttftP50}
+                            p95={model.ttftP95}
+                          />
+                          <span className='text-muted-foreground w-14 text-right'>
+                            {ms(model.ttftP95)}
+                          </span>
+                        </span>
+                      </td>
+                      <td className='py-2.5 text-right'>
+                        {formatNumber(model.outputSpeed, { maximumFractionDigits: 0 })}
+                      </td>
+                      <td
+                        className={cn(
+                          'py-2.5 text-right',
+                          flagged && 'font-medium text-red-700 dark:text-red-400',
+                        )}
+                      >
+                        {percent(model.errorRate, 2)}
+                        {flagged && (
+                          <span className='sr-only'>
+                            , above the {percent(errorThreshold)} threshold
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
             </tbody>
           </table>
         </div>
-        <p className='text-muted-foreground mt-3 text-xs'>
-          TTFT is time to first token. Error rates over {errorThreshold * 100}% are red.
-        </p>
-      </CardContent>
-    </Card>
+        <BlockReady className='text-xs'>
+          <p className='text-muted-foreground text-xs'>
+            TTFT is time to first token. The dot is the median and the bar runs to the
+            95th percentile. Error rates over {percent(errorThreshold)} are red.
+          </p>
+        </BlockReady>
+      </section>
+    </BlockStateProvider>
   )
 }
 

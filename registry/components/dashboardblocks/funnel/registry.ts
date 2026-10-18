@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'funnel-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('funnel')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('funnel'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel/funnel-01.tsx',
@@ -23,7 +28,13 @@ export const examples: Registry['items'] = [
   {
     name: 'funnel-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('funnel')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('funnel'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel/funnel-02.tsx',
@@ -32,7 +43,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Stages as vertical columns, with the share lost at each step shown as the empty track above the column.',
+        'Stages as columns against a 0 to 100% axis, each topped by the share that left at that step, with the biggest drop named.',
       size: 'full',
       usedWith: ['funnel-04', 'data-table-03'],
     },
@@ -40,7 +51,14 @@ export const examples: Registry['items'] = [
   {
     name: 'funnel-03',
     type: 'registry:component',
-    registryDependencies: ['badge', 'card', registryUrl('funnel')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('funnel'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel/funnel-03.tsx',
@@ -57,7 +75,13 @@ export const examples: Registry['items'] = [
   {
     name: 'funnel-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('funnel')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart-panel'),
+      registryUrl('funnel'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/funnel/funnel-04.tsx',
@@ -66,7 +90,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Two segments side by side at every stage, each as a share of its first step, to compare how they convert.',
+        'Two segments as lines through every stage, each as a share of its first step, with the gap between them shaded.',
       size: 'full',
       usedWith: ['funnel-01', 'data-table-03'],
     },

@@ -6,7 +6,12 @@ export const examples: Registry['items'] = [
   {
     name: 'alerts-01',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('alerts')],
+    registryDependencies: [
+      'button',
+      registryUrl('alerts'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/alerts/alerts-01.tsx',
@@ -25,9 +30,12 @@ export const examples: Registry['items'] = [
     dependencies: ['recharts'],
     registryDependencies: [
       'button',
-      'card',
       registryUrl('alerts'),
+      registryUrl('block-state'),
+      registryUrl('chart'),
       registryUrl('chart-panel'),
+      registryUrl('format'),
+      registryUrl('kpi'),
     ],
     files: [
       {
@@ -46,9 +54,9 @@ export const examples: Registry['items'] = [
     name: 'alerts-03',
     type: 'registry:component',
     registryDependencies: [
-      'card',
       'switch',
       registryUrl('alerts'),
+      registryUrl('block-state'),
       registryUrl('data-table'),
     ],
     files: [
@@ -67,7 +75,12 @@ export const examples: Registry['items'] = [
   {
     name: 'alerts-04',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', registryUrl('alerts')],
+    registryDependencies: [
+      'button',
+      registryUrl('alerts'),
+      registryUrl('block-state'),
+      registryUrl('details'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/alerts/alerts-04.tsx',

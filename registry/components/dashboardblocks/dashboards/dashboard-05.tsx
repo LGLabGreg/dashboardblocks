@@ -4,7 +4,11 @@ import {
   Alerts1,
   type Alerts1Props,
 } from '@/registry/components/dashboardblocks/alerts/alerts-01'
-import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockBusy,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanel6 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-06'
 import {
   type DateRangePreset,
@@ -12,7 +16,6 @@ import {
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,
@@ -28,11 +31,11 @@ import { Realtime2 } from '@/registry/components/dashboardblocks/realtime/realti
 import type { StatusLevel, UptimeDay } from '@/registry/components/dashboardblocks/status'
 import { Status2 } from '@/registry/components/dashboardblocks/status/status-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDateRange, formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-import { cn } from '@/lib/utils'
-
 interface Dashboard5Props {
+  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -180,16 +183,15 @@ const INCIDENTS: {
   },
 ]
 
-const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
+const ALERTS: (Omit<NonNullable<Alerts1Props['alerts']>[number], 'firedAt'> & {
   minutesAgo: number
-  service: string
 })[] = [
   {
     id: 'a1',
     minutesAgo: 4,
     service: 'API',
+    region: 'eu-west-1',
     severity: 'critical',
-    source: 'api · eu-west-1',
     title: 'Error rate above 5% for 10 minutes',
   },
   {
@@ -197,15 +199,14 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
     minutesAgo: 18,
     service: 'Payments',
     severity: 'critical',
-    source: 'payments-worker',
     title: 'Queue backlog over 10,000 jobs',
   },
   {
     id: 'a3',
     minutesAgo: 52,
     service: 'Web app',
+    region: 'us-east-1',
     severity: 'warning',
-    source: 'web · us-east-1',
     title: 'p95 response time above 250 ms',
   },
   {
@@ -214,7 +215,6 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
     minutesAgo: 135,
     service: 'API',
     severity: 'warning',
-    source: 'postgres-primary',
     title: 'Disk usage above 80%',
   },
   {
@@ -222,7 +222,6 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
     minutesAgo: 210,
     service: 'Webhooks',
     severity: 'warning',
-    source: 'webhooks · retries',
     title: 'Retry queue growing for 30 minutes',
   },
   {
@@ -230,7 +229,6 @@ const ALERTS: (Omit<Alerts1Props['alerts'][number], 'firedAt'> & {
     minutesAgo: 310,
     service: 'Payments',
     severity: 'info',
-    source: 'billing-cron',
     title: 'Nightly invoice run took 2× longer than usual',
   },
 ]
@@ -380,7 +378,9 @@ interface Query {
   service: string | null
 }
 
-const ms = (value: number) => `${Math.round(value)} ms`
+const LATENCY_SLO_MS = 200
+
+const ms = (value: number) => `${formatNumber(value, { maximumFractionDigits: 0 })} ms`
 
 function weigh(services: Service[], value: (service: Service) => number) {
   const total = services.reduce((sum, service) => sum + service.share, 0)
@@ -468,8 +468,6 @@ function buildOpsData({ preset, service }: Query, today: Date) {
   const range = getDateRange(preset, today)
   const previousRange = getPreviousRange(range)
   const services = service ? SERVICES.filter((item) => item.name === service) : SERVICES
-  const serviceLabel = service ? `, ${service}` : ', all services'
-  const scope = `${hourly ? 'Today' : formatDateRange(range)}${serviceLabel}`
 
   const point = (daysAgo: number, hour?: number) => ({
     p50: Math.round(weigh(services, (item) => latencyAt(item, 'p50', daysAgo, hour))),
@@ -492,14 +490,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
           ...point(daysAgo),
         }
       })
-  const meanP95 = (from: number) =>
-    Array.from({ length: days }, (_, index) => point(from + index).p95).reduce(
-      (sum, value) => sum + value,
-      0,
-    ) / days
-  const latencyTrend = hourly
-    ? ((point(0).p95 - point(1).p95) / point(1).p95) * 100
-    : ((meanP95(0) - meanP95(days)) / meanP95(days)) * 100
+  const latencyPrevious = hourly ? point(1, NOW_HOURS).p95 : point(1).p95
 
   const now = new Date(today.getTime() + NOW_HOURS * HOUR)
   const matches = (item: { service: string }) => !service || item.service === service
@@ -513,7 +504,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
       .slice(0, 6)
       .map(({ environment, minutesAgo, service: name, ...deployment }) => ({
         ...deployment,
-        environment: service ? environment : `${name} · ${environment}`,
+        environment: service ? environment : `${name} ${environment.toLowerCase()}`,
         startedAt: new Date(now.getTime() - minutesAgo * MINUTE),
       })),
     dora: {
@@ -521,7 +512,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
       previous: doraFor(services, days, days, today),
     },
     latency,
-    latencyTrend: Number(latencyTrend.toFixed(1)),
+    latencyPrevious,
     now,
     pipelines: PIPELINES.filter(matches).map((pipeline) => ({
       medianDuration: pipeline.medianDuration,
@@ -529,8 +520,6 @@ function buildOpsData({ preset, service }: Query, today: Date) {
       runs: pipeline.runs.split('').map((run) => RUN_STATUS[run]),
     })),
     previousLabel: hourly ? 'yesterday' : formatDateRange(previousRange),
-    scope,
-    serviceName: service ?? 'All services',
     uptime: services.map((item) => ({
       days: uptimeDays(item.name, today),
       name: item.name,
@@ -545,7 +534,7 @@ const THROUGHPUT = Array.from({ length: 60 }, (_, index) => {
 })
 
 const Dashboard5 = (props: Dashboard5Props) => {
-  const { title, today } = props
+  const { status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '30d', service: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -562,116 +551,127 @@ const Dashboard5 = (props: Dashboard5Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <div className='@container flex w-full flex-col gap-6'>
-      <header className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground text-sm' aria-live='polite'>
-              {formatDateRange(range)} vs {formatDateRange(getPreviousRange(range))}
-              {query.service && ` · ${query.service}`}
+    <BlockStateProvider status={status}>
+      <div className='@container flex w-full flex-col gap-8'>
+        <header className='flex flex-col gap-3 border-b pb-4'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+            </div>
+            <p className='text-muted-foreground leading-relaxed'>
+              Showing{' '}
+              <DateRangePicker
+                onValueChange={(preset) => update({ preset })}
+                today={today}
+                value={query.preset}
+                variant='inline'
+              />
+              <span aria-live='polite'>
+                , {formatDateRange(range)}, compared with{' '}
+                {formatDateRange(getPreviousRange(range))}.
+              </span>
             </p>
           </div>
-          <ExportMenu onExport={() => {}} />
-        </div>
-        <div className='flex flex-wrap items-center gap-2'>
-          <DateRangePicker
-            onValueChange={(preset) => update({ preset })}
-            today={today}
-            value={query.preset}
-          />
-          <FilterMenu
-            allLabel='All services'
-            label='Service'
-            onValueChange={(service) => update({ service })}
-            options={SERVICES.map((item) => item.name)}
-            value={query.service}
-          >
-            <IconPlaceholder
-              lucide='ServerIcon'
-              tabler='IconServer'
-              hugeicons='ServerStack01Icon'
-              phosphor='HardDrivesIcon'
-              remixicon='RiServerLine'
-            />
-            {query.service ? 'Change service' : 'Filter by service'}
-          </FilterMenu>
-          {query.service && (
-            <FilterChip
-              field='Service'
+          <div className='flex flex-wrap items-center gap-2'>
+            {query.service && (
+              <FilterChip
+                field='Service'
+                value={query.service}
+                onRemove={() => update({ service: null })}
+              />
+            )}
+            <FilterMenu
+              allLabel='All services'
+              label='Service'
+              onValueChange={(service) => update({ service })}
+              options={SERVICES.map((item) => item.name)}
               value={query.service}
-              onRemove={() => update({ service: null })}
-            />
-          )}
-        </div>
-      </header>
-      <Realtime2
-        description='Requests per second across all services, last 5 minutes'
-        samples={THROUGHPUT}
-        simulate
-        title='Throughput'
-      />
-      <BlockBusy
-        busy={busy}
-        label='Updating the dashboard'
-        className='grid grid-flow-dense grid-cols-1 gap-4 @4xl:grid-cols-3'
-      >
-        <div className='grid @4xl:col-span-3'>
-          <Deployments3
-            current={data.dora.current}
-            description={`${data.scope}, compared with ${data.previousLabel}`}
-            previous={data.dora.previous}
-            title='Delivery performance'
-          />
-        </div>
-        <div className='grid @4xl:col-span-2'>
-          <ChartPanel6
-            data={data.latency}
-            description={`Response time percentiles, ${data.scope}`}
-            formatter={ms}
-            headline='p95'
-            labelHeading={displayedQuery.preset === 'today' ? 'Hour' : 'Day'}
-            percentiles={[
-              { key: 'p50', label: 'p50' },
-              { key: 'p95', label: 'p95' },
-              { key: 'p99', label: 'p99' },
-            ]}
-            title='Response time'
-            trend={data.latencyTrend}
-          />
-        </div>
-        <div className={cn('grid', data.alerts.length > 3 && '@4xl:row-span-2')}>
-          <Alerts1 alerts={data.alerts} now={data.now} title='Open alerts' />
-        </div>
-        <div className='grid @4xl:col-span-2'>
-          <Status2
-            description={`${data.serviceName}: daily status over the last 90 days`}
-            services={data.uptime}
-            title='Uptime'
-          />
-        </div>
-        <div
-          className={cn(
-            'grid',
-            data.alerts.length > 3 ? '@4xl:col-span-2' : '@4xl:col-span-3',
-          )}
+            >
+              <IconPlaceholder
+                lucide='ServerIcon'
+                tabler='IconServer'
+                hugeicons='ServerStack01Icon'
+                phosphor='HardDrivesIcon'
+                remixicon='RiServerLine'
+              />
+              {query.service ? 'Change service' : 'Filter by service'}
+            </FilterMenu>
+          </div>
+        </header>
+        <Realtime2
+          status={status}
+          description='Requests per second across every service, over the last 5 minutes.'
+          samples={THROUGHPUT}
+          simulate
+          title='Throughput'
+        />
+        <BlockBusy
+          busy={busy}
+          label='Updating the dashboard'
+          className='mt-4 grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
         >
-          <Deployments1
-            deployments={data.deployments}
-            description={`${data.serviceName}: the latest deploys to every environment`}
+          <div className='@4xl:col-span-3'>
+            <Deployments3
+              status={status}
+              comparison={
+                displayedQuery.preset === 'today'
+                  ? 'yesterday'
+                  : `in the ${getPreset(displayedQuery.preset).days} days before`
+              }
+              current={data.dora.current}
+              previous={data.dora.previous}
+              title='Delivery performance'
+            />
+          </div>
+          <div className='@4xl:col-span-2'>
+            <ChartPanel6
+              status={status}
+              comparison={
+                displayedQuery.preset === 'today'
+                  ? 'this time yesterday'
+                  : 'the day before'
+              }
+              data={data.latency}
+              description='Half of all requests finish within p50, and all but the slowest 1% within p99.'
+              formatter={ms}
+              headline='p95'
+              labelHeading={displayedQuery.preset === 'today' ? 'Hour' : 'Day'}
+              limit={{ label: 'SLO', value: LATENCY_SLO_MS }}
+              percentiles={[
+                { key: 'p50', label: 'p50' },
+                { key: 'p95', label: 'p95' },
+                { key: 'p99', label: 'p99' },
+              ]}
+              previous={data.latencyPrevious}
+              title='Response time'
+            />
+          </div>
+          <Alerts1
+            status={status}
+            alerts={data.alerts}
             now={data.now}
-            title='Recent deployments'
+            title='Open alerts'
           />
-        </div>
-        <div className='grid'>
-          <Deployments4
-            description={`${data.serviceName}: the last 30 runs of each pipeline, oldest on the left`}
-            pipelines={data.pipelines}
-            title='Build health'
-          />
-        </div>
-      </BlockBusy>
-    </div>
+          <div className='@4xl:col-span-2'>
+            <Status2
+              status={status}
+              services={data.uptime}
+              title='Uptime, last 90 days'
+            />
+          </div>
+          <Deployments4 status={status} pipelines={data.pipelines} title='Build health' />
+          <div className='@4xl:col-span-3'>
+            <Deployments1
+              status={status}
+              deployments={data.deployments}
+              now={data.now}
+              title='Recent deployments'
+            />
+          </div>
+        </BlockBusy>
+      </div>
+    </BlockStateProvider>
   )
 }
 

@@ -1,31 +1,55 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartPlaceholder,
+  ChartTooltipContent,
+  chartActiveDot,
+  chartAxisProps,
+  chartGridProps,
+  chartLastDot,
+  chartLineCursor,
+  chartValueAxisWidth,
+  useChartId,
+} from '@/registry/components/dashboardblocks/chart'
+import {
   ChartPanelFigure,
   ChartPanelLegend,
   ChartPanelTable,
-  ChartPanelTooltip,
-  chartAxisProps,
-  chartGridProps,
-  formatCompact,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
+  Stat,
+  StatChange,
   StatChangeContent,
+  StatGroup,
+  StatLabel,
   type StatMetric,
+  StatValue,
   formatStatValue,
+  getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
+import {
+  formatCompact,
+  formatCurrency,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 import {
+  Area,
   CartesianGrid,
+  ComposedChart,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
 
-import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface DailyValue {
@@ -40,8 +64,12 @@ interface ChartMetric extends StatMetric {
 
 interface StatGroup3Props {
   currentLabel?: string
-  metrics: ChartMetric[]
+  /** Leave out, or pass none, to show the empty state. */
+  metrics?: ChartMetric[]
+  /** How many metrics to sketch while loading. @default 4 */
+  placeholders?: number
   previousLabel?: string
+  status?: BlockStatus
   title: string
 }
 
@@ -73,15 +101,12 @@ const exampleTotals = (daily: DailyValue[], mode: 'mean' | 'sum', digits = 0) =>
   return { daily, previous: total('previous'), value: total('current') }
 }
 
-const currency = (value: number) =>
-  `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
-
 const exampleProps: StatGroup3Props = {
   currentLabel: 'Sep 1 – 30',
   metrics: [
     {
       ...exampleTotals(exampleDaily(1_420, 12, 160, 0.92), 'sum'),
-      formatter: currency,
+      formatter: (value) => formatCurrency(value),
       key: 'revenue',
       label: 'Revenue',
     },
@@ -92,14 +117,18 @@ const exampleProps: StatGroup3Props = {
     },
     {
       ...exampleTotals(exampleDaily(36.2, 0.08, 1.4, 0.96, 2), 'mean', 2),
-      formatter: (value) => `$${value.toFixed(2)}`,
+      formatter: (value) =>
+        formatCurrency(value, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }),
       key: 'aov',
       label: 'Avg order value',
     },
     {
       ...exampleTotals(exampleDaily(2.1, -0.02, 0.25, 1.1, 1), 'mean', 1),
       changeType: 'points',
-      formatter: (value) => `${value}%`,
+      formatter: (value) => formatPercent(value / 100),
       goodDirection: 'down',
       key: 'refundRate',
       label: 'Refund rate',
@@ -109,65 +138,114 @@ const exampleProps: StatGroup3Props = {
   title: 'Sales',
 }
 
-const CURRENT_COLOR = 'var(--chart-2)'
-const PREVIOUS_COLOR = 'color-mix(in oklab, var(--muted-foreground) 55%, transparent)'
+const CURRENT_COLOR = 'var(--color-chart-2)'
+const PREVIOUS_COLOR = 'var(--color-muted-foreground)'
 
 const StatGroup3 = (props: StatGroup3Props) => {
   const {
     currentLabel = 'This period',
-    metrics,
+    metrics = [],
+    placeholders = 4,
     previousLabel = 'Previous period',
+    status,
     title,
   } = props
-  const [active, setActive] = useState(metrics[0]?.key)
+  const gradient = useChartId()
+  const [active, setActive] = useState<string>()
+  const state = getBlockState(status, metrics.length === 0)
+
+  const header = (
+    <header className='flex flex-col gap-0.5'>
+      <h2 className='font-semibold tracking-tight'>{title}</h2>
+      <p className='text-muted-foreground text-sm'>
+        {currentLabel} against {previousLabel}. Pick a metric to chart it by day.
+      </p>
+    </header>
+  )
+
+  if (state) {
+    return (
+      <BlockStateProvider status={status} empty={metrics.length === 0}>
+        <section className='@container flex flex-col gap-4'>
+          {header}
+          <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @2xl:grid-cols-4'>
+            {getStatPlaceholders(placeholders).map((metric) => (
+              <Stat key={metric.key}>
+                <StatLabel />
+                <StatValue className='text-3xl @4xl:text-4xl' />
+                <StatChange className='text-xs' metric={metric} variant='short' />
+              </Stat>
+            ))}
+          </StatGroup>
+          {state === 'loading' && <ChartPlaceholder className='mt-1' height={224} />}
+        </section>
+      </BlockStateProvider>
+    )
+  }
 
   return (
-    <Card className='@container gap-0 py-0'>
+    <section className='@container flex flex-col gap-4'>
+      {header}
       <Tabs
-        value={active}
+        value={active ?? metrics[0]?.key}
         onValueChange={(value) => setActive(String(value))}
         className='gap-0'
       >
         <TabsList
           aria-label={`${title} metrics`}
-          // Not the primitive's colour: the 1px gaps between cells show this background as dividers
-          className='bg-border grid h-auto w-full grid-cols-2 items-stretch gap-px rounded-none border-b p-0 group-data-horizontal/tabs:h-auto @[44rem]:grid-cols-4'
+          variant='line'
+          className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @2xl:grid-cols-4'
         >
           {metrics.map((metric) => (
             <TabsTrigger
               key={metric.key}
               value={metric.key}
-              // Not the primitive's colour: each metric is a cell of the block's own grid, on the card's surface
-              className='bg-card data-active:bg-card dark:data-active:bg-card h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none border-0 px-4 py-4 text-left font-normal whitespace-normal hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] data-active:shadow-[inset_0_-2px_0_var(--color-foreground)]! dark:data-active:border-transparent @md:px-6 @md:py-5 @[44rem]:px-5'
+              className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
             >
               <span className='text-muted-foreground text-sm'>{metric.label}</span>
-              <span className='text-foreground text-2xl font-semibold tracking-tight whitespace-nowrap @md:text-3xl'>
+              <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @4xl:text-4xl'>
                 {formatStatValue(metric)}
               </span>
-              <StatChangeContent metric={metric} />
+              <StatChangeContent
+                className='text-xs'
+                comparison={previousLabel}
+                metric={metric}
+                variant='short'
+              />
             </TabsTrigger>
           ))}
         </TabsList>
         {metrics.map((metric) => {
-          const format = metric.formatter ?? ((value: number) => value.toLocaleString())
+          const format = metric.formatter ?? ((value: number) => formatNumber(value))
           return (
             <TabsContent
               key={metric.key}
               value={metric.key}
-              className='flex flex-col gap-4 px-4 pt-5 pb-4 @md:px-6'
+              className='mt-1 flex flex-col gap-3 border-t pt-4'
             >
               <ChartPanelLegend
                 items={[
                   { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
-                  { color: PREVIOUS_COLOR, label: previousLabel, shape: 'line' },
+                  {
+                    color: PREVIOUS_COLOR,
+                    label: previousLabel,
+                    shape: 'line',
+                  },
                 ]}
               />
               <ChartPanelFigure className='h-56'>
                 <ResponsiveContainer width='100%' height='100%'>
-                  <LineChart
+                  <ComposedChart
+                    aria-label={`${metric.label} by day, ${currentLabel} against ${previousLabel}`}
                     data={metric.daily}
                     margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
                   >
+                    <defs>
+                      <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
+                        <stop offset='0%' stopColor={CURRENT_COLOR} stopOpacity={0.3} />
+                        <stop offset='100%' stopColor={CURRENT_COLOR} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid {...chartGridProps} />
                     <XAxis
                       {...chartAxisProps}
@@ -183,29 +261,30 @@ const StatGroup3 = (props: StatGroup3Props) => {
                           ? format(value)
                           : formatCompact(value)
                       }
-                      width={44}
+                      width={chartValueAxisWidth}
                     />
                     <Tooltip
                       content={(tooltipProps) => (
-                        <ChartPanelTooltip {...tooltipProps} valueFormatter={format} />
+                        <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
                       )}
-                      cursor={{ stroke: 'var(--color-border)' }}
+                      cursor={chartLineCursor}
                       itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
                     />
                     <Line
-                      activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
+                      activeDot={chartActiveDot}
                       dataKey='previous'
                       dot={false}
                       name={previousLabel}
                       stroke={PREVIOUS_COLOR}
-                      strokeLinecap='round'
-                      strokeWidth={2}
+                      strokeDasharray='3 3'
+                      strokeWidth={1.5}
                       type='monotone'
                     />
-                    <Line
-                      activeDot={{ r: 4, stroke: 'var(--color-card)', strokeWidth: 2 }}
+                    <Area
+                      activeDot={chartActiveDot}
                       dataKey='current'
-                      dot={false}
+                      dot={chartLastDot(metric.daily.length, CURRENT_COLOR)}
+                      fill={`url(#${gradient})`}
                       name={currentLabel}
                       stroke={CURRENT_COLOR}
                       strokeLinecap='round'
@@ -213,7 +292,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
                       strokeWidth={2}
                       type='monotone'
                     />
-                  </LineChart>
+                  </ComposedChart>
                 </ResponsiveContainer>
               </ChartPanelFigure>
               <ChartPanelTable
@@ -229,7 +308,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
           )
         })}
       </Tabs>
-    </Card>
+    </section>
   )
 }
 

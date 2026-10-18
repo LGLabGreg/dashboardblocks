@@ -1,21 +1,19 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   BreakdownBar,
   BreakdownKey,
   formatShare,
 } from '@/registry/components/dashboardblocks/breakdown'
-import { getDelta } from '@/registry/components/dashboardblocks/comparison'
-import { Trend } from '@/registry/components/dashboardblocks/trend'
-
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 interface Region {
   color: string
@@ -25,44 +23,50 @@ interface Region {
 }
 
 interface Geo4Props {
-  description: string
+  /** Follows the previous value in a sentence, such as `in Q2`. */
+  comparison: string
+  /** Defaults to a sentence about the fastest-growing region. */
+  description?: string
   formatter?: (value: number) => string
-  previousLabel: string
-  regions: Region[]
+  /** Leave out, or pass none, to show the empty state. */
+  regions?: Region[]
+  status?: BlockStatus
   title: string
 }
 
 const currency = (value: number) =>
-  value >= 1_000_000
-    ? `$${(value / 1_000_000).toFixed(2)}M`
-    : `$${Math.round(value / 1_000).toLocaleString('en-US')}K`
+  formatCurrency(value, { compact: true, maximumFractionDigits: 2 })
 
 const exampleProps: Geo4Props = {
-  description: 'Q3 2026',
+  comparison: 'in Q2',
   formatter: currency,
-  previousLabel: 'vs Q2',
   regions: [
     {
-      color: 'var(--chart-2)',
+      color: 'var(--color-chart-2)',
       current: 1_284_600,
       label: 'North America',
       previous: 1_196_300,
     },
-    { color: 'var(--chart-3)', current: 912_400, label: 'Europe', previous: 861_900 },
     {
-      color: 'var(--chart-4)',
+      color: 'var(--color-chart-3)',
+      current: 912_400,
+      label: 'Europe',
+      previous: 861_900,
+    },
+    {
+      color: 'var(--color-chart-4)',
       current: 538_700,
       label: 'Asia Pacific',
       previous: 462_100,
     },
     {
-      color: 'var(--chart-5)',
+      color: 'var(--color-chart-5)',
       current: 186_300,
       label: 'Latin America',
       previous: 191_800,
     },
     {
-      color: 'var(--chart-1)',
+      color: 'var(--color-chart-1)',
       current: 97_900,
       label: 'Middle East & Africa',
       previous: 84_600,
@@ -73,36 +77,47 @@ const exampleProps: Geo4Props = {
 
 const Geo4 = (props: Geo4Props) => {
   const {
-    description,
-    formatter = (value: number) => value.toLocaleString('en-US'),
-    previousLabel,
-    regions,
+    comparison,
+    formatter = (value: number) => formatNumber(value),
+    regions = [],
+    status,
     title,
   } = props
+  const state = getBlockState(status, regions.length === 0)
   const total = regions.reduce((sum, region) => sum + region.current, 0)
   const previousTotal = regions.reduce((sum, region) => sum + region.previous, 0)
-  const totalChange = getDelta(total, previousTotal).percent
+  const growth = (region: Region) =>
+    region.previous > 0 ? region.current / region.previous - 1 : 0
+  const fastest = regions.reduce<Region | null>(
+    (best, region) => (best === null || growth(region) > growth(best) ? region : best),
+    null,
+  )
+  const {
+    description = fastest
+      ? `${fastest.label} grew fastest, by ${formatShare(fastest.current - fastest.previous, fastest.previous, 1)}.`
+      : undefined,
+  } = props
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction className='flex flex-col items-end gap-0.5'>
-          <span className='text-2xl font-semibold tracking-tight tabular-nums'>
-            {formatter(total)}
-          </span>
-          <span className='flex items-center gap-1 text-xs'>
-            <Trend
-              className='text-xs [&_svg]:size-3.5'
-              trend={totalChange}
-              trendIcon='arrow'
-            />
-            <span className='text-muted-foreground'>{previousLabel}</span>
-          </span>
-        </CardAction>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
+    <BlockStateProvider status={status} empty={regions.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </BlockReady>
+        </header>
+        <div className='flex flex-col gap-1 border-t pt-4'>
+          <KPIValue value={total} format={formatter} />
+          <KPIChange
+            comparison={comparison}
+            format={formatter}
+            previous={previousTotal}
+            value={total}
+          />
+        </div>
         <BreakdownBar
           segments={regions.map((region) => ({
             color: region.color,
@@ -110,52 +125,59 @@ const Geo4 = (props: Geo4Props) => {
             value: region.current,
           }))}
         />
-        <table className='w-full text-sm'>
-          <caption className='sr-only'>{`${title}, ${description}, with the change ${previousLabel}`}</caption>
-          <thead className='text-muted-foreground text-xs'>
-            <tr>
-              <th scope='col' className='pb-2 text-left font-normal'>
-                Region
-              </th>
-              <th scope='col' className='pb-2 text-right font-normal'>
-                Revenue
-              </th>
-              <th scope='col' className='w-20 pb-2 text-right font-normal'>
-                Change
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {regions.map((region) => (
-              <tr key={region.label} className='border-t'>
-                <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
-                  <span className='flex items-start gap-2'>
-                    <BreakdownKey color={region.color} className='mt-1' />
-                    <span className='flex min-w-0 flex-col @md:flex-row @md:gap-2'>
-                      <span>{region.label}</span>
-                      <span className='text-muted-foreground text-xs @md:text-sm'>
-                        {formatShare(region.current, total, 1)}
-                        <span className='sr-only'> of revenue</span>
+        {state === 'loading' && <BlockStateRows rows={5} />}
+        {!state && (
+          <table className='w-full text-sm'>
+            <caption className='sr-only'>{`${title}, with the change on the amount ${comparison}`}</caption>
+            <thead className='text-muted-foreground text-xs'>
+              <tr>
+                <th scope='col' className='pb-2 text-left font-normal'>
+                  Region
+                </th>
+                <th scope='col' className='pb-2 text-right font-normal'>
+                  Revenue
+                </th>
+                <th scope='col' className='w-24 pb-2 text-right font-normal'>
+                  Change
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {regions.map((region) => (
+                <tr key={region.label} className='border-t'>
+                  <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
+                    <span className='flex items-start gap-2'>
+                      <BreakdownKey color={region.color} className='mt-1' />
+                      <span className='flex min-w-0 flex-col @md:flex-row @md:gap-2'>
+                        <span>{region.label}</span>
+                        <span className='text-muted-foreground text-xs tabular-nums @md:text-sm'>
+                          {formatShare(region.current, total, 1)}
+                          <span className='sr-only'> of revenue</span>
+                        </span>
                       </span>
                     </span>
-                  </span>
-                </th>
-                <td className='py-2.5 text-right align-top font-medium tabular-nums'>
-                  {formatter(region.current)}
-                </td>
-                <td className='py-2.5 pl-3 align-top'>
-                  <Trend
-                    className='justify-end text-xs [&_svg]:size-3.5'
-                    trend={getDelta(region.current, region.previous).percent}
-                    trendIcon='arrow'
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </CardContent>
-    </Card>
+                  </th>
+                  <td className='py-2.5 text-right align-top font-medium tabular-nums'>
+                    {formatter(region.current)}
+                  </td>
+                  <td className='py-2.5 pl-3 text-right align-top'>
+                    <KPIChange
+                      inline
+                      className='text-xs'
+                      comparison={comparison}
+                      format={formatter}
+                      previous={region.previous}
+                      value={region.current}
+                      variant='short'
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

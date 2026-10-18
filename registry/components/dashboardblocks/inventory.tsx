@@ -1,8 +1,11 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, type RefObject, useEffect, useState } from 'react'
+import {
+  StatusLabel,
+  type StatusLabelProps,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
 
 import { cn } from '@/lib/utils'
 
@@ -71,89 +74,24 @@ function projectStock({ dailyDemand, days, incoming = [], onHand }: ProjectionIn
 
 const stockStatusConfig: Record<
   StockStatus,
-  { bar: string; className: string; icon: ReactNode; label: string }
+  { color: string; label: string; tone: StatusTone }
 > = {
-  low: {
-    bar: 'bg-amber-500',
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Low stock',
-  },
-  ok: {
-    bar: 'bg-emerald-600 dark:bg-emerald-500',
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'In stock',
-  },
-  out: {
-    bar: 'bg-red-600 dark:bg-red-500',
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Out of stock',
-  },
-  over: {
-    bar: 'bg-sky-500',
-    className: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
-    icon: (
-      <IconPlaceholder
-        lucide='LayersIcon'
-        tabler='IconStack2'
-        hugeicons='Layers01Icon'
-        phosphor='StackIcon'
-        remixicon='RiStackLine'
-        aria-hidden
-      />
-    ),
-    label: 'Overstock',
-  },
+  low: { color: 'var(--color-amber-500)', label: 'Low stock', tone: 'warning' },
+  ok: { color: 'var(--color-emerald-500)', label: 'In stock', tone: 'good' },
+  out: { color: 'var(--color-red-500)', label: 'Out of stock', tone: 'bad' },
+  over: { color: 'var(--color-sky-500)', label: 'Overstock', tone: 'info' },
 }
 
-function StockStatusBadge({
-  className,
-  status,
-}: {
-  className?: string
+interface StockStatusLabelProps extends Omit<StatusLabelProps, 'children' | 'tone'> {
   status: StockStatus
-}) {
+}
+
+function StockStatusLabel({ status, ...props }: StockStatusLabelProps) {
   const config = stockStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel tone={config.tone} {...props}>
       {config.label}
-    </span>
+    </StatusLabel>
   )
 }
 
@@ -171,36 +109,24 @@ function StockBar({
   onHand,
   reorderPoint,
 }: StockBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
+  const { ref, revealed } = useReveal<HTMLDivElement>(animated)
   const status = getStockStatus({ maxStock, onHand, reorderPoint })
   const top = capacity ?? (Math.max(onHand, reorderPoint, maxStock ?? 0) * 1.1 || 1)
   const at = (value: number) => `${Math.min(100, (Math.max(0, value) / top) * 100)}%`
 
   return (
-    <div
-      ref={ref as RefObject<HTMLDivElement>}
-      aria-hidden
-      className={cn('relative h-2 w-full', className)}
-    >
+    <div ref={ref} aria-hidden className={cn('relative h-2 w-full', className)}>
       <div className='bg-muted h-full w-full overflow-hidden rounded-full'>
         <div
-          className={cn(
-            'h-full rounded-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none',
-            stockStatusConfig[status].bar,
-          )}
-          style={{ width: revealed ? at(onHand) : '0%' }}
+          className='h-full rounded-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
+          style={{
+            backgroundColor: stockStatusConfig[status].color,
+            width: revealed ? at(onHand) : '0%',
+          }}
         />
       </div>
       <span
-        className='bg-foreground ring-card absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+        className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
         style={{ left: at(reorderPoint) }}
       />
     </div>
@@ -224,7 +150,7 @@ function ReorderPointKey({ className }: { className?: string }) {
 export {
   ReorderPointKey,
   StockBar,
-  StockStatusBadge,
+  StockStatusLabel,
   getDaysOfCover,
   getReorderQuantity,
   getStockStatus,
@@ -232,4 +158,11 @@ export {
   stockStatusConfig,
 }
 
-export type { ProjectionInput, ReorderInput, StockBarProps, StockInput, StockStatus }
+export type {
+  ProjectionInput,
+  ReorderInput,
+  StockBarProps,
+  StockInput,
+  StockStatus,
+  StockStatusLabelProps,
+}

@@ -6,18 +6,20 @@ import {
   ActivityTime,
   UnreadDot,
 } from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
+import { cn } from '@/lib/utils'
 
 interface Notification {
   action: string
@@ -30,12 +32,13 @@ interface Notification {
   target: string
 }
 
-interface ActivityFeed03Props {
-  /** Newest first. */
-  notifications: Notification[]
+interface ActivityFeed3Props {
+  /** Newest first. Leave out, or pass none, to show the empty state. */
+  notifications?: Notification[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onRead?: (ids: string[]) => void
+  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -43,11 +46,11 @@ interface ActivityFeed03Props {
 const NOW = new Date(Date.UTC(2026, 8, 26, 15, 0))
 const minutesAgo = (minutes: number) => new Date(NOW.getTime() - minutes * 60_000)
 
-const exampleProps: ActivityFeed03Props = {
+const exampleProps: ActivityFeed3Props = {
   notifications: [
     {
       action: 'mentioned you in',
-      actor: { name: 'Priya Nair' },
+      actor: { avatar: '/images/avatar-02.webp', name: 'Priya Nair' },
       at: minutesAgo(3),
       id: 'n1',
       mention: true,
@@ -63,7 +66,7 @@ const exampleProps: ActivityFeed03Props = {
     },
     {
       action: 'replied to your comment on',
-      actor: { name: 'Mei Tanaka' },
+      actor: { avatar: '/images/avatar-04.webp', name: 'Mei Tanaka' },
       at: minutesAgo(80),
       id: 'n3',
       preview: 'Good catch, updated the empty state.',
@@ -93,18 +96,25 @@ const exampleProps: ActivityFeed03Props = {
 
 type Filter = 'all' | 'mentions' | 'unread'
 
-const ActivityFeed03 = (props: ActivityFeed03Props) => {
-  const { notifications, now, onRead, timeZone = 'UTC', title } = props
-  const [filter, setFilter] = useState<Filter>('all')
-  const [read, setRead] = useState(
-    () => new Set(notifications.filter((item) => item.read).map((item) => item.id)),
-  )
+const describe = (unread: Notification[]) => {
+  if (unread.length === 0) return "You're all caught up."
+  const mentions = unread.filter((item) => item.mention).length
+  const count = `${unread.length} unread`
+  return mentions === 0 ? `${count}.` : `${count}, ${mentions} mentioning you.`
+}
 
-  const unread = notifications.filter((item) => !read.has(item.id))
+const ActivityFeed3 = (props: ActivityFeed3Props) => {
+  const { notifications = [], now, onRead, status, timeZone = 'UTC', title } = props
+  const [filter, setFilter] = useState<Filter>('all')
+  const [markedRead, setMarkedRead] = useState<ReadonlySet<string>>(() => new Set())
+  const state = getBlockState(status, notifications.length === 0)
+
+  const isRead = (item: Notification) => item.read || markedRead.has(item.id)
+  const unread = notifications.filter((item) => !isRead(item))
   const markRead = (ids: string[]) => {
-    const fresh = ids.filter((id) => !read.has(id))
+    const fresh = ids.filter((id) => unread.some((item) => item.id === id))
     if (fresh.length === 0) return
-    setRead(new Set([...read, ...fresh]))
+    setMarkedRead(new Set([...markedRead, ...fresh]))
     onRead?.(fresh)
   }
 
@@ -119,74 +129,91 @@ const ActivityFeed03 = (props: ActivityFeed03Props) => {
   ]
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardAction>
+    <BlockStateProvider status={status} empty={notifications.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{describe(unread)}</p>
+            </BlockReady>
+          </div>
           <Button
-            disabled={unread.length === 0}
+            disabled={Boolean(state) || unread.length === 0}
             onClick={() => markRead(unread.map((item) => item.id))}
             size='sm'
             variant='ghost'
           >
             Mark all as read
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
+        </header>
         <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList className='mb-2'>
+          <TabsList>
             {filters.map((item) => (
               <TabsTrigger key={item.value} value={item.value}>
                 {item.label}
-                {item.value === 'unread' && unread.length > 0 && (
-                  <span className='bg-primary text-primary-foreground ml-1.5 rounded-full px-1.5 text-[10px] leading-4 font-semibold tabular-nums'>
-                    {unread.length}
+                {!state && item.value !== 'all' && item.items.length > 0 && (
+                  <span className='text-muted-foreground tabular-nums'>
+                    {item.items.length}
                   </span>
                 )}
               </TabsTrigger>
             ))}
           </TabsList>
           {filters.map((item) => (
-            <TabsContent key={item.value} value={item.value}>
-              {item.items.length === 0 ? (
-                <p className='text-muted-foreground py-8 text-center text-sm'>
+            <TabsContent key={item.value} value={item.value} className='mt-2'>
+              {state ? (
+                <div className='border-t'>
+                  <BlockStateRows rows={5} />
+                </div>
+              ) : item.items.length === 0 ? (
+                <p className='text-muted-foreground border-t py-8 text-center text-sm'>
                   {item.value === 'unread'
                     ? "You're all caught up."
                     : 'Nothing here yet.'}
                 </p>
               ) : (
-                <ActivityFeed className='-mx-2'>
+                <ActivityFeed className='border-t'>
                   {item.items.map((notification) => {
-                    const isUnread = !read.has(notification.id)
+                    const isUnread = !isRead(notification)
                     return (
-                      <ActivityFeedItem key={notification.id}>
+                      <ActivityFeedItem key={notification.id} className='border-b'>
                         <button
                           type='button'
                           onClick={() => markRead([notification.id])}
-                          className='hover:bg-muted/60 focus-visible:ring-ring/50 flex w-full items-start gap-3 rounded-lg p-2 text-left outline-none focus-visible:ring-[3px]'
+                          className='hover:bg-muted/50 focus-visible:ring-ring/50 flex w-full items-start gap-3 px-2 py-3 text-left outline-none focus-visible:ring-[3px]'
                         >
                           <PersonAvatar person={notification.actor} />
                           <span className='flex min-w-0 flex-1 flex-col gap-1'>
-                            <span className='text-sm'>
-                              <span className='font-medium'>
-                                {notification.actor.name}
-                              </span>{' '}
-                              <span className='text-muted-foreground'>
-                                {notification.action}
-                              </span>{' '}
-                              <span className='font-medium'>{notification.target}</span>
+                            <span className='flex items-baseline justify-between gap-3'>
+                              <span
+                                className={cn(
+                                  'text-sm',
+                                  !isUnread && 'text-muted-foreground',
+                                )}
+                              >
+                                <span className='font-medium'>
+                                  {notification.actor.name}
+                                </span>{' '}
+                                <span className='text-muted-foreground'>
+                                  {notification.action}
+                                </span>{' '}
+                                <span className='font-medium'>{notification.target}</span>
+                              </span>
+                              <ActivityTime
+                                className='tabular-nums'
+                                date={notification.at}
+                                now={now}
+                                timeZone={timeZone}
+                              />
                             </span>
                             {notification.preview && (
-                              <span className='text-muted-foreground line-clamp-2 text-sm'>
-                                {notification.preview}
+                              <span className='text-muted-foreground border-l-2 pl-2 text-sm'>
+                                <span className='line-clamp-2'>
+                                  {notification.preview}
+                                </span>
                               </span>
                             )}
-                            <ActivityTime
-                              date={notification.at}
-                              now={now}
-                              timeZone={timeZone}
-                            />
                           </span>
                           <span className='flex h-5 w-2 items-center'>
                             {isUnread && <UnreadDot />}
@@ -200,14 +227,14 @@ const ActivityFeed03 = (props: ActivityFeed03Props) => {
             </TabsContent>
           ))}
         </Tabs>
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 
 export {
-  ActivityFeed03,
-  exampleProps as activityFeed03ExampleProps,
-  type ActivityFeed03Props,
+  ActivityFeed3,
+  exampleProps as activityFeed3ExampleProps,
+  type ActivityFeed3Props,
   type Notification,
 }

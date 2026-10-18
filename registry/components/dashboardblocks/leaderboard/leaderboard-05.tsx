@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   Leaderboard,
   LeaderboardBar,
   LeaderboardItem,
@@ -9,18 +16,10 @@ import {
   LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -30,14 +29,17 @@ interface CountryStat {
   visitors: number
 }
 
-interface Leaderboard05Props {
-  countries: CountryStat[]
-  description: string
+interface Leaderboard5Props {
+  /** Leave out, or pass none, to show the empty state. */
+  countries?: CountryStat[]
+  /** Defaults to a sentence about the leading country and the top three. */
+  description?: string
   initialCount?: number
+  status?: BlockStatus
   title: string
 }
 
-const exampleProps: Leaderboard05Props = {
+const exampleProps: Leaderboard5Props = {
   countries: [
     { code: 'US', name: 'United States', visitors: 24_318 },
     { code: 'DE', name: 'Germany', visitors: 11_204 },
@@ -48,9 +50,20 @@ const exampleProps: Leaderboard05Props = {
     { code: 'JP', name: 'Japan', visitors: 3_618 },
     { code: 'CA', name: 'Canada', visitors: 2_944 },
   ],
-  description: 'Visitors by country, last 7 days',
   initialCount: 5,
-  title: 'Top Countries',
+  title: 'Top countries',
+}
+
+function summarize(ranked: CountryStat[]) {
+  const total = ranked.reduce((sum, country) => sum + country.visitors, 0)
+  const [first] = ranked
+  if (!first || total === 0) return 'No visitors yet.'
+  const share = (visitors: number) =>
+    formatPercent(visitors / total, { maximumFractionDigits: 0 })
+  const lead = `${first.name} sent ${share(first.visitors)} of ${formatNumber(total)} visitors`
+  if (ranked.length <= 3) return `${lead}.`
+  const top = ranked.slice(0, 3).reduce((sum, country) => sum + country.visitors, 0)
+  return `${lead}, and the top 3 countries ${share(top)}.`
 }
 
 const pressScale =
@@ -100,8 +113,9 @@ function IconSwap({
   )
 }
 
-const Leaderboard05 = (props: Leaderboard05Props) => {
-  const { countries, description, initialCount = 5, title } = props
+const Leaderboard5 = (props: Leaderboard5Props) => {
+  const { countries = [], initialCount = 5, status, title } = props
+  const state = getBlockState(status, countries.length === 0)
   const [ascending, setAscending] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [skipBarAnimation, setSkipBarAnimation] = useState(false)
@@ -111,18 +125,24 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
   const max = ranked[0]?.visitors || 1
   const ordered = ascending ? [...ranked].reverse() : ranked
   const visible = expanded ? ordered : ordered.slice(0, initialCount)
-  const canExpand = countries.length > initialCount
+  const canExpand = !state && countries.length > initialCount
+  const { description = summarize(ranked) } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
+    <BlockStateProvider status={status} empty={countries.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </BlockReady>
+          </div>
           <Button
             variant='ghost'
             size='icon-sm'
             aria-label={ascending ? 'Sort by most visitors' : 'Sort by fewest visitors'}
+            disabled={state !== undefined}
             onClick={() => {
               setSkipBarAnimation(true)
               setAscending((value) => !value)
@@ -151,83 +171,94 @@ const Leaderboard05 = (props: Leaderboard05Props) => {
               }
             />
           </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <Leaderboard>
-          {visible.map((country, index) => {
-            const share = (country.visitors / total) * 100
-            return (
-              <LeaderboardItem key={country.code}>
-                <LeaderboardBar
-                  animated={!skipBarAnimation}
-                  delay={index * 100}
-                  value={(country.visitors / max) * 100}
-                />
-                <LeaderboardRank rank={ranked.indexOf(country) + 1} />
-                <span
-                  aria-hidden='true'
-                  className='w-6 shrink-0 font-mono text-xs text-muted-foreground'
-                >
-                  {country.code}
-                </span>
-                <LeaderboardLabel className='truncate'>{country.name}</LeaderboardLabel>
-                <span className='shrink-0 text-xs text-muted-foreground tabular-nums'>
-                  {share.toFixed(1)}%
-                </span>
-                <LeaderboardValue className='w-14'>
-                  {country.visitors.toLocaleString()}
-                </LeaderboardValue>
-              </LeaderboardItem>
-            )
-          })}
-        </Leaderboard>
-      </CardContent>
-      {canExpand && (
-        <CardFooter>
-          <Button
-            variant='ghost'
-            size='sm'
-            aria-expanded={expanded}
-            onClick={() => {
-              setSkipBarAnimation(true)
-              setExpanded((value) => !value)
-            }}
-            className={cn('w-full', pressScale)}
-          >
-            {expanded ? 'Show less' : `Show all ${countries.length}`}
-            <IconSwap
-              active={expanded}
-              activeIcon={
-                <IconPlaceholder
-                  lucide='ChevronUpIcon'
-                  tabler='IconChevronUp'
-                  hugeicons='ArrowUp01Icon'
-                  phosphor='CaretUpIcon'
-                  remixicon='RiArrowUpSLine'
-                />
-              }
-              data-icon='inline-end'
-              inactiveIcon={
-                <IconPlaceholder
-                  lucide='ChevronDownIcon'
-                  tabler='IconChevronDown'
-                  hugeicons='ArrowDownIcon'
-                  phosphor='CaretDownIcon'
-                  remixicon='RiArrowDownSLine'
-                />
-              }
-            />
-          </Button>
-        </CardFooter>
-      )}
-    </Card>
+        </header>
+        <div className='flex flex-col gap-2'>
+          <BlockStateRows rows={initialCount} />
+          {!state && (
+            <Leaderboard>
+              {visible.map((country, index) => {
+                const share = country.visitors / total
+                return (
+                  <LeaderboardItem key={country.code}>
+                    <LeaderboardBar
+                      animated={!skipBarAnimation}
+                      className={
+                        country === ranked[0]
+                          ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                          : undefined
+                      }
+                      delay={index * 100}
+                      value={(country.visitors / max) * 100}
+                    />
+                    <LeaderboardRank rank={ranked.indexOf(country) + 1} />
+                    <span
+                      aria-hidden='true'
+                      className='w-6 shrink-0 font-mono text-xs text-muted-foreground'
+                    >
+                      {country.code}
+                    </span>
+                    <LeaderboardLabel className='truncate'>
+                      {country.name}
+                    </LeaderboardLabel>
+                    <span className='shrink-0 text-xs text-muted-foreground tabular-nums'>
+                      {formatPercent(share, {
+                        maximumFractionDigits: 1,
+                        minimumFractionDigits: 1,
+                      })}
+                    </span>
+                    <LeaderboardValue className='w-14'>
+                      {formatNumber(country.visitors)}
+                    </LeaderboardValue>
+                  </LeaderboardItem>
+                )
+              })}
+            </Leaderboard>
+          )}
+          {canExpand && (
+            <Button
+              variant='ghost'
+              size='sm'
+              aria-expanded={expanded}
+              onClick={() => {
+                setSkipBarAnimation(true)
+                setExpanded((value) => !value)
+              }}
+              className={cn('self-start', pressScale)}
+            >
+              {expanded ? 'Show less' : `Show all ${countries.length}`}
+              <IconSwap
+                active={expanded}
+                activeIcon={
+                  <IconPlaceholder
+                    lucide='ChevronUpIcon'
+                    tabler='IconChevronUp'
+                    hugeicons='ArrowUp01Icon'
+                    phosphor='CaretUpIcon'
+                    remixicon='RiArrowUpSLine'
+                  />
+                }
+                data-icon='inline-end'
+                inactiveIcon={
+                  <IconPlaceholder
+                    lucide='ChevronDownIcon'
+                    tabler='IconChevronDown'
+                    hugeicons='ArrowDownIcon'
+                    phosphor='CaretDownIcon'
+                    remixicon='RiArrowDownSLine'
+                  />
+                }
+              />
+            </Button>
+          )}
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 
 export {
-  Leaderboard05,
-  exampleProps as leaderboard05ExampleProps,
+  Leaderboard5,
+  exampleProps as leaderboard5ExampleProps,
   type CountryStat,
-  type Leaderboard05Props,
+  type Leaderboard5Props,
 }

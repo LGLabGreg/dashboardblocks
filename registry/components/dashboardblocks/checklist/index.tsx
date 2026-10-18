@@ -16,3 +16,10 @@ export const checklistExampleProps = {
   'checklist-03': checklist3ExampleProps,
   'checklist-04': checklist4ExampleProps,
 }
+
+export const checklistEmptyProps = {
+  'checklist-01': { steps: [] },
+  'checklist-02': { stages: [] },
+  'checklist-03': { steps: [] },
+  'checklist-04': { groups: [] },
+}

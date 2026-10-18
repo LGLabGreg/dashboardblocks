@@ -1,6 +1,10 @@
 'use client'
 
-import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockBusy,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import { BREAKDOWN_OTHER_COLOR } from '@/registry/components/dashboardblocks/breakdown'
 import { Breakdown1 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
 import { ChartPanel1 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-01'
@@ -11,7 +15,6 @@ import {
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,
@@ -22,9 +25,15 @@ import { Funnel1 } from '@/registry/components/dashboardblocks/funnel/funnel-01'
 import { Inventory1 } from '@/registry/components/dashboardblocks/inventory/inventory-01'
 import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/stat-group-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatCurrency,
+  formatDateRange,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
 interface Dashboard1Props {
+  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -42,9 +51,9 @@ const REGIONS = [
 ]
 
 const CHANNELS = [
-  { color: 'var(--chart-2)', label: 'Organic search', share: 0.38 },
-  { color: 'var(--chart-3)', label: 'Paid search', share: 0.27 },
-  { color: 'var(--chart-4)', label: 'Email', share: 0.17 },
+  { color: 'var(--color-chart-2)', label: 'Organic search', share: 0.38 },
+  { color: 'var(--color-chart-3)', label: 'Paid search', share: 0.27 },
+  { color: 'var(--color-chart-4)', label: 'Email', share: 0.17 },
   { color: BREAKDOWN_OTHER_COLOR, label: 'Other', share: 0.18 },
 ]
 
@@ -128,7 +137,7 @@ const splitTotal = (total: number, shares: number[]) => {
   return parts
 }
 
-const currency = (value: number) => `$${Math.round(value).toLocaleString('en-US')}`
+const currency = (value: number) => formatCurrency(value)
 
 function buildStoreData({ compare, preset, region }: Query, today: Date) {
   const hourly = preset === 'today'
@@ -180,23 +189,31 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
     : 1
   const rangeLabel = formatDateRange(range)
   const previousLabel = formatDateRange(previousRange)
-  const scope = `${hourly ? 'Today' : rangeLabel}${region ? `, ${region}` : ''}`
+
+  const best = current.reduce(
+    (top, point, index) => (point.revenue > current[top].revenue ? index : top),
+    0,
+  )
+  const channels = splitTotal(
+    now.revenue,
+    CHANNELS.map((channel, index) => channel.share + (region ? (index - 1.5) * 0.02 : 0)),
+  ).map((value, index) => ({
+    color: CHANNELS[index].color,
+    label: CHANNELS[index].label,
+    value,
+  }))
+  const search = channels
+    .filter((channel) => channel.label.endsWith('search'))
+    .reduce((sum, channel) => sum + channel.value, 0)
 
   return {
+    bestDay: `${hourly ? 'Busiest hour' : 'Best day'} was ${label(best)}, at ${currency(current[best].revenue)}.`,
+    channels,
+    channelSummary: `Search brings in ${formatPercent(search / now.revenue, { maximumFractionDigits: 0 })} of revenue, organic and paid together.`,
     chart: current.map((point, index) => ({
       current: Math.round(point.revenue),
       label: label(index),
       previous: Math.round(previous[index].revenue),
-    })),
-    channels: splitTotal(
-      now.revenue,
-      CHANNELS.map(
-        (channel, index) => channel.share + (region ? (index - 1.5) * 0.02 : 0),
-      ),
-    ).map((value, index) => ({
-      color: CHANNELS[index].color,
-      label: CHANNELS[index].label,
-      value,
     })),
     month: {
       current: Array.from({ length: elapsed }, (_, offset) =>
@@ -225,15 +242,13 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
       units: Math.max(1, Math.round(revenue / PRODUCTS[index].price)),
     })),
     rangeLabel,
-    scope,
     stats: [
       {
-        formatter: currency,
-        history: current.map((point) => Math.round(point.revenue)),
-        key: 'revenue',
-        label: 'Revenue',
-        previous: compare ? Math.round(before.revenue) : undefined,
-        value: Math.round(now.revenue),
+        history: current.map((point) => Math.round(point.sessions)),
+        key: 'sessions',
+        label: 'Sessions',
+        previous: compare ? Math.round(before.sessions) : undefined,
+        value: Math.round(now.sessions),
       },
       {
         history: current.map((point) => Math.round(point.orders)),
@@ -243,7 +258,8 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
         value: Math.round(now.orders),
       },
       {
-        formatter: (value: number) => `$${value.toFixed(2)}`,
+        formatter: (value: number) =>
+          formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
         history: current.map((point) =>
           Number((point.revenue / point.orders).toFixed(2)),
         ),
@@ -254,7 +270,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
       },
       {
         changeType: 'points' as const,
-        formatter: (value: number) => `${value}%`,
+        formatter: (value: number) => formatPercent(value / 100),
         history: current.map((point) =>
           Number(((point.orders / point.sessions) * 100).toFixed(1)),
         ),
@@ -268,7 +284,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
 }
 
 const Dashboard1 = (props: Dashboard1Props) => {
-  const { title, today } = props
+  const { status, title, today } = props
   const [query, setQuery] = useState<Query>({
     compare: true,
     preset: '30d',
@@ -289,118 +305,125 @@ const Dashboard1 = (props: Dashboard1Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <div className='@container flex w-full flex-col gap-6'>
-      <header className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground text-sm' aria-live='polite'>
-              {formatDateRange(range)}
-              {query.compare && ` vs ${formatDateRange(getPreviousRange(range))}`}
-              {query.region && ` · ${query.region}`}
+    <BlockStateProvider status={status}>
+      <div className='@container flex w-full flex-col gap-8'>
+        <header className='flex flex-col gap-3 border-b pb-4'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+              <div className='flex items-center gap-3'>
+                <CompareToggle
+                  checked={query.compare}
+                  onCheckedChange={(compare) => update({ compare })}
+                />
+                <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+              </div>
+            </div>
+            <p className='text-muted-foreground leading-relaxed'>
+              Showing{' '}
+              <DateRangePicker
+                onValueChange={(preset) => update({ preset })}
+                today={today}
+                value={query.preset}
+                variant='inline'
+              />
+              <span aria-live='polite'>
+                , {formatDateRange(range)}
+                {query.compare &&
+                  `, compared with ${formatDateRange(getPreviousRange(range))}`}
+                .
+              </span>
             </p>
           </div>
-          <ExportMenu onExport={() => {}} />
-        </div>
-        <div className='flex flex-wrap items-center gap-2'>
-          <DateRangePicker
-            onValueChange={(preset) => update({ preset })}
-            today={today}
-            value={query.preset}
-          />
-          <CompareToggle
-            checked={query.compare}
-            className='px-1'
-            onCheckedChange={(compare) => update({ compare })}
-          />
-          <FilterMenu
-            allLabel='All regions'
-            label='Region'
-            onValueChange={(region) => update({ region })}
-            options={REGIONS.map((item) => item.name)}
-            value={query.region}
-          >
-            <IconPlaceholder
-              lucide='MapPinIcon'
-              tabler='IconMapPin'
-              hugeicons='Location01Icon'
-              phosphor='MapPinIcon'
-              remixicon='RiMapPinLine'
-            />
-            {query.region ? 'Change region' : 'Filter by region'}
-          </FilterMenu>
-          {query.region && (
-            <FilterChip
-              field='Region'
+          <div className='flex flex-wrap items-center gap-2'>
+            {query.region && (
+              <FilterChip
+                field='Region'
+                value={query.region}
+                onRemove={() => update({ region: null })}
+              />
+            )}
+            <FilterMenu
+              allLabel='All regions'
+              label='Region'
+              onValueChange={(region) => update({ region })}
+              options={REGIONS.map((item) => item.name)}
               value={query.region}
-              onRemove={() => update({ region: null })}
+            >
+              <IconPlaceholder
+                lucide='MapPinIcon'
+                tabler='IconMapPin'
+                hugeicons='Location01Icon'
+                phosphor='MapPinIcon'
+                remixicon='RiMapPinLine'
+              />
+              {query.region ? 'Change region' : 'Filter by region'}
+            </FilterMenu>
+          </div>
+        </header>
+        <BlockBusy
+          busy={busy}
+          label='Updating the dashboard'
+          className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
+        >
+          <div className='@4xl:col-span-3'>
+            <StatGroup2
+              status={status}
+              comparison={data.previousLabel}
+              description={
+                displayedQuery.compare
+                  ? undefined
+                  : 'Sessions, orders, order value and conversion, by day.'
+              }
+              metrics={data.stats}
+              title='Shoppers and orders'
             />
-          )}
-        </div>
-      </header>
-      <BlockBusy
-        busy={busy}
-        label='Updating the dashboard'
-        className='grid gap-4 @4xl:grid-cols-3'
-      >
-        <div className='@4xl:col-span-3'>
-          <StatGroup2
-            description={
-              displayedQuery.compare
-                ? `${data.scope}, compared with ${data.previousLabel}`
-                : data.scope
-            }
-            metrics={data.stats}
-            title='Performance'
-          />
-        </div>
-        <div className='@4xl:col-span-2'>
-          <ChartPanel1
-            currentLabel={data.rangeLabel}
-            data={data.chart}
-            description={
-              displayedQuery.compare
-                ? `${data.scope}, compared with ${data.previousLabel}`
-                : data.scope
-            }
+          </div>
+          <div className='@4xl:col-span-2'>
+            <ChartPanel1
+              status={status}
+              comparison={`in ${data.previousLabel}`}
+              currentLabel={data.rangeLabel}
+              data={data.chart}
+              description={status ? '' : data.bestDay}
+              formatter={currency}
+              previousLabel={data.previousLabel}
+              showPrevious={displayedQuery.compare}
+              title='Revenue'
+            />
+          </div>
+          <Forecast3
+            status={status}
+            current={data.month.current}
+            description='Month to date, projected at the daily run-rate so far.'
+            elapsed={data.month.elapsed}
             formatter={currency}
-            previousLabel={data.previousLabel}
-            showPrevious={displayedQuery.compare}
-            title='Revenue'
+            target={data.month.target}
+            title={`${data.month.name} revenue`}
+            total={data.month.total}
           />
-        </div>
-        <Breakdown1
-          description={data.scope}
-          formatter={currency}
-          segments={data.channels}
-          title='Revenue by channel'
-        />
-        <div className='@4xl:col-span-2'>
-          <DataTable2
-            description={`Units sold, revenue and share of total, ${data.scope}`}
-            rows={data.products}
-            title='Revenue by product'
+          <div className='@4xl:col-span-2'>
+            <DataTable2 status={status} rows={data.products} title='Revenue by product' />
+          </div>
+          <Funnel1
+            status={status}
+            description='Most shoppers who leave do it between viewing a product and adding it to the cart.'
+            stages={data.funnel}
+            title='Checkout funnel'
           />
-        </div>
-        <Funnel1 description={data.scope} stages={data.funnel} title='Checkout funnel' />
-        <Forecast3
-          current={data.month.current}
-          description={`Month to date${displayedQuery.region ? `, ${displayedQuery.region}` : ''}, projected at the daily run-rate`}
-          elapsed={data.month.elapsed}
-          formatter={currency}
-          target={data.month.target}
-          title={`${data.month.name} revenue`}
-          total={data.month.total}
-        />
-        <div className='@4xl:col-span-2'>
-          <Inventory1
-            description='Products at or near their reorder point, soonest to run out first'
-            items={STOCK}
-            title='Low stock'
+          <div className='@4xl:col-span-2'>
+            <Inventory1 status={status} items={STOCK} title='Low stock' />
+          </div>
+          <Breakdown1
+            status={status}
+            description={status ? '' : data.channelSummary}
+            formatter={currency}
+            segments={data.channels}
+            title='Revenue by channel'
           />
-        </div>
-      </BlockBusy>
-    </div>
+        </BlockBusy>
+      </div>
+    </BlockStateProvider>
   )
 }
 

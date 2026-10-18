@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: f4983fa5ae6a
+// source-hash: 9d2424a69e82
 
 'use client'
 
@@ -29,6 +29,8 @@ interface CommandMenuItem {
   id: string
   keywords?: string[]
   label: string
+  /** Shown at the end of the row, such as an order's total. */
+  meta?: string
   onSelect?: () => void
   shortcut?: string
 }
@@ -68,7 +70,7 @@ function useCommandMenuShortcut(onOpen: () => void, key = 'k') {
 }
 
 interface CommandMenuProps {
-  /** @default 'No results found.' */
+  /** Defaults to a sentence that quotes the search text. */
   emptyMessage?: string
   groups: CommandMenuGroup[]
   loading?: boolean
@@ -85,7 +87,7 @@ interface CommandMenuProps {
 }
 
 function CommandMenu({
-  emptyMessage = 'No results found.',
+  emptyMessage,
   groups,
   loading = false,
   onNavigate = (href) => window.location.assign(href),
@@ -100,6 +102,9 @@ function CommandMenu({
   const query = controlledQuery ?? ownQuery
   const setQuery = onQueryChange ?? setOwnQuery
   const results = onQueryChange ? groups : filterCommandGroups(groups, query)
+  const empty =
+    emptyMessage ??
+    (query.trim() ? `No results for “${query.trim()}”.` : 'Nothing here yet.')
 
   function changeOpen(next: boolean) {
     onOpenChange(next)
@@ -136,16 +141,14 @@ function CommandMenu({
             const item = items.get(String(key))
             if (item) select(item)
           }}
-          renderEmptyState={() =>
-            loading ? null : <CommandEmpty>{emptyMessage}</CommandEmpty>
-          }
+          renderEmptyState={() => (loading ? null : <CommandEmpty>{empty}</CommandEmpty>)}
         >
           {results.map((group) => (
             <CommandGroup key={group.heading} heading={group.heading}>
               {group.items.map((item) => (
                 <CommandItem key={item.id} id={item.id} textValue={item.label}>
                   {item.icon}
-                  <span className='flex min-w-0 flex-col'>
+                  <span className='flex min-w-0 flex-1 flex-col'>
                     <span className='truncate'>{item.label}</span>
                     {item.description && (
                       <span className='text-muted-foreground truncate text-xs'>
@@ -153,14 +156,43 @@ function CommandMenu({
                       </span>
                     )}
                   </span>
+                  {item.meta && (
+                    <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
+                      {item.meta}
+                    </span>
+                  )}
                   {item.shortcut && <CommandShortcut>{item.shortcut}</CommandShortcut>}
                 </CommandItem>
               ))}
             </CommandGroup>
           ))}
         </CommandList>
+        <CommandMenuKeys />
       </Command>
     </CommandDialog>
+  )
+}
+
+function CommandMenuKeys() {
+  return (
+    <div
+      aria-hidden
+      className='text-muted-foreground flex items-center gap-4 border-t px-3 py-2 text-xs max-sm:hidden'
+    >
+      <span className='flex items-center gap-1.5'>
+        <Kbd>↑</Kbd>
+        <Kbd>↓</Kbd>
+        to move
+      </span>
+      <span className='flex items-center gap-1.5'>
+        <Kbd>↵</Kbd>
+        to choose
+      </span>
+      <span className='ms-auto flex items-center gap-1.5'>
+        <Kbd>Esc</Kbd>
+        to close
+      </span>
+    </div>
   )
 }
 

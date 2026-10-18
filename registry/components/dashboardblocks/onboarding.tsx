@@ -14,7 +14,6 @@ import {
 } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
@@ -271,7 +270,11 @@ function ChoiceCards(props: ChoiceCardsProps) {
                   <span id={`${inputId}-title`} className='text-sm font-medium'>
                     {option.title}
                   </span>
-                  {option.badge}
+                  {option.badge && (
+                    <span className='text-muted-foreground text-xs font-normal'>
+                      {option.badge}
+                    </span>
+                  )}
                 </span>
                 {option.description && (
                   <span
@@ -566,63 +569,61 @@ function ActionCard({
   )
   const describedBy = description ? `${id}-description` : undefined
   return (
-    <Card
-      size='sm'
+    <div
+      data-slot='action-card'
       className={cn(
-        'hover:bg-muted/50 has-[:focus-visible]:ring-ring/50 relative h-full transition-colors has-[:focus-visible]:ring-3',
+        'group/action has-[:focus-visible]:ring-ring/50 relative flex h-full items-start gap-3 border-t pt-3 pb-1 has-[:focus-visible]:ring-3',
         className,
       )}
     >
-      <CardContent className='flex items-start gap-3'>
-        {icon && (
-          <span
-            aria-hidden
-            className='bg-muted text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg]:size-5'
-          >
-            {icon}
-          </span>
-        )}
-        <div className='flex min-w-0 flex-1 flex-col gap-1'>
-          <span className='flex flex-wrap items-center gap-2'>
-            {href ? (
-              <Link
-                href={href}
-                onClick={onClick}
-                aria-describedby={describedBy}
-                className='text-sm font-medium outline-none'
-              >
-                {target}
-              </Link>
-            ) : (
-              <button
-                type='button'
-                onClick={onClick}
-                aria-describedby={describedBy}
-                className='text-left text-sm font-medium outline-none'
-              >
-                {target}
-              </button>
-            )}
-            {badge}
-          </span>
-          {description && (
-            <p id={describedBy} className='text-muted-foreground text-sm text-pretty'>
-              {description}
-            </p>
-          )}
-          {meta && <p className='text-muted-foreground mt-1 text-xs'>{meta}</p>}
-        </div>
-        <IconPlaceholder
-          lucide='ArrowRightIcon'
-          tabler='IconArrowRight'
-          hugeicons='ArrowRight01Icon'
-          phosphor='ArrowRightIcon'
-          remixicon='RiArrowRightLine'
+      {icon && (
+        <span
           aria-hidden
-          className='text-muted-foreground group-hover/card:text-foreground mt-0.5 size-4 shrink-0 transition-[color,translate] group-hover/card:translate-x-0.5 motion-reduce:transition-none'
-        />
-      </CardContent>
-    </Card>
+          className='text-muted-foreground group-hover/action:text-foreground mt-0.5 flex shrink-0 transition-colors [&_svg]:size-5'
+        >
+          {icon}
+        </span>
+      )}
+      <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+        <span className='flex flex-wrap items-baseline gap-x-2'>
+          {href ? (
+            <Link
+              href={href}
+              onClick={onClick}
+              aria-describedby={describedBy}
+              className='text-sm font-medium underline-offset-4 outline-none group-hover/action:underline'
+            >
+              {target}
+            </Link>
+          ) : (
+            <button
+              type='button'
+              onClick={onClick}
+              aria-describedby={describedBy}
+              className='text-left text-sm font-medium underline-offset-4 outline-none group-hover/action:underline'
+            >
+              {target}
+            </button>
+          )}
+          {badge && <span className='text-muted-foreground text-xs'>{badge}</span>}
+        </span>
+        {description && (
+          <p id={describedBy} className='text-muted-foreground text-sm text-pretty'>
+            {description}
+          </p>
+        )}
+        {meta && <p className='text-muted-foreground text-sm'>{meta}</p>}
+      </div>
+      <IconPlaceholder
+        lucide='ArrowRightIcon'
+        tabler='IconArrowRight'
+        hugeicons='ArrowRight01Icon'
+        phosphor='ArrowRightIcon'
+        remixicon='RiArrowRightLine'
+        aria-hidden
+        className='text-muted-foreground group-hover/action:text-foreground mt-0.5 size-4 shrink-0 transition-[color,translate] group-hover/action:translate-x-0.5 motion-reduce:transition-none'
+      />
+    </div>
   )
 }
 

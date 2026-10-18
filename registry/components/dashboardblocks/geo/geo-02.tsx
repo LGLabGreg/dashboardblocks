@@ -1,29 +1,42 @@
 'use client'
 
-import { CountryFlag, ShareBar } from '@/registry/components/dashboardblocks/geo'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
+import {
+  Leaderboard,
+  LeaderboardBar,
+  LeaderboardItem,
+  LeaderboardLabel,
+  LeaderboardValue,
+} from '@/registry/components/dashboardblocks/leaderboard'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
+
+import { cn } from '@/lib/utils'
 
 interface CountryRow {
-  /** ISO 3166-1 alpha-2 code, e.g. */
+  /** ISO 3166-1 alpha-2 code, such as `GB`. */
   code: string
   name: string
   value: number
 }
 
 interface Geo2Props {
-  countries: CountryRow[]
-  description: string
+  /** Leave out, or pass none, to show the empty state. */
+  countries?: CountryRow[]
+  /** Defaults to a sentence about the leading country's share. */
+  description?: string
   formatter?: (value: number) => string
   limit?: number
+  status?: BlockStatus
   title: string
   total?: number
+  /** @default 'sessions' */
+  unit?: string
 }
 
 const exampleProps: Geo2Props = {
@@ -43,17 +56,17 @@ const exampleProps: Geo2Props = {
     { code: 'MX', name: 'Mexico', value: 1_870 },
     { code: 'SG', name: 'Singapore', value: 1_420 },
   ],
-  description: 'Sessions, last 30 days',
   title: 'Top countries',
 }
 
 const Geo2 = (props: Geo2Props) => {
   const {
-    countries,
-    description,
-    formatter = (value: number) => value.toLocaleString('en-US'),
+    countries = [],
+    formatter = (value: number) => formatNumber(value),
     limit = 8,
+    status,
     title,
+    unit = 'sessions',
   } = props
   const sorted = [...countries].sort((a, b) => b.value - a.value)
   const total = props.total ?? countries.reduce((sum, country) => sum + country.value, 0)
@@ -61,59 +74,79 @@ const Geo2 = (props: Geo2Props) => {
   const other = total - shown.reduce((sum, country) => sum + country.value, 0)
   const largest = Math.max(shown[0]?.value ?? 0, other)
   const share = (value: number) =>
-    total > 0 ? `${((value / total) * 100).toFixed(1)}%` : '0%'
+    formatPercent(total > 0 ? value / total : 0, {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1,
+    })
+  const [first] = sorted
+  const {
+    description = first
+      ? `${first.name} sent ${formatPercent(total > 0 ? first.value / total : 0, { maximumFractionDigits: 0 })} of ${formatter(total)} ${unit}.`
+      : undefined,
+  } = props
 
   const rows = [
     ...shown.map((country) => ({ ...country, key: country.code })),
     ...(other > 0
-      ? [
-          {
-            code: undefined,
-            key: 'other',
-            name: 'Other countries',
-            value: other,
-          },
-        ]
+      ? [{ code: undefined, key: 'other', name: 'Other countries', value: other }]
       : []),
   ]
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-3'>
-        <div className='text-muted-foreground flex justify-between gap-4 text-xs'>
-          <span>Country</span>
-          <span>{formatter(total)} total</span>
-        </div>
-        <ol className='flex flex-col gap-3'>
-          {rows.map((row) => (
-            <li key={row.key} className='flex items-start gap-3'>
-              <CountryFlag code={row.code} className='h-5' />
-              <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
-                <div className='flex items-baseline justify-between gap-3 text-sm'>
-                  <span className='min-w-0 truncate'>{row.name}</span>
-                  <span className='shrink-0 tabular-nums'>
-                    <span className='font-medium'>{formatter(row.value)}</span>
-                    <span className='sr-only'>, </span>
-                    <span className='text-muted-foreground inline-block w-14 text-right text-xs'>
-                      {share(row.value)}
-                      <span className='sr-only'> of total</span>
-                    </span>
+    <BlockStateProvider status={status} empty={countries.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </BlockReady>
+        </header>
+        <div className='flex flex-col gap-1.5'>
+          <div className='text-muted-foreground flex justify-between px-2 text-xs'>
+            <span>Country</span>
+            <span className='capitalize'>{unit}</span>
+          </div>
+          <BlockStateRows rows={9} />
+          {!status && rows.length > 0 && (
+            <Leaderboard>
+              {rows.map((row, index) => (
+                <LeaderboardItem key={row.key}>
+                  <LeaderboardBar
+                    className={
+                      row.code === undefined
+                        ? 'bg-muted'
+                        : index === 0
+                          ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                          : undefined
+                    }
+                    delay={index * 100}
+                    value={largest > 0 ? (row.value / largest) * 100 : 0}
+                  />
+                  <CountryFlag code={row.code} />
+                  <LeaderboardLabel
+                    className={cn(
+                      'truncate',
+                      row.code === undefined && 'text-muted-foreground',
+                    )}
+                  >
+                    {row.name}
+                  </LeaderboardLabel>
+                  <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
+                    {share(row.value)}
+                    <span className='sr-only'> of total</span>
                   </span>
-                </div>
-                <ShareBar
-                  color={row.code ? 'var(--chart-2)' : 'var(--muted-foreground)'}
-                  value={largest > 0 ? row.value / largest : 0}
-                />
-              </div>
-            </li>
-          ))}
-        </ol>
-      </CardContent>
-    </Card>
+                  <LeaderboardValue className='w-14'>
+                    {formatter(row.value)}
+                  </LeaderboardValue>
+                </LeaderboardItem>
+              ))}
+            </Leaderboard>
+          )}
+        </div>
+      </section>
+    </BlockStateProvider>
   )
 }
 

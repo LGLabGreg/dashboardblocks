@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -128,10 +132,10 @@ type ConnectionStatus = 'connected' | 'error' | 'paused' | 'disconnected'
 
 const connectionStatusConfig: Record<
   ConnectionStatus,
-  { className: string; icon: ReactNode; label: string }
+  { icon: ReactNode; label: string; tone: StatusTone }
 > = {
   connected: {
-    className: 'text-emerald-700 dark:text-emerald-400',
+    tone: 'good',
     icon: (
       <IconPlaceholder
         lucide='CircleCheckIcon'
@@ -145,7 +149,7 @@ const connectionStatusConfig: Record<
     label: 'Connected',
   },
   disconnected: {
-    className: 'text-muted-foreground',
+    tone: 'neutral',
     icon: (
       <IconPlaceholder
         lucide='CircleDashedIcon'
@@ -159,7 +163,7 @@ const connectionStatusConfig: Record<
     label: 'Not connected',
   },
   error: {
-    className: 'text-red-700 dark:text-red-400',
+    tone: 'bad',
     icon: (
       <IconPlaceholder
         lucide='TriangleAlertIcon'
@@ -173,7 +177,7 @@ const connectionStatusConfig: Record<
     label: 'Needs attention',
   },
   paused: {
-    className: 'text-amber-800 dark:text-amber-400',
+    tone: 'warning',
     icon: (
       <IconPlaceholder
         lucide='CirclePauseIcon'
@@ -199,16 +203,16 @@ function ConnectionStatusLabel({
 }) {
   const config = connectionStatusConfig[status]
   return (
-    <span
+    <StatusLabel
+      tone={config.tone}
       className={cn(
-        'inline-flex items-center gap-1.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5',
-        config.className,
+        'inline-flex items-center gap-1.5 text-xs [&_svg]:size-3.5',
         className,
       )}
     >
       {config.icon}
       {label ?? config.label}
-    </span>
+    </StatusLabel>
   )
 }
 

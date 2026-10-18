@@ -61,11 +61,12 @@ const exampleProps: CommandMenu2Props = {
         label: 'Jonas Weber',
       },
       {
-        description: 'Priya Nair · $89.00',
+        description: 'Priya Nair',
         href: '/orders/1041',
         icon: orderIcon,
         id: 'recent-1041',
         label: 'Order #1041',
+        meta: '$89.00',
       },
     ],
   },
@@ -96,11 +97,12 @@ async function searchRecords(query: string): Promise<CommandMenuGroup[]> {
           `#${order.id} ${order.customer}`.toLowerCase().includes(needle),
         )
         .map((order) => ({
-          description: `${order.customer} · ${order.total}`,
+          description: order.customer,
           href: `/orders/${order.id}`,
           icon: orderIcon,
           id: `order-${order.id}`,
           label: `Order #${order.id}`,
+          meta: order.total,
         })),
     },
   ]
@@ -141,7 +143,7 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
   }
 
   return (
-    <div className='flex flex-col items-center gap-3'>
+    <section className='@container flex flex-col items-center gap-3'>
       <CommandMenuTrigger
         onClick={() => setOpen(true)}
         placeholder='Search customers and orders…'
@@ -159,9 +161,8 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
         loading={loading}
         onNavigate={onNavigate}
         placeholder='Search customers and orders…'
-        emptyMessage='No customers or orders match.'
       />
-    </div>
+    </section>
   )
 }
 

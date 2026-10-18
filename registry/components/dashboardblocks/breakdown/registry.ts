@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('breakdown')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown/breakdown-01.tsx',
@@ -23,7 +27,7 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('breakdown')],
+    registryDependencies: [registryUrl('block-state'), registryUrl('breakdown')],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown/breakdown-02.tsx',
@@ -32,7 +36,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        "One bar per group showing its mix of categories, with a chosen category's share labelled on every row.",
+        "One bar per group showing its mix of categories, sorted by a chosen category's share, which is labelled on every row.",
       size: 'half',
       usedWith: ['chart-panel-03', 'data-table-02'],
     },
@@ -40,7 +44,13 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('breakdown')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('chart'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown/breakdown-03.tsx',
@@ -57,7 +67,13 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-04',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('breakdown')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown/breakdown-04.tsx',
@@ -65,7 +81,8 @@ export const examples: Registry['items'] = [
       },
     ],
     meta: {
-      shows: "How each category's share of a total moved between two periods.",
+      shows:
+        "How each category's share of a total moved between two periods, as a dot for each period joined by a line.",
       size: 'half',
       usedWith: ['chart-panel-03', 'data-table-03'],
     },

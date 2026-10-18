@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   KanbanAssignees,
   KanbanAttachments,
   KanbanBoard,
@@ -20,15 +27,8 @@ import {
   getColumnItems,
   moveItem,
 } from '@/registry/components/dashboardblocks/kanban'
-import { useState } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { getDayOffset } from '@/registry/components/dashboardblocks/schedule'
+import { useMemo, useState } from 'react'
 
 interface SprintIssue extends KanbanItem {
   assignees: string[]
@@ -45,15 +45,21 @@ interface Kanban1Props {
   columns: KanbanColumnDef[]
   /** The column that counts as finished: its due dates lose their urgency. */
   doneColumn: string
-  issues: SprintIssue[]
+  /** Leave out, or pass none, to show the empty state. */
+  issues?: SprintIssue[]
   /** Pass a fixed date, so due dates render the same on the server and in the browser. */
   now: Date
   onMove?: (id: string, column: string, index: number) => void
-  subtitle: string
+  /** Such as `Sep 21 – Oct 4`. */
+  period: string
+  project: string
+  status?: BlockStatus
   title: string
 }
 
 const NOW = Date.UTC(2026, 8, 28, 10)
+const noIssues: SprintIssue[] = []
+
 const inDays = (days: number) => new Date(NOW + days * 86_400_000)
 
 const labels = {
@@ -67,11 +73,11 @@ const labels = {
 
 const exampleProps: Kanban1Props = {
   columns: [
-    { color: 'var(--muted-foreground)', id: 'backlog', title: 'Backlog' },
-    { color: 'var(--chart-3)', id: 'todo', title: 'To do' },
-    { color: 'var(--chart-2)', id: 'progress', title: 'In progress', wipLimit: 3 },
-    { color: 'var(--chart-5)', id: 'review', title: 'In review', wipLimit: 2 },
-    { color: 'var(--chart-4)', id: 'done', title: 'Done' },
+    { color: 'var(--color-muted-foreground)', id: 'backlog', title: 'Backlog' },
+    { color: 'var(--color-chart-3)', id: 'todo', title: 'To do' },
+    { color: 'var(--color-chart-2)', id: 'progress', title: 'In progress', wipLimit: 3 },
+    { color: 'var(--color-chart-5)', id: 'review', title: 'In review', wipLimit: 2 },
+    { color: 'var(--color-chart-4)', id: 'done', title: 'Done' },
   ],
   doneColumn: 'done',
   issues: [
@@ -198,7 +204,8 @@ const exampleProps: Kanban1Props = {
     },
   ],
   now: new Date(NOW),
-  subtitle: 'Web app · Sep 21 – Oct 4',
+  period: 'Sep 21 – Oct 4',
+  project: 'Web app',
   title: 'Sprint 24',
 }
 
@@ -206,77 +213,100 @@ const Kanban1 = (props: Kanban1Props) => {
   const {
     columns,
     doneColumn,
-    issues: initialIssues,
+    issues: loadedIssues = noIssues,
     now,
     onMove,
-    subtitle,
+    period,
+    project,
+    status,
     title,
   } = props
-  const [issues, setIssues] = useState(initialIssues)
+  const [moves, setMoves] = useState<{ column: string; id: string; index: number }[]>([])
+  const issues = useMemo(
+    () =>
+      moves.reduce(
+        (current, move) => moveItem(current, move.id, move.column, move.index),
+        loadedIssues,
+      ),
+    [loadedIssues, moves],
+  )
+  const state = getBlockState(status, loadedIssues.length === 0)
   const done = getColumnItems(issues, doneColumn).length
+  const overdue = issues.filter(
+    (issue) =>
+      issue.column !== doneColumn && issue.due && getDayOffset(issue.due, now) < 0,
+  ).length
 
   return (
-    <Card className='gap-0 pb-0'>
-      <CardHeader className='border-b'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>
-          {subtitle} · {done} of {issues.length} issues done
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='px-0'>
-        <KanbanBoard
-          className='scroll-px-6 px-6 py-4'
-          columns={columns}
-          itemName={{ one: 'issue', other: 'issues' }}
-          items={issues}
-          label={`${title} board`}
-          onMove={(id, column, index) => {
-            setIssues((current) => moveItem(current, id, column, index))
-            onMove?.(id, column, index)
-          }}
-        >
-          {columns.map((column) => (
-            <KanbanColumn key={column.id} column={column}>
-              {getColumnItems(issues, column.id).map((issue) => (
-                <KanbanCard key={issue.id} item={issue}>
-                  <div className='flex min-h-6 items-center gap-2 pr-7'>
-                    <span className='text-muted-foreground font-mono text-xs'>
-                      {issue.key}
-                    </span>
-                    <KanbanPriority className='mr-auto' priority={issue.priority} />
-                    <KanbanAssignees names={issue.assignees} />
-                  </div>
-                  <KanbanCardTitle />
-                  <KanbanCardMenu className='absolute top-3 right-2' />
-                  {issue.labels.length > 0 && <KanbanLabels labels={issue.labels} />}
-                  <div className='flex flex-wrap items-center gap-x-3 gap-y-2 empty:hidden'>
-                    {issue.due && (
-                      <KanbanDueDate
-                        date={issue.due}
-                        done={issue.column === doneColumn}
-                        now={now}
-                      />
-                    )}
-                    {issue.comments !== undefined && (
-                      <KanbanComments count={issue.comments} />
-                    )}
-                    {issue.attachments !== undefined && (
-                      <KanbanAttachments count={issue.attachments} />
-                    )}
-                    {issue.subtasks && (
-                      <KanbanSubtasks
-                        done={issue.subtasks.done}
-                        total={issue.subtasks.total}
-                      />
-                    )}
-                  </div>
-                </KanbanCard>
-              ))}
-            </KanbanColumn>
-          ))}
-        </KanbanBoard>
-      </CardContent>
-    </Card>
+    <BlockStateProvider status={status} empty={loadedIssues.length === 0}>
+      <section className='@container flex flex-col gap-3'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>
+              {project}, {period}. {done} of {issues.length} issues done
+              {overdue > 0 ? `, ${overdue} overdue.` : '.'}
+            </p>
+          </BlockReady>
+        </header>
+        {(state === 'empty' || state === 'error') && (
+          <BlockStateRows className='border-t pt-3' />
+        )}
+        {(state === undefined || state === 'loading') && (
+          <KanbanBoard
+            className='pb-2'
+            columns={columns}
+            itemName={{ one: 'issue', other: 'issues' }}
+            items={issues}
+            label={`${title} board`}
+            onMove={(id, column, index) => {
+              setMoves((current) => [...current, { column, id, index }])
+              onMove?.(id, column, index)
+            }}
+          >
+            {columns.map((column) => (
+              <KanbanColumn key={column.id} column={column}>
+                {getColumnItems(issues, column.id).map((issue) => (
+                  <KanbanCard key={issue.id} item={issue}>
+                    <div className='flex min-h-6 items-center gap-2 pr-7'>
+                      <span className='text-muted-foreground font-mono text-xs'>
+                        {issue.key}
+                      </span>
+                      <KanbanPriority className='mr-auto' priority={issue.priority} />
+                      <KanbanAssignees names={issue.assignees} />
+                    </div>
+                    <KanbanCardTitle />
+                    <KanbanCardMenu className='absolute top-3 right-2' />
+                    {issue.labels.length > 0 && <KanbanLabels labels={issue.labels} />}
+                    <div className='flex flex-wrap items-center gap-x-3 gap-y-2 empty:hidden'>
+                      {issue.due && (
+                        <KanbanDueDate
+                          date={issue.due}
+                          done={issue.column === doneColumn}
+                          now={now}
+                        />
+                      )}
+                      {issue.comments !== undefined && (
+                        <KanbanComments count={issue.comments} />
+                      )}
+                      {issue.attachments !== undefined && (
+                        <KanbanAttachments count={issue.attachments} />
+                      )}
+                      {issue.subtasks && (
+                        <KanbanSubtasks
+                          done={issue.subtasks.done}
+                          total={issue.subtasks.total}
+                        />
+                      )}
+                    </div>
+                  </KanbanCard>
+                ))}
+              </KanbanColumn>
+            ))}
+          </KanbanBoard>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

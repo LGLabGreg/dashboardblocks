@@ -1,32 +1,47 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   HeatmapGrid,
   HeatmapLegend,
+  getColumnTotals,
   getPeak,
 } from '@/registry/components/dashboardblocks/heatmap'
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  Stat,
+  StatGroup,
+  StatLabel,
+  StatValue,
+} from '@/registry/components/dashboardblocks/stat-group'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 interface Heatmap1Props {
-  description: string
-  /** Seven rows, Monday first, of 24 hourly values. */
-  values: number[][]
+  /** Defaults to a sentence about the busiest time. */
+  description?: string
+  status?: BlockStatus
   title: string
   unit: string
+  /** Seven rows, Monday first, of 24 hourly values. Leave out to show the empty state. */
+  values?: number[][]
 }
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const DAY_NAMES = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+]
 const HOURS = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))
 
 const exampleProps: Heatmap1Props = {
-  description: 'Average sessions by weekday and hour, last 4 weeks',
   title: 'When people visit',
   unit: 'sessions',
   values: DAYS.map((_, day) =>
@@ -40,37 +55,80 @@ const exampleProps: Heatmap1Props = {
   ),
 }
 
+const hourRange = (hour: number) =>
+  `${HOURS[hour]}:00–${String((hour + 1) % 24).padStart(2, '0')}:00`
+
 const Heatmap1 = (props: Heatmap1Props) => {
-  const { description, title, unit, values } = props
+  const { status, title, unit, values = [] } = props
   const peak = getPeak(values)
-  const hourRange = (hour: number) =>
-    `${HOURS[hour]}:00–${String((hour + 1) % 24).padStart(2, '0')}:00`
+  const byHour = getColumnTotals(values)
+  const peakHour = byHour.reduce(
+    (top, value, hour) => (value > byHour[top] ? hour : top),
+    0,
+  )
+  const week = byHour.reduce((sum, value) => sum + value, 0)
+  const weekend = values
+    .slice(5)
+    .flat()
+    .reduce((sum, value) => sum + value, 0)
+  const unitName = unit.charAt(0).toUpperCase() + unit.slice(1)
+  const {
+    description = peak
+      ? `${DAY_NAMES[peak.row]} at ${HOURS[peak.column]}:00 is the busiest hour of an average week, with ${formatNumber(peak.value)} ${unit}.`
+      : undefined,
+  } = props
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <BlockStateProvider status={status} empty={!peak}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </BlockReady>
+        </header>
+        <StatGroup className='grid-cols-2 @xl:grid-cols-3'>
+          <Stat className='col-span-2 @xl:col-span-1'>
+            <StatLabel>{unitName} in an average week</StatLabel>
+            <StatValue>{formatNumber(week)}</StatValue>
+          </Stat>
+          <Stat className='justify-end'>
+            <StatLabel>Busiest hour of the day</StatLabel>
+            <StatValue className='text-2xl'>{HOURS[peakHour]}:00</StatValue>
+          </Stat>
+          <Stat className='justify-end'>
+            <StatLabel>On weekends</StatLabel>
+            <StatValue className='text-2xl'>
+              {formatPercent(week > 0 ? weekend / week : 0, { maximumFractionDigits: 0 })}
+            </StatValue>
+          </Stat>
+        </StatGroup>
         <HeatmapGrid
           cellClassName='h-5'
+          cellName={({ column, row }) => `${DAYS[row]}, ${hourRange(column)}`}
           columnLabelEvery={3}
+          columnSummary={{
+            highlightIndex: peakHour,
+            label: `${unitName} by hour of the day, all week: most at ${HOURS[peakHour]}:00, with ${formatNumber(byHour[peakHour])}`,
+            labels: HOURS.map((_, hour) => `${hourRange(hour)}, all week`),
+            values: byHour,
+          }}
           columns={HOURS}
-          footer={<HeatmapLegend />}
           describe={({ column, row }, value) =>
-            `${DAYS[row]}, ${hourRange(column)}: ${value?.toLocaleString() ?? 'no data'} ${unit}`
+            `${DAY_NAMES[row]}, ${hourRange(column)}: ${value === null ? 'no data' : formatNumber(value)} ${unit}`
           }
-          label={`${title}: ${description}`}
+          footer={<HeatmapLegend />}
+          label={`${title}: average ${unit} by weekday and hour`}
           rowHeader='Day'
+          rowNames={DAY_NAMES}
           rows={DAYS}
+          valueName={unitName}
           values={values}
-        >
-          {peak &&
-            `Busiest: ${DAYS[peak.row]}, ${hourRange(peak.column)}, with ${peak.value.toLocaleString()} ${unit}`}
-        </HeatmapGrid>
-      </CardContent>
-    </Card>
+        />
+      </section>
+    </BlockStateProvider>
   )
 }
 

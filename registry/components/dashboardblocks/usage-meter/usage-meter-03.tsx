@@ -1,19 +1,20 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   UsageBar,
   UsageKey,
+  UsageMeterValue,
   formatUsage,
 } from '@/registry/components/dashboardblocks/usage-meter'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 interface MeteredItem {
   included: number
@@ -27,13 +28,18 @@ interface MeteredItem {
 }
 
 interface UsageMeter3Props {
-  description: string
-  items: MeteredItem[]
+  /** When the overage is billed, such as `Oct 1`. */
+  billedOn: string
+  /** Defaults to a sentence naming the meters past what the plan includes. */
+  description?: string
+  /** Leave out, or pass none, to show the empty state. */
+  items?: MeteredItem[]
+  status?: BlockStatus
   title: string
 }
 
 const exampleProps: UsageMeter3Props = {
-  description: 'Usage past your plan is billed on Oct 1',
+  billedOn: 'Oct 1',
   items: [
     {
       included: 1_000_000,
@@ -51,12 +57,13 @@ const exampleProps: UsageMeter3Props = {
 
 const OVERAGE_COLOR = 'var(--color-amber-500)'
 
-const currency = new Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' })
+const formatMoney = (value: number) =>
+  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
 
 function formatPrice(item: MeteredItem) {
   const per = item.per ?? 1
   const unit = per === 1 ? item.unit.replace(/s$/, '') : item.unit
-  return `${currency.format(item.price)} per ${per === 1 ? '' : `${formatUsage(per, undefined, { compact: true })} `}${unit}`
+  return `${formatMoney(item.price)} per ${per === 1 ? '' : `${formatUsage(per, undefined, { compact: true })} `}${unit}`
 }
 
 function getOverageCost(item: MeteredItem) {
@@ -64,81 +71,111 @@ function getOverageCost(item: MeteredItem) {
   return Math.ceil(over / (item.per ?? 1)) * item.price
 }
 
+function joinNames(names: string[]) {
+  if (names.length < 2) return names.join('')
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+}
+
+function describe(items: MeteredItem[]) {
+  const over = items.filter((item) => item.used > item.included).map((item) => item.name)
+  if (over.length === 0) return 'Every meter is within what your plan includes.'
+  return `${joinNames(over)} ${over.length === 1 ? 'is' : 'are'} past what your plan includes.`
+}
+
 const UsageMeter3 = (props: UsageMeter3Props) => {
-  const { description, items, title } = props
+  const { billedOn, items = [], status, title } = props
+  const { description = describe(items) } = props
+  const state = getBlockState(status, items.length === 0)
   const total = items.reduce((sum, item) => sum + getOverageCost(item), 0)
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
-        <ul className='flex flex-col gap-4'>
-          {items.map((item) => {
-            const over = Math.max(0, item.used - item.included)
-            const cost = getOverageCost(item)
-            return (
-              <li key={item.name} className='flex flex-col gap-1.5'>
-                <div className='flex items-baseline justify-between gap-3 text-sm'>
-                  <span className='font-medium'>{item.name}</span>
-                  <span className='text-muted-foreground text-xs tabular-nums'>
-                    <span className='text-foreground font-medium'>
-                      {formatUsage(item.used, undefined, { compact: true })}
-                    </span>{' '}
-                    of {formatUsage(item.included, item.unit, { compact: true })} included
-                  </span>
-                </div>
-                <UsageBar
-                  color='var(--primary)'
-                  limit={item.included}
-                  overColor={OVERAGE_COLOR}
-                  size='sm'
-                  used={item.used}
-                />
-                <div className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
-                  <span>{formatPrice(item)}</span>
-                  {over > 0 ? (
-                    <span className='font-medium text-amber-800 tabular-nums dark:text-amber-400'>
-                      +{formatUsage(over, item.unit, { compact: true })} ·{' '}
-                      {currency.format(cost)}
-                    </span>
-                  ) : (
-                    <span className='tabular-nums'>
-                      {formatUsage(item.included - item.used, item.unit, {
-                        compact: true,
-                      })}{' '}
-                      left
-                    </span>
-                  )}
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-        <div className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-          <span className='inline-flex items-center gap-1.5'>
-            <UsageKey shape='used' />
-            Included
-          </span>
-          <span className='inline-flex items-center gap-1.5'>
-            <UsageKey color={OVERAGE_COLOR} shape='over' />
-            Overage
-          </span>
-          <span className='inline-flex items-center gap-1.5'>
-            <UsageKey shape='limit' />
-            Plan limit
-          </span>
+    <BlockStateProvider status={status} empty={items.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        <div className='flex flex-col gap-1 border-t pt-4'>
+          <UsageMeterValue>{formatMoney(total)}</UsageMeterValue>
+          {state === 'loading' ? (
+            <BlockStateText className='text-sm' />
+          ) : state ? null : (
+            <p className='text-muted-foreground text-sm'>
+              Estimated overage, billed {billedOn}
+            </p>
+          )}
         </div>
-      </CardContent>
-      <CardFooter className='justify-between gap-3 border-t'>
-        <span className='text-muted-foreground text-sm'>Estimated overage</span>
-        <span className='text-lg font-semibold tabular-nums'>
-          {currency.format(total)}
-        </span>
-      </CardFooter>
-    </Card>
+        {state === 'loading' && <BlockStateRows className='border-t' rows={3} />}
+        {!state && (
+          <>
+            <ul className='flex flex-col border-t'>
+              {items.map((item) => {
+                const over = Math.max(0, item.used - item.included)
+                const cost = getOverageCost(item)
+                return (
+                  <li key={item.name} className='flex flex-col gap-2 border-b py-3'>
+                    <div className='flex items-baseline justify-between gap-3 text-sm'>
+                      <span className='font-medium'>{item.name}</span>
+                      <span className='text-muted-foreground tabular-nums'>
+                        <span className='text-foreground font-medium'>
+                          {formatUsage(item.used, undefined, { compact: true })}
+                        </span>{' '}
+                        of {formatUsage(item.included, item.unit, { compact: true })}
+                      </span>
+                    </div>
+                    <UsageBar
+                      color='var(--color-chart-2)'
+                      limit={item.included}
+                      overColor={OVERAGE_COLOR}
+                      size='sm'
+                      used={item.used}
+                    />
+                    <div className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
+                      <span>{formatPrice(item)}</span>
+                      {over > 0 ? (
+                        <span className='flex items-baseline gap-3 tabular-nums'>
+                          <span className='font-medium text-amber-800 dark:text-amber-400'>
+                            {formatUsage(over, item.unit, { compact: true })} over
+                          </span>
+                          <span className='text-foreground min-w-16 text-right font-medium'>
+                            {formatMoney(cost)}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className='tabular-nums'>
+                          {formatUsage(item.included - item.used, item.unit, {
+                            compact: true,
+                          })}{' '}
+                          left
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          </>
+        )}
+        {state !== 'empty' && state !== 'error' && (
+          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+            <li className='inline-flex items-center gap-1.5'>
+              <UsageKey shape='used' />
+              Included
+            </li>
+            <li className='inline-flex items-center gap-1.5'>
+              <UsageKey color={OVERAGE_COLOR} shape='over' />
+              Overage
+            </li>
+            <li className='inline-flex items-center gap-1.5'>
+              <UsageKey shape='limit' />
+              Plan limit
+            </li>
+          </ul>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

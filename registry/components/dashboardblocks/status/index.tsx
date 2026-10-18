@@ -19,3 +19,11 @@ export const statusExampleProps = {
   'status-04': status4ExampleProps,
   'status-05': status5ExampleProps,
 }
+
+export const statusEmptyProps = {
+  'status-01': { services: [] },
+  'status-02': { services: [] },
+  'status-03': { updates: [] },
+  'status-04': { regions: [] },
+  'status-05': { days: [], downtime: undefined, incidents: [] },
+}

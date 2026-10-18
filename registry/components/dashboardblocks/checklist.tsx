@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ComponentProps } from 'react'
 
@@ -10,7 +14,7 @@ type StepState = 'done' | 'current' | 'todo' | 'skipped'
 interface StepStateConfig {
   icon: React.ReactNode
   label: string
-  text: string
+  tone: StatusTone
 }
 
 const stepStateConfig: Record<StepState, StepStateConfig> = {
@@ -26,7 +30,7 @@ const stepStateConfig: Record<StepState, StepStateConfig> = {
       />
     ),
     label: 'In progress',
-    text: 'text-foreground font-medium',
+    tone: 'info',
   },
   done: {
     icon: (
@@ -40,7 +44,7 @@ const stepStateConfig: Record<StepState, StepStateConfig> = {
       />
     ),
     label: 'Done',
-    text: 'text-emerald-700 dark:text-emerald-400',
+    tone: 'good',
   },
   skipped: {
     icon: (
@@ -54,7 +58,7 @@ const stepStateConfig: Record<StepState, StepStateConfig> = {
       />
     ),
     label: 'Skipped',
-    text: 'text-muted-foreground',
+    tone: 'neutral',
   },
   todo: {
     icon: (
@@ -68,7 +72,7 @@ const stepStateConfig: Record<StepState, StepStateConfig> = {
       />
     ),
     label: 'To do',
-    text: 'text-muted-foreground',
+    tone: 'neutral',
   },
 }
 
@@ -89,6 +93,19 @@ function getChecklistProgress(steps: { state: StepState }[]): ChecklistProgress 
   if (total > 0) percentage = (done / total) * 100
   else if (steps.length > 0) percentage = 100
   return { done, percentage, remaining: total - done, skipped, total }
+}
+
+interface ChecklistNoun {
+  one: string
+  other: string
+}
+
+function describeChecklistProgress(
+  progress: ChecklistProgress,
+  noun: ChecklistNoun = { one: 'step', other: 'steps' },
+) {
+  const done = `${progress.done} of ${progress.total} ${progress.total === 1 ? noun.one : noun.other} done`
+  return progress.skipped > 0 ? `${done}, ${progress.skipped} skipped` : done
 }
 
 function getNextStep<T extends { state: StepState }>(steps: T[]): T | undefined {
@@ -122,13 +139,13 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
   return (
     <span
       aria-hidden
+      data-state={state}
       className={cn(
-        'bg-card flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums [&_svg]:size-3.5',
-        state === 'done' && 'bg-emerald-600 text-white',
-        state === 'current' && 'border-primary text-foreground border-2',
-        state === 'todo' && 'text-muted-foreground border-muted-foreground/40 border',
-        state === 'skipped' &&
-          'text-muted-foreground border-muted-foreground/60 border border-dashed',
+        'flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium tabular-nums [&_svg]:size-3.5',
+        state === 'done' && 'border-current text-emerald-700 dark:text-emerald-400',
+        state === 'current' && 'border-foreground text-foreground border-2',
+        state === 'todo' && 'text-muted-foreground border-border',
+        state === 'skipped' && 'text-muted-foreground border-border border-dashed',
         className,
       )}
     >
@@ -153,9 +170,22 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
       )}
       {(state === 'current' || state === 'todo') &&
         (index === undefined
-          ? state === 'current' && <span className='bg-primary size-2 rounded-full' />
+          ? state === 'current' && <span className='bg-foreground size-2 rounded-full' />
           : index)}
     </span>
+  )
+}
+
+function StepStateLabel({
+  className,
+  state,
+  ...props
+}: Omit<ComponentProps<typeof StatusLabel>, 'tone'> & { state: StepState }) {
+  const config = stepStateConfig[state]
+  return (
+    <StatusLabel tone={config.tone} className={className} {...props}>
+      {config.label}
+    </StatusLabel>
   )
 }
 
@@ -183,11 +213,19 @@ function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'ty
 
 export {
   StepIndicator,
+  StepStateLabel,
   TaskCheckbox,
+  describeChecklistProgress,
   getChecklistProgress,
   getNextStep,
   skipStep,
   stepStateConfig,
 }
 
-export type { ChecklistProgress, StepIndicatorProps, StepState, StepStateConfig }
+export type {
+  ChecklistNoun,
+  ChecklistProgress,
+  StepIndicatorProps,
+  StepState,
+  StepStateConfig,
+}

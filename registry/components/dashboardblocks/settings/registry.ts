@@ -8,9 +8,11 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'input',
+      registryUrl('block-state'),
+      registryUrl('details'),
       registryUrl('settings'),
+      registryUrl('status-label'),
       registryUrl('team'),
     ],
     files: [
@@ -29,7 +31,14 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-02',
     type: 'registry:component',
-    registryDependencies: ['badge', 'button', 'card', 'input', registryUrl('settings')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('settings'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-02.tsx',
@@ -46,7 +55,7 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-03',
     type: 'registry:component',
-    registryDependencies: ['card', 'switch'],
+    registryDependencies: ['switch', registryUrl('block-state')],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-03.tsx',
@@ -65,8 +74,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
       'tabs',
+      registryUrl('block-state'),
       registryUrl('settings'),
       registryUrl('team'),
     ],
@@ -78,7 +87,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Connected and available integrations in tabs, with what each does and a prompt for ones that need reconnecting.',
+        'Connected and available integrations in tabs, one row each with what it does, its status and a prompt for ones that need reconnecting.',
       size: 'half',
       usedWith: ['settings-05', 'settings-02'],
     },
@@ -86,7 +95,16 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-05',
     type: 'registry:component',
-    registryDependencies: ['badge', 'button', 'card', 'switch', registryUrl('settings')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      'button',
+      'switch',
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('settings'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-05.tsx',
@@ -95,7 +113,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Webhook endpoints with the events they receive, recent deliveries and delivery rate, and a switch to pause each one.',
+        'Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.',
       size: 'full',
       usedWith: ['settings-02', 'settings-04', 'status-01'],
     },
@@ -103,7 +121,7 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-06',
     type: 'registry:component',
-    registryDependencies: ['button', 'card', 'input', registryUrl('settings')],
+    registryDependencies: ['button', 'input', registryUrl('settings')],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-06.tsx',
@@ -122,9 +140,11 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'card',
+      'field',
       'input',
       'native-select',
+      registryUrl('block-state'),
+      registryUrl('forms'),
       registryUrl('team'),
     ],
     files: [
@@ -135,7 +155,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A profile form with your photo, name, email, time zone and theme, confirming a new email before it takes effect.',
+        'A profile form with your photo, name, email, time zone and theme, a save bar that shows once something changes, and a new email confirmed before it takes effect.',
       size: 'half',
       usedWith: ['security-05', 'settings-03'],
     },

@@ -1,19 +1,19 @@
 'use client'
 
 import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  SkeletonText,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type DeployStatus,
   DeployStatusLabel,
   shortSha,
 } from '@/registry/components/dashboardblocks/deployments'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Details } from '@/registry/components/dashboardblocks/details'
 
 interface Environment {
   deployedAt: Date
@@ -27,12 +27,14 @@ interface Environment {
 
 interface Deployments2Props {
   /** How many commits each environment is ahead of the next, in order. */
-  ahead: number[]
-  description: string
-  /** In promotion order, e.g. */
-  environments: Environment[]
+  ahead?: number[]
+  /** Defaults to a sentence naming what the last environment runs and what is waiting. */
+  description?: string
+  /** In promotion order, ending with the one customers use. Leave out, or pass none, to show the empty state. */
+  environments?: Environment[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
+  status?: BlockStatus
   title: string
 }
 
@@ -41,7 +43,6 @@ const hoursAgo = (hours: number) => new Date(NOW.getTime() - hours * 3_600_000)
 
 const exampleProps: Deployments2Props = {
   ahead: [4, 2],
-  description: 'What each environment is running, and what is waiting to be promoted',
   environments: [
     {
       deployedAt: hoursAgo(0.3),
@@ -84,66 +85,106 @@ function formatDeployed(date: Date, now: Date) {
   return relative.format(-Math.round(minutes / 1_440), 'day')
 }
 
+const summarize = (environments: Environment[], ahead: number[]) => {
+  const live = environments[environments.length - 1]
+  if (!live) return 'No environments yet.'
+  const waiting = ahead.reduce((sum, count) => sum + count, 0)
+  const runs = `${live.name} runs ${live.version}`
+  if (waiting === 0) return `${runs}, the same build as every other environment.`
+  return `${runs}, with ${waiting} ${waiting === 1 ? 'commit' : 'commits'} waiting to reach it.`
+}
+
 const Deployments2 = (props: Deployments2Props) => {
-  const { ahead, description, environments, now, title } = props
+  const { ahead = [], environments = [], now, status, title } = props
+  const { description = summarize(environments, ahead) } = props
+  const state = getBlockState(status, environments.length === 0)
 
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ol className='flex flex-col gap-2 @xl:flex-row @xl:items-stretch'>
-          {environments.map((environment, index) => (
-            <li
-              key={environment.id}
-              className='flex flex-col gap-2 @xl:flex-1 @xl:flex-row @xl:items-center'
-            >
-              {index > 0 && (
-                <div className='text-muted-foreground flex items-center gap-1.5 self-center text-xs @xl:flex-col @xl:gap-0.5 [&_svg]:size-4'>
-                  <IconPlaceholder
-                    lucide='ArrowRightIcon'
-                    tabler='IconArrowRight'
-                    hugeicons='ArrowRight01Icon'
-                    phosphor='ArrowRightIcon'
-                    remixicon='RiArrowRightLine'
-                    aria-hidden
-                    className='rotate-90 @xl:rotate-0'
-                  />
-                  <span className='tabular-nums whitespace-nowrap'>
-                    {ahead[index - 1] ?? 0}{' '}
-                    {(ahead[index - 1] ?? 0) === 1 ? 'commit' : 'commits'}
-                    <span className='sr-only'>
-                      {' '}
-                      waiting to be promoted from {environments[index - 1].name}
-                    </span>
-                  </span>
-                </div>
-              )}
-              <div className='flex flex-1 flex-col gap-2 rounded-lg border p-3'>
-                <div className='flex items-center justify-between gap-2'>
-                  <span className='text-sm font-medium'>{environment.name}</span>
-                  <DeployStatusLabel showLabel={false} status={environment.status} />
-                </div>
-                <span className='font-mono text-lg font-semibold tracking-tight'>
-                  {environment.version}
+    <BlockStateProvider status={status} empty={environments.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <BlockReady className='text-sm'>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </BlockReady>
+        </header>
+        {state === 'loading' && (
+          <div className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
+            <span className='sr-only'>Loading</span>
+            {Array.from({ length: 3 }, (_, index) => (
+              <div
+                key={index}
+                aria-hidden
+                className='flex min-w-0 flex-col gap-1 border-t pt-3'
+              >
+                <span className='text-sm'>
+                  <SkeletonText className='w-24' />
                 </span>
-                <span className='text-muted-foreground flex flex-col text-xs'>
-                  <span className='font-mono'>{shortSha(environment.sha)}</span>
-                  <span>
-                    {environment.deployedBy},{' '}
+                <span className='text-2xl'>
+                  <SkeletonText className='w-28' />
+                </span>
+                <span className='text-xs'>
+                  <SkeletonText className='w-32' />
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+        {(state === 'empty' || state === 'error') && (
+          <div className='border-t pt-3'>
+            <BlockStateText
+              className='text-2xl font-light tracking-tight'
+              variant='short'
+            />
+          </div>
+        )}
+        {!state && (
+          <ol className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
+            {environments.map((environment, index) => {
+              const next = environments[index + 1]
+              const waiting = ahead[index] ?? 0
+              return (
+                <li
+                  key={environment.id}
+                  className='flex min-w-0 flex-col gap-1 border-t pt-3'
+                >
+                  <div className='flex items-baseline justify-between gap-2'>
+                    <span className='text-muted-foreground text-sm'>
+                      {environment.name}
+                    </span>
+                    <DeployStatusLabel status={environment.status} />
+                  </div>
+                  <span className='truncate text-2xl font-light tracking-tight tabular-nums'>
+                    {environment.version}
+                  </span>
+                  <Details className='text-muted-foreground text-xs'>
+                    <span className='font-mono'>{shortSha(environment.sha)}</span>
+                    {environment.deployedBy}
                     <time dateTime={environment.deployedAt.toISOString()}>
                       {formatDeployed(environment.deployedAt, now)}
                     </time>
-                  </span>
-                </span>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </CardContent>
-    </Card>
+                  </Details>
+                  {next && (
+                    <p className='text-muted-foreground mt-2 text-sm'>
+                      <span
+                        className={
+                          waiting > 0
+                            ? 'text-foreground font-medium tabular-nums'
+                            : 'tabular-nums'
+                        }
+                      >
+                        {waiting} {waiting === 1 ? 'commit' : 'commits'}
+                      </span>{' '}
+                      ahead of {next.name}
+                    </p>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
+        )}
+      </section>
+    </BlockStateProvider>
   )
 }
 

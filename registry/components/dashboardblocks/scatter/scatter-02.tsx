@@ -1,15 +1,27 @@
 'use client'
 
 import {
-  ChartPanelFigure,
-  ChartPanelTable,
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   chartAxisProps,
   chartGridProps,
+  chartReferenceLabel,
+  chartReferenceProps,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import {
+  ChartPanelFigure,
+  ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
   ScatterTooltipContent,
   getMedian,
 } from '@/registry/components/dashboardblocks/scatter'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
   CartesianGrid,
   LabelList,
@@ -23,14 +35,6 @@ import {
   YAxis,
 } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
 interface QuadrantItem {
   label: string
   x: number
@@ -39,9 +43,11 @@ interface QuadrantItem {
 
 interface Scatter2Props {
   description: string
-  items: QuadrantItem[]
+  /** Leave out, or pass none, to show the empty state. */
+  items?: QuadrantItem[]
   /** Names for the four quadrants: top left, top right, bottom left, bottom right. */
   quadrants: [string, string, string, string]
+  status?: BlockStatus
   title: string
   split?: { x: number; y: number }
   x: {
@@ -59,7 +65,8 @@ interface Scatter2Props {
 }
 
 const exampleProps: Scatter2Props = {
-  description: 'Share of accounts using each feature against their satisfaction with it',
+  description:
+    'How many accounts use each feature, against how satisfied they are with it.',
   items: [
     { label: 'Dashboards', x: 86, y: 4.4 },
     { label: 'Alerts', x: 71, y: 4.1 },
@@ -75,20 +82,21 @@ const exampleProps: Scatter2Props = {
   title: 'Feature priorities',
   x: {
     domain: [0, 100],
-    format: (value) => `${Math.round(value)}%`,
+    format: (value) => formatPercent(value / 100, { maximumFractionDigits: 0 }),
     label: 'Usage',
     ticks: [0, 25, 50, 75, 100],
   },
   y: {
     domain: [2, 5],
-    format: (value) => value.toFixed(1),
+    format: (value) => formatNumber(value, { minimumFractionDigits: 1 }),
     label: 'Satisfaction',
     ticks: [2, 3, 4, 5],
   },
 }
 
 const Scatter2 = (props: Scatter2Props) => {
-  const { description, items, quadrants, title, x, y } = props
+  const { description, items = [], quadrants, status, title, x, y } = props
+  const state = getBlockState(status, items.length === 0)
   const split = props.split ?? {
     x: getMedian(items.map((item) => item.x)),
     y: getMedian(items.map((item) => item.y)),
@@ -102,25 +110,31 @@ const Scatter2 = (props: Scatter2Props) => {
       | 'insideTopRight'
       | 'insideBottomLeft'
       | 'insideBottomRight',
-  ) => ({
-    fill: 'var(--color-muted-foreground)',
-    fontSize: 11,
-    fontWeight: 500,
-    position,
-    value,
-  })
+  ) => ({ ...chartReferenceLabel, fontWeight: 500, position, value })
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
+    <BlockStateProvider status={status} empty={items.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        </header>
+        {state ? (
+          <div className='border-t pt-4'>
+            <BlockStateText className='text-sm' />
+          </div>
+        ) : (
+          <p className='text-muted-foreground border-t pt-4 text-sm'>
+            {`Split at ${props.split ? '' : 'the medians, '}${x.format(split.x)} ${x.label.toLowerCase()} and ${y.format(split.y)} ${y.label.toLowerCase()}.`}
+          </p>
+        )}
         <ChartPanelFigure className='h-80'>
           <ResponsiveContainer width='100%' height='100%'>
-            <ScatterChart margin={{ top: 8, right: 16, bottom: 16, left: 0 }}>
-              <CartesianGrid {...chartGridProps} vertical />
+            <ScatterChart
+              aria-label={`${title} chart`}
+              margin={{ top: 8, right: 16, bottom: 16, left: 0 }}
+            >
+              <CartesianGrid {...chartGridProps} />
               <ReferenceArea
                 fill='var(--color-muted)'
                 fillOpacity={0.5}
@@ -154,16 +168,8 @@ const Scatter2 = (props: Scatter2Props) => {
                 y1={y.domain[0]}
                 y2={split.y}
               />
-              <ReferenceLine
-                stroke='var(--color-muted-foreground)'
-                strokeDasharray='4 4'
-                x={split.x}
-              />
-              <ReferenceLine
-                stroke='var(--color-muted-foreground)'
-                strokeDasharray='4 4'
-                y={split.y}
-              />
+              <ReferenceLine {...chartReferenceProps} x={split.x} />
+              <ReferenceLine {...chartReferenceProps} y={split.y} />
               <XAxis
                 {...chartAxisProps}
                 dataKey='x'
@@ -188,7 +194,7 @@ const Scatter2 = (props: Scatter2Props) => {
                 tickFormatter={y.format}
                 ticks={y.ticks}
                 type='number'
-                width={36}
+                width={chartValueAxisWidth}
               />
               <Tooltip
                 content={({ active, payload }) => {
@@ -196,7 +202,7 @@ const Scatter2 = (props: Scatter2Props) => {
                   if (!active || !item) return null
                   return (
                     <ScatterTooltipContent
-                      color='var(--chart-2)'
+                      color='var(--color-chart-2)'
                       rows={[
                         { label: x.label, value: x.format(item.x) },
                         { label: y.label, value: y.format(item.y) },
@@ -210,8 +216,8 @@ const Scatter2 = (props: Scatter2Props) => {
               />
               <Scatter
                 data={items}
-                fill='var(--chart-2)'
-                stroke='var(--color-card)'
+                fill='var(--color-chart-2)'
+                stroke='var(--color-background)'
                 strokeWidth={2}
               >
                 <LabelList
@@ -225,9 +231,6 @@ const Scatter2 = (props: Scatter2Props) => {
             </ScatterChart>
           </ResponsiveContainer>
         </ChartPanelFigure>
-        <p className='text-muted-foreground text-xs'>
-          {`Split at the median: ${x.format(split.x)} ${x.label.toLowerCase()} and ${y.format(split.y)} ${y.label.toLowerCase()}.`}
-        </p>
         <ChartPanelTable
           caption={`${title}: ${description}.`}
           columns={[
@@ -238,8 +241,8 @@ const Scatter2 = (props: Scatter2Props) => {
           ]}
           rows={items.map((item) => ({ ...item, quadrant: quadrantOf(item) }))}
         />
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

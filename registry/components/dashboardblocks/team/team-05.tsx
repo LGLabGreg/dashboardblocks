@@ -1,17 +1,15 @@
 'use client'
 
+import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import { SaveBar } from '@/registry/components/dashboardblocks/forms'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { cn } from '@/lib/utils'
@@ -42,11 +40,19 @@ type PermissionGrants = Record<string, string[]>
 
 interface Team5Props {
   description: string
-  grants: PermissionGrants
+  /** Leave out, with `roles`, to show the empty state. */
+  grants?: PermissionGrants
   groups: PermissionGroup[]
   onSave?: (grants: PermissionGrants) => void
-  roles: PermissionRole[]
+  /** Leave out, or pass none, to show the empty state. */
+  roles?: PermissionRole[]
+  status?: BlockStatus
   title: string
+}
+
+interface PermissionMatrixProps extends Omit<Team5Props, 'grants' | 'roles' | 'status'> {
+  grants: PermissionGrants
+  roles: PermissionRole[]
 }
 
 const exampleProps: Team5Props = {
@@ -161,7 +167,7 @@ function revokeWithDependents(granted: Set<string>, id: string, all: Permission[
   }
 }
 
-const Team5 = (props: Team5Props) => {
+function PermissionMatrix(props: PermissionMatrixProps) {
   const { description, groups, onSave, roles, title } = props
   const [saved, setSaved] = useState(props.grants)
   const [grants, setGrants] = useState(props.grants)
@@ -192,131 +198,150 @@ const Team5 = (props: Team5Props) => {
     })
   }
 
+  const locked = roles.filter((role) => role.locked).map((role) => role.name)
+
   return (
-    <Card className='gap-0 pb-0'>
-      <CardHeader className='border-b pb-6'>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='overflow-x-auto px-0'>
-        <table className='w-full text-sm'>
-          <caption className='sr-only'>{title}</caption>
-          <thead>
-            <tr className='border-b'>
-              <th
-                scope='col'
-                className='bg-card sticky left-0 z-10 min-w-40 px-6 py-3 text-left font-medium'
-              >
-                <span className='sr-only'>Permission</span>
-              </th>
-              {roles.map((role) => (
-                <th
-                  key={role.id}
-                  scope='col'
-                  className='min-w-20 px-2 py-3 text-center font-medium last:pr-6'
-                >
-                  <div className='flex flex-col items-center gap-0.5'>
-                    {role.name}
-                    <span className='text-muted-foreground inline-flex items-center gap-1 text-xs font-normal whitespace-nowrap tabular-nums [&_svg]:size-3'>
-                      {role.locked && (
-                        <IconPlaceholder
-                          lucide='LockIcon'
-                          tabler='IconLock'
-                          hugeicons='SquareLock02Icon'
-                          phosphor='LockIcon'
-                          remixicon='RiLockLine'
-                          aria-hidden
-                        />
-                      )}
-                      {role.members} {role.members === 1 ? 'member' : 'members'}
-                    </span>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {groups.map((group) => (
-              <Fragment key={group.id}>
-                <tr className='bg-muted/50 border-b'>
-                  <th
-                    scope='colgroup'
-                    colSpan={roles.length + 1}
-                    className='text-muted-foreground px-6 py-2 text-left text-xs font-medium'
-                  >
-                    <span className='sticky left-6'>{group.label}</span>
-                  </th>
-                </tr>
-                {group.permissions.map((permission) => (
-                  <tr key={permission.id} className='border-b last:border-b-0'>
-                    <th
-                      scope='row'
-                      className='bg-card sticky left-0 z-10 px-6 py-3 text-left font-normal'
-                    >
-                      <span className='block font-medium'>{permission.label}</span>
-                      {permission.description && (
-                        <span className='text-muted-foreground block text-xs'>
-                          {permission.description}
-                        </span>
-                      )}
-                    </th>
-                    {roles.map((role) => {
-                      const on = role.locked || has(grants, role.id, permission.id)
-                      const changed =
-                        !role.locked && on !== has(saved, role.id, permission.id)
-                      return (
-                        <td
-                          key={role.id}
-                          className={cn(
-                            'px-2 py-3 text-center last:pr-6',
-                            changed && 'bg-primary/5',
-                          )}
-                        >
-                          <span className='inline-flex'>
-                            <Checkbox
-                              aria-label={`${role.name}: ${group.label}, ${permission.label}`}
-                              checked={on}
-                              disabled={role.locked}
-                              onCheckedChange={(next) =>
-                                toggle(role.id, permission.id, next === true)
-                              }
-                            />
-                          </span>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                ))}
-              </Fragment>
-            ))}
-          </tbody>
-        </table>
-      </CardContent>
-      <CardFooter className='flex flex-wrap items-center justify-end gap-2 border-t py-4'>
-        <p role='status' className='text-muted-foreground mr-auto text-sm'>
-          {changes > 0
-            ? `${changes} unsaved ${changes === 1 ? 'change' : 'changes'}`
-            : roles.some((role) => role.locked)
-              ? `${roles
-                  .filter((role) => role.locked)
-                  .map((role) => role.name)
-                  .join(' and ')} can do everything.`
-              : ''}
+    <section className='@container flex flex-col gap-3'>
+      <header className='flex flex-col gap-0.5'>
+        <h2 className='font-semibold tracking-tight'>{title}</h2>
+        <p className='text-muted-foreground text-sm'>
+          {description}
+          {locked.length > 0 &&
+            ` ${locked.join(' and ')} ${locked.length === 1 ? 'can' : 'can each'} do everything.`}
         </p>
-        <Button variant='ghost' disabled={changes === 0} onClick={() => setGrants(saved)}>
-          Discard
-        </Button>
-        <Button
-          disabled={changes === 0}
-          onClick={() => {
-            setSaved(grants)
-            onSave?.(grants)
-          }}
-        >
-          Save changes
-        </Button>
-      </CardFooter>
-    </Card>
+      </header>
+      <form
+        method='post'
+        onSubmit={(event) => {
+          event.preventDefault()
+          setSaved(grants)
+          onSave?.(grants)
+        }}
+      >
+        <div className='overflow-x-auto border-t'>
+          <table className='w-full text-sm'>
+            <caption className='sr-only'>{title}</caption>
+            <thead>
+              <tr className='border-b'>
+                <th
+                  scope='col'
+                  className='bg-background sticky left-0 z-10 min-w-40 py-2.5 pr-4 text-left font-medium'
+                >
+                  <span className='sr-only'>Permission</span>
+                </th>
+                {roles.map((role) => (
+                  <th
+                    key={role.id}
+                    scope='col'
+                    className='min-w-20 px-2 py-2.5 text-center font-medium'
+                  >
+                    <div className='flex flex-col items-center'>
+                      {role.name}
+                      <span className='text-muted-foreground inline-flex items-center gap-1 text-xs font-normal whitespace-nowrap tabular-nums [&_svg]:size-3'>
+                        {role.locked && (
+                          <IconPlaceholder
+                            lucide='LockIcon'
+                            tabler='IconLock'
+                            hugeicons='SquareLock02Icon'
+                            phosphor='LockIcon'
+                            remixicon='RiLockLine'
+                            aria-hidden
+                          />
+                        )}
+                        {role.members} {role.members === 1 ? 'member' : 'members'}
+                      </span>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {groups.map((group) => (
+                <Fragment key={group.id}>
+                  <tr className='border-b'>
+                    <th
+                      scope='colgroup'
+                      colSpan={roles.length + 1}
+                      className='text-muted-foreground pt-4 pb-1.5 text-left text-xs font-medium'
+                    >
+                      <span className='sticky left-0'>{group.label}</span>
+                    </th>
+                  </tr>
+                  {group.permissions.map((permission) => (
+                    <tr key={permission.id} className='border-b'>
+                      <th
+                        scope='row'
+                        className='bg-background sticky left-0 z-10 py-2.5 pr-4 text-left font-normal'
+                      >
+                        <span className='block'>{permission.label}</span>
+                        {permission.description && (
+                          <span className='text-muted-foreground block text-xs'>
+                            {permission.description}
+                          </span>
+                        )}
+                      </th>
+                      {roles.map((role) => {
+                        const on = role.locked || has(grants, role.id, permission.id)
+                        const changed =
+                          !role.locked && on !== has(saved, role.id, permission.id)
+                        return (
+                          <td
+                            key={role.id}
+                            className={cn(
+                              'px-2 py-2.5 text-center',
+                              changed && 'bg-primary/5',
+                            )}
+                          >
+                            <span className='inline-flex'>
+                              <Checkbox
+                                aria-label={`${role.name}: ${group.label}, ${permission.label}`}
+                                checked={on}
+                                disabled={role.locked}
+                                onCheckedChange={(next) =>
+                                  toggle(role.id, permission.id, next === true)
+                                }
+                              />
+                            </span>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  ))}
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <SaveBar
+          className='mt-4'
+          isDirty={changes > 0}
+          isSubmitting={false}
+          message={`${changes} unsaved ${changes === 1 ? 'change' : 'changes'}`}
+          onDiscard={() => setGrants(saved)}
+        />
+      </form>
+    </section>
+  )
+}
+
+const Team5 = (props: Team5Props) => {
+  const { description, grants = {}, roles = [], status, title } = props
+  const state = getBlockState(status, roles.length === 0)
+
+  return (
+    <BlockStateProvider status={status} empty={roles.length === 0}>
+      {state ? (
+        <section className='@container flex flex-col gap-3'>
+          <header className='flex flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </header>
+          <BlockStateRows className='border-t' rows={8} />
+        </section>
+      ) : (
+        <PermissionMatrix {...props} grants={grants} roles={roles} />
+      )}
+    </BlockStateProvider>
   )
 }
 

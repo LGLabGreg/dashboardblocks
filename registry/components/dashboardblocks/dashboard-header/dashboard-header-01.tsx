@@ -10,12 +10,12 @@ import {
   type Filter,
   FilterChip,
   type FilterField,
-  formatDateRange,
   getDateRange,
   getPreviousRange,
   isSameFilter,
 } from '@/registry/components/dashboardblocks/dashboard-header'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDateRange } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 interface DashboardHeader1Props {
@@ -65,25 +65,31 @@ const DashboardHeader1 = (props: DashboardHeader1Props) => {
     )
 
   return (
-    <header className='@container'>
-      <div className='flex flex-wrap items-center gap-x-3 gap-y-4'>
-        <DashboardHeaderTitle
-          className='order-1 flex-1 @4xl:flex-none'
-          title={title}
-          description={
-            <span aria-live='polite'>
-              {formatDateRange(range)}
-              {compare && ` vs ${formatDateRange(getPreviousRange(range))}`}
-            </span>
-          }
-        />
-        <div className='order-3 flex basis-full flex-wrap items-center gap-2 @4xl:order-2 @4xl:flex-1 @4xl:basis-auto @4xl:justify-end'>
-          <DateRangePicker onValueChange={setPreset} today={today} value={preset} />
-          <CompareToggle
-            checked={compare}
-            onCheckedChange={setCompare}
-            className='px-1'
+    <header className='@container flex flex-col gap-3 border-b pb-4'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-wrap items-start justify-between gap-3'>
+          <DashboardHeaderTitle title={title} />
+          <div className='flex items-center gap-3'>
+            <CompareToggle checked={compare} onCheckedChange={setCompare} />
+            <ExportMenu onExport={onExport} />
+          </div>
+        </div>
+        <p className='text-muted-foreground leading-relaxed'>
+          Showing{' '}
+          <DateRangePicker
+            onValueChange={setPreset}
+            today={today}
+            value={preset}
+            variant='inline'
           />
+          <span aria-live='polite'>
+            , {formatDateRange(range)}
+            {compare && `, compared with ${formatDateRange(getPreviousRange(range))}`}.
+          </span>
+        </p>
+      </div>
+      <div className='flex flex-wrap items-center gap-2'>
+        {filters.length > 0 && (
           <ul aria-label='Active filters' className='flex flex-wrap items-center gap-2'>
             {filters.map((filter) => (
               <li key={`${filter.field}-${filter.value}`} className='flex'>
@@ -95,22 +101,21 @@ const DashboardHeader1 = (props: DashboardHeader1Props) => {
               </li>
             ))}
           </ul>
-          <AddFilterMenu
-            fields={filterFields}
-            onFilterChange={toggleFilter}
-            value={filters}
-          >
-            <IconPlaceholder
-              lucide='PlusIcon'
-              tabler='IconPlus'
-              hugeicons='PlusSignIcon'
-              phosphor='PlusIcon'
-              remixicon='RiAddLine'
-            />
-            Add filter
-          </AddFilterMenu>
-        </div>
-        <ExportMenu className='order-2 @4xl:order-3' onExport={onExport} />
+        )}
+        <AddFilterMenu
+          fields={filterFields}
+          onFilterChange={toggleFilter}
+          value={filters}
+        >
+          <IconPlaceholder
+            lucide='PlusIcon'
+            tabler='IconPlus'
+            hugeicons='PlusSignIcon'
+            phosphor='PlusIcon'
+            remixicon='RiAddLine'
+          />
+          Add filter
+        </AddFilterMenu>
       </div>
     </header>
   )

@@ -1,22 +1,22 @@
 'use client'
 
+import {
+  BlockReady,
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import {
   type Person,
   PersonAvatar,
-  PresenceIndicator,
+  PresenceLabel,
 } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 interface Shift {
   end: Date
@@ -28,7 +28,9 @@ interface Team4Props {
   description: string
   now: Date
   onPage?: (person: Person) => void
-  shifts: Shift[]
+  /** Leave out, or pass none, to show the empty state. */
+  shifts?: Shift[]
+  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -43,27 +45,52 @@ const exampleProps: Team4Props = {
   shifts: [
     {
       end: monday(0),
-      person: { id: 'm4', name: 'Mateo García', presence: 'online' },
+      person: {
+        avatar: '/images/avatar-06.webp',
+        id: 'm4',
+        name: 'Mateo García',
+        presence: 'online',
+      },
       start: monday(-1),
     },
     {
       end: monday(1),
-      person: { id: 'm2', name: 'Liam Chen', presence: 'online' },
+      person: {
+        avatar: '/images/avatar-04.webp',
+        id: 'm2',
+        name: 'Liam Chen',
+        presence: 'online',
+      },
       start: monday(0),
     },
     {
       end: monday(2),
-      person: { id: 'm3', name: 'Sofia Rossi', presence: 'away' },
+      person: {
+        avatar: '/images/avatar-01.webp',
+        id: 'm3',
+        name: 'Sofia Rossi',
+        presence: 'away',
+      },
       start: monday(1),
     },
     {
       end: monday(3),
-      person: { id: 'm6', name: 'Jonas Weber', presence: 'offline' },
+      person: {
+        avatar: '/images/avatar-07.webp',
+        id: 'm6',
+        name: 'Jonas Weber',
+        presence: 'offline',
+      },
       start: monday(2),
     },
     {
       end: monday(4),
-      person: { id: 'm1', name: 'Amara Okafor', presence: 'online' },
+      person: {
+        avatar: '/images/avatar-05.webp',
+        id: 'm1',
+        name: 'Amara Okafor',
+        presence: 'online',
+      },
       start: monday(3),
     },
   ],
@@ -83,7 +110,8 @@ function formatDuration(ms: number) {
 }
 
 const Team4 = (props: Team4Props) => {
-  const { description, now, onPage, shifts, timeZone = 'UTC', title } = props
+  const { description, now, onPage, shifts = [], status, timeZone = 'UTC', title } = props
+  const state = getBlockState(status, shifts.length === 0)
   const id = useId()
   const handoverFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
@@ -100,36 +128,59 @@ const Team4 = (props: Team4Props) => {
     month: 'short',
     timeZone,
   })
+  const weekdayFormatter = new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'short',
+    timeZone,
+    weekday: 'short',
+  })
 
   const upcoming = shifts.filter((shift) => shift.end.getTime() > now.getTime())
   const current = upcoming[0]?.start.getTime() <= now.getTime() ? upcoming[0] : undefined
-  const [next, ...later] = current ? upcoming.slice(1) : upcoming
+  const comingUp = current ? upcoming.slice(1) : upcoming
+  const next = comingUp.at(0)
   const elapsed = current
     ? (now.getTime() - current.start.getTime()) /
       (current.end.getTime() - current.start.getTime())
     : 0
 
+  const summary = current
+    ? `${current.person.name} until ${weekdayFormatter.format(current.end)}${next ? `, then ${next.person.name}` : ''}.`
+    : next
+      ? `Nobody right now. ${next.person.name} starts ${weekdayFormatter.format(next.start)}.`
+      : 'Nobody is on call.'
+
   return (
-    <Card className='@container'>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-5'>
-        <section aria-labelledby={`${id}-now`} className='flex flex-col gap-3'>
-          <h4 id={`${id}-now`} className='text-muted-foreground text-xs font-medium'>
+    <BlockStateProvider status={status} empty={shifts.length === 0}>
+      <section className='@container flex flex-col gap-4'>
+        <header className='flex flex-col gap-0.5'>
+          <h2 className='font-semibold tracking-tight'>{title}</h2>
+          <p className='text-muted-foreground text-sm'>
+            {description}. <BlockReady className='text-sm'>{summary}</BlockReady>
+          </p>
+        </header>
+        <section
+          aria-labelledby={`${id}-now`}
+          className='flex flex-col gap-3 border-t pt-4'
+        >
+          <h3 id={`${id}-now`} className='text-sm font-medium'>
             On call now
-          </h4>
-          {current ? (
+          </h3>
+          {state ? (
+            <BlockStateRows rows={1} />
+          ) : current ? (
             <>
               <div className='flex flex-wrap items-center gap-3'>
                 <PersonAvatar person={current.person} showPresence size='lg' />
-                <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                  <span className='truncate text-base font-semibold'>
+                <div className='flex min-w-0 flex-1 flex-col'>
+                  <span className='truncate text-2xl font-light tracking-tight'>
                     {current.person.name}
                   </span>
                   {current.person.presence && (
-                    <PresenceIndicator presence={current.person.presence} />
+                    <PresenceLabel
+                      presence={current.person.presence}
+                      className='text-xs'
+                    />
                   )}
                 </div>
                 <Button
@@ -174,43 +225,19 @@ const Team4 = (props: Team4Props) => {
             <p className='text-muted-foreground text-sm'>Nobody is on call right now.</p>
           )}
         </section>
-        {next && (
+        {!state && next && (
           <section
             aria-labelledby={`${id}-next`}
-            className='flex flex-col gap-3 border-t pt-4'
+            className='flex flex-col gap-1 border-t pt-4'
           >
-            <h4 id={`${id}-next`} className='text-muted-foreground text-xs font-medium'>
-              Next
-            </h4>
-            <div className='flex items-center gap-3'>
-              <PersonAvatar person={next.person} />
-              <div className='flex min-w-0 flex-1 flex-col'>
-                <span className='truncate text-sm font-medium'>{next.person.name}</span>
-                <span className='text-muted-foreground text-xs'>
-                  From{' '}
-                  <time dateTime={next.start.toISOString()}>
-                    {handoverFormatter.format(next.start)}
-                  </time>
-                  {!current &&
-                    `, in ${formatDuration(next.start.getTime() - now.getTime())}`}
-                </span>
-              </div>
-            </div>
-          </section>
-        )}
-        {later.length > 0 && (
-          <section
-            aria-labelledby={`${id}-later`}
-            className='flex flex-col gap-2 border-t pt-4'
-          >
-            <h4 id={`${id}-later`} className='text-muted-foreground text-xs font-medium'>
-              Later
-            </h4>
-            <ol className='flex flex-col'>
-              {later.map((shift) => (
+            <h3 id={`${id}-next`} className='text-sm font-medium'>
+              Coming up
+            </h3>
+            <ol className='flex flex-col divide-y'>
+              {comingUp.map((shift) => (
                 <li
                   key={`${shift.person.id}-${shift.start.toISOString()}`}
-                  className='flex items-center gap-3 py-1.5'
+                  className='flex items-center gap-3 py-2.5'
                 >
                   <PersonAvatar person={shift.person} size='sm' />
                   <span className='min-w-0 flex-1 truncate text-sm'>
@@ -230,8 +257,8 @@ const Team4 = (props: Team4Props) => {
             </ol>
           </section>
         )}
-      </CardContent>
-    </Card>
+      </section>
+    </BlockStateProvider>
   )
 }
 

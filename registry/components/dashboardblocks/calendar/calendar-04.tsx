@@ -1,6 +1,12 @@
 'use client'
 
 import {
+  BlockStateProvider,
+  BlockStateText,
+  type BlockStatus,
+  getBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
   type CalendarEvent,
   CalendarEventDetails,
   CalendarLegend,
@@ -15,11 +21,8 @@ import {
   formatTime,
   getDay,
 } from '@/registry/components/dashboardblocks/schedule'
+import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { useRef, useState } from 'react'
-
-import { Card, CardContent } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
 
 interface Room {
   id: string
@@ -28,12 +31,14 @@ interface Room {
 }
 
 interface Calendar4Props {
-  bookings: CalendarEvent[]
+  /** Leave out, or pass none, to show the empty state. */
+  bookings?: CalendarEvent[]
   endHour?: number
   now: Date
   onSelectBooking?: (booking: CalendarEvent) => void
   rooms: Room[]
   startHour?: number
+  status?: BlockStatus
   teams: { color: string; name: string }[]
   /** @default 'UTC' */
   timeZone?: string
@@ -44,11 +49,11 @@ const at = (day: number, hour: number, minute = 0) =>
   new Date(Date.UTC(2026, 8, day, hour, minute))
 
 const TEAMS = {
-  design: { calendar: 'Design', color: 'var(--chart-4)' },
-  engineering: { calendar: 'Engineering', color: 'var(--chart-2)' },
-  leadership: { calendar: 'Leadership', color: 'var(--chart-1)' },
-  people: { calendar: 'People', color: 'var(--chart-5)' },
-  sales: { calendar: 'Sales', color: 'var(--chart-3)' },
+  design: { calendar: 'Design', color: 'var(--color-chart-4)' },
+  engineering: { calendar: 'Engineering', color: 'var(--color-chart-2)' },
+  leadership: { calendar: 'Leadership', color: 'var(--color-chart-1)' },
+  people: { calendar: 'People', color: 'var(--color-chart-5)' },
+  sales: { calendar: 'Sales', color: 'var(--color-chart-3)' },
 }
 
 const exampleProps: Calendar4Props = {
@@ -207,7 +212,7 @@ const exampleProps: Calendar4Props = {
 
 function getRoomStatus(bookings: CalendarEvent[], now: Date, timeZone: string) {
   if (bookings.some((booking) => booking.allDay))
-    return { busy: true, label: 'Closed today' }
+    return { busy: true, label: 'Closed today', tone: 'neutral' as const }
   const times = bookings
     .map((booking) => ({ end: booking.end ?? booking.start, start: booking.start }))
     .sort((a, b) => a.start.getTime() - b.start.getTime())
@@ -217,7 +222,11 @@ function getRoomStatus(bookings: CalendarEvent[], now: Date, timeZone: string) {
     for (const { end, start } of times) {
       if (start <= until && end > until) until = end
     }
-    return { busy: true, label: `In use until ${formatTime(until, timeZone)}` }
+    return {
+      busy: true,
+      label: `In use until ${formatTime(until, timeZone)}`,
+      tone: 'warning' as const,
+    }
   }
   const next = times.find(({ start }) => start > now)
   return {
@@ -225,20 +234,24 @@ function getRoomStatus(bookings: CalendarEvent[], now: Date, timeZone: string) {
     label: next
       ? `Free until ${formatTime(next.start, timeZone)}`
       : 'Free for the rest of today',
+    tone: 'good' as const,
   }
 }
 
 const Calendar4 = (props: Calendar4Props) => {
   const {
-    bookings,
+    bookings: data = [],
     endHour = 19,
     now,
     onSelectBooking,
     rooms,
     startHour = 7,
+    status: blockStatus,
     teams,
     timeZone = 'UTC',
   } = props
+  const state = getBlockState(blockStatus, data.length === 0)
+  const bookings = state ? [] : data
   const today = getDay(now, timeZone)
   const [day, setDay] = useState(today)
   const [selectedId, setSelectedId] = useState<string>()
@@ -247,29 +260,25 @@ const Calendar4 = (props: Calendar4Props) => {
   const isToday = day.getTime() === today.getTime()
   const dayBookings = getEventsForDay(bookings, day, timeZone)
   const selected = dayBookings.find((booking) => booking.id === selectedId)
+  let freeNow = 0
   const resources: CalendarResource[] = rooms.map((room) => {
-    const status = isToday
-      ? getRoomStatus(
-          dayBookings.filter((booking) => booking.resource === room.id),
-          now,
-          timeZone,
-        )
-      : undefined
+    const status =
+      isToday && !state
+        ? getRoomStatus(
+            dayBookings.filter((booking) => booking.resource === room.id),
+            now,
+            timeZone,
+          )
+        : undefined
+    if (status && !status.busy) freeNow++
     return {
       description: (
         <>
           <span className='block truncate'>{room.seats} seats</span>
           {status && (
-            <span className='flex items-center gap-1.5'>
-              <span
-                aria-hidden
-                className={cn(
-                  'size-1.5 shrink-0 rounded-full',
-                  status.busy ? 'bg-amber-500' : 'bg-emerald-500',
-                )}
-              />
-              <span className='truncate'>{status.label}</span>
-            </span>
+            <StatusLabel tone={status.tone} className='block truncate text-xs'>
+              {status.label}
+            </StatusLabel>
           )}
         </>
       ),
@@ -284,11 +293,17 @@ const Calendar4 = (props: Calendar4Props) => {
   }
 
   return (
-    <Card className='@container'>
-      <CardContent className='flex flex-col gap-4'>
+    <BlockStateProvider status={blockStatus} empty={data.length === 0}>
+      <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={formatDay(day, { day: 'numeric', month: 'long', weekday: 'long' })}
-          description={`${rooms.length} rooms · ${dayBookings.length} ${dayBookings.length === 1 ? 'booking' : 'bookings'}`}
+          description={
+            state ? (
+              <BlockStateText />
+            ) : (
+              `${dayBookings.length} ${dayBookings.length === 1 ? 'booking' : 'bookings'} across ${rooms.length} rooms.${isToday ? ` ${freeNow} ${freeNow === 1 ? 'room is' : 'rooms are'} free right now.` : ''}`
+            )
+          }
           onToday={() => showDay(today)}
           onPrevious={() => showDay(addDays(day, -1))}
           onNext={() => showDay(addDays(day, 1))}
@@ -325,17 +340,19 @@ const Calendar4 = (props: Calendar4Props) => {
                   ?.focus()
                 setSelectedId(undefined)
               }}
-              className='bg-muted/40 rounded-lg border p-4'
+              className='border-t pt-4'
             />
           ) : (
-            <p className='text-muted-foreground text-sm'>
-              Select a booking to see who booked it.
-            </p>
+            !state && (
+              <p className='text-muted-foreground text-sm'>
+                Select a booking to see who booked it.
+              </p>
+            )
           )}
         </div>
-        <CalendarLegend calendars={teams} label='Teams' />
-      </CardContent>
-    </Card>
+        {!state && <CalendarLegend calendars={teams} label='Teams' />}
+      </section>
+    </BlockStateProvider>
   )
 }
 

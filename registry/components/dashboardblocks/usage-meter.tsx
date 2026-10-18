@@ -1,8 +1,18 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
+import {
+  BlockStateText,
+  SkeletonText,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, type RefObject, useEffect, useState } from 'react'
+import { formatCompact, formatNumber } from '@/registry/lib/dashboardblocks/format'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -48,14 +58,8 @@ function getDaysLeft(remaining: number, dailyBurn: number) {
   return dailyBurn > 0 ? Math.max(0, remaining) / dailyBurn : Infinity
 }
 
-const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
-const compactFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  notation: 'compact',
-})
-
 function formatUsage(value: number, unit?: string, { compact = false } = {}) {
-  const number = (compact ? compactFormatter : numberFormatter).format(value)
+  const number = compact ? formatCompact(value) : formatNumber(value)
   return unit ? `${number} ${unit}` : number
 }
 
@@ -64,12 +68,12 @@ interface UsageStatusConfig {
   icon: ReactNode
   label: string
   soft: string
-  text: string
+  tone: StatusTone
 }
 
 const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
   critical: {
-    color: 'var(--destructive)',
+    color: 'var(--color-destructive)',
     icon: (
       <IconPlaceholder
         lucide='OctagonAlertIcon'
@@ -82,10 +86,10 @@ const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
     ),
     label: 'Critical',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    text: 'text-red-700 dark:text-red-400',
+    tone: 'bad',
   },
   ok: {
-    color: 'var(--primary)',
+    color: 'var(--color-chart-2)',
     icon: (
       <IconPlaceholder
         lucide='CircleCheckIcon'
@@ -98,10 +102,10 @@ const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
     ),
     label: 'Within limit',
     soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    text: 'text-emerald-700 dark:text-emerald-400',
+    tone: 'good',
   },
   over: {
-    color: 'var(--destructive)',
+    color: 'var(--color-destructive)',
     icon: (
       <IconPlaceholder
         lucide='CircleXIcon'
@@ -114,7 +118,7 @@ const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
     ),
     label: 'Over limit',
     soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    text: 'text-red-700 dark:text-red-400',
+    tone: 'bad',
   },
   warning: {
     color: 'var(--color-amber-500)',
@@ -130,7 +134,7 @@ const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
     ),
     label: 'Nearing limit',
     soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    text: 'text-amber-800 dark:text-amber-400',
+    tone: 'warning',
   },
 }
 
@@ -143,6 +147,8 @@ function UsageStatusBadge({
   label?: string
   status: UsageStatus
 }) {
+  const state = useBlockState()
+  if (state) return null
   const config = usageStatusConfig[status]
   return (
     <span
@@ -155,6 +161,25 @@ function UsageStatusBadge({
       {config.icon}
       {label ?? config.label}
     </span>
+  )
+}
+
+function UsageStatusLabel({
+  className,
+  label,
+  status,
+}: {
+  className?: string
+  label?: string
+  status: UsageStatus
+}) {
+  const state = useBlockState()
+  if (state) return null
+  const config = usageStatusConfig[status]
+  return (
+    <StatusLabel className={className} tone={config.tone}>
+      {label ?? config.label}
+    </StatusLabel>
   )
 }
 
@@ -180,20 +205,28 @@ function UsageBar({
   color,
   critical,
   limit,
-  overColor = 'var(--destructive)',
+  overColor = 'var(--color-destructive)',
   projected,
   size = 'md',
   used,
   warning,
 }: UsageBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
+  const { ref, revealed } = useReveal(animated)
+  const state = useBlockState()
 
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
+  if (state) {
+    return (
+      <div
+        aria-hidden
+        className={cn(
+          'bg-muted w-full rounded-full',
+          size === 'md' ? 'h-2.5' : 'h-1.5',
+          state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          className,
+        )}
+      />
+    )
+  }
 
   const status = getUsageStatus(Math.min(used, limit), limit, { critical, warning })
   const fill = color ?? usageStatusConfig[status].color
@@ -207,7 +240,7 @@ function UsageBar({
 
   return (
     <div
-      ref={ref as RefObject<HTMLDivElement>}
+      ref={ref}
       aria-hidden
       className={cn('relative w-full', size === 'md' ? 'h-2.5' : 'h-1.5', className)}
     >
@@ -237,7 +270,7 @@ function UsageBar({
       </div>
       {pastLimit && (
         <span
-          className='bg-foreground ring-card absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+          className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
           style={{ left: at(limit) }}
         />
       )}
@@ -249,7 +282,7 @@ type UsageKeyShape = 'used' | 'projected' | 'over' | 'limit'
 
 function UsageKey({
   className,
-  color = 'var(--primary)',
+  color = 'var(--color-chart-2)',
   shape,
 }: {
   className?: string
@@ -280,12 +313,20 @@ function UsageMeterValue({
   children,
   className,
 }: {
-  children: ReactNode
+  children?: ReactNode
   className?: string
 }) {
+  const state = useBlockState()
+
   return (
-    <span className={cn('text-2xl font-semibold tracking-tight tabular-nums', className)}>
-      {children}
+    <span className={cn('text-4xl font-light tracking-tight tabular-nums', className)}>
+      {state === 'loading' ? (
+        <SkeletonText className='w-[4.5em]' />
+      ) : state ? (
+        <BlockStateText className='inline' variant='short' />
+      ) : (
+        children
+      )}
     </span>
   )
 }
@@ -297,6 +338,8 @@ function UsageMeterLimit({
   children: ReactNode
   className?: string
 }) {
+  const state = useBlockState()
+  if (state) return null
   return (
     <span className={cn('text-muted-foreground text-sm', className)}>{children}</span>
   )
@@ -308,6 +351,7 @@ export {
   UsageMeterLimit,
   UsageMeterValue,
   UsageStatusBadge,
+  UsageStatusLabel,
   formatUsage,
   getDaysLeft,
   getUsageShare,

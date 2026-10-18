@@ -16,3 +16,10 @@ export const deploymentsExampleProps = {
   'deployments-03': deployments3ExampleProps,
   'deployments-04': deployments4ExampleProps,
 }
+
+export const deploymentsEmptyProps = {
+  'deployments-01': { deployments: [] },
+  'deployments-02': { environments: [] },
+  'deployments-03': { current: undefined, previous: undefined },
+  'deployments-04': { pipelines: [] },
+}

@@ -1,10 +1,15 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 7864868062a0
+// source-hash: 4c154919e782
 
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -612,20 +617,29 @@ interface PlanUsageProps {
   used: number
 }
 
-const countFormatter = new Intl.NumberFormat('en-US')
+function usageTone(percent: number): StatusTone {
+  if (percent >= 90) return 'bad'
+  if (percent >= 75) return 'warning'
+  return 'neutral'
+}
 
 function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
+  const usedLabel = `${formatPercent(percent / 100, { maximumFractionDigits: 0 })} used`
   return (
-    <div className='bg-background flex flex-col gap-3 rounded-lg border p-3 text-sm group-data-[collapsible=icon]:hidden'>
-      <div className='flex flex-col gap-1'>
-        <span className='font-medium'>{title}</span>
-        <span className='text-muted-foreground text-xs'>
-          {countFormatter.format(used)} of {countFormatter.format(limit)} {unit}
-        </span>
+    <div className='flex flex-col gap-2.5 border-t px-2 pt-3 pb-1 text-sm group-data-[collapsible=icon]:hidden'>
+      <div className='flex items-baseline justify-between gap-2'>
+        <span className='truncate font-medium'>{title}</span>
+        <StatusLabel tone={usageTone(percent)} className='shrink-0 text-xs tabular-nums'>
+          {usedLabel}
+        </StatusLabel>
       </div>
-      <Progress value={percent} aria-label={`${title}: ${Math.round(percent)}% used`} />
+      <Progress value={percent} aria-label={`${title}: ${usedLabel}`} />
+      <p className='text-muted-foreground text-xs text-pretty'>
+        <span className='text-foreground tabular-nums'>{formatNumber(used)}</span> of{' '}
+        <span className='tabular-nums'>{formatNumber(limit)}</span> {unit}
+      </p>
       {action && (
         <Link
           href={action.href}
@@ -666,7 +680,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
           >
             {item.title}
             {item.badge !== undefined && (
-              <span className='bg-muted text-foreground rounded-full px-1.5 text-xs tabular-nums'>
+              <span className='text-muted-foreground font-normal tabular-nums'>
                 {item.badge}
               </span>
             )}

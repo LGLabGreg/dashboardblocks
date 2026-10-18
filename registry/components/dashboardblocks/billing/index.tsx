@@ -19,3 +19,11 @@ export const billingExampleProps = {
   'billing-04': billing4ExampleProps,
   'billing-05': billing5ExampleProps,
 }
+
+export const billingEmptyProps = {
+  'billing-01': { movement: undefined },
+  'billing-02': { paymentMethod: undefined, plan: undefined, price: undefined },
+  'billing-03': { invoices: [] },
+  'billing-04': { current: undefined, previous: undefined },
+  'billing-05': { plans: [] },
+}

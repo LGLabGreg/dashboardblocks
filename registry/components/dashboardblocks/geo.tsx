@@ -1,14 +1,26 @@
 'use client'
 
+import {
+  Skeleton,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
+import {
+  ChartFloatingTooltip,
+  ChartTooltipItem,
+} from '@/registry/components/dashboardblocks/chart'
 import { getHeatColor } from '@/registry/components/dashboardblocks/heatmap'
-import { useInView } from '@/registry/hooks/use-in-view'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   type FocusEvent,
   type KeyboardEvent,
+  type MouseEvent,
+  type PointerEvent,
   type ReactNode,
-  type RefObject,
-  useEffect,
   useRef,
   useState,
 } from 'react'
@@ -48,26 +60,37 @@ function CountryFlag({ className, code }: { className?: string; code?: string })
   )
 }
 
-const compactFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  notation: 'compact',
-})
-
-function formatCompact(value: number) {
-  return compactFormatter.format(value)
-}
-
 interface MapPoint {
   id: string
   x: number
   y: number
 }
 
+interface ActivePoint {
+  flip: boolean
+  id: string
+  x: number
+  y: number
+}
+
 function useMapReadout(points: MapPoint[]) {
-  const [active, setActive] = useState<string | null>(null)
+  const [active, setActive] = useState<ActivePoint | null>(null)
   const [cursor, setCursor] = useState<string | null>(null)
   const container = useRef<HTMLDivElement>(null)
   const current = points.find((point) => point.id === cursor) ?? points[0]
+
+  const show = (id: string, element: HTMLElement) => {
+    const origin = container.current?.getBoundingClientRect()
+    if (!origin) return
+    const box = element.getBoundingClientRect()
+    const x = box.left - origin.left + box.width / 2
+    setActive({
+      flip: x > origin.width / 2,
+      id,
+      x,
+      y: box.top - origin.top + box.height / 2,
+    })
+  }
 
   const focusPoint = (id: string) => {
     setCursor(id)
@@ -127,12 +150,12 @@ function useMapReadout(points: MapPoint[]) {
 
   const getPointProps = (id: string) => ({
     'data-map-point': id,
-    onClick: () => setActive(id),
-    onFocus: () => {
+    onClick: (event: MouseEvent<HTMLElement>) => show(id, event.currentTarget),
+    onFocus: (event: FocusEvent<HTMLElement>) => {
       setCursor(id)
-      setActive(id)
+      show(id, event.currentTarget)
     },
-    onPointerEnter: () => setActive(id),
+    onPointerEnter: (event: PointerEvent<HTMLElement>) => show(id, event.currentTarget),
     tabIndex: id === current?.id ? 0 : -1,
   })
 
@@ -146,6 +169,41 @@ function useMapReadout(points: MapPoint[]) {
     },
     getPointProps,
   }
+}
+
+interface MapTooltipProps {
+  active: ActivePoint | null
+  color?: string
+  format: (value: number) => string
+  name?: string
+  share?: number
+  value: number | null
+  valueHeader: string
+}
+
+function MapTooltip({
+  active,
+  color,
+  format,
+  name,
+  share,
+  value,
+  valueHeader,
+}: MapTooltipProps) {
+  if (!active) return null
+  return (
+    <ChartFloatingTooltip active flip={active.flip} x={active.x} y={active.y}>
+      <span className='font-medium'>{name}</span>
+      <ChartTooltipItem
+        color={value === null ? undefined : color}
+        name={valueHeader}
+        value={value === null ? 'No data' : format(value)}
+      />
+      {share !== undefined && value !== null && (
+        <ChartTooltipItem name='Share' value={formatPercent(share)} />
+      )}
+    </ChartFloatingTooltip>
+  )
 }
 
 interface GeoTableRow {
@@ -191,20 +249,11 @@ function GeoTable({
   )
 }
 
-function MapReadout({
-  children,
-  footer,
-  text,
-}: {
-  children?: ReactNode
-  footer?: ReactNode
-  text: string | null
-}) {
+function MapFooter({ children, footer }: { children?: ReactNode; footer?: ReactNode }) {
+  if (!children && !footer) return null
   return (
     <div className='flex flex-wrap items-center justify-between gap-x-6 gap-y-2'>
-      <p className='text-muted-foreground min-h-5 text-sm'>
-        {text ? <span className='text-foreground'>{text}</span> : children}
-      </p>
+      {children && <p className='text-muted-foreground text-sm'>{children}</p>}
       {footer}
     </div>
   )
@@ -278,7 +327,7 @@ const US_STATE_TILES: TileMapTile[] = (
 interface TileMapProps {
   children?: ReactNode
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   describe: (tile: TileMapTile, value: number | null) => string
   footer?: ReactNode
@@ -290,6 +339,8 @@ interface TileMapProps {
   nameHeader?: string
   /** `sqrt` spreads out skewed values, such as counts that follow population, so the smaller tiles don't all look the same. */
   scale?: 'linear' | 'sqrt'
+  /** Adds each tile's share of the total to its tooltip. */
+  showShare?: boolean
   tiles: TileMapTile[]
   valueHeader?: string
   /** By tile id. */
@@ -302,12 +353,13 @@ function TileMap({
   color,
   describe,
   footer,
-  format = (value) => value.toLocaleString('en-US'),
+  format = (value) => formatNumber(value),
   label,
   max: maxProp,
   min: minProp,
   nameHeader = 'Region',
   scale = 'linear',
+  showShare = false,
   tiles,
   valueHeader = 'Value',
   values,
@@ -315,6 +367,7 @@ function TileMap({
   const { active, containerProps, getPointProps } = useMapReadout(
     tiles.map((tile) => ({ id: tile.id, x: tile.column, y: tile.row })),
   )
+  const state = useBlockState()
   const known = tiles
     .map((tile) => values[tile.id])
     .filter((value): value is number => typeof value === 'number')
@@ -323,7 +376,42 @@ function TileMap({
   const transform = scale === 'sqrt' ? Math.sqrt : (value: number) => value
   const range = transform(max) - transform(min) || 1
   const columns = Math.max(...tiles.map((tile) => tile.column)) + 1
-  const activeTile = tiles.find((tile) => tile.id === active)
+  const total = known.reduce((sum, value) => sum + value, 0)
+  const heat = (value: number) =>
+    getHeatColor(Math.max(0, (transform(value) - transform(min)) / range), color)
+  const activeTile = tiles.find((tile) => tile.id === active?.id)
+  const activeValue = activeTile ? (values[activeTile.id] ?? null) : null
+
+  if (state) {
+    return (
+      <div aria-hidden className={cn('flex flex-col gap-3', className)}>
+        <div
+          className='grid gap-[3px]'
+          style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+        >
+          {tiles.map((tile) => {
+            const position = { gridColumn: tile.column + 1, gridRow: tile.row + 1 }
+            return state === 'loading' ? (
+              <Skeleton
+                key={tile.id}
+                className='aspect-square rounded-[3px]'
+                style={position}
+              />
+            ) : (
+              <span
+                key={tile.id}
+                className='text-muted-foreground flex aspect-square min-w-0 items-center justify-center rounded-[3px] border border-dashed text-xs font-medium'
+                style={position}
+              >
+                {tile.code}
+              </span>
+            )
+          })}
+        </div>
+        {state === 'loading' && <MapFooter footer={footer}>{children}</MapFooter>}
+      </div>
+    )
+  }
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
@@ -331,42 +419,52 @@ function TileMap({
         {...containerProps}
         role='group'
         aria-label={`${label}. Use the arrow keys to move between tiles.`}
-        className='@container grid gap-[3px]'
-        style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+        className='relative'
       >
-        {tiles.map((tile) => {
-          const value = values[tile.id] ?? null
-          const t = value === null ? 0 : (transform(value) - transform(min)) / range
-          return (
-            <button
-              key={tile.id}
-              type='button'
-              aria-label={`${tile.code}, ${describe(tile, value)}`}
-              className={cn(
-                'ring-offset-card flex aspect-square min-w-0 items-center justify-center rounded-[3px] text-[length:clamp(0.5rem,2.6cqw,0.75rem)] font-medium outline-none',
-                value === null && 'text-muted-foreground border border-dashed',
-                'focus-visible:ring-foreground focus-visible:ring-2 focus-visible:ring-offset-1',
-                active === tile.id && 'ring-foreground ring-2 ring-offset-1',
-              )}
-              style={{
-                backgroundColor:
-                  value === null ? undefined : getHeatColor(Math.max(0, t), color),
-                gridColumn: tile.column + 1,
-                gridRow: tile.row + 1,
-              }}
-              {...getPointProps(tile.id)}
-            >
-              <span aria-hidden>{tile.code}</span>
-            </button>
-          )
-        })}
+        <div
+          className='grid gap-[3px]'
+          style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+        >
+          {tiles.map((tile) => {
+            const value = values[tile.id] ?? null
+            return (
+              <button
+                key={tile.id}
+                type='button'
+                aria-label={`${tile.code}, ${describe(tile, value)}`}
+                className={cn(
+                  'ring-offset-background flex aspect-square min-w-0 items-center justify-center rounded-[3px] text-xs font-medium outline-none',
+                  value === null && 'text-muted-foreground border border-dashed',
+                  'focus-visible:ring-foreground focus-visible:ring-2 focus-visible:ring-offset-1',
+                  active?.id === tile.id && 'ring-foreground ring-2 ring-offset-1',
+                )}
+                style={{
+                  backgroundColor: value === null ? undefined : heat(value),
+                  gridColumn: tile.column + 1,
+                  gridRow: tile.row + 1,
+                }}
+                {...getPointProps(tile.id)}
+              >
+                <span aria-hidden>{tile.code}</span>
+              </button>
+            )
+          })}
+        </div>
+        <MapTooltip
+          active={active}
+          color={activeValue === null ? undefined : heat(activeValue)}
+          format={format}
+          name={activeTile?.name}
+          share={
+            showShare && activeValue !== null && total > 0
+              ? activeValue / total
+              : undefined
+          }
+          value={activeValue}
+          valueHeader={valueHeader}
+        />
       </div>
-      <MapReadout
-        footer={footer}
-        text={activeTile ? describe(activeTile, values[activeTile.id] ?? null) : null}
-      >
-        {children}
-      </MapReadout>
+      <MapFooter footer={footer}>{children}</MapFooter>
       <GeoTable
         caption={label}
         format={format}
@@ -437,33 +535,39 @@ function getMarkerSize(value: number, max: number, maxSize: number) {
 interface DotMapProps {
   children?: ReactNode
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   describe: (marker: DotMapMarker) => string
   footer?: ReactNode
   format?: (value: number) => string
   label: string
+  /** Writes the name of the largest marker beside it. */
+  labelLargest?: boolean
   markers: DotMapMarker[]
   /** Fixes the size scale, so maps can be compared. */
   max?: number
   /** Diameter of the largest marker, in pixels. */
   maxSize?: number
   nameHeader?: string
+  /** Adds each marker's share of the total to its tooltip. */
+  showShare?: boolean
   valueHeader?: string
 }
 
 function DotMap({
   children,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   describe,
   footer,
-  format = (value) => value.toLocaleString('en-US'),
+  format = (value) => formatNumber(value),
   label,
+  labelLargest = false,
   markers,
   max: maxProp,
   maxSize = 28,
   nameHeader = 'Location',
+  showShare = false,
   valueHeader = 'Value',
 }: DotMapProps) {
   const sorted = [...markers].sort((a, b) => b.value - a.value)
@@ -478,8 +582,37 @@ function DotMap({
       y: marker.y,
     })),
   )
+  const state = useBlockState()
   const max = maxProp ?? Math.max(0, ...markers.map((marker) => marker.value))
-  const activeMarker = markers.find((marker) => marker.id === active)
+  const activeMarker = markers.find((marker) => marker.id === active?.id)
+  const total = markers.reduce((sum, marker) => sum + marker.value, 0)
+  const markerColor = `color-mix(in oklab, ${color} 75%, transparent)`
+  const largest = labelLargest ? positioned[0] : undefined
+
+  if (state) {
+    return (
+      <div aria-hidden className={cn('@container flex flex-col gap-3', className)}>
+        <svg
+          viewBox={`0 0 ${LAND_COLUMNS} ${LAND_ROWS}`}
+          className={cn(
+            'w-full',
+            state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          )}
+          style={{ aspectRatio: `${LAND_COLUMNS} / ${LAND_ROWS}` }}
+        >
+          <path
+            d={getLandPath()}
+            fill='none'
+            stroke='color-mix(in oklab, var(--color-muted-foreground) 32%, transparent)'
+            strokeDasharray='0 1'
+            strokeLinecap='round'
+            strokeWidth={0.55}
+          />
+        </svg>
+        {state === 'loading' && <MapFooter footer={footer}>{children}</MapFooter>}
+      </div>
+    )
+  }
 
   return (
     <div className={cn('@container flex flex-col gap-3', className)}>
@@ -498,7 +631,7 @@ function DotMap({
           <path
             d={getLandPath()}
             fill='none'
-            stroke='color-mix(in oklab, var(--muted-foreground) 32%, transparent)'
+            stroke='color-mix(in oklab, var(--color-muted-foreground) 32%, transparent)'
             strokeDasharray='0 1'
             strokeLinecap='round'
             strokeWidth={0.55}
@@ -518,11 +651,11 @@ function DotMap({
               <span
                 aria-hidden
                 className={cn(
-                  'ring-card group-focus-visible/marker:ring-foreground block rounded-full ring-2',
-                  active === marker.id && 'ring-foreground',
+                  'ring-background group-focus-visible/marker:ring-foreground block rounded-full ring-2',
+                  active?.id === marker.id && 'ring-foreground',
                 )}
                 style={{
-                  backgroundColor: `color-mix(in oklab, ${color} 75%, transparent)`,
+                  backgroundColor: markerColor,
                   height: size,
                   width: size,
                 }}
@@ -530,10 +663,34 @@ function DotMap({
             </button>
           )
         })}
+        {largest && (
+          <span
+            aria-hidden
+            className='pointer-events-none absolute -translate-y-1/2 text-xs font-medium whitespace-nowrap'
+            style={{
+              left: `${largest.x}%`,
+              marginLeft: `calc(${getMarkerSize(largest.value, max, maxSize)} / 2 + 6px)`,
+              top: `${largest.y}%`,
+            }}
+          >
+            {largest.name}
+          </span>
+        )}
+        <MapTooltip
+          active={active}
+          color={markerColor}
+          format={format}
+          name={activeMarker?.name}
+          share={
+            showShare && activeMarker && total > 0
+              ? activeMarker.value / total
+              : undefined
+          }
+          value={activeMarker?.value ?? null}
+          valueHeader={valueHeader}
+        />
       </div>
-      <MapReadout footer={footer} text={activeMarker ? describe(activeMarker) : null}>
-        {children}
-      </MapReadout>
+      <MapFooter footer={footer}>{children}</MapFooter>
       <GeoTable
         caption={label}
         format={format}
@@ -554,7 +711,7 @@ function niceFloor(value: number) {
 
 interface DotMapLegendProps {
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   format?: (value: number) => string
   /** The same `max` and `maxSize` the map uses. */
@@ -565,7 +722,7 @@ interface DotMapLegendProps {
 
 function DotMapLegend({
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   format = formatCompact,
   max,
   maxSize = 28,
@@ -596,64 +753,15 @@ function DotMapLegend({
   )
 }
 
-interface ShareBarProps {
-  animated?: boolean
-  className?: string
-  /** @default 'var(--chart-2)' */
-  color?: string
-  /** Filled share of the track, 0–1. */
-  value: number
-}
-
-function ShareBar({
-  animated = true,
-  className,
-  color = 'var(--chart-2)',
-  value,
-}: ShareBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  const share = Math.min(1, Math.max(0, Number.isFinite(value) ? value : 0))
-
-  return (
-    <div
-      ref={ref as RefObject<HTMLDivElement>}
-      aria-hidden
-      className={cn('bg-muted h-1.5 w-full overflow-hidden rounded-full', className)}
-    >
-      <div
-        className='h-full rounded-full transition-[width] duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
-        style={{ backgroundColor: color, width: `${(revealed ? share : 0) * 100}%` }}
-      />
-    </div>
-  )
-}
-
 export {
   CountryFlag,
   DotMap,
   DotMapLegend,
-  ShareBar,
   TileMap,
   US_STATE_TILES,
   countryFlag,
-  formatCompact,
   getMarkerSize,
   projectPoint,
 }
 
-export type {
-  DotMapLegendProps,
-  DotMapMarker,
-  DotMapProps,
-  ShareBarProps,
-  TileMapProps,
-  TileMapTile,
-}
+export type { DotMapLegendProps, DotMapMarker, DotMapProps, TileMapProps, TileMapTile }

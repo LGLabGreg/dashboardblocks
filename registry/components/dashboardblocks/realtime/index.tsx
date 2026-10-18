@@ -16,3 +16,10 @@ export const realtimeExampleProps = {
   'realtime-03': realtime3ExampleProps,
   'realtime-04': realtime4ExampleProps,
 }
+
+export const realtimeEmptyProps = {
+  'realtime-01': { activeUsers: undefined, pageViews: [], pages: [] },
+  'realtime-02': { samples: [] },
+  'realtime-03': { events: [] },
+  'realtime-04': { hourly: [], metrics: [] },
+}

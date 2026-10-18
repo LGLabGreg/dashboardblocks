@@ -1,13 +1,33 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import {
-  type CSSProperties,
-  type ReactNode,
-  type RefObject,
-  useEffect,
-  useState,
-} from 'react'
+  ChartPlaceholder,
+  chartActiveDot,
+  chartAxisProps,
+  chartBarCursor,
+  chartGridProps,
+  chartReferenceProps,
+  ChartTooltipFrame,
+  ChartTooltipItem,
+  chartValueAxisWidth,
+} from '@/registry/components/dashboardblocks/chart'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { type CSSProperties, useState } from 'react'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ComposedChart,
+  Line,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type YAxisTickContentProps,
+} from 'recharts'
 
 import { cn } from '@/lib/utils'
 
@@ -125,17 +145,11 @@ function getBinPosition(bins: DistributionBin[], value: number) {
   )
 }
 
-function useReveal(animated: boolean) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
-
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
-
-  return { ref: ref as RefObject<HTMLDivElement>, revealed }
+/** A share (0–1) as a whole percent, with one decimal below 1%. */
+function formatDistributionShare(share: number) {
+  return formatPercent(share, {
+    maximumFractionDigits: share > 0 && share < 0.01 ? 1 : 0,
+  })
 }
 
 interface HistogramMarker {
@@ -144,60 +158,76 @@ interface HistogramMarker {
 }
 
 interface HistogramProps {
-  animated?: boolean
   bins: DistributionBin[]
-  children?: ReactNode
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
-  /** Earlier counts in the same bins, drawn as outlines. */
+  /** Earlier counts in the same bins, drawn as a dashed line of shares. */
   compare?: number[]
-  describe: (index: number) => string
+  /** @default 'Before' */
+  compareLabel?: string
   formatEdge?: (value: number) => string
+  /** Names the bars in the tooltip, such as `This week`. @default 'Share' */
+  label?: string
   markers?: HistogramMarker[]
+  /** Shows every nth bin edge on the axis. */
   tickEvery?: number
   threshold?: HistogramMarker
-  /** @default a muted red from --destructive */
+  /** @default DISTRIBUTION_THRESHOLD_COLOR */
   thresholdColor?: string
+  /** Counts the bars in the tooltip, such as `requests`. Leave out to show shares only. */
+  unit?: string
+  /** Names the chart for screen readers; leave it out to hide it, such as beside a table of the same data. */
+  'aria-label'?: string
 }
+
+const LABEL_ROW_PX = 16
 
 function estimateLabelWidth(text: string) {
   return text.length * 6.5 + 8
 }
 
-const defaultThresholdColor = 'color-mix(in oklab, var(--destructive) 70%, var(--card))'
+const DISTRIBUTION_THRESHOLD_COLOR =
+  'color-mix(in oklab, var(--color-destructive) 70%, var(--color-background))'
+
+function chartLabelProps(ariaLabel: string | undefined) {
+  return ariaLabel
+    ? ({ 'aria-label': ariaLabel, role: 'img' } as const)
+    : ({ 'aria-hidden': true } as const)
+}
 
 function Histogram({
-  animated = true,
+  'aria-label': ariaLabel,
   bins,
-  children,
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   compare,
-  describe,
-  formatEdge = (value) => value.toLocaleString(),
+  compareLabel = 'Before',
+  formatEdge = (value) => formatNumber(value),
+  label = 'Share',
   markers = [],
   threshold,
-  thresholdColor = defaultThresholdColor,
+  thresholdColor = DISTRIBUTION_THRESHOLD_COLOR,
   tickEvery = 1,
+  unit,
 }: HistogramProps) {
-  const { ref, revealed } = useReveal(animated)
-  const [active, setActive] = useState<number | null>(null)
-  const [width, setWidth] = useState(600)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width))
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [ref])
-
+  const [width, setWidth] = useState(0)
+  const state = useBlockState()
   const total = bins.reduce((sum, bin) => sum + bin.count, 0) || 1
   const compareTotal = compare?.reduce((sum, count) => sum + count, 0) || 1
-  const shares = bins.map((bin) => bin.count / total)
-  const compareShares = compare?.map((count) => count / compareTotal) ?? []
-  const peak = Math.max(...shares, ...compareShares, 0) || 1
+  const data = bins.map((bin, index) => ({
+    ...bin,
+    compareShare: compare ? (compare[index] ?? 0) / compareTotal : undefined,
+    over: threshold !== undefined && bin.x0 >= threshold.value,
+    position: index + 0.5,
+    share: bin.count / total,
+  }))
+
+  const shareTicks = getNiceTicks(
+    0,
+    Math.max(...data.map((bin) => Math.max(bin.share, bin.compareShare ?? 0)), 0.01),
+    4,
+  )
 
   const lines = [
     ...markers.map((marker) => ({ ...marker, kind: 'marker' as const })),
@@ -214,126 +244,152 @@ function Histogram({
     rowEnds[row] = center + half
     return row
   })
-  const labelRows = rowEnds.length
   const widestTick = Math.max(
     0,
     ...bins.map((bin) => estimateLabelWidth(formatEdge(bin.x0))),
   )
   const tickStep = Math.max(
     tickEvery,
-    Math.ceil((widestTick + 8) / (width / Math.max(1, bins.length))),
+    Math.ceil((widestTick + 8) / Math.max(1, width / Math.max(1, bins.length))),
   )
+  const ticks = bins
+    .map((_, index) => index)
+    .filter((index) => index % tickStep === 0 && bins.length - index >= tickStep)
+    .concat(bins.length)
+  const edgeAt = (index: number) =>
+    index >= bins.length ? (bins[bins.length - 1]?.x1 ?? 0) : (bins[index]?.x0 ?? 0)
+
+  if (state) {
+    return (
+      <div className={cn('w-full', className)}>
+        <ChartPlaceholder height='100%' />
+      </div>
+    )
+  }
 
   return (
-    <div className={cn('flex flex-col gap-3', className)}>
-      <div ref={ref} aria-hidden className='flex min-h-0 flex-1 flex-col gap-1.5'>
-        <div
-          className='relative min-h-0 flex-1'
-          style={{ paddingTop: `${labelRows * 16 + 4}px` }}
-          onPointerLeave={() => setActive(null)}
+    <div {...chartLabelProps(ariaLabel)} className={cn('w-full', className)}>
+      <ResponsiveContainer
+        height='100%'
+        onResize={(nextWidth) => setWidth(nextWidth)}
+        width='100%'
+      >
+        <ComposedChart
+          accessibilityLayer={false}
+          barCategoryGap={2}
+          data={data}
+          margin={{
+            bottom: 0,
+            left: 0,
+            right: 16,
+            top: rowEnds.length * LABEL_ROW_PX + 4,
+          }}
         >
-          <div className='flex h-full items-end gap-0.5 border-b'>
-            {bins.map((bin, index) => {
-              const over = threshold !== undefined && bin.x0 >= threshold.value
+          <CartesianGrid {...chartGridProps} />
+          <XAxis dataKey='position' height={0} hide />
+          <XAxis
+            {...chartAxisProps}
+            dataKey='position'
+            domain={[0, bins.length]}
+            interval={0}
+            tickFormatter={(index: number) => formatEdge(edgeAt(index))}
+            ticks={ticks}
+            type='number'
+            xAxisId='edges'
+          />
+          <YAxis
+            {...chartAxisProps}
+            domain={[0, shareTicks[shareTicks.length - 1]]}
+            tickFormatter={formatDistributionShare}
+            ticks={shareTicks}
+            width={chartValueAxisWidth}
+          />
+          <Tooltip
+            content={({ active, payload }) => {
+              const bin = payload?.[0]?.payload as (typeof data)[number] | undefined
+              if (!active || !bin) return null
               return (
-                <div
-                  key={index}
-                  className='relative flex h-full min-w-0 flex-1 items-end'
-                  onPointerEnter={() => setActive(index)}
-                  onPointerDown={() => setActive(index)}
-                >
-                  {active === index && (
-                    <span className='bg-muted absolute inset-x-0 top-0 bottom-0 rounded-t-[3px]' />
-                  )}
-                  <span
-                    className='relative w-full origin-bottom rounded-t-[3px] transition-transform duration-700 ease-out motion-reduce:transition-none'
-                    style={{
-                      backgroundColor: over ? thresholdColor : color,
-                      height: `${(shares[index] / peak) * 100}%`,
-                      minHeight: bin.count > 0 ? 2 : 0,
-                      transform: `scaleY(${revealed ? 1 : 0})`,
-                      transitionDelay: `${index * 30}ms`,
-                    }}
+                <ChartTooltipFrame>
+                  <span className='font-medium tabular-nums'>
+                    {formatEdge(bin.x0)}–{formatEdge(bin.x1)}
+                  </span>
+                  <ChartTooltipItem
+                    color={bin.over ? thresholdColor : color}
+                    name={label}
+                    value={formatDistributionShare(bin.share)}
                   />
-                  {compare && (
-                    <span
-                      className='border-foreground/70 absolute inset-x-0 bottom-0 rounded-t-[3px] border-2 border-b-0 transition-opacity duration-500 motion-reduce:transition-none'
-                      style={{
-                        height: `${((compareShares[index] ?? 0) / peak) * 100}%`,
-                        opacity: revealed ? 1 : 0,
-                      }}
+                  {bin.compareShare !== undefined && (
+                    <ChartTooltipItem
+                      color='var(--color-muted-foreground)'
+                      name={compareLabel}
+                      value={formatDistributionShare(bin.compareShare)}
                     />
                   )}
-                </div>
+                  {unit && (
+                    <ChartTooltipItem
+                      name={unit.charAt(0).toUpperCase() + unit.slice(1)}
+                      value={formatNumber(bin.count)}
+                    />
+                  )}
+                </ChartTooltipFrame>
               )
-            })}
-          </div>
+            }}
+            cursor={chartBarCursor}
+          />
+          <Bar dataKey='share' name={label} radius={[4, 4, 0, 0]}>
+            {data.map((bin, index) => (
+              <Cell key={index} fill={bin.over ? thresholdColor : color} />
+            ))}
+          </Bar>
+          {compare && (
+            <Line
+              activeDot={chartActiveDot}
+              dataKey='compareShare'
+              dot={false}
+              name={compareLabel}
+              stroke='var(--color-muted-foreground)'
+              strokeDasharray='3 3'
+              strokeWidth={1.5}
+              type='monotone'
+            />
+          )}
           {lines.map((line, index) => (
-            <div
+            <ReferenceLine
               key={`${line.kind}-${line.label}`}
-              className='pointer-events-none absolute bottom-0 flex flex-col items-center'
-              style={{
-                left: `${line.position * 100}%`,
-                top: `${rows[index] * 16}px`,
-                transform: 'translateX(-50%)',
-              }}
-            >
-              <span
-                className={cn(
-                  'bg-card rounded-sm px-1 text-[11px] leading-4 font-medium whitespace-nowrap tabular-nums',
-                  line.kind === 'threshold' && 'text-muted-foreground',
-                )}
-              >
-                {line.label}
-              </span>
-              <span
-                className={cn(
-                  'w-0 flex-1',
-                  line.kind === 'marker'
-                    ? 'border-foreground border-l-[1.5px]'
-                    : 'border-muted-foreground border-l-[1.5px] border-dashed',
-                )}
-              />
-            </div>
+              {...(line.kind === 'marker'
+                ? { stroke: 'var(--color-foreground)', strokeWidth: 1.5 }
+                : chartReferenceProps)}
+              ifOverflow='visible'
+              label={({ viewBox }: { viewBox?: { x?: number; y?: number } }) => (
+                <text
+                  x={viewBox?.x ?? 0}
+                  y={(viewBox?.y ?? 0) - 6 - rows[index] * LABEL_ROW_PX}
+                  textAnchor='middle'
+                  fontSize={11}
+                  fontWeight={500}
+                  fill={
+                    line.kind === 'marker'
+                      ? 'var(--color-foreground)'
+                      : 'var(--color-muted-foreground)'
+                  }
+                >
+                  {line.label}
+                </text>
+              )}
+              x={line.position * bins.length}
+              xAxisId='edges'
+            />
           ))}
-        </div>
-        <div className='text-muted-foreground relative h-4 text-[11px] tabular-nums'>
-          {bins.map((bin, index) =>
-            index % tickStep === 0 && (index === 0 || bins.length - index >= tickStep) ? (
-              <span
-                key={index}
-                className='absolute -translate-x-1/2 whitespace-nowrap first:translate-x-0'
-                style={{ left: `${(index / bins.length) * 100}%` }}
-              >
-                {formatEdge(bin.x0)}
-              </span>
-            ) : null,
-          )}
-          {bins.length > 0 && (
-            <span className='absolute right-0 whitespace-nowrap'>
-              {formatEdge(bins[bins.length - 1].x1)}
-            </span>
-          )}
-        </div>
-      </div>
-      <p className='text-muted-foreground min-h-5 text-sm'>
-        {active !== null ? (
-          <span className='text-foreground'>{describe(active)}</span>
-        ) : (
-          children
-        )}
-      </p>
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   )
 }
 
-interface BoxPlotProps {
-  animated?: boolean
-  className?: string
-  /** @default 'var(--chart-2)' */
-  color?: string
-  domain: [number, number]
+interface BoxPlotRow {
+  count?: number
   high: number
+  label: string
   low: number
   mean?: number
   median: number
@@ -341,102 +397,248 @@ interface BoxPlotProps {
   q3: number
 }
 
-function BoxPlot({
-  animated = true,
-  className,
-  color = 'var(--chart-2)',
-  domain,
-  high,
-  low,
-  mean,
-  median,
-  q1,
-  q3,
-}: BoxPlotProps) {
-  const { ref, revealed } = useReveal(animated)
-  const [min, max] = domain
-  const position = (value: number) =>
-    Math.min(100, Math.max(0, ((value - min) / (max - min || 1)) * 100))
+interface BoxPlotProps {
+  className?: string
+  /** @default 'var(--color-chart-2)' */
+  color?: string
+  domain: [number, number]
+  format?: (value: number) => string
+  /** Shows each row's label on the left. @default true when there is more than one row */
+  labels?: boolean
+  /** Shows each row's median on the right. @default true when there is more than one row */
+  medians?: boolean
+  /** How many rows to sketch while loading, when `rows` is empty. @default 4 */
+  placeholderRows?: number
+  /** @default 44 */
+  rowHeight?: number
+  rows: BoxPlotRow[]
+  tickFormat?: (value: number) => string
+  ticks?: number[]
+  /** Counts each row in the tooltip, such as `tickets`. */
+  unit?: string
+  /** @default '5th–95th percentile' */
+  whiskerLabel?: string
+  /** Names the chart for screen readers; leave it out to hide it, such as beside a table of the same data. */
+  'aria-label'?: string
+}
 
+const BOX_AXIS_PX = 24
+const LABEL_AXIS_PX = 100
+const BOX_MAX_PX = 24
+
+interface BoxShapeProps {
+  color: string
+  height?: number
+  payload?: BoxPlotRow
+  width?: number
+  x?: number
+  y?: number
+}
+
+function BoxShape({
+  color,
+  height = 0,
+  payload,
+  width = 0,
+  x = 0,
+  y = 0,
+}: BoxShapeProps) {
+  if (!payload) return null
+  const at = (value: number) =>
+    payload.high > payload.low
+      ? x + ((value - payload.low) / (payload.high - payload.low)) * width
+      : x
+  const middle = y + height / 2
+  const box = Math.min(BOX_MAX_PX, height * 0.55)
   return (
-    <div ref={ref} aria-hidden className={cn('relative h-6 w-full', className)}>
-      <div
-        className='absolute inset-y-0 origin-left transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none'
-        style={{
-          left: `${position(low)}%`,
-          opacity: revealed ? 1 : 0,
-          transform: `scaleX(${revealed ? 1 : 0.6})`,
-          width: `${position(high) - position(low)}%`,
-        }}
-      >
-        <span className='bg-muted-foreground absolute inset-x-0 top-1/2 h-px -translate-y-1/2' />
-        <span className='bg-muted-foreground absolute inset-y-1.5 left-0 w-px' />
-        <span className='bg-muted-foreground absolute inset-y-1.5 right-0 w-px' />
-      </div>
-      <span
-        className='absolute inset-y-0.5 rounded-[3px] border border-[var(--box-color)] transition-opacity duration-500 motion-reduce:transition-none'
-        style={
-          {
-            '--box-color': color,
-            backgroundColor: `color-mix(in oklab, ${color} 30%, var(--card))`,
-            left: `${position(q1)}%`,
-            opacity: revealed ? 1 : 0,
-            width: `${position(q3) - position(q1)}%`,
-          } as CSSProperties
-        }
+    <g>
+      <line
+        x1={x}
+        x2={x + width}
+        y1={middle}
+        y2={middle}
+        stroke='var(--color-muted-foreground)'
       />
-      <span
-        className='bg-foreground absolute inset-y-0 w-0.5 -translate-x-1/2 rounded-full'
-        style={{ left: `${position(median)}%` }}
+      <line
+        x1={x}
+        x2={x}
+        y1={middle - box / 3}
+        y2={middle + box / 3}
+        stroke='var(--color-muted-foreground)'
       />
-      {mean !== undefined && (
-        <span
-          className='bg-card border-foreground absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px]'
-          style={{ left: `${position(mean)}%` }}
+      <line
+        x1={x + width}
+        x2={x + width}
+        y1={middle - box / 3}
+        y2={middle + box / 3}
+        stroke='var(--color-muted-foreground)'
+      />
+      <rect
+        x={at(payload.q1)}
+        y={middle - box / 2}
+        width={Math.max(1, at(payload.q3) - at(payload.q1))}
+        height={box}
+        rx={3}
+        fill={`color-mix(in oklab, ${color} 30%, var(--color-background))`}
+        stroke={color}
+      />
+      <line
+        x1={at(payload.median)}
+        x2={at(payload.median)}
+        y1={middle - box / 2 - 2}
+        y2={middle + box / 2 + 2}
+        stroke='var(--color-foreground)'
+        strokeLinecap='round'
+        strokeWidth={2}
+      />
+      {payload.mean !== undefined && (
+        <circle
+          cx={at(payload.mean)}
+          cy={middle}
+          r={4}
+          fill='var(--color-background)'
+          stroke='var(--color-foreground)'
+          strokeWidth={1.5}
         />
       )}
-    </div>
+    </g>
   )
 }
 
-interface DistributionAxisProps {
-  className?: string
-  domain: [number, number]
-  format?: (value: number) => string
-  ticks: number[]
-}
-
-function DistributionAxis({
+function BoxPlot({
+  'aria-label': ariaLabel,
   className,
+  color = 'var(--color-chart-2)',
   domain,
-  format = (value) => value.toLocaleString(),
+  format = (value) => formatNumber(value),
+  labels,
+  medians,
+  placeholderRows = 4,
+  rowHeight = 44,
+  rows,
+  tickFormat = format,
   ticks,
-}: DistributionAxisProps) {
-  const [min, max] = domain
+  unit,
+  whiskerLabel = '5th–95th percentile',
+}: BoxPlotProps) {
+  const state = useBlockState()
+  const several = rows.length > 1
+  const showLabels = labels ?? several
+  const showMedians = medians ?? several
+  const data = rows.map((row) => ({ ...row, range: [row.low, row.high] }))
+
+  if (state) {
+    return (
+      <ChartPlaceholder
+        className={className}
+        height={(rows.length || placeholderRows) * rowHeight + BOX_AXIS_PX}
+      />
+    )
+  }
+
   return (
     <div
-      aria-hidden
-      className={cn(
-        'text-muted-foreground relative h-4 text-[11px] tabular-nums',
-        className,
-      )}
+      {...chartLabelProps(ariaLabel)}
+      className={cn('w-full', className)}
+      style={{ height: rows.length * rowHeight + BOX_AXIS_PX }}
     >
-      {ticks.map((tick, index) => (
-        <span
-          key={tick}
-          className={cn(
-            'absolute whitespace-nowrap',
-            index === 0
-              ? ''
-              : index === ticks.length - 1
-                ? '-translate-x-full'
-                : '-translate-x-1/2',
-          )}
-          style={{ left: `${((tick - min) / (max - min || 1)) * 100}%` }}
+      <ResponsiveContainer height='100%' width='100%'>
+        <BarChart
+          accessibilityLayer={false}
+          barCategoryGap={0}
+          data={data}
+          layout='vertical'
+          margin={{ bottom: 0, left: 0, right: showMedians ? 0 : 20, top: 0 }}
         >
-          {format(tick)}
-        </span>
-      ))}
+          <XAxis
+            {...chartAxisProps}
+            allowDataOverflow
+            domain={domain}
+            height={BOX_AXIS_PX}
+            interval={0}
+            tickFormatter={tickFormat}
+            ticks={ticks}
+            type='number'
+          />
+          <YAxis
+            axisLine={false}
+            dataKey='label'
+            hide={!showLabels}
+            tick={{
+              dx: -LABEL_AXIS_PX + 8,
+              fill: 'var(--color-foreground)',
+              fontSize: 14,
+              textAnchor: 'start',
+            }}
+            tickLine={false}
+            type='category'
+            width={showLabels ? LABEL_AXIS_PX : 0}
+          />
+          {showMedians && (
+            <YAxis
+              axisLine={false}
+              dataKey='label'
+              orientation='right'
+              tick={({ payload, x, y }: YAxisTickContentProps) => {
+                const row = rows.find((item) => item.label === payload?.value)
+                return row ? (
+                  <text
+                    x={Number(x) + 8}
+                    y={Number(y)}
+                    dominantBaseline='middle'
+                    fill='var(--color-foreground)'
+                    fontSize={14}
+                  >
+                    {format(row.median)}
+                  </text>
+                ) : (
+                  <g />
+                )
+              }}
+              tickLine={false}
+              type='category'
+              width={64}
+              yAxisId='medians'
+            />
+          )}
+          <Tooltip
+            content={({ active, payload }) => {
+              const row = payload?.[0]?.payload as BoxPlotRow | undefined
+              if (!active || !row) return null
+              return (
+                <ChartTooltipFrame>
+                  <span className='font-medium'>{row.label}</span>
+                  <ChartTooltipItem name='Median' value={format(row.median)} />
+                  {row.mean !== undefined && (
+                    <ChartTooltipItem name='Mean' value={format(row.mean)} />
+                  )}
+                  <ChartTooltipItem
+                    name='Middle half'
+                    value={`${format(row.q1)}–${format(row.q3)}`}
+                  />
+                  <ChartTooltipItem
+                    name={whiskerLabel}
+                    value={`${format(row.low)}–${format(row.high)}`}
+                  />
+                  {unit && row.count !== undefined && (
+                    <ChartTooltipItem
+                      name={unit.charAt(0).toUpperCase() + unit.slice(1)}
+                      value={formatNumber(row.count)}
+                    />
+                  )}
+                </ChartTooltipFrame>
+              )
+            }}
+            cursor={chartBarCursor}
+          />
+          <Bar
+            dataKey='range'
+            shape={(shape: Omit<BoxShapeProps, 'color'>) => (
+              <BoxShape {...shape} color={color} />
+            )}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 }
@@ -444,22 +646,22 @@ function DistributionAxis({
 type DistributionKeyShape =
   | 'bar'
   | 'box'
+  | 'line'
   | 'mean'
   | 'median'
-  | 'outline'
   | 'threshold'
   | 'whisker'
 
 interface DistributionKeyProps {
   className?: string
-  /** @default 'var(--chart-2)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   shape: DistributionKeyShape
 }
 
 function DistributionKey({
   className,
-  color = 'var(--chart-2)',
+  color = 'var(--color-chart-2)',
   shape,
 }: DistributionKeyProps) {
   const base = cn('inline-block shrink-0', className)
@@ -483,9 +685,17 @@ function DistributionKey({
           style={
             {
               '--box-color': color,
-              backgroundColor: `color-mix(in oklab, ${color} 30%, var(--card))`,
+              backgroundColor: `color-mix(in oklab, ${color} 30%, var(--color-background))`,
             } as CSSProperties
           }
+        />
+      )
+    case 'line':
+      return (
+        <span
+          aria-hidden
+          className={cn(base, 'h-0.5 w-3 rounded-full')}
+          style={{ backgroundColor: color }}
         />
       )
     case 'mean':
@@ -498,16 +708,6 @@ function DistributionKey({
     case 'median':
       return (
         <span aria-hidden className={cn(base, 'bg-foreground h-3 w-0.5 rounded-full')} />
-      )
-    case 'outline':
-      return (
-        <span
-          aria-hidden
-          className={cn(
-            base,
-            'border-foreground/70 h-2.5 w-2.5 rounded-t-[3px] border-2 border-b-0',
-          )}
-        />
       )
     case 'threshold':
       return (
@@ -532,10 +732,11 @@ function DistributionKey({
 
 export {
   BoxPlot,
-  DistributionAxis,
+  DISTRIBUTION_THRESHOLD_COLOR,
   DistributionKey,
   Histogram,
   binValues,
+  formatDistributionShare,
   getBinPosition,
   getNiceTicks,
   getShareAbove,
@@ -547,7 +748,7 @@ export {
 
 export type {
   BoxPlotProps,
-  DistributionAxisProps,
+  BoxPlotRow,
   DistributionBin,
   DistributionKeyProps,
   DistributionKeyShape,

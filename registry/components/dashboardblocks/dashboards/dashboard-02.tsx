@@ -1,13 +1,17 @@
 'use client'
 
 import { Billing1 } from '@/registry/components/dashboardblocks/billing/billing-01'
-import { BlockBusy } from '@/registry/components/dashboardblocks/block-state'
+import {
+  BlockBusy,
+  BlockStateProvider,
+  type BlockStatus,
+} from '@/registry/components/dashboardblocks/block-state'
 import {
   type DateRangePreset,
+  DateRangePicker,
   ExportMenu,
   FilterChip,
   FilterMenu,
-  formatDateRange,
   getDateRange,
   getPreset,
   getPreviousRange,
@@ -21,12 +25,15 @@ import { Heatmap1 } from '@/registry/components/dashboardblocks/heatmap/heatmap-
 import { Retention3 } from '@/registry/components/dashboardblocks/retention/retention-03'
 import { StatGroup3 } from '@/registry/components/dashboardblocks/stat-group/stat-group-03'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  formatCurrency,
+  formatDateRange,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { ButtonGroup } from '@/components/ui/button-group'
-
 interface Dashboard2Props {
+  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -44,16 +51,12 @@ const PLANS = [
 ]
 
 const REGIONS = [
-  { color: 'var(--chart-2)', label: 'North America', share: 0.46 },
-  { color: 'var(--chart-3)', label: 'Europe', share: 0.36 },
-  { color: 'var(--chart-4)', label: 'Asia Pacific', share: 0.18 },
+  { color: 'var(--color-chart-2)', label: 'North America', share: 0.46 },
+  { color: 'var(--color-chart-3)', label: 'Europe', share: 0.36 },
+  { color: 'var(--color-chart-4)', label: 'Asia Pacific', share: 0.18 },
 ]
 
-const SEGMENTS: { label: string; value: DateRangePreset }[] = [
-  { label: '7 days', value: '7d' },
-  { label: '30 days', value: '30d' },
-  { label: '90 days', value: '90d' },
-]
+const PRESETS: DateRangePreset[] = ['7d', '30d', '90d']
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -63,7 +66,13 @@ interface Query {
 }
 
 const subscribersAt = (offset: number, share: number) =>
-  share * (7_600 - offset * 9 + Math.sin(offset / 9) * 60)
+  share *
+  (7_600 -
+    offset * 9 +
+    Math.sin(offset / 9) * 60 +
+    Math.sin(offset / 3.4) * 38 -
+    (offset > 11 ? 70 : 0) -
+    (offset > 47 ? 90 : 0))
 
 const accountsAt = (offset: number, share: number) =>
   share *
@@ -112,7 +121,6 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
   const accounts = daily('accounts')
   const churn = daily('churn')
   const nps = daily('nps')
-  const scope = `${formatDateRange(range)}${plan ? `, ${plan} plan` : ''}`
 
   const months = days / 30
   const starting = day(days).mrr
@@ -120,6 +128,8 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
   const churned = Math.round((starting * mean(churn, 'current') * months) / 100)
   const contraction = Math.round(starting * 0.011 * months)
   const expansion = Math.round(starting * (plan === 'Starter' ? 0.018 : 0.034) * months)
+
+  const newBusiness = Math.max(0, ending - starting - expansion + contraction + churned)
 
   const retention = [1, 7, 30].map((dayNumber, index) => {
     const rate = plans.reduce((sum, item) => sum + item.share * item.retention[index], 0)
@@ -143,7 +153,7 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
     metrics: [
       {
         daily: mrr,
-        formatter: (value: number) => `$${Math.round(value).toLocaleString('en-US')}`,
+        formatter: (value: number) => formatCurrency(value),
         key: 'mrr',
         label: 'MRR',
         previous: last(mrr).previous,
@@ -159,7 +169,8 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
       {
         changeType: 'points' as const,
         daily: churn,
-        formatter: (value: number) => `${value.toFixed(1)}%`,
+        formatter: (value: number) =>
+          formatPercent(value / 100, { minimumFractionDigits: 1 }),
         goodDirection: 'down' as const,
         key: 'churn',
         label: 'Churn',
@@ -179,9 +190,10 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
       churn: churned,
       contraction,
       expansion,
-      newBusiness: Math.max(0, ending - starting - expansion + contraction + churned),
+      newBusiness,
       starting,
     },
+    movementSummary: `New business and expansion added ${formatCurrency(newBusiness + expansion, { compact: true })}; churn and downgrades took ${formatCurrency(churned + contraction, { compact: true })}.`,
     previousLabel: formatDateRange(previousRange),
     regions: REGIONS.map((region, index) => {
       const drift = (index - 1) * 0.01
@@ -193,12 +205,11 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
       }
     }),
     retention,
-    scope,
   }
 }
 
 const Dashboard2 = (props: Dashboard2Props) => {
-  const { title, today } = props
+  const { status, title, today } = props
   const [query, setQuery] = useState<Query>({ plan: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -215,33 +226,37 @@ const Dashboard2 = (props: Dashboard2Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <div className='@container flex w-full flex-col gap-6'>
-      <header className='flex flex-col gap-4'>
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-muted-foreground text-sm' aria-live='polite'>
-              {formatDateRange(range)} vs {formatDateRange(getPreviousRange(range))}
-              {query.plan && ` · ${query.plan} plan`}
+    <BlockStateProvider status={status}>
+      <div className='@container flex w-full flex-col gap-8'>
+        <header className='flex flex-col gap-3 border-b pb-4'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+              <ExportMenu disabled={status !== undefined} onExport={() => {}} />
+            </div>
+            <p className='text-muted-foreground leading-relaxed'>
+              Showing{' '}
+              <DateRangePicker
+                onValueChange={(preset) => update({ preset })}
+                presets={PRESETS}
+                today={today}
+                value={query.preset}
+                variant='inline'
+              />
+              <span aria-live='polite'>
+                , {formatDateRange(range)}, compared with{' '}
+                {formatDateRange(getPreviousRange(range))}.
+              </span>
             </p>
           </div>
-          <ExportMenu onExport={() => {}} />
-        </div>
-        <div className='flex flex-wrap items-center gap-x-4 gap-y-3'>
-          <ButtonGroup aria-label='Date range'>
-            {SEGMENTS.map((segment) => (
-              <Button
-                key={segment.value}
-                aria-pressed={query.preset === segment.value}
-                className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
-                onClick={() => update({ preset: segment.value })}
-                variant='outline'
-              >
-                {segment.label}
-              </Button>
-            ))}
-          </ButtonGroup>
           <div className='flex flex-wrap items-center gap-2'>
+            {query.plan && (
+              <FilterChip
+                field='Plan'
+                value={query.plan}
+                onRemove={() => update({ plan: null })}
+              />
+            )}
             <FilterMenu
               allLabel='All plans'
               label='Plan'
@@ -258,60 +273,57 @@ const Dashboard2 = (props: Dashboard2Props) => {
               />
               {query.plan ? 'Change plan' : 'Filter by plan'}
             </FilterMenu>
-            {query.plan && (
-              <FilterChip
-                field='Plan'
-                value={query.plan}
-                onRemove={() => update({ plan: null })}
-              />
-            )}
           </div>
-        </div>
-      </header>
-      <BlockBusy
-        busy={busy}
-        label='Updating the dashboard'
-        className='grid gap-4 @4xl:grid-cols-3'
-      >
-        <div className='@4xl:col-span-3'>
-          <StatGroup3
-            currentLabel={data.currentLabel}
-            metrics={data.metrics}
-            previousLabel={data.previousLabel}
-            title={data.scope}
+        </header>
+        <BlockBusy
+          busy={busy}
+          label='Updating the dashboard'
+          className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
+        >
+          <div className='@4xl:col-span-3'>
+            <StatGroup3
+              status={status}
+              currentLabel={data.currentLabel}
+              metrics={data.metrics}
+              previousLabel={data.previousLabel}
+              title='Revenue and customers'
+            />
+          </div>
+          <div className='@4xl:col-span-2'>
+            <Billing1
+              status={status}
+              description={status ? '' : data.movementSummary}
+              movement={data.movement}
+              title='MRR movement'
+            />
+          </div>
+          <Geo4
+            status={status}
+            comparison={`in ${data.previousLabel}`}
+            formatter={(value) => formatCurrency(value)}
+            regions={data.regions}
+            title='MRR by region'
           />
-        </div>
-        <div className='@4xl:col-span-2'>
-          <Heatmap1
-            description={`Average active accounts by weekday and hour, ${data.scope}`}
-            title='When customers are active'
-            unit='accounts'
-            values={data.activity}
+          <div className='@4xl:col-span-2'>
+            <Heatmap1
+              status={status}
+              title='When customers are active'
+              unit='accounts'
+              values={data.activity}
+            />
+          </div>
+          <Retention3
+            status={status}
+            description='Share of the latest monthly signup cohort still active, against the cohort before.'
+            milestones={data.retention}
+            title='Retention milestones'
           />
-        </div>
-        <Geo4
-          description={`MRR at the end of ${data.scope}`}
-          formatter={(value) => `$${value.toLocaleString('en-US')}`}
-          previousLabel={`vs ${data.previousLabel}`}
-          regions={data.regions}
-          title='MRR by region'
-        />
-        <div className='@4xl:col-span-2'>
-          <Billing1
-            description={data.scope}
-            movement={data.movement}
-            title='MRR movement'
-          />
-        </div>
-        <Retention3
-          description={`Latest monthly signup cohort${displayedQuery.plan ? `, ${displayedQuery.plan} plan` : ''}, compared with the one before`}
-          milestones={data.retention}
-          previousLabel='Previous cohort'
-          title='Retention milestones'
-        />
-      </BlockBusy>
-      <DataTable4 {...dataTable4ExampleProps} />
-    </div>
+          <div className='@4xl:col-span-3'>
+            <DataTable4 status={status} {...dataTable4ExampleProps} />
+          </div>
+        </BlockBusy>
+      </div>
+    </BlockStateProvider>
   )
 }
 

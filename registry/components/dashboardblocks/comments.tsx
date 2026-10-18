@@ -145,6 +145,7 @@ function getMentions(text: string, names?: string[]) {
 function initials(name: string) {
   return name
     .split(/\s+/)
+    .filter(Boolean)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join('')
@@ -162,9 +163,7 @@ function CommentAvatar({
   return (
     <Avatar aria-hidden size={size} className={className}>
       {author.avatar && <AvatarImage src={author.avatar} alt='' />}
-      <AvatarFallback className={cn(size === 'sm' && 'text-[0.625rem]')}>
-        {initials(author.name)}
-      </AvatarFallback>
+      <AvatarFallback>{initials(author.name)}</AvatarFallback>
     </Avatar>
   )
 }
@@ -469,6 +468,7 @@ interface CommentComposerProps {
   focusOnMount?: boolean
   className?: string
   defaultValue?: string
+  disabled?: boolean
   footer?: ReactNode
   label?: string
   /** Shows a Cancel button, and Escape cancels too. */
@@ -487,6 +487,7 @@ interface CommentComposerProps {
 function CommentComposer({
   className,
   defaultValue = '',
+  disabled = false,
   focusOnMount = false,
   footer,
   label = 'Comment',
@@ -559,7 +560,7 @@ function CommentComposer({
   async function submit(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault()
     const body = text.trim()
-    if (isSubmitting) return
+    if (isSubmitting || disabled) return
     if (!body) return textareaRef.current?.focus()
     setIsSubmitting(true)
     try {
@@ -612,6 +613,7 @@ function CommentComposer({
           aria-invalid={error ? true : undefined}
           placeholder={placeholder}
           value={text}
+          disabled={disabled}
           readOnly={isSubmitting}
           onChange={(event) => {
             change(event.target.value)
@@ -660,7 +662,7 @@ function CommentComposer({
               Cancel
             </Button>
           )}
-          <Button type='submit' size='sm' disabled={isSubmitting}>
+          <Button type='submit' size='sm' disabled={disabled || isSubmitting}>
             {isSubmitting ? pendingLabel : submitLabel}
           </Button>
         </InputGroupAddon>

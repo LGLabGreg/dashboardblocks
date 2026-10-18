@@ -7,7 +7,13 @@ export const examples: Registry['items'] = [
     name: 'forecast-01',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['card', registryUrl('chart-panel'), registryUrl('forecast')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('forecast'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/forecast/forecast-01.tsx',
@@ -24,7 +30,14 @@ export const examples: Registry['items'] = [
   {
     name: 'forecast-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('forecast')],
+    dependencies: ['recharts'],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('chart'),
+      registryUrl('chart-panel'),
+      registryUrl('forecast'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/forecast/forecast-02.tsx',
@@ -33,7 +46,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'The date the trend reaches a target, with an 80% range of dates, against the deadline.',
+        'The running total heading for a goal line, with the forecast, its 80% range, the deadline and the date it gets there.',
       size: 'half',
       usedWith: ['forecast-01', 'goals-01', 'progress-kpi-01'],
     },
@@ -41,7 +54,12 @@ export const examples: Registry['items'] = [
   {
     name: 'forecast-03',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('forecast')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('forecast'),
+      registryUrl('format'),
+      registryUrl('kpi'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/forecast/forecast-03.tsx',
@@ -60,7 +78,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
-      'card',
+      registryUrl('block-state'),
+      registryUrl('chart'),
       registryUrl('chart-panel'),
       registryUrl('data-table'),
       registryUrl('forecast'),

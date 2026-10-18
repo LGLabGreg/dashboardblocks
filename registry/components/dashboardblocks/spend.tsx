@@ -1,8 +1,11 @@
 'use client'
 
-import { useInView } from '@/registry/hooks/use-in-view'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type RefObject, useEffect, useState } from 'react'
+import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
+import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import { useReveal } from '@/registry/hooks/use-reveal'
 
 import { cn } from '@/lib/utils'
 
@@ -73,93 +76,33 @@ function getRunway({ cash, monthlyNet, now }: RunwayInput) {
   return { date, months }
 }
 
-const budgetStatusConfig: Record<
-  BudgetStatus,
-  { className: string; icon: React.ReactNode; label: string }
-> = {
-  'at-risk': {
-    className: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'At risk',
-  },
-  'on-track': {
-    className: 'bg-muted text-foreground',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'On track',
-  },
-  over: {
-    className: 'bg-red-500/10 text-red-700 dark:text-red-400',
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
-    label: 'Over budget',
-  },
-  under: {
-    className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    label: 'Under budget',
-  },
+const budgetStatusConfig: Record<BudgetStatus, { label: string; tone: StatusTone }> = {
+  'at-risk': { label: 'At risk', tone: 'warning' },
+  'on-track': { label: 'On track', tone: 'good' },
+  over: { label: 'Over budget', tone: 'bad' },
+  under: { label: 'Under budget', tone: 'good' },
 }
 
-function BudgetStatusBadge({
+function BudgetStatusLabel({
   className,
   status,
 }: {
   className?: string
   status: BudgetStatus
 }) {
+  const state = useBlockState()
+  if (state) return null
   const config = budgetStatusConfig[status]
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.className,
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel className={className} tone={config.tone}>
       {config.label}
-    </span>
+    </StatusLabel>
   )
 }
 
 const spendColors = {
-  over: 'var(--destructive)',
-  spent: 'var(--primary)',
+  over: 'var(--color-destructive)',
+  spent: 'var(--color-chart-2)',
 } as const
 
 function projectedFill(color: string) {
@@ -170,7 +113,7 @@ interface BudgetBarProps {
   animated?: boolean
   budget: number
   className?: string
-  /** @default 'var(--primary)' */
+  /** @default 'var(--color-chart-2)' */
   color?: string
   projected?: number
   /** @default 'md' */
@@ -189,14 +132,22 @@ function BudgetBar({
   size = 'md',
   spent,
 }: BudgetBarProps) {
-  const { isInView, ref } = useInView({ threshold: 0.3 })
-  const [revealed, setRevealed] = useState(!animated)
+  const { ref, revealed } = useReveal(animated)
+  const state = useBlockState()
 
-  useEffect(() => {
-    if (!animated || !isInView) return
-    const frame = requestAnimationFrame(() => setRevealed(true))
-    return () => cancelAnimationFrame(frame)
-  }, [animated, isInView])
+  if (state) {
+    return (
+      <div
+        aria-hidden
+        className={cn(
+          'bg-muted w-full rounded-full',
+          size === 'md' ? 'h-3' : 'h-2',
+          state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+          className,
+        )}
+      />
+    )
+  }
 
   const scale = Math.max(budget, spent, projected ?? 0) * SCALE_HEADROOM || 1
   const at = (value: number) => `${(Math.max(0, value) / scale) * 100}%`
@@ -206,7 +157,7 @@ function BudgetBar({
 
   return (
     <div
-      ref={ref as RefObject<HTMLDivElement>}
+      ref={ref}
       aria-hidden
       className={cn('relative w-full', size === 'md' ? 'h-3' : 'h-2', className)}
     >
@@ -237,7 +188,7 @@ function BudgetBar({
         )}
       </div>
       <span
-        className='bg-foreground ring-card absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+        className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
         style={{ left: at(budget) }}
       />
     </div>
@@ -284,7 +235,7 @@ function SpendKey({
 
 export {
   BudgetBar,
-  BudgetStatusBadge,
+  BudgetStatusLabel,
   SpendKey,
   budgetStatusConfig,
   getBudgetPace,

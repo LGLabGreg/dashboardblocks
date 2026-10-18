@@ -16,3 +16,10 @@ export const calendarExampleProps = {
   'calendar-03': calendar3ExampleProps,
   'calendar-04': calendar4ExampleProps,
 }
+
+export const calendarEmptyProps = {
+  'calendar-01': { events: [] },
+  'calendar-02': { events: [] },
+  'calendar-03': { events: [] },
+  'calendar-04': { bookings: [] },
+}
