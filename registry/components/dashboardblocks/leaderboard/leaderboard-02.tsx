@@ -132,9 +132,9 @@ const Leaderboard2 = (props: Leaderboard2Props) => {
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <BlockStateRows rows={5} />
+        <BlockStateRows className='border-t' rows={5} />
         {!state && (
-          <Leaderboard className='gap-0'>
+          <Leaderboard className='gap-0 border-t'>
             {reps.map((rep, index) => {
               const attainment = rep.revenue / (rep.quota || 1)
               return (

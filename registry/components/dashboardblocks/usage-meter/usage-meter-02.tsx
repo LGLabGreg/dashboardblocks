@@ -71,7 +71,7 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
               <span>
                 <span className='tabular-nums'>{formatUsage(free, unit)}</span> free
               </span>
-              {status !== 'ok' && <UsageStatusLabel status={status} />}
+              {status !== 'ok' && <UsageStatusLabel variant='text' status={status} />}
             </Details>
           </BlockReady>
         </div>

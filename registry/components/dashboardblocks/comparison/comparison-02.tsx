@@ -14,6 +14,15 @@ import {
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
+import {
   formatNumber,
   formatPercent,
   formatSigned,
@@ -156,45 +165,43 @@ const Comparison2 = (props: Comparison2Props) => {
         </div>
       </div>
       <p className='text-muted-foreground text-sm'>{verdict(result, variant)}</p>
-      <table className='w-full text-sm'>
-        <caption className='sr-only'>Results by variant</caption>
-        <thead>
-          <tr className='text-muted-foreground border-b text-xs'>
-            <th scope='col' className='py-2 text-left font-normal'>
-              Variant
-            </th>
-            <th scope='col' className='hidden py-2 text-right font-normal @sm:table-cell'>
+      <DataTable density='compact' caption='Results by variant'>
+        <DataTableHeader>
+          <DataTableRow>
+            <DataTableHead>Variant</DataTableHead>
+            <DataTableHead align='end' className='hidden @sm:table-cell'>
               Visitors
-            </th>
-            <th scope='col' className='py-2 text-right font-normal'>
-              Conversions
-            </th>
-            <th scope='col' className='py-2 text-right font-normal'>
-              Rate
-            </th>
-          </tr>
-        </thead>
-        <tbody className='tabular-nums'>
+            </DataTableHead>
+            <DataTableHead align='end'>Conversions</DataTableHead>
+            <DataTableHead align='end'>Rate</DataTableHead>
+          </DataTableRow>
+        </DataTableHeader>
+        <DataTableBody>
           {[
             { ...control, rate: result.rateA },
             { ...variant, rate: result.rateB },
           ].map((row) => (
-            <tr key={row.name} className='border-b last:border-b-0'>
-              <th scope='row' className='py-2.5 pr-2 text-left font-medium'>
-                <span className='text-muted-foreground mr-2 font-normal'>{row.name}</span>
+            <DataTableRow key={row.name}>
+              <DataTableRowHead primary>
+                <span className='text-muted-foreground me-2 font-normal'>{row.name}</span>
                 {row.label}
-              </th>
-              <td className='text-muted-foreground hidden py-2.5 text-right @sm:table-cell'>
+              </DataTableRowHead>
+              <DataTableCell
+                align='end'
+                className='text-muted-foreground hidden @sm:table-cell'
+              >
                 {formatNumber(row.visitors)}
-              </td>
-              <td className='text-muted-foreground py-2.5 text-right'>
+              </DataTableCell>
+              <DataTableCell align='end' className='text-muted-foreground'>
                 {formatNumber(row.conversions)}
-              </td>
-              <td className='py-2.5 text-right font-medium'>{rate(row.rate)}</td>
-            </tr>
+              </DataTableCell>
+              <DataTableCell align='end' className='font-medium'>
+                {rate(row.rate)}
+              </DataTableCell>
+            </DataTableRow>
           ))}
-        </tbody>
-      </table>
+        </DataTableBody>
+      </DataTable>
     </section>
   )
 }

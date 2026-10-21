@@ -1076,7 +1076,7 @@ const labelDotClasses: Record<ActivityTone, string> = {
   info: 'bg-sky-500',
   neutral: 'bg-muted-foreground',
   success: 'bg-emerald-500',
-  warning: 'bg-amber-500',
+  warning: 'bg-orange-500',
 }
 
 function KanbanLabels({
@@ -1203,7 +1203,7 @@ const priorityConfig: Record<
   { className: string; icon: ReactNode; label: string }
 > = {
   high: {
-    className: 'text-amber-800 dark:text-amber-400',
+    className: 'text-orange-700 dark:text-orange-400',
     icon: (
       <IconPlaceholder
         lucide='ChevronUpIcon'

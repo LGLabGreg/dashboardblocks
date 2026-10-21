@@ -124,7 +124,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'input',
-      'native-select',
+      registryUrl('option-select'),
       'switch',
       'textarea',
       registryUrl('block-state'),

@@ -13,6 +13,7 @@ import {
   SaveBar,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 
 import {
   Field,
@@ -24,7 +25,6 @@ import {
   FieldTitle,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -158,13 +158,11 @@ function Forms1Content(props: Forms1Props & { defaultValues: WorkspaceSettings }
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor={form.getId('timezone')}>Time zone</FieldLabel>
-                <NativeSelect className='w-full' {...form.field('timezone')}>
-                  {timezones.map((timezone) => (
-                    <NativeSelectOption key={timezone.value} value={timezone.value}>
-                      {timezone.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                <OptionSelect
+                  className='w-full'
+                  options={timezones}
+                  {...form.select('timezone')}
+                />
                 <FieldDescription>
                   Reports and digests use this time zone.
                 </FieldDescription>

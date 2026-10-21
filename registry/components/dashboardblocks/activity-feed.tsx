@@ -12,7 +12,16 @@ const activityToneClasses: Record<ActivityTone, string> = {
   info: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
   neutral: 'bg-muted text-foreground',
   success: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-  warning: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
+  warning: 'bg-orange-500/10 text-orange-700 dark:text-orange-400',
+}
+
+const activityToneColors: Record<ActivityTone, string> = {
+  accent: 'var(--color-chart-2)',
+  danger: 'var(--color-red-600)',
+  info: 'var(--color-sky-600)',
+  neutral: 'var(--color-muted-foreground)',
+  success: 'var(--color-emerald-600)',
+  warning: 'var(--color-orange-500)',
 }
 
 function ActivityFeed({ className, ...props }: ComponentProps<'ol'>) {
@@ -188,6 +197,7 @@ export {
   ActivityTime,
   UnreadDot,
   activityToneClasses,
+  activityToneColors,
   formatActivityDay,
   formatActivityTime,
   getDayKey,

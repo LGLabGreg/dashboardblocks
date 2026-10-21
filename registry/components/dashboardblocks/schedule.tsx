@@ -4,7 +4,6 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { joinDetails } from '@/registry/lib/dashboardblocks/format'
 import {
   type CSSProperties,
@@ -269,69 +268,22 @@ function EventRow({
 
 type Urgency = 'overdue' | 'today' | 'soon' | 'later'
 
-const urgencyConfig: Record<
-  Urgency,
-  { icon: React.ReactNode; label: string; soft: string; text: string }
-> = {
+const urgencyConfig: Record<Urgency, { label: string; text: string }> = {
   later: {
-    icon: (
-      <IconPlaceholder
-        lucide='CalendarClockIcon'
-        tabler='IconCalendarTime'
-        hugeicons='Calendar03Icon'
-        phosphor='CalendarDotsIcon'
-        remixicon='RiCalendarScheduleLine'
-        aria-hidden
-      />
-    ),
     label: 'Upcoming',
-    soft: 'bg-muted text-foreground',
     text: 'text-muted-foreground',
   },
   overdue: {
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
     label: 'Overdue',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     text: 'text-red-700 dark:text-red-400',
   },
   soon: {
-    icon: (
-      <IconPlaceholder
-        lucide='ClockIcon'
-        tabler='IconClock'
-        hugeicons='Clock01Icon'
-        phosphor='ClockIcon'
-        remixicon='RiTimeLine'
-        aria-hidden
-      />
-    ),
     label: 'Due soon',
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    text: 'text-amber-800 dark:text-amber-400',
+    text: 'text-orange-700 dark:text-orange-400',
   },
   today: {
-    icon: (
-      <IconPlaceholder
-        lucide='TimerIcon'
-        tabler='IconStopwatch'
-        hugeicons='Timer02Icon'
-        phosphor='TimerIcon'
-        remixicon='RiTimerLine'
-        aria-hidden
-      />
-    ),
     label: 'Today',
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    text: 'text-amber-800 dark:text-amber-400',
+    text: 'text-orange-700 dark:text-orange-400',
   },
 }
 
@@ -341,30 +293,6 @@ function getUrgency(date: Date, now: Date, timeZone = 'UTC', soonDays = 7): Urge
   if (offset < 0) return 'overdue'
   if (offset === 0) return 'today'
   return offset <= soonDays ? 'soon' : 'later'
-}
-
-function UrgencyBadge({
-  className,
-  label,
-  urgency,
-}: {
-  className?: string
-  label?: string
-  urgency: Urgency
-}) {
-  const config = urgencyConfig[urgency]
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-      {label ?? config.label}
-    </span>
-  )
 }
 
 const urgencyTones: Record<Urgency, StatusTone> = {
@@ -384,7 +312,7 @@ function UrgencyLabel({
   urgency: Urgency
 }) {
   return (
-    <StatusLabel tone={urgencyTones[urgency]} className={className}>
+    <StatusLabel tone={urgencyTones[urgency]} className={className} variant='text'>
       {label ?? urgencyConfig[urgency].label}
     </StatusLabel>
   )
@@ -507,6 +435,7 @@ function MonthCalendar({
   }))
 
   return (
+    // Not a data table: a calendar month, drawn as the ARIA date grid pattern.
     <table
       ref={grid}
       // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role -- the ARIA date grid pattern is a table with the grid role
@@ -607,7 +536,6 @@ export {
   EventRow,
   EventSwatch,
   MonthCalendar,
-  UrgencyBadge,
   UrgencyLabel,
   addDays,
   formatCountdown,

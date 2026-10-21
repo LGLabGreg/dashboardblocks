@@ -14,14 +14,6 @@ import {
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHead,
-  DataTableHeader,
-  DataTableRow,
-} from '@/registry/components/dashboardblocks/data-table'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   ActionsMenu,
@@ -42,6 +34,14 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCurrency,
@@ -234,10 +234,10 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
                 description={order.placed}
                 badge={
                   <Details className='text-muted-foreground text-sm'>
-                    <StatusLabel tone={PAYMENT_TONE[order.status]}>
+                    <StatusLabel variant='text' tone={PAYMENT_TONE[order.status]}>
                       {order.status}
                     </StatusLabel>
-                    <StatusLabel tone={FULFILMENT_TONE[order.fulfilment]}>
+                    <StatusLabel variant='text' tone={FULFILMENT_TONE[order.fulfilment]}>
                       {order.fulfilment}
                     </StatusLabel>
                   </Details>
@@ -307,12 +307,10 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
             }
           >
             <RecordSection
-              className='[--data-table-inset:0px]'
               description={`${formatNumber(units)} items from ${items.length} products, ${money(total)} with shipping and tax.`}
               title='Items'
             >
-              <DataTable>
-                <caption className='sr-only'>Items in order {order.id}</caption>
+              <DataTable caption={`Items in order ${order.id}`}>
                 <DataTableHeader>
                   <DataTableRow>
                     <DataTableHead>Product</DataTableHead>
@@ -330,13 +328,11 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
                           {item.sku}
                         </span>
                       </DataTableCell>
-                      <DataTableCell align='end' label='Qty'>
+                      <DataTableCell align='end'>
                         {formatNumber(item.quantity)}
                       </DataTableCell>
-                      <DataTableCell align='end' label='Price'>
-                        {money(item.price)}
-                      </DataTableCell>
-                      <DataTableCell align='end' label='Total'>
+                      <DataTableCell align='end'>{money(item.price)}</DataTableCell>
+                      <DataTableCell align='end'>
                         {money(item.price * item.quantity)}
                       </DataTableCell>
                     </DataTableRow>

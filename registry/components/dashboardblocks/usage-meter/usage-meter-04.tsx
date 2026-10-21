@@ -123,6 +123,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
               {runsOut ? (
                 <>
                   <UsageStatusLabel
+                    variant='text'
                     label={`${Math.floor(daysLeft)} ${Math.floor(daysLeft) === 1 ? 'day' : 'days'} left`}
                     status={status}
                   />

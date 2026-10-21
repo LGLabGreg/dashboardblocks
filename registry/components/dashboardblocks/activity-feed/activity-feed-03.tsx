@@ -177,7 +177,10 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
                   {item.items.map((notification) => {
                     const isUnread = !isRead(notification)
                     return (
-                      <ActivityFeedItem key={notification.id} className='border-b'>
+                      <ActivityFeedItem
+                        key={notification.id}
+                        className='border-b last:border-b-0'
+                      >
                         <button
                           type='button'
                           onClick={() => markRead([notification.id])}

@@ -93,7 +93,10 @@ const Goals2 = (props: Goals2Props) => {
             </BlockReady>
           </p>
         </header>
-        <BlockStateRows className='border-y' rows={goals.length || 4} />
+        <BlockStateRows
+          className='border-t data-[slot=block-state-rows]:border-b'
+          rows={goals.length || 4}
+        />
         {!status && goals.length > 0 && (
           <ul className='flex flex-col divide-y border-y'>
             {rows.map(({ format, goal, pace }) => (

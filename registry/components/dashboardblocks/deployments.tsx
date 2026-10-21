@@ -21,7 +21,7 @@ const deployStatusConfig: Record<
     tone: 'neutral',
   },
   'rolled-back': {
-    cell: 'bg-amber-500 dark:bg-amber-400',
+    cell: 'bg-orange-500 dark:bg-orange-400',
     label: 'Rolled back',
     tone: 'warning',
   },

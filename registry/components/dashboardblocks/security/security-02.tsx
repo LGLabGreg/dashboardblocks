@@ -144,7 +144,10 @@ const Security2 = (props: Security2Props) => {
         {!state && (
           <ol className='flex flex-col border-t'>
             {shown.map((event) => (
-              <li key={event.id} className='flex items-start gap-3 border-b py-2.5'>
+              <li
+                key={event.id}
+                className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+              >
                 <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                   <p className='text-sm text-pretty'>
                     <span className='font-medium'>{event.actor}</span> {event.action}
@@ -161,7 +164,7 @@ const Security2 = (props: Security2Props) => {
               </li>
             ))}
             {shown.length === 0 && (
-              <li className='text-muted-foreground border-b py-6 text-center text-sm'>
+              <li className='text-muted-foreground py-6 text-center text-sm'>
                 No warnings in this log.
               </li>
             )}

@@ -100,7 +100,7 @@ function Podium({ top, unit }: PodiumProps) {
   const max = Math.max(top[0]?.value ?? 0, 1)
 
   return (
-    <ol ref={ref} className='grid grid-cols-3 items-end gap-2 border-b'>
+    <ol ref={ref} className='grid grid-cols-3 items-end gap-2 border-y pt-4'>
       {top.map((contributor, index) => {
         const step = podium[index]
         const delay = `${index * 100}ms`
@@ -186,7 +186,7 @@ const Leaderboard3 = (props: Leaderboard3Props) => {
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <BlockStateRows rows={6} />
+        <BlockStateRows className='border-t' rows={6} />
         {!state && <Podium top={top} unit={unit} />}
         {!state && rest.length > 0 && (
           <Leaderboard className='gap-0'>

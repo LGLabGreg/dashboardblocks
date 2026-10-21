@@ -186,18 +186,19 @@ function SlaLabel({ due, now, paused }: { due: Date; now: Date; paused: boolean 
   const minutes = Math.round((due.getTime() - now.getTime()) / 60_000)
   if (paused)
     return (
-      <StatusLabel className='text-xs' tone='neutral'>
+      <StatusLabel variant='text' className='text-xs' tone='neutral'>
         SLA paused
       </StatusLabel>
     )
   if (minutes < 0)
     return (
-      <StatusLabel className='text-xs tabular-nums' tone='bad'>
+      <StatusLabel variant='text' className='text-xs tabular-nums' tone='bad'>
         {formatSpan(-minutes)} over SLA
       </StatusLabel>
     )
   return (
     <StatusLabel
+      variant='text'
       className='text-xs tabular-nums'
       tone={minutes < 60 ? 'warning' : 'neutral'}
     >
@@ -291,7 +292,7 @@ const Kanban3 = (props: Kanban3Props) => {
               {breached > 0 ? (
                 <>
                   , and{' '}
-                  <StatusLabel tone='bad'>
+                  <StatusLabel variant='text' tone='bad'>
                     {breached} {breached === 1 ? 'is' : 'are'} over SLA
                   </StatusLabel>
                   .

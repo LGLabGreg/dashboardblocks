@@ -50,7 +50,7 @@ const Alerts4 = (props: Alerts4Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container flex flex-col gap-3 border-y py-3 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
+      <section className='@container flex flex-col gap-3 border-t pt-3 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
         <div className='flex shrink-0 flex-col gap-0.5'>
           {state === 'error' || state === 'empty' ? (
             <p className='flex items-baseline gap-2'>
@@ -75,7 +75,7 @@ const Alerts4 = (props: Alerts4Props) => {
               {SEVERITIES.map((severity) => {
                 const count = counts?.[severity] ?? 0
                 return count > 0 ? (
-                  <SeverityLabel key={severity} severity={severity}>
+                  <SeverityLabel variant='text' key={severity} severity={severity}>
                     {count} {severityConfig[severity].label.toLowerCase()}
                   </SeverityLabel>
                 ) : (

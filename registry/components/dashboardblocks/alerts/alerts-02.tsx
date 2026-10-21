@@ -119,10 +119,7 @@ const Alerts2 = (props: Alerts2Props) => {
             <div className='flex flex-wrap items-baseline gap-x-2'>
               <h2 className='font-semibold tracking-tight'>{title}</h2>
               {!state && (
-                <SeverityLabel
-                  className='text-sm'
-                  severity={acknowledged ? 'resolved' : severity}
-                >
+                <SeverityLabel severity={acknowledged ? 'resolved' : severity}>
                   {acknowledged ? 'Acknowledged' : undefined}
                 </SeverityLabel>
               )}

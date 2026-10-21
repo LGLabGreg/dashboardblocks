@@ -94,6 +94,7 @@
         "sidebar",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/link.json",
+        "https://www.dashboardblocks.com/r/radix/page-header.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json"
       ],
       "files": [
@@ -188,6 +189,7 @@
       "description": "Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
+        "https://www.dashboardblocks.com/r/radix/table.json",
         "https://www.dashboardblocks.com/r/radix/use-reveal.json"
       ],
       "files": [
@@ -207,7 +209,8 @@
         "recharts"
       ],
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/radix/chart.json"
+        "https://www.dashboardblocks.com/r/radix/chart.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -234,10 +237,27 @@
       ]
     },
     {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.",
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/block-state.json",
+        "https://www.dashboardblocks.com/r/radix/link.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/table.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/table.tsx"
+        }
+      ]
+    },
+    {
       "name": "data-table",
       "type": "registry:component",
       "title": "Data Table",
-      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.",
+      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars, scrolling sideways when wider than its card.",
       "dependencies": [
         "@tanstack/react-table@^9.2.4"
       ],
@@ -247,7 +267,8 @@
         "checkbox",
         "dropdown-menu",
         "input",
-        "https://www.dashboardblocks.com/r/radix/details.json"
+        "https://www.dashboardblocks.com/r/radix/details.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -498,7 +519,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
-        "https://www.dashboardblocks.com/r/radix/heatmap.json"
+        "https://www.dashboardblocks.com/r/radix/heatmap.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -711,7 +733,7 @@
       "name": "page-header",
       "type": "registry:component",
       "title": "Page Header",
-      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs and a more-actions menu.",
+      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs that put what doesn’t fit under More, and a more-actions menu.",
       "registryDependencies": [
         "button",
         "dropdown-menu",
@@ -909,6 +931,22 @@
           "path": "registry/components/dashboardblocks/spend.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/spend.tsx"
+        }
+      ]
+    },
+    {
+      "name": "option-select",
+      "type": "registry:component",
+      "title": "Option Select",
+      "description": "A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/option-select.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/option-select.tsx"
         }
       ]
     },
@@ -1172,7 +1210,8 @@
         "checkbox",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/details.json"
+        "https://www.dashboardblocks.com/r/radix/details.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -1191,7 +1230,7 @@
         "button",
         "field",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "https://www.dashboardblocks.com/r/radix/forms.json",
         "https://www.dashboardblocks.com/r/radix/link.json"
       ],
@@ -1883,7 +1922,7 @@
         }
       ],
       "meta": {
-        "shows": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+        "shows": "What is left as a liquid that drains as usage grows, turning orange and then red.",
         "size": "compact",
         "usedWith": [
           "usage-meter-02",
@@ -1893,7 +1932,7 @@
         "component": "UsageMeter7",
         "props": "{ icon: ReactNode; limit: number; onUpgrade?: () => void; status?: \"loading\" | \"error\"; title: string; unit: string; used?: number }"
       },
-      "description": "What is left as a liquid that drains as usage grows, turning amber and then red."
+      "description": "What is left as a liquid that drains as usage grows, turning orange and then red."
     },
     {
       "name": "usage-meter-08",
@@ -2021,7 +2060,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
-        "https://www.dashboardblocks.com/r/radix/leaderboard.json"
+        "https://www.dashboardblocks.com/r/radix/leaderboard.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -2206,7 +2246,8 @@
       ],
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/chart-panel.json",
+        "https://www.dashboardblocks.com/r/radix/breakdown.json",
+        "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/ring.json"
       ],
       "files": [
@@ -2291,7 +2332,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/breakdown.json"
+        "https://www.dashboardblocks.com/r/radix/breakdown.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -2381,7 +2423,8 @@
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/funnel.json",
-        "https://www.dashboardblocks.com/r/radix/kpi.json"
+        "https://www.dashboardblocks.com/r/radix/kpi.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -2583,9 +2626,9 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
-        "https://www.dashboardblocks.com/r/radix/status.json"
+        "https://www.dashboardblocks.com/r/radix/status.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -2894,7 +2937,7 @@
         }
       ],
       "meta": {
-        "shows": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+        "shows": "A table of rows with sortable column headers.",
         "size": "full",
         "usedWith": [
           "data-table-06",
@@ -2903,15 +2946,15 @@
         "component": "DataTable1",
         "props": "{ description?: string; period?: string; rows?: { bounceRate: number; duration: number; path: string; views: number; visitors: number }[]; status?: \"loading\" | \"error\"; title: string }"
       },
-      "description": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens."
+      "description": "A table of rows with sortable column headers."
     },
     {
       "name": "data-table-02",
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
-        "https://www.dashboardblocks.com/r/radix/format.json"
+        "https://www.dashboardblocks.com/r/radix/format.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -2938,10 +2981,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
-        "https://www.dashboardblocks.com/r/radix/stat-group.json"
+        "https://www.dashboardblocks.com/r/radix/stat-group.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3226,8 +3269,8 @@
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/dashboard-header.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
-        "https://www.dashboardblocks.com/r/radix/status-label.json"
+        "https://www.dashboardblocks.com/r/radix/status-label.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3556,9 +3599,9 @@
       "name": "comparison-01",
       "type": "registry:component",
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
-        "https://www.dashboardblocks.com/r/radix/kpi.json"
+        "https://www.dashboardblocks.com/r/radix/kpi.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3586,7 +3629,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/comparison.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
-        "https://www.dashboardblocks.com/r/radix/format.json"
+        "https://www.dashboardblocks.com/r/radix/format.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3735,7 +3779,7 @@
         "switch",
         "https://www.dashboardblocks.com/r/radix/alerts.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json"
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3875,7 +3919,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
-        "https://www.dashboardblocks.com/r/radix/kpi.json"
+        "https://www.dashboardblocks.com/r/radix/kpi.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "meta": {
         "shows": "Revenue split across regions, each with its share and its change on the previous quarter.",
@@ -3966,9 +4011,9 @@
         "button",
         "https://www.dashboardblocks.com/r/radix/billing.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
-        "https://www.dashboardblocks.com/r/radix/format.json"
+        "https://www.dashboardblocks.com/r/radix/format.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -3985,7 +4030,7 @@
           "billing-05"
         ],
         "component": "Billing3",
-        "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"due\" | \"overdue\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; status?: \"loading\" | \"error\"; title: string }"
       },
       "description": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one."
     },
@@ -4235,8 +4280,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
-        "https://www.dashboardblocks.com/r/radix/pipeline.json"
+        "https://www.dashboardblocks.com/r/radix/pipeline.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -4518,7 +4563,8 @@
       "registryDependencies": [
         "checkbox",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/forms.json"
+        "https://www.dashboardblocks.com/r/radix/forms.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -4546,7 +4592,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/settings.json",
         "https://www.dashboardblocks.com/r/radix/team.json"
@@ -5018,8 +5064,8 @@
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
-        "https://www.dashboardblocks.com/r/radix/forecast.json"
+        "https://www.dashboardblocks.com/r/radix/forecast.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -6245,7 +6291,7 @@
       "registryDependencies": [
         "button",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "switch",
         "textarea",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -6267,7 +6313,7 @@
           "settings-01"
         ],
         "component": "Security6",
-        "props": "{ acsUrl: string; connection?: { certificate: string; issuer: string; provider: string; signInUrl: string }; connectionStatus?: \"error\" | \"connected\" | \"paused\" | \"disconnected\"; description: string; domains?: { domain: string; id: string; txtRecord: string; verified: boolean }[]; enforced?: boolean; entityId: string; onEnforcedChange?: (enforced: boolean) => void; onSave?: (connection: { certificate: string; issuer: string; provider: string; signInUrl: string }) => void; onVerifyDomain?: (id: string) => boolean | Promise<boolean>; providers: string[]; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ acsUrl: string; connection?: { certificate: string; issuer: string; provider: string; signInUrl: string }; connectionStatus?: \"error\" | \"connected\" | \"disconnected\" | \"importing\" | \"paused\" | \"revoked\"; description: string; domains?: { domain: string; id: string; txtRecord: string; verified: boolean }[]; enforced?: boolean; entityId: string; onEnforcedChange?: (enforced: boolean) => void; onSave?: (connection: { certificate: string; issuer: string; provider: string; signInUrl: string }) => void; onVerifyDomain?: (id: string) => boolean | Promise<boolean>; providers: string[]; status?: \"loading\" | \"error\"; title: string }"
       },
       "description": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it."
     },
@@ -6458,7 +6504,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/format.json"
+        "https://www.dashboardblocks.com/r/radix/format.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -6573,7 +6620,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "switch",
-        "https://www.dashboardblocks.com/r/radix/block-state.json"
+        "https://www.dashboardblocks.com/r/radix/block-state.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -6590,7 +6638,7 @@
           "settings-07"
         ],
         "component": "Settings3",
-        "props": "{ channels: { id: string; label: string }[]; description: string; groups?: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void; preferences?: {  }; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ channels: { id: string; label: string; unavailable?: ReactNode }[]; description: string; groups?: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void | { status: \"error\"; message: string } | Promise<void | { status: \"error\"; message: string }>; preferences?: {  }; status?: \"loading\" | \"error\"; title: string }"
       },
       "description": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel."
     },
@@ -6619,7 +6667,7 @@
           "settings-02"
         ],
         "component": "Settings4",
-        "props": "{ description: string; integrations?: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"error\" | \"connected\" | \"paused\" | \"disconnected\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ description: string; integrations?: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"error\" | \"connected\" | \"disconnected\" | \"importing\" | \"paused\" | \"revoked\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; status?: \"loading\" | \"error\"; title: string }"
       },
       "description": "Connected and available integrations in tabs, one row each with what it does, its status and a prompt for ones that need reconnecting."
     },
@@ -6692,7 +6740,7 @@
         "button",
         "field",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/forms.json",
         "https://www.dashboardblocks.com/r/radix/team.json"
@@ -6712,7 +6760,7 @@
           "settings-03"
         ],
         "component": "Settings7",
-        "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void | Promise<void>; profile?: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; status?: \"loading\" | \"error\"; timeZones: { label: string; value: string }[]; title: string }"
+        "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void | { name?: string; email?: string } | Promise<void | { name?: string; email?: string }>; profile?: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; status?: \"loading\" | \"error\"; timeZones: { label: string; value: string }[]; title: string }"
       },
       "description": "A profile form with your photo, name, email, time zone and theme, a save bar that shows once something changes, and a new email confirmed before it takes effect."
     },
@@ -6738,7 +6786,7 @@
           "app-shell-02"
         ],
         "component": "AppShell1",
-        "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
+        "props": "{ banner?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; onWorkspaceChange?: (id: string) => void; pathname: string; searchPlaceholder?: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaceId?: string; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
       },
       "description": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications."
     },
@@ -6826,7 +6874,7 @@
       "registryDependencies": [
         "field",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "switch",
         "textarea",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -6847,7 +6895,7 @@
           "forms-04"
         ],
         "component": "Forms1",
-        "props": "{ defaultValues?: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; description: string; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; bio?: string; email?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; status?: \"loading\" | \"error\"; timezones: { label: string; value: string }[]; title: string }"
+        "props": "{ defaultValues?: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; description: string; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; email?: string; bio?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; status?: \"loading\" | \"error\"; timezones: { label: string; value: string }[]; title: string }"
       },
       "description": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes."
     },
@@ -6858,7 +6906,7 @@
         "button",
         "field",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "textarea",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/forms.json"
@@ -6889,7 +6937,7 @@
         "button",
         "field",
         "input",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "switch",
         "textarea",
         "https://www.dashboardblocks.com/r/radix/forms.json"
@@ -6946,11 +6994,11 @@
         "badge",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/page-header.json",
         "https://www.dashboardblocks.com/r/radix/record-detail.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json",
+        "https://www.dashboardblocks.com/r/radix/table.json",
         "https://www.dashboardblocks.com/r/radix/team.json"
       ],
       "files": [
@@ -6980,12 +7028,12 @@
         "button",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
-        "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/page-header.json",
         "https://www.dashboardblocks.com/r/radix/record-detail.json",
-        "https://www.dashboardblocks.com/r/radix/status-label.json"
+        "https://www.dashboardblocks.com/r/radix/status-label.json",
+        "https://www.dashboardblocks.com/r/radix/table.json"
       ],
       "files": [
         {
@@ -7065,7 +7113,7 @@
           "forms-01"
         ],
         "component": "PageHeader1",
-        "props": "{ description?: string; onCreate?: () => void; onExport?: () => void; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ createLabel?: null | string; description?: string; exportLabel?: null | string; onCreate?: () => void; onExport?: () => void; status?: \"loading\" | \"error\"; title: string }"
       },
       "description": "A page title and description with a secondary action and a main action."
     },
@@ -7093,7 +7141,7 @@
           "record-detail-01"
         ],
         "component": "PageHeader2",
-        "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"paused\" | \"draft\" | \"live\"; status?: \"loading\" | \"error\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }"
+        "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; status?: \"loading\" | \"error\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }"
       },
       "description": "A page title with its status as a coloured word and links to the page's sections, each with a count."
     },
@@ -7289,7 +7337,7 @@
           "data-table-02"
         ],
         "component": "CommandMenu2",
-        "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
+        "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
       },
       "description": "A command palette that shows recent records, then searches customers and orders as you type."
     },
@@ -7632,6 +7680,7 @@
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/data-table.json",
         "https://www.dashboardblocks.com/r/radix/files.json",
+        "https://www.dashboardblocks.com/r/radix/table.json",
         "https://www.dashboardblocks.com/r/radix/team.json"
       ],
       "files": [
@@ -8006,7 +8055,7 @@
         "button",
         "field",
         "input-group",
-        "native-select",
+        "https://www.dashboardblocks.com/r/radix/option-select.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/link.json",
         "https://www.dashboardblocks.com/r/radix/onboarding.json"
@@ -8036,8 +8085,8 @@
       "registryDependencies": [
         "button",
         "field",
-        "native-select",
-        "https://www.dashboardblocks.com/r/radix/onboarding.json"
+        "https://www.dashboardblocks.com/r/radix/onboarding.json",
+        "https://www.dashboardblocks.com/r/radix/option-select.json"
       ],
       "files": [
         {
@@ -8186,7 +8235,7 @@
           "auth-03"
         ],
         "component": "ErrorPages5",
-        "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"inactive\" | \"signed-out-elsewhere\" | \"password-changed\" | \"revoked\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
+        "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
       },
       "description": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page."
     },

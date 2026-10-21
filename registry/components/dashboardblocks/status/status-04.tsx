@@ -3,20 +3,27 @@
 import {
   BlockReady,
   BlockStateProvider,
-  BlockStateRows,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { DataTableBar } from '@/registry/components/dashboardblocks/data-table'
 import {
   StatusIndicator,
   type StatusLevel,
   getWorstStatus,
   statusConfig,
 } from '@/registry/components/dashboardblocks/status'
+import {
+  DataTable,
+  DataTableBar,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
-
-import { cn } from '@/lib/utils'
 
 interface Region {
   code: string
@@ -85,9 +92,6 @@ const exampleProps: Status4Props = {
   title: 'Region health',
 }
 
-const ROW =
-  'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-6 gap-y-1.5 @xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)_4rem]'
-
 const formatErrors = (percent: number) =>
   formatPercent(percent / 100, { maximumFractionDigits: 2 })
 
@@ -110,70 +114,60 @@ const Status4 = (props: Status4Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container flex flex-col gap-3'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <div
-          aria-hidden
-          className={cn(
-            ROW,
-            'text-muted-foreground hidden border-t pt-2 text-xs @xl:grid',
-          )}
-        >
-          <span>Region</span>
-          <span>Status</span>
-          <span>p95 latency</span>
-          <span className='text-right'>Errors</span>
-        </div>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={5} />
-          </div>
-        )}
-        {!state && (
-          <ul className='flex flex-col border-t'>
-            {regions.map((region) => (
-              <li key={region.code} className={cn(ROW, 'border-b py-2.5')}>
-                <div className='flex min-w-0 flex-col'>
-                  <span className='truncate text-sm font-medium'>{region.name}</span>
-                  <span className='text-muted-foreground truncate font-mono text-xs'>
-                    {region.code}
-                  </span>
-                </div>
-                <StatusIndicator
-                  className='justify-self-end @xl:justify-self-start'
-                  status={region.status}
-                />
-                <div className='flex min-w-0 items-center gap-3'>
-                  <DataTableBar
-                    className='flex-1'
-                    color={
-                      region.status === 'operational'
-                        ? undefined
-                        : statusConfig[region.status].color
-                    }
-                    max={slowest}
-                    value={region.latency}
-                  />
-                  <span className='w-14 shrink-0 text-right text-sm tabular-nums'>
-                    <span className='sr-only'>p95 latency </span>
-                    {region.latency > 0 ? `${formatNumber(region.latency)} ms` : '—'}
-                  </span>
-                </div>
-                <span className='text-muted-foreground text-right text-sm tabular-nums'>
-                  <span className='text-foreground'>
+        <DataTable caption={title} className='border-t'>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Region</DataTableHead>
+              <DataTableHead>Status</DataTableHead>
+              <DataTableHead>p95 latency</DataTableHead>
+              <DataTableHead align='end'>Errors</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={4} rows={5} />
+            {!state &&
+              regions.map((region) => (
+                <DataTableRow key={region.code}>
+                  <DataTableRowHead primary>
+                    <span className='block'>{region.name}</span>
+                    <span className='text-muted-foreground block font-mono text-xs font-normal'>
+                      {region.code}
+                    </span>
+                  </DataTableRowHead>
+                  <DataTableCell>
+                    <StatusIndicator status={region.status} />
+                  </DataTableCell>
+                  <DataTableCell className='w-2/5'>
+                    <span className='flex w-full items-center gap-3'>
+                      <DataTableBar
+                        className='flex-1'
+                        color={
+                          region.status === 'operational'
+                            ? undefined
+                            : statusConfig[region.status].color
+                        }
+                        max={slowest}
+                        value={region.latency}
+                      />
+                      <span className='w-14 shrink-0 text-end tabular-nums'>
+                        {region.latency > 0 ? `${formatNumber(region.latency)} ms` : '—'}
+                      </span>
+                    </span>
+                  </DataTableCell>
+                  <DataTableCell align='end'>
                     {formatErrors(region.errorRate)}
-                  </span>
-                  <span className='@xl:sr-only'> errors</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+                  </DataTableCell>
+                </DataTableRow>
+              ))}
+          </DataTableBody>
+        </DataTable>
       </section>
     </BlockStateProvider>
   )

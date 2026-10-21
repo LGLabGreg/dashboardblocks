@@ -12,6 +12,15 @@ import {
   BreakdownLegend,
   formatShare,
 } from '@/registry/components/dashboardblocks/breakdown'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 
 interface CompositionCategory {
   color: string
@@ -120,31 +129,25 @@ const Breakdown2 = (props: Breakdown2Props) => {
         </div>
         {state === 'loading' && <BlockStateRows rows={5} />}
         {!state && (
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{`${title}: ${description}`}</caption>
-            <thead className='text-muted-foreground text-xs'>
-              <tr className='border-b'>
-                <th scope='col' className='pb-2 text-left font-normal'>
+          <DataTable density='compact' caption={`${title}: ${description}`}>
+            <DataTableHeader>
+              <DataTableRow>
+                <DataTableHead>
                   <span className='sr-only'>Group</span>
-                </th>
-                <th scope='col' className='pb-2 font-normal'>
+                </DataTableHead>
+                <DataTableHead>
                   <span className='sr-only'>Share by category</span>
-                </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
-                  {highlighted?.label}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </DataTableHead>
+                <DataTableHead align='end'>{highlighted?.label}</DataTableHead>
+              </DataTableRow>
+            </DataTableHeader>
+            <DataTableBody>
               {rows.map(({ group, share, total }) => (
-                <tr key={group.label} className='border-b last:border-b-0'>
-                  <th
-                    scope='row'
-                    className='w-32 py-2.5 pr-4 text-left font-normal whitespace-nowrap'
-                  >
+                <DataTableRow key={group.label}>
+                  <DataTableRowHead className='w-32 whitespace-nowrap'>
                     {group.label}
-                  </th>
-                  <td className='py-2.5'>
+                  </DataTableRowHead>
+                  <DataTableCell>
                     <BreakdownBar
                       className='h-2.5'
                       segments={categories.map((category) => ({
@@ -161,14 +164,14 @@ const Breakdown2 = (props: Breakdown2Props) => {
                         )
                         .join(', ')}
                     </span>
-                  </td>
-                  <td className='w-14 py-2.5 pl-4 text-right tabular-nums'>
+                  </DataTableCell>
+                  <DataTableCell align='end' className='w-16'>
                     {formatShare(share, 1)}
-                  </td>
-                </tr>
+                  </DataTableCell>
+                </DataTableRow>
               ))}
-            </tbody>
-          </table>
+            </DataTableBody>
+          </DataTable>
         )}
       </section>
     </BlockStateProvider>

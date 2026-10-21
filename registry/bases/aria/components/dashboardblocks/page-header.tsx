@@ -1,11 +1,11 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: 9b60ac891dc0
+// source-hash: 0c5005cbb36d
 
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { Fragment, type ReactNode } from 'react'
+import { Fragment, type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -187,76 +187,196 @@ function PageTabs({
 }) {
   return (
     <nav aria-label={label} className={cn('border-b', className)}>
-      <div className='-mb-px flex gap-1 overflow-x-auto [scrollbar-width:none]'>
-        {items.map((item) => {
-          const active = item.href === pathname
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={active ? 'page' : undefined}
-              data-active={active || undefined}
-              className='text-muted-foreground hover:text-foreground data-active:border-foreground data-active:text-foreground focus-visible:ring-ring/50 flex shrink-0 items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-3 py-2.5 text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-[3px]'
-            >
-              {item.title}
-              {item.badge !== undefined && (
-                <span className='text-muted-foreground font-normal tabular-nums'>
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          )
-        })}
-      </div>
+      <TabLinks items={items} pathname={pathname} />
     </nav>
   )
 }
 
+interface TabLinksProps {
+  className?: string
+  /** @default the tab whose href is the pathname */
+  isActive?: (href: string) => boolean
+  items: PageTab[]
+  pathname: string
+}
+
+function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
+  const active = (href: string) => (isActive ? isActive(href) : href === pathname)
+  const activeHref = items.find((item) => active(item.href))?.href
+  const [rail, hiddenHrefs] = useHiddenRailItems<HTMLDivElement>(activeHref, items)
+  const hidden = items.filter((item) => hiddenHrefs.includes(item.href))
+
+  return (
+    <div
+      ref={rail}
+      className={cn('relative -mb-px flex min-w-0 gap-1 overflow-hidden', className)}
+    >
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          aria-current={item.href === pathname ? 'page' : undefined}
+          data-active={active(item.href) || undefined}
+          data-rail='item'
+          data-rail-id={item.href}
+          className={cn(
+            'text-muted-foreground hover:text-foreground data-active:border-foreground data-active:text-foreground focus-visible:ring-ring/50 flex shrink-0 items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-3 py-2.5 text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-[3px]',
+            hiddenHrefs.includes(item.href) && 'invisible absolute',
+          )}
+        >
+          {item.title}
+          {item.badge !== undefined && (
+            <span className='text-muted-foreground font-normal tabular-nums'>
+              {item.badge}
+            </span>
+          )}
+        </Link>
+      ))}
+      {hidden.length > 0 && (
+        <div data-rail='more' className='flex shrink-0 items-center'>
+          <ActionsMenu
+            items={hidden.map((item) => ({
+              badge: item.badge,
+              href: item.href,
+              label: item.title,
+            }))}
+          >
+            More ({hidden.length})
+          </ActionsMenu>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const RAIL_MORE_WIDTH = 96
+
+/**
+ * The ids of a rail's items that don't fit beside its More menu, keeping the
+ * active one shown. Each item has `data-rail='item'` and a `data-rail-id`;
+ * what always shows has `data-rail='fixed'`, and the menu `data-rail='more'`.
+ */
+function getHiddenRailItems(rail: HTMLElement, activeId: string | undefined) {
+  const gap = Number.parseFloat(getComputedStyle(rail).columnGap) || 0
+  const parts = (kind: string) => [
+    ...rail.querySelectorAll<HTMLElement>(`:scope > [data-rail='${kind}']`),
+  ]
+  const items = parts('item').map((item) => ({
+    id: item.dataset.railId ?? '',
+    width: item.offsetWidth,
+  }))
+  const fixed = parts('fixed').reduce((sum, item) => sum + item.offsetWidth + gap, 0)
+  const ordered = [
+    ...items.filter((item) => item.id === activeId),
+    ...items.filter((item) => item.id !== activeId),
+  ]
+  const hiddenIn = (room: number) => {
+    let used = fixed
+    const shown = new Set<string>()
+    for (const item of ordered) {
+      if (used + item.width > room) break
+      used += item.width + gap
+      shown.add(item.id)
+    }
+    return items.filter((item) => !shown.has(item.id)).map((item) => item.id)
+  }
+  if (hiddenIn(rail.clientWidth).length === 0) return []
+  const more = parts('more')[0]?.offsetWidth ?? RAIL_MORE_WIDTH
+  return hiddenIn(rail.clientWidth - more - gap)
+}
+
+/** Measures the rail on every resize and when `items` change; see `getHiddenRailItems`. */
+function useHiddenRailItems<T extends HTMLElement>(
+  activeId: string | undefined,
+  items: unknown,
+) {
+  const rail = useRef<T>(null)
+  const [hidden, setHidden] = useState<string[]>([])
+  useEffect(() => {
+    const element = rail.current
+    if (!element) return
+    const observer = new ResizeObserver(() => {
+      const next = getHiddenRailItems(element, activeId)
+      setHidden((current) => (current.join('\n') === next.join('\n') ? current : next))
+    })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [activeId, items])
+  return [rail, hidden] as const
+}
+
 interface ActionsMenuItem {
+  /** Shown after the label, such as a count. */
+  badge?: ReactNode
+  /** Makes the item a link. */
+  href?: string
   icon?: ReactNode
   label: string
-  onSelect: () => void
+  onSelect?: () => void
   variant?: 'default' | 'destructive'
 }
 
 function ActionsMenu({
+  children,
   disabled = false,
   items,
   label = 'More actions',
 }: {
+  /** A text trigger, such as "More (3)", in place of the icon button. */
+  children?: ReactNode
   disabled?: boolean
   items: ActionsMenuItem[]
-  /** @default 'More actions' */
+  /** Names the icon button. @default 'More actions' */
   label?: string
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
     <DropdownMenuTrigger>
-      <Button variant='outline' size='icon' aria-label={label} isDisabled={disabled}>
-        <IconPlaceholder
-          lucide='EllipsisIcon'
-          tabler='IconDots'
-          hugeicons='MoreHorizontalCircle01Icon'
-          phosphor='DotsThreeIcon'
-          remixicon='RiMoreLine'
-        />
-      </Button>
+      {children ? (
+        <Button variant='ghost' size='sm' isDisabled={disabled}>
+          {children}
+        </Button>
+      ) : (
+        <Button variant='outline' size='icon' aria-label={label} isDisabled={disabled}>
+          <IconPlaceholder
+            lucide='EllipsisIcon'
+            tabler='IconDots'
+            hugeicons='MoreHorizontalCircle01Icon'
+            phosphor='DotsThreeIcon'
+            remixicon='RiMoreLine'
+          />
+        </Button>
+      )}
       <DropdownMenu placement='bottom end' className='w-auto min-w-44'>
         {items.map((item, index) => (
           <Fragment key={item.label}>
             {index === firstDestructive && index > 0 && <DropdownMenuSeparator />}
             <DropdownMenuItem
               variant={item.variant}
+              href={item.href}
               textValue={item.label}
               onAction={item.onSelect}
             >
-              {item.icon}
-              {item.label}
+              <ActionsMenuItemContent item={item} />
             </DropdownMenuItem>
           </Fragment>
         ))}
       </DropdownMenu>
     </DropdownMenuTrigger>
+  )
+}
+
+function ActionsMenuItemContent({ item }: { item: ActionsMenuItem }) {
+  return (
+    <>
+      {item.icon}
+      {item.label}
+      {item.badge !== undefined && (
+        <span className='text-muted-foreground ms-auto ps-4 tabular-nums'>
+          {item.badge}
+        </span>
+      )}
+    </>
   )
 }
 
@@ -269,6 +389,15 @@ export {
   PageHeaderHeading,
   PageHeaderRow,
   PageTabs,
+  TabLinks,
+  getHiddenRailItems,
+  useHiddenRailItems,
 }
 
-export type { ActionsMenuItem, PageHeaderFact, PageHeaderHeadingProps, PageTab }
+export type {
+  ActionsMenuItem,
+  PageHeaderFact,
+  PageHeaderHeadingProps,
+  PageTab,
+  TabLinksProps,
+}

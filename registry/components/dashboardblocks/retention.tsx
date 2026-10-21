@@ -166,6 +166,7 @@ function CohortTable({
   const averages = getAverageRetention(cohorts)
   const periods = averages.length
   const total = cohorts.reduce((sum, cohort) => sum + cohort.size, 0)
+  const averageSize = cohorts.length > 0 ? Math.round(total / cohorts.length) : 0
   const later = cohorts.flatMap((cohort) => getRetentionRates(cohort).slice(1))
   const scaleMax = scaleMaxProp ?? (later.length > 0 ? Math.max(...later) : 1)
   const scaleMin = scaleMinProp < scaleMax ? scaleMinProp : 0
@@ -220,6 +221,7 @@ function CohortTable({
       setOpen(true)
     }
     return (
+      // Not a data table: a tile of the cohort heatmap.
       <td
         key={period}
         onPointerEnter={hover}
@@ -237,6 +239,7 @@ function CohortTable({
   }
 
   const emptyCell = (period: number) => (
+    // Not a data table: a tile of the cohort heatmap.
     <td key={period}>
       <span className='sr-only'>Not reached yet</span>
     </td>
@@ -259,6 +262,7 @@ function CohortTable({
               'focus-visible:ring-ring/50 relative -my-1 overflow-x-auto rounded-sm py-1 outline-none focus-visible:ring-3',
           )}
         >
+          {/* Not a data table: a heatmap chart, each cell a coloured tile with its own tooltip. */}
           <table
             className='w-full border-separate border-spacing-[3px] text-xs tabular-nums'
             style={{ minWidth }}
@@ -317,7 +321,7 @@ function CohortTable({
                     Average
                   </th>
                   <td className='pr-2 text-right font-medium whitespace-nowrap'>
-                    {formatCount(total)}
+                    {formatCount(averageSize)}
                   </td>
                   {averages.map((rate, period) =>
                     rate === null

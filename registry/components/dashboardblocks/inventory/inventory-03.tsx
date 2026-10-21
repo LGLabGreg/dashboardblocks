@@ -10,8 +10,8 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   BreakdownBar,
-  BreakdownKey,
-  formatShare,
+  BreakdownTable,
+  getTotal,
 } from '@/registry/components/dashboardblocks/breakdown'
 import { ChartPlaceholder } from '@/registry/components/dashboardblocks/chart'
 import {
@@ -48,7 +48,12 @@ const noCounts: Record<StockStatus, number> = { low: 0, ok: 0, out: 0, over: 0 }
 const Inventory3 = (props: Inventory3Props) => {
   const { annualCogs, counts = noCounts, currency = 'USD', status, title, value } = props
   const state = getBlockState(status, value)
-  const total = ORDER.reduce((sum, stock) => sum + counts[stock], 0)
+  const segments = ORDER.map((stock) => ({
+    color: stockStatusConfig[stock].color,
+    label: stockStatusConfig[stock].label,
+    value: counts[stock],
+  }))
+  const total = getTotal(segments)
   const reorder = counts.low + counts.out
   const turnover =
     annualCogs !== undefined && value !== undefined && value > 0
@@ -100,41 +105,12 @@ const Inventory3 = (props: Inventory3Props) => {
         )}
         {!state && (
           <>
-            <BreakdownBar
-              segments={ORDER.map((stock) => ({
-                color: stockStatusConfig[stock].color,
-                label: stockStatusConfig[stock].label,
-                value: counts[stock],
-              }))}
+            <BreakdownBar segments={segments} />
+            <BreakdownTable
+              caption={`${title}: ${description}`}
+              labels={['Status', 'SKUs', 'Share']}
+              segments={segments}
             />
-            <table className='w-full text-sm'>
-              <caption className='sr-only'>{`${title}: ${description}`}</caption>
-              <thead className='sr-only'>
-                <tr>
-                  <th scope='col'>Status</th>
-                  <th scope='col'>SKUs</th>
-                  <th scope='col'>Share</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ORDER.map((stock) => (
-                  <tr key={stock} className='border-b last:border-b-0'>
-                    <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
-                      <span className='flex items-center gap-2'>
-                        <BreakdownKey color={stockStatusConfig[stock].color} />
-                        {stockStatusConfig[stock].label}
-                      </span>
-                    </th>
-                    <td className='py-2.5 pr-3 text-right tabular-nums'>
-                      {formatNumber(counts[stock])}
-                    </td>
-                    <td className='text-muted-foreground w-12 py-2.5 text-right tabular-nums'>
-                      {formatShare(counts[stock], total)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </>
         )}
       </section>

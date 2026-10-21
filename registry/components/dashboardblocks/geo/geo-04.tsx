@@ -13,6 +13,15 @@ import {
   formatShare,
 } from '@/registry/components/dashboardblocks/breakdown'
 import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 interface Region {
@@ -127,25 +136,23 @@ const Geo4 = (props: Geo4Props) => {
         />
         {state === 'loading' && <BlockStateRows rows={5} />}
         {!state && (
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{`${title}, with the change on the amount ${comparison}`}</caption>
-            <thead className='text-muted-foreground text-xs'>
-              <tr>
-                <th scope='col' className='pb-2 text-left font-normal'>
-                  Region
-                </th>
-                <th scope='col' className='pb-2 text-right font-normal'>
-                  Revenue
-                </th>
-                <th scope='col' className='w-24 pb-2 text-right font-normal'>
+          <DataTable
+            density='compact'
+            caption={`${title}, with the change on the amount ${comparison}`}
+          >
+            <DataTableHeader>
+              <DataTableRow>
+                <DataTableHead>Region</DataTableHead>
+                <DataTableHead align='end'>Revenue</DataTableHead>
+                <DataTableHead align='end' className='w-24'>
                   Change
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </DataTableHead>
+              </DataTableRow>
+            </DataTableHeader>
+            <DataTableBody>
               {regions.map((region) => (
-                <tr key={region.label} className='border-t'>
-                  <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
+                <DataTableRow key={region.label}>
+                  <DataTableRowHead>
                     <span className='flex items-start gap-2'>
                       <BreakdownKey color={region.color} className='mt-1' />
                       <span className='flex min-w-0 flex-col @md:flex-row @md:gap-2'>
@@ -156,11 +163,11 @@ const Geo4 = (props: Geo4Props) => {
                         </span>
                       </span>
                     </span>
-                  </th>
-                  <td className='py-2.5 text-right align-top font-medium tabular-nums'>
+                  </DataTableRowHead>
+                  <DataTableCell align='end' className='align-top font-medium'>
                     {formatter(region.current)}
-                  </td>
-                  <td className='py-2.5 pl-3 text-right align-top'>
+                  </DataTableCell>
+                  <DataTableCell align='end' className='align-top'>
                     <KPIChange
                       inline
                       className='text-xs'
@@ -170,11 +177,11 @@ const Geo4 = (props: Geo4Props) => {
                       value={region.current}
                       variant='short'
                     />
-                  </td>
-                </tr>
+                  </DataTableCell>
+                </DataTableRow>
               ))}
-            </tbody>
-          </table>
+            </DataTableBody>
+          </DataTable>
         )}
       </section>
     </BlockStateProvider>

@@ -26,7 +26,7 @@ interface PresenceConfig {
 }
 
 const presenceConfig: Record<Presence, PresenceConfig> = {
-  away: { dot: 'bg-amber-500', label: 'Away', tone: 'warning' },
+  away: { dot: 'bg-orange-500', label: 'Away', tone: 'warning' },
   offline: {
     dot: 'border-muted-foreground bg-background border-2',
     label: 'Offline',

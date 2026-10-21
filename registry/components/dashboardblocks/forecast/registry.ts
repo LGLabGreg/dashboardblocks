@@ -81,8 +81,8 @@ export const examples: Registry['items'] = [
       registryUrl('block-state'),
       registryUrl('chart'),
       registryUrl('chart-panel'),
-      registryUrl('data-table'),
       registryUrl('forecast'),
+      registryUrl('table'),
     ],
     files: [
       {

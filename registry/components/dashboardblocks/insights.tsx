@@ -2,6 +2,7 @@
 
 import {
   StatusLabel,
+  type StatusLabelProps,
   type StatusTone,
   statusToneClasses,
 } from '@/registry/components/dashboardblocks/status-label'
@@ -21,7 +22,7 @@ interface InsightKindConfig {
 
 const insightKindConfig: Record<InsightKind, InsightKindConfig> = {
   anomaly: {
-    fill: 'var(--color-amber-500)',
+    fill: 'var(--color-orange-500)',
     label: 'Anomaly',
     tone: 'warning',
   },
@@ -52,14 +53,16 @@ function InsightLabel({
   className,
   kind,
   label,
+  variant,
 }: {
   className?: string
   kind: InsightKind
   label?: string
+  variant?: StatusLabelProps['variant']
 }) {
   const config = insightKindConfig[kind]
   return (
-    <StatusLabel className={className} tone={config.tone}>
+    <StatusLabel className={className} tone={config.tone} variant={variant}>
       {label ?? config.label}
     </StatusLabel>
   )

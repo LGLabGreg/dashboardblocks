@@ -21,15 +21,6 @@ import {
   ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHead,
-  DataTableHeader,
-  DataTableRow,
-  DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import {
   ForecastKey,
   type ForecastKeyShape,
   ForecastLegend,
@@ -39,6 +30,15 @@ import {
   getForecastAxis,
   projectGrowth,
 } from '@/registry/components/dashboardblocks/forecast'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import {
   formatCompact,
   formatCurrency,
@@ -171,7 +171,7 @@ const Forecast4 = (props: Forecast4Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container/data-table flex flex-col gap-4 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <p className='text-muted-foreground text-sm'>{description}</p>
@@ -310,8 +310,7 @@ const Forecast4 = (props: Forecast4Props) => {
             />
           )}
         </div>
-        <DataTable>
-          <caption className='sr-only'>{`${title} by scenario, to ${endLabel}`}</caption>
+        <DataTable caption={`${title} by scenario, to ${endLabel}`}>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Scenario</DataTableHead>
@@ -350,18 +349,19 @@ const Forecast4 = (props: Forecast4Props) => {
                         </div>
                       </div>
                     </DataTableCell>
-                    <DataTableCell align='end' label='Growth'>
+                    <DataTableCell align='end'>
                       {formatGrowth(scenarios[scenario.key].rate)} a month
                     </DataTableCell>
-                    <DataTableCell align='end' label={endLabel} className='font-medium'>
+                    <DataTableCell align='end' className='font-medium'>
                       {formatter(end)}
                     </DataTableCell>
-                    <DataTableCell align='end' label='Change'>
+                    <DataTableCell align='end'>
                       {formatGrowth(current > 0 ? end / current - 1 : 0)}
                     </DataTableCell>
                     {target !== undefined && (
-                      <DataTableCell align='end' label='Reaches target'>
+                      <DataTableCell align='end'>
                         <ForecastStatusLabel
+                          variant='text'
                           label={reached ?? `Not by ${endLabel}`}
                           status={reached ? 'on-track' : 'off-track'}
                         />

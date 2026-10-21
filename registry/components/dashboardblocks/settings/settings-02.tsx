@@ -274,7 +274,10 @@ const Settings2 = (props: Settings2Props) => {
               className='flex flex-col gap-2 rounded-lg border p-4 outline-none'
             >
               <p id={`${id}-revealed`} className='text-sm font-medium'>
-                <StatusLabel tone='good'>Created</StatusLabel> “{revealed.name}”
+                <StatusLabel variant='text' tone='good'>
+                  Created
+                </StatusLabel>{' '}
+                “{revealed.name}”
               </p>
               <p className='text-muted-foreground text-sm'>
                 Copy the key now. You won’t be able to see it again.
@@ -314,7 +317,7 @@ const Settings2 = (props: Settings2Props) => {
                       <span className='flex min-w-0 flex-wrap items-baseline gap-x-2'>
                         <span className='truncate text-sm font-medium'>{key.name}</span>
                         {stale && (
-                          <StatusLabel tone='warning' className='text-xs'>
+                          <StatusLabel variant='text' tone='warning' className='text-xs'>
                             Unused for {idle} days
                           </StatusLabel>
                         )}

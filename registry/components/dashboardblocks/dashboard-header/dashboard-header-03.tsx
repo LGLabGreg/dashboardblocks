@@ -58,7 +58,7 @@ const DashboardHeader3 = (props: DashboardHeader3Props) => {
   const range = getDateRange(preset, today)
 
   return (
-    <header className='@container flex flex-col gap-4 border-b pb-4'>
+    <header className='@container flex flex-col gap-4'>
       <div className='flex items-start justify-between gap-3'>
         <DashboardHeaderTitle
           title={title}

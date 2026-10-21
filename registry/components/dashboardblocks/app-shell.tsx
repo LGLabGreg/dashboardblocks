@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
+import { TabLinks } from '@/registry/components/dashboardblocks/page-header'
 import {
   StatusLabel,
   type StatusTone,
@@ -301,9 +302,9 @@ function WorkspaceSwitcher({
                   key={workspace.id}
                   onClick={() => onValueChange(workspace.id)}
                 >
-                  <BrandMark className='size-6 rounded-md [&_svg]:size-3.5'>
+                  <span className='flex size-6 shrink-0 items-center justify-center rounded-md border [&_svg]:size-3.5'>
                     {workspace.logo}
-                  </BrandMark>
+                  </span>
                   {workspace.name}
                   {workspace.id === current.id && (
                     <>
@@ -648,7 +649,11 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
     <div className='flex flex-col gap-2.5 border-t px-2 pt-3 pb-1 text-sm group-data-[collapsible=icon]:hidden'>
       <div className='flex items-baseline justify-between gap-2'>
         <span className='truncate font-medium'>{title}</span>
-        <StatusLabel tone={usageTone(percent)} className='shrink-0 text-xs tabular-nums'>
+        <StatusLabel
+          variant='text'
+          tone={usageTone(percent)}
+          className='shrink-0 text-xs tabular-nums'
+        >
           {usedLabel}
         </StatusLabel>
       </div>
@@ -678,32 +683,12 @@ interface TopNavProps {
 
 function TopNav({ className, items, pathname }: TopNavProps) {
   return (
-    <nav
-      aria-label='Main'
-      className={cn(
-        '-mb-px flex gap-1 overflow-x-auto [scrollbar-width:none]',
-        className,
-      )}
-    >
-      {items.map((item) => {
-        const active = isActiveHref(item.href, pathname)
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={item.href === pathname ? 'page' : undefined}
-            data-active={active || undefined}
-            className='text-muted-foreground hover:text-foreground data-active:border-foreground data-active:text-foreground focus-visible:ring-ring/50 flex shrink-0 items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-3 py-2.5 text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-[3px]'
-          >
-            {item.title}
-            {item.badge !== undefined && (
-              <span className='text-muted-foreground font-normal tabular-nums'>
-                {item.badge}
-              </span>
-            )}
-          </Link>
-        )
-      })}
+    <nav aria-label='Main' className={cn('min-w-0', className)}>
+      <TabLinks
+        items={items}
+        pathname={pathname}
+        isActive={(href) => isActiveHref(href, pathname)}
+      />
     </nav>
   )
 }

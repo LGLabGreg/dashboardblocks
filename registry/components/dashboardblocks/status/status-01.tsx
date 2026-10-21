@@ -102,7 +102,7 @@ const Status1 = (props: Status1Props) => {
             {services.map((service) => (
               <li
                 key={service.name}
-                className='flex items-center justify-between gap-4 border-b py-2.5'
+                className='flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0'
               >
                 <div className='flex min-w-0 flex-col'>
                   <span className='text-sm font-medium'>{service.name}</span>

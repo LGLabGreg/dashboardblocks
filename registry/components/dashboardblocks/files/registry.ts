@@ -29,6 +29,7 @@ export const examples: Registry['items'] = [
       registryUrl('block-state'),
       registryUrl('data-table'),
       registryUrl('files'),
+      registryUrl('table'),
       registryUrl('team'),
     ],
     files: [

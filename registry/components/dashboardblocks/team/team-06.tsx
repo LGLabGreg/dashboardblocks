@@ -8,6 +8,7 @@ import {
   getBlockState,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { useCopyToClipboard } from '@/registry/components/dashboardblocks/settings'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -16,7 +17,6 @@ import { flushSync } from 'react-dom'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
 type ShareAccess = 'owner' | 'edit' | 'view'
 
@@ -222,17 +222,16 @@ function ShareSettings(props: Team6Props) {
               className='@md:flex-1'
             />
             <div className='flex gap-2'>
-              <NativeSelect
+              <OptionSelect
                 aria-label='Access for new people'
                 disabled={state !== undefined}
                 value={access}
-                onChange={(event) =>
-                  setAccess(event.target.value as Exclude<ShareAccess, 'owner'>)
-                }
-              >
-                <NativeSelectOption value='view'>{accessLabels.view}</NativeSelectOption>
-                <NativeSelectOption value='edit'>{accessLabels.edit}</NativeSelectOption>
-              </NativeSelect>
+                options={[
+                  { label: accessLabels.view, value: 'view' },
+                  { label: accessLabels.edit, value: 'edit' },
+                ]}
+                onValueChange={setAccess}
+              />
               <Button
                 type='submit'
                 className='flex-1 @md:flex-none'
@@ -296,20 +295,17 @@ function ShareSettings(props: Team6Props) {
                         {accessLabels[person.access]}
                       </span>
                     ) : (
-                      <NativeSelect
+                      <OptionSelect
                         size='sm'
                         aria-label={`Access for ${name}`}
                         value={person.access}
-                        onChange={(event) => change(person, event.target.value)}
-                      >
-                        <NativeSelectOption value='view'>
-                          {accessLabels.view}
-                        </NativeSelectOption>
-                        <NativeSelectOption value='edit'>
-                          {accessLabels.edit}
-                        </NativeSelectOption>
-                        <NativeSelectOption value='remove'>Remove</NativeSelectOption>
-                      </NativeSelect>
+                        options={[
+                          { label: accessLabels.view, value: 'view' },
+                          { label: accessLabels.edit, value: 'edit' },
+                          { label: 'Remove', value: 'remove' },
+                        ]}
+                        onValueChange={(value) => change(person, value)}
+                      />
                     )}
                   </li>
                 )
@@ -331,23 +327,22 @@ function ShareSettings(props: Team6Props) {
                 {link.icon}
               </span>
               <div className='flex min-w-0 flex-1 flex-col items-start gap-0.5'>
-                <NativeSelect
+                <OptionSelect
                   size='sm'
                   aria-label='Who can open the link'
                   aria-describedby={`${id}-link-description`}
                   value={linkAccess}
-                  onChange={(event) => {
-                    const next = event.target.value as LinkAccess
+                  options={(Object.keys(linkAccessConfig) as LinkAccess[]).map(
+                    (value) => ({
+                      label: linkAccessConfig[value].label(workspace),
+                      value,
+                    }),
+                  )}
+                  onValueChange={(next) => {
                     setLinkAccess(next)
                     onLinkAccessChange?.(next)
                   }}
-                >
-                  {(Object.keys(linkAccessConfig) as LinkAccess[]).map((value) => (
-                    <NativeSelectOption key={value} value={value}>
-                      {linkAccessConfig[value].label(workspace)}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                />
                 <span
                   id={`${id}-link-description`}
                   className='text-muted-foreground text-xs'

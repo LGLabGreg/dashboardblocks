@@ -113,9 +113,9 @@ const Insights1 = (props: Insights1Props) => {
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <p className='text-muted-foreground text-sm'>{description}</p>
         </header>
-        <BlockStateRows className='border-y' />
+        <BlockStateRows className='border-t' />
         {!status && insights.length > 0 && (
-          <ul className='divide-y border-y'>
+          <ul className='divide-y border-t'>
             {insights.map((insight) => (
               <li
                 key={insight.id}
@@ -123,7 +123,11 @@ const Insights1 = (props: Insights1Props) => {
               >
                 <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
                   <Details className='text-muted-foreground text-xs'>
-                    <InsightLabel className='text-xs' kind={insight.kind} />
+                    <InsightLabel
+                      className='text-xs'
+                      kind={insight.kind}
+                      variant='text'
+                    />
                     {insight.topic}
                   </Details>
                   <InsightText segments={insight.segments} />

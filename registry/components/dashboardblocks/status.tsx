@@ -114,10 +114,26 @@ function StatusIndicator({
       data-status={status}
       className={cn('inline-flex items-center gap-2', className)}
     >
-      <span aria-hidden className={cn('size-2 shrink-0 rounded-full', config.fill)} />
-      <StatusLabel tone={config.tone} className={cn(hideLabel && 'sr-only')}>
-        {label ?? config.label}
-      </StatusLabel>
+      {hideLabel ? (
+        <>
+          <span aria-hidden className={cn('size-2 shrink-0 rounded-full', config.fill)} />
+          <StatusLabel tone={config.tone} className='sr-only' variant='text'>
+            {label ?? config.label}
+          </StatusLabel>
+        </>
+      ) : (
+        <StatusLabel
+          tone={config.tone}
+          indicator={
+            <span
+              aria-hidden
+              className={cn('size-1.5 shrink-0 rounded-full', config.fill)}
+            />
+          }
+        >
+          {label ?? config.label}
+        </StatusLabel>
+      )}
     </span>
   )
 }

@@ -7,8 +7,18 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { SaveBar } from '@/registry/components/dashboardblocks/forms'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableGroupHead,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -218,100 +228,79 @@ function PermissionMatrix(props: PermissionMatrixProps) {
           onSave?.(grants)
         }}
       >
-        <div className='overflow-x-auto border-t'>
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{title}</caption>
-            <thead>
-              <tr className='border-b'>
-                <th
-                  scope='col'
-                  className='bg-background sticky left-0 z-10 min-w-40 py-2.5 pr-4 text-left font-medium'
-                >
-                  <span className='sr-only'>Permission</span>
-                </th>
-                {roles.map((role) => (
-                  <th
-                    key={role.id}
-                    scope='col'
-                    className='min-w-20 px-2 py-2.5 text-center font-medium'
-                  >
-                    <div className='flex flex-col items-center'>
-                      {role.name}
-                      <span className='text-muted-foreground inline-flex items-center gap-1 text-xs font-normal whitespace-nowrap tabular-nums [&_svg]:size-3'>
-                        {role.locked && (
-                          <IconPlaceholder
-                            lucide='LockIcon'
-                            tabler='IconLock'
-                            hugeicons='SquareLock02Icon'
-                            phosphor='LockIcon'
-                            remixicon='RiLockLine'
-                            aria-hidden
-                          />
-                        )}
-                        {role.members} {role.members === 1 ? 'member' : 'members'}
-                      </span>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((group) => (
-                <Fragment key={group.id}>
-                  <tr className='border-b'>
-                    <th
-                      scope='colgroup'
-                      colSpan={roles.length + 1}
-                      className='text-muted-foreground pt-4 pb-1.5 text-left text-xs font-medium'
-                    >
-                      <span className='sticky left-0'>{group.label}</span>
-                    </th>
-                  </tr>
-                  {group.permissions.map((permission) => (
-                    <tr key={permission.id} className='border-b'>
-                      <th
-                        scope='row'
-                        className='bg-background sticky left-0 z-10 py-2.5 pr-4 text-left font-normal'
-                      >
-                        <span className='block'>{permission.label}</span>
-                        {permission.description && (
-                          <span className='text-muted-foreground block text-xs'>
-                            {permission.description}
-                          </span>
-                        )}
-                      </th>
-                      {roles.map((role) => {
-                        const on = role.locked || has(grants, role.id, permission.id)
-                        const changed =
-                          !role.locked && on !== has(saved, role.id, permission.id)
-                        return (
-                          <td
-                            key={role.id}
-                            className={cn(
-                              'px-2 py-2.5 text-center',
-                              changed && 'bg-primary/5',
-                            )}
-                          >
-                            <span className='inline-flex'>
-                              <Checkbox
-                                aria-label={`${role.name}: ${group.label}, ${permission.label}`}
-                                checked={on}
-                                disabled={role.locked}
-                                onCheckedChange={(next) =>
-                                  toggle(role.id, permission.id, next === true)
-                                }
-                              />
-                            </span>
-                          </td>
-                        )
-                      })}
-                    </tr>
-                  ))}
-                </Fragment>
+        <DataTable className='border-t' caption={title}>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead className='min-w-40'>
+                <span className='sr-only'>Permission</span>
+              </DataTableHead>
+              {roles.map((role) => (
+                <DataTableHead key={role.id} align='center' className='min-w-20 py-2.5'>
+                  <div className='flex flex-col items-center'>
+                    <span className='text-foreground text-sm'>{role.name}</span>
+                    <span className='inline-flex items-center gap-1 font-normal tabular-nums [&_svg]:size-3'>
+                      {role.locked && (
+                        <IconPlaceholder
+                          lucide='LockIcon'
+                          tabler='IconLock'
+                          hugeicons='SquareLock02Icon'
+                          phosphor='LockIcon'
+                          remixicon='RiLockLine'
+                          aria-hidden
+                        />
+                      )}
+                      {role.members} {role.members === 1 ? 'member' : 'members'}
+                    </span>
+                  </div>
+                </DataTableHead>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </DataTableRow>
+          </DataTableHeader>
+          {groups.map((group) => (
+            <DataTableBody key={group.id}>
+              <DataTableRow>
+                <DataTableGroupHead colSpan={roles.length + 1}>
+                  {group.label}
+                </DataTableGroupHead>
+              </DataTableRow>
+              {group.permissions.map((permission) => (
+                <DataTableRow key={permission.id}>
+                  <DataTableRowHead>
+                    <span className='block'>{permission.label}</span>
+                    {permission.description && (
+                      <span className='text-muted-foreground block text-xs'>
+                        {permission.description}
+                      </span>
+                    )}
+                  </DataTableRowHead>
+                  {roles.map((role) => {
+                    const on = role.locked || has(grants, role.id, permission.id)
+                    const changed =
+                      !role.locked && on !== has(saved, role.id, permission.id)
+                    return (
+                      <DataTableCell
+                        key={role.id}
+                        align='center'
+                        className={cn(changed && 'bg-primary/5')}
+                      >
+                        <span className='inline-flex'>
+                          <Checkbox
+                            aria-label={`${role.name}: ${group.label}, ${permission.label}`}
+                            checked={on}
+                            disabled={role.locked}
+                            onCheckedChange={(next) =>
+                              toggle(role.id, permission.id, next === true)
+                            }
+                          />
+                        </span>
+                      </DataTableCell>
+                    )
+                  })}
+                </DataTableRow>
+              ))}
+            </DataTableBody>
+          ))}
+        </DataTable>
         <SaveBar
           className='mt-4'
           isDirty={changes > 0}

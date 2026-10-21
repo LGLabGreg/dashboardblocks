@@ -55,7 +55,7 @@ const waveColors: Record<UsageStatus, string> = {
   critical: 'text-red-300 dark:text-red-900',
   ok: 'text-[color-mix(in_oklab,var(--color-chart-2)_25%,var(--color-background))]',
   over: 'text-red-300 dark:text-red-900',
-  warning: 'text-amber-200 dark:text-amber-900',
+  warning: 'text-orange-200 dark:text-orange-900',
 }
 
 const UsageMeter7 = (props: UsageMeter7Props) => {

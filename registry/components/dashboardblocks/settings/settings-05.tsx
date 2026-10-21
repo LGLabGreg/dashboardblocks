@@ -101,7 +101,9 @@ const exampleProps: Settings5Props = {
 
 const isSuccess = (delivery: Delivery) => delivery.status >= 200 && delivery.status < 300
 
-function getEndpointStatus(endpoint: WebhookEndpoint): ConnectionStatus {
+type EndpointStatus = Extract<ConnectionStatus, 'connected' | 'error' | 'paused'>
+
+function getEndpointStatus(endpoint: WebhookEndpoint): EndpointStatus {
   if (!endpoint.enabled) return 'paused'
   const recent = endpoint.deliveries.slice(-3)
   if (recent.length > 0 && recent.every((delivery) => !isSuccess(delivery)))
@@ -109,9 +111,8 @@ function getEndpointStatus(endpoint: WebhookEndpoint): ConnectionStatus {
   return 'connected'
 }
 
-const statusLabel: Record<ConnectionStatus, string> = {
+const statusLabel: Record<EndpointStatus, string> = {
   connected: 'Active',
-  disconnected: 'Not set up',
   error: 'Failing',
   paused: 'Disabled',
 }

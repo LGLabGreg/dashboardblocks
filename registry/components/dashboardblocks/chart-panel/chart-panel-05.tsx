@@ -7,11 +7,11 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { BreakdownTable } from '@/registry/components/dashboardblocks/breakdown'
 import {
   ChartTooltipContent,
   type ChartValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
-import { ChartPanelKey } from '@/registry/components/dashboardblocks/chart-panel'
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 import {
   formatCompact,
@@ -28,8 +28,6 @@ import {
   Sector,
   Tooltip,
 } from 'recharts'
-
-import { cn } from '@/lib/utils'
 
 interface Segment {
   color: string
@@ -152,40 +150,13 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
             </BlockReady>
             <BlockStateRows rows={4} />
             {!state && (
-              <table className='w-full text-sm'>
-                <caption className='sr-only'>{`${title}: ${description}`}</caption>
-                <thead className='sr-only'>
-                  <tr>
-                    <th scope='col'>Source</th>
-                    <th scope='col'>{totalLabel}</th>
-                    <th scope='col'>Share</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {segments.map((segment, index) => (
-                    <tr
-                      key={segment.label}
-                      className={cn(
-                        'border-b transition-colors last:border-b-0',
-                        activeIndex === index && 'bg-muted/50',
-                      )}
-                    >
-                      <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
-                        <span className='flex items-center gap-2'>
-                          <ChartPanelKey color={segment.color} />
-                          {segment.label}
-                        </span>
-                      </th>
-                      <td className='py-2.5 pr-3 text-right tabular-nums'>
-                        {formatter(segment.value)}
-                      </td>
-                      <td className='text-muted-foreground w-12 py-2.5 text-right tabular-nums'>
-                        {share(segment.value)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <BreakdownTable
+                caption={`${title}: ${description}`}
+                format={formatter}
+                highlightIndex={activeIndex}
+                labels={['Source', totalLabel, 'Share']}
+                segments={segments}
+              />
             )}
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   FormSteps,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type FormEvent, useState } from 'react'
 
@@ -20,7 +21,6 @@ import {
   FieldTitle,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -125,7 +125,7 @@ const Forms3 = (props: Forms3Props) => {
       next()
       return
     }
-    if (await form.submit(event)) setCreated(values.name)
+    await form.submit(event, { onSaved: () => setCreated(values.name) })
   }
 
   function startOver() {
@@ -201,24 +201,20 @@ const Forms3 = (props: Forms3Props) => {
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor={form.getId('region')}>Region</FieldLabel>
-              <NativeSelect className='w-full' {...form.field('region')}>
-                {regions.map((region) => (
-                  <NativeSelectOption key={region.value} value={region.value}>
-                    {region.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              <OptionSelect
+                className='w-full'
+                options={regions}
+                {...form.select('region')}
+              />
               <FieldDescription>Pick the region closest to your users.</FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor={form.getId('environment')}>Environment</FieldLabel>
-              <NativeSelect className='w-full' {...form.field('environment')}>
-                {environments.map((environment) => (
-                  <NativeSelectOption key={environment.value} value={environment.value}>
-                    {environment.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              <OptionSelect
+                className='w-full'
+                options={environments}
+                {...form.select('environment')}
+              />
             </Field>
             <Field orientation='horizontal'>
               <FieldContent>

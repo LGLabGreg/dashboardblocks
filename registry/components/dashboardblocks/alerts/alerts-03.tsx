@@ -19,7 +19,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
+} from '@/registry/components/dashboardblocks/table'
 import { useState } from 'react'
 
 import { Switch } from '@/components/ui/switch'
@@ -111,7 +111,7 @@ const Alerts3 = (props: Alerts3Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
@@ -120,8 +120,7 @@ const Alerts3 = (props: Alerts3Props) => {
             </p>
           </BlockReady>
         </header>
-        <DataTable>
-          <caption className='sr-only'>{title}</caption>
+        <DataTable caption={title}>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Rule</DataTableHead>
@@ -144,19 +143,13 @@ const Alerts3 = (props: Alerts3Props) => {
                         {rule.condition}
                       </span>
                     </DataTableCell>
-                    <DataTableCell label='Severity'>
+                    <DataTableCell>
                       <SeverityLabel severity={rule.severity} />
                     </DataTableCell>
-                    <DataTableCell
-                      label='Notifies'
-                      className='text-muted-foreground whitespace-nowrap'
-                    >
+                    <DataTableCell className='text-muted-foreground whitespace-nowrap'>
                       {rule.channels.join(', ')}
                     </DataTableCell>
-                    <DataTableCell
-                      label='Last triggered'
-                      className='text-muted-foreground whitespace-nowrap'
-                    >
+                    <DataTableCell className='text-muted-foreground whitespace-nowrap'>
                       {rule.lastTriggered ? (
                         <time dateTime={rule.lastTriggered.toISOString()}>
                           {formatRelativeTime(rule.lastTriggered, now)}
@@ -165,7 +158,7 @@ const Alerts3 = (props: Alerts3Props) => {
                         'Never'
                       )}
                     </DataTableCell>
-                    <DataTableCell label='Status'>
+                    <DataTableCell>
                       <div className='inline-flex min-h-6 items-center gap-2 text-sm whitespace-nowrap'>
                         <Switch
                           aria-label={rule.name}

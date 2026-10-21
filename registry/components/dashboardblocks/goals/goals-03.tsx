@@ -142,7 +142,7 @@ const Goals3 = (props: Goals3Props) => {
                   className={cn(
                     'text-xs font-medium tabular-nums',
                     shortfall > 0
-                      ? 'text-amber-800 dark:text-amber-400'
+                      ? 'text-orange-700 dark:text-orange-400'
                       : 'text-emerald-700 dark:text-emerald-400',
                   )}
                 >

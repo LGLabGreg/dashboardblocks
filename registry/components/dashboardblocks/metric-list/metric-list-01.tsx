@@ -130,9 +130,9 @@ const MetricList1 = (props: MetricList1Props) => {
             </p>
           </BlockReady>
         </header>
-        <BlockStateRows className='border-y' rows={6} />
+        <BlockStateRows className='border-t' rows={6} />
         {!state && (
-          <MetricList className='border-y'>
+          <MetricList className='border-t'>
             {metrics.map((metric) => (
               <MetricRow
                 key={metric.key}

@@ -7,15 +7,6 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHead,
-  DataTableHeader,
-  DataTableRow,
-  DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import {
   PipelineAge,
   type PipelineItem,
   PipelineOwner,
@@ -24,6 +15,15 @@ import {
   getDaysInStage,
   isStuck,
 } from '@/registry/components/dashboardblocks/pipeline'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 interface Pipeline3Props {
@@ -162,7 +162,7 @@ const Pipeline3 = (props: Pipeline3Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
@@ -183,8 +183,7 @@ const Pipeline3 = (props: Pipeline3Props) => {
             Nothing is stuck.
           </p>
         ) : (
-          <DataTable>
-            <caption className='sr-only'>{`${title}: ${description}`}</caption>
+          <DataTable caption={`${title}: ${description}`}>
             <DataTableHeader>
               <DataTableRow>
                 <DataTableHead>Name</DataTableHead>
@@ -209,10 +208,10 @@ const Pipeline3 = (props: Pipeline3Props) => {
                           </span>
                         )}
                       </DataTableCell>
-                      <DataTableCell label='Stage' className='whitespace-nowrap'>
+                      <DataTableCell className='whitespace-nowrap'>
                         {stage?.label}
                       </DataTableCell>
-                      <DataTableCell label='In stage'>
+                      <DataTableCell>
                         <span className='inline-flex flex-wrap items-baseline gap-x-1.5'>
                           <PipelineAge days={days} expectedDays={expected} />
                           <span
@@ -223,13 +222,10 @@ const Pipeline3 = (props: Pipeline3Props) => {
                           </span>
                         </span>
                       </DataTableCell>
-                      <DataTableCell
-                        label='Over by'
-                        className='whitespace-nowrap tabular-nums'
-                      >
+                      <DataTableCell className='whitespace-nowrap tabular-nums'>
                         {formatAge(days - expected, 'long')}
                       </DataTableCell>
-                      <DataTableCell label='Owner'>
+                      <DataTableCell>
                         <PipelineOwner
                           avatar={item.ownerAvatar}
                           name={item.owner ?? 'Unassigned'}

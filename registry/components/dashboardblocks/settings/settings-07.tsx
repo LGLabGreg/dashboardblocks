@@ -13,6 +13,7 @@ import {
   SaveBar,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
@@ -33,7 +34,6 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
 import { cn } from '@/lib/utils'
 
@@ -48,6 +48,9 @@ interface Profile {
   timeZone: string
 }
 
+/** Why the server refused a field, shown under it. */
+type ProfileErrors = Partial<Record<'email' | 'name', string>>
+
 interface TimeZoneOption {
   label: string
   value: string
@@ -55,9 +58,10 @@ interface TimeZoneOption {
 
 interface Settings7Props {
   description: string
-  /** Called with the chosen image, or `null` when the photo is removed. */
+  /** Called with the chosen image, or `null` when the photo is removed. Leave out to hide Upload photo. */
   onAvatarChange?: (file: File | null) => void
-  onSave?: (profile: Profile) => void | Promise<void>
+  /** Resolve to field errors to refuse the change. */
+  onSave?: (profile: Profile) => void | ProfileErrors | Promise<void | ProfileErrors>
   /** Leave out to show the empty state. */
   profile?: Profile
   status?: BlockStatus
@@ -69,6 +73,7 @@ type ProfileValues = Omit<Profile, 'avatar'> & { avatar: string }
 
 const exampleProps: Settings7Props = {
   description: 'How you appear to others in the workspace, and how the app looks to you.',
+  onAvatarChange: () => {},
   profile: {
     avatar: '/images/avatar-05.webp',
     email: 'amara@acme.co',
@@ -147,17 +152,19 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
   const { onAvatarChange, onSave, profile, timeZones } = props
   const fileInput = useRef<HTMLInputElement>(null)
   const [avatarError, setAvatarError] = useState<string | null>(null)
-  const [status, setStatus] = useState('')
+  const [notice, setNotice] = useState<{ text: string; tone: 'error' | 'saved' } | null>(
+    null,
+  )
+  const [said, setSaid] = useState<{ id: number; text: string }[]>([])
   const form = useSimpleForm<ProfileValues>({
     defaultValues: { ...profile, avatar: profile.avatar ?? '' },
-    onSubmit: async (values) => {
-      await onSave?.({
+    onSubmit: (values) =>
+      onSave?.({
         ...values,
         avatar: values.avatar || undefined,
         email: values.email.trim().toLowerCase(),
         name: values.name.trim(),
-      })
-    },
+      }),
     validate,
   })
   const { values } = form
@@ -178,26 +185,37 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
     const url = URL.createObjectURL(file)
     objectUrls.current.push(url)
     form.setValue('avatar', url)
-    setStatus('')
+    setNotice(null)
     onAvatarChange?.(file)
   }
 
   const removeAvatar = () => {
     form.setValue('avatar', '')
     setAvatarError(null)
-    setStatus('')
+    setNotice(null)
     onAvatarChange?.(null)
+  }
+
+  const say = (text: string, tone: 'error' | 'saved') => {
+    setNotice({ text, tone })
+    setSaid((current) => [
+      ...current.slice(-2),
+      { id: (current.at(-1)?.id ?? 0) + 1, text },
+    ])
   }
 
   const save = async (event: FormEvent<HTMLFormElement>) => {
     const email = values.email.trim().toLowerCase()
     const confirmEmail = emailChanged
-    setStatus('')
-    const saved = await form.submit(event)
-    if (!saved) return
-    startTransition(() =>
-      setStatus(confirmEmail ? `Saved. Check ${email} to confirm it.` : 'Saved.'),
-    )
+    setNotice(null)
+    try {
+      await form.submit(event, {
+        onSaved: () =>
+          say(confirmEmail ? `Saved. Check ${email} to confirm it.` : 'Saved.', 'saved'),
+      })
+    } catch {
+      startTransition(() => say('Couldn’t save your profile. Try again.', 'error'))
+    }
   }
 
   return (
@@ -220,24 +238,26 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
                 />
                 <div className='flex flex-col gap-2'>
                   <div className='flex flex-wrap gap-2'>
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='sm'
-                      aria-describedby={`${form.getId('avatar')}-hint`}
-                      onClick={() => fileInput.current?.click()}
-                    >
-                      <IconPlaceholder
-                        lucide='UploadIcon'
-                        tabler='IconUpload'
-                        hugeicons='Upload01Icon'
-                        phosphor='UploadSimpleIcon'
-                        remixicon='RiUploadLine'
-                        data-icon='inline-start'
-                        aria-hidden
-                      />
-                      {values.avatar ? 'Change photo' : 'Upload photo'}
-                    </Button>
+                    {onAvatarChange && (
+                      <Button
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        aria-describedby={`${form.getId('avatar')}-hint`}
+                        onClick={() => fileInput.current?.click()}
+                      >
+                        <IconPlaceholder
+                          lucide='UploadIcon'
+                          tabler='IconUpload'
+                          hugeicons='Upload01Icon'
+                          phosphor='UploadSimpleIcon'
+                          remixicon='RiUploadLine'
+                          data-icon='inline-start'
+                          aria-hidden
+                        />
+                        {values.avatar ? 'Change photo' : 'Upload photo'}
+                      </Button>
+                    )}
                     {values.avatar && (
                       <Button
                         type='button'
@@ -245,31 +265,35 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
                         size='sm'
                         onClick={removeAvatar}
                       >
-                        Remove
+                        {onAvatarChange ? 'Remove' : 'Remove photo'}
                       </Button>
                     )}
                   </div>
-                  <p
-                    id={`${form.getId('avatar')}-hint`}
-                    className={cn(
-                      'text-xs',
-                      avatarError ? 'text-destructive' : 'text-muted-foreground',
-                    )}
-                  >
-                    {avatarError ?? 'JPG, PNG or GIF, up to 2 MB.'}
-                  </p>
-                  <input
-                    ref={fileInput}
-                    type='file'
-                    accept='image/*'
-                    tabIndex={-1}
-                    aria-hidden
-                    className='sr-only'
-                    onChange={(event) => {
-                      chooseAvatar(event.target.files?.[0])
-                      event.target.value = ''
-                    }}
-                  />
+                  {onAvatarChange && (
+                    <>
+                      <p
+                        id={`${form.getId('avatar')}-hint`}
+                        className={cn(
+                          'text-xs',
+                          avatarError ? 'text-destructive' : 'text-muted-foreground',
+                        )}
+                      >
+                        {avatarError ?? 'JPG, PNG or GIF, up to 2 MB.'}
+                      </p>
+                      <input
+                        ref={fileInput}
+                        type='file'
+                        accept='image/*'
+                        tabIndex={-1}
+                        aria-hidden
+                        className='sr-only'
+                        onChange={(event) => {
+                          chooseAvatar(event.target.files?.[0])
+                          event.target.value = ''
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               <Field data-invalid={form.errors.name ? true : undefined}>
@@ -296,13 +320,11 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor={form.getId('timeZone')}>Time zone</FieldLabel>
-                <NativeSelect className='w-full' {...form.field('timeZone')}>
-                  {timeZones.map((zone) => (
-                    <NativeSelectOption key={zone.value} value={zone.value}>
-                      {zone.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                <OptionSelect
+                  className='w-full'
+                  options={timeZones}
+                  {...form.select('timeZone')}
+                />
                 <FieldDescription>
                   Used for dates in dashboards, reports and email digests.
                 </FieldDescription>
@@ -334,9 +356,21 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
             </FieldGroup>
           </FormSection>
         </div>
-        <p role='status' className='text-muted-foreground mt-4 text-sm empty:sr-only'>
-          {form.isDirty ? '' : status}
-        </p>
+        {notice && (notice.tone === 'error' || !form.isDirty) && (
+          <p
+            className={cn(
+              'mt-4 text-sm',
+              notice.tone === 'error' ? 'text-destructive' : 'text-muted-foreground',
+            )}
+          >
+            {notice.text}
+          </p>
+        )}
+        <div role='status' aria-atomic='false' className='sr-only'>
+          {said.map((message) => (
+            <div key={message.id}>{message.text}</div>
+          ))}
+        </div>
         <SaveBar
           className='mt-6'
           isDirty={form.isDirty}
@@ -345,7 +379,7 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
           onDiscard={() => {
             form.reset()
             setAvatarError(null)
-            setStatus('')
+            setNotice(null)
           }}
         />
       </form>
@@ -380,6 +414,7 @@ export {
   Settings7,
   exampleProps as settings7ExampleProps,
   type Profile,
+  type ProfileErrors,
   type Settings7Props,
   type Theme,
   type TimeZoneOption,

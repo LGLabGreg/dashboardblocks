@@ -126,7 +126,7 @@ const riskLevelConfig: Record<RiskLevel, { cell: string; label: string; text: st
     medium: {
       cell: 'bg-amber-400/20 dark:bg-amber-400/20',
       label: 'Medium',
-      text: 'text-amber-800 dark:text-amber-400',
+      text: 'text-amber-700 dark:text-amber-400',
     },
   }
 

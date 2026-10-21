@@ -11,7 +11,6 @@ import {
   statusToneClasses,
 } from '@/registry/components/dashboardblocks/status-label'
 import { useReveal } from '@/registry/hooks/use-reveal'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 
@@ -20,8 +19,6 @@ import { cn } from '@/lib/utils'
 type GaugeTone = 'positive' | 'caution' | 'critical' | 'neutral'
 
 interface GaugeToneConfig {
-  icon: ReactNode
-  soft: string
   stroke: string
   swatch: string
   text: string
@@ -30,68 +27,24 @@ interface GaugeToneConfig {
 
 const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
   caution: {
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
-    stroke: 'stroke-amber-500',
-    swatch: 'bg-amber-500',
+    stroke: 'stroke-orange-500',
+    swatch: 'bg-orange-500',
     text: statusToneClasses.warning,
     tone: 'warning',
   },
   critical: {
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     stroke: 'stroke-red-600',
     swatch: 'bg-red-600',
     text: statusToneClasses.bad,
     tone: 'bad',
   },
   neutral: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleDotIcon'
-        tabler='IconCircleDot'
-        hugeicons='RecordIcon'
-        phosphor='RecordIcon'
-        remixicon='RiRecordCircleLine'
-        aria-hidden
-      />
-    ),
-    soft: 'bg-muted text-foreground',
     stroke: 'stroke-muted-foreground',
     swatch: 'bg-muted-foreground',
     text: statusToneClasses.neutral,
     tone: 'neutral',
   },
   positive: {
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     stroke: 'stroke-emerald-600',
     swatch: 'bg-emerald-600',
     text: statusToneClasses.good,
@@ -412,30 +365,6 @@ function GaugeValue({ children, className }: GaugeValueProps) {
   )
 }
 
-function GaugeToneBadge({
-  className,
-  label,
-  tone,
-}: {
-  className?: string
-  label: string
-  tone: GaugeTone
-}) {
-  const config = gaugeToneConfig[tone]
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-      {label}
-    </span>
-  )
-}
-
 function GaugeToneLabel({
   className,
   label,
@@ -514,7 +443,6 @@ export {
   Gauge,
   GaugeLegend,
   GaugeTargetKey,
-  GaugeToneBadge,
   GaugeToneLabel,
   GaugeValue,
   gaugeToneConfig,

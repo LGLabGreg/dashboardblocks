@@ -10,11 +10,11 @@ export const examples: Registry['items'] = [
       'badge',
       'button',
       registryUrl('block-state'),
-      registryUrl('data-table'),
       registryUrl('format'),
       registryUrl('page-header'),
       registryUrl('record-detail'),
       registryUrl('status-label'),
+      registryUrl('table'),
       registryUrl('team'),
     ],
     files: [
@@ -37,12 +37,12 @@ export const examples: Registry['items'] = [
       'button',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
-      registryUrl('data-table'),
       registryUrl('details'),
       registryUrl('format'),
       registryUrl('page-header'),
       registryUrl('record-detail'),
       registryUrl('status-label'),
+      registryUrl('table'),
     ],
     files: [
       {

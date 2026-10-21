@@ -13,6 +13,7 @@ import {
   type ChoiceCardOption,
   ChoiceCards,
 } from '@/registry/components/dashboardblocks/onboarding'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
@@ -27,7 +28,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { FieldError } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
 interface DataSource {
   category: string
@@ -270,20 +270,17 @@ const Onboarding3 = (props: Onboarding3Props) => {
                     onChange={(event) => setQuery(event.target.value)}
                   />
                 </InputGroup>
-                <NativeSelect
+                <OptionSelect
                   aria-label='Category'
                   className='w-full @md:w-44'
                   disabled={blockState !== undefined}
-                  value={category}
-                  onChange={(event) => setCategory(event.target.value)}
-                >
-                  <NativeSelectOption value=''>All categories</NativeSelectOption>
-                  {categories.map((item) => (
-                    <NativeSelectOption key={item} value={item}>
-                      {item}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                  value={category || 'all'}
+                  options={[
+                    { label: 'All categories', value: 'all' },
+                    ...categories.map((item) => ({ label: item, value: item })),
+                  ]}
+                  onValueChange={(value) => setCategory(value === 'all' ? '' : value)}
+                />
               </div>
               <p role='status' className='sr-only'>
                 {blockState

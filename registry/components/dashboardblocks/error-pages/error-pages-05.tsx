@@ -8,6 +8,7 @@ import { buttonVariants } from '@/components/ui/button'
 
 type SessionEndReason =
   | 'inactive'
+  | 'signed-out'
   | 'signed-out-elsewhere'
   | 'password-changed'
   | 'revoked'
@@ -52,6 +53,7 @@ const reasons: Record<SessionEndReason, (idleMinutes: number) => string> = {
   'password-changed': () =>
     'Your password was changed, so every device was signed out. Sign in with the new password.',
   revoked: () => 'An admin ended your session. Sign in again to carry on.',
+  'signed-out': () => 'You signed out. Sign in again to carry on.',
   'signed-out-elsewhere': () => 'You signed out in another tab or window.',
 }
 
@@ -73,7 +75,7 @@ const ErrorPages5 = ({
 }: ErrorPages5Props) => (
   <ErrorPageLayout
     brand={brand}
-    title='Your session has ended'
+    title={reason === 'signed-out' ? 'You’re signed out' : 'Your session has ended'}
     description={reasons[reason](idleMinutes)}
   >
     <div className='flex flex-col gap-4 border-t pt-6'>

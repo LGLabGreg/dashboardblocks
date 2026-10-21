@@ -130,7 +130,10 @@ const AiUsage2 = (props: AiUsage2Props) => {
                 (feature.tokens.cached ?? 0) +
                 feature.tokens.output
               return (
-                <li key={feature.label} className='flex flex-col gap-2 border-b py-3'>
+                <li
+                  key={feature.label}
+                  className='flex flex-col gap-2 border-b py-3 last:border-b-0'
+                >
                   <div className='flex items-baseline justify-between gap-3'>
                     <span className='text-sm font-medium'>{feature.label}</span>
                     <span className='text-sm tabular-nums'>

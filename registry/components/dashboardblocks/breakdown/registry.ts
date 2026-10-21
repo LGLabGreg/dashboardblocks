@@ -27,7 +27,11 @@ export const examples: Registry['items'] = [
   {
     name: 'breakdown-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('breakdown')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('breakdown'),
+      registryUrl('table'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown/breakdown-02.tsx',

@@ -56,6 +56,7 @@ export const examples: Registry['items'] = [
       registryUrl('ai-usage'),
       registryUrl('block-state'),
       registryUrl('format'),
+      registryUrl('table'),
     ],
     files: [
       {

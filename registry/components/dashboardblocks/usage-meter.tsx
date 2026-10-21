@@ -7,10 +7,10 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   StatusLabel,
+  type StatusLabelProps,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { useReveal } from '@/registry/hooks/use-reveal'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCompact, formatNumber } from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 
@@ -65,119 +65,49 @@ function formatUsage(value: number, unit?: string, { compact = false } = {}) {
 
 interface UsageStatusConfig {
   color: string
-  icon: ReactNode
   label: string
-  soft: string
   tone: StatusTone
 }
 
 const usageStatusConfig: Record<UsageStatus, UsageStatusConfig> = {
   critical: {
     color: 'var(--color-destructive)',
-    icon: (
-      <IconPlaceholder
-        lucide='OctagonAlertIcon'
-        tabler='IconAlertOctagon'
-        hugeicons='AlertDiamondIcon'
-        phosphor='WarningOctagonIcon'
-        remixicon='RiAlarmWarningLine'
-        aria-hidden
-      />
-    ),
     label: 'Critical',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     tone: 'bad',
   },
   ok: {
     color: 'var(--color-chart-2)',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleCheckIcon'
-        tabler='IconCircleCheck'
-        hugeicons='CheckmarkCircle02Icon'
-        phosphor='CheckCircleIcon'
-        remixicon='RiCheckboxCircleLine'
-        aria-hidden
-      />
-    ),
     label: 'Within limit',
-    soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
     tone: 'good',
   },
   over: {
     color: 'var(--color-destructive)',
-    icon: (
-      <IconPlaceholder
-        lucide='CircleXIcon'
-        tabler='IconCircleX'
-        hugeicons='CancelCircleIcon'
-        phosphor='XCircleIcon'
-        remixicon='RiCloseCircleLine'
-        aria-hidden
-      />
-    ),
     label: 'Over limit',
-    soft: 'bg-red-500/10 text-red-700 dark:text-red-400',
     tone: 'bad',
   },
   warning: {
-    color: 'var(--color-amber-500)',
-    icon: (
-      <IconPlaceholder
-        lucide='TriangleAlertIcon'
-        tabler='IconAlertTriangle'
-        hugeicons='Alert02Icon'
-        phosphor='WarningIcon'
-        remixicon='RiErrorWarningLine'
-        aria-hidden
-      />
-    ),
+    color: 'var(--color-orange-500)',
     label: 'Nearing limit',
-    soft: 'bg-amber-500/10 text-amber-800 dark:text-amber-400',
     tone: 'warning',
   },
-}
-
-function UsageStatusBadge({
-  className,
-  label,
-  status,
-}: {
-  className?: string
-  label?: string
-  status: UsageStatus
-}) {
-  const state = useBlockState()
-  if (state) return null
-  const config = usageStatusConfig[status]
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
-        config.soft,
-        className,
-      )}
-    >
-      {config.icon}
-      {label ?? config.label}
-    </span>
-  )
 }
 
 function UsageStatusLabel({
   className,
   label,
   status,
+  variant,
 }: {
   className?: string
   label?: string
   status: UsageStatus
+  variant?: StatusLabelProps['variant']
 }) {
   const state = useBlockState()
   if (state) return null
   const config = usageStatusConfig[status]
   return (
-    <StatusLabel className={className} tone={config.tone}>
+    <StatusLabel className={className} tone={config.tone} variant={variant}>
       {label ?? config.label}
     </StatusLabel>
   )
@@ -350,7 +280,6 @@ export {
   UsageKey,
   UsageMeterLimit,
   UsageMeterValue,
-  UsageStatusBadge,
   UsageStatusLabel,
   formatUsage,
   getDaysLeft,

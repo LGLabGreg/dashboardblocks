@@ -7,9 +7,9 @@ export const examples: Registry['items'] = [
     name: 'comparison-01',
     type: 'registry:component',
     registryDependencies: [
-      registryUrl('data-table'),
       registryUrl('format'),
       registryUrl('kpi'),
+      registryUrl('table'),
     ],
     files: [
       {
@@ -31,6 +31,7 @@ export const examples: Registry['items'] = [
       registryUrl('comparison'),
       registryUrl('details'),
       registryUrl('format'),
+      registryUrl('table'),
     ],
     files: [
       {

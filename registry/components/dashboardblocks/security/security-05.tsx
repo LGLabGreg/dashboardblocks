@@ -178,7 +178,7 @@ function TwoFactorSettings(props: Security5Props) {
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <p className='text-muted-foreground text-sm'>{description}</p>
         </header>
-        <BlockStateRows className='border-y' rows={3} />
+        <BlockStateRows className='border-t' rows={3} />
       </section>
     )
   }
@@ -194,7 +194,7 @@ function TwoFactorSettings(props: Security5Props) {
           {enabled ? 'On' : 'Off'}
         </StatusLabel>
       </header>
-      <ul className='flex flex-col divide-y border-y'>
+      <ul className='flex flex-col divide-y border-t'>
         <li className='flex flex-col gap-4 py-3'>
           <div className='flex items-start gap-3'>
             <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
@@ -358,7 +358,7 @@ function TwoFactorSettings(props: Security5Props) {
                   className={cn(
                     'text-sm',
                     codesLeft <= 2
-                      ? 'text-amber-800 dark:text-amber-400'
+                      ? 'text-orange-700 dark:text-orange-400'
                       : 'text-muted-foreground',
                   )}
                 >

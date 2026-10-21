@@ -104,7 +104,7 @@ const Geo2 = (props: Geo2Props) => {
             )}
           </BlockReady>
         </header>
-        <div className='flex flex-col gap-1.5'>
+        <div className='flex flex-col gap-1.5 border-t pt-4'>
           <div className='text-muted-foreground flex justify-between px-2 text-xs'>
             <span>Country</span>
             <span className='capitalize'>{unit}</span>

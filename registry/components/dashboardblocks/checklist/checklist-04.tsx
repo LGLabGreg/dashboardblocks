@@ -203,7 +203,10 @@ function TaskGroups(props: TaskGroupsProps) {
                   const metaId = `${checkboxId}-meta`
                   const isDone = done.has(task.id)
                   return (
-                    <li key={task.id} className='flex items-start gap-3 border-b py-2.5'>
+                    <li
+                      key={task.id}
+                      className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+                    >
                       <TaskCheckbox
                         id={checkboxId}
                         checked={isDone}

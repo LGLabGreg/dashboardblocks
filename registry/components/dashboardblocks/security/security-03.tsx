@@ -125,7 +125,10 @@ function SessionList(props: Security3Props) {
       {!state && (
         <ul className='flex flex-col border-t'>
           {sessions.map((session) => (
-            <li key={session.id} className='flex items-center gap-3 border-b py-2.5'>
+            <li
+              key={session.id}
+              className='flex items-center gap-3 border-b py-2.5 last:border-b-0'
+            >
               <DeviceIcon kind={session.device} />
               <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                 <span className='truncate text-sm font-medium'>{session.client}</span>

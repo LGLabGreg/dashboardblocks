@@ -172,7 +172,7 @@ const Leaderboard5 = (props: Leaderboard5Props) => {
             />
           </Button>
         </header>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 border-t pt-4'>
           <BlockStateRows rows={initialCount} />
           {!state && (
             <Leaderboard>

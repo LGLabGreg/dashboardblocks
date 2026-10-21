@@ -289,7 +289,7 @@ const Invoice1 = (props: Invoice1Props) => {
                   <span
                     className={
                       status === 'overdue'
-                        ? 'font-medium text-amber-800 dark:text-amber-400 print:text-black!'
+                        ? 'font-medium text-orange-700 dark:text-orange-400 print:text-black!'
                         : undefined
                     }
                   >

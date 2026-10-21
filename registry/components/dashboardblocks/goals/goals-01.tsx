@@ -107,7 +107,7 @@ const Goals1 = (props: Goals1Props) => {
                   'font-medium tabular-nums',
                   gap >= 0
                     ? 'text-emerald-700 dark:text-emerald-400'
-                    : 'text-amber-800 dark:text-amber-400',
+                    : 'text-orange-700 dark:text-orange-400',
                 )}
               >
                 {formatter(Math.abs(gap))} {gap >= 0 ? 'ahead of' : 'behind'}
@@ -144,7 +144,7 @@ const Goals1 = (props: Goals1Props) => {
                 className={cn(
                   'text-xs tabular-nums',
                   shortfall > 0
-                    ? 'font-medium text-amber-800 dark:text-amber-400'
+                    ? 'font-medium text-orange-700 dark:text-orange-400'
                     : 'text-muted-foreground',
                 )}
               >

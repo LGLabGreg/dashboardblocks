@@ -222,7 +222,10 @@ const Comments3 = (props: Comments3Props) => {
             <header className='flex flex-col gap-0.5'>
               <h2 className='font-semibold tracking-tight'>{document.title}</h2>
               <Details className='text-muted-foreground text-sm'>
-                <StatusLabel tone={statusTones[document.statusTone ?? 'warning']}>
+                <StatusLabel
+                  variant='text'
+                  tone={statusTones[document.statusTone ?? 'warning']}
+                >
                   {document.status}
                 </StatusLabel>
                 {document.updated}

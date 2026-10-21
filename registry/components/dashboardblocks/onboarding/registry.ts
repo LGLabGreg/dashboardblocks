@@ -60,7 +60,7 @@ export const examples: Registry['items'] = [
       'button',
       'field',
       'input-group',
-      'native-select',
+      registryUrl('option-select'),
       registryUrl('block-state'),
       registryUrl('link'),
       registryUrl('onboarding'),
@@ -81,7 +81,12 @@ export const examples: Registry['items'] = [
   {
     name: 'onboarding-04',
     type: 'registry:component',
-    registryDependencies: ['button', 'field', 'native-select', registryUrl('onboarding')],
+    registryDependencies: [
+      'button',
+      'field',
+      registryUrl('onboarding'),
+      registryUrl('option-select'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/onboarding/onboarding-04.tsx',

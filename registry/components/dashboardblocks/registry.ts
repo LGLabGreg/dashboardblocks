@@ -86,6 +86,7 @@ export const components: Registry['items'] = [
       'sidebar',
       registryUrl('format'),
       registryUrl('link'),
+      registryUrl('page-header'),
       registryUrl('status-label'),
     ],
     files: [
@@ -166,7 +167,11 @@ export const components: Registry['items'] = [
     title: 'Breakdown',
     description:
       'Primitives for part-to-whole breakdowns: a segmented 100% bar, legend keys and share formatting.',
-    registryDependencies: [registryUrl('chart-panel'), registryUrl('use-reveal')],
+    registryDependencies: [
+      registryUrl('chart-panel'),
+      registryUrl('table'),
+      registryUrl('use-reveal'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/breakdown.tsx',
@@ -181,7 +186,7 @@ export const components: Registry['items'] = [
     description:
       'Primitives for full-size chart panels: tooltip, legend, axis defaults and an accessible data table.',
     dependencies: ['recharts'],
-    registryDependencies: [registryUrl('chart')],
+    registryDependencies: [registryUrl('chart'), registryUrl('table')],
     files: [
       {
         path: 'registry/components/dashboardblocks/chart-panel.tsx',
@@ -204,11 +209,25 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'table',
+    type: 'registry:component',
+    title: 'Table',
+    description:
+      'The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.',
+    registryDependencies: [registryUrl('block-state'), registryUrl('link')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/table.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'data-table',
     type: 'registry:component',
     title: 'Data Table',
     description:
-      'Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.',
+      'Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars, scrolling sideways when wider than its card.',
     dependencies: ['@tanstack/react-table@^9.2.4'],
     registryDependencies: [
       registryUrl('block-state'),
@@ -217,6 +236,7 @@ export const components: Registry['items'] = [
       'dropdown-menu',
       'input',
       registryUrl('details'),
+      registryUrl('table'),
     ],
     files: [
       {
@@ -437,6 +457,7 @@ export const components: Registry['items'] = [
       registryUrl('chart'),
       registryUrl('format'),
       registryUrl('heatmap'),
+      registryUrl('table'),
     ],
     files: [
       {
@@ -626,7 +647,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Page Header',
     description:
-      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs and a more-actions menu.',
+      'Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs that put what doesn’t fit under More, and a more-actions menu.',
     registryDependencies: ['button', 'dropdown-menu', registryUrl('link')],
     files: [
       {
@@ -795,6 +816,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/spend.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'option-select',
+    type: 'registry:component',
+    title: 'Option Select',
+    description:
+      'A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.',
+    registryDependencies: ['select'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/option-select.tsx',
         type: 'registry:component',
       },
     ],
@@ -1046,6 +1081,7 @@ export const components: Registry['items'] = [
       registryUrl('format'),
       registryUrl('block-state'),
       registryUrl('details'),
+      registryUrl('table'),
     ],
     files: [
       {
@@ -1064,7 +1100,7 @@ export const components: Registry['items'] = [
       'button',
       'field',
       'input',
-      'native-select',
+      registryUrl('option-select'),
       registryUrl('forms'),
       registryUrl('link'),
     ],

@@ -6,6 +6,7 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
 import {
   DataTable,
   DataTableBody,
@@ -14,8 +15,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
+} from '@/registry/components/dashboardblocks/table'
 import {
   formatCurrency,
   formatNumber,
@@ -106,15 +106,14 @@ const Comparison1 = (props: Comparison1Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, metrics)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <DataTable className='border-t'>
-          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+        <DataTable caption={`${title}: ${description}`} className='border-t'>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Metric</DataTableHead>
@@ -134,24 +133,16 @@ const Comparison1 = (props: Comparison1Props) => {
                 return (
                   <DataTableRow key={metric.label}>
                     <DataTableCell primary>{metric.label}</DataTableCell>
-                    <DataTableCell
-                      align='end'
-                      label={currentLabel}
-                      className='font-medium'
-                    >
+                    <DataTableCell align='end' className='font-medium'>
                       {format(metric.current)}
                     </DataTableCell>
-                    <DataTableCell
-                      align='end'
-                      label={previousLabel}
-                      className='text-muted-foreground'
-                    >
+                    <DataTableCell align='end' className='text-muted-foreground'>
                       {format(metric.previous)}
                     </DataTableCell>
-                    <DataTableCell align='end' label='Difference'>
+                    <DataTableCell align='end'>
                       {formatSigned(difference, metric.differenceFormatter ?? format)}
                     </DataTableCell>
-                    <DataTableCell align='end' label='Change'>
+                    <DataTableCell align='end'>
                       <KPIChange
                         comparison={`in ${previousLabel}`}
                         format={format}

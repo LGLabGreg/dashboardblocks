@@ -82,7 +82,7 @@ const Leaderboard1 = (props: Leaderboard1Props) => {
             />
           </Button>
         </header>
-        <div className='flex flex-col gap-1.5'>
+        <div className='flex flex-col gap-1.5 border-t pt-4'>
           <div className='text-muted-foreground flex justify-between px-2 text-xs'>
             <span>Page</span>
             <span>Visitors</span>

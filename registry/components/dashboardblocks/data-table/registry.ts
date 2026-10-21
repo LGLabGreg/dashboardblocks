@@ -18,8 +18,7 @@ export const examples: Registry['items'] = [
       },
     ],
     meta: {
-      shows:
-        'A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.',
+      shows: 'A table of rows with sortable column headers.',
       size: 'full',
       usedWith: ['data-table-06', 'stat-group-02'],
     },
@@ -29,8 +28,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       registryUrl('block-state'),
-      registryUrl('data-table'),
       registryUrl('format'),
+      registryUrl('table'),
     ],
     files: [
       {
@@ -50,10 +49,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       registryUrl('block-state'),
-      registryUrl('data-table'),
       registryUrl('format'),
       registryUrl('kpi'),
       registryUrl('stat-group'),
+      registryUrl('table'),
     ],
     files: [
       {

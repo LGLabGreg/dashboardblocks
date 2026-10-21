@@ -28,7 +28,7 @@ const DashboardHeader2 = (props: DashboardHeader2Props) => {
   const [preset, setPreset] = useState<DateRangePreset>(defaultPreset)
 
   return (
-    <header className='@container flex flex-col gap-1 border-b pb-4'>
+    <header className='@container flex flex-col gap-1'>
       <div className='flex items-start justify-between gap-3'>
         <div className='flex min-w-0 flex-wrap items-baseline gap-x-2'>
           <h2 className='text-2xl font-semibold tracking-tight'>{title}</h2>

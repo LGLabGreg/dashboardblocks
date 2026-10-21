@@ -1,9 +1,7 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 7278b02953c7
+// source-hash: e5fa007f5bcb
 
 'use client'
-
-/* oxlint-disable jsx-a11y/no-redundant-roles, jsx-a11y/no-interactive-element-to-noninteractive-role -- the explicit roles keep table semantics when the stacked layout changes the display */
 
 import {
   BlockStateText,
@@ -11,6 +9,17 @@ import {
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  type DataTableCellProps,
+  DataTableHead,
+  type DataTableHeadProps,
+  DataTableHeader,
+  DataTableRow,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type CellData,
@@ -59,190 +68,18 @@ import { Input } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
 
-function DataTable({ className, ...props }: ComponentProps<'table'>) {
-  return (
-    <table
-      // Explicit ARIA roles keep the table semantics when the display changes, which some browsers otherwise drop.
-      role='table'
-      data-slot='data-table'
-      className={cn(
-        'w-full border-collapse text-sm @max-2xl/data-table:block',
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-function DataTableHeader({ className, ...props }: ComponentProps<'thead'>) {
-  return (
-    <thead
-      role='rowgroup'
-      className={cn('border-b @max-2xl/data-table:sr-only', className)}
-      {...props}
-    />
-  )
-}
-
-function DataTableBody({ className, ...props }: ComponentProps<'tbody'>) {
-  return (
-    <tbody
-      role='rowgroup'
-      className={cn('@max-2xl/data-table:block', className)}
-      {...props}
-    />
-  )
-}
-
-function DataTableRow({ className, ...props }: ComponentProps<'tr'>) {
-  return (
-    <tr
-      role='row'
-      className={cn(
-        'data-[state=selected]:bg-muted/50 border-b last:border-b-0 @max-2xl/data-table:grid @max-2xl/data-table:grid-cols-2 @max-2xl/data-table:gap-x-4 @max-2xl/data-table:gap-y-3 @max-2xl/data-table:px-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:py-4',
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-type Align = 'start' | 'end'
-
-interface DataTableHeadProps extends Omit<ComponentProps<'th'>, 'align'> {
-  align?: Align
-}
-
-function DataTableHead({ align = 'start', className, ...props }: DataTableHeadProps) {
-  return (
-    <th
-      role='columnheader'
-      scope='col'
-      className={cn(
-        'text-muted-foreground h-10 px-3 text-xs font-medium whitespace-nowrap first:pl-[var(--data-table-inset,1.5rem)] last:pr-[var(--data-table-inset,1.5rem)]',
-        align === 'end' ? 'text-right' : 'text-left',
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-interface DataTableCellProps extends Omit<ComponentProps<'td'>, 'align'> {
-  align?: Align
-  label?: string
-  primary?: boolean
-  truncate?: boolean
-}
-
-function DataTableCell({
-  align = 'start',
-  className,
-  label,
-  primary = false,
-  truncate = false,
-  ...props
-}: DataTableCellProps) {
-  return (
-    <td
-      role='cell'
-      data-label={label}
-      className={cn(
-        'h-12 px-3 py-2 align-middle first:pl-[var(--data-table-inset,1.5rem)] last:pr-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:flex @max-2xl/data-table:h-auto @max-2xl/data-table:min-w-0 @max-2xl/data-table:flex-col @max-2xl/data-table:items-start @max-2xl/data-table:gap-1 @max-2xl/data-table:p-0 @max-2xl/data-table:text-left @max-2xl/data-table:first:pl-0 @max-2xl/data-table:last:pr-0',
-        align === 'end' && 'text-right whitespace-nowrap tabular-nums',
-        truncate &&
-          'w-full max-w-0 truncate @max-2xl/data-table:w-auto @max-2xl/data-table:max-w-none @max-2xl/data-table:items-stretch @max-2xl/data-table:whitespace-normal',
-        primary && 'font-medium @max-2xl/data-table:col-span-2',
-        !primary &&
-          label &&
-          '@max-2xl/data-table:before:text-muted-foreground @max-2xl/data-table:before:text-xs @max-2xl/data-table:before:font-normal @max-2xl/data-table:before:content-[attr(data-label)]',
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-interface DataTableStateRowsProps {
-  colSpan: number
-  /** How many rows to sketch while loading. @default 5 */
-  rows?: number
-}
-
-function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
-  const state = useBlockState()
-  if (!state) return null
-
-  if (state !== 'loading') {
-    return (
-      <DataTableRow>
-        <DataTableCell colSpan={colSpan} className='@max-2xl/data-table:col-span-2'>
-          <BlockStateText />
-        </DataTableCell>
-      </DataTableRow>
-    )
-  }
-
-  return Array.from({ length: rows }, (_, index) => (
-    <DataTableRow key={index} aria-hidden={index > 0 || undefined}>
-      <DataTableCell colSpan={colSpan} className='@max-2xl/data-table:col-span-2'>
-        <span className='flex w-full items-center gap-4'>
-          {index === 0 && <span className='sr-only'>Loading</span>}
-          <SkeletonText className='w-1/4' />
-          <SkeletonText className='ml-auto w-16' />
-          <SkeletonText className='w-16' />
-        </span>
-      </DataTableCell>
-    </DataTableRow>
-  ))
-}
-
 function useDataTableUnavailable() {
   const state = useBlockState()
   return state === 'loading' || state === 'error'
 }
 
-interface DataTableBarProps {
-  className?: string
-  /** @default 'var(--color-chart-2)' */
-  color?: string
-  max: number
-  value: number
-}
-
-function DataTableBar({
-  className,
-  color = 'var(--color-chart-2)',
-  max,
-  value,
-}: DataTableBarProps) {
-  const share = max > 0 ? Math.min(1, Math.max(0, value / max)) : 0
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'bg-muted block h-1.5 w-full overflow-hidden rounded-full',
-        className,
-      )}
-    >
-      <span
-        className='block h-full rounded-full'
-        style={{ backgroundColor: color, width: `${share * 100}%` }}
-      />
-    </span>
-  )
-}
-
 interface DataTableColumnMeta {
   /** @default 'start' */
-  align?: Align
+  align?: DataTableCellProps['align']
   cellClassName?: string
   headerClassName?: string
-  hideLabelWhenStacked?: boolean
   label?: string
   primary?: boolean
-  /** @default Oldest first and Newest first for a Date or ISO date string (pass them for a timestamp number), A to Z and Z to A for text, high to low and low to high otherwise */
-  sortLabels?: { asc: string; desc: string }
   truncate?: boolean
 }
 
@@ -434,6 +271,7 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
 > {
   /** Read by screen readers only. */
   caption?: ReactNode
+  /** Shown when there are no rows, in the block's empty state too. */
   empty?: ReactNode
   /** How many rows to sketch while loading. @default 5 */
   loadingRows?: number
@@ -448,20 +286,20 @@ function DataTableContent<TData extends RowData>({
   ...props
 }: DataTableContentProps<TData>) {
   'use no memo'
-  const state = useBlockState()
+  const blockState = useBlockState()
+  const state = blockState === 'empty' && empty !== undefined ? undefined : blockState
   const rows = table.getRowModel().rows
   const columns = table.getVisibleLeafColumns()
-  const selectable = columns.some((column) => column.id === SELECT_COLUMN_ID)
 
   return (
     <DataTable
       {...props}
+      caption={caption}
       className={cn(
         'focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset',
         props.className,
       )}
     >
-      {caption && <caption className='sr-only'>{caption}</caption>}
       <DataTableHeader>
         {table.getHeaderGroups().map((group) => (
           <DataTableRow key={group.id}>
@@ -479,9 +317,6 @@ function DataTableContent<TData extends RowData>({
             <DataTableRow
               key={row.id}
               data-state={row.getIsSelected() ? 'selected' : undefined}
-              className={cn(
-                selectable && '@max-2xl/data-table:relative @max-2xl/data-table:pr-14',
-              )}
             >
               {row.getVisibleCells().map((cell) => {
                 const { meta } = cell.column.columnDef
@@ -489,13 +324,6 @@ function DataTableContent<TData extends RowData>({
                   <DataTableCell
                     key={cell.id}
                     align={meta?.align}
-                    label={
-                      meta?.primary ||
-                      meta?.hideLabelWhenStacked ||
-                      cell.column.id === SELECT_COLUMN_ID
-                        ? undefined
-                        : getColumnLabel(cell.column)
-                    }
                     primary={meta?.primary}
                     truncate={meta?.truncate}
                     className={meta?.cellClassName}
@@ -510,7 +338,7 @@ function DataTableContent<TData extends RowData>({
           <DataTableRow>
             <DataTableCell
               colSpan={columns.length}
-              className='text-muted-foreground h-24 text-center @max-2xl/data-table:col-span-2 @max-2xl/data-table:items-center @max-2xl/data-table:py-4'
+              className='text-muted-foreground h-24 text-center'
             >
               {empty ?? <DataTableEmpty table={table} />}
             </DataTableCell>
@@ -611,21 +439,24 @@ interface DataTableFacetOption {
 
 interface DataTableFacetFilterProps<TData extends RowData> {
   className?: string
-  column: DataTableColumn<TData> | undefined
+  columnId: string
   /** Defaults to the column's distinct values, A to Z. */
   options?: DataTableFacetOption[]
+  table: DataTableInstance<TData>
   /** Defaults to the column's label. */
   title?: string
 }
 
 function DataTableFacetFilter<TData extends RowData>({
   className,
-  column,
+  columnId,
   options,
+  table,
   title,
 }: DataTableFacetFilterProps<TData>) {
   'use no memo'
   const unavailable = useDataTableUnavailable()
+  const column = table.getColumn(columnId)
   if (!column) return null
   const label = title ?? getColumnLabel(column)
   const counts = new Map<string, number>()
@@ -777,109 +608,6 @@ function DataTableViewOptions<TData extends RowData>({
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
-      </DropdownMenu>
-    </DropdownMenuTrigger>
-  )
-}
-
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
-
-function isDateColumn<TData extends RowData>(
-  table: DataTableInstance<TData>,
-  columnId: string,
-) {
-  for (const row of table.getCoreRowModel().rows) {
-    const value: unknown = row.getValue(columnId)
-    if (value == null || value === '') continue
-    return value instanceof Date || (typeof value === 'string' && ISO_DATE.test(value))
-  }
-  return false
-}
-
-interface DataTableSortMenuProps<TData extends RowData> {
-  className?: string
-  table: DataTableInstance<TData>
-}
-
-function DataTableSortMenu<TData extends RowData>({
-  className,
-  table,
-}: DataTableSortMenuProps<TData>) {
-  'use no memo'
-  const unavailable = useDataTableUnavailable()
-  const columns = table
-    .getAllLeafColumns()
-    .filter((column) => column.getCanSort() && column.getIsVisible())
-  const [sort] = table.state.sorting
-  const current = columns.find((column) => column.id === sort?.id)
-  const text = current?.getAutoSortDir() === 'asc'
-  const customLabels = current?.columnDef.meta?.sortLabels
-  const dates = current && isDateColumn(table, current.id)
-  const labels =
-    customLabels ??
-    (dates
-      ? { asc: 'Oldest first', desc: 'Newest first' }
-      : text
-        ? { asc: 'A to Z', desc: 'Z to A' }
-        : { asc: 'Low to high', desc: 'High to low' })
-  const first = customLabels || dates ? current.getFirstSortDir() : text ? 'asc' : 'desc'
-  const second = first === 'asc' ? 'desc' : 'asc'
-
-  return (
-    <DropdownMenuTrigger>
-      <Button variant='outline' size='sm' className={className} isDisabled={unavailable}>
-        <IconPlaceholder
-          lucide='ListFilterIcon'
-          tabler='IconFilter'
-          hugeicons='FilterHorizontalIcon'
-          phosphor='FunnelSimpleIcon'
-          remixicon='RiFilter3Line'
-          className='text-muted-foreground'
-        />
-        {current ? `Sort: ${getColumnLabel(current)}` : 'Sort'}
-      </Button>
-      <DropdownMenu placement='bottom end' className='w-auto min-w-44'>
-        <DropdownMenuGroup
-          selectionMode='single'
-          disallowEmptySelection
-          selectedKeys={sort ? [`column:${sort.id}`] : []}
-          onSelectionChange={(keys) => {
-            const [key] = keys === 'all' ? [] : [...keys]
-            if (key === undefined) return
-            const id = String(key).slice('column:'.length)
-            const column = table.getColumn(id)
-            const desc =
-              id === sort?.id ? sort.desc : column?.getFirstSortDir() === 'desc'
-            table.setSorting([{ desc, id }])
-          }}
-        >
-          <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-          {columns.map((column) => (
-            <DropdownMenuItem key={column.id} id={`column:${column.id}`}>
-              {getColumnLabel(column)}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
-        {sort && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup
-              selectionMode='single'
-              disallowEmptySelection
-              selectedKeys={[sort.desc ? 'desc' : 'asc']}
-              onSelectionChange={(keys) => {
-                const [direction] = keys === 'all' ? [] : [...keys]
-                if (direction !== undefined) {
-                  table.setSorting([{ desc: direction === 'desc', id: sort.id }])
-                }
-              }}
-            >
-              <DropdownMenuLabel>Order</DropdownMenuLabel>
-              <DropdownMenuItem id={first}>{labels[first]}</DropdownMenuItem>
-              <DropdownMenuItem id={second}>{labels[second]}</DropdownMenuItem>
-            </DropdownMenuGroup>
-          </>
-        )}
       </DropdownMenu>
     </DropdownMenuTrigger>
   )
@@ -1052,7 +780,9 @@ function DataTableSelectAll<TData extends RowData>({
     <Checkbox
       aria-label='Select all rows on this page'
       isSelected={table.getIsAllPageRowsSelected()}
-      isIndeterminate={table.getIsSomePageRowsSelected()}
+      isIndeterminate={
+        table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
+      }
       isDisabled={unavailable}
       onChange={(checked) => table.toggleAllPageRowsSelected(checked === true)}
     />
@@ -1092,9 +822,8 @@ function createDataTableSelectColumn<TData extends RowData>({
     header: ({ table }) => <DataTableSelectAll table={table} />,
     id: SELECT_COLUMN_ID,
     meta: {
-      cellClassName:
-        'w-px pr-0 @max-2xl/data-table:absolute @max-2xl/data-table:top-4 @max-2xl/data-table:right-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:w-auto',
-      headerClassName: 'w-px pr-0',
+      cellClassName: 'w-px pe-0',
+      headerClassName: 'w-px pe-0',
       label: 'Select',
     },
   }
@@ -1103,32 +832,21 @@ function createDataTableSelectColumn<TData extends RowData>({
 export {
   createDataTableColumnHelper,
   createDataTableSelectColumn,
-  DataTable,
-  DataTableBar,
-  DataTableBody,
-  DataTableCell,
   DataTableColumnHead,
   DataTableContent,
   DataTableFacetFilter,
   dataTableFeatures,
-  DataTableHead,
-  DataTableHeader,
   DataTablePagination,
   DataTableReset,
-  DataTableRow,
   DataTableSearch,
   DataTableSelectionBar,
   DataTableSortButton,
-  DataTableSortMenu,
-  DataTableStateRows,
   DataTableViewOptions,
   getColumnLabel,
   useDataTable,
 }
 
 export type {
-  DataTableBarProps,
-  DataTableCellProps,
   DataTableColumn,
   DataTableColumnDef,
   DataTableColumnMeta,
@@ -1136,13 +854,10 @@ export type {
   DataTableFacetFilterProps,
   DataTableFacetOption,
   DataTableFeatures,
-  DataTableHeadProps,
   DataTableInstance,
   DataTablePaginationProps,
   DataTableSearchProps,
   DataTableSelectionBarProps,
-  DataTableSortMenuProps,
-  DataTableStateRowsProps,
   DataTableViewOptionsProps,
   UseDataTableOptions,
 }

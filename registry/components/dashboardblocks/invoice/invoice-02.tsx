@@ -239,9 +239,9 @@ const Invoice2 = (props: Invoice2Props) => {
             number={number}
             status={
               <Details>
-                <InvoiceStatusLabel status='paid' />
+                <InvoiceStatusLabel variant='text' status='paid' />
                 {refunded > 0 && (
-                  <StatusLabel tone='neutral'>
+                  <StatusLabel variant='text' tone='neutral'>
                     {refunded >= amounts.total ? 'Refunded' : 'Partially refunded'}
                   </StatusLabel>
                 )}

@@ -456,7 +456,7 @@ const Billing5 = (props: Billing5Props) => {
             )}
 
             {plan?.price && lost.length > 0 && !unchanged && (
-              <div className='flex gap-3 rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 text-sm'>
+              <div className='flex gap-3 rounded-lg border border-orange-500/30 bg-orange-500/5 p-4 text-sm'>
                 <IconPlaceholder
                   lucide='TriangleAlertIcon'
                   tabler='IconAlertTriangle'
@@ -464,7 +464,7 @@ const Billing5 = (props: Billing5Props) => {
                   phosphor='WarningIcon'
                   remixicon='RiErrorWarningLine'
                   aria-hidden
-                  className='mt-0.5 size-4 shrink-0 text-amber-800 dark:text-amber-400'
+                  className='mt-0.5 size-4 shrink-0 text-orange-700 dark:text-orange-400'
                 />
                 <div className='flex flex-col gap-1'>
                   <p className='font-medium'>{plan.name} doesn’t include:</p>

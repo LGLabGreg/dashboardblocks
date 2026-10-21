@@ -131,7 +131,7 @@ const Deployments4 = (props: Deployments4Props) => {
                         {pipeline.name}
                       </span>
                       <span className='flex shrink-0 items-baseline gap-4 text-xs tabular-nums'>
-                        <StatusLabel tone={rateTone(rate)}>
+                        <StatusLabel variant='text' tone={rateTone(rate)}>
                           {formatPercent(rate, { maximumFractionDigits: 0 })} passed
                         </StatusLabel>
                         <span className='text-muted-foreground w-24 text-right'>

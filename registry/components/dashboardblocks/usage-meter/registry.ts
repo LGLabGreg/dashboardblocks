@@ -154,7 +154,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'What is left as a liquid that drains as usage grows, turning amber and then red.',
+        'What is left as a liquid that drains as usage grows, turning orange and then red.',
       size: 'compact',
       usedWith: ['usage-meter-02', 'billing-01', 'usage-meter-06'],
     },

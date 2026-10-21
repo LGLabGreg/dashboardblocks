@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: 9d2424a69e82
+// source-hash: ff08a79d1816
 
 'use client'
 
@@ -28,6 +28,8 @@ interface CommandMenuItem {
   /** Unique across every group. */
   id: string
   keywords?: string[]
+  /** Leaves the menu open when picked, for an item that changes what the menu shows. */
+  keepOpen?: boolean
   label: string
   /** Shown at the end of the row, such as an order's total. */
   meta?: string
@@ -79,6 +81,8 @@ interface CommandMenuProps {
   /** Fetch results yourself: the menu shows `groups` as they are, without filtering. */
   onQueryChange?: (query: string) => void
   open: boolean
+  /** Shown between the search field and the results, such as an answer to what was typed. The empty message is left out while it's there. */
+  panel?: ReactNode
   /** @default 'Search…' */
   placeholder?: string
   /** The search text, when you pass `onQueryChange`. */
@@ -94,6 +98,7 @@ function CommandMenu({
   onOpenChange,
   onQueryChange,
   open,
+  panel,
   placeholder = 'Search…',
   query: controlledQuery,
   title = 'Search',
@@ -112,7 +117,7 @@ function CommandMenu({
   }
 
   function select(item: CommandMenuItem) {
-    changeOpen(false)
+    if (!item.keepOpen) changeOpen(false)
     if (item.onSelect) item.onSelect()
     else if (item.href) onNavigate(item.href)
   }
@@ -128,8 +133,18 @@ function CommandMenu({
       title={title}
       description={placeholder}
     >
-      <Command inputValue={query} onInputChange={setQuery} filter={() => true}>
+      <Command
+        className='max-h-[calc(66dvh-1rem)]'
+        inputValue={query}
+        onInputChange={setQuery}
+        filter={() => true}
+      >
         <CommandInput placeholder={placeholder} />
+        {panel !== undefined && (
+          <div data-slot='command-menu-panel' className='overflow-y-auto'>
+            {panel}
+          </div>
+        )}
         {loading && (
           <p role='status' className='text-muted-foreground py-6 text-center text-sm'>
             Searching…
@@ -141,7 +156,9 @@ function CommandMenu({
             const item = items.get(String(key))
             if (item) select(item)
           }}
-          renderEmptyState={() => (loading ? null : <CommandEmpty>{empty}</CommandEmpty>)}
+          renderEmptyState={() =>
+            loading || panel !== undefined ? null : <CommandEmpty>{empty}</CommandEmpty>
+          }
         >
           {results.map((group) => (
             <CommandGroup key={group.heading} heading={group.heading}>

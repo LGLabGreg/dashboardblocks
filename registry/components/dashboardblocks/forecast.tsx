@@ -5,10 +5,12 @@ import {
   ChartTooltipFrame,
   ChartTooltipItem,
   type ChartValueFormatter,
+  chartReferenceColor,
   chartReferenceProps,
 } from '@/registry/components/dashboardblocks/chart'
 import {
   StatusLabel,
+  type StatusLabelProps,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { useReveal } from '@/registry/hooks/use-reveal'
@@ -224,16 +226,18 @@ function ForecastStatusLabel({
   className,
   label,
   status,
+  variant,
 }: {
   className?: string
   label?: string
   status: ForecastStatus
+  variant?: StatusLabelProps['variant']
 }) {
   const state = useBlockState()
   if (state) return null
   const config = forecastStatusConfig[status]
   return (
-    <StatusLabel className={className} tone={config.tone}>
+    <StatusLabel className={className} tone={config.tone} variant={variant}>
       {label ?? config.label}
     </StatusLabel>
   )
@@ -244,7 +248,7 @@ const forecastColors = {
   band: 'color-mix(in oklab, var(--color-chart-2) 20%, transparent)',
   forecast: 'var(--color-chart-2)',
   marker: 'var(--color-foreground)',
-  target: 'color-mix(in oklab, var(--color-foreground) 40%, transparent)',
+  target: chartReferenceColor,
 } as const
 
 const forecastDash = {

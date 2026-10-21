@@ -5,8 +5,17 @@ import {
   ChartPanelKey,
   ChartPanelLegend,
 } from '@/registry/components/dashboardblocks/chart-panel'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import { useReveal } from '@/registry/hooks/use-reveal'
-import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -89,13 +98,62 @@ function BreakdownLegend({ className, items }: BreakdownLegendProps) {
   return <ChartPanelLegend className={className} items={items} />
 }
 
+interface BreakdownTableProps {
+  caption: string
+  /** @default formatNumber */
+  format?: (value: number) => string
+  highlightIndex?: number | null
+  /** Names the columns for screen readers. @default ['Category', 'Value', 'Share'] */
+  labels?: [string, string, string]
+  segments: BreakdownSegment[]
+}
+
+function BreakdownTable({
+  caption,
+  format = (value) => formatNumber(value),
+  highlightIndex = null,
+  labels = ['Category', 'Value', 'Share'],
+  segments,
+}: BreakdownTableProps) {
+  const total = getTotal(segments)
+
+  return (
+    <DataTable density='compact' caption={caption}>
+      <DataTableHeader className='sr-only'>
+        <DataTableRow>
+          <DataTableHead>{labels[0]}</DataTableHead>
+          <DataTableHead align='end'>{labels[1]}</DataTableHead>
+          <DataTableHead align='end'>{labels[2]}</DataTableHead>
+        </DataTableRow>
+      </DataTableHeader>
+      <DataTableBody>
+        {segments.map((segment, index) => (
+          <DataTableRow key={segment.label} highlighted={highlightIndex === index}>
+            <DataTableRowHead>
+              <span className='flex items-center gap-2'>
+                <BreakdownKey color={segment.color} />
+                {segment.label}
+              </span>
+            </DataTableRowHead>
+            <DataTableCell align='end'>{format(segment.value)}</DataTableCell>
+            <DataTableCell align='end' className='text-muted-foreground w-16'>
+              {formatShare(segment.value, total)}
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </DataTableBody>
+    </DataTable>
+  )
+}
+
 export {
   BREAKDOWN_OTHER_COLOR,
   BreakdownBar,
   BreakdownKey,
   BreakdownLegend,
+  BreakdownTable,
   formatShare,
   getTotal,
 }
 
-export type { BreakdownBarProps, BreakdownSegment }
+export type { BreakdownBarProps, BreakdownSegment, BreakdownTableProps }

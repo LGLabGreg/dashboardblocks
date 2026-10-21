@@ -188,7 +188,11 @@ const Pipeline4 = (props: Pipeline4Props) => {
                         `${compact(row.weighted)} weighted open`,
                       )}
                     </span>
-                    <StatusLabel className='text-xs' tone={gap <= 0 ? 'good' : 'warning'}>
+                    <StatusLabel
+                      variant='text'
+                      className='text-xs'
+                      tone={gap <= 0 ? 'good' : 'warning'}
+                    >
                       {gap <= 0
                         ? `Covers quota by ${compact(-gap)}`
                         : `Short ${compact(gap)}`}

@@ -89,7 +89,12 @@ export const examples: Registry['items'] = [
   {
     name: 'team-05',
     type: 'registry:component',
-    registryDependencies: ['checkbox', registryUrl('block-state'), registryUrl('forms')],
+    registryDependencies: [
+      'checkbox',
+      registryUrl('block-state'),
+      registryUrl('forms'),
+      registryUrl('table'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/team/team-05.tsx',
@@ -109,7 +114,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'input',
-      'native-select',
+      registryUrl('option-select'),
       registryUrl('block-state'),
       registryUrl('settings'),
       registryUrl('team'),

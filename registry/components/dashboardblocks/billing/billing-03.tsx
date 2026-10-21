@@ -11,6 +11,7 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   DataTable,
   DataTableBody,
@@ -19,8 +20,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import { Details } from '@/registry/components/dashboardblocks/details'
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
@@ -42,6 +42,7 @@ interface Billing3Props {
   currency?: string
   /** Leave out, or pass none, to show the empty state. */
   invoices?: Invoice[]
+  /** Leave out to hide Download. */
   onDownload?: (id: string) => void
   onViewAll?: () => void
   status?: BlockStatus
@@ -98,6 +99,7 @@ const exampleProps: Billing3Props = {
       status: 'paid',
     },
   ],
+  onDownload: () => {},
   title: 'Invoices',
 }
 
@@ -123,7 +125,7 @@ const Billing3 = (props: Billing3Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>
@@ -137,69 +139,62 @@ const Billing3 = (props: Billing3Props) => {
             </Button>
           )}
         </header>
-        <DataTable>
-          <caption className='sr-only'>
-            {state ? title : `${title}: ${description}`}
-          </caption>
+        <DataTable caption={state ? title : `${title}: ${description}`}>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Invoice</DataTableHead>
               <DataTableHead>Date</DataTableHead>
               <DataTableHead align='end'>Amount</DataTableHead>
               <DataTableHead>Status</DataTableHead>
-              <DataTableHead align='end'>
-                <span className='sr-only'>Download</span>
-              </DataTableHead>
+              {onDownload && (
+                <DataTableHead align='end'>
+                  <span className='sr-only'>Download</span>
+                </DataTableHead>
+              )}
             </DataTableRow>
           </DataTableHeader>
           <DataTableBody>
-            <DataTableStateRows colSpan={5} />
+            <DataTableStateRows colSpan={onDownload ? 5 : 4} />
             {!state &&
               invoices.map((invoice) => (
                 <DataTableRow key={invoice.id}>
                   <DataTableCell primary truncate>
                     <span className='block truncate'>{invoice.description}</span>
                     <Details className='text-muted-foreground block truncate text-xs font-normal tabular-nums'>
-                      {invoice.detail}
                       {invoice.number}
+                      {invoice.detail}
                     </Details>
                   </DataTableCell>
-                  <DataTableCell
-                    label='Date'
-                    className='text-muted-foreground whitespace-nowrap'
-                  >
+                  <DataTableCell className='text-muted-foreground whitespace-nowrap'>
                     <time dateTime={invoice.date.toISOString()}>
                       {formatBillingDate(invoice.date)}
                     </time>
                   </DataTableCell>
-                  <DataTableCell align='end' label='Amount'>
-                    {money(invoice.amount)}
-                  </DataTableCell>
-                  <DataTableCell label='Status'>
+                  <DataTableCell align='end'>{money(invoice.amount)}</DataTableCell>
+                  <DataTableCell>
                     <InvoiceStatusLabel status={invoice.status} />
                   </DataTableCell>
-                  <DataTableCell
-                    align='end'
-                    className='@max-2xl/data-table:items-end @max-2xl/data-table:justify-end'
-                  >
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() => onDownload?.(invoice.id)}
-                    >
-                      <IconPlaceholder
-                        lucide='DownloadIcon'
-                        tabler='IconDownload'
-                        hugeicons='Download01Icon'
-                        phosphor='DownloadIcon'
-                        remixicon='RiDownloadLine'
-                        aria-hidden
-                      />
-                      <span className='sr-only'>Download </span>
-                      PDF
-                      <span className='sr-only'> for {invoice.number}</span>
-                    </Button>
-                  </DataTableCell>
+                  {onDownload && (
+                    <DataTableCell align='end'>
+                      <Button
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => onDownload(invoice.id)}
+                      >
+                        <IconPlaceholder
+                          lucide='DownloadIcon'
+                          tabler='IconDownload'
+                          hugeicons='Download01Icon'
+                          phosphor='DownloadIcon'
+                          remixicon='RiDownloadLine'
+                          aria-hidden
+                        />
+                        <span className='sr-only'>Download </span>
+                        PDF
+                        <span className='sr-only'> for {invoice.number}</span>
+                      </Button>
+                    </DataTableCell>
+                  )}
                 </DataTableRow>
               ))}
           </DataTableBody>

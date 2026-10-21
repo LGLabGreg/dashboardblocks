@@ -221,8 +221,8 @@ const Onboarding1 = (props: Onboarding1Props) => {
     if (step === STEPS.length - 1) {
       event.preventDefault()
       await finish(invites)
-    } else if (await form.submit(event)) {
-      startTransition(() => setStep(step + 1))
+    } else {
+      await form.submit(event, { onSaved: () => setStep(step + 1) })
     }
   }
 

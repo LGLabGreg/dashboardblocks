@@ -121,10 +121,19 @@
       ]
     },
     {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.",
+      "registryDependencies": [
+        "@dashboardblocks/table"
+      ]
+    },
+    {
       "name": "data-table",
       "type": "registry:component",
       "title": "Data Table",
-      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars and a stacked layout for narrow cards.",
+      "description": "Dashboard tables on TanStack Table: sorting, search, facet filters, pagination, row selection and column visibility, with inline bars, scrolling sideways when wider than its card.",
       "registryDependencies": [
         "@dashboardblocks/data-table"
       ]
@@ -358,7 +367,7 @@
       "name": "page-header",
       "type": "registry:component",
       "title": "Page Header",
-      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs and a more-actions menu.",
+      "description": "Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs that put what doesn’t fit under More, and a more-actions menu.",
       "registryDependencies": [
         "@dashboardblocks/page-header"
       ]
@@ -460,6 +469,15 @@
       "description": "Primitives for spend and budgets: pace against an even spend of the budget with a projected total and a status, runway at the current net burn, a budget bar with overspend and a striped projection, the status as a coloured word, and legend keys.",
       "registryDependencies": [
         "@dashboardblocks/spend"
+      ]
+    },
+    {
+      "name": "option-select",
+      "type": "registry:component",
+      "title": "Option Select",
+      "description": "A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
+      "registryDependencies": [
+        "@dashboardblocks/option-select"
       ]
     },
     {
@@ -784,7 +802,7 @@
     {
       "name": "usage-meter-07",
       "type": "registry:component",
-      "description": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+      "description": "What is left as a liquid that drains as usage grows, turning orange and then red.",
       "registryDependencies": [
         "@dashboardblocks/usage-meter-07"
       ]
@@ -1064,7 +1082,7 @@
     {
       "name": "data-table-01",
       "type": "registry:component",
-      "description": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+      "description": "A table of rows with sortable column headers.",
       "registryDependencies": [
         "@dashboardblocks/data-table-01"
       ]

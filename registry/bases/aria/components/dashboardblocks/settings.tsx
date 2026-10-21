@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/settings.tsx for React Aria
-// source-hash: 93a1e8c58ba3
+// source-hash: 03b4871577e1
 
 'use client'
 
@@ -8,7 +8,7 @@ import {
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -130,7 +130,13 @@ function SettingsRow({ children, className, description, id, label }: SettingsRo
   )
 }
 
-type ConnectionStatus = 'connected' | 'error' | 'paused' | 'disconnected'
+type ConnectionStatus =
+  | 'connected'
+  | 'disconnected'
+  | 'error'
+  | 'importing'
+  | 'paused'
+  | 'revoked'
 
 const connectionStatusConfig: Record<
   ConnectionStatus,
@@ -178,6 +184,21 @@ const connectionStatusConfig: Record<
     ),
     label: 'Needs attention',
   },
+  importing: {
+    tone: 'info',
+    icon: (
+      <IconPlaceholder
+        lucide='Loader2Icon'
+        tabler='IconLoader'
+        hugeicons='Loading03Icon'
+        phosphor='SpinnerIcon'
+        remixicon='RiLoaderLine'
+        aria-hidden
+        className='animate-spin motion-reduce:animate-none'
+      />
+    ),
+    label: 'Importing',
+  },
   paused: {
     tone: 'warning',
     icon: (
@@ -192,6 +213,20 @@ const connectionStatusConfig: Record<
     ),
     label: 'Paused',
   },
+  revoked: {
+    tone: 'bad',
+    icon: (
+      <IconPlaceholder
+        lucide='UnlinkIcon'
+        tabler='IconUnlink'
+        hugeicons='Unlink01Icon'
+        phosphor='LinkBreakIcon'
+        remixicon='RiLinkUnlink'
+        aria-hidden
+      />
+    ),
+    label: 'Access removed',
+  },
 }
 
 function ConnectionStatusLabel({
@@ -205,16 +240,52 @@ function ConnectionStatusLabel({
 }) {
   const config = connectionStatusConfig[status]
   return (
-    <StatusLabel
-      tone={config.tone}
-      className={cn(
-        'inline-flex items-center gap-1.5 text-xs [&_svg]:size-3.5',
-        className,
-      )}
-    >
-      {config.icon}
+    <StatusLabel tone={config.tone} className={className} indicator={config.icon}>
       {label ?? config.label}
     </StatusLabel>
+  )
+}
+
+interface ConnectionRowProps extends Omit<ComponentProps<'div'>, 'title'> {
+  /** Buttons for what can be done now: Connect, Reconnect, Disconnect. */
+  actions?: ReactNode
+  /** What it does, or what's wrong, in a sentence. */
+  description?: ReactNode
+  /** Drawn in a square at the start of the row. */
+  logo?: ReactNode
+  name: string
+  status: ConnectionStatus
+}
+
+function ConnectionRow({
+  actions,
+  children,
+  className,
+  description,
+  logo,
+  name,
+  status,
+  ...props
+}: ConnectionRowProps) {
+  return (
+    <div
+      data-slot='connection-row'
+      className={cn('flex flex-wrap items-start gap-x-3 gap-y-2 py-3', className)}
+      {...props}
+    >
+      {logo}
+      <div className='flex min-w-0 flex-1 basis-48 flex-col gap-0.5'>
+        <span className='flex flex-wrap items-baseline gap-x-2'>
+          <span className='text-sm font-medium'>{name}</span>
+          <ConnectionStatusLabel status={status} />
+        </span>
+        {description && (
+          <div className='text-muted-foreground text-sm text-pretty'>{description}</div>
+        )}
+        {children}
+      </div>
+      {actions && <div className='flex shrink-0 flex-wrap gap-2'>{actions}</div>}
+    </div>
   )
 }
 
@@ -321,6 +392,7 @@ function daysBetween(from: Date, to: Date) {
 }
 
 export {
+  ConnectionRow,
   ConnectionStatusLabel,
   CopyButton,
   RoleMenu,
@@ -335,4 +407,10 @@ export {
   useCopyToClipboard,
 }
 
-export type { ConnectionStatus, Role, RoleMenuProps, SettingsRowProps }
+export type {
+  ConnectionRowProps,
+  ConnectionStatus,
+  Role,
+  RoleMenuProps,
+  SettingsRowProps,
+}

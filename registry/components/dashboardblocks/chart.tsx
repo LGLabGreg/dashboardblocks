@@ -63,10 +63,12 @@ const chartActiveDot = {
   strokeWidth: 2,
 } as const
 
+const chartReferenceColor =
+  'color-mix(in oklab, var(--color-foreground) 40%, transparent)'
+
 const chartReferenceProps = {
-  stroke: 'var(--color-foreground)',
+  stroke: chartReferenceColor,
   strokeDasharray: '3 3',
-  strokeOpacity: 0.4,
 } as const
 
 const chartReferenceLabel = {
@@ -118,6 +120,21 @@ interface ChartBarLabelProps {
 }
 
 /** A `LabelList` `content` that writes the value above the bar at `highlightIndex`. */
+const NICE_STEPS = [1, 2, 2.5, 5]
+
+/** Round ticks from 0 that leave a little room above `max`, at most `intervals` steps. */
+function chartNiceTicks(max: number, intervals = 5) {
+  const target = Math.max(max, 0) * 1.05 || 1
+  const scale = 10 ** Math.floor(Math.log10(target / intervals))
+  const step =
+    [...NICE_STEPS, 10]
+      .map((nice) => nice * scale)
+      .find((candidate) => target / candidate <= intervals) ?? 10 * scale
+  return Array.from({ length: Math.ceil(target / step) + 1 }, (_, index) =>
+    Number((index * step).toPrecision(12)),
+  )
+}
+
 function chartBarValueLabel(
   highlightIndex: number | undefined,
   formatter: ChartValueFormatter = formatNumber,
@@ -607,6 +624,8 @@ export {
   chartGridProps,
   chartLastDot,
   chartLineCursor,
+  chartNiceTicks,
+  chartReferenceColor,
   chartReferenceLabel,
   chartReferenceProps,
   chartTimeGridProps,

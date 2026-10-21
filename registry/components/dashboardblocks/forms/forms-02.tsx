@@ -13,13 +13,13 @@ import {
   isEmail,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Textarea } from '@/components/ui/textarea'
 
 type NewCustomer = {
@@ -193,13 +193,11 @@ const Forms2 = (props: Forms2Props) => {
             </Field>
             <Field>
               <FieldLabel htmlFor={form.getId('plan')}>Plan</FieldLabel>
-              <NativeSelect className='w-full' {...form.field('plan')}>
-                {plans.map((plan) => (
-                  <NativeSelectOption key={plan} value={plan}>
-                    {plan}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              <OptionSelect
+                className='w-full'
+                options={plans.map((plan) => ({ label: plan, value: plan }))}
+                {...form.select('plan')}
+              />
             </Field>
             <Field>
               <FieldLabel htmlFor={form.getId('notes')}>Notes</FieldLabel>

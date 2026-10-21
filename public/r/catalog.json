@@ -241,7 +241,7 @@
       "component": "AppShell1",
       "shows": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications.",
       "size": "page",
-      "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }",
+      "props": "{ banner?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; onWorkspaceChange?: (id: string) => void; pathname: string; searchPlaceholder?: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaceId?: string; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }",
       "usedWith": [
         "app-shell-02"
       ]
@@ -421,7 +421,7 @@
       "component": "Billing3",
       "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
       "size": "half",
-      "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"due\" | \"overdue\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "billing-02",
         "billing-05"
@@ -715,7 +715,7 @@
       "component": "CommandMenu2",
       "shows": "A command palette that shows recent records, then searches customers and orders as you type.",
       "size": "half",
-      "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }",
+      "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }",
       "usedWith": [
         "command-menu-01",
         "data-table-02"
@@ -936,7 +936,7 @@
       "install": "@dashboardblocks/data-table-01",
       "import": "@/components/dashboardblocks/data-table/data-table-01",
       "component": "DataTable1",
-      "shows": "A table of rows with sortable column headers, and a sort menu in place of the headers on narrow screens.",
+      "shows": "A table of rows with sortable column headers.",
       "size": "full",
       "props": "{ description?: string; period?: string; rows?: { bounceRate: number; duration: number; path: string; views: number; visitors: number }[]; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
@@ -1174,7 +1174,7 @@
       "component": "ErrorPages5",
       "shows": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
       "size": "page",
-      "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"inactive\" | \"signed-out-elsewhere\" | \"password-changed\" | \"revoked\"; returnTo?: string; savedDraft?: boolean; signInHref: string }",
+      "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\"; returnTo?: string; savedDraft?: boolean; signInHref: string }",
       "usedWith": [
         "auth-03"
       ]
@@ -1399,7 +1399,7 @@
       "component": "Forms1",
       "shows": "A form with fields grouped into titled sections and a save bar that appears while there are unsaved changes.",
       "size": "half",
-      "props": "{ defaultValues?: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; description: string; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; bio?: string; email?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; status?: \"loading\" | \"error\"; timezones: { label: string; value: string }[]; title: string }",
+      "props": "{ defaultValues?: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }; description: string; domain: string; onSubmit?: (values: { bio: string; email: string; name: string; slug: string; timezone: string; weeklyDigest: boolean; workspaceName: string }) => Promise<void | { name?: string; email?: string; bio?: string; slug?: string; timezone?: string; weeklyDigest?: string; workspaceName?: string }>; status?: \"loading\" | \"error\"; timezones: { label: string; value: string }[]; title: string }",
       "usedWith": [
         "page-header-01",
         "forms-04"
@@ -2207,7 +2207,7 @@
       "component": "PageHeader1",
       "shows": "A page title and description with a secondary action and a main action.",
       "size": "full",
-      "props": "{ description?: string; onCreate?: () => void; onExport?: () => void; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ createLabel?: null | string; description?: string; exportLabel?: null | string; onCreate?: () => void; onExport?: () => void; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "data-table-02",
         "forms-01"
@@ -2220,7 +2220,7 @@
       "component": "PageHeader2",
       "shows": "A page title with its status as a coloured word and links to the page's sections, each with a count.",
       "size": "full",
-      "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"paused\" | \"draft\" | \"live\"; status?: \"loading\" | \"error\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }",
+      "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; status?: \"loading\" | \"error\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string }",
       "usedWith": [
         "data-table-02",
         "record-detail-01"
@@ -2679,7 +2679,7 @@
       "component": "Security6",
       "shows": "A single sign-on connection with details to copy into your identity provider, verified domains, and a switch to require it.",
       "size": "half",
-      "props": "{ acsUrl: string; connection?: { certificate: string; issuer: string; provider: string; signInUrl: string }; connectionStatus?: \"error\" | \"connected\" | \"paused\" | \"disconnected\"; description: string; domains?: { domain: string; id: string; txtRecord: string; verified: boolean }[]; enforced?: boolean; entityId: string; onEnforcedChange?: (enforced: boolean) => void; onSave?: (connection: { certificate: string; issuer: string; provider: string; signInUrl: string }) => void; onVerifyDomain?: (id: string) => boolean | Promise<boolean>; providers: string[]; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ acsUrl: string; connection?: { certificate: string; issuer: string; provider: string; signInUrl: string }; connectionStatus?: \"error\" | \"connected\" | \"disconnected\" | \"importing\" | \"paused\" | \"revoked\"; description: string; domains?: { domain: string; id: string; txtRecord: string; verified: boolean }[]; enforced?: boolean; entityId: string; onEnforcedChange?: (enforced: boolean) => void; onSave?: (connection: { certificate: string; issuer: string; provider: string; signInUrl: string }) => void; onVerifyDomain?: (id: string) => boolean | Promise<boolean>; providers: string[]; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "security-04",
         "team-05",
@@ -2720,7 +2720,7 @@
       "component": "Settings3",
       "shows": "Each notification against each channel, grouped by topic, with a switch for each one and a switch for the whole channel.",
       "size": "full",
-      "props": "{ channels: { id: string; label: string }[]; description: string; groups?: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void; preferences?: {  }; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ channels: { id: string; label: string; unavailable?: ReactNode }[]; description: string; groups?: { events: { description?: string; id: string; label: string }[]; id: string; label: string }[]; onChange?: (preferences: {  }) => void | { status: \"error\"; message: string } | Promise<void | { status: \"error\"; message: string }>; preferences?: {  }; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "notifications-01",
         "settings-07"
@@ -2733,7 +2733,7 @@
       "component": "Settings4",
       "shows": "Connected and available integrations in tabs, one row each with what it does, its status and a prompt for ones that need reconnecting.",
       "size": "half",
-      "props": "{ description: string; integrations?: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"error\" | \"connected\" | \"paused\" | \"disconnected\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ description: string; integrations?: { category: string; description: string; detail?: string; id: string; logo?: ReactNode; name: string; status: \"error\" | \"connected\" | \"disconnected\" | \"importing\" | \"paused\" | \"revoked\" }[]; onConfigure?: (id: string) => void; onConnect?: (id: string) => void; onDisconnect?: (id: string) => void; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "settings-05",
         "settings-02"
@@ -2773,7 +2773,7 @@
       "component": "Settings7",
       "shows": "A profile form with your photo, name, email, time zone and theme, a save bar that shows once something changes, and a new email confirmed before it takes effect.",
       "size": "half",
-      "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void | Promise<void>; profile?: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; status?: \"loading\" | \"error\"; timeZones: { label: string; value: string }[]; title: string }",
+      "props": "{ description: string; onAvatarChange?: (file: null | File) => void; onSave?: (profile: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }) => void | { name?: string; email?: string } | Promise<void | { name?: string; email?: string }>; profile?: { avatar?: string; email: string; name: string; theme: \"light\" | \"dark\" | \"system\"; timeZone: string }; status?: \"loading\" | \"error\"; timeZones: { label: string; value: string }[]; title: string }",
       "usedWith": [
         "security-05",
         "settings-03"
@@ -3247,7 +3247,7 @@
       "install": "@dashboardblocks/usage-meter-07",
       "import": "@/components/dashboardblocks/usage-meter/usage-meter-07",
       "component": "UsageMeter7",
-      "shows": "What is left as a liquid that drains as usage grows, turning amber and then red.",
+      "shows": "What is left as a liquid that drains as usage grows, turning orange and then red.",
       "size": "compact",
       "props": "{ icon: ReactNode; limit: number; onUpgrade?: () => void; status?: \"loading\" | \"error\"; title: string; unit: string; used?: number }",
       "usedWith": [

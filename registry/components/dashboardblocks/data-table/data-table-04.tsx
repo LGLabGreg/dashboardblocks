@@ -9,7 +9,6 @@ import {
 import {
   createDataTableColumnHelper,
   DataTableContent,
-  DataTableSortMenu,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 import type { StatusLevel } from '@/registry/components/dashboardblocks/status'
@@ -148,7 +147,6 @@ const getColumns = (latencyLimit: number, errorRateLimit: number) =>
       },
       header: 'Status',
       id: 'status',
-      meta: { cellClassName: '@max-2xl/data-table:col-span-2' },
     }),
     columnHelper.accessor('latency', {
       cell: ({ getValue, row }) =>
@@ -191,7 +189,7 @@ const DataTable4 = (props: DataTable4Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>
@@ -199,7 +197,6 @@ const DataTable4 = (props: DataTable4Props) => {
               <p className='text-muted-foreground text-sm'>{description}</p>
             </BlockReady>
           </div>
-          <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
         </header>
         <DataTableContent
           caption={`${title}: ${description}`}

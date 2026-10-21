@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 94a9b9d7834e
+// source-hash: 5aa4b00bc233
 
 'use client'
 
@@ -119,9 +119,7 @@ function useSimpleForm<T extends FormValues>({
       'aria-invalid': errors[name] ? true : undefined,
       id,
       name,
-      onBlur: (
-        event: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-      ) => {
+      onBlur: (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const next = event.relatedTarget
         if (
           !event.currentTarget.value.trim() ||
@@ -132,9 +130,20 @@ function useSimpleForm<T extends FormValues>({
           return
         setTouched((current) => ({ ...current, [name]: true }))
       },
-      onChange: (
-        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-      ) => setValue(name, event.target.value as T[typeof name]),
+      onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+        setValue(name, event.target.value as T[typeof name]),
+      value: String(values[name]),
+    }
+  }
+
+  function select(name: keyof T & string) {
+    const id = getId(name)
+    return {
+      'aria-describedby': errors[name] ? `${id}-error` : undefined,
+      'aria-invalid': errors[name] ? true : undefined,
+      id,
+      name,
+      onValueChange: (value: string) => setValue(name, value as T[typeof name]),
       value: String(values[name]),
     }
   }
@@ -143,7 +152,15 @@ function useSimpleForm<T extends FormValues>({
     return { children: errors[name], id: `${getId(name)}-error` }
   }
 
-  async function submit(event?: FormEvent<HTMLFormElement>) {
+  /**
+   * Validates, then saves in one transition, so a page the save refreshes and
+   * `onSaved`'s own updates show together. Resolves to `true` once saved;
+   * rejects when `onSubmit` throws.
+   */
+  async function submit(
+    event?: FormEvent<HTMLFormElement>,
+    { onSaved }: { onSaved?: () => void } = {},
+  ) {
     event?.preventDefault()
     flushSync(() => setSubmitted(true))
     const invalid = names.filter((name) => clientErrors[name])
@@ -152,24 +169,32 @@ function useSimpleForm<T extends FormValues>({
       return false
     }
     setIsSubmitting(true)
-    try {
-      const result = await onSubmit(values)
-      if (result && hasErrors(result)) {
-        startTransition(() => {
-          setServerErrors(result)
-          setRefusedIds(names.filter((name) => result[name]).map(getId))
-        })
-        return false
-      }
-      startTransition(() => {
-        setSavedValues(values)
-        setSubmitted(false)
-        setTouched({})
+    return new Promise<boolean>((resolve, reject) => {
+      startTransition(async () => {
+        try {
+          const result = await onSubmit(values)
+          if (result && hasErrors(result)) {
+            startTransition(() => {
+              setServerErrors(result)
+              setRefusedIds(names.filter((name) => result[name]).map(getId))
+            })
+            resolve(false)
+            return
+          }
+          startTransition(() => {
+            setSavedValues(values)
+            setSubmitted(false)
+            setTouched({})
+            onSaved?.()
+          })
+          resolve(true)
+        } catch (error) {
+          reject(error)
+        } finally {
+          startTransition(() => setIsSubmitting(false))
+        }
       })
-      return true
-    } finally {
-      startTransition(() => setIsSubmitting(false))
-    }
+    })
   }
 
   function reset(next: T = savedValues) {
@@ -189,6 +214,7 @@ function useSimpleForm<T extends FormValues>({
     isDirty,
     isSubmitting,
     reset,
+    select,
     setValue,
     submit,
     validateFields,

@@ -2,17 +2,29 @@
 
 import {
   BlockStateProvider,
-  BlockStateRows,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { Fragment, useState } from 'react'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableGroupHead,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
+import { type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Switch } from '@/components/ui/switch'
 
 interface NotificationChannel {
   id: string
   label: string
+  /** Why the channel can't send right now, such as "Slack isn't connected. Ask an admin to connect it." Shown above the table; the channel's switches turn off until it can, and the saved choices come back then. */
+  unavailable?: ReactNode
 }
 
 interface NotificationEvent {
@@ -30,12 +42,17 @@ interface NotificationGroup {
 /** `preferences[eventId]` lists the channel ids that event is sent to. */
 type NotificationPreferences = Record<string, string[]>
 
+type NotificationChangeResult = void | { status: 'error'; message: string }
+
 interface Settings3Props {
   channels: NotificationChannel[]
   description: string
   /** Leave out, or pass none, to show the empty state. */
   groups?: NotificationGroup[]
-  onChange?: (preferences: NotificationPreferences) => void
+  /** Saves the new preferences; resolve to an error, or throw, to put the switches it changed back and say why. */
+  onChange?: (
+    preferences: NotificationPreferences,
+  ) => NotificationChangeResult | Promise<NotificationChangeResult>
   preferences?: NotificationPreferences
   status?: BlockStatus
   title: string
@@ -107,22 +124,67 @@ const exampleProps: Settings3Props = {
   title: 'Notifications',
 }
 
+function revert(
+  current: NotificationPreferences,
+  previous: NotificationPreferences,
+  next: NotificationPreferences,
+) {
+  const reverted = { ...current }
+  for (const eventId of new Set([...Object.keys(previous), ...Object.keys(next)])) {
+    const was = previous[eventId] ?? []
+    const sent = next[eventId] ?? []
+    for (const channelId of new Set([...was, ...sent])) {
+      if (was.includes(channelId) === sent.includes(channelId)) continue
+      const without = (reverted[eventId] ?? []).filter((channel) => channel !== channelId)
+      reverted[eventId] = was.includes(channelId) ? [...without, channelId] : without
+    }
+  }
+  return reverted
+}
+
 const Settings3 = (props: Settings3Props) => {
   const { channels, description, groups = [], onChange, status, title } = props
   const [preferences, setPreferences] = useState(props.preferences ?? {})
+  const [error, setError] = useState<string | null>(null)
+  const [said, setSaid] = useState<{ id: number; text: string }[]>([])
+  const noteId = useId()
   const ready = !status && groups.length > 0
+  const unavailable = channels.filter((channel) => channel.unavailable)
 
-  const update = (next: NotificationPreferences) => {
+  const update = async (next: NotificationPreferences) => {
+    const previous = preferences
     setPreferences(next)
-    onChange?.(next)
+    setError(null)
+    let result: NotificationChangeResult
+    try {
+      result = await onChange?.(next)
+    } catch {
+      result = {
+        message: 'Couldn’t save your notifications. Try again.',
+        status: 'error',
+      }
+    }
+    if (!result) return
+    const { message } = result
+    startTransition(() => {
+      setPreferences((current) => revert(current, previous, next))
+      setError(message)
+      setSaid((current) => [
+        ...current.slice(-2),
+        { id: (current.at(-1)?.id ?? 0) + 1, text: message },
+      ])
+    })
   }
 
-  const isOn = (eventId: string, channelId: string) =>
-    preferences[eventId]?.includes(channelId) ?? false
+  const isOn = (eventId: string, channel: NotificationChannel) =>
+    !channel.unavailable && (preferences[eventId]?.includes(channel.id) ?? false)
+
+  const noteFor = (channel: NotificationChannel) =>
+    channel.unavailable ? `${noteId}-${channel.id}` : undefined
 
   const toggle = (eventId: string, channelId: string, on: boolean) => {
     const current = preferences[eventId] ?? []
-    update({
+    return update({
       ...preferences,
       [eventId]: on
         ? [...current, channelId]
@@ -150,84 +212,86 @@ const Settings3 = (props: Settings3Props) => {
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <p className='text-muted-foreground text-sm'>{description}</p>
         </header>
-        <div className='overflow-x-auto border-t'>
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{title}</caption>
-            <thead>
-              <tr className='border-b'>
-                <th scope='col' className='min-w-40 py-2.5 pr-4 text-left font-medium'>
-                  <span className='sr-only'>Notification</span>
-                </th>
-                {channels.map((channel) => {
-                  const count = allEvents.filter((event) =>
-                    isOn(event.id, channel.id),
-                  ).length
-                  return (
-                    <th
-                      key={channel.id}
-                      scope='col'
-                      className='w-20 px-2 py-2.5 text-center font-medium'
-                    >
-                      <div className='flex flex-col items-center gap-2'>
-                        {channel.label}
+        {ready &&
+          unavailable.map((channel) => (
+            <p
+              key={channel.id}
+              id={noteFor(channel)}
+              className='text-muted-foreground text-sm text-pretty'
+            >
+              {channel.unavailable}
+            </p>
+          ))}
+        <DataTable className='border-t' caption={title}>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead className='min-w-40'>
+                <span className='sr-only'>Notification</span>
+              </DataTableHead>
+              {channels.map((channel) => {
+                const count = allEvents.filter((event) => isOn(event.id, channel)).length
+                return (
+                  <DataTableHead key={channel.id} align='center' className='w-20 py-2.5'>
+                    <div className='flex flex-col items-center gap-2'>
+                      <span className='text-foreground text-sm'>{channel.label}</span>
+                      <Switch
+                        size='sm'
+                        aria-label={`All ${channel.label} notifications`}
+                        aria-describedby={noteFor(channel)}
+                        checked={ready && count === allEvents.length}
+                        disabled={!ready || Boolean(channel.unavailable)}
+                        onCheckedChange={(on) => void setChannel(channel.id, on)}
+                      />
+                    </div>
+                  </DataTableHead>
+                )
+              })}
+            </DataTableRow>
+          </DataTableHeader>
+          {!ready && (
+            <DataTableBody>
+              <DataTableStateRows colSpan={channels.length + 1} rows={4} />
+            </DataTableBody>
+          )}
+          {ready &&
+            groups.map((group) => (
+              <DataTableBody key={group.id}>
+                <DataTableRow>
+                  <DataTableGroupHead colSpan={channels.length + 1}>
+                    {group.label}
+                  </DataTableGroupHead>
+                </DataTableRow>
+                {group.events.map((event) => (
+                  <DataTableRow key={event.id}>
+                    <DataTableRowHead>
+                      <span className='block'>{event.label}</span>
+                      {event.description && (
+                        <span className='text-muted-foreground block text-xs'>
+                          {event.description}
+                        </span>
+                      )}
+                    </DataTableRowHead>
+                    {channels.map((channel) => (
+                      <DataTableCell key={channel.id} align='center'>
                         <Switch
-                          size='sm'
-                          aria-label={`All ${channel.label} notifications`}
-                          checked={ready && count === allEvents.length}
-                          disabled={!ready}
-                          onCheckedChange={(on) => setChannel(channel.id, on)}
+                          aria-label={`${event.label} by ${channel.label}`}
+                          aria-describedby={noteFor(channel)}
+                          checked={isOn(event.id, channel)}
+                          disabled={Boolean(channel.unavailable)}
+                          onCheckedChange={(on) => void toggle(event.id, channel.id, on)}
                         />
-                      </div>
-                    </th>
-                  )
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {!ready && (
-                <tr>
-                  <td colSpan={channels.length + 1}>
-                    <BlockStateRows rows={4} />
-                  </td>
-                </tr>
-              )}
-              {ready &&
-                groups.map((group) => (
-                  <Fragment key={group.id}>
-                    <tr className='border-b'>
-                      <th
-                        scope='colgroup'
-                        colSpan={channels.length + 1}
-                        className='text-muted-foreground pt-4 pb-1.5 text-left text-xs font-medium'
-                      >
-                        {group.label}
-                      </th>
-                    </tr>
-                    {group.events.map((event) => (
-                      <tr key={event.id} className='border-b'>
-                        <th scope='row' className='py-2.5 pr-4 text-left font-normal'>
-                          <span className='block'>{event.label}</span>
-                          {event.description && (
-                            <span className='text-muted-foreground block text-xs'>
-                              {event.description}
-                            </span>
-                          )}
-                        </th>
-                        {channels.map((channel) => (
-                          <td key={channel.id} className='px-2 py-2.5 text-center'>
-                            <Switch
-                              aria-label={`${event.label} by ${channel.label}`}
-                              checked={isOn(event.id, channel.id)}
-                              onCheckedChange={(on) => toggle(event.id, channel.id, on)}
-                            />
-                          </td>
-                        ))}
-                      </tr>
+                      </DataTableCell>
                     ))}
-                  </Fragment>
+                  </DataTableRow>
                 ))}
-            </tbody>
-          </table>
+              </DataTableBody>
+            ))}
+        </DataTable>
+        {error && <p className='text-destructive text-sm'>{error}</p>}
+        <div role='status' aria-atomic='false' className='sr-only'>
+          {said.map((message) => (
+            <div key={message.id}>{message.text}</div>
+          ))}
         </div>
       </section>
     </BlockStateProvider>
@@ -237,6 +301,7 @@ const Settings3 = (props: Settings3Props) => {
 export {
   Settings3,
   exampleProps as settings3ExampleProps,
+  type NotificationChangeResult,
   type NotificationChannel,
   type NotificationEvent,
   type NotificationGroup,

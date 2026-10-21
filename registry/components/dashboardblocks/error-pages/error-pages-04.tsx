@@ -139,7 +139,7 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
           <UsageBar
             color='var(--color-chart-2)'
             limit={total}
-            overColor='var(--color-amber-500)'
+            overColor='var(--color-orange-500)'
             size='sm'
             used={elapsed}
           />

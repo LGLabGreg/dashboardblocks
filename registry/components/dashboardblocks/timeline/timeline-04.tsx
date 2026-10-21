@@ -97,7 +97,11 @@ function Slip({ slip }: { slip: number | null }) {
     return <span className='text-muted-foreground text-right text-sm'>—</span>
   }
   return (
-    <StatusLabel className='text-right tabular-nums' tone={slip > 0 ? 'bad' : 'good'}>
+    <StatusLabel
+      variant='text'
+      className='text-right tabular-nums'
+      tone={slip > 0 ? 'bad' : 'good'}
+    >
       {slip === 0 ? 'On time' : formatSigned(slip, formatDays)}
     </StatusLabel>
   )
@@ -159,7 +163,7 @@ const Timeline4 = (props: Timeline4Props) => {
               </span>
             </p>
             <p className='text-sm'>
-              <StatusLabel tone={latest > 0 ? 'bad' : 'good'}>
+              <StatusLabel variant='text' tone={latest > 0 ? 'bad' : 'good'}>
                 {latest > 0 ? 'Behind plan' : latest < 0 ? 'Ahead of plan' : 'On plan'}
               </StatusLabel>
               <span className='text-muted-foreground'>
@@ -311,6 +315,7 @@ const Timeline4 = (props: Timeline4Props) => {
                       </span>
                       {slips[index] !== null && (
                         <StatusLabel
+                          variant='text'
                           className='text-xs'
                           tone={slips[index] > 0 ? 'bad' : 'good'}
                         >

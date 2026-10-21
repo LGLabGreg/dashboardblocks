@@ -9,6 +9,10 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { FilterChip } from '@/registry/components/dashboardblocks/dashboard-header'
 import {
+  StatusLabel,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
+import {
   DataTable,
   DataTableBody,
   DataTableCell,
@@ -16,11 +20,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import {
-  StatusLabel,
-  type StatusTone,
-} from '@/registry/components/dashboardblocks/status-label'
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
@@ -124,7 +124,7 @@ const States3 = (props: States3Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
@@ -159,7 +159,7 @@ const States3 = (props: States3Props) => {
                 remixicon='RiSearchLine'
               />
             }
-            className='border-y'
+            className='border-t'
             title='No orders match these filters'
             description='Remove a filter, or clear them all to see every order.'
             action={
@@ -169,8 +169,7 @@ const States3 = (props: States3Props) => {
             }
           />
         ) : (
-          <DataTable>
-            <caption className='sr-only'>{title}</caption>
+          <DataTable caption={title}>
             <DataTableHeader>
               <DataTableRow>
                 <DataTableHead>Customer</DataTableHead>
@@ -190,15 +189,13 @@ const States3 = (props: States3Props) => {
                         {order.id}
                       </span>
                     </DataTableCell>
-                    <DataTableCell label='Region'>{order.region}</DataTableCell>
-                    <DataTableCell label='Status'>
+                    <DataTableCell>{order.region}</DataTableCell>
+                    <DataTableCell>
                       <StatusLabel tone={STATUS_TONES[order.status]}>
                         {order.status}
                       </StatusLabel>
                     </DataTableCell>
-                    <DataTableCell align='end' label='Amount'>
-                      {currency(order.amount)}
-                    </DataTableCell>
+                    <DataTableCell align='end'>{currency(order.amount)}</DataTableCell>
                   </DataTableRow>
                 ))}
             </DataTableBody>

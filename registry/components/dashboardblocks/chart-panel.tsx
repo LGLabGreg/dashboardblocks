@@ -5,11 +5,20 @@ import {
   ChartPlaceholder,
   type ChartValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-type ChartPanelKeyShape = 'line' | 'rect'
+type ChartPanelKeyShape = 'dashed' | 'line' | 'rect'
 
 interface ChartPanelKeyProps {
   className?: string
@@ -23,10 +32,14 @@ function ChartPanelKey({ className, color, shape = 'rect' }: ChartPanelKeyProps)
       aria-hidden
       className={cn(
         'inline-block shrink-0',
-        shape === 'line' ? 'h-0.5 w-3 rounded-full' : 'size-2.5 rounded-[3px]',
+        shape === 'dashed'
+          ? 'w-3 border-t-2 border-dashed'
+          : shape === 'line'
+            ? 'h-0.5 w-3 rounded-full'
+            : 'size-2.5 rounded-[3px]',
         className,
       )}
-      style={{ backgroundColor: color }}
+      style={shape === 'dashed' ? { borderColor: color } : { backgroundColor: color }}
     />
   )
 }
@@ -85,20 +98,17 @@ function ChartPanelTable<T extends object>({
 
   return (
     <div className='sr-only'>
-      <table>
-        <caption>{caption}</caption>
-        <thead>
-          <tr>
+      <DataTable caption={caption}>
+        <DataTableHeader>
+          <DataTableRow>
             {columns.map((column) => (
-              <th key={column.key} scope='col'>
-                {column.label}
-              </th>
+              <DataTableHead key={column.key}>{column.label}</DataTableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </DataTableRow>
+        </DataTableHeader>
+        <DataTableBody>
           {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <DataTableRow key={rowIndex}>
               {columns.map((column, columnIndex) => {
                 const value = (row as Record<string, unknown>)[column.key]
                 const content =
@@ -106,17 +116,15 @@ function ChartPanelTable<T extends object>({
                     ? column.format(value)
                     : String(value)
                 return columnIndex === 0 ? (
-                  <th key={column.key} scope='row'>
-                    {content}
-                  </th>
+                  <DataTableRowHead key={column.key}>{content}</DataTableRowHead>
                 ) : (
-                  <td key={column.key}>{content}</td>
+                  <DataTableCell key={column.key}>{content}</DataTableCell>
                 )
               })}
-            </tr>
+            </DataTableRow>
           ))}
-        </tbody>
-      </table>
+        </DataTableBody>
+      </DataTable>
     </div>
   )
 }

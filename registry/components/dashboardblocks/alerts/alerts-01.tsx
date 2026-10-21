@@ -156,7 +156,7 @@ const Alerts1 = (props: Alerts1Props) => {
               return (
                 <li
                   key={alert.id}
-                  className='flex items-center justify-between gap-3 border-b py-2.5'
+                  className='flex items-center justify-between gap-3 border-b py-2.5 last:border-b-0'
                 >
                   <div className='flex min-w-0 flex-col gap-0.5'>
                     <p className='text-sm'>

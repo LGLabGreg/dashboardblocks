@@ -5,6 +5,7 @@ import {
   type ChoiceCardOption,
   ChoiceCards,
 } from '@/registry/components/dashboardblocks/onboarding'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
@@ -24,7 +25,6 @@ import {
   FieldLabel,
   FieldTitle,
 } from '@/components/ui/field'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
 import { cn } from '@/lib/utils'
 
@@ -303,23 +303,16 @@ const Onboarding4 = (props: Onboarding4Props) => {
           <FieldGroup>
             <Field data-invalid={errors.role ? true : undefined}>
               <FieldLabel htmlFor={fieldId('role')}>Your role</FieldLabel>
-              <NativeSelect
+              <OptionSelect
                 id={fieldId('role')}
                 className='w-full @md:w-72'
                 aria-invalid={errors.role ? true : undefined}
                 aria-describedby={errors.role ? `${fieldId('role')}-error` : undefined}
-                value={answers.role}
-                onChange={(event) => set('role', event.target.value)}
-              >
-                <NativeSelectOption value='' disabled>
-                  Choose a role
-                </NativeSelectOption>
-                {roles.map((role) => (
-                  <NativeSelectOption key={role.value} value={role.value}>
-                    {role.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                placeholder='Choose a role'
+                value={answers.role || null}
+                options={roles}
+                onValueChange={(role) => set('role', role)}
+              />
               <FieldError id={`${fieldId('role')}-error`}>{errors.role}</FieldError>
             </Field>
             <div className='flex flex-col gap-3'>

@@ -9,7 +9,6 @@ import {
 import {
   createDataTableColumnHelper,
   DataTableContent,
-  DataTableSortMenu,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
@@ -121,7 +120,7 @@ const DataTable1 = (props: DataTable1Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>
@@ -129,7 +128,6 @@ const DataTable1 = (props: DataTable1Props) => {
               <p className='text-muted-foreground text-sm'>{description}</p>
             </BlockReady>
           </div>
-          <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
         </header>
         <DataTableContent caption={`${title}: ${description}`} table={table} />
       </section>

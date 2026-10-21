@@ -147,7 +147,10 @@ const Security4 = (props: Security4Props) => {
         {!state && (
           <ul className='flex flex-col border-t'>
             {sorted.map((check) => (
-              <li key={check.id} className='flex items-start gap-3 border-b py-2.5'>
+              <li
+                key={check.id}
+                className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+              >
                 <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                   <span className='text-sm font-medium'>{check.label}</span>
                   <span className='text-muted-foreground text-xs'>{check.detail}</span>

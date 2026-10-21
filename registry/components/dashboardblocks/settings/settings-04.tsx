@@ -7,8 +7,8 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
+  ConnectionRow,
   type ConnectionStatus,
-  ConnectionStatusLabel,
 } from '@/registry/components/dashboardblocks/settings'
 import { getAvatarColor } from '@/registry/components/dashboardblocks/team'
 import { type ReactNode, useState } from 'react'
@@ -94,6 +94,9 @@ const exampleProps: Settings4Props = {
 
 type Filter = 'all' | 'connected' | 'available'
 
+const needsAttention = (item: Integration) =>
+  item.status === 'error' || item.status === 'revoked'
+
 const Settings4 = (props: Settings4Props) => {
   const { description, onConfigure, onConnect, onDisconnect, status, title } = props
   const [integrations, setIntegrations] = useState(props.integrations ?? [])
@@ -124,7 +127,7 @@ const Settings4 = (props: Settings4Props) => {
     },
   ]
 
-  const attention = integrations.filter((item) => item.status === 'error').length
+  const attention = integrations.filter(needsAttention).length
 
   return (
     <BlockStateProvider state={getBlockState(status, integrations)}>
@@ -170,80 +173,77 @@ const Settings4 = (props: Settings4Props) => {
               ) : (
                 <ul className='flex flex-col divide-y border-t'>
                   {view.items.map((item) => (
-                    <li
-                      key={item.id}
-                      className='flex flex-wrap items-center gap-x-3 gap-y-2 py-2.5'
-                    >
-                      <span
-                        aria-hidden
-                        className={cn(
-                          'flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold [&_svg]:size-4',
-                          !item.logo && getAvatarColor(item.name),
-                          item.logo && 'border',
-                        )}
+                    <li key={item.id}>
+                      <ConnectionRow
+                        className='py-2.5'
+                        description={item.description}
+                        logo={
+                          <span
+                            aria-hidden
+                            className={cn(
+                              'flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold [&_svg]:size-4',
+                              !item.logo && getAvatarColor(item.name),
+                              item.logo && 'border',
+                            )}
+                          >
+                            {item.logo ?? item.name[0]}
+                          </span>
+                        }
+                        name={item.name}
+                        status={item.status}
+                        actions={
+                          item.status === 'disconnected' ? (
+                            <Button
+                              variant='outline'
+                              size='sm'
+                              aria-label={`Connect ${item.name}`}
+                              onClick={() => {
+                                setStatus(item.id, 'connected')
+                                onConnect?.(item.id)
+                              }}
+                            >
+                              Connect
+                            </Button>
+                          ) : (
+                            <>
+                              <Button
+                                variant='ghost'
+                                size='sm'
+                                aria-label={`Disconnect ${item.name}`}
+                                onClick={() => {
+                                  setStatus(item.id, 'disconnected')
+                                  onDisconnect?.(item.id)
+                                }}
+                              >
+                                Disconnect
+                              </Button>
+                              <Button
+                                variant={needsAttention(item) ? 'default' : 'outline'}
+                                size='sm'
+                                aria-label={`${needsAttention(item) ? 'Reconnect' : 'Configure'} ${item.name}`}
+                                onClick={() => {
+                                  if (needsAttention(item))
+                                    setStatus(item.id, 'connected')
+                                  onConfigure?.(item.id)
+                                }}
+                              >
+                                {needsAttention(item) ? 'Reconnect' : 'Configure'}
+                              </Button>
+                            </>
+                          )
+                        }
                       >
-                        {item.logo ?? item.name[0]}
-                      </span>
-                      <div className='flex min-w-0 flex-1 basis-48 flex-col gap-0.5'>
-                        <span className='flex flex-wrap items-baseline gap-x-2'>
-                          <span className='text-sm font-medium'>{item.name}</span>
-                          <ConnectionStatusLabel status={item.status} />
-                        </span>
-                        <span className='text-muted-foreground text-xs text-pretty'>
-                          {item.description}
-                        </span>
                         {item.detail && (
                           <span
                             className={cn(
-                              'text-muted-foreground text-xs',
-                              item.status === 'error' && 'text-red-700 dark:text-red-400',
+                              'text-muted-foreground text-sm',
+                              needsAttention(item) && 'text-red-700 dark:text-red-400',
                             )}
                           >
                             {item.detail}
                           </span>
                         )}
-                      </div>
-                      <div className='ms-auto flex shrink-0 gap-1'>
-                        {item.status === 'disconnected' ? (
-                          <Button
-                            variant='outline'
-                            size='sm'
-                            aria-label={`Connect ${item.name}`}
-                            onClick={() => {
-                              setStatus(item.id, 'connected')
-                              onConnect?.(item.id)
-                            }}
-                          >
-                            Connect
-                          </Button>
-                        ) : (
-                          <>
-                            <Button
-                              variant='ghost'
-                              size='sm'
-                              aria-label={`Disconnect ${item.name}`}
-                              onClick={() => {
-                                setStatus(item.id, 'disconnected')
-                                onDisconnect?.(item.id)
-                              }}
-                            >
-                              Disconnect
-                            </Button>
-                            <Button
-                              variant={item.status === 'error' ? 'default' : 'outline'}
-                              size='sm'
-                              aria-label={`${item.status === 'error' ? 'Reconnect' : 'Configure'} ${item.name}`}
-                              onClick={() => {
-                                if (item.status === 'error')
-                                  setStatus(item.id, 'connected')
-                                onConfigure?.(item.id)
-                              }}
-                            >
-                              {item.status === 'error' ? 'Reconnect' : 'Configure'}
-                            </Button>
-                          </>
-                        )}
-                      </div>
+                      </ConnectionRow>
                     </li>
                   ))}
                 </ul>

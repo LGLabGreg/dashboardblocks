@@ -148,7 +148,7 @@ const DataTable5 = (props: DataTable5Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>

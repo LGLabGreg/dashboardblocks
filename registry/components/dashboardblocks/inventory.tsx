@@ -76,7 +76,7 @@ const stockStatusConfig: Record<
   StockStatus,
   { color: string; label: string; tone: StatusTone }
 > = {
-  low: { color: 'var(--color-amber-500)', label: 'Low stock', tone: 'warning' },
+  low: { color: 'var(--color-orange-500)', label: 'Low stock', tone: 'warning' },
   ok: { color: 'var(--color-emerald-500)', label: 'In stock', tone: 'good' },
   out: { color: 'var(--color-red-500)', label: 'Out of stock', tone: 'bad' },
   over: { color: 'var(--color-sky-500)', label: 'Overstock', tone: 'info' },

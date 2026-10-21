@@ -775,7 +775,7 @@ function FileUploadItem({
     <li
       data-status={status}
       className={cn(
-        'flex items-center gap-3 border-b py-2.5 [&_svg]:shrink-0',
+        'flex items-center gap-3 border-b py-2.5 last:border-b-0 [&_svg]:shrink-0',
         className,
       )}
     >
@@ -812,11 +812,13 @@ function FileUploadItem({
           {status === 'done' && (
             <Details>
               {formatFileSize(size)}
-              <StatusLabel tone='good'>Uploaded</StatusLabel>
+              <StatusLabel variant='text' tone='good'>
+                Uploaded
+              </StatusLabel>
             </Details>
           )}
           {status === 'error' && (
-            <StatusLabel tone='bad' className='min-w-0 truncate'>
+            <StatusLabel variant='text' tone='bad' className='min-w-0 truncate'>
               {error ?? 'Upload failed'}
             </StatusLabel>
           )}

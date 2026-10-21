@@ -99,7 +99,8 @@ export const examples: Registry['items'] = [
     dependencies: ['recharts'],
     registryDependencies: [
       registryUrl('block-state'),
-      registryUrl('chart-panel'),
+      registryUrl('breakdown'),
+      registryUrl('chart'),
       registryUrl('ring'),
     ],
     files: [

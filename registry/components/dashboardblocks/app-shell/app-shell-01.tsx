@@ -31,16 +31,26 @@ import {
 import { cn } from '@/lib/utils'
 
 interface AppShell1Props {
+  /** Shown across the top of every page, under the header, such as a notice that something needs fixing. */
+  banner?: ReactNode
   breadcrumbs: Crumb[]
   children?: ReactNode
   notificationCount: number
+  /** Adds "New workspace…" to the workspace switcher. */
+  onCreateWorkspace?: () => void
   onNotificationsClick?: () => void
   onSearch?: () => void
   onSignOut?: () => void
+  /** Opens another workspace. Leave out to switch in the shell only. */
+  onWorkspaceChange?: (id: string) => void
   pathname: string
+  /** @default 'Search…' */
+  searchPlaceholder?: string
   sections: NavSection[]
   user: AppUser
   userLinks: UserMenuLink[]
+  /** The workspace that's open. Leave out to start on the first. */
+  workspaceId?: string
   workspaces: Workspace[]
 }
 
@@ -219,27 +229,33 @@ const exampleProps: AppShell1Props = {
 
 const AppShell1 = (props: AppShell1Props) => {
   const {
+    banner,
     breadcrumbs,
     children,
     notificationCount,
+    onCreateWorkspace,
     onNotificationsClick = () => {},
     onSearch = () => {},
     onSignOut = () => {},
+    onWorkspaceChange,
     pathname,
+    searchPlaceholder,
     sections,
     user,
     userLinks,
+    workspaceId,
     workspaces,
   } = props
-  const [workspace, setWorkspace] = useState(workspaces[0]?.id ?? '')
+  const [chosen, setChosen] = useState(workspaces[0]?.id ?? '')
 
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <WorkspaceSwitcher
-            onValueChange={setWorkspace}
-            value={workspace}
+            onCreate={onCreateWorkspace}
+            onValueChange={onWorkspaceChange ?? setChosen}
+            value={workspaceId ?? chosen}
             workspaces={workspaces}
           />
         </SidebarHeader>
@@ -259,13 +275,14 @@ const AppShell1 = (props: AppShell1Props) => {
           />
           <AppBreadcrumbs items={breadcrumbs} />
           <div className='ml-auto flex items-center gap-2'>
-            <SearchButton onOpen={onSearch} />
+            <SearchButton onOpen={onSearch} placeholder={searchPlaceholder} />
             <NotificationsButton
               count={notificationCount}
               onClick={onNotificationsClick}
             />
           </div>
         </AppHeader>
+        {banner}
         <div className='flex flex-1 flex-col gap-4 p-4 md:p-6'>
           {children ?? <PagePlaceholder />}
         </div>

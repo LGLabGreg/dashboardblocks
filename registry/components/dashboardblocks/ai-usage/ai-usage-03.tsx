@@ -4,10 +4,19 @@ import { modelPalette } from '@/registry/components/dashboardblocks/ai-usage'
 import {
   BlockReady,
   BlockStateProvider,
-  BlockStateRows,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
@@ -125,101 +134,79 @@ const AiUsage3 = (props: AiUsage3Props) => {
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <div
-          role='region'
-          aria-label={title}
-          // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
-          tabIndex={0}
-          className='focus-visible:ring-ring/50 relative overflow-x-auto rounded-sm outline-none focus-visible:ring-3 focus-visible:ring-inset'
-        >
-          <table className='w-full min-w-[34rem] border-t text-sm tabular-nums'>
-            <thead>
-              <tr className='text-muted-foreground border-b text-xs'>
-                <th scope='col' className='py-2.5 text-left font-normal'>
-                  Model
-                </th>
-                <th scope='col' className='py-2.5 text-right font-normal'>
-                  Requests
-                </th>
-                <th scope='col' className='py-2.5 text-right font-normal'>
-                  <abbr
-                    title='Time to first token, median and 95th percentile'
-                    className='no-underline'
-                  >
-                    TTFT, median to p95
-                  </abbr>
-                </th>
-                <th scope='col' className='py-2.5 text-right font-normal'>
-                  Tokens/s
-                </th>
-                <th scope='col' className='py-2.5 text-right font-normal'>
-                  Errors
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {state && (
-                <tr className='border-b'>
-                  <td colSpan={5}>
-                    <BlockStateRows rows={3} />
-                  </td>
-                </tr>
-              )}
-              {!state &&
-                models.map((model, index) => {
-                  const flagged = model.errorRate > errorThreshold
-                  return (
-                    <tr key={model.label} className='border-b'>
-                      <th scope='row' className='py-2.5 text-left font-medium'>
-                        <span className='flex items-center gap-2'>
-                          <span
-                            aria-hidden
-                            className='size-2.5 rounded-[3px]'
-                            style={{
-                              backgroundColor: modelPalette[index % modelPalette.length],
-                            }}
-                          />
-                          {model.label}
+        <DataTable caption={title} className='min-w-[34rem] border-t tabular-nums'>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead>Model</DataTableHead>
+              <DataTableHead align='end'>Requests</DataTableHead>
+              <DataTableHead align='end'>
+                <abbr
+                  title='Time to first token, median and 95th percentile'
+                  className='no-underline'
+                >
+                  TTFT, median to p95
+                </abbr>
+              </DataTableHead>
+              <DataTableHead align='end'>Tokens/s</DataTableHead>
+              <DataTableHead align='end'>Errors</DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={5} rows={3} />
+            {!state &&
+              models.map((model, index) => {
+                const flagged = model.errorRate > errorThreshold
+                return (
+                  <DataTableRow key={model.label}>
+                    <DataTableRowHead primary>
+                      <span className='flex items-center gap-2'>
+                        <span
+                          aria-hidden
+                          className='size-2.5 rounded-[3px]'
+                          style={{
+                            backgroundColor: modelPalette[index % modelPalette.length],
+                          }}
+                        />
+                        {model.label}
+                      </span>
+                    </DataTableRowHead>
+                    <DataTableCell align='end' className='text-muted-foreground'>
+                      {formatNumber(model.requests)}
+                    </DataTableCell>
+                    <DataTableCell align='end'>
+                      <span className='flex items-center justify-end gap-2.5'>
+                        <span>{ms(model.ttftP50)}</span>
+                        <LatencyRange
+                          max={slowest}
+                          p50={model.ttftP50}
+                          p95={model.ttftP95}
+                        />
+                        <span className='text-muted-foreground w-14 text-end'>
+                          {ms(model.ttftP95)}
                         </span>
-                      </th>
-                      <td className='text-muted-foreground py-2.5 text-right'>
-                        {formatNumber(model.requests)}
-                      </td>
-                      <td className='py-2.5'>
-                        <span className='flex items-center justify-end gap-2.5'>
-                          <span>{ms(model.ttftP50)}</span>
-                          <LatencyRange
-                            max={slowest}
-                            p50={model.ttftP50}
-                            p95={model.ttftP95}
-                          />
-                          <span className='text-muted-foreground w-14 text-right'>
-                            {ms(model.ttftP95)}
-                          </span>
+                      </span>
+                    </DataTableCell>
+                    <DataTableCell align='end'>
+                      {formatNumber(model.outputSpeed, { maximumFractionDigits: 0 })}
+                    </DataTableCell>
+                    <DataTableCell
+                      align='end'
+                      className={cn(
+                        flagged && 'font-medium text-red-700 dark:text-red-400',
+                      )}
+                    >
+                      {percent(model.errorRate, 2)}
+                      {flagged && (
+                        <span className='sr-only'>
+                          , above the {percent(errorThreshold)} threshold
                         </span>
-                      </td>
-                      <td className='py-2.5 text-right'>
-                        {formatNumber(model.outputSpeed, { maximumFractionDigits: 0 })}
-                      </td>
-                      <td
-                        className={cn(
-                          'py-2.5 text-right',
-                          flagged && 'font-medium text-red-700 dark:text-red-400',
-                        )}
-                      >
-                        {percent(model.errorRate, 2)}
-                        {flagged && (
-                          <span className='sr-only'>
-                            , above the {percent(errorThreshold)} threshold
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  )
-                })}
-            </tbody>
-          </table>
-        </div>
+                      )}
+                    </DataTableCell>
+                  </DataTableRow>
+                )
+              })}
+          </DataTableBody>
+        </DataTable>
         <BlockReady className='text-xs'>
           <p className='text-muted-foreground text-xs'>
             TTFT is time to first token. The dot is the median and the bar runs to the

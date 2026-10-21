@@ -81,7 +81,7 @@ type Fill = 'full' | 'warning' | 'ok'
 const FILL: Record<Fill, { color: string; label: string; tone: StatusTone }> = {
   full: { color: 'var(--color-red-500)', label: 'Over capacity', tone: 'bad' },
   ok: { color: 'var(--color-chart-2)', label: 'Room to spare', tone: 'neutral' },
-  warning: { color: 'var(--color-amber-500)', label: 'Nearly full', tone: 'warning' },
+  warning: { color: 'var(--color-orange-500)', label: 'Nearly full', tone: 'warning' },
 }
 
 const percent = (ratio: number) => formatPercent(ratio, { maximumFractionDigits: 0 })

@@ -265,13 +265,23 @@ function MrrWaterfall({
   )
 }
 
-type InvoiceStatus = 'paid' | 'due' | 'overdue' | 'failed'
+type InvoiceStatus =
+  | 'draft'
+  | 'due'
+  | 'failed'
+  | 'overdue'
+  | 'paid'
+  | 'uncollectible'
+  | 'void'
 
 const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTone }> = {
+  draft: { label: 'Draft', tone: 'neutral' },
   due: { label: 'Due', tone: 'neutral' },
   failed: { label: 'Failed', tone: 'bad' },
   overdue: { label: 'Overdue', tone: 'warning' },
   paid: { label: 'Paid', tone: 'good' },
+  uncollectible: { label: 'Uncollectible', tone: 'bad' },
+  void: { label: 'Void', tone: 'neutral' },
 }
 
 interface InvoiceStatusLabelProps extends Omit<StatusLabelProps, 'children' | 'tone'> {

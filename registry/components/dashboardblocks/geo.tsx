@@ -9,6 +9,15 @@ import {
   ChartTooltipItem,
 } from '@/registry/components/dashboardblocks/chart'
 import { getHeatColor } from '@/registry/components/dashboardblocks/heatmap'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCompact,
@@ -228,23 +237,24 @@ function GeoTable({
   const sorted = [...rows].sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity))
   return (
     <div className='sr-only'>
-      <table>
-        <caption>{caption}</caption>
-        <thead>
-          <tr>
-            <th scope='col'>{nameHeader}</th>
-            <th scope='col'>{valueHeader}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <DataTable caption={caption}>
+        <DataTableHeader>
+          <DataTableRow>
+            <DataTableHead>{nameHeader}</DataTableHead>
+            <DataTableHead>{valueHeader}</DataTableHead>
+          </DataTableRow>
+        </DataTableHeader>
+        <DataTableBody>
           {sorted.map((row) => (
-            <tr key={row.id}>
-              <th scope='row'>{row.name}</th>
-              <td>{row.value === null ? 'No data' : format(row.value)}</td>
-            </tr>
+            <DataTableRow key={row.id}>
+              <DataTableRowHead>{row.name}</DataTableRowHead>
+              <DataTableCell>
+                {row.value === null ? 'No data' : format(row.value)}
+              </DataTableCell>
+            </DataTableRow>
           ))}
-        </tbody>
-      </table>
+        </DataTableBody>
+      </DataTable>
     </div>
   )
 }

@@ -171,7 +171,7 @@ function ChecklistSteps(props: ChecklistStepsProps) {
           const isOpen = expanded.has(step.id)
           const panelId = `${id}-${step.id}`
           return (
-            <li key={step.id} className='border-b'>
+            <li key={step.id} className='border-b last:border-b-0'>
               <button
                 type='button'
                 aria-controls={panelId}
@@ -192,7 +192,7 @@ function ChecklistSteps(props: ChecklistStepsProps) {
                     {step.title}
                   </span>
                   <Details className='text-muted-foreground text-sm'>
-                    <StepStateLabel state={step.state} />
+                    <StepStateLabel variant='text' state={step.state} />
                     {step.optional && 'Optional'}
                   </Details>
                 </span>

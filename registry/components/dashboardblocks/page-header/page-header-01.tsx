@@ -17,8 +17,12 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Button } from '@/components/ui/button'
 
 interface PageHeader1Props {
+  /** Names the main action; `null` leaves the main action out. @default 'New order' */
+  createLabel?: string | null
   /** Leave out to show the empty state. */
   description?: string
+  /** Names the export action; `null` leaves it out. @default 'Export' */
+  exportLabel?: string | null
   onCreate?: () => void
   onExport?: () => void
   status?: BlockStatus
@@ -31,41 +35,59 @@ const exampleProps: PageHeader1Props = {
 }
 
 const PageHeader1 = (props: PageHeader1Props) => {
-  const { description, onCreate = () => {}, onExport = () => {}, status, title } = props
+  const {
+    createLabel = 'New order',
+    description,
+    exportLabel = 'Export',
+    onCreate = () => {},
+    onExport = () => {},
+    status,
+    title,
+  } = props
   const state = getBlockState(status, description)
 
   return (
     <BlockStateProvider state={state}>
-      <PageHeader className='border-b pb-4'>
+      <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading
             title={title}
             description={state ? <BlockStateText /> : description}
           />
-          <PageHeaderActions>
-            <Button variant='outline' disabled={state !== undefined} onClick={onExport}>
-              <IconPlaceholder
-                lucide='DownloadIcon'
-                tabler='IconDownload'
-                hugeicons='Download01Icon'
-                phosphor='DownloadIcon'
-                remixicon='RiDownloadLine'
-                data-icon='inline-start'
-              />
-              Export
-            </Button>
-            <Button onClick={onCreate}>
-              <IconPlaceholder
-                lucide='PlusIcon'
-                tabler='IconPlus'
-                hugeicons='PlusSignIcon'
-                phosphor='PlusIcon'
-                remixicon='RiAddLine'
-                data-icon='inline-start'
-              />
-              New order
-            </Button>
-          </PageHeaderActions>
+          {(exportLabel !== null || createLabel !== null) && (
+            <PageHeaderActions>
+              {exportLabel !== null && (
+                <Button
+                  variant='outline'
+                  disabled={state !== undefined}
+                  onClick={onExport}
+                >
+                  <IconPlaceholder
+                    lucide='DownloadIcon'
+                    tabler='IconDownload'
+                    hugeicons='Download01Icon'
+                    phosphor='DownloadIcon'
+                    remixicon='RiDownloadLine'
+                    data-icon='inline-start'
+                  />
+                  {exportLabel}
+                </Button>
+              )}
+              {createLabel !== null && (
+                <Button onClick={onCreate}>
+                  <IconPlaceholder
+                    lucide='PlusIcon'
+                    tabler='IconPlus'
+                    hugeicons='PlusSignIcon'
+                    phosphor='PlusIcon'
+                    remixicon='RiAddLine'
+                    data-icon='inline-start'
+                  />
+                  {createLabel}
+                </Button>
+              )}
+            </PageHeaderActions>
+          )}
         </PageHeaderRow>
       </PageHeader>
     </BlockStateProvider>

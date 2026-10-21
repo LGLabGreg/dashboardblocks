@@ -72,7 +72,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <header className='@container border-b pb-4'>
+      <header className='@container'>
         <div className='flex flex-col gap-4 @3xl:flex-row @3xl:items-end @3xl:justify-between'>
           <div className='flex flex-col gap-2'>
             <DashboardHeaderTitle

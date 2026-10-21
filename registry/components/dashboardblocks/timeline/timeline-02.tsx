@@ -123,14 +123,22 @@ const Timeline2 = (props: Timeline2Props) => {
               </span>
             </p>
             <p className='text-muted-foreground text-sm'>
-              {nextDays < 0 ? <StatusLabel tone='bad'>Late</StatusLabel> : 'Until'}{' '}
+              {nextDays < 0 ? (
+                <StatusLabel variant='text' tone='bad'>
+                  Late
+                </StatusLabel>
+              ) : (
+                'Until'
+              )}{' '}
               {nextDays < 0 ? 'on' : ''}{' '}
               <span className='text-foreground font-medium'>{next.label}</span>,{' '}
               {nextDays < 0 ? 'due' : 'on'} {formatTimelineDate(next.date)}.
               {next.status === 'at-risk' && (
                 <>
                   {' '}
-                  <StatusLabel tone='warning'>At risk.</StatusLabel>
+                  <StatusLabel variant='text' tone='warning'>
+                    At risk.
+                  </StatusLabel>
                 </>
               )}
             </p>

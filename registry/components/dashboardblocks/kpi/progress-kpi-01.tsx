@@ -118,7 +118,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
                     'font-medium tabular-nums',
                     gap >= 0
                       ? 'text-emerald-700 dark:text-emerald-400'
-                      : 'text-amber-800 dark:text-amber-400',
+                      : 'text-orange-700 dark:text-orange-400',
                   )}
                 >
                   {formatter(projected)}

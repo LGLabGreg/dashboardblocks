@@ -276,7 +276,11 @@ const Calendar4 = (props: Calendar4Props) => {
         <>
           <span className='block truncate'>{room.seats} seats</span>
           {status && (
-            <StatusLabel tone={status.tone} className='block truncate text-xs'>
+            <StatusLabel
+              variant='text'
+              tone={status.tone}
+              className='block truncate text-xs'
+            >
               {status.label}
             </StatusLabel>
           )}

@@ -25,6 +25,8 @@ interface CommandMenuItem {
   /** Unique across every group. */
   id: string
   keywords?: string[]
+  /** Leaves the menu open when picked, for an item that changes what the menu shows. */
+  keepOpen?: boolean
   label: string
   /** Shown at the end of the row, such as an order's total. */
   meta?: string
@@ -36,6 +38,8 @@ interface CommandMenuGroup {
   heading: string
   items: CommandMenuItem[]
 }
+
+const PANEL_KEYS = new Set(['ArrowDown', 'ArrowUp', 'End', 'Enter', 'Home'])
 
 function filterCommandGroups(groups: CommandMenuGroup[], query: string) {
   const needle = query.trim().toLowerCase()
@@ -76,6 +80,8 @@ interface CommandMenuProps {
   /** Fetch results yourself: the menu shows `groups` as they are, without filtering. */
   onQueryChange?: (query: string) => void
   open: boolean
+  /** Shown between the search field and the results, such as an answer to what was typed. The empty message is left out while it's there. */
+  panel?: ReactNode
   /** @default 'Search…' */
   placeholder?: string
   /** The search text, when you pass `onQueryChange`. */
@@ -91,6 +97,7 @@ function CommandMenu({
   onOpenChange,
   onQueryChange,
   open,
+  panel,
   placeholder = 'Search…',
   query: controlledQuery,
   title = 'Search',
@@ -109,7 +116,7 @@ function CommandMenu({
   }
 
   function select(item: CommandMenuItem) {
-    changeOpen(false)
+    if (!item.keepOpen) changeOpen(false)
     if (item.onSelect) item.onSelect()
     else if (item.href) onNavigate(item.href)
   }
@@ -121,20 +128,39 @@ function CommandMenu({
       title={title}
       description={placeholder}
     >
-      <Command shouldFilter={false}>
+      <Command shouldFilter={false} className='max-h-[calc(66dvh-1rem)]'>
         <CommandInput value={query} onValueChange={setQuery} placeholder={placeholder} />
+        {panel !== undefined && (
+          <div
+            data-slot='command-menu-panel'
+            role='presentation'
+            className='overflow-y-auto'
+            onKeyDown={(event) => {
+              if (PANEL_KEYS.has(event.key)) event.stopPropagation()
+            }}
+          >
+            {panel}
+          </div>
+        )}
         <CommandList>
           {loading ? (
             <p role='status' className='text-muted-foreground py-6 text-center text-sm'>
               Searching…
             </p>
           ) : (
-            <CommandEmpty>{empty}</CommandEmpty>
+            panel === undefined && <CommandEmpty>{empty}</CommandEmpty>
           )}
           {results.map((group) => (
             <CommandGroup key={group.heading} heading={group.heading}>
               {group.items.map((item) => (
-                <CommandItem key={item.id} value={item.id} onSelect={() => select(item)}>
+                <CommandItem
+                  key={item.id}
+                  value={item.id}
+                  onMouseDown={(event) => {
+                    if (item.keepOpen) event.preventDefault()
+                  }}
+                  onSelect={() => select(item)}
+                >
                   {item.icon}
                   <span className='flex min-w-0 flex-1 flex-col'>
                     <span className='truncate'>{item.label}</span>

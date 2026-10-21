@@ -156,7 +156,7 @@ const Status5 = (props: Status5Props) => {
                 {incidents.map((incident) => (
                   <li
                     key={`${incident.date}-${incident.title}`}
-                    className='flex flex-col items-start gap-x-4 gap-y-1 border-b py-2.5 @md:flex-row @md:items-center @md:justify-between'
+                    className='flex flex-col items-start gap-x-4 gap-y-1 border-b py-2.5 last:border-b-0 @md:flex-row @md:items-center @md:justify-between'
                   >
                     <div className='flex min-w-0 flex-col'>
                       <span className='text-sm font-medium'>{incident.title}</span>

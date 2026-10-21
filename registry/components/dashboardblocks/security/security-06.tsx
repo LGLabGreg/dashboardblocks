@@ -6,6 +6,7 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import {
   type ConnectionStatus,
   ConnectionStatusLabel,
@@ -16,7 +17,6 @@ import { type FormEvent, startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -191,18 +191,16 @@ function SsoSettings(props: SsoSettingsProps) {
             <label htmlFor={`${id}-provider`} className='text-sm'>
               Provider
             </label>
-            <NativeSelect
+            <OptionSelect
               id={`${id}-provider`}
-              value={draft.provider}
-              onChange={(event) => field('provider', event.target.value)}
               className='w-full'
-            >
-              {providers.map((provider) => (
-                <NativeSelectOption key={provider} value={provider}>
-                  {provider}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              value={draft.provider}
+              options={providers.map((provider) => ({
+                label: provider,
+                value: provider,
+              }))}
+              onValueChange={(provider) => field('provider', provider)}
+            />
           </div>
           <div className='flex flex-col gap-2'>
             <label htmlFor={`${id}-issuer`} className='text-sm'>

@@ -159,7 +159,7 @@ const Deployments1 = (props: Deployments1Props) => {
               deployments.map((deployment) => (
                 <li
                   key={deployment.id}
-                  className='flex items-start gap-3 border-b py-2.5'
+                  className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
                 >
                   <PersonAvatar
                     className='mt-0.5'

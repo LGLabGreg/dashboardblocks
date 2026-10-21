@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/comments.tsx for React Aria
-// source-hash: 1935817be0c3
+// source-hash: 8dc920d6bafc
 
 'use client'
 
@@ -473,11 +473,14 @@ interface CommentComposerProps {
   className?: string
   defaultValue?: string
   disabled?: boolean
+  /** Shown when someone submits nothing. @default 'Write something first.' */
+  emptyMessage?: string
   footer?: ReactNode
   label?: string
   /** Shows a Cancel button, and Escape cancels too. */
   onCancel?: () => void
-  onSubmit: (body: string) => void | Promise<void>
+  /** Resolve to a message to show it as an error and keep what was typed. */
+  onSubmit: (body: string) => void | string | Promise<void | string>
   onValueChange?: (value: string) => void
   pendingLabel?: string
   people?: CommentAuthor[]
@@ -492,6 +495,7 @@ function CommentComposer({
   className,
   defaultValue = '',
   disabled = false,
+  emptyMessage = 'Write something first.',
   focusOnMount = false,
   footer,
   label = 'Comment',
@@ -565,11 +569,15 @@ function CommentComposer({
     event?.preventDefault()
     const body = text.trim()
     if (isSubmitting || disabled) return
-    if (!body) return textareaRef.current?.focus()
+    if (!body) {
+      setError(emptyMessage)
+      return textareaRef.current?.focus()
+    }
     setIsSubmitting(true)
     try {
-      await onSubmit(body)
+      const refused = await onSubmit(body)
       startTransition(() => {
+        if (typeof refused === 'string') return setError(refused)
         change('')
         setCaret(0)
       })
@@ -610,7 +618,7 @@ function CommentComposer({
         <InputGroupTextarea
           ref={textareaRef}
           aria-label={label}
-          aria-describedby={`${id}-hint`}
+          aria-describedby={error ? `${id}-hint ${id}-error` : `${id}-hint`}
           aria-autocomplete={people.length > 0 ? 'list' : undefined}
           aria-controls={open ? `${id}-people` : undefined}
           aria-activedescendant={open ? `${id}-person-${activeIndex}` : undefined}
@@ -680,7 +688,7 @@ function CommentComposer({
           `${suggestions.length} ${suggestions.length === 1 ? 'person' : 'people'} found`}
       </p>
       {error && (
-        <p role='alert' className='text-destructive text-sm'>
+        <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
           {error}
         </p>
       )}

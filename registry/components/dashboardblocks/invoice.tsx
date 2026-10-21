@@ -1,12 +1,20 @@
 'use client'
 
 import {
-  BlockStateRows,
   BlockStateText,
   SkeletonText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCurrency,
@@ -193,9 +201,10 @@ interface DocumentTotalLabels {
 }
 
 function getTotalRows(amounts: DocumentAmounts, labels: DocumentTotalLabels = {}) {
-  const rows: DocumentTotalRow[] = [
-    { id: 'subtotal', label: 'Subtotal', value: amounts.subtotal },
-  ]
+  const rows: DocumentTotalRow[] = []
+  if (amounts.discount > 0 || amounts.taxes.length > 0 || amounts.shipping > 0) {
+    rows.push({ id: 'subtotal', label: 'Subtotal', value: amounts.subtotal })
+  }
   if (amounts.discount > 0) {
     rows.push({
       id: 'discount',
@@ -577,136 +586,101 @@ function LineItemsTable({
   const state = useBlockState()
   const selected = new Set(selection?.selected)
   const hasSelection = Boolean(selection)
-  const edge = 'first:ps-0 last:pe-0'
   const wide = 'hidden @md/line-items:table-cell print:table-cell'
-  const head =
-    'text-muted-foreground h-10 px-2 text-start align-middle text-xs font-medium whitespace-nowrap'
-  const cell = 'px-2 py-2.5 align-middle whitespace-nowrap'
 
   return (
     <div className={cn('@container/line-items print:*:overflow-visible', className)}>
-      <div
-        role='region'
-        aria-label={caption}
-        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
-        tabIndex={0}
-        className='focus-visible:ring-ring/50 w-full overflow-x-auto outline-none focus-visible:ring-3'
-      >
-        <table className='w-full text-sm'>
-          <caption className='sr-only'>{caption}</caption>
-          <thead>
-            <tr className='border-b'>
-              {hasSelection && (
-                <th scope='col' className={cn(head, edge, 'w-8 pe-0')}>
-                  <span className='sr-only'>Selected</span>
-                </th>
-              )}
-              <th scope='col' className={cn(head, edge)}>
-                Description
-              </th>
-              <th scope='col' className={cn(head, edge, 'text-end', !hidePrices && wide)}>
-                Qty
-              </th>
-              {!hidePrices && (
-                <>
-                  <th scope='col' className={cn(head, edge, wide, 'text-end')}>
-                    Unit price
-                  </th>
-                  <th scope='col' className={cn(head, edge, 'text-end')}>
-                    Amount
-                  </th>
-                </>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {state && (
-              <tr>
-                <td
-                  colSpan={(hasSelection ? 1 : 0) + (hidePrices ? 2 : 4)}
-                  className='p-0'
-                >
-                  <BlockStateRows rows={Math.min(Math.max(lines.length, 3), 6)} />
-                </td>
-              </tr>
+      <DataTable caption={caption} density='compact'>
+        <DataTableHeader>
+          <DataTableRow>
+            {hasSelection && (
+              <DataTableHead className='w-8 pe-0'>
+                <span className='sr-only'>Selected</span>
+              </DataTableHead>
             )}
-            {!state &&
-              lines.map((line) => {
-                const isSelectable = selection && (selection.isSelectable?.(line) ?? true)
-                const isExcluded = isSelectable && line.optional && !selected.has(line.id)
-                const quantity = `${line.quantity}${line.unit ? ` ${line.unit}` : ''}`
-                return (
-                  <tr key={line.id} className='break-inside-avoid border-b last:border-0'>
-                    {hasSelection && (
-                      <td className={cn(cell, edge, 'pe-0 align-top')}>
-                        {isSelectable && (
-                          <Checkbox
-                            aria-label={selection.label(line)}
-                            checked={selected.has(line.id)}
-                            onCheckedChange={(checked) =>
-                              selection.onChange(line.id, checked === true)
-                            }
-                            className='mt-0.5 print:bg-transparent! print:[&_svg]:text-black!'
-                          />
-                        )}
-                      </td>
+            <DataTableHead>Description</DataTableHead>
+            <DataTableHead align='end' className={cn(!hidePrices && wide)}>
+              Qty
+            </DataTableHead>
+            {!hidePrices && (
+              <>
+                <DataTableHead align='end' className={wide}>
+                  Unit price
+                </DataTableHead>
+                <DataTableHead align='end'>Amount</DataTableHead>
+              </>
+            )}
+          </DataTableRow>
+        </DataTableHeader>
+        <DataTableBody>
+          <DataTableStateRows
+            colSpan={(hasSelection ? 1 : 0) + (hidePrices ? 2 : 4)}
+            rows={Math.min(Math.max(lines.length, 3), 6)}
+          />
+          {!state &&
+            lines.map((line) => {
+              const isSelectable = selection && (selection.isSelectable?.(line) ?? true)
+              const isExcluded = isSelectable && line.optional && !selected.has(line.id)
+              const quantity = `${line.quantity}${line.unit ? ` ${line.unit}` : ''}`
+              return (
+                <DataTableRow key={line.id} className='break-inside-avoid'>
+                  {hasSelection && (
+                    <DataTableCell className='pe-0 align-top'>
+                      {isSelectable && (
+                        <Checkbox
+                          aria-label={selection.label(line)}
+                          checked={selected.has(line.id)}
+                          onCheckedChange={(checked) =>
+                            selection.onChange(line.id, checked === true)
+                          }
+                          className='mt-0.5 print:bg-transparent! print:[&_svg]:text-black!'
+                        />
+                      )}
+                    </DataTableCell>
+                  )}
+                  <DataTableCell className='align-top'>
+                    <span className='block font-medium'>{line.description}</span>
+                    {(line.sku || line.optional || line.detail) && (
+                      <Details className='text-muted-foreground mt-0.5 block text-xs'>
+                        {line.sku && <span className='font-mono'>{line.sku}</span>}
+                        {line.optional && 'Optional'}
+                        {line.detail}
+                      </Details>
                     )}
-                    <td className={cn(cell, edge, 'align-top whitespace-normal')}>
-                      <span className='block font-medium'>{line.description}</span>
-                      {(line.sku || line.optional || line.detail) && (
-                        <Details className='text-muted-foreground mt-0.5 block text-xs'>
-                          {line.sku && <span className='font-mono'>{line.sku}</span>}
-                          {line.optional && 'Optional'}
-                          {line.detail}
-                        </Details>
-                      )}
-                      {!hidePrices && (
-                        <span className='text-muted-foreground mt-0.5 block text-xs tabular-nums @md/line-items:hidden print:hidden'>
-                          {quantity} × {formatDocumentAmount(line.unitPrice, currency)}
-                        </span>
-                      )}
-                    </td>
-                    <td
-                      className={cn(
-                        cell,
-                        edge,
-                        'text-end align-top tabular-nums',
-                        !hidePrices && wide,
-                      )}
-                    >
-                      {quantity}
-                    </td>
                     {!hidePrices && (
-                      <>
-                        <td
-                          className={cn(
-                            cell,
-                            edge,
-                            wide,
-                            'text-end align-top tabular-nums',
-                          )}
-                        >
-                          {formatDocumentAmount(line.unitPrice, currency)}
-                        </td>
-                        <td
-                          className={cn(
-                            cell,
-                            edge,
-                            'text-end align-top font-medium tabular-nums',
-                            isExcluded && 'text-muted-foreground font-normal',
-                          )}
-                        >
-                          {formatDocumentAmount(getLineAmount(line, currency), currency)}
-                          {isExcluded && <span className='sr-only'>, not included</span>}
-                        </td>
-                      </>
+                      <span className='text-muted-foreground mt-0.5 block text-xs tabular-nums @md/line-items:hidden print:hidden'>
+                        {quantity} × {formatDocumentAmount(line.unitPrice, currency)}
+                      </span>
                     )}
-                  </tr>
-                )
-              })}
-          </tbody>
-        </table>
-      </div>
+                  </DataTableCell>
+                  <DataTableCell
+                    align='end'
+                    className={cn('align-top', !hidePrices && wide)}
+                  >
+                    {quantity}
+                  </DataTableCell>
+                  {!hidePrices && (
+                    <>
+                      <DataTableCell align='end' className={cn('align-top', wide)}>
+                        {formatDocumentAmount(line.unitPrice, currency)}
+                      </DataTableCell>
+                      <DataTableCell
+                        align='end'
+                        className={cn(
+                          'align-top font-medium',
+                          isExcluded && 'text-muted-foreground font-normal',
+                        )}
+                      >
+                        {formatDocumentAmount(getLineAmount(line, currency), currency)}
+                        {isExcluded && <span className='sr-only'>, not included</span>}
+                      </DataTableCell>
+                    </>
+                  )}
+                </DataTableRow>
+              )
+            })}
+        </DataTableBody>
+      </DataTable>
     </div>
   )
 }
@@ -734,7 +708,7 @@ function DocumentTotals({
         <div
           key={row.id}
           className={cn(
-            'flex items-baseline justify-between gap-4',
+            'flex items-baseline justify-between gap-4 px-[var(--data-table-inset,0.75rem)]',
             row.emphasis && 'border-t pt-2.5 font-medium',
           )}
         >

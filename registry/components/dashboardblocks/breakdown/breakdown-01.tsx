@@ -10,8 +10,8 @@ import {
 import {
   BREAKDOWN_OTHER_COLOR,
   BreakdownBar,
-  BreakdownKey,
   type BreakdownSegment,
+  BreakdownTable,
   formatShare,
   getTotal,
 } from '@/registry/components/dashboardblocks/breakdown'
@@ -75,34 +75,11 @@ const Breakdown1 = (props: Breakdown1Props) => {
         <BreakdownBar segments={segments} />
         {state === 'loading' && <BlockStateRows rows={4} />}
         {!state && (
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{`${title}: ${description}`}</caption>
-            <thead className='sr-only'>
-              <tr>
-                <th scope='col'>Category</th>
-                <th scope='col'>Value</th>
-                <th scope='col'>Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              {segments.map((segment) => (
-                <tr key={segment.label} className='border-b last:border-b-0'>
-                  <th scope='row' className='py-2.5 pr-3 text-left font-normal'>
-                    <span className='flex items-center gap-2'>
-                      <BreakdownKey color={segment.color} />
-                      {segment.label}
-                    </span>
-                  </th>
-                  <td className='py-2.5 pr-3 text-right tabular-nums'>
-                    {formatter(segment.value)}
-                  </td>
-                  <td className='text-muted-foreground w-12 py-2.5 text-right tabular-nums'>
-                    {formatShare(segment.value, total)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <BreakdownTable
+            caption={`${title}: ${description}`}
+            format={formatter}
+            segments={segments}
+          />
         )}
       </section>
     </BlockStateProvider>

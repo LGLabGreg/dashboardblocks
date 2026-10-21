@@ -215,7 +215,7 @@ const Notifications2 = (props: Notifications2Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <section className='@container flex items-center justify-between gap-3 border-b pb-2'>
+      <section className='@container flex items-center justify-between gap-3'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <NotificationBell unreadCount={unread}>
           <NotificationsHeader

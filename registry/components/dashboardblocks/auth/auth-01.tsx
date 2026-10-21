@@ -177,7 +177,7 @@ const Auth1 = (props: Auth1Props) => {
                   phosphor='WarningIcon'
                   remixicon='RiErrorWarningLine'
                   aria-hidden
-                  className='text-amber-800 dark:text-amber-400'
+                  className='text-orange-700 dark:text-orange-400'
                 />
                 <span>
                   You’re signed in as <span className='font-medium'>{signedInAs}</span>.

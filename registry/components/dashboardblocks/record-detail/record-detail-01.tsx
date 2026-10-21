@@ -8,14 +8,6 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
-  DataTable,
-  DataTableBody,
-  DataTableCell,
-  DataTableHead,
-  DataTableHeader,
-  DataTableRow,
-} from '@/registry/components/dashboardblocks/data-table'
-import {
   ActionsMenu,
   BackLink,
   PageHeader,
@@ -36,6 +28,15 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowLink,
+} from '@/registry/components/dashboardblocks/table'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { formatCurrency, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
@@ -218,12 +219,10 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
             }
           >
             <RecordSection
-              className='[--data-table-inset:0px]'
               description={`The last ${orders.length} orders, ${money(spent)} after refunds.`}
               title='Recent orders'
             >
-              <DataTable>
-                <caption className='sr-only'>Recent orders</caption>
+              <DataTable caption='Recent orders'>
                 <DataTableHeader>
                   <DataTableRow>
                     <DataTableHead>Order</DataTableHead>
@@ -236,27 +235,17 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
                   {orders.map((order) => (
                     <DataTableRow key={order.id}>
                       <DataTableCell primary>
-                        <a
-                          href={order.href}
-                          className='underline-offset-4 hover:underline'
-                        >
-                          {order.id}
-                        </a>
+                        <DataTableRowLink href={order.href}>{order.id}</DataTableRowLink>
                       </DataTableCell>
-                      <DataTableCell
-                        label='Date'
-                        className='text-muted-foreground whitespace-nowrap'
-                      >
+                      <DataTableCell className='text-muted-foreground whitespace-nowrap'>
                         {order.date}
                       </DataTableCell>
-                      <DataTableCell label='Status'>
+                      <DataTableCell>
                         <StatusLabel tone={ORDER_TONE[order.status]}>
                           {order.status}
                         </StatusLabel>
                       </DataTableCell>
-                      <DataTableCell align='end' label='Total'>
-                        {money(order.total)}
-                      </DataTableCell>
+                      <DataTableCell align='end'>{money(order.total)}</DataTableCell>
                     </DataTableRow>
                   ))}
                 </DataTableBody>

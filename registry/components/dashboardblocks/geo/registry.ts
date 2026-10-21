@@ -75,6 +75,7 @@ export const examples: Registry['items'] = [
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('kpi'),
+      registryUrl('table'),
     ],
     meta: {
       shows:

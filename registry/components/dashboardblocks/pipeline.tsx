@@ -94,7 +94,7 @@ function PipelineAge({
       className={cn(
         'text-xs whitespace-nowrap tabular-nums',
         stuck
-          ? 'font-medium text-amber-800 dark:text-amber-400'
+          ? 'font-medium text-orange-700 dark:text-orange-400'
           : 'text-muted-foreground',
         className,
       )}

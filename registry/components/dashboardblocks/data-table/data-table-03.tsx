@@ -6,6 +6,8 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { getKPIChange, KPIChange } from '@/registry/components/dashboardblocks/kpi'
+import { StatSparkline } from '@/registry/components/dashboardblocks/stat-group'
 import {
   DataTable,
   DataTableBody,
@@ -14,9 +16,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
-import { getKPIChange, KPIChange } from '@/registry/components/dashboardblocks/kpi'
-import { StatSparkline } from '@/registry/components/dashboardblocks/stat-group'
+} from '@/registry/components/dashboardblocks/table'
 import {
   formatCurrency,
   formatNumber,
@@ -121,15 +121,14 @@ const DataTable3 = (props: DataTable3Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <DataTable>
-          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+        <DataTable caption={`${title}: ${description}`}>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Campaign</DataTableHead>
@@ -155,10 +154,8 @@ const DataTable3 = (props: DataTable3Props) => {
                         {row.channel}
                       </span>
                     </DataTableCell>
-                    <DataTableCell align='end' label='Spend'>
-                      {formatCurrency(row.spend)}
-                    </DataTableCell>
-                    <DataTableCell align='end' label='Conversions'>
+                    <DataTableCell align='end'>{formatCurrency(row.spend)}</DataTableCell>
+                    <DataTableCell align='end'>
                       <span className='block'>{formatNumber(conversions)}</span>
                       <KPIChange
                         className='text-xs'
@@ -169,7 +166,7 @@ const DataTable3 = (props: DataTable3Props) => {
                         variant='short'
                       />
                     </DataTableCell>
-                    <DataTableCell align='end' label='Cost per conversion'>
+                    <DataTableCell align='end'>
                       <span className='block'>{money(cost)}</span>
                       <KPIChange
                         className='text-xs'
@@ -182,7 +179,7 @@ const DataTable3 = (props: DataTable3Props) => {
                         variant='short'
                       />
                     </DataTableCell>
-                    <DataTableCell label='Conversions by day' className='w-32'>
+                    <DataTableCell className='w-32'>
                       <StatSparkline
                         className='h-7 w-full'
                         data={row.conversions}

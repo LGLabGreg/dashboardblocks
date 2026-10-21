@@ -21,7 +21,7 @@
       "data-table-02"
     ],
     "component": "CommandMenu2",
-    "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
+    "props": "{ recent: { heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }; search?: (query: string) => Promise<{ heading: string; items: { description?: string; href?: string; icon?: ReactNode; id: string; keywords?: string[]; keepOpen?: boolean; label: string; meta?: string; onSelect?: () => void; shortcut?: string }[] }[]>; onNavigate?: (href: string) => void }"
   },
   "type": "registry:component"
 }

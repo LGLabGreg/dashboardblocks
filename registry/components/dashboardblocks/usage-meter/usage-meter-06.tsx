@@ -138,7 +138,10 @@ const UsageMeter6 = (props: UsageMeter6Props) => {
             {limits.map((item) => {
               const status = getUsageStatus(item.used, item.limit)
               return (
-                <li key={item.name} className='flex flex-col gap-2 border-b py-2.5'>
+                <li
+                  key={item.name}
+                  className='flex flex-col gap-2 border-b py-2.5 last:border-b-0'
+                >
                   <div className='flex items-center justify-between gap-3 text-sm'>
                     <span className='text-muted-foreground flex min-w-0 items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0'>
                       {item.icon}

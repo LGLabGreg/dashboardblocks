@@ -15,7 +15,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableStateRows,
-} from '@/registry/components/dashboardblocks/data-table'
+} from '@/registry/components/dashboardblocks/table'
 import {
   formatCurrency,
   formatNumber,
@@ -69,15 +69,14 @@ const DataTable2 = (props: DataTable2Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <DataTable>
-          <caption className='sr-only'>{`${title}: ${description}`}</caption>
+        <DataTable caption={`${title}: ${description}`}>
           <DataTableHeader>
             <DataTableRow>
               <DataTableHead>Product</DataTableHead>
@@ -97,13 +96,8 @@ const DataTable2 = (props: DataTable2Props) => {
                       {row.category}
                     </span>
                   </DataTableCell>
-                  <DataTableCell align='end' label='Units'>
-                    {formatNumber(row.units)}
-                  </DataTableCell>
-                  <DataTableCell
-                    label='Revenue'
-                    className='@max-2xl/data-table:order-last @max-2xl/data-table:col-span-2'
-                  >
+                  <DataTableCell align='end'>{formatNumber(row.units)}</DataTableCell>
+                  <DataTableCell>
                     <span className='flex w-full items-center gap-3'>
                       <DataTableBar max={top?.revenue ?? 0} value={row.revenue} />
                       <span className='w-16 shrink-0 text-right tabular-nums'>
@@ -111,11 +105,7 @@ const DataTable2 = (props: DataTable2Props) => {
                       </span>
                     </span>
                   </DataTableCell>
-                  <DataTableCell
-                    align='end'
-                    label='Share'
-                    className='text-muted-foreground'
-                  >
+                  <DataTableCell align='end' className='text-muted-foreground'>
                     {share(row.revenue, total)}
                   </DataTableCell>
                 </DataTableRow>

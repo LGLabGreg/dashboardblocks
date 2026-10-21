@@ -65,7 +65,7 @@ const exampleProps: Team3Props = {
 }
 
 const barFill: Record<Presence, string> = {
-  away: 'bg-amber-500',
+  away: 'bg-orange-500',
   offline: 'bg-muted-foreground/30',
   online: 'bg-emerald-600 dark:bg-emerald-500',
 }

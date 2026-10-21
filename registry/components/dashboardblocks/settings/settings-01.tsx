@@ -339,7 +339,7 @@ const Settings1 = (props: Settings1Props) => {
                       <Details className='text-muted-foreground text-xs'>
                         {roleConfig[pending.role].label}
                         {expired ? (
-                          <StatusLabel tone='warning' className='text-xs'>
+                          <StatusLabel variant='text' tone='warning' className='text-xs'>
                             Expired
                           </StatusLabel>
                         ) : (

@@ -54,7 +54,7 @@ function Forms4Content(props: Forms4Props & { defaultValues: CustomerDetails }) 
 
   return (
     <>
-      <div className='divide-y border-y'>
+      <div className='divide-y border-t'>
         <InlineEditField
           label='Name'
           value={details.name}

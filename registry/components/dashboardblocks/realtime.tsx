@@ -52,14 +52,16 @@ function LiveBadge({ className, label = 'Live', paused = false }: LiveBadgeProps
   return (
     <StatusLabel
       tone={paused ? 'neutral' : 'good'}
-      className={cn('inline-flex items-center gap-1.5', className)}
+      className={className}
+      indicator={
+        <span aria-hidden className='relative flex size-1.5 shrink-0'>
+          {!paused && (
+            <span className='absolute inline-flex size-full rounded-full bg-current opacity-60 motion-safe:animate-ping' />
+          )}
+          <span className='relative inline-flex size-1.5 rounded-full bg-current' />
+        </span>
+      }
     >
-      <span aria-hidden className='relative flex size-2'>
-        {!paused && (
-          <span className='absolute inline-flex size-full rounded-full bg-current opacity-60 motion-safe:animate-ping' />
-        )}
-        <span className='relative inline-flex size-2 rounded-full bg-current' />
-      </span>
       {paused ? 'Paused' : label}
     </StatusLabel>
   )

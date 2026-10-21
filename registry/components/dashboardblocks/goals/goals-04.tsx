@@ -116,7 +116,7 @@ const Goals4 = (props: Goals4Props) => {
                       {goal.unit}
                     </span>
                     {done ? (
-                      <StatusLabel className='text-xs' tone='good'>
+                      <StatusLabel variant='text' className='text-xs' tone='good'>
                         Met
                         {goal.current > goal.target &&
                           `, ${formatNumber(goal.current - goal.target)} over`}

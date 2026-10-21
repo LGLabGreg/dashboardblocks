@@ -55,7 +55,7 @@ const exampleProps: UsageMeter3Props = {
   title: 'Metered usage',
 }
 
-const OVERAGE_COLOR = 'var(--color-amber-500)'
+const OVERAGE_COLOR = 'var(--color-orange-500)'
 
 const formatMoney = (value: number) =>
   formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
@@ -136,7 +136,7 @@ const UsageMeter3 = (props: UsageMeter3Props) => {
                       <span>{formatPrice(item)}</span>
                       {over > 0 ? (
                         <span className='flex items-baseline gap-3 tabular-nums'>
-                          <span className='font-medium text-amber-800 dark:text-amber-400'>
+                          <span className='font-medium text-orange-700 dark:text-orange-400'>
                             {formatUsage(over, item.unit, { compact: true })} over
                           </span>
                           <span className='text-foreground min-w-16 text-right font-medium'>

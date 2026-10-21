@@ -2,6 +2,7 @@
 
 import { isEmail } from '@/registry/components/dashboardblocks/forms'
 import { Link } from '@/registry/components/dashboardblocks/link'
+import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ClipboardEvent,
@@ -16,7 +17,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 
 import { cn } from '@/lib/utils'
 
@@ -450,18 +450,13 @@ function InviteList({
                   onChange={(event) => update(index, { email: event.target.value })}
                   onPaste={(event) => paste(event, index)}
                 />
-                <NativeSelect
+                <OptionSelect
                   className='w-full'
                   aria-label={`Role for ${label}`}
                   value={invite.role}
-                  onChange={(event) => update(index, { role: event.target.value })}
-                >
-                  {roles.map((role) => (
-                    <NativeSelectOption key={role.value} value={role.value}>
-                      {role.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                  options={roles}
+                  onValueChange={(role) => update(index, { role })}
+                />
                 <Button
                   type='button'
                   variant='ghost'

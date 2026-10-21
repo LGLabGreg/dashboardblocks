@@ -16,7 +16,6 @@ import {
   DataTableReset,
   DataTableSearch,
   DataTableSelectionBar,
-  DataTableSortMenu,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
 import {
@@ -28,6 +27,7 @@ import {
   formatFileSize,
   getFileKind,
 } from '@/registry/components/dashboardblocks/files'
+import { DataTableRowLink } from '@/registry/components/dashboardblocks/table'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { createContext, startTransition, useContext, useMemo, useState } from 'react'
@@ -196,12 +196,7 @@ const columns = columnHelper.columns([
     cell: ({ row }) => (
       <span className='flex min-w-0 items-center gap-3'>
         <FileKindIcon kind={row.original.kind} size='sm' />
-        <a
-          href={row.original.href}
-          className='truncate underline-offset-4 outline-none hover:underline focus-visible:underline'
-        >
-          {row.original.name}
-        </a>
+        <DataTableRowLink href={row.original.href}>{row.original.name}</DataTableRowLink>
       </span>
     ),
     header: 'Name',
@@ -230,7 +225,6 @@ const columns = columnHelper.columns([
     enableGlobalFilter: false,
     header: 'Modified',
     id: 'modified',
-    meta: { sortLabels: { asc: 'Oldest first', desc: 'Newest first' } },
     sortDescFirst: true,
   }),
   columnHelper.accessor('size', {
@@ -245,10 +239,8 @@ const columns = columnHelper.columns([
     header: () => <span className='sr-only'>Actions</span>,
     id: 'actions',
     meta: {
-      cellClassName:
-        'w-px pl-0 @max-2xl/data-table:absolute @max-2xl/data-table:right-[var(--data-table-inset,1.5rem)] @max-2xl/data-table:bottom-3 @max-2xl/data-table:-mr-2 @max-2xl/data-table:w-auto',
+      cellClassName: 'w-px pl-0',
       headerClassName: 'w-px',
-      hideLabelWhenStacked: true,
     },
   }),
 ])
@@ -343,7 +335,7 @@ const Files2 = (props: Files2Props) => {
   return (
     <BlockStateProvider state={getBlockState(status, files)}>
       <FileTable value={{ actionsFor, now, timeZone }}>
-        <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+        <section className='@container/data-table flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>
             <BlockReady className='text-sm'>
@@ -366,16 +358,13 @@ const Files2 = (props: Files2Props) => {
               <>
                 <DataTableSearch table={table} placeholder='Search files…' />
                 <DataTableFacetFilter
-                  column={table.getColumn('kind')}
+                  table={table}
+                  columnId='kind'
                   options={KIND_OPTIONS.filter((option) =>
                     rows.some((row) => row.kind === option.value),
                   )}
                 />
                 <DataTableReset table={table} />
-                <DataTableSortMenu
-                  className='ml-auto @2xl/data-table:hidden'
-                  table={table}
-                />
               </>
             )}
           </div>

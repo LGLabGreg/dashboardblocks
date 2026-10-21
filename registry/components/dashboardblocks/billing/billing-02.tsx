@@ -88,7 +88,10 @@ const Billing2 = (props: Billing2Props) => {
             <h2 className='font-semibold tracking-tight'>{title}</h2>
             <BlockReady className='text-sm'>
               <Details className='text-muted-foreground block text-sm'>
-                <StatusLabel tone={cancelsAtPeriodEnd ? 'warning' : 'good'}>
+                <StatusLabel
+                  variant='text'
+                  tone={cancelsAtPeriodEnd ? 'warning' : 'good'}
+                >
                   {cancelsAtPeriodEnd ? 'Cancels' : 'Active'}
                 </StatusLabel>
                 <span>

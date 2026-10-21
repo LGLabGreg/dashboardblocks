@@ -175,6 +175,7 @@ function TimelineStatusLabel({
         className,
       )}
       tone={config.tone}
+      variant='text'
     >
       {config.icon}
       <span className={cn(!showLabel && 'sr-only')}>{config.label}</span>

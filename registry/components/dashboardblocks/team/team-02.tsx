@@ -86,7 +86,7 @@ const exampleProps: Team2Props = {
 
 const FILL_COLOR = 'var(--color-chart-2)'
 const OVER_FILL =
-  'repeating-linear-gradient(135deg, var(--color-amber-500) 0 3px, color-mix(in oklab, var(--color-amber-500) 45%, var(--color-background)) 3px 6px)'
+  'repeating-linear-gradient(135deg, var(--color-orange-500) 0 3px, color-mix(in oklab, var(--color-orange-500) 45%, var(--color-background)) 3px 6px)'
 
 function WorkloadBar({
   assigned,
@@ -198,7 +198,7 @@ const Team2 = (props: Team2Props) => {
                     </span>
                     <span className='flex shrink-0 items-baseline gap-2 text-xs tabular-nums'>
                       {over > 0 && (
-                        <StatusLabel tone='warning' className='text-xs'>
+                        <StatusLabel variant='text' tone='warning' className='text-xs'>
                           Over by {over}
                         </StatusLabel>
                       )}

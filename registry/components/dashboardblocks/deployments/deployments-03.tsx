@@ -160,7 +160,11 @@ const Deployments3 = (props: Deployments3Props) => {
                   <BlockReady className='text-xs'>
                     {levels && (
                       <Details>
-                        <DoraLabel className='text-xs' level={levels[metric.key]} />
+                        <DoraLabel
+                          className='text-xs'
+                          level={levels[metric.key]}
+                          variant='text'
+                        />
                         {metric.hint}
                       </Details>
                     )}

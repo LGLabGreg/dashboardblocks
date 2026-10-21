@@ -122,7 +122,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
                     'font-medium tabular-nums',
                     share >= 1
                       ? 'text-emerald-700 dark:text-emerald-400'
-                      : 'text-amber-800 dark:text-amber-400',
+                      : 'text-orange-700 dark:text-orange-400',
                   )}
                 >
                   {formatPercent(share, { maximumFractionDigits: 0 })} of goal

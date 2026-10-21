@@ -163,13 +163,14 @@ const Comments4 = (props: Comments4Props) => {
   function badge(kind: MessageKind) {
     if (kind === 'customer')
       return (
-        <StatusLabel className='text-xs' tone='info'>
+        <StatusLabel variant='text' className='text-xs' tone='info'>
           Customer
         </StatusLabel>
       )
     if (kind === 'note')
       return (
         <StatusLabel
+          variant='text'
           className='flex items-center gap-1 text-xs [&_svg]:size-3'
           tone='warning'
         >
@@ -216,7 +217,7 @@ const Comments4 = (props: Comments4Props) => {
                   key={message.id}
                   className={
                     message.kind === 'note'
-                      ? 'border-l-2 border-amber-500/60 bg-amber-500/5 py-3 pr-3 pl-[calc(0.75rem-2px)]'
+                      ? 'border-l-2 border-orange-500/60 bg-orange-500/5 py-3 pr-3 pl-[calc(0.75rem-2px)]'
                       : 'px-3'
                   }
                 >
@@ -276,7 +277,7 @@ const Comments4 = (props: Comments4Props) => {
             </TabsContent>
             <TabsContent value='note'>
               <CommentComposer
-                className='*:data-[slot=input-group]:bg-amber-500/5'
+                className='*:data-[slot=input-group]:bg-orange-500/5'
                 label='Internal note'
                 placeholder='Add a note for your team. Type @ to mention someone.'
                 submitLabel='Add note'
@@ -285,7 +286,7 @@ const Comments4 = (props: Comments4Props) => {
                 people={people}
                 value={drafts.note}
                 footer={
-                  <span className='flex min-w-0 items-center gap-1.5 text-amber-800 dark:text-amber-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
+                  <span className='flex min-w-0 items-center gap-1.5 text-orange-700 dark:text-orange-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
                     {lockIcon}
                     <span className='truncate'>
                       {mentioned.length > 0

@@ -11,6 +11,7 @@ export const examples: Registry['items'] = [
       registryUrl('format'),
       registryUrl('funnel'),
       registryUrl('kpi'),
+      registryUrl('table'),
     ],
     files: [
       {

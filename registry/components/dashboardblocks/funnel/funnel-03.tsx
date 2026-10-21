@@ -96,7 +96,7 @@ const Funnel3 = (props: Funnel3Props) => {
                         {`${formatRate(step.fromPrevious)} of previous step`}
                         {`${formatNumber(step.dropped)} dropped`}
                         {isBiggestDrop && (
-                          <StatusLabel tone='bad' className='text-xs'>
+                          <StatusLabel variant='text' tone='bad' className='text-xs'>
                             Biggest drop-off
                           </StatusLabel>
                         )}

@@ -14,6 +14,15 @@ import {
   getFunnelSteps,
 } from '@/registry/components/dashboardblocks/funnel'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+} from '@/registry/components/dashboardblocks/table'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment } from 'react'
 
@@ -66,44 +75,40 @@ const Funnel1 = (props: Funnel1Props) => {
         </dl>
         {state === 'loading' && <BlockStateRows rows={5} />}
         {!state && (
-          <table className='w-full text-sm'>
-            <caption className='sr-only'>{`${title}: ${description}`}</caption>
-            <thead className='text-muted-foreground text-xs'>
-              <tr>
-                <th scope='col' className='pb-1 text-left font-normal'>
-                  Stage
-                </th>
-                <th scope='col' className='pb-1 text-right font-normal'>
-                  Users
-                </th>
-                <th scope='col' className='pb-1 text-right font-normal'>
+          <DataTable density='compact' caption={`${title}: ${description}`}>
+            <DataTableHeader>
+              <DataTableRow>
+                <DataTableHead>Stage</DataTableHead>
+                <DataTableHead align='end'>Users</DataTableHead>
+                <DataTableHead align='end'>
                   Conversion<span className='sr-only'> from previous step</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </DataTableHead>
+              </DataTableRow>
+            </DataTableHeader>
+            <DataTableBody>
               {steps.map((step, index) => (
                 <Fragment key={step.label}>
-                  <tr>
-                    <th scope='row' className='pt-2.5 pr-4 pb-1.5 text-left font-normal'>
-                      {step.label}
-                    </th>
-                    <td className='w-20 pt-2.5 pb-1.5 pl-2 text-right font-medium tabular-nums'>
+                  <DataTableRow className='border-b-0'>
+                    <DataTableRowHead className='pb-1.5'>{step.label}</DataTableRowHead>
+                    <DataTableCell align='end' className='w-20 pb-1.5 font-medium'>
                       {formatNumber(step.value)}
-                    </td>
-                    <td className='text-muted-foreground w-24 pt-2.5 pb-1.5 pl-2 text-right tabular-nums'>
+                    </DataTableCell>
+                    <DataTableCell
+                      align='end'
+                      className='text-muted-foreground w-24 pb-1.5'
+                    >
                       {index === 0 ? '—' : formatRate(step.fromPrevious)}
-                    </td>
-                  </tr>
-                  <tr aria-hidden>
-                    <td colSpan={3} className='pb-1'>
+                    </DataTableCell>
+                  </DataTableRow>
+                  <DataTableRow aria-hidden>
+                    <DataTableCell colSpan={3} className='pt-0'>
                       <FunnelBar delay={index * 80} value={step.fromStart * 100} />
-                    </td>
-                  </tr>
+                    </DataTableCell>
+                  </DataTableRow>
                 </Fragment>
               ))}
-            </tbody>
-          </table>
+            </DataTableBody>
+          </DataTable>
         )}
       </section>
     </BlockStateProvider>

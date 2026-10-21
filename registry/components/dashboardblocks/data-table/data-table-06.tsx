@@ -16,7 +16,6 @@ import {
   DataTableReset,
   DataTableSearch,
   DataTableSelectionBar,
-  DataTableSortMenu,
   DataTableViewOptions,
   useDataTable,
 } from '@/registry/components/dashboardblocks/data-table'
@@ -242,7 +241,7 @@ const columns = columnHelper.columns([
     cell: ({ getValue }) => dateFormat.format(new Date(getValue())),
     enableGlobalFilter: false,
     header: 'Signed up',
-    meta: { align: 'end', sortLabels: { asc: 'Oldest first', desc: 'Newest first' } },
+    meta: { align: 'end' },
     sortDescFirst: true,
   }),
 ])
@@ -271,7 +270,7 @@ const DataTable6 = (props: DataTable6Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, rows)}>
-      <section className='@container/data-table flex flex-col gap-3 [--data-table-inset:0px]'>
+      <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>
@@ -306,20 +305,18 @@ const DataTable6 = (props: DataTable6Props) => {
             <>
               <DataTableSearch table={table} placeholder='Search customers…' />
               <DataTableFacetFilter
-                column={table.getColumn('status')}
+                table={table}
+                columnId='status'
                 options={STATUS_OPTIONS}
               />
               <DataTableFacetFilter
-                column={table.getColumn('plan')}
+                table={table}
+                columnId='plan'
                 options={PLAN_OPTIONS}
               />
               <DataTableReset table={table} />
               <div className='ml-auto flex items-center gap-2'>
-                <DataTableSortMenu className='@2xl/data-table:hidden' table={table} />
-                <DataTableViewOptions
-                  className='@max-2xl/data-table:hidden'
-                  table={table}
-                />
+                <DataTableViewOptions table={table} />
               </div>
             </>
           )}

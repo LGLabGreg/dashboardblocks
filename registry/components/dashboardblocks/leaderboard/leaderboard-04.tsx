@@ -1,18 +1,23 @@
 import {
   BlockReady,
   BlockStateProvider,
-  BlockStateRows,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
-  Leaderboard,
-  LeaderboardItem,
-  LeaderboardLabel,
   LeaderboardRank,
   LeaderboardRankChange,
-  LeaderboardValue,
 } from '@/registry/components/dashboardblocks/leaderboard'
+import {
+  DataTable,
+  DataTableBody,
+  DataTableCell,
+  DataTableHead,
+  DataTableHeader,
+  DataTableRow,
+  DataTableRowHead,
+  DataTableStateRows,
+} from '@/registry/components/dashboardblocks/table'
 import {
   formatCurrency,
   formatNumber,
@@ -139,45 +144,44 @@ const Leaderboard4 = (props: Leaderboard4Props) => {
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <div className='flex flex-col'>
-          <div
-            aria-hidden='true'
-            className='text-muted-foreground flex gap-3 border-b pb-2 text-xs'
-          >
-            <span className='w-5 shrink-0'>#</span>
-            <span className='flex-1'>Product</span>
-            <span>Revenue</span>
-            <span className='w-16 shrink-0 text-end'>Move</span>
-          </div>
-          <BlockStateRows rows={6} />
-          {!state && (
-            <Leaderboard className='gap-0'>
-              {products.map((product, index) => (
-                <LeaderboardItem
-                  key={product.id}
-                  className='border-b px-0 py-2.5 last:border-b-0'
-                >
-                  <LeaderboardRank rank={index + 1} />
-                  <LeaderboardLabel>
-                    <p className='truncate font-medium'>{product.name}</p>
-                    <p className='text-muted-foreground truncate text-xs'>
+        <DataTable caption={title} className='border-t'>
+          <DataTableHeader>
+            <DataTableRow>
+              <DataTableHead className='w-10'>#</DataTableHead>
+              <DataTableHead>Product</DataTableHead>
+              <DataTableHead align='end'>Revenue</DataTableHead>
+              <DataTableHead align='end' className='w-20'>
+                Move
+              </DataTableHead>
+            </DataTableRow>
+          </DataTableHeader>
+          <DataTableBody>
+            <DataTableStateRows colSpan={4} rows={6} />
+            {!state &&
+              products.map((product, index) => (
+                <DataTableRow key={product.id}>
+                  <DataTableCell className='pe-0'>
+                    <LeaderboardRank rank={index + 1} />
+                  </DataTableCell>
+                  <DataTableRowHead primary truncate>
+                    <span className='block truncate'>{product.name}</span>
+                    <span className='text-muted-foreground block truncate text-xs font-normal'>
                       {joinDetails(
                         product.category,
                         `${formatNumber(product.unitsSold)} sold`,
                       )}
-                    </p>
-                  </LeaderboardLabel>
-                  <LeaderboardValue>
+                    </span>
+                  </DataTableRowHead>
+                  <DataTableCell align='end' className='font-medium'>
                     {formatCurrency(product.revenue, { currency })}
-                  </LeaderboardValue>
-                  <div className='flex w-16 shrink-0 justify-end'>
+                  </DataTableCell>
+                  <DataTableCell align='end'>
                     <LeaderboardRankChange change={product.change} />
-                  </div>
-                </LeaderboardItem>
+                  </DataTableCell>
+                </DataTableRow>
               ))}
-            </Leaderboard>
-          )}
-        </div>
+          </DataTableBody>
+        </DataTable>
       </section>
     </BlockStateProvider>
   )

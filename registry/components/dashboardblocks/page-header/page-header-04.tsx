@@ -50,7 +50,7 @@ const PageHeader4 = (props: PageHeader4Props) => {
 
   return (
     <BlockStateProvider state={state}>
-      <PageHeader className='border-b pb-4'>
+      <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading
             title={title}
