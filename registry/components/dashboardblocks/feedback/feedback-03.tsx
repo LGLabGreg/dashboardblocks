@@ -11,6 +11,7 @@ import { Details } from '@/registry/components/dashboardblocks/details'
 import { StarRating } from '@/registry/components/dashboardblocks/feedback'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 interface Review {
   author: string
@@ -80,14 +81,6 @@ const exampleProps: Feedback3Props = {
   title: 'Recent reviews',
 }
 
-const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
-
-function formatReviewAge(date: Date, now: Date) {
-  const hours = (now.getTime() - date.getTime()) / 3_600_000
-  if (hours < 24) return relative.format(-Math.max(1, Math.round(hours)), 'hour')
-  return relative.format(-Math.round(hours / 24), 'day')
-}
-
 const Feedback3 = (props: Feedback3Props) => {
   const { description, now, reviews = [], status, title } = props
   const state = getBlockState(status, reviews)
@@ -139,7 +132,7 @@ const Feedback3 = (props: Feedback3Props) => {
                   <Details className='text-muted-foreground text-xs'>
                     {review.source}
                     <time dateTime={review.date.toISOString()}>
-                      {formatReviewAge(review.date, now)}
+                      {formatRelativeTime(review.date, now, { style: 'long' })}
                     </time>
                   </Details>
                 </div>

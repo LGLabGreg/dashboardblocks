@@ -104,8 +104,7 @@ const PAYMENT_TONE: Record<PaymentStatus, StatusTone> = {
   Refunded: 'neutral',
 }
 
-const money = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const money = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)

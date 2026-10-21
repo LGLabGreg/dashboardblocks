@@ -8,7 +8,7 @@ const plain = (text: string) => text.replace(/[\u2009\u202f]/g, ' ')
 
 describe('formatProvenanceWindow', () => {
   it('reads all time without a window', () => {
-    assert.equal(formatProvenanceWindow(null, 'en-US', 'UTC'), 'All time')
+    assert.equal(formatProvenanceWindow(null, 'UTC'), 'All time')
   })
 
   it('shortens a range within one month', () => {
@@ -19,7 +19,6 @@ describe('formatProvenanceWindow', () => {
             from: new Date('2026-09-01T00:00:00Z'),
             to: new Date('2026-09-30T00:00:00Z'),
           },
-          'en-US',
           'UTC',
         ),
       ),
@@ -35,7 +34,6 @@ describe('formatProvenanceWindow', () => {
             from: new Date('2026-09-28T00:00:00Z'),
             to: new Date('2026-10-04T00:00:00Z'),
           },
-          'en-US',
           'UTC',
         ),
       ),
@@ -51,7 +49,6 @@ describe('formatProvenanceWindow', () => {
             from: new Date('2025-12-29T00:00:00Z'),
             to: new Date('2026-01-04T00:00:00Z'),
           },
-          'en-US',
           'UTC',
         ),
       ),
@@ -67,7 +64,6 @@ describe('formatProvenanceWindow', () => {
             from: new Date('2026-09-01T02:00:00Z'),
             to: new Date('2026-09-08T02:00:00Z'),
           },
-          'en-US',
           'America/New_York',
         ),
       ),

@@ -19,6 +19,7 @@ import {
   formatTimelineDate,
   getDaysBetween,
 } from '@/registry/components/dashboardblocks/timeline'
+import { formatRelativeDays } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -86,8 +87,6 @@ const exampleProps: Timeline2Props = {
   now: date(9, 26),
   title: 'Launch milestones',
 }
-
-const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
 
 const Timeline2 = (props: Timeline2Props) => {
   const { description, milestones = [], now, status, title } = props
@@ -203,9 +202,7 @@ const Timeline2 = (props: Timeline2Props) => {
                             <span
                               className={cn('ml-1.5', overdue && statusToneClasses.bad)}
                             >
-                              {overdue
-                                ? `${-days} days late`
-                                : relative.format(days, 'day')}
+                              {overdue ? `${-days} days late` : formatRelativeDays(days)}
                             </span>
                           )}
                         </span>

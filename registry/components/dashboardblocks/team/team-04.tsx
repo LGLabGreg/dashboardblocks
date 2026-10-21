@@ -14,6 +14,7 @@ import {
   PresenceLabel,
 } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -113,27 +114,6 @@ const Team4 = (props: Team4Props) => {
   const { description, now, onPage, shifts = [], status, timeZone = 'UTC', title } = props
   const state = getBlockState(status, shifts)
   const id = useId()
-  const handoverFormatter = new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    hour: '2-digit',
-    hourCycle: 'h23',
-    minute: '2-digit',
-    month: 'short',
-    timeZone,
-    timeZoneName: 'short',
-    weekday: 'short',
-  })
-  const dayFormatter = new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-  })
-  const weekdayFormatter = new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-    weekday: 'short',
-  })
 
   const upcoming = shifts.filter((shift) => shift.end.getTime() > now.getTime())
   const current = upcoming[0]?.start.getTime() <= now.getTime() ? upcoming[0] : undefined
@@ -145,9 +125,9 @@ const Team4 = (props: Team4Props) => {
     : 0
 
   const summary = current
-    ? `${current.person.name} until ${weekdayFormatter.format(current.end)}${next ? `, then ${next.person.name}` : ''}.`
+    ? `${current.person.name} until ${formatDate(current.end, 'weekday-day', timeZone)}${next ? `, then ${next.person.name}` : ''}.`
     : next
-      ? `Nobody right now. ${next.person.name} starts ${weekdayFormatter.format(next.start)}.`
+      ? `Nobody right now. ${next.person.name} starts ${formatDate(next.start, 'weekday-day', timeZone)}.`
       : 'Nobody is on call.'
 
   return (
@@ -213,7 +193,7 @@ const Team4 = (props: Team4Props) => {
                     className='text-foreground font-medium'
                     dateTime={current.end.toISOString()}
                   >
-                    {handoverFormatter.format(current.end)}
+                    {formatDate(current.end, 'weekday-day-time-zone', timeZone)}
                   </time>
                 </span>
                 <span className='tabular-nums'>
@@ -245,11 +225,11 @@ const Team4 = (props: Team4Props) => {
                   </span>
                   <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
                     <time dateTime={shift.start.toISOString()}>
-                      {dayFormatter.format(shift.start)}
+                      {formatDate(shift.start, 'day', timeZone)}
                     </time>
                     {' – '}
                     <time dateTime={shift.end.toISOString()}>
-                      {dayFormatter.format(shift.end)}
+                      {formatDate(shift.end, 'day', timeZone)}
                     </time>
                   </span>
                 </li>

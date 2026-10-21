@@ -17,7 +17,7 @@ import {
   StatLabel,
   StatValue,
 } from '@/registry/components/dashboardblocks/stat-group'
-import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import { formatDate, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 interface Heatmap3Props {
   /** One value per day, oldest first, ending on `endDate`. Leave out, or pass none, to show the empty state. */
@@ -56,22 +56,6 @@ const exampleProps: Heatmap3Props = {
   unit: 'deploys',
 }
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-const shortDateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-const monthFormatter = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  timeZone: 'UTC',
-})
-
 function getLongestRun(daily: number[]) {
   let longest = 0
   let current = 0
@@ -103,7 +87,7 @@ const Heatmap3 = (props: Heatmap3Props) => {
   const columns = Array.from({ length: WEEKS }, (_, column) => {
     if (!startsMonth(column)) return ''
     if (column === 0 && [1, 2].some(startsMonth)) return ''
-    return monthFormatter.format(dateAt(0, column))
+    return formatDate(dateAt(0, column), 'month')
   })
   const total = daily.reduce((sum, value) => sum + value, 0)
   const activeDays = daily.filter((value) => value > 0).length
@@ -133,7 +117,7 @@ const Heatmap3 = (props: Heatmap3Props) => {
             <StatValue className='text-2xl'>
               {formatNumber(daily[busiest] ?? 0)}
               <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
-                on {shortDateFormatter.format(busiestDate)}
+                on {formatDate(busiestDate, 'day')}
               </span>
             </StatValue>
           </Stat>
@@ -151,11 +135,11 @@ const Heatmap3 = (props: Heatmap3Props) => {
           minWidth='40rem'
           cellClassName='aspect-square min-h-0'
           cellName={({ column, row }) =>
-            `${DAY_NAMES[row]}, ${dateFormatter.format(dateAt(row, column))}`
+            `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}`
           }
           columns={columns}
           describe={({ column, row }, value) =>
-            `${DAY_NAMES[row]}, ${dateFormatter.format(dateAt(row, column))}: ${value === null ? 'no data' : `${formatNumber(value)} ${unit}`}`
+            `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}: ${value === null ? 'no data' : `${formatNumber(value)} ${unit}`}`
           }
           footer={<HeatmapLegend />}
           label={`${title}: ${unit} per day over the last ${WEEKS} weeks`}

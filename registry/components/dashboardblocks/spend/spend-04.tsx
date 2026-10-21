@@ -26,7 +26,11 @@ import {
 } from '@/registry/components/dashboardblocks/chart-panel'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { getRunway } from '@/registry/components/dashboardblocks/spend'
-import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
+import {
+  formatCurrency,
+  formatDate,
+  formatNumber,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   Area,
   CartesianGrid,
@@ -59,17 +63,8 @@ const exampleProps: Spend4Props = {
   title: 'Burn and runway',
 }
 
-const shortMonthFormatter = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  timeZone: 'UTC',
-})
 const formatMonth = (date: Date) =>
-  `${shortMonthFormatter.format(date)} '${String(date.getUTCFullYear()).slice(2)}`
-const longMonthFormatter = new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
+  `${formatDate(date, 'month')} '${String(date.getUTCFullYear()).slice(2)}`
 
 const Spend4 = (props: Spend4Props) => {
   const {
@@ -159,7 +154,7 @@ const Spend4 = (props: Spend4Props) => {
                 {runway.date && (
                   <dd className='text-muted-foreground text-xs'>
                     <BlockReady className='text-xs'>
-                      Cash runs out around {longMonthFormatter.format(runway.date)}
+                      Cash runs out around {formatDate(runway.date, 'month-long-year')}
                     </BlockReady>
                   </dd>
                 )}

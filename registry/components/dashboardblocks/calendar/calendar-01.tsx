@@ -17,12 +17,8 @@ import {
   startOfMonth,
 } from '@/registry/components/dashboardblocks/calendar'
 import { Details } from '@/registry/components/dashboardblocks/details'
-import {
-  EventRow,
-  formatDay,
-  formatRelativeDay,
-  getDay,
-} from '@/registry/components/dashboardblocks/schedule'
+import { EventRow, getDay } from '@/registry/components/dashboardblocks/schedule'
+import { formatDate, formatDayHeading } from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 
 interface Calendar1Props {
@@ -276,7 +272,7 @@ const Calendar1 = (props: Calendar1Props) => {
   const [selectedEventId, setSelectedEventId] = useState<string>()
   const id = useId()
 
-  const monthLabel = formatDay(month, { month: 'long', year: 'numeric' })
+  const monthLabel = formatDate(month, 'month-long-year')
   const monthEvents = events.filter((event) => {
     const { first, last } = getEventDays(event, timeZone)
     return first < startOfMonth(month, 1) && last >= month
@@ -284,7 +280,7 @@ const Calendar1 = (props: Calendar1Props) => {
   const todayEvents = getEventsForDay(events, today, timeZone)
   const showsToday = today >= month && today < startOfMonth(month, 1)
   const dayEvents = getEventsForDay(events, selectedDay, timeZone)
-  const relative = formatRelativeDay(selectedDay, today)
+  const relative = formatDayHeading(selectedDay, today)
 
   const selectDay = (day: Date) => {
     setSelectedDay(day)
@@ -301,7 +297,7 @@ const Calendar1 = (props: Calendar1Props) => {
             state ? (
               <BlockStateText />
             ) : (
-              `${monthEvents.length} ${monthEvents.length === 1 ? 'event' : 'events'} in ${formatDay(month, { month: 'long' })}${showsToday ? `, ${todayEvents.length} of them today` : ''}.`
+              `${monthEvents.length} ${monthEvents.length === 1 ? 'event' : 'events'} in ${formatDate(month, 'month-long')}${showsToday ? `, ${todayEvents.length} of them today` : ''}.`
             )
           }
           onToday={() => {
@@ -340,7 +336,7 @@ const Calendar1 = (props: Calendar1Props) => {
               aria-live='polite'
               className='flex flex-col gap-0.5 px-2 text-sm font-medium'
             >
-              {formatDay(selectedDay, { day: 'numeric', month: 'long', weekday: 'long' })}
+              {formatDate(selectedDay, 'weekday-long-day')}
               <Details className='text-muted-foreground font-normal'>
                 {['Today', 'Tomorrow', 'Yesterday'].includes(relative) && relative}
                 {!state &&

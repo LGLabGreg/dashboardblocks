@@ -54,8 +54,7 @@ function formatDuration(seconds: number) {
 
 const metricFormats: Record<MetricFormat, MetricFormatter> = {
   compact: formatCompact,
-  currency: (value) =>
-    formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+  currency: (value) => formatCurrency(value, { precision: 'exact' }),
   'currency-compact': (value) => formatCurrency(value, { compact: true }),
   duration: formatDuration,
   milliseconds: (value) => `${formatNumber(value, { maximumFractionDigits: 0 })} ms`,

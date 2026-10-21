@@ -13,6 +13,7 @@ import {
   getWorstStatus,
   statusConfig,
 } from '@/registry/components/dashboardblocks/status'
+import { formatList } from '@/registry/lib/dashboardblocks/format'
 
 interface Service {
   description?: string
@@ -56,8 +57,6 @@ const summaryLabel: Record<StatusLevel, string> = {
   unknown: 'Status unknown',
 }
 
-const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
-
 const summarize = (services: Service[]) => {
   const affected = services.filter((service) => service.status !== 'operational')
   if (affected.length === 0) return `All ${services.length} services are operational.`
@@ -65,8 +64,8 @@ const summarize = (services: Service[]) => {
     (service) => `${service.name} ${statusConfig[service.status].phrase}`,
   )
   const rest = services.length - affected.length
-  if (rest === 0) return `${listFormat.format(states)}.`
-  return `${listFormat.format(states)}; the other ${rest} ${rest === 1 ? 'is' : 'are'} operational.`
+  if (rest === 0) return `${formatList(states)}.`
+  return `${formatList(states)}; the other ${rest} ${rest === 1 ? 'is' : 'are'} operational.`
 }
 
 const Status1 = (props: Status1Props) => {

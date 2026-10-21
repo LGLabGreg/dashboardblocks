@@ -57,8 +57,7 @@ const exampleProps: UsageMeter3Props = {
 
 const OVERAGE_COLOR = 'var(--color-orange-500)'
 
-const formatMoney = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const formatMoney = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 function formatPrice(item: MeteredItem) {
   const per = item.per ?? 1

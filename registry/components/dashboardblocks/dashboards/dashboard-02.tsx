@@ -27,6 +27,7 @@ import { StatGroup3 } from '@/registry/components/dashboardblocks/stat-group/sta
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCurrency,
+  formatDate,
   formatDateRange,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
@@ -98,11 +99,7 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
     }
   }
   const labelAt = (index: number) =>
-    new Date(range.start.getTime() + index * 86_400_000).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'short',
-      timeZone: 'UTC',
-    })
+    formatDate(new Date(range.start.getTime() + index * 86_400_000), 'day')
   const daily = (key: 'accounts' | 'churn' | 'mrr' | 'nps') =>
     Array.from({ length: days }, (_, index) => {
       const offset = days - 1 - index

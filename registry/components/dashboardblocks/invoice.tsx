@@ -20,6 +20,7 @@ import {
   formatCurrency,
   formatPercent,
   formatSigned,
+  getCurrencyDigits,
 } from '@/registry/lib/dashboardblocks/format'
 import { type ComponentProps, type ReactNode, useId } from 'react'
 
@@ -73,32 +74,14 @@ interface DocumentAmounts {
   total: number
 }
 
-const currencyDigits = new Map<string, number>()
-
-function getCurrencyDigits(currency = 'USD') {
-  let digits = currencyDigits.get(currency)
-  if (digits === undefined) {
-    digits =
-      new Intl.NumberFormat('en-US', { currency, style: 'currency' }).resolvedOptions()
-        .maximumFractionDigits ?? 2
-    currencyDigits.set(currency, digits)
-  }
-  return digits
-}
-
 function toMinorUnits(value: number, scale: number) {
   // The epsilon keeps 1.005 from rounding down because it's stored as 1.00499…
   return Math.sign(value) * Math.round(Math.abs(value) * scale + 1e-6)
 }
 
 function formatDocumentAmount(value: number, currency = 'USD') {
-  const digits = getCurrencyDigits(currency)
   const format = (amount: number) =>
-    formatCurrency(amount, {
-      currency,
-      maximumFractionDigits: digits,
-      minimumFractionDigits: digits,
-    })
+    formatCurrency(amount, { currency, precision: 'exact' })
   return value < 0 ? formatSigned(value, format) : format(value)
 }
 

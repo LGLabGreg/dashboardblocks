@@ -16,6 +16,7 @@ import {
 } from '@/registry/components/dashboardblocks/deployments'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 interface Deployment {
   author: string
@@ -106,15 +107,6 @@ const exampleProps: Deployments1Props = {
   title: 'Deployments',
 }
 
-const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto', style: 'short' })
-
-function formatStarted(date: Date, now: Date) {
-  const minutes = Math.round((now.getTime() - date.getTime()) / 60_000)
-  if (minutes < 60) return relative.format(-Math.max(1, minutes), 'minute')
-  if (minutes < 60 * 24) return relative.format(-Math.round(minutes / 60), 'hour')
-  return relative.format(-Math.round(minutes / 1_440), 'day')
-}
-
 const summarize = (deployments: Deployment[], now: Date) => {
   if (deployments.length === 0) return 'Nothing deployed yet.'
   const oldest = Math.min(
@@ -185,7 +177,7 @@ const Deployments1 = (props: Deployments1Props) => {
                           <span className='font-mono'>{shortSha(deployment.sha)}</span>
                           {deployment.author}
                           <time dateTime={deployment.startedAt.toISOString()}>
-                            {formatStarted(deployment.startedAt, now)}
+                            {formatRelativeTime(deployment.startedAt, now)}
                           </time>
                         </Details>
                       </p>

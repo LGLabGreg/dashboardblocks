@@ -11,12 +11,11 @@ import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   CopyButton,
   daysBetween,
-  formatDate,
-  formatRelative,
   maskSecret,
 } from '@/registry/components/dashboardblocks/settings'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDate, formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, type RefObject, useEffect, useId, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 
@@ -331,7 +330,7 @@ const Settings2 = (props: Settings2Props) => {
                           <>
                             Used{' '}
                             <time dateTime={key.lastUsedAt.toISOString()}>
-                              {formatRelative(key.lastUsedAt, now)}
+                              {formatRelativeTime(key.lastUsedAt, now, { style: 'long' })}
                             </time>
                           </>
                         ) : (
@@ -340,7 +339,7 @@ const Settings2 = (props: Settings2Props) => {
                         <>
                           Created by {key.createdBy} on{' '}
                           <time dateTime={key.createdAt.toISOString()}>
-                            {formatDate(key.createdAt)}
+                            {formatDate(key.createdAt, 'date')}
                           </time>
                         </>
                       </Details>

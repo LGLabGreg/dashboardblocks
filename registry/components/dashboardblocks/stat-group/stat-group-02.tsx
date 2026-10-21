@@ -67,11 +67,7 @@ const exampleProps: StatGroup2Props = {
       value: 3.4,
     },
     {
-      formatter: (value) =>
-        formatCurrency(value, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+      formatter: (value) => formatCurrency(value, { precision: 'exact' }),
       history: exampleHistory(37.6, 0.18, 0.7, 4),
       key: 'aov',
       label: 'Avg order value',

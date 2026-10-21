@@ -102,8 +102,7 @@ const STATUS_TONES: Record<OrderStatus, StatusTone> = {
   Refunded: 'neutral',
 }
 
-const currency = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const currency = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 function describe(shown: number, total: number, filters: Filter[]) {
   const orders = `${total} ${total === 1 ? 'order' : 'orders'}`

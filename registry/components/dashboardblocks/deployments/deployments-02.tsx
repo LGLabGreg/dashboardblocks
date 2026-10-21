@@ -14,6 +14,7 @@ import {
   shortSha,
 } from '@/registry/components/dashboardblocks/deployments'
 import { Details } from '@/registry/components/dashboardblocks/details'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 interface Environment {
   deployedAt: Date
@@ -74,15 +75,6 @@ const exampleProps: Deployments2Props = {
   ],
   now: NOW,
   title: 'Environments',
-}
-
-const relative = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
-
-function formatDeployed(date: Date, now: Date) {
-  const minutes = Math.round((now.getTime() - date.getTime()) / 60_000)
-  if (minutes < 60) return relative.format(-Math.max(1, minutes), 'minute')
-  if (minutes < 60 * 24) return relative.format(-Math.round(minutes / 60), 'hour')
-  return relative.format(-Math.round(minutes / 1_440), 'day')
 }
 
 const summarize = (environments: Environment[], ahead: number[]) => {
@@ -161,7 +153,7 @@ const Deployments2 = (props: Deployments2Props) => {
                     <span className='font-mono'>{shortSha(environment.sha)}</span>
                     {environment.deployedBy}
                     <time dateTime={environment.deployedAt.toISOString()}>
-                      {formatDeployed(environment.deployedAt, now)}
+                      {formatRelativeTime(environment.deployedAt, now, { style: 'long' })}
                     </time>
                   </Details>
                   {next && (

@@ -92,10 +92,7 @@ function customerFacts(customer: Customer): PageHeaderFact[] {
     {
       detail: joinDetails(
         `#${customer.lastOrder.id}`,
-        formatCurrency(customer.lastOrder.total, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+        formatCurrency(customer.lastOrder.total, { precision: 'exact' }),
       ),
       label: 'Last order',
       value: customer.lastOrder.when,

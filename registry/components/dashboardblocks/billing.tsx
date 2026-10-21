@@ -15,7 +15,11 @@ import {
   type StatusLabelProps,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
-import { formatCurrency, formatSigned } from '@/registry/lib/dashboardblocks/format'
+import {
+  formatCurrency,
+  formatDate,
+  formatSigned,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   Bar,
   BarChart,
@@ -30,15 +34,8 @@ import {
 } from 'recharts'
 import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-
 function formatBillingDate(date: Date) {
-  return dateFormatter.format(date)
+  return formatDate(date, 'date')
 }
 
 function getDaysUntil(date: Date, now: Date) {

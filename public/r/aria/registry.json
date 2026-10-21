@@ -6,6 +6,9 @@
     {
       "name": "activity-feed",
       "type": "registry:component",
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
       "title": "Activity Feed",
       "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
       "files": [
@@ -55,7 +58,8 @@
       "title": "Animated Number",
       "description": "An animated number component.",
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/aria/use-animated-number.json"
+        "https://www.dashboardblocks.com/r/aria/use-animated-number.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -268,7 +272,8 @@
         "dropdown-menu",
         "input",
         "https://www.dashboardblocks.com/r/aria/details.json",
-        "https://www.dashboardblocks.com/r/aria/table.json"
+        "https://www.dashboardblocks.com/r/aria/table.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -640,7 +645,8 @@
       "registryDependencies": [
         "button",
         "popover",
-        "https://www.dashboardblocks.com/r/aria/link.json"
+        "https://www.dashboardblocks.com/r/aria/link.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -1062,7 +1068,8 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/aria/animated-number.json"
+        "https://www.dashboardblocks.com/r/aria/animated-number.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -3715,7 +3722,8 @@
         "button",
         "https://www.dashboardblocks.com/r/aria/alerts.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/details.json"
+        "https://www.dashboardblocks.com/r/aria/details.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -3779,7 +3787,8 @@
         "switch",
         "https://www.dashboardblocks.com/r/aria/alerts.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/table.json"
+        "https://www.dashboardblocks.com/r/aria/table.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -3807,7 +3816,8 @@
         "button",
         "https://www.dashboardblocks.com/r/aria/alerts.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/details.json"
+        "https://www.dashboardblocks.com/r/aria/details.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -4448,7 +4458,8 @@
       "registryDependencies": [
         "button",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/team.json"
+        "https://www.dashboardblocks.com/r/aria/team.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -4535,7 +4546,8 @@
         "button",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/progress-bar.json",
-        "https://www.dashboardblocks.com/r/aria/team.json"
+        "https://www.dashboardblocks.com/r/aria/team.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -5910,7 +5922,8 @@
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/deployments.json",
         "https://www.dashboardblocks.com/r/aria/details.json",
-        "https://www.dashboardblocks.com/r/aria/team.json"
+        "https://www.dashboardblocks.com/r/aria/team.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -5938,7 +5951,8 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/deployments.json",
-        "https://www.dashboardblocks.com/r/aria/details.json"
+        "https://www.dashboardblocks.com/r/aria/details.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -6264,7 +6278,8 @@
         "input",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/settings.json",
-        "https://www.dashboardblocks.com/r/aria/status-label.json"
+        "https://www.dashboardblocks.com/r/aria/status-label.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -6563,7 +6578,8 @@
         "https://www.dashboardblocks.com/r/aria/details.json",
         "https://www.dashboardblocks.com/r/aria/settings.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json",
-        "https://www.dashboardblocks.com/r/aria/team.json"
+        "https://www.dashboardblocks.com/r/aria/team.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -6594,7 +6610,8 @@
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/details.json",
         "https://www.dashboardblocks.com/r/aria/settings.json",
-        "https://www.dashboardblocks.com/r/aria/status-label.json"
+        "https://www.dashboardblocks.com/r/aria/status-label.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -7456,7 +7473,8 @@
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/comments.json"
+        "https://www.dashboardblocks.com/r/aria/comments.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {
@@ -8167,7 +8185,8 @@
         "button",
         "code-block",
         "https://www.dashboardblocks.com/r/aria/settings.json",
-        "https://www.dashboardblocks.com/r/aria/error-pages.json"
+        "https://www.dashboardblocks.com/r/aria/error-pages.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
         {

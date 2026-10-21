@@ -3,7 +3,6 @@
 import {
   type AlertSeverity,
   SeverityLabel,
-  formatRelativeTime,
 } from '@/registry/components/dashboardblocks/alerts'
 import {
   BlockReady,
@@ -20,6 +19,7 @@ import {
   DataTableRow,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Switch } from '@/components/ui/switch'

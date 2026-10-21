@@ -17,10 +17,9 @@ import {
   type ConnectionStatus,
   ConnectionStatusLabel,
   CopyButton,
-  formatRelative,
 } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { formatPercent, formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, YAxis } from 'recharts'
 
@@ -155,7 +154,9 @@ function DeliveryChart({
               if (!active || !delivery) return null
               return (
                 <ChartTooltipFrame>
-                  <span className='font-medium'>{formatRelative(delivery.at, now)}</span>
+                  <span className='font-medium'>
+                    {formatRelativeTime(delivery.at, now, { style: 'long' })}
+                  </span>
                   <ChartTooltipItem
                     color={isSuccess(delivery) ? DELIVERED_COLOR : FAILED_COLOR}
                     name={isSuccess(delivery) ? 'Delivered' : 'Failed'}
@@ -277,7 +278,7 @@ const Settings5 = (props: Settings5Props) => {
                           <>
                             last{' '}
                             <time dateTime={last.at.toISOString()}>
-                              {formatRelative(last.at, now)}
+                              {formatRelativeTime(last.at, now, { style: 'long' })}
                             </time>
                             {!isSuccess(last) && (
                               <span className='text-red-700 dark:text-red-400'>

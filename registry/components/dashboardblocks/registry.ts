@@ -6,6 +6,7 @@ export const components: Registry['items'] = [
   {
     name: 'activity-feed',
     type: 'registry:component',
+    registryDependencies: [registryUrl('format')],
     title: 'Activity Feed',
     description:
       'Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and "Today" and "Yesterday" day headings that take a fixed now and a time zone, and grouping by day.',
@@ -49,7 +50,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Animated Number',
     description: 'An animated number component.',
-    registryDependencies: [registryUrl('use-animated-number')],
+    registryDependencies: [registryUrl('use-animated-number'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/animated-number.tsx',
@@ -237,6 +238,7 @@ export const components: Registry['items'] = [
       'input',
       registryUrl('details'),
       registryUrl('table'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -563,7 +565,12 @@ export const components: Registry['items'] = [
     title: 'KPI Provenance',
     description:
       'A button beside a number that shows how it was computed: what’s counted, the date range, the filters, the query’s name and a link to the rows.',
-    registryDependencies: ['button', 'popover', registryUrl('link')],
+    registryDependencies: [
+      'button',
+      'popover',
+      registryUrl('link'),
+      registryUrl('format'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/kpi-provenance.tsx',
@@ -933,7 +940,7 @@ export const components: Registry['items'] = [
     title: 'Trend',
     description: 'A trend indicator component.',
     dependencies: ['class-variance-authority'],
-    registryDependencies: [registryUrl('animated-number')],
+    registryDependencies: [registryUrl('animated-number'), registryUrl('format')],
     files: [
       {
         path: 'registry/components/dashboardblocks/trend.tsx',

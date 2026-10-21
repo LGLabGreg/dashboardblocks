@@ -57,8 +57,7 @@ const exampleProps: Comparison1Props = {
     { current: 1_284, label: 'Orders', previous: 1_210 },
     {
       current: 37.55,
-      formatter: (value) =>
-        formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+      formatter: (value) => formatCurrency(value, { precision: 'exact' }),
       label: 'Avg order value',
       previous: 35.45,
     },

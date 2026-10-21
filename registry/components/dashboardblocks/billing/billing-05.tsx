@@ -140,14 +140,7 @@ const Billing5 = (props: Billing5Props) => {
   const [scheduled, setScheduled] = useState<PlanChange | null>(null)
   const [confirmed, setConfirmed] = useState('')
 
-  const money = (value: number) => {
-    const digits = Number.isInteger(value) ? 0 : 2
-    return formatCurrency(value, {
-      currency,
-      maximumFractionDigits: digits,
-      minimumFractionDigits: digits,
-    })
-  }
+  const money = (value: number) => formatCurrency(value, { currency, precision: 'exact' })
 
   const plan = plans.find((item) => item.id === planId)
   const activePlan = plans.find((item) => item.id === active.planId)

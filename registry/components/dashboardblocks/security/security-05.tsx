@@ -9,10 +9,10 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   CopyButton,
-  formatDate,
   useCopyToClipboard,
 } from '@/registry/components/dashboardblocks/settings'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -206,7 +206,7 @@ function TwoFactorSettings(props: Security5Props) {
                   <>
                     Added{' '}
                     <time dateTime={authenticator.toISOString()}>
-                      {formatDate(authenticator)}
+                      {formatDate(authenticator, 'date')}
                     </time>
                   </>
                 ) : (
@@ -324,7 +324,7 @@ function TwoFactorSettings(props: Security5Props) {
                     <span className='text-muted-foreground text-xs'>
                       Added{' '}
                       <time dateTime={key.addedAt.toISOString()}>
-                        {formatDate(key.addedAt)}
+                        {formatDate(key.addedAt, 'date')}
                       </time>
                     </span>
                   </div>

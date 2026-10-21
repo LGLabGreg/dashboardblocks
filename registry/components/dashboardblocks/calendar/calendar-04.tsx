@@ -17,11 +17,11 @@ import {
 } from '@/registry/components/dashboardblocks/calendar'
 import {
   addDays,
-  formatDay,
   formatTime,
   getDay,
 } from '@/registry/components/dashboardblocks/schedule'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useRef, useState } from 'react'
 
 interface Room {
@@ -300,7 +300,7 @@ const Calendar4 = (props: Calendar4Props) => {
     <BlockStateProvider state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
-          title={formatDay(day, { day: 'numeric', month: 'long', weekday: 'long' })}
+          title={formatDate(day, 'weekday-long-day')}
           description={
             state ? (
               <BlockStateText />

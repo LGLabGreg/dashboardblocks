@@ -15,7 +15,7 @@ import {
 import { Icons } from '@/registry/components/dashboardblocks/icon'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import { formatList, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -128,11 +128,9 @@ const describeMessage = (message: SocialMessage) => [
   ...(message.replies ? [plural(message.replies, 'reply', 'replies')] : []),
 ]
 
-const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
-
 const summarize = (events: SocialEvent[]) => {
   if (events.length === 0) return 'Nothing new from your tools.'
-  const sources = listFormat.format(
+  const sources = formatList(
     (Object.keys(platformConfig) as Platform[])
       .map((platform) => ({
         count: events.filter((event) => event.platform === platform).length,

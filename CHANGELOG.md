@@ -1,5 +1,15 @@
 # dashboardblocks
 
+## 1.8.0
+
+### Minor Changes
+
+- 8db2bbc: Every block now formats money, numbers and dates through `format.ts`, so the same value reads the same way in every block.
+  
+  - `formatCurrency` takes a `precision`: `'whole'` (the default) for totals and KPIs, `'exact'` for amounts paid, owed or priced (`$49.00` beside `$2,240.00`), and `'fine'` for costs per request. Amounts in billing, invoice, table and stat blocks now show their cents on every row.
+  - `formatDate(date, style, timeZone)` formats a date or time in a named style (`'day'`, `'date'`, `'time'`, `'clock'` and more), and `formatDateRange`, `formatRelativeTime`, `formatRelativeDays`, `formatDayHeading`, `formatList`, `formatOrdinal`, `zonedParts`, `resolveTimeZone` and `formatTimeZoneOffset` join them. Settings, Team, Alerts, Schedule, Calendar and Activity Feed use these in place of their own helpers, which are gone.
+  - Lists of names join with a serial comma ("Ana, Ben, and Cy").
+
 ## 1.7.0
 
 ### Minor Changes

@@ -16,14 +16,12 @@ import {
   EventSwatch,
   type ScheduleEvent,
   addDays,
-  formatDay,
   formatDuration,
   formatTimeRange,
-  getDateParts,
   getDay,
-  getDayKey,
   getEventStyle,
 } from '@/registry/components/dashboardblocks/schedule'
+import { dayIn, formatDate, zonedParts } from '@/registry/lib/dashboardblocks/format'
 import { useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -207,7 +205,7 @@ const Schedule4 = (props: Schedule4Props) => {
     (_, index) => startHour + index * 2,
   )
   const position = (date: Date) => {
-    const { hour, minute } = getDateParts(date, timeZone)
+    const { hour, minute } = zonedParts(date, timeZone)
     const minutes = hour * 60 + minute - startHour * 60
     return Math.min(1, Math.max(0, minutes / range)) * 100
   }
@@ -216,7 +214,7 @@ const Schedule4 = (props: Schedule4Props) => {
     const day = addDays(today, index)
     const key = day.toISOString().slice(0, 10)
     const dayEvents = events
-      .filter((event) => getDayKey(event.start, timeZone) === key)
+      .filter((event) => dayIn(event.start, timeZone) === key)
       .sort((a, b) => a.start.getTime() - b.start.getTime())
     const timed = dayEvents.filter((event) => !event.allDay)
     return {
@@ -237,7 +235,7 @@ const Schedule4 = (props: Schedule4Props) => {
   const booked = (minutes: number) =>
     minutes === 0 ? 'Free' : formatDuration(new Date(0), new Date(minutes * 60_000))
   const dayName = (day: Date, index: number) =>
-    index === 0 ? 'today' : formatDay(day, { weekday: 'long' })
+    index === 0 ? 'today' : formatDate(day, 'weekday-long')
 
   const show = (event: ScheduleEvent, bar: HTMLElement) => {
     const origin = frame.current?.getBoundingClientRect()
@@ -313,15 +311,11 @@ const Schedule4 = (props: Schedule4Props) => {
                       <span aria-hidden className='font-medium'>
                         {index === 0
                           ? 'Today'
-                          : `${formatDay(day, { weekday: 'short' })} ${day.getUTCDate()}`}
+                          : `${formatDate(day, 'weekday')} ${day.getUTCDate()}`}
                       </span>
                       <span className='sr-only'>
                         {index === 0 && 'Today, '}
-                        {formatDay(day, {
-                          day: 'numeric',
-                          month: 'long',
-                          weekday: 'long',
-                        })}
+                        {formatDate(day, 'weekday-long-day')}
                       </span>
                       {allDay.map((event) => (
                         <span

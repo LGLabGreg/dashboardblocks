@@ -17,6 +17,7 @@ import {
   toggleReaction,
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
+import { formatList } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -90,8 +91,6 @@ const describeUpdates = (updates: ThreadComment[], now: Date) => {
   return `${updates.length} ${updates.length === 1 ? 'update' : 'updates'}, the latest ${when}.`
 }
 
-const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
-
 const Comments2 = (props: Comments2Props) => {
   const {
     currentUser,
@@ -155,7 +154,7 @@ const Comments2 = (props: Comments2Props) => {
           ))}
         </span>
         <span className='truncate'>
-          Notifies {listFormat.format(mentioned.map((person) => person.name))}
+          Notifies {formatList(mentioned.map((person) => person.name))}
         </span>
       </span>
     ) : (

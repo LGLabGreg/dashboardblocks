@@ -31,7 +31,11 @@ import { Realtime2 } from '@/registry/components/dashboardblocks/realtime/realti
 import type { StatusLevel, UptimeDay } from '@/registry/components/dashboardblocks/status'
 import { Status2 } from '@/registry/components/dashboardblocks/status/status-02'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatDateRange, formatNumber } from '@/registry/lib/dashboardblocks/format'
+import {
+  formatDate,
+  formatDateRange,
+  formatNumber,
+} from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
 interface Dashboard5Props {
@@ -450,12 +454,7 @@ function uptimeDays(service: string, today: Date): UptimeDay[] {
       (item) => item.service === service && item.daysAgo === daysAgo,
     )
     return {
-      label: new Date(today.getTime() - daysAgo * DAY).toLocaleDateString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        timeZone: 'UTC',
-        year: 'numeric',
-      }),
+      label: formatDate(new Date(today.getTime() - daysAgo * DAY), 'date'),
       note: incident?.note,
       status: incident?.status ?? 'operational',
       uptime: incident?.uptime ?? 100,
@@ -483,11 +482,7 @@ function buildOpsData({ preset, service }: Query, today: Date) {
     : Array.from({ length: days }, (_, index) => {
         const daysAgo = days - 1 - index
         return {
-          label: new Date(today.getTime() - daysAgo * DAY).toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'short',
-            timeZone: 'UTC',
-          }),
+          label: formatDate(new Date(today.getTime() - daysAgo * DAY), 'day'),
           ...point(daysAgo),
         }
       })

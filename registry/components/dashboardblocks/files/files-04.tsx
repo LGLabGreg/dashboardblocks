@@ -1,6 +1,5 @@
 'use client'
 
-import { formatActivityTime } from '@/registry/components/dashboardblocks/activity-feed'
 import {
   BlockMessage,
   BlockReady,
@@ -19,7 +18,7 @@ import {
   formatFileSize,
 } from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import { formatRelativeTime, joinDetails } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
 interface BrowserFile {
@@ -314,14 +313,14 @@ const Files4 = (props: Files4Props) => {
                       <Details className='@md:hidden'>
                         {formatFileSize(item.size)}
                         <time dateTime={item.modified.toISOString()}>
-                          {formatActivityTime(item.modified, now, timeZone)}
+                          {formatRelativeTime(item.modified, now, { timeZone })}
                         </time>
                       </Details>
                       <time
                         dateTime={item.modified.toISOString()}
                         className='hidden @md:inline'
                       >
-                        {formatActivityTime(item.modified, now, timeZone)}
+                        {formatRelativeTime(item.modified, now, { timeZone })}
                       </time>
                     </span>
                     <span className='hidden w-20 shrink-0 text-right text-sm tabular-nums @md:inline'>

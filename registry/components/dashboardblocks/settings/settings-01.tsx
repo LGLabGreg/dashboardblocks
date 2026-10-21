@@ -10,13 +10,13 @@ import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   type Role,
   RoleMenu,
-  formatRelative,
   roleConfig,
   roleOrder,
 } from '@/registry/components/dashboardblocks/settings'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, useId, useState } from 'react'
 import { flushSync } from 'react-dom'
 
@@ -346,7 +346,7 @@ const Settings1 = (props: Settings1Props) => {
                           <>
                             Sent{' '}
                             <time dateTime={pending.sentAt.toISOString()}>
-                              {formatRelative(pending.sentAt, now)}
+                              {formatRelativeTime(pending.sentAt, now, { style: 'long' })}
                             </time>
                           </>
                         )}

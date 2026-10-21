@@ -79,18 +79,6 @@ function ErrorPageLayout({
   )
 }
 
-const timeFormatter = new Intl.DateTimeFormat('en-US', {
-  hour: 'numeric',
-  minute: '2-digit',
-  timeZone: 'UTC',
-  timeZoneName: 'short',
-})
-
-/** "2:30 PM UTC", in UTC so it renders the same on server and client. */
-function formatTime(date: Date) {
-  return timeFormatter.format(date)
-}
-
 function formatDuration(milliseconds: number) {
   const minutes = Math.round(milliseconds / 60_000)
   if (minutes < 1) return 'less than a minute'
@@ -99,6 +87,6 @@ function formatDuration(milliseconds: number) {
   return `about ${hours} ${hours === 1 ? 'hour' : 'hours'}`
 }
 
-export { ErrorPageLayout, formatDuration, formatTime }
+export { ErrorPageLayout, formatDuration }
 
 export type { ErrorPageLayoutProps }

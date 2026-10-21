@@ -18,6 +18,7 @@ import {
   describeSeries,
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
+import { formatList } from '@/registry/lib/dashboardblocks/format'
 
 interface DailyComparison {
   label: string
@@ -53,8 +54,6 @@ const exampleProps: LineChartKPI1Props = {
   title: 'Visitors',
 }
 
-const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
-
 function describeLead(data: DailyComparison[]): [string, string] {
   const behind = data.filter((point) => point.value < point.previous)
   const ahead = data.length - behind.length
@@ -62,7 +61,7 @@ function describeLead(data: DailyComparison[]): [string, string] {
   if (ahead === 0) return ['behind', 'every day.']
   return [
     'ahead of',
-    `on ${ahead} of ${data.length} days, behind on ${listFormat.format(behind.map((point) => point.label))}.`,
+    `on ${ahead} of ${data.length} days, behind on ${formatList(behind.map((point) => point.label))}.`,
   ]
 }
 

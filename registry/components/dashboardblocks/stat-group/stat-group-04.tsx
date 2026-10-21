@@ -36,11 +36,7 @@ const exampleProps: StatGroup4Props = {
     },
     { key: 'customers', label: 'Customers', previous: 1_186, value: 1_241 },
     {
-      formatter: (value) =>
-        formatCurrency(value, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+      formatter: (value) => formatCurrency(value, { precision: 'exact' }),
       key: 'arpu',
       label: 'ARPU',
       previous: 68.13,

@@ -2,6 +2,7 @@
 
 import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-number'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatPercent, formatSigned } from '@/registry/lib/dashboardblocks/format'
 import { type VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
@@ -85,10 +86,8 @@ interface TrendProps extends Omit<VariantProps<typeof trendVariants>, 'direction
   trendIcon?: 'arrow' | 'trend'
 }
 
-const defaultFormatter = (value: number): string => {
-  const prefix = value > 0 ? '+' : ''
-  return `${prefix}${value.toLocaleString('en-US')}%`
-}
+const defaultFormatter = (value: number): string =>
+  formatSigned(value / 100, (ratio) => formatPercent(ratio, { maximumFractionDigits: 3 }))
 
 function getTrendDirection(value: number): TrendDirection {
   if (value > 0) return 'up'

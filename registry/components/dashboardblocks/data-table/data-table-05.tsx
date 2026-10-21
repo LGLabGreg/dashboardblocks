@@ -84,8 +84,7 @@ const STATE_CONFIG: Record<OrderState, { label: string; tone: StatusTone }> = {
   refunded: { label: 'Refunded', tone: 'neutral' },
 }
 
-const money = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const money = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 const summarize = (rows: OrderRow[], period?: string) => {
   const paid = rows.filter((row) => row.state === 'paid')

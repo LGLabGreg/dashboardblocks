@@ -16,11 +16,11 @@ import { Details } from '@/registry/components/dashboardblocks/details'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import {
   UrgencyLabel,
-  formatDay,
   getDay,
   getDayOffset,
   getUrgency,
 } from '@/registry/components/dashboardblocks/schedule'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -107,7 +107,7 @@ const SOON_DAYS = 2
 function DueDate({ done, due, now }: { done: boolean; due: Date; now: Date }) {
   const offset = getDayOffset(due, now)
   const day = getDay(due)
-  const date = formatDay(day, { day: 'numeric', month: 'short' })
+  const date = formatDate(day, 'day')
   const urgency = done ? 'later' : getUrgency(due, now, 'UTC', SOON_DAYS)
   const label =
     urgency === 'overdue'

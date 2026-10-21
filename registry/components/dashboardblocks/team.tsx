@@ -63,21 +63,6 @@ function getInitials(name: string) {
   return `${first}${last}`.toUpperCase()
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
-  numeric: 'auto',
-  style: 'short',
-})
-
-function formatLastActive(date: Date, now: Date) {
-  const minutes = Math.round((date.getTime() - now.getTime()) / 60_000)
-  const hours = Math.round(minutes / 60)
-  const days = Math.round(hours / 24)
-  if (Math.abs(minutes) < 1) return 'just now'
-  if (Math.abs(minutes) < 60) return relativeFormatter.format(minutes, 'minute')
-  if (Math.abs(hours) < 24) return relativeFormatter.format(hours, 'hour')
-  return relativeFormatter.format(days, 'day')
-}
-
 type AvatarSize = 'sm' | 'default' | 'lg'
 
 const initialsSize: Record<AvatarSize, string> = {
@@ -192,7 +177,6 @@ export {
   AvatarStack,
   PersonAvatar,
   PresenceLabel,
-  formatLastActive,
   getAvatarColor,
   getInitials,
   presenceConfig,

@@ -16,7 +16,11 @@ import {
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatDateRange, formatPercent } from '@/registry/lib/dashboardblocks/format'
+import {
+  formatDate,
+  formatDateRange,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 import {
   Bar,
@@ -80,14 +84,8 @@ function getDaysBetween(from: Date, to: Date) {
   return Math.round((utc(to) - utc(from)) / DAY)
 }
 
-const dayFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-
 function formatTimelineDate(date: Date) {
-  return dayFormatter.format(date)
+  return formatDate(date, 'day')
 }
 
 function formatTimelineRange(start: Date, end: Date) {
@@ -183,12 +181,7 @@ function TimelineStatusLabel({
   )
 }
 
-const monthFormatter = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  timeZone: 'UTC',
-})
-
-const formatMonth = (date: Date) => monthFormatter.format(date)
+const formatMonth = (date: Date) => formatDate(date, 'month')
 
 const TIMELINE_AXIS_HEIGHT = 20
 const TIMELINE_NOW_Z_INDEX = 550

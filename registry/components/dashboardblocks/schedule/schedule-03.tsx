@@ -10,12 +10,11 @@ import {
 import {
   UrgencyLabel,
   formatCountdown,
-  formatDay,
   getDay,
   getDayOffset,
   getUrgency,
 } from '@/registry/components/dashboardblocks/schedule'
-import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
+import { formatCurrency, formatDate } from '@/registry/lib/dashboardblocks/format'
 
 interface Deadline {
   /** What is owed or renewed, in dollars. */
@@ -163,7 +162,7 @@ const Schedule3 = (props: Schedule3Props) => {
                         dateTime={getDay(row.due, timeZone).toISOString().slice(0, 10)}
                         className='text-muted-foreground text-sm whitespace-nowrap tabular-nums'
                       >
-                        {formatDay(getDay(row.due, timeZone))}
+                        {formatDate(getDay(row.due, timeZone), 'weekday-day')}
                       </time>
                     </p>
                   </li>

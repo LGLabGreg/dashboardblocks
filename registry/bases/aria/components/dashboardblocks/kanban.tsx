@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: 1c19a8c32a9a
+// source-hash: b7be20375bd0
 
 'use client'
 
@@ -11,13 +11,13 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   UrgencyLabel,
-  formatDay,
   getDay,
   getDayOffset,
   getUrgency,
 } from '@/registry/components/dashboardblocks/schedule'
 import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDate, formatList } from '@/registry/lib/dashboardblocks/format'
 import {
   type FormEvent,
   type KeyboardEvent,
@@ -1121,8 +1121,6 @@ function getInitials(name: string) {
     .join('')
 }
 
-const listFormat = new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' })
-
 function KanbanAssignees({
   className,
   max = 3,
@@ -1156,7 +1154,7 @@ function KanbanAssignees({
           </AvatarGroupCount>
         )}
       </AvatarGroup>
-      <span className='sr-only'>Assigned to {listFormat.format(names)}</span>
+      <span className='sr-only'>Assigned to {formatList(names)}</span>
     </span>
   )
 }
@@ -1187,7 +1185,7 @@ function KanbanDueDate({
         ? 'Tomorrow'
         : offset === -1
           ? 'Yesterday'
-          : formatDay(getDay(date, timeZone), { day: 'numeric', month: 'short' })
+          : formatDate(getDay(date, timeZone), 'day')
   const urgency = done ? 'later' : getUrgency(date, now, timeZone, soonDays)
   return (
     <span className={cn('inline-flex', className)}>

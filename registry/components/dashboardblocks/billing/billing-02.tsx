@@ -156,11 +156,7 @@ const Billing2 = (props: Billing2Props) => {
                     className='text-2xl'
                     value={nextInvoiceAmount ?? price}
                     format={(value) =>
-                      formatCurrency(value, {
-                        currency,
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
+                      formatCurrency(value, { currency, precision: 'exact' })
                     }
                   />
                 </dd>

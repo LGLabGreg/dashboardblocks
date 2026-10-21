@@ -39,6 +39,7 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   formatCompact,
+  formatDate,
   formatDateRange,
   formatNumber,
   formatPercent,
@@ -88,11 +89,6 @@ const exampleProps: Forecast2Props = {
 }
 
 const DAY = 86_400_000
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
 
 const Forecast2 = (props: Forecast2Props) => {
   const {
@@ -162,7 +158,7 @@ const Forecast2 = (props: Forecast2Props) => {
           <div className='flex flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>
             <p className='text-muted-foreground text-sm'>
-              {formatter(target)} {metric} by {dateFormatter.format(deadline)}.
+              {formatter(target)} {metric} by {formatDate(deadline, 'day')}.
             </p>
           </div>
           <ForecastStatusLabel status={status} />
@@ -182,7 +178,7 @@ const Forecast2 = (props: Forecast2Props) => {
               ) : forecast.reached ? (
                 formatter(current)
               ) : expected ? (
-                dateFormatter.format(expected)
+                formatDate(expected, 'day')
               ) : (
                 'Not in view'
               )}
@@ -250,7 +246,7 @@ const Forecast2 = (props: Forecast2Props) => {
                   interval='preserveStartEnd'
                   minTickGap={24}
                   scale='time'
-                  tickFormatter={(value: number) => dateFormatter.format(value)}
+                  tickFormatter={(value: number) => formatDate(value, 'day')}
                   ticks={ticks}
                   type='number'
                 />
@@ -285,7 +281,7 @@ const Forecast2 = (props: Forecast2Props) => {
                   content={(tooltipProps) => (
                     <ForecastTooltip
                       {...tooltipProps}
-                      formatLabel={(label) => dateFormatter.format(Number(label))}
+                      formatLabel={(label) => formatDate(Number(label), 'day')}
                       level={level}
                       valueFormatter={formatter}
                     />
@@ -344,14 +340,14 @@ const Forecast2 = (props: Forecast2Props) => {
               {earliest
                 ? latest
                   ? `, and the ${percent} range is ${formatDateRange({ end: latest, start: earliest })}.`
-                  : `, and the ${percent} range starts on ${dateFormatter.format(earliest)}.`
+                  : `, and the ${percent} range starts on ${formatDate(earliest, 'day')}.`
                 : '.'}
             </p>
           </BlockReady>
         )}
         {!state && (
           <ChartPanelTable
-            caption={`${title}: ${formatter(target)} ${metric} by ${dateFormatter.format(deadline)}. The forecast is a straight-line fit with a ${percent} range.`}
+            caption={`${title}: ${formatter(target)} ${metric} by ${formatDate(deadline, 'day')}. The forecast is a straight-line fit with a ${percent} range.`}
             columns={[
               { key: 'label', label: 'Week ending' },
               { format: formatter, key: 'actual', label: 'Actual' },
@@ -360,7 +356,7 @@ const Forecast2 = (props: Forecast2Props) => {
             rows={rows.map((row, index) => ({
               actual: row.actual ?? '—',
               forecast: index > last ? (row.forecast ?? '—') : '—',
-              label: dateFormatter.format(row.date),
+              label: formatDate(row.date, 'day'),
             }))}
           />
         )}

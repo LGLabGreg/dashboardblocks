@@ -5,7 +5,7 @@ import {
   TinyBarChart,
 } from '@/registry/components/dashboardblocks/chart'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
-import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import { formatNumber, formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -153,18 +153,11 @@ function RollingBars({
   )
 }
 
-const relativeTime = new Intl.RelativeTimeFormat('en-US', {
-  numeric: 'auto',
-  style: 'narrow',
-})
-
 function formatAgo(date: Date, now: Date) {
   const seconds = Math.max(0, Math.round((now.getTime() - date.getTime()) / 1000))
   if (seconds < 5) return 'now'
   if (seconds < 60) return `${seconds}s ago`
-  const minutes = Math.round(seconds / 60)
-  if (minutes < 60) return relativeTime.format(-minutes, 'minute')
-  return relativeTime.format(-Math.round(minutes / 60), 'hour')
+  return formatRelativeTime(date, now, { style: 'narrow' })
 }
 
 export {

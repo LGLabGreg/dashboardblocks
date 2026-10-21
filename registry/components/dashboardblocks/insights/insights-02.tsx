@@ -32,6 +32,7 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
+  formatDate,
   formatNumber,
   formatPercent,
   formatSigned,
@@ -77,11 +78,6 @@ interface Insights2Props {
 
 const DAY = 86_400_000
 const NOW = Date.UTC(2026, 8, 25)
-const dayFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
 const OUTAGE: Record<number, number> = { 24: 212, 25: 281 }
 
 const exampleProps: Insights2Props = {
@@ -109,7 +105,7 @@ const exampleProps: Insights2Props = {
     const expected = (weekend ? 286 : 342) + index * 0.9
     return {
       high: Math.round(expected * 1.08),
-      label: dayFormatter.format(date),
+      label: formatDate(date, 'day'),
       low: Math.round(expected * 0.92),
       value: OUTAGE[index] ?? Math.round(expected + Math.sin(index * 1.7) * 13),
     }

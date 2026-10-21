@@ -1,11 +1,9 @@
 'use client'
 
-import {
-  ErrorPageLayout,
-  formatTime,
-} from '@/registry/components/dashboardblocks/error-pages'
+import { ErrorPageLayout } from '@/registry/components/dashboardblocks/error-pages'
 import { CopyButton } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -131,7 +129,9 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
         <div className='flex flex-col py-2'>
           <dt className='text-muted-foreground text-xs'>Time</dt>
           <dd>
-            <time dateTime={occurredAt.toISOString()}>{formatTime(occurredAt)}</time>
+            <time dateTime={occurredAt.toISOString()}>
+              {formatDate(occurredAt, 'time-zone')}
+            </time>
           </dd>
         </div>
         {details && (

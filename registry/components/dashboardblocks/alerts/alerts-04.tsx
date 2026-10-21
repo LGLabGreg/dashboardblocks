@@ -3,7 +3,6 @@
 import {
   type AlertSeverity,
   SeverityLabel,
-  formatRelativeTime,
   severityConfig,
 } from '@/registry/components/dashboardblocks/alerts'
 import {
@@ -16,6 +15,7 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 

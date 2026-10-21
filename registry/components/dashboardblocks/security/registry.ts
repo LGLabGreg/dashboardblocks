@@ -104,6 +104,7 @@ export const examples: Registry['items'] = [
       registryUrl('block-state'),
       registryUrl('settings'),
       registryUrl('status-label'),
+      registryUrl('format'),
     ],
     files: [
       {

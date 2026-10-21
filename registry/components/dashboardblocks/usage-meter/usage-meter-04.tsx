@@ -19,6 +19,7 @@ import {
   formatUsage,
   getDaysLeft,
 } from '@/registry/components/dashboardblocks/usage-meter'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
@@ -80,14 +81,12 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
   const runsOut = Number.isFinite(daysLeft)
     ? new Date(now.getTime() + daysLeft * DAY)
     : null
-  const dateFormatter = new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-  })
-  const formatDate = (date: Date) => dateFormatter.format(date)
   const days = dailyUsage.map((value, index) => ({
-    label: formatDate(new Date(now.getTime() - (dailyUsage.length - 1 - index) * DAY)),
+    label: formatDate(
+      new Date(now.getTime() - (dailyUsage.length - 1 - index) * DAY),
+      'day',
+      timeZone,
+    ),
     value,
   }))
   const latest = days[days.length - 1]
@@ -128,7 +127,9 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
                     status={status}
                   />
                   , running out around{' '}
-                  <time dateTime={runsOut.toISOString()}>{formatDate(runsOut)}</time>
+                  <time dateTime={runsOut.toISOString()}>
+                    {formatDate(runsOut, 'day', timeZone)}
+                  </time>
                 </>
               ) : (
                 'No recent use, so they won’t run out at this rate'

@@ -4,7 +4,15 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
-import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import {
+  dayIn,
+  formatDate,
+  formatDayHeading,
+  formatRelativeDays,
+  formatRelativeTime,
+  joinDetails,
+  zonedParts,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   type CSSProperties,
   type KeyboardEvent,
@@ -31,42 +39,9 @@ interface ScheduleEvent {
 
 const DAY = 86_400_000
 
-const partsFormatters = new Map<string, Intl.DateTimeFormat>()
-
-function getDateParts(date: Date, timeZone = 'UTC') {
-  let formatter = partsFormatters.get(timeZone)
-  if (!formatter) {
-    formatter = new Intl.DateTimeFormat('en-US', {
-      day: 'numeric',
-      hour: 'numeric',
-      hourCycle: 'h23',
-      minute: 'numeric',
-      month: 'numeric',
-      timeZone,
-      year: 'numeric',
-    })
-    partsFormatters.set(timeZone, formatter)
-  }
-  const parts: Record<string, number> = {}
-  for (const part of formatter.formatToParts(date)) {
-    if (part.type !== 'literal') parts[part.type] = Number(part.value)
-  }
-  return {
-    day: parts.day,
-    hour: parts.hour % 24,
-    minute: parts.minute,
-    month: parts.month - 1,
-    year: parts.year,
-  }
-}
-
 function getDay(date: Date, timeZone = 'UTC') {
-  const { day, month, year } = getDateParts(date, timeZone)
-  return new Date(Date.UTC(year, month, day))
-}
-
-function getDayKey(date: Date, timeZone = 'UTC') {
-  return getDay(date, timeZone).toISOString().slice(0, 10)
+  const { day, month, year } = zonedParts(date, timeZone)
+  return new Date(Date.UTC(year, month - 1, day))
 }
 
 function addDays(day: Date, days: number) {
@@ -79,34 +54,8 @@ function getDayOffset(date: Date, now: Date, timeZone = 'UTC') {
   )
 }
 
-function formatDay(
-  day: Date,
-  options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    weekday: 'short',
-  },
-) {
-  return day.toLocaleDateString('en-US', { ...options, timeZone: 'UTC' })
-}
-
-function formatRelativeDay(day: Date, today: Date) {
-  const offset = Math.round((day.getTime() - today.getTime()) / DAY)
-  if (offset === 0) return 'Today'
-  if (offset === 1) return 'Tomorrow'
-  if (offset === -1) return 'Yesterday'
-  if (offset > 1 && offset < 7) return formatDay(day, { weekday: 'long' })
-  return formatDay(day)
-}
-
-function formatDayLabel(date: Date, now: Date, timeZone = 'UTC') {
-  return formatRelativeDay(getDay(date, timeZone), getDay(now, timeZone))
-}
-
 function formatTime(date: Date, timeZone = 'UTC') {
-  const { hour, minute } = getDateParts(date, timeZone)
-  const hour12 = hour % 12 || 12
-  return `${hour12}:${String(minute).padStart(2, '0')} ${hour < 12 ? 'AM' : 'PM'}`
+  return formatDate(date, 'time', timeZone)
 }
 
 function formatTimeRange(start: Date, end: Date | undefined, timeZone = 'UTC') {
@@ -125,15 +74,11 @@ function formatDuration(start: Date, end: Date) {
   return rest === 0 ? `${hours} hr` : `${hours} hr ${rest} min`
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
-
 function formatCountdown(date: Date, now: Date, timeZone = 'UTC') {
   const offset = getDayOffset(date, now, timeZone)
-  if (offset !== 0) return relativeFormatter.format(offset, 'day')
-  const minutes = Math.round((date.getTime() - now.getTime()) / 60_000)
-  if (Math.abs(minutes) < 1) return 'now'
-  if (Math.abs(minutes) < 60) return relativeFormatter.format(minutes, 'minute')
-  return relativeFormatter.format(Math.round(minutes / 60), 'hour')
+  if (offset !== 0) return formatRelativeDays(offset)
+  if (Math.abs(date.getTime() - now.getTime()) < 60_000) return 'now'
+  return formatRelativeTime(date, now, { style: 'long', timeZone })
 }
 
 interface ScheduleDay<T extends ScheduleEvent> {
@@ -146,12 +91,12 @@ interface ScheduleDay<T extends ScheduleEvent> {
 function groupByDay<T extends ScheduleEvent>(events: T[], now: Date, timeZone = 'UTC') {
   const days = new Map<string, ScheduleDay<T>>()
   for (const event of [...events].sort((a, b) => a.start.getTime() - b.start.getTime())) {
-    const key = getDayKey(event.start, timeZone)
+    const key = dayIn(event.start, timeZone)
     const group = days.get(key) ?? {
       day: getDay(event.start, timeZone),
       events: [],
       key,
-      label: formatDayLabel(event.start, now, timeZone),
+      label: formatDayHeading(event.start, now, timeZone),
     }
     group.events.push(event)
     days.set(key, group)
@@ -366,7 +311,7 @@ function MonthCalendar({
 
   const eventsByDay = new Map<string, ScheduleEvent[]>()
   for (const event of events) {
-    const key = getDayKey(event.start, timeZone)
+    const key = dayIn(event.start, timeZone)
     eventsByDay.set(key, [...(eventsByDay.get(key) ?? []), event])
   }
 
@@ -430,8 +375,8 @@ function MonthCalendar({
   }
 
   const weekdays = weeks[0].map((day) => ({
-    long: formatDay(day, { weekday: 'long' }),
-    short: formatDay(day, { weekday: 'short' }).slice(0, 2),
+    long: formatDate(day, 'weekday-long'),
+    short: formatDate(day, 'weekday').slice(0, 2),
   }))
 
   return (
@@ -469,7 +414,7 @@ function MonthCalendar({
               const isActive = active.getTime() === day.getTime()
               const outside = !inMonth(day)
               const name = [
-                formatDay(day, { day: 'numeric', month: 'long', weekday: 'long' }),
+                formatDate(day, 'weekday-long-day'),
                 isToday ? 'today' : '',
                 dayEvents.length === 0
                   ? 'no events'
@@ -539,15 +484,10 @@ export {
   UrgencyLabel,
   addDays,
   formatCountdown,
-  formatDay,
-  formatDayLabel,
   formatDuration,
-  formatRelativeDay,
   formatTime,
   formatTimeRange,
-  getDateParts,
   getDay,
-  getDayKey,
   getDayOffset,
   getEventStyle,
   getMonthWeeks,

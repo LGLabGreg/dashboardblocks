@@ -11,6 +11,7 @@ export const examples: Registry['items'] = [
       registryUrl('alerts'),
       registryUrl('block-state'),
       registryUrl('details'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -58,6 +59,7 @@ export const examples: Registry['items'] = [
       registryUrl('alerts'),
       registryUrl('block-state'),
       registryUrl('table'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -80,6 +82,7 @@ export const examples: Registry['items'] = [
       registryUrl('alerts'),
       registryUrl('block-state'),
       registryUrl('details'),
+      registryUrl('format'),
     ],
     files: [
       {

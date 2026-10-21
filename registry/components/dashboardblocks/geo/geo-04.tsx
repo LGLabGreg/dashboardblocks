@@ -43,8 +43,7 @@ interface Geo4Props {
   title: string
 }
 
-const currency = (value: number) =>
-  formatCurrency(value, { compact: true, maximumFractionDigits: 2 })
+const currency = (value: number) => formatCurrency(value, { compact: true })
 
 const exampleProps: Geo4Props = {
   comparison: 'in Q2',

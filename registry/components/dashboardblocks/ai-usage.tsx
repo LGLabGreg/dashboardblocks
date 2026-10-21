@@ -44,12 +44,7 @@ function formatTokens(count: number) {
 }
 
 function formatUsd(value: number) {
-  if (value > 0 && value < 0.01) return `$${value.toPrecision(2)}`
-  const digits = value < 10 ? 2 : 0
-  return formatCurrency(value, {
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits,
-  })
+  return formatCurrency(value, { precision: 'fine' })
 }
 
 const modelPalette = [

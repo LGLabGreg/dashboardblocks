@@ -15,6 +15,7 @@ import {
   formatUptime,
   getUptime,
 } from '@/registry/components/dashboardblocks/status'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 interface ServiceUptime {
   days: UptimeDay[]
@@ -41,12 +42,7 @@ const exampleDays = (
   Array.from({ length: 90 }, (_, index) => {
     const daysAgo = 89 - index
     return {
-      label: new Date(END_DATE - daysAgo * DAY).toLocaleDateString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        timeZone: 'UTC',
-        year: 'numeric',
-      }),
+      label: formatDate(new Date(END_DATE - daysAgo * DAY), 'date'),
       status: 'operational',
       uptime: 100,
       ...events[daysAgo],

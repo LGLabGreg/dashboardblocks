@@ -11,9 +11,9 @@ import {
   type Person,
   PersonAvatar,
   PresenceLabel,
-  formatLastActive,
 } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
@@ -154,7 +154,7 @@ const Team1 = (props: Team1Props) => {
                         className='text-muted-foreground tabular-nums'
                         dateTime={member.lastActive.toISOString()}
                       >
-                        {formatLastActive(member.lastActive, now)}
+                        {formatRelativeTime(member.lastActive, now)}
                       </time>
                     )}
                   </span>

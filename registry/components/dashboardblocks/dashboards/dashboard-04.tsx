@@ -32,6 +32,7 @@ import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/sta
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCurrency,
+  formatDate,
   formatDateRange,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
@@ -344,10 +345,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
       revenue += totalAt(segments, (today.getTime() - time) / DAY, today).revenue
     }
     return {
-      label: new Date(start).toLocaleDateString('en-US', {
-        month: 'short',
-        timeZone: 'UTC',
-      }),
+      label: formatDate(new Date(start), 'month'),
       value: Math.round(revenue / 100) * 100,
     }
   })

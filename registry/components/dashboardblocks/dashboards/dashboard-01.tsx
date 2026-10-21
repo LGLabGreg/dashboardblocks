@@ -27,6 +27,7 @@ import { StatGroup2 } from '@/registry/components/dashboardblocks/stat-group/sta
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCurrency,
+  formatDate,
   formatDateRange,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
@@ -175,11 +176,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
   const label = (index: number) => {
     if (hourly) return `${String(index).padStart(2, '0')}:00`
     const date = new Date(range.start.getTime() + index * 86_400_000)
-    return date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'short',
-      timeZone: 'UTC',
-    })
+    return formatDate(date, 'day')
   }
   const elapsed = today.getUTCDate()
   const daysInMonth = new Date(
@@ -221,7 +218,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
         Math.round(revenueAt(offset, region, false)),
       ).reduce((sum, value) => sum + value, 0),
       elapsed,
-      name: today.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      name: formatDate(today, 'month-long'),
       target: Math.round((DAILY_TARGET * daysInMonth * regionShare) / 1_000) * 1_000,
       total: daysInMonth,
     },
@@ -259,8 +256,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
         value: Math.round(now.orders),
       },
       {
-        formatter: (value: number) =>
-          formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+        formatter: (value: number) => formatCurrency(value, { precision: 'exact' }),
         history: current.map((point) =>
           Number((point.revenue / point.orders).toFixed(2)),
         ),

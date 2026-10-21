@@ -6,7 +6,8 @@
   "registryDependencies": [
     "button",
     "popover",
-    "https://www.dashboardblocks.com/r/base/link.json"
+    "https://www.dashboardblocks.com/r/base/link.json",
+    "https://www.dashboardblocks.com/r/base/format.json"
   ],
   "files": [
     {
@@ -17,7 +18,7 @@
     },
     {
       "path": "registry/components/dashboardblocks/kpi-provenance-format.ts",
-      "content": "import type { Provenance } from '@/registry/components/dashboardblocks/kpi-provenance'\n\nfunction formatProvenanceWindow(\n  window: Provenance['window'],\n  locale = 'en-US',\n  timeZone?: string,\n) {\n  if (!window) return 'All time'\n  const format = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone })\n  // Client only: the window shows in the details popover, after someone opens it.\n  return format.formatRange(window.from, window.to)\n}\n\nfunction formatProvenanceFilters(filters: Provenance['filters']) {\n  return Object.entries(filters).map(([name, value]) => `${name}: ${value}`)\n}\n\nexport { formatProvenanceFilters, formatProvenanceWindow }\n",
+      "content": "import type { Provenance } from '@/registry/components/dashboardblocks/kpi-provenance'\nimport { formatDateRange } from '@/registry/lib/dashboardblocks/format'\n\nfunction formatProvenanceWindow(window: Provenance['window'], timeZone = 'UTC') {\n  if (!window) return 'All time'\n  return formatDateRange({ end: window.to, start: window.from }, { timeZone, year: true })\n}\n\nfunction formatProvenanceFilters(filters: Provenance['filters']) {\n  return Object.entries(filters).map(([name, value]) => `${name}: ${value}`)\n}\n\nexport { formatProvenanceFilters, formatProvenanceWindow }\n",
       "type": "registry:component",
       "target": "@components/dashboardblocks/kpi-provenance-format.ts"
     }

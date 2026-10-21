@@ -3,10 +3,10 @@
 import {
   ErrorPageLayout,
   formatDuration,
-  formatTime,
 } from '@/registry/components/dashboardblocks/error-pages'
 import { UsageBar } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { flushSync } from 'react-dom'
 
@@ -116,12 +116,12 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
             {overrun ? 'Planned to be back by' : 'Back by'}
           </p>
           <p className='text-4xl font-light tracking-tight tabular-nums'>
-            <time dateTime={endsAt.toISOString()}>{formatTime(endsAt)}</time>
+            <time dateTime={endsAt.toISOString()}>{formatDate(endsAt, 'time-zone')}</time>
           </p>
           <p className='text-muted-foreground text-sm'>
             {overrun
               ? 'It’s taking longer than planned. We’ll post an update soon.'
-              : `Started ${formatTime(startsAt)}, with ${formatDuration(endsAt.getTime() - now.getTime())} to go.`}
+              : `Started ${formatDate(startsAt, 'time-zone')}, with ${formatDuration(endsAt.getTime() - now.getTime())} to go.`}
           </p>
         </div>
         <div
@@ -161,7 +161,7 @@ const ErrorPages4 = (props: ErrorPages4Props) => {
                   dateTime={update.at.toISOString()}
                   className='text-muted-foreground tabular-nums'
                 >
-                  {formatTime(update.at)}
+                  {formatDate(update.at, 'time-zone')}
                 </time>
                 <span className={index === 0 ? 'font-medium' : undefined}>
                   {update.text}

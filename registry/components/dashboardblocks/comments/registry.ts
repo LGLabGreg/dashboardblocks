@@ -28,6 +28,7 @@ export const examples: Registry['items'] = [
       'tabs',
       registryUrl('block-state'),
       registryUrl('comments'),
+      registryUrl('format'),
     ],
     files: [
       {

@@ -33,6 +33,7 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import {
   formatCompact,
+  formatDate,
   formatNumber,
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
@@ -79,12 +80,6 @@ const exampleProps: Forecast1Props = {
 }
 
 const DAY = 86_400_000
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-const formatDate = (value: number) => dateFormatter.format(value)
 
 const Forecast1 = (props: Forecast1Props) => {
   const {
@@ -125,7 +120,9 @@ const Forecast1 = (props: Forecast1Props) => {
         <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
           <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
             <dt className='text-muted-foreground text-sm'>
-              {current && !state ? `Latest, ${formatDate(current.date)}` : 'Latest'}
+              {current && !state
+                ? `Latest, ${formatDate(current.date, 'day')}`
+                : 'Latest'}
             </dt>
             <dd>
               <KPIValue
@@ -139,7 +136,9 @@ const Forecast1 = (props: Forecast1Props) => {
             <>
               <div className='flex flex-col gap-1'>
                 <dt className='text-muted-foreground text-sm'>
-                  {end && !state ? `Forecast, ${formatDate(end.date)}` : 'Forecast'}
+                  {end && !state
+                    ? `Forecast, ${formatDate(end.date, 'day')}`
+                    : 'Forecast'}
                 </dt>
                 <dd>
                   <KPIValue
@@ -211,7 +210,7 @@ const Forecast1 = (props: Forecast1Props) => {
                   interval='preserveStartEnd'
                   minTickGap={24}
                   scale='time'
-                  tickFormatter={formatDate}
+                  tickFormatter={(value: number) => formatDate(value, 'day')}
                   ticks={ticks.map((row) => row.date)}
                   type='number'
                 />
@@ -249,7 +248,7 @@ const Forecast1 = (props: Forecast1Props) => {
                   content={(tooltipProps) => (
                     <ForecastTooltip
                       {...tooltipProps}
-                      formatLabel={(label) => formatDate(Number(label))}
+                      formatLabel={(label) => formatDate(Number(label), 'day')}
                       level={level}
                       valueFormatter={formatter}
                     />
@@ -307,7 +306,7 @@ const Forecast1 = (props: Forecast1Props) => {
                 actual: row.actual ?? '—',
                 forecast: isForecast ? (row.forecast ?? '—') : '—',
                 high: isForecast ? (row.high ?? '—') : '—',
-                label: formatDate(row.date),
+                label: formatDate(row.date, 'day'),
                 low: isForecast ? (row.low ?? '—') : '—',
               }
             })}

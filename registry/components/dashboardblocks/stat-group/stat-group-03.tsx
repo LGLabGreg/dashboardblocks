@@ -117,11 +117,7 @@ const exampleProps: StatGroup3Props = {
     },
     {
       ...exampleTotals(exampleDaily(36.2, 0.08, 1.4, 0.96, 2), 'mean', 2),
-      formatter: (value) =>
-        formatCurrency(value, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+      formatter: (value) => formatCurrency(value, { precision: 'exact' }),
       key: 'aov',
       label: 'Avg order value',
     },

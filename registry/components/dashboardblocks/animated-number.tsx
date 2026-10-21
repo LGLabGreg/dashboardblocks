@@ -1,6 +1,7 @@
 'use client'
 
 import { useAnimatedNumber } from '@/registry/hooks/use-animated-number'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 
 interface AnimatedNumberProps {
@@ -33,7 +34,9 @@ export function AnimatedNumber({
     from,
   })
 
-  const displayValue = formatter ? formatter(value) : value.toLocaleString('en-US')
+  const displayValue = formatter
+    ? formatter(value)
+    : formatNumber(value, { maximumFractionDigits: 3 })
 
   return (
     <span ref={ref as React.RefObject<HTMLSpanElement>} className={className}>

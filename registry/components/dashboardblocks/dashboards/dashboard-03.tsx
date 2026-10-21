@@ -24,6 +24,7 @@ import { Leaderboard1 } from '@/registry/components/dashboardblocks/leaderboard/
 import { Realtime1 } from '@/registry/components/dashboardblocks/realtime/realtime-01'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
+  formatDate,
   formatDateRange,
   formatNumber,
   formatPercent,
@@ -155,10 +156,7 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
   }
   const labelAt = (index: number) => {
     if (hourly) return `${String(index).padStart(2, '0')}:00`
-    return new Date(range.start.getTime() + index * 86_400_000).toLocaleDateString(
-      'en-US',
-      { day: 'numeric', month: 'short', timeZone: 'UTC' },
-    )
+    return formatDate(new Date(range.start.getTime() + index * 86_400_000), 'day')
   }
   const series = (shift: number) =>
     Array.from({ length }, (_, index) => point(length - 1 - index + shift))

@@ -50,6 +50,7 @@ export const examples: Registry['items'] = [
       'code-block',
       registryUrl('settings'),
       registryUrl('error-pages'),
+      registryUrl('format'),
     ],
     files: [
       {

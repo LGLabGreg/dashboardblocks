@@ -19,6 +19,7 @@ import {
   projectUsage,
   usageStatusConfig,
 } from '@/registry/components/dashboardblocks/usage-meter'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
@@ -61,12 +62,6 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
     used = 0,
   } = props
   const state = getBlockState(blockStatus, props.used)
-  const dateFormatter = new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-  })
-  const formatDate = (date: Date) => dateFormatter.format(date)
 
   const daysElapsed = (now.getTime() - periodStart.getTime()) / DAY
   const daysInPeriod = (periodEnd.getTime() - periodStart.getTime()) / DAY
@@ -99,8 +94,10 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
             </span>
             <span>
               Resets{' '}
-              <time dateTime={periodEnd.toISOString()}>{formatDate(periodEnd)}</time>, in{' '}
-              {daysToReset} {daysToReset === 1 ? 'day' : 'days'}
+              <time dateTime={periodEnd.toISOString()}>
+                {formatDate(periodEnd, 'day', timeZone)}
+              </time>
+              , in {daysToReset} {daysToReset === 1 ? 'day' : 'days'}
             </span>
           </p>
         </BlockReady>
@@ -130,7 +127,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
                     {' '}
                     At this rate you reach the limit around{' '}
                     <time dateTime={limitDate.toISOString()}>
-                      {formatDate(limitDate)}
+                      {formatDate(limitDate, 'day', timeZone)}
                     </time>
                     .
                   </>

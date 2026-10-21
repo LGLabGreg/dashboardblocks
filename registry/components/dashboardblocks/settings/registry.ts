@@ -14,6 +14,7 @@ export const examples: Registry['items'] = [
       registryUrl('settings'),
       registryUrl('status-label'),
       registryUrl('team'),
+      registryUrl('format'),
     ],
     files: [
       {
@@ -38,6 +39,7 @@ export const examples: Registry['items'] = [
       registryUrl('details'),
       registryUrl('settings'),
       registryUrl('status-label'),
+      registryUrl('format'),
     ],
     files: [
       {

@@ -79,12 +79,7 @@ function getMetrics(
       value: now.arr,
     },
     {
-      formatter: (value) =>
-        formatCurrency(value, {
-          currency,
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+      formatter: (value) => formatCurrency(value, { currency, precision: 'exact' }),
       hint: `Per customer, across ${formatNumber(current.customers)}`,
       key: 'arpu',
       label: 'ARPU',

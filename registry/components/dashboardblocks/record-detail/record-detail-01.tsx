@@ -114,8 +114,7 @@ const ORDER_TONE: Record<OrderStatus, StatusTone> = {
   Shipped: 'info',
 }
 
-const money = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const money = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 const RecordDetail1 = (props: RecordDetail1Props) => {
   const {

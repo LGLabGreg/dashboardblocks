@@ -18,6 +18,7 @@ import {
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   type CellData,
   type Column,
@@ -610,8 +611,6 @@ function DataTableViewOptions<TData extends RowData>({
   )
 }
 
-const countFormat = new Intl.NumberFormat('en-US')
-
 interface DataTablePaginationProps<TData extends RowData> {
   className?: string
   pageSizeOptions?: number[]
@@ -659,8 +658,8 @@ function DataTablePagination<TData extends RowData>({
           <SkeletonText className='w-24' />
         ) : (
           <Details>
-            {`${countFormat.format(from)}–${countFormat.format(to)} of ${countFormat.format(total)}`}
-            {selected > 0 && `${countFormat.format(selected)} selected`}
+            {`${formatNumber(from)}–${formatNumber(to)} of ${formatNumber(total)}`}
+            {selected > 0 && `${formatNumber(selected)} selected`}
           </Details>
         )}
       </p>

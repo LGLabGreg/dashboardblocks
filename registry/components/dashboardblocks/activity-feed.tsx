@@ -1,5 +1,11 @@
 'use client'
 
+import {
+  dayIn,
+  formatDate,
+  formatDayHeading,
+  formatRelativeTime,
+} from '@/registry/lib/dashboardblocks/format'
 import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -92,59 +98,6 @@ function UnreadDot({ className }: { className?: string }) {
   )
 }
 
-const MINUTE = 60_000
-const HOUR = 60 * MINUTE
-const DAY = 24 * HOUR
-
-const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
-  numeric: 'auto',
-  style: 'short',
-})
-
-function getDayKey(date: Date, timeZone = 'UTC') {
-  return new Intl.DateTimeFormat('en-CA', {
-    day: '2-digit',
-    month: '2-digit',
-    timeZone,
-    year: 'numeric',
-  }).format(date)
-}
-
-function formatActivityTime(date: Date, now: Date, timeZone = 'UTC') {
-  const elapsed = now.getTime() - date.getTime()
-  if (elapsed < MINUTE) return 'just now'
-  if (elapsed < HOUR)
-    return relativeFormatter.format(-Math.floor(elapsed / MINUTE), 'minute')
-  if (elapsed < 12 * HOUR)
-    return relativeFormatter.format(-Math.floor(elapsed / HOUR), 'hour')
-  const days = Math.round(
-    (Date.parse(getDayKey(now, timeZone)) - Date.parse(getDayKey(date, timeZone))) / DAY,
-  )
-  if (days === 0) {
-    return new Intl.DateTimeFormat('en-US', { timeStyle: 'short', timeZone }).format(date)
-  }
-  if (days < 7) return relativeFormatter.format(-days, 'day')
-  return new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-  }).format(date)
-}
-
-function formatActivityDay(date: Date, now: Date, timeZone = 'UTC') {
-  const days = Math.round(
-    (Date.parse(getDayKey(now, timeZone)) - Date.parse(getDayKey(date, timeZone))) / DAY,
-  )
-  if (days === 0) return 'Today'
-  if (days === 1) return 'Yesterday'
-  return new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    timeZone,
-    weekday: 'long',
-  }).format(date)
-}
-
 function groupActivityByDay<T extends { at: Date }>(
   items: T[],
   now: Date,
@@ -152,14 +105,14 @@ function groupActivityByDay<T extends { at: Date }>(
 ) {
   const groups: { items: T[]; key: string; label: string }[] = []
   for (const item of items) {
-    const key = getDayKey(item.at, timeZone)
+    const key = dayIn(item.at, timeZone)
     const group = groups.find((existing) => existing.key === key)
     if (group) group.items.push(item)
     else
       groups.push({
         items: [item],
         key,
-        label: formatActivityDay(item.at, now, timeZone),
+        label: formatDayHeading(item.at, now, timeZone),
       })
   }
   return groups
@@ -178,14 +131,10 @@ function ActivityTime({ className, date, now, timeZone = 'UTC' }: ActivityTimePr
   return (
     <time
       dateTime={date.toISOString()}
-      title={new Intl.DateTimeFormat('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-        timeZone,
-      }).format(date)}
+      title={formatDate(date, 'date-time', timeZone)}
       className={cn('text-muted-foreground text-xs whitespace-nowrap', className)}
     >
-      {formatActivityTime(date, now, timeZone)}
+      {formatRelativeTime(date, now, { timeZone })}
     </time>
   )
 }
@@ -198,9 +147,6 @@ export {
   UnreadDot,
   activityToneClasses,
   activityToneColors,
-  formatActivityDay,
-  formatActivityTime,
-  getDayKey,
   groupActivityByDay,
 }
 

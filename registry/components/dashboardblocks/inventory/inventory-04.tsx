@@ -30,7 +30,7 @@ import {
   getStockStatus,
   projectStock,
 } from '@/registry/components/dashboardblocks/inventory'
-import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import { formatDate, formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   Area,
   AreaChart,
@@ -79,12 +79,6 @@ const DAY = 86_400_000
 const STOCK_COLOR = 'var(--color-chart-2)'
 const STOCKOUT_COLOR = 'var(--color-red-500)'
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-
 const units = (value: number) => `${formatNumber(value)} units`
 
 const Inventory4 = (props: Inventory4Props) => {
@@ -109,7 +103,7 @@ const Inventory4 = (props: Inventory4Props) => {
     onHand: onHand ?? 0,
   })
   const rows = levels.map((level, day) => ({
-    date: dateFormatter.format(new Date(now.getTime() + day * DAY)),
+    date: formatDate(new Date(now.getTime() + day * DAY), 'day'),
     day,
     stock: Math.max(0, Math.round(level)),
   }))

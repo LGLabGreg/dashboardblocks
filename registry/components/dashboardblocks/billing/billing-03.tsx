@@ -108,12 +108,7 @@ const Billing3 = (props: Billing3Props) => {
   const state = getBlockState(status, invoices)
   const unpaid = invoices.filter((invoice) => invoice.status !== 'paid')
   const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0)
-  const money = (value: number) =>
-    formatCurrency(value, {
-      currency,
-      maximumFractionDigits: 2,
-      minimumFractionDigits: 2,
-    })
+  const money = (value: number) => formatCurrency(value, { currency, precision: 'exact' })
   const oldest = unpaid.reduce<Invoice | undefined>(
     (first, invoice) => (!first || invoice.date < first.date ? invoice : first),
     undefined,

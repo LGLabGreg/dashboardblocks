@@ -35,22 +35,6 @@ function SeverityLabel({ children, severity, ...props }: SeverityLabelProps) {
   )
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat('en-US', {
-  numeric: 'auto',
-  style: 'short',
-})
-
-function formatRelativeTime(date: Date, now: Date) {
-  const seconds = Math.round((date.getTime() - now.getTime()) / 1000)
-  const minutes = Math.round(seconds / 60)
-  const hours = Math.round(minutes / 60)
-  const days = Math.round(hours / 24)
-  if (Math.abs(seconds) < 60) return 'just now'
-  if (Math.abs(minutes) < 60) return relativeFormatter.format(minutes, 'minute')
-  if (Math.abs(hours) < 24) return relativeFormatter.format(hours, 'hour')
-  return relativeFormatter.format(days, 'day')
-}
-
-export { SeverityLabel, formatRelativeTime, severityConfig, severityOrder }
+export { SeverityLabel, severityConfig, severityOrder }
 
 export type { AlertSeverity, SeverityConfig, SeverityLabelProps }

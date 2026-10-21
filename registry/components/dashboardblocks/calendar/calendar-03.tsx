@@ -20,11 +20,8 @@ import {
   getWeekDays,
   startOfMonth,
 } from '@/registry/components/dashboardblocks/calendar'
-import {
-  addDays,
-  formatDay,
-  getDay,
-} from '@/registry/components/dashboardblocks/schedule'
+import { addDays, getDay } from '@/registry/components/dashboardblocks/schedule'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId, useRef, useState } from 'react'
 
 type View = 'month' | 'week'
@@ -300,7 +297,7 @@ const Calendar3 = (props: Calendar3Props) => {
   const visible = events.filter((event) => !hidden.includes(event.calendar ?? ''))
   const selected = visible.find((event) => event.id === selectedId)
   const days = getWeekDays(anchor, weekStartsOn)
-  const monthLabel = formatDay(month, { month: 'long', year: 'numeric' })
+  const monthLabel = formatDate(month, 'month-long-year')
   const [rangeStart, rangeEnd] =
     view === 'month' ? [month, startOfMonth(month, 1)] : [days[0], addDays(days[6], 1)]
   const inView = visible.filter((event) => {
@@ -405,11 +402,7 @@ const Calendar3 = (props: Calendar3Props) => {
                     aria-live='polite'
                     className='px-2 text-sm font-medium'
                   >
-                    {formatDay(anchor, {
-                      day: 'numeric',
-                      month: 'long',
-                      weekday: 'long',
-                    })}
+                    {formatDate(anchor, 'weekday-long-day')}
                   </h3>
                   {!state && (
                     <CalendarEventList

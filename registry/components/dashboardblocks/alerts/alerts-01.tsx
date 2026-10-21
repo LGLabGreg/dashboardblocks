@@ -3,7 +3,6 @@
 import {
   type AlertSeverity,
   SeverityLabel,
-  formatRelativeTime,
 } from '@/registry/components/dashboardblocks/alerts'
 import {
   BlockReady,
@@ -13,6 +12,7 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
+import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'

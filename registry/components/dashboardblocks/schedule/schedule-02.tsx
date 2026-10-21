@@ -12,12 +12,14 @@ import {
   EventRow,
   MonthCalendar,
   type ScheduleEvent,
-  formatDay,
-  formatRelativeDay,
   getDay,
-  getDayKey,
 } from '@/registry/components/dashboardblocks/schedule'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import {
+  dayIn,
+  formatDate,
+  formatDayHeading,
+} from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -172,16 +174,16 @@ const Schedule2 = (props: Schedule2Props) => {
   const [month, setMonth] = useState(() => monthOf(getDay(now, timeZone)))
   const id = useId()
 
-  const monthLabel = formatDay(month, { month: 'long', year: 'numeric' })
+  const monthLabel = formatDate(month, 'month-long-year')
   const monthKey = month.toISOString().slice(0, 7)
   const monthCount = events.filter(
-    (event) => getDayKey(event.start, timeZone).slice(0, 7) === monthKey,
+    (event) => dayIn(event.start, timeZone).slice(0, 7) === monthKey,
   ).length
   const selectedKey = selected.toISOString().slice(0, 10)
   const dayEvents = events
-    .filter((event) => getDayKey(event.start, timeZone) === selectedKey)
+    .filter((event) => dayIn(event.start, timeZone) === selectedKey)
     .sort((a, b) => a.start.getTime() - b.start.getTime())
-  const selectedLabel = formatRelativeDay(selected, getDay(now, timeZone))
+  const selectedLabel = formatDayHeading(selected, getDay(now, timeZone))
   const showMonth = (months: number) =>
     setMonth(new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + months, 1)))
 
@@ -193,7 +195,7 @@ const Schedule2 = (props: Schedule2Props) => {
           <BlockReady className='text-sm'>
             <p className='text-muted-foreground text-sm'>
               {monthCount} {monthCount === 1 ? 'event' : 'events'} in{' '}
-              {formatDay(month, { month: 'long' })}.
+              {formatDate(month, 'month-long')}.
             </p>
           </BlockReady>
         </header>
@@ -256,7 +258,7 @@ const Schedule2 = (props: Schedule2Props) => {
             <h3 id={`${id}-day`} className='flex flex-col gap-0.5 text-sm font-medium'>
               {selectedLabel}
               <Details className='text-muted-foreground font-normal'>
-                {formatDay(selected)}
+                {formatDate(selected, 'weekday-day')}
                 {ready &&
                   `${dayEvents.length} ${dayEvents.length === 1 ? 'event' : 'events'}`}
               </Details>

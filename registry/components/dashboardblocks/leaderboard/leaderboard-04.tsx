@@ -21,6 +21,7 @@ import {
 import {
   formatCurrency,
   formatNumber,
+  formatOrdinal,
   joinDetails,
 } from '@/registry/lib/dashboardblocks/format'
 
@@ -102,11 +103,6 @@ const exampleProps: Leaderboard4Props = {
   title: 'Top products',
 }
 
-const ordinalRules = new Intl.PluralRules('en-US', { type: 'ordinal' })
-const ordinalSuffix: Record<string, string> = { few: 'rd', one: 'st', two: 'nd' }
-const ordinal = (rank: number) =>
-  `${rank}${ordinalSuffix[ordinalRules.select(rank)] ?? 'th'}`
-
 function summarize(products: Product[], period: string) {
   const climber = products
     .map((product, index) => ({ ...product, rank: index + 1 }))
@@ -115,7 +111,7 @@ function summarize(products: Product[], period: string) {
   const fresh = products.filter((product) => product.change === 'new')
   const parts = [
     climber &&
-      `${climber.name} climbed ${climber.change} ${climber.change === 1 ? 'place' : 'places'} to ${ordinal(climber.rank)}`,
+      `${climber.name} climbed ${climber.change} ${climber.change === 1 ? 'place' : 'places'} to ${formatOrdinal(climber.rank)}`,
     fresh.length === 1 && `${fresh[0].name} is new`,
     fresh.length > 1 && `${fresh.length} products are new`,
   ].filter(Boolean)

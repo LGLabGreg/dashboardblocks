@@ -11,10 +11,10 @@ import {
   EventRow,
   type ScheduleEvent,
   formatCountdown,
-  formatDay,
   getDayOffset,
   groupByDay,
 } from '@/registry/components/dashboardblocks/schedule'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
 interface Schedule1Props {
@@ -166,7 +166,7 @@ const Schedule1 = (props: Schedule1Props) => {
               >
                 {group.label}
                 <span className='font-normal tabular-nums'>
-                  {formatDay(group.day, { day: 'numeric', month: 'short' })}
+                  {formatDate(group.day, 'day')}
                 </span>
               </h3>
               <ul className='flex flex-col gap-3'>

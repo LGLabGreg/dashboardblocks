@@ -25,7 +25,7 @@ import {
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
+import { formatCurrency, formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
@@ -137,13 +137,6 @@ const PLAN_OPTIONS: DataTableFacetOption[] = ['Free', 'Pro', 'Team', 'Enterprise
   (plan) => ({ label: plan, value: plan }),
 )
 
-const dateFormat = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-
 const summarize = (rows: CustomerRow[]) => {
   const paying = rows.filter((row) => row.mrr > 0)
   const total = paying.reduce((sum, row) => sum + row.mrr, 0)
@@ -238,7 +231,7 @@ const columns = columnHelper.columns([
     meta: { align: 'end' },
   }),
   columnHelper.accessor('signedUp', {
-    cell: ({ getValue }) => dateFormat.format(new Date(getValue())),
+    cell: ({ getValue }) => formatDate(new Date(getValue()), 'date'),
     enableGlobalFilter: false,
     header: 'Signed up',
     meta: { align: 'end' },

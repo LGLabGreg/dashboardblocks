@@ -3,7 +3,7 @@
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
   type ChangeEvent,
   type DragEvent,
@@ -312,9 +312,6 @@ function FileKindIcon({
 }
 
 const FILE_SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
-const sizeFormatters = [0, 1].map(
-  (digits) => new Intl.NumberFormat('en-US', { maximumFractionDigits: digits }),
-)
 
 /** "0 B", "940 KB", "2.4 MB", "1.2 GB", in steps of 1,024 as browsers and operating systems count. */
 function formatFileSize(bytes: number) {
@@ -328,8 +325,8 @@ function formatFileSize(bytes: number) {
     exponent += 1
     value /= 1024
   }
-  const formatter = sizeFormatters[exponent > 0 && value < 100 ? 1 : 0]
-  return `${formatter.format(value)} ${FILE_SIZE_UNITS[exponent]}`
+  const digits = exponent > 0 && value < 100 ? 1 : 0
+  return `${formatNumber(value, { maximumFractionDigits: digits })} ${FILE_SIZE_UNITS[exponent]}`
 }
 
 type FileRejectionReason = 'count' | 'size' | 'type'

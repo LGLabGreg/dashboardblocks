@@ -33,6 +33,7 @@ import {
   formatMetricValue,
   getMetricFormatter,
 } from '@/registry/components/dashboardblocks/metric-list'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 import {
   Area,
@@ -66,11 +67,6 @@ interface MetricList4Props {
 }
 
 const NOW = Date.UTC(2026, 8, 25)
-const dayFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
 
 const exampleDaily = (
   end: number,
@@ -95,7 +91,7 @@ const exampleProps: MetricList4Props = {
   comparison: '30 days ago',
   description: 'Daily over the last 30 days. Pick a metric to chart it.',
   labels: Array.from({ length: 30 }, (_, day) =>
-    dayFormatter.format(new Date(NOW - (29 - day) * 86_400_000)),
+    formatDate(new Date(NOW - (29 - day) * 86_400_000), 'day'),
   ),
   metrics: [
     {

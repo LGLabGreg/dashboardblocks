@@ -30,8 +30,7 @@ interface Geo1Props {
   values?: Record<string, number>
 }
 
-const currency = (value: number) =>
-  formatCurrency(value, { compact: true, maximumFractionDigits: 2 })
+const currency = (value: number) => formatCurrency(value, { compact: true })
 
 const exampleProps: Geo1Props = {
   formatter: currency,

@@ -16,6 +16,7 @@ import {
   type StatusLevel,
 } from '@/registry/components/dashboardblocks/status'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatList } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
@@ -64,8 +65,6 @@ const exampleProps: Status3Props = {
   ],
 }
 
-const listFormat = new Intl.ListFormat('en-US', { type: 'conjunction' })
-
 const Status3 = (props: Status3Props) => {
   const { affected, onSubscribe, severity, started, status, title, updates = [] } = props
   const state = getBlockState(status, updates)
@@ -81,10 +80,7 @@ const Status3 = (props: Status3Props) => {
             <h2 className='font-semibold tracking-tight text-balance'>{title}</h2>
             <BlockReady className='text-sm'>
               <p className='text-muted-foreground text-sm'>
-                {[
-                  started,
-                  affected.length > 0 && `Affects ${listFormat.format(affected)}`,
-                ]
+                {[started, affected.length > 0 && `Affects ${formatList(affected)}`]
                   .filter(Boolean)
                   .map((sentence) => `${sentence}.`)
                   .join(' ')}

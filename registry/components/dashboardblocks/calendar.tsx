@@ -3,18 +3,21 @@
 import {
   type ScheduleEvent,
   addDays,
-  formatDay,
   formatTime,
   formatTimeRange,
-  getDateParts,
   getDay,
-  getDayKey,
   getEventStyle,
   getMonthWeeks,
 } from '@/registry/components/dashboardblocks/schedule'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { joinDetails } from '@/registry/lib/dashboardblocks/format'
+import {
+  dayIn,
+  formatDate,
+  formatDateRange,
+  joinDetails,
+  zonedParts,
+} from '@/registry/lib/dashboardblocks/format'
 import {
   type CSSProperties,
   type KeyboardEvent,
@@ -65,23 +68,7 @@ function startOfMonth(day: Date, months = 0) {
 }
 
 function formatDayRange(first: Date, last: Date) {
-  const year = last.getUTCFullYear()
-  if (first.getUTCFullYear() !== year) {
-    const options: Intl.DateTimeFormatOptions = {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    }
-    return `${formatDay(first, options)} – ${formatDay(last, options)}`
-  }
-  if (first.getUTCMonth() === last.getUTCMonth()) {
-    return `${formatDay(first, { month: 'long' })} ${first.getUTCDate()}–${last.getUTCDate()}, ${year}`
-  }
-  const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-  }
-  return `${formatDay(first, options)} – ${formatDay(last, options)}, ${year}`
+  return formatDateRange({ end: last, start: first }, { year: true })
 }
 
 function getEventDays(event: ScheduleEvent, timeZone = 'UTC') {
@@ -236,21 +223,18 @@ function getEventWhen(
   timeZone: string,
   style: 'long' | 'short',
 ): string[] {
-  const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: style,
-    weekday: style,
-  }
+  const dayStyle = style === 'long' ? 'weekday-long-day' : 'weekday-day'
   const { first, last } = getEventDays(event, timeZone)
   if (first.getTime() === last.getTime()) {
     return [
-      formatDay(first, options),
+      formatDate(first, dayStyle),
       event.allDay ? 'All day' : formatTimeRange(event.start, event.end, timeZone),
     ]
   }
-  if (event.allDay) return [`${formatDay(first, options)} – ${formatDay(last, options)}`]
+  if (event.allDay)
+    return [`${formatDate(first, dayStyle)} – ${formatDate(last, dayStyle)}`]
   return [
-    `${formatDay(first, options)}, ${formatTime(event.start, timeZone)} – ${formatDay(last, options)}, ${formatTime(new Date(getEnd(event)), timeZone)}`,
+    `${formatDate(first, dayStyle)}, ${formatTime(event.start, timeZone)} – ${formatDate(last, dayStyle)}, ${formatTime(new Date(getEnd(event)), timeZone)}`,
   ]
 }
 
@@ -278,7 +262,7 @@ function EventName({ event, timeZone }: { event: ScheduleEvent; timeZone: string
 }
 
 function formatShortTime(date: Date, timeZone: string) {
-  const { hour, minute } = getDateParts(date, timeZone)
+  const { hour, minute } = zonedParts(date, timeZone)
   const time = `${hour % 12 || 12}${minute === 0 ? '' : `:${String(minute).padStart(2, '0')}`}`
   return `${time}${hour < 12 ? 'a' : 'p'}`
 }
@@ -511,7 +495,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
   const timedByDay = new Map<string, T[]>()
   for (const event of events) {
     if (spansDays(event, timeZone)) continue
-    const key = getDayKey(event.start, timeZone)
+    const key = dayIn(event.start, timeZone)
     timedByDay.set(key, [...(timedByDay.get(key) ?? []), event])
   }
   for (const dayEvents of timedByDay.values()) {
@@ -592,13 +576,11 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
           <div
             key={day.getTime()}
             role='columnheader'
-            aria-label={formatDay(day, { weekday: 'long' })}
+            aria-label={formatDate(day, 'weekday-long')}
             className='text-muted-foreground pb-2 text-center text-xs font-medium @2xl:px-1.5 @2xl:text-left'
           >
-            <span className='@2xl:hidden'>{formatDay(day, { weekday: 'narrow' })}</span>
-            <span className='hidden @2xl:inline'>
-              {formatDay(day, { weekday: 'short' })}
-            </span>
+            <span className='@2xl:hidden'>{formatDate(day, 'weekday-narrow')}</span>
+            <span className='hidden @2xl:inline'>{formatDate(day, 'weekday')}</span>
           </div>
         ))}
       </div>
@@ -619,11 +601,7 @@ function CalendarMonthView<T extends ScheduleEvent = CalendarEvent>({
               const isSelected = selectedDay?.getTime() === day.getTime()
               const isActive = active.getTime() === day.getTime()
               const outside = !inMonth(day)
-              const dayName = formatDay(day, {
-                day: 'numeric',
-                month: 'long',
-                weekday: 'long',
-              })
+              const dayName = formatDate(day, 'weekday-long-day')
 
               const slots: (MonthSlot<T> | undefined)[] = []
               for (const segment of covering) {
@@ -863,8 +841,8 @@ function TimeGrid<T extends ScheduleEvent>({
   const scroller = useRef<HTMLDivElement>(null)
   const body = useRef<HTMLDivElement>(null)
   const hours = endHour - startHour
-  const todayKey = getDayKey(now, timeZone)
-  const nowParts = getDateParts(now, timeZone)
+  const todayKey = dayIn(now, timeZone)
+  const nowParts = zonedParts(now, timeZone)
   const nowMinutes = (nowParts.hour - startHour) * 60 + nowParts.minute
   const showNow =
     nowMinutes >= 0 &&
@@ -1000,7 +978,7 @@ function TimeGrid<T extends ScheduleEvent>({
                   <ul>
                     {layoutEvents(column.events).map(
                       ({ event, lane, lanes, span, uncoveredMinutes }) => {
-                        const { hour, minute } = getDateParts(event.start, timeZone)
+                        const { hour, minute } = zonedParts(event.start, timeZone)
                         const top = Math.max(0, (hour - startHour) * 60 + minute)
                         const minutes = getMinutes(event)
                         const bottom = Math.min(
@@ -1097,23 +1075,19 @@ function CalendarWeekView<T extends ScheduleEvent = CalendarEvent>({
   ...props
 }: CalendarWeekViewProps<T>) {
   const { now, timeZone = 'UTC' } = props
-  const todayKey = getDayKey(now, timeZone)
+  const todayKey = dayIn(now, timeZone)
   const timed = events.filter((event) => !spansDays(event, timeZone))
   const columns = days.map((day) => {
     const key = toKey(day)
     const isToday = key === todayKey
-    const name = formatDay(day, {
-      day: 'numeric',
-      month: 'long',
-      weekday: 'long',
-    })
+    const name = formatDate(day, 'weekday-long-day')
     return {
       day,
-      events: timed.filter((event) => getDayKey(event.start, timeZone) === key),
+      events: timed.filter((event) => dayIn(event.start, timeZone) === key),
       header: (
         <div className='flex flex-col items-center gap-0.5'>
           <span aria-hidden className='text-muted-foreground text-xs'>
-            {formatDay(day, { weekday: 'short' })}
+            {formatDate(day, 'weekday')}
           </span>
           <span
             aria-hidden

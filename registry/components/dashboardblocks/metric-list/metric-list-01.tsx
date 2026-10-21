@@ -13,6 +13,7 @@ import {
   MetricRow,
   getMetricChange,
 } from '@/registry/components/dashboardblocks/metric-list'
+import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 interface MetricList1Props {
   /** Follows the previous value in each change, such as `the 14 days before`. */
@@ -26,12 +27,6 @@ interface MetricList1Props {
   title: string
 }
 
-const dayFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-})
-
 const exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =>
   Array.from({ length: 14 }, (_, day) =>
     Number((end - (13 - day) * slope + Math.sin(day / 1.4 + phase) * wobble).toFixed(2)),
@@ -40,7 +35,7 @@ const exampleHistory = (end: number, slope: number, wobble: number, phase = 0) =
 const exampleProps: MetricList1Props = {
   comparison: 'the 14 days before',
   labels: Array.from({ length: 14 }, (_, day) =>
-    dayFormatter.format(new Date(Date.UTC(2026, 8, 12 + day))),
+    formatDate(new Date(Date.UTC(2026, 8, 12 + day)), 'day'),
   ),
   metrics: [
     {

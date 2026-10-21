@@ -358,33 +358,6 @@ function CopyButton({
   )
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' })
-
-function formatRelative(date: Date, now: Date) {
-  const seconds = Math.round((date.getTime() - now.getTime()) / 1000)
-  const minutes = Math.round(seconds / 60)
-  const hours = Math.round(minutes / 60)
-  const days = Math.round(hours / 24)
-  if (Math.abs(minutes) < 1) return 'just now'
-  if (Math.abs(minutes) < 60) return relativeFormatter.format(minutes, 'minute')
-  if (Math.abs(hours) < 24) return relativeFormatter.format(hours, 'hour')
-  if (Math.abs(days) < 30) return relativeFormatter.format(days, 'day')
-  if (Math.abs(days) < 365)
-    return relativeFormatter.format(Math.round(days / 30), 'month')
-  return relativeFormatter.format(Math.round(days / 365), 'year')
-}
-
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-  year: 'numeric',
-})
-
-function formatDate(date: Date) {
-  return dateFormatter.format(date)
-}
-
 function daysBetween(from: Date, to: Date) {
   return Math.floor((to.getTime() - from.getTime()) / 86_400_000)
 }
@@ -397,8 +370,6 @@ export {
   SettingsRow,
   connectionStatusConfig,
   daysBetween,
-  formatDate,
-  formatRelative,
   maskSecret,
   roleConfig,
   roleOrder,

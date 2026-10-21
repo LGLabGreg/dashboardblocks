@@ -94,8 +94,7 @@ const exampleProps: DataTable3Props = {
   title: 'Campaigns',
 }
 
-const money = (value: number) =>
-  formatCurrency(value, { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+const money = (value: number) => formatCurrency(value, { precision: 'exact' })
 
 const dayLabel = (index: number, count: number) => {
   const daysAgo = count - 1 - index
