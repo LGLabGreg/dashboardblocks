@@ -2,9 +2,9 @@
   "name": "dashboardblocks",
   "homepage": "https://www.dashboardblocks.com",
   "sizes": {
-    "compact": "A quarter of the row or more: four to a row, down to a 280px card. These are the blocks whose docs preview is compact.",
-    "half": "A third of the row or more: one column of a three-column dashboard.",
-    "full": "Two thirds of the row or more: two or three columns of a three-column dashboard.",
+    "compact": "A quarter of the row or more, down to a 280px card.",
+    "half": "A third of the row or more: one of a pair, or one column of a three-column dashboard.",
+    "full": "Two thirds of the row or more: a row of its own, or two columns of a three-column dashboard.",
     "page": "A whole page, such as an app shell, a sign-in screen or a dashboard. Never inside a dashboard."
   },
   "blocks": [

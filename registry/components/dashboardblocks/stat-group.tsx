@@ -40,6 +40,20 @@ function formatStatValue(metric: Pick<StatMetric, 'formatter' | 'value'>) {
   return (metric.formatter ?? defaultFormatter)(metric.value)
 }
 
+const statColumns: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 @md:grid-cols-2',
+  3: 'grid-cols-1 @lg:grid-cols-3',
+  4: 'grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4',
+  5: 'grid-cols-1 @xl:grid-cols-3 @4xl:grid-cols-5',
+  6: 'grid-cols-1 @lg:grid-cols-3 @4xl:grid-cols-6',
+}
+
+/** Columns for a row of `count` stats: one on a phone, then rows that never leave a stat alone. */
+function getStatColumns(count: number) {
+  return statColumns[count] ?? 'grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'
+}
+
 function getStatPlaceholders(count: number): StatMetric[] {
   return Array.from({ length: count }, (_, index) => ({
     key: `placeholder-${index}`,
@@ -257,6 +271,7 @@ export {
   StatSparkline,
   StatValue,
   formatStatValue,
+  getStatColumns,
   getStatPlaceholders,
 }
 

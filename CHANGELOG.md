@@ -1,5 +1,12 @@
 # dashboardblocks
 
+## 1.8.1
+
+### Patch Changes
+
+- 261fb0c: `getBudgetPace` in `spend.tsx` takes an optional `projected`, so its status can follow a forecast of your own.
+- ac8fed7: Stat Group: a row of stats takes its columns from how many stats it holds (`getStatColumns`), so the columns are equal and no stat sits alone on a row at any width. Phones show one column. Stat Group 1 uses it.
+
 ## 1.8.0
 
 ### Minor Changes

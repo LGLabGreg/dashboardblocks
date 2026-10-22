@@ -13,6 +13,7 @@ import {
   type StatMetric,
   StatValue,
   formatStatValue,
+  getStatColumns,
   getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
@@ -57,7 +58,7 @@ const StatGroup1 = (props: StatGroup1Props) => {
   return (
     <BlockStateProvider state={getBlockState(status, metrics)}>
       <section className='@container flex flex-col gap-4'>
-        <StatGroup className='grid-cols-1 @md:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]'>
+        <StatGroup className={getStatColumns(shown.length)}>
           {shown.map((metric) => (
             <Stat key={metric.key}>
               <StatLabel>{metric.label}</StatLabel>

@@ -15,6 +15,8 @@ interface BudgetPaceInput {
   budget: number
   /** Share of the period that has passed, 0–1. */
   elapsed: number
+  /** Your own projection to the period's end. Leave out to project the pace so far. */
+  projected?: number
   spent: number
   /** How far over budget the projection can land and stay on track, and how far under counts as under budget, 0.05 by default. */
   tolerance?: number
@@ -33,11 +35,12 @@ interface BudgetPace {
 function getBudgetPace({
   budget,
   elapsed,
+  projected: given,
   spent,
   tolerance = 0.05,
 }: BudgetPaceInput): BudgetPace {
   const clamped = Math.min(1, Math.max(0, elapsed))
-  const projected = clamped > 0 ? spent / clamped : spent
+  const projected = given ?? (clamped > 0 ? spent / clamped : spent)
   let status: BudgetStatus = 'on-track'
   if (spent > budget) status = 'over'
   else if (projected > budget * (1 + tolerance)) status = 'at-risk'
