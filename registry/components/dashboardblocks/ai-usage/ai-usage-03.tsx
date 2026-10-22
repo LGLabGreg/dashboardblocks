@@ -15,6 +15,7 @@ import {
   DataTableHeader,
   DataTableRow,
   DataTableRowHead,
+  DataTableRowLink,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
@@ -24,6 +25,8 @@ import { cn } from '@/lib/utils'
 interface ModelPerformance {
   /** Share of requests that errored, 0–1. */
   errorRate: number
+  /** The model's calls: the whole row opens them. */
+  href?: string
   label: string
   /** Output tokens per second while streaming. */
   outputSpeed: number
@@ -167,7 +170,13 @@ const AiUsage3 = (props: AiUsage3Props) => {
                             backgroundColor: modelPalette[index % modelPalette.length],
                           }}
                         />
-                        {model.label}
+                        {model.href ? (
+                          <DataTableRowLink href={model.href}>
+                            {model.label}
+                          </DataTableRowLink>
+                        ) : (
+                          model.label
+                        )}
                       </span>
                     </DataTableRowHead>
                     <DataTableCell align='end' className='text-muted-foreground'>

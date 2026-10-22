@@ -146,7 +146,7 @@
       "component": "AiUsage2",
       "shows": "Model spend by product feature, with each feature's input, cached and output tokens and its cost per thousand requests.",
       "size": "full",
-      "props": "{ description?: string; features?: { cost: number; label: string; requests: number; tokens: { cached?: number; input: number; output: number } }[]; period?: string; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ description?: string; features?: { cost: number; href?: string; label: string; requests: number; tokens: { cached?: number; input: number; output: number } }[]; period?: string; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "ai-usage-01",
         "ai-usage-04",
@@ -160,7 +160,7 @@
       "component": "AiUsage3",
       "shows": "Requests, time to first token from the median to the 95th percentile, output speed and error rate for each model.",
       "size": "full",
-      "props": "{ description?: string; errorThreshold?: number; models?: { errorRate: number; label: string; outputSpeed: number; requests: number; ttftP50: number; ttftP95: number }[]; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ description?: string; errorThreshold?: number; models?: { errorRate: number; href?: string; label: string; outputSpeed: number; requests: number; ttftP50: number; ttftP95: number }[]; status?: \"loading\" | \"error\"; title: string }",
       "usedWith": [
         "ai-usage-01",
         "ai-usage-02"

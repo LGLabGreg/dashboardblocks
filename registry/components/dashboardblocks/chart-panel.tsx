@@ -138,7 +138,9 @@ function ChartPanelFigure({ children, className }: ChartPanelFigureProps) {
   const state = useBlockState()
 
   return (
-    <div className={cn('w-full tabular-nums', className)}>
+    <div
+      className={cn('w-full tabular-nums [&_.recharts-tooltip-wrapper]:z-10', className)}
+    >
       {state ? <ChartPlaceholder height='100%' /> : children}
     </div>
   )

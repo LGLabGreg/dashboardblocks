@@ -155,11 +155,7 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
                   <CodeBlockHeader>
                     <CodeBlockTitle>Error details</CodeBlockTitle>
                     <CodeBlockActions>
-                      <CodeBlockCopyButton
-                        size='icon-sm'
-                        aria-label='Copy details'
-                        value={details}
-                      />
+                      <CodeBlockCopyButton aria-label='Copy details' value={details} />
                     </CodeBlockActions>
                   </CodeBlockHeader>
                   <CodeBlockContent wrap className='data-wrap:mask-none'>

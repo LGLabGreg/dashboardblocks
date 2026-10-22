@@ -1,5 +1,16 @@
 # dashboardblocks
 
+## 1.8.2
+
+### Patch Changes
+
+- 4f56db2: AI Usage 2 and 3: a feature or model row can take an `href`, and the whole row opens it, such as the calls behind that row.
+- 2de5ccc: Chart: `chartFadedColor` takes an optional strength, for a main series drawn softer beside a louder one.
+- 2e2544e: Chart Panel: a chart's tooltip shows above a table or list that follows the chart, instead of behind it.
+- bf8771b: AI Assistant and Error Pages 3: a code block's copy button keeps the code block's own size, so it lines up with the title.
+- 65c8b10: Data Table: a facet filter's counts read with thousands separators (1,204), and the search box's name drops the placeholder's trailing ellipsis.
+- 94256bc: Page Header: three facts sit in one row of three on a narrow screen, so none is left alone on a row.
+
 ## 1.8.1
 
 ### Patch Changes

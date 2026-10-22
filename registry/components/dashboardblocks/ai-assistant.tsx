@@ -261,7 +261,7 @@ function ChatCodeBlock({ code, language }: { code: string; language: string }) {
       <CodeBlockHeader>
         <CodeBlockTitle>{language || 'code'}</CodeBlockTitle>
         <CodeBlockActions>
-          <CodeBlockCopyButton size='icon-sm' aria-label='Copy code' value={code} />
+          <CodeBlockCopyButton aria-label='Copy code' value={code} />
         </CodeBlockActions>
       </CodeBlockHeader>
       <CodeBlockContent className='mask-none'>

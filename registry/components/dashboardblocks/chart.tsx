@@ -76,9 +76,12 @@ const chartReferenceLabel = {
   fontSize: 11,
 } as const
 
-/** The rest of a series beside a highlighted mark. */
-function chartFadedColor(color: string) {
-  return `color-mix(in oklab, ${color} 30%, transparent)`
+/**
+ * The rest of a series beside a highlighted mark, at 30% of `color`. A main series that sits
+ * beside a louder one (calls above their failures) passes a stronger `percent`, such as 70.
+ */
+function chartFadedColor(color: string, percent = 30) {
+  return `color-mix(in oklab, ${color} ${percent}%, transparent)`
 }
 
 /** A gradient or pattern id that is safe inside `url(#…)`. */

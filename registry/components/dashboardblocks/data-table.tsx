@@ -420,7 +420,7 @@ function DataTableSearch<TData extends RowData>({
   return (
     <Input
       type='search'
-      aria-label={placeholder}
+      aria-label={placeholder.replace(/…$/, '')}
       placeholder={placeholder}
       value={String(table.state.globalFilter ?? '')}
       onChange={(event) => table.setGlobalFilter(event.target.value)}
@@ -511,7 +511,7 @@ function DataTableFacetFilter<TData extends RowData>({
               {item.icon}
               {item.label}
               <span className='text-muted-foreground ml-auto pl-4 text-xs tabular-nums'>
-                {item.count ?? counts.get(item.value) ?? 0}
+                {formatNumber(item.count ?? counts.get(item.value) ?? 0)}
               </span>
             </DropdownMenuCheckboxItem>
           ))}

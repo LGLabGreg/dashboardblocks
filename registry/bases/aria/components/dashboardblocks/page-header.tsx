@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: 0c5005cbb36d
+// source-hash: f9b826c8a35b
 
 'use client'
 
@@ -120,7 +120,8 @@ function PageHeaderFacts({
   return (
     <dl
       className={cn(
-        'grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @2xl/page-header:flex @2xl/page-header:gap-x-12',
+        'grid gap-x-6 gap-y-4 border-t pt-4 @2xl/page-header:flex @2xl/page-header:gap-x-12',
+        items.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
         className,
       )}
     >

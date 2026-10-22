@@ -16,10 +16,16 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import {
+  DataTableListItem,
+  DataTableRowLink,
+} from '@/registry/components/dashboardblocks/table'
 import { formatPercent, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
 interface FeatureUsage {
   cost: number
+  /** The feature's calls or usage page: the whole row opens it. */
+  href?: string
   label: string
   requests: number
   tokens: TokenCounts
@@ -130,12 +136,18 @@ const AiUsage2 = (props: AiUsage2Props) => {
                 (feature.tokens.cached ?? 0) +
                 feature.tokens.output
               return (
-                <li
+                <DataTableListItem
                   key={feature.label}
                   className='flex flex-col gap-2 border-b py-3 last:border-b-0'
                 >
                   <div className='flex items-baseline justify-between gap-3'>
-                    <span className='text-sm font-medium'>{feature.label}</span>
+                    {feature.href ? (
+                      <DataTableRowLink href={feature.href} className='text-sm'>
+                        {feature.label}
+                      </DataTableRowLink>
+                    ) : (
+                      <span className='text-sm font-medium'>{feature.label}</span>
+                    )}
                     <span className='text-sm tabular-nums'>
                       <span className='font-medium'>{formatUsd(feature.cost)}</span>
                       <span className='text-muted-foreground ml-1.5 inline-block w-8 text-right text-xs'>
@@ -161,7 +173,7 @@ const AiUsage2 = (props: AiUsage2Props) => {
                   <span className='sr-only'>
                     {`${formatTokens(feature.tokens.input)} input, ${formatTokens(feature.tokens.cached ?? 0)} cached input and ${formatTokens(feature.tokens.output)} output tokens.`}
                   </span>
-                </li>
+                </DataTableListItem>
               )
             })}
           </ul>
