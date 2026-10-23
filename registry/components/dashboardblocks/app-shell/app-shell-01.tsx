@@ -4,10 +4,13 @@ import {
   AppBreadcrumbs,
   AppHeader,
   AppNav,
+  AppPanel,
   type AppUser,
   type Crumb,
   type NavSection,
   NotificationsButton,
+  PanelButton,
+  type PanelButtonProps,
   SearchButton,
   SidebarUserMenu,
   type UserMenuLink,
@@ -43,6 +46,8 @@ interface AppShell1Props {
   onSignOut?: () => void
   /** Opens another workspace. Leave out to switch in the shell only. */
   onWorkspaceChange?: (id: string) => void
+  /** A panel beside the page, such as a copilot, opened from a button in the header: docked on a wide screen, a sheet on a smaller one. */
+  panel?: AppShell1Panel
   pathname: string
   /** @default 'Search…' */
   searchPlaceholder?: string
@@ -52,6 +57,11 @@ interface AppShell1Props {
   /** The workspace that's open. Leave out to start on the first. */
   workspaceId?: string
   workspaces: Workspace[]
+}
+
+interface AppShell1Panel extends Omit<PanelButtonProps, 'className'> {
+  /** The panel's content, which fills its height. Its own close button calls `onOpenChange(false)`. */
+  children: ReactNode
 }
 
 const exampleProps: AppShell1Props = {
@@ -238,6 +248,7 @@ const AppShell1 = (props: AppShell1Props) => {
     onSearch = () => {},
     onSignOut = () => {},
     onWorkspaceChange,
+    panel,
     pathname,
     searchPlaceholder,
     sections,
@@ -275,6 +286,15 @@ const AppShell1 = (props: AppShell1Props) => {
           />
           <AppBreadcrumbs items={breadcrumbs} />
           <div className='ml-auto flex items-center gap-2'>
+            {panel && (
+              <PanelButton
+                icon={panel.icon}
+                label={panel.label}
+                onOpenChange={panel.onOpenChange}
+                open={panel.open}
+                shortcut={panel.shortcut}
+              />
+            )}
             <SearchButton onOpen={onSearch} placeholder={searchPlaceholder} />
             <NotificationsButton
               count={notificationCount}
@@ -287,6 +307,11 @@ const AppShell1 = (props: AppShell1Props) => {
           {children ?? <PagePlaceholder />}
         </div>
       </SidebarInset>
+      {panel && (
+        <AppPanel label={panel.label} onOpenChange={panel.onOpenChange} open={panel.open}>
+          {panel.children}
+        </AppPanel>
+      )}
     </SidebarProvider>
   )
 }
@@ -321,4 +346,9 @@ function PagePlaceholder() {
   )
 }
 
-export { AppShell1, exampleProps as appShell1ExampleProps, type AppShell1Props }
+export {
+  AppShell1,
+  exampleProps as appShell1ExampleProps,
+  type AppShell1Panel,
+  type AppShell1Props,
+}

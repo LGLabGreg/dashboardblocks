@@ -1,9 +1,9 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: a4d09df640fe
+// source-hash: 2681767f504f
 
 'use client'
 
-import { Link } from '@/registry/components/dashboardblocks/link'
+import { isPlainClick, Link } from '@/registry/components/dashboardblocks/link'
 import { TabLinks } from '@/registry/components/dashboardblocks/page-header'
 import {
   StatusLabel,
@@ -11,7 +11,14 @@ import {
 } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
-import { type ReactNode, useEffect, useState } from 'react'
+import {
+  type MouseEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -33,6 +40,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Kbd } from '@/components/ui/kbd'
 import { Progress } from '@/components/ui/progress'
+import { Sheet, SheetTitle } from '@/components/ui/sheet'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -543,18 +551,25 @@ interface SearchButtonProps {
   placeholder?: string
 }
 
-function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchButtonProps) {
+/** Calls `onPress` on ⌘ or Ctrl with the letter `key`, unless the page already used the key. */
+function useShortcut(key: string | undefined, onPress: () => void) {
   useEffect(() => {
+    if (!key) return
+    const letter = key.toLowerCase()
     const onKeyDown = (event: KeyboardEvent) => {
       // Chrome's autofill sends keydown events without a key.
-      if (event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault()
-        onOpen()
-      }
+      if (event.defaultPrevented || event.key?.toLowerCase() !== letter) return
+      if (!(event.metaKey || event.ctrlKey)) return
+      event.preventDefault()
+      onPress()
     }
     window.addEventListener('keydown', onKeyDown, { capture: true })
     return () => window.removeEventListener('keydown', onKeyDown, { capture: true })
-  }, [onOpen])
+  }, [key, onPress])
+}
+
+function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchButtonProps) {
+  useShortcut('k', onOpen)
 
   return (
     <Button
@@ -577,6 +592,145 @@ function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchBu
       <Kbd aria-hidden className='ml-auto max-sm:hidden'>
         ⌘K
       </Kbd>
+    </Button>
+  )
+}
+
+interface AppPanelProps {
+  /** The panel's content, such as a Copilot Panel, which fills its height. */
+  children: ReactNode
+  /** Names the panel for screen readers, such as `Ask AI`. */
+  label: string
+  onOpenChange: (open: boolean) => void
+  open: boolean
+}
+
+const DOCKED_QUERY = '(min-width: 80rem)'
+
+function subscribeToDocked(onChange: () => void) {
+  const query = window.matchMedia(DOCKED_QUERY)
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
+
+/** Whether the screen is wide enough for the page, the sidebar and a panel side by side. */
+function useDockedPanel() {
+  return useSyncExternalStore(
+    subscribeToDocked,
+    () => window.matchMedia(DOCKED_QUERY).matches,
+    () => false,
+  )
+}
+
+/** The panel's composer when it has one, else its first field or button. */
+function panelFocusTarget(root: HTMLElement | null) {
+  return (
+    root?.querySelector<HTMLElement>('textarea') ??
+    root?.querySelector<HTMLElement>('input, button:not([disabled])') ??
+    null
+  )
+}
+
+/** A panel beside the page on a wide screen, and a sheet over it on a smaller one. Put it after `SidebarInset`. */
+function AppPanel({ children, label, onOpenChange, open }: AppPanelProps) {
+  const docked = useDockedPanel()
+  const panelRef = useRef<HTMLElement>(null)
+  const sheetRef = useRef<HTMLDivElement>(null)
+  const returnTo = useRef<HTMLElement | null>(null)
+  const focused = useRef(false)
+  const sheetFocused = useRef(false)
+
+  useEffect(() => {
+    if (!docked || open === focused.current) return
+    focused.current = open
+    if (open) {
+      returnTo.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null
+      panelFocusTarget(panelRef.current)?.focus()
+    } else if (returnTo.current?.isConnected) {
+      returnTo.current.focus()
+    }
+  }, [docked, open])
+
+  useEffect(() => {
+    if (docked || open === sheetFocused.current) return
+    sheetFocused.current = open
+    if (open) panelFocusTarget(sheetRef.current)?.focus()
+  }, [docked, open])
+
+  const closeOnLink = (event: MouseEvent) => {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null
+    if (link && isPlainClick(event) && link.getAttribute('target') !== '_blank') {
+      onOpenChange(false)
+    }
+  }
+
+  if (docked) {
+    if (!open) return null
+    return (
+      <aside
+        ref={panelRef}
+        aria-label={label}
+        className='bg-background sticky top-0 flex h-svh w-96 shrink-0 flex-col border-l'
+      >
+        {children}
+      </aside>
+    )
+  }
+  return (
+    <Sheet
+      isOpen={open}
+      onOpenChange={onOpenChange}
+      showCloseButton={false}
+      className='w-full sm:max-w-md'
+    >
+      <SheetTitle className='sr-only'>{label}</SheetTitle>
+      <div ref={sheetRef} className='flex min-h-0 flex-1 flex-col' onClick={closeOnLink}>
+        {children}
+      </div>
+    </Sheet>
+  )
+}
+
+interface PanelButtonProps {
+  className?: string
+  /** Leave out for a button with only its label. */
+  icon?: ReactNode
+  /** Such as `Ask AI`. */
+  label: string
+  onOpenChange: (open: boolean) => void
+  open: boolean
+  /** A letter that opens and closes the panel with ⌘ or Ctrl, such as `i`. */
+  shortcut?: string
+}
+
+/** The header button that opens and closes an `AppPanel`. */
+function PanelButton({
+  className,
+  icon,
+  label,
+  onOpenChange,
+  open,
+  shortcut,
+}: PanelButtonProps) {
+  useShortcut(shortcut, () => onOpenChange(!open))
+
+  const key = shortcut?.toUpperCase()
+  return (
+    <Button
+      variant='outline'
+      aria-expanded={open}
+      aria-keyshortcuts={key ? `Meta+${key} Control+${key}` : undefined}
+      onPress={() => onOpenChange(!open)}
+      className={cn(icon && 'max-lg:aspect-square max-lg:px-0', className)}
+    >
+      {icon}
+      <span className={cn(icon && 'max-lg:sr-only')}>{label}</span>
+      {key && (
+        <Kbd aria-hidden className='max-lg:hidden'>
+          ⌘{key}
+        </Kbd>
+      )}
     </Button>
   )
 }
@@ -678,6 +832,7 @@ function TopNav({ className, items, pathname }: TopNavProps) {
 
 export {
   AppBrand,
+  AppPanel,
   AppBreadcrumbs,
   AppHeader,
   AppNav,
@@ -685,6 +840,7 @@ export {
   getInitials,
   isActiveHref,
   NotificationsButton,
+  PanelButton,
   PlanUsage,
   SearchButton,
   SidebarUserMenu,
@@ -695,6 +851,7 @@ export {
 
 export type {
   AppBrandProps,
+  AppPanelProps,
   AppHeaderProps,
   AppNavProps,
   AppUser,
@@ -703,6 +860,7 @@ export type {
   NavLink,
   NavSection,
   NotificationsButtonProps,
+  PanelButtonProps,
   PlanUsageProps,
   SearchButtonProps,
   TopNavProps,

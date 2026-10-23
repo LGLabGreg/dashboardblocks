@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.10.0
+
+### Minor Changes
+
+- 18c0891: App Shell 01 can open a side panel, such as a chat, from a button in its header: docked beside the page on a wide screen and a sheet on a smaller one. Links in a model's answer open with your app's router when `LinkProvider` is given `navigate`, so a chat keeps its place.
+
 ## 1.9.0
 
 ### Minor Changes

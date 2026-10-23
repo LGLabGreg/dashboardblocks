@@ -1,7 +1,13 @@
+'use client'
+
 import type { AISource } from '@/registry/components/dashboardblocks/ai-message'
+import { isPlainClick, useLinkNavigate } from '@/registry/components/dashboardblocks/link'
 import type { ReactNode } from 'react'
 
-/** A link from a model's reply or its sources. Takes an href `getSafeHref` passed; a web address opens in a new tab. A plain `<a>`, not the app's router link, which may fetch an in-app path the model chose as soon as it shows. */
+/**
+ * A link from a model's reply or its sources. Takes an href `getSafeHref` passed; a web address opens in a new tab.
+ * A plain `<a>`, not the app's router link, which may fetch an in-app path the model chose as soon as it shows; a click on an in-app path opens it with `LinkProvider`'s `navigate`.
+ */
 function AILink({
   children,
   className,
@@ -11,10 +17,17 @@ function AILink({
   className?: string
   href: string
 }) {
+  const navigate = useLinkNavigate()
   const external = /^https?:/i.test(href)
+  const inApp = /^[/?#]/.test(href)
   return (
     <a
       href={href}
+      onClick={(event) => {
+        if (!inApp || !navigate || event.defaultPrevented || !isPlainClick(event)) return
+        event.preventDefault()
+        navigate(href)
+      }}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
       className={className}
