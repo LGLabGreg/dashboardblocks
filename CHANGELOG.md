@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.8.3
+
+### Patch Changes
+
+- 91bbbe4: Table: a list row pads its sides like a table cell, so an icon or a name never sits against the list's edge (AI Usage 02).
+
 ## 1.8.2
 
 ### Patch Changes

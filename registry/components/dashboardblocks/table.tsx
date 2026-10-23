@@ -136,7 +136,11 @@ function DataTableRow({ className, highlighted, ...props }: DataTableRowProps) {
 /** A list row that a `DataTableRowLink` or `DataTableRowTrigger` inside it opens as a whole. */
 function DataTableListItem({ className, ...props }: ComponentProps<'li'>) {
   return (
-    <li data-slot='data-table-list-item' className={cn(ROW_HOST, className)} {...props} />
+    <li
+      data-slot='data-table-list-item'
+      className={cn('px-[var(--data-table-inset,0.75rem)]', ROW_HOST, className)}
+      {...props}
+    />
   )
 }
 
