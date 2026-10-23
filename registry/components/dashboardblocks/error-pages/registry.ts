@@ -48,6 +48,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'code-block',
+      registryUrl('disclosure'),
       registryUrl('settings'),
       registryUrl('error-pages'),
       registryUrl('format'),

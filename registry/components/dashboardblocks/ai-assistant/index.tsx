@@ -20,6 +20,6 @@ export const aiAssistantExampleProps = {
 export const aiAssistantEmptyProps = {
   'ai-assistant-01': { accounts: [], metrics: [] },
   'ai-assistant-02': { messages: [] },
-  'ai-assistant-03': { messages: [], tokens: undefined, usage: {} },
+  'ai-assistant-03': { messages: [], tokens: undefined },
   'ai-assistant-04': { error: undefined, messages: [] },
 }

@@ -6,7 +6,6 @@ import {
   ChatError,
   ChatHeader,
   ChatMessage,
-  type ChatMessageData,
   ChatMessageActions,
   ChatMessages,
   ChatWelcome,
@@ -15,6 +14,17 @@ import {
   TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
+import {
+  type AIChat,
+  type AIFilePart,
+  type AIMessage,
+  type AIMessagePart,
+  type AIReasoningPart,
+  type AIReply,
+  type AITextPart,
+  getMessageText,
+  getStreamingMessageId,
+} from '@/registry/components/dashboardblocks/ai-message'
 import {
   BlockReady,
   BlockStateProvider,
@@ -52,6 +62,11 @@ interface Account {
 
 interface AiAssistant1Props {
   accounts?: Account[]
+  /**
+   * The chat the panel runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies.
+   * While the page shows in the message box, each question carries `metadata: { context }`, so the server knows to add the page's data.
+   */
+  chat?: AIChat
   /** Follows each previous value, such as `last month`. */
   comparison: string
   context: string
@@ -59,15 +74,10 @@ interface AiAssistant1Props {
   description: string
   /** Names each point of a metric's history, oldest first. */
   historyLabels: string[]
-  messages: ChatMessageData[]
+  /** The conversation the canned replies start from. With `chat`, pass it to the chat instead. */
+  messages?: AIMessage[]
   /** Leave out, or pass none, to show the empty state. */
   metrics?: Metric[]
-  /** Streams the reply to the conversation as chunks of text. */
-  onSend?: (
-    messages: ChatMessageData[],
-    signal: AbortSignal,
-    context?: string,
-  ) => AsyncIterable<string>
   status?: BlockStatus
   suggestions: SuggestedPrompt[]
   title: string
@@ -167,31 +177,71 @@ const exampleProps: AiAssistant1Props = {
   title: 'Revenue',
 }
 
-const cannedReplies: Record<string, string> = {
-  'Why did churn go up this month?': `Churn rose from **1.4%** to **1.8%**, and most of it comes from one place:
+const cannedReplies: Record<string, AIMessagePart[]> = {
+  'Why did churn go up this month?': [
+    {
+      text: 'Churn moved from 1.4% to 1.8%. Check which plans the 31 cancellations came from and whether they line up with the Sep 1 price change.',
+      type: 'reasoning',
+    },
+    {
+      text: `Churn rose from **1.4%** to **1.8%**, and most of it comes from one place:
 
 - **Starter plans.** 23 of the 31 cancellations were Starter customers in their first 90 days.
 - **Price change.** 14 of them cancelled within a week of the Sep 1 price increase.
 - **Enterprise held steady.** No Enterprise account cancelled, and two expanded.
 
 Offering Starter customers the old price for three more months would likely win back about half of those accounts.`,
-  'Draft a revenue update for the team': `Here's a draft you can post:
+      type: 'text',
+    },
+  ],
+  'Draft a revenue update for the team': [
+    {
+      text: `Here's a draft you can post:
 
 **Revenue update, September**
 MRR reached **$184,320**, up 4.2% on August, with 312 new customers. Net retention is 112%, helped by two Enterprise expansions.
 
 Churn rose to 1.8%, mostly Starter customers after the price change. Next week we'll test a win-back offer for them.`,
-  'Which accounts are at risk?': `Three accounts show the usual warning signs:
+      type: 'text',
+    },
+  ],
+  'Which accounts are at risk?': [
+    {
+      text: 'Look for falling seat use, failed payments and a run of support tickets among the top accounts, then sort by renewal date.',
+      type: 'reasoning',
+    },
+    {
+      text: `Three accounts show the usual warning signs:
 
-1. **Brightline Studio**: seats used fell from 42 to 19 since August, and their admin hasn't logged in for 12 days.
-2. **Kestrel Analytics**: two failed payments this month; the card on file expires Sep 30.
-3. **Oakridge Dental Group**: opened 4 support tickets about exports in the last two weeks.
+| Account | Signal | MRR | Renews |
+| :-- | :-- | --: | :-- |
+| Brightline Studio | 19 of 42 seats used | $4,200 | Oct 14 |
+| Kestrel Analytics | Two failed payments | $3,780 | Nov 2 |
+| Oakridge Dental Group | 4 export tickets | $2,640 | Dec 9 |
 
-Together they're **$10,620** of MRR. Brightline renews first, on Oct 14.`,
+Together they're **$10,620** of MRR. Brightline renews first, so start there.`,
+      type: 'text',
+    },
+  ],
 }
 
-const fallbackReply =
-  'This is a demo reply. Pass `onSend` to stream answers from your own model, with the page’s data as context.'
+const fallbackReply: AIMessagePart[] = [
+  {
+    text: 'This is a demo reply. Pass `chat` to stream answers from your own model, with the page’s data as context.',
+    type: 'text',
+  },
+]
+
+const noContextReply: AIMessagePart[] = [
+  {
+    text: 'I can’t see this page without its context. Add it back to the message box to ask about these numbers.',
+    type: 'text',
+  },
+]
+
+function hasContext(metadata: unknown) {
+  return typeof metadata === 'object' && metadata !== null && 'context' in metadata
+}
 
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
@@ -207,20 +257,26 @@ function wait(ms: number, signal: AbortSignal) {
   })
 }
 
-async function* simulateStream(
-  messages: ChatMessageData[],
+async function* simulateReply(
+  reply: AIMessagePart[],
   signal: AbortSignal,
-  context?: string,
-) {
-  const question = messages.at(-1)?.content ?? ''
-  const reply = context
-    ? (cannedReplies[question] ?? fallbackReply)
-    : 'I can’t see this page without its context. Add it back to the message box to ask about these numbers.'
-  await wait(700, signal)
-  for (const word of reply.split(/(?<=\s)/)) {
-    await wait(25, signal)
-    yield word
+): AsyncGenerator<AIReply> {
+  const parts: AIMessagePart[] = [{ type: 'step-start' }]
+  await wait(400, signal)
+  yield { parts }
+  for (const step of reply) {
+    if (step.type !== 'text' && step.type !== 'reasoning') continue
+    const part: AITextPart | AIReasoningPart = { ...step, state: 'streaming', text: '' }
+    parts.push(part)
+    await wait(step.type === 'reasoning' ? 900 : 200, signal)
+    for (const word of step.text.split(/(?<=\s)/)) {
+      await wait(step.type === 'reasoning' ? 8 : 25, signal)
+      part.text += word
+      yield { parts }
+    }
+    part.state = 'done'
   }
+  yield { parts }
 }
 
 const AiAssistant1 = (props: AiAssistant1Props) => {
@@ -231,9 +287,8 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     defaultOpen = true,
     description,
     historyLabels,
-    messages: initialMessages,
+    messages: initialMessages = [],
     metrics = [],
-    onSend = simulateStream,
     status: blockStatus,
     suggestions,
     title,
@@ -245,12 +300,20 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   const panelId = useId()
   const [open, setOpen] = useState(defaultOpen)
   const [withContext, setWithContext] = useState(true)
-  const chat = useChatStream({
+  const demo = useChatStream({
     initialMessages,
-    onSend: (conversation, signal) =>
-      onSend(conversation, signal, withContext ? contextLabel : undefined),
+    onSend: (conversation, signal) => {
+      const last = conversation.at(-1)
+      const question = getMessageText(last ?? { parts: [] })
+      const reply = hasContext(last?.metadata)
+        ? (cannedReplies[question] ?? fallbackReply)
+        : noContextReply
+      return simulateReply(reply, signal)
+    },
   })
+  const chat = props.chat ?? demo
   const { messages, status } = chat
+  const streamingId = getStreamingMessageId(messages, status)
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const focusNext = useRef<'composer' | 'toggle' | null>(null)
@@ -262,13 +325,17 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     focusNext.current = null
   }, [open])
 
-  function send(text: string) {
-    chat.send(text)
+  function send(message: { files?: AIFilePart[]; text: string }) {
+    chat.sendMessage({
+      ...message,
+      metadata: withContext ? { context: contextLabel } : undefined,
+    })
     composerRef.current?.focus()
   }
 
   function newChat() {
-    chat.reset()
+    chat.stop()
+    chat.setMessages?.([])
     composerRef.current?.focus()
   }
 
@@ -386,21 +453,23 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
               className='border-b'
               actions={
                 <>
-                  <Button
-                    variant='ghost'
-                    size='icon-sm'
-                    aria-label='New chat'
-                    disabled={messages.length === 0}
-                    onClick={newChat}
-                  >
-                    <IconPlaceholder
-                      lucide='SquarePenIcon'
-                      tabler='IconEdit'
-                      hugeicons='PencilEdit02Icon'
-                      phosphor='NotePencilIcon'
-                      remixicon='RiEditBoxLine'
-                    />
-                  </Button>
+                  {chat.setMessages && (
+                    <Button
+                      variant='ghost'
+                      size='icon-sm'
+                      aria-label='New chat'
+                      disabled={messages.length === 0}
+                      onClick={newChat}
+                    >
+                      <IconPlaceholder
+                        lucide='SquarePenIcon'
+                        tabler='IconEdit'
+                        hugeicons='PencilEdit02Icon'
+                        phosphor='NotePencilIcon'
+                        remixicon='RiEditBoxLine'
+                      />
+                    </Button>
+                  )}
                   <Button
                     variant='ghost'
                     size='icon-sm'
@@ -431,7 +500,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
                   <SuggestedPrompts
                     variant='list'
                     prompts={suggestions}
-                    onSelect={send}
+                    onSelect={(text) => send({ text })}
                   />
                 </ChatWelcome>
               </div>
@@ -439,17 +508,18 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
               <ChatMessages status={status} latest={latest}>
                 {messages.map((message, index) => {
                   const isLast = index === messages.length - 1
-                  const streaming = isLast && status === 'streaming'
+                  const streaming = message.id === streamingId
                   return (
                     <ChatMessage
                       key={message.id}
                       message={message}
                       streaming={streaming}
+                      onToolApprovalResponse={chat.addToolApprovalResponse}
                       actions={
                         message.role === 'assistant' &&
                         !streaming && (
                           <ChatMessageActions
-                            content={message.content}
+                            content={getMessageText(message)}
                             onRegenerate={isLast ? chat.regenerate : undefined}
                           />
                         )
@@ -457,9 +527,9 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
                     />
                   )
                 })}
-                {status === 'submitted' && <TypingIndicator />}
+                {status === 'submitted' && !streamingId && <TypingIndicator />}
                 {status === 'error' && (
-                  <ChatError message={chat.error} onRetry={chat.regenerate} />
+                  <ChatError message={chat.error?.message} onRetry={chat.regenerate} />
                 )}
               </ChatMessages>
             )}
@@ -467,7 +537,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
               className='p-4 pt-0'
               textareaRef={composerRef}
               status={status}
-              onSubmit={chat.send}
+              onSubmit={send}
               onStop={chat.stop}
               placeholder='Ask about this page…'
               context={

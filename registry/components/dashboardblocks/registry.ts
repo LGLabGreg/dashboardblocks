@@ -1053,21 +1053,70 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'disclosure',
+    type: 'registry:component',
+    title: 'Disclosure',
+    description:
+      'A line of muted text with a chevron that shows or hides what is under it, such as a tool call’s input and output or a model’s reasoning.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/disclosure.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'ai-chat',
+    type: 'registry:component',
+    title: 'AI Chat',
+    description:
+      'The parts every AI block shares: message types that take the Vercel AI SDK’s useChat and UIMessage as they are, Markdown from a model drawn with safe links and no HTML while it streams, thinking that collapses to one line, tool calls with their state, approval and details, attached files, and numbered sources and citations.',
+    dependencies: ['marked@^18.1.0', 'remend@^1.4.0'],
+    registryDependencies: [
+      'attachment',
+      'button',
+      'code-block',
+      'marker',
+      'use-highlighted-code',
+      registryUrl('disclosure'),
+      registryUrl('format'),
+      registryUrl('link'),
+      registryUrl('table'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/ai-message.ts',
+        type: 'registry:component',
+      },
+      {
+        path: 'registry/components/dashboardblocks/ai-sources.tsx',
+        type: 'registry:component',
+      },
+      {
+        path: 'registry/components/dashboardblocks/ai-markdown.tsx',
+        type: 'registry:component',
+      },
+      {
+        path: 'registry/components/dashboardblocks/ai-parts.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'ai-assistant',
     type: 'registry:component',
     title: 'AI Assistant',
     description:
-      'Primitives for AI chat: a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, user and assistant messages with safe formatting for lists, code and code blocks, copy, regenerate and feedback actions, a typing indicator, suggested prompts, a welcome, an error with retry, context chips, a message box where Enter sends and Stop halts a reply, and a hook that runs a chat from any function that streams text.',
+      'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
     registryDependencies: [
       'attachment',
       'bubble',
       'button',
-      'code-block',
       'input-group',
-      'marker',
       'message',
       'message-scroller',
-      'use-highlighted-code',
+      registryUrl('ai-chat'),
+      registryUrl('format'),
     ],
     files: [
       {

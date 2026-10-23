@@ -1,5 +1,10 @@
 'use client'
 
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+} from '@/registry/components/dashboardblocks/disclosure'
 import { ErrorPageLayout } from '@/registry/components/dashboardblocks/error-pages'
 import { CopyButton } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -138,31 +143,24 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
           <div className='py-2'>
             <dt className='sr-only'>Details</dt>
             <dd>
-              <details className='group'>
-                <summary className='text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1 text-xs font-medium [&::-webkit-details-marker]:hidden'>
-                  <IconPlaceholder
-                    lucide='ChevronRightIcon'
-                    tabler='IconChevronRight'
-                    hugeicons='ArrowRight01Icon'
-                    phosphor='CaretRightIcon'
-                    remixicon='RiArrowRightSLine'
-                    aria-hidden
-                    className='size-3.5 transition-transform group-open:rotate-90'
-                  />
+              <Disclosure>
+                <DisclosureTrigger className='text-xs font-medium [&_svg]:mt-px [&_svg]:size-3.5'>
                   Details
-                </summary>
-                <CodeBlock size='sm' className='mt-2'>
-                  <CodeBlockHeader>
-                    <CodeBlockTitle>Error details</CodeBlockTitle>
-                    <CodeBlockActions>
-                      <CodeBlockCopyButton aria-label='Copy details' value={details} />
-                    </CodeBlockActions>
-                  </CodeBlockHeader>
-                  <CodeBlockContent wrap className='data-wrap:mask-none'>
-                    {details}
-                  </CodeBlockContent>
-                </CodeBlock>
-              </details>
+                </DisclosureTrigger>
+                <DisclosureContent>
+                  <CodeBlock size='sm'>
+                    <CodeBlockHeader>
+                      <CodeBlockTitle>Error details</CodeBlockTitle>
+                      <CodeBlockActions>
+                        <CodeBlockCopyButton aria-label='Copy details' value={details} />
+                      </CodeBlockActions>
+                    </CodeBlockHeader>
+                    <CodeBlockContent wrap className='data-wrap:mask-none'>
+                      {details}
+                    </CodeBlockContent>
+                  </CodeBlock>
+                </DisclosureContent>
+              </Disclosure>
             </dd>
           </div>
         )}

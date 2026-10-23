@@ -9,6 +9,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       registryUrl('ai-assistant'),
+      registryUrl('ai-chat'),
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('stat-group'),
@@ -29,7 +30,11 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('ai-assistant'), registryUrl('block-state')],
+    registryDependencies: [
+      registryUrl('ai-assistant'),
+      registryUrl('ai-chat'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-02.tsx',
@@ -38,7 +43,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A chat with an assistant whose replies include a list and a SQL query, with copy, rating, regenerate and follow-up questions.',
+        'A chat with an assistant whose replies include a table and a SQL query, with attachments, copy, rating, regenerate and follow-up questions.',
       size: 'half',
       usedWith: ['ai-assistant-01', 'ai-assistant-04'],
     },
@@ -48,6 +53,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       registryUrl('ai-assistant'),
+      registryUrl('ai-chat'),
       registryUrl('ai-usage'),
       registryUrl('block-state'),
       registryUrl('details'),
@@ -62,7 +68,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Questions about token usage numbers, with the tokens and cost shown for each answer.',
+        'Questions about token usage numbers, with the tokens and cost shown for each answer and a change that waits for approval.',
       size: 'half',
       usedWith: ['ai-usage-01', 'ai-assistant-02'],
     },
@@ -70,7 +76,11 @@ export const examples: Registry['items'] = [
   {
     name: 'ai-assistant-04',
     type: 'registry:component',
-    registryDependencies: [registryUrl('ai-assistant'), registryUrl('block-state')],
+    registryDependencies: [
+      registryUrl('ai-assistant'),
+      registryUrl('ai-chat'),
+      registryUrl('block-state'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/ai-assistant/ai-assistant-04.tsx',

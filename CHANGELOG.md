@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.9.0
+
+### Minor Changes
+
+- b7bc253: AI Assistant: blocks take one `chat` prop shaped like the Vercel AI SDK's `useChat`, so `useChat()` passes in as it is, and replies show thinking, tool calls with Approve and Deny, Markdown tables, attached files and numbered sources. `useChatStream` builds the same chat from any function that streams. `onSend` and the `content` string on a message are gone: messages hold `parts`. New `ai-chat` and `disclosure` items hold the shared parts. Error Pages 03 folds its details with `Disclosure`.
+
 ## 1.8.3
 
 ### Patch Changes
