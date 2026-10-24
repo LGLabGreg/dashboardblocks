@@ -83,10 +83,12 @@ interface KPIValueProps {
   animated?: boolean
   className?: string
   format?: KPIFormat | KPIFormatter
+  /** Where an animated value counts from, such as the previous period's value. @default 0 */
+  from?: number
   value?: number
 }
 
-function KPIValue({ animated = false, className, format, value }: KPIValueProps) {
+function KPIValue({ animated = false, className, format, from, value }: KPIValueProps) {
   const state = useBlockState() ?? (value === undefined ? 'empty' : undefined)
   const formatter = getKPIFormatter(format)
 
@@ -102,7 +104,7 @@ function KPIValue({ animated = false, className, format, value }: KPIValueProps)
       ) : animated ? (
         <>
           <span aria-hidden>
-            <AnimatedNumber value={value} formatter={formatter} />
+            <AnimatedNumber value={value} from={from} formatter={formatter} />
           </span>
           <span className='sr-only'>{formatter(value)}</span>
         </>

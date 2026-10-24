@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.10.2
+
+### Patch Changes
+
+- f09d1fa: AI replies fade in word by word as they stream, with no caret, in every block that draws a model's Markdown. KPI values can count from a previous value with `from`.
+
 ## 1.10.1
 
 ### Patch Changes

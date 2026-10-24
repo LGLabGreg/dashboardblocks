@@ -172,7 +172,8 @@ function ToolValue({ label, tool, value }: ToolValueProps) {
   )
 }
 
-function isUnfinished(part: AIAnyToolPart) {
+/** Whether a tool call never ended: it was still running, or approved and running, when the reply stopped. */
+function isToolUnfinished(part: AIAnyToolPart) {
   switch (part.state) {
     case 'input-streaming':
     case 'input-available':
@@ -331,7 +332,7 @@ function ToolCall({
   result,
 }: ToolCallProps) {
   const name = label ?? getToolLabel(part)
-  const stopped = !inProgress && isUnfinished(part)
+  const stopped = !inProgress && isToolUnfinished(part)
   const status = getToolStatus(part, stopped)
   const rowRef = useRef<HTMLDivElement>(null)
   const waiting = part.state === 'approval-requested' && part.approval
@@ -466,13 +467,14 @@ function MessageFiles({ className, files }: { className?: string; files: AIFileP
   )
 }
 
-type Group =
+type AIMessageGroup =
   | { key: string; type: 'thinking'; streaming: boolean; text: string }
   | { key: string; part: AIAnyToolPart; type: 'tool' }
   | { key: string; streaming: boolean; text: string; type: 'text' }
 
-function groupParts(message: AIMessage, streaming: boolean): Group[] {
-  const groups: Group[] = []
+/** A reply's parts as it shows them: reasoning in a row joined into one thinking group, text, and each tool call. */
+function groupParts(message: AIMessage, streaming: boolean): AIMessageGroup[] {
+  const groups: AIMessageGroup[] = []
   const { parts } = message
   parts.forEach((part, index) => {
     const previous = groups.at(-1)
@@ -611,7 +613,9 @@ function AIMessageParts({
 
 export {
   AIMessageParts,
+  groupParts,
   hasAnswer,
+  isToolUnfinished,
   MessageFiles,
   Thinking,
   ThinkingIndicator,
@@ -619,4 +623,10 @@ export {
   ToolValue,
 }
 
-export type { AIMessagePartsProps, ThinkingProps, ToolCallProps, ToolValueProps }
+export type {
+  AIMessageGroup,
+  AIMessagePartsProps,
+  ThinkingProps,
+  ToolCallProps,
+  ToolValueProps,
+}

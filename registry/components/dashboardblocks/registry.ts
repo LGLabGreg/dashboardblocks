@@ -1071,7 +1071,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'AI Chat',
     description:
-      'The parts every AI block shares: message types that take the Vercel AI SDK’s useChat and UIMessage as they are, Markdown from a model drawn with safe links and no HTML while it streams, thinking that collapses to one line, tool calls with their state, approval and details, attached files, and numbered sources and citations.',
+      'The parts every AI block shares: message types that take the Vercel AI SDK’s useChat and UIMessage as they are, Markdown from a model drawn with safe links and no HTML while it streams, each word fading in as it arrives, thinking that collapses to one line, tool calls with their state, approval and details, attached files, and numbered sources and citations.',
     dependencies: ['marked@^18.1.0', 'remend@^1.4.0'],
     registryDependencies: [
       'attachment',

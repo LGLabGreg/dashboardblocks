@@ -440,6 +440,8 @@ interface ChatMessageProps extends Pick<
 > {
   actions?: ReactNode
   avatar?: ReactNode
+  /** What an assistant's reply shows, in place of its parts in order. */
+  children?: ReactNode
   className?: string
   footer?: ReactNode
   message: AIMessage
@@ -450,6 +452,7 @@ interface ChatMessageProps extends Pick<
 function ChatMessage({
   actions,
   avatar,
+  children,
   className,
   footer,
   message,
@@ -492,13 +495,15 @@ function ChatMessage({
           <Bubble variant='ghost' className='w-full'>
             <BubbleContent className='w-full'>
               <span className='sr-only'>{name ?? 'Assistant'}: </span>
-              <AIMessageParts
-                message={message}
-                streaming={streaming}
-                toolLabels={toolLabels}
-                onToolApprovalResponse={onToolApprovalResponse}
-                renderToolResult={renderToolResult}
-              />
+              {children ?? (
+                <AIMessageParts
+                  message={message}
+                  streaming={streaming}
+                  toolLabels={toolLabels}
+                  onToolApprovalResponse={onToolApprovalResponse}
+                  renderToolResult={renderToolResult}
+                />
+              )}
             </BubbleContent>
           </Bubble>
           {footer}

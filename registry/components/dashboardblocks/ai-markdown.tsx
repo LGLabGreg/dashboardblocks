@@ -187,24 +187,51 @@ function AICodeBlock({ code, language }: { code: string; language: string }) {
 
 interface RenderContext {
   sources: AISource[]
+  streaming: boolean
+}
+
+function fadeInWords(text: string, key: string): ReactNode[] {
+  return (text.match(/\s*\S+\s*|\s+/g) ?? []).map((word, index) => (
+    <span
+      key={`${key}-${index}`}
+      className='motion-safe:animate-in motion-safe:fade-in duration-500'
+    >
+      {word}
+    </span>
+  ))
 }
 
 function renderText(raw: string, context: RenderContext, key: string): ReactNode {
   const text = decodeEntities(raw)
-  if (context.sources.length === 0 || !text.includes('[')) return text
+  // One flat list of words, so a word keeps its node when a citation after it completes.
+  const show = (value: string, at: number): ReactNode[] =>
+    context.streaming ? fadeInWords(value, `${key}-${at}`) : [value]
+  if (context.sources.length === 0 || !text.includes('[')) return show(text, 0)
   const parts: ReactNode[] = []
   let last = 0
   for (const match of text.matchAll(CITATION)) {
     const source = context.sources[Number(match[1]) - 1]
     if (!source) continue
     // The space before a citation would sit between the word and its number.
-    parts.push(text.slice(last, match.index).replace(/\s+$/, ''))
+    parts.push(...show(text.slice(last, match.index).replace(/\s+$/, ''), last))
+    const citation = (
+      <Citation key={`${key}-${match.index}`} index={Number(match[1])} source={source} />
+    )
     parts.push(
-      <Citation key={`${key}-${match.index}`} index={Number(match[1])} source={source} />,
+      context.streaming ? (
+        <span
+          key={`${key}-${match.index}`}
+          className='motion-safe:animate-in motion-safe:fade-in duration-500'
+        >
+          {citation}
+        </span>
+      ) : (
+        citation
+      ),
     )
     last = match.index + match[0].length
   }
-  parts.push(text.slice(last))
+  parts.push(...show(text.slice(last), last))
   return parts
 }
 
@@ -440,7 +467,7 @@ function AIMarkdown({
   streaming = false,
   text,
 }: AIMarkdownProps) {
-  const blocks = renderBlocks(lex(text, streaming), { sources })
+  const blocks = renderBlocks(lex(text, streaming), { sources, streaming })
   if (blocks.every((block) => block === null)) return null
   return (
     <div

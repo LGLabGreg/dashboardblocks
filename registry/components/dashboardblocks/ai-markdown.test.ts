@@ -18,6 +18,8 @@ function render(
   return renderToStaticMarkup(createElement(AIMarkdown, { text, ...options }))
 }
 
+const textOf = (html: string) => html.replace(/<[^>]+>/g, '')
+
 describe('ai-markdown', () => {
   it('drops a link a model wrote to a script, keeping its words', () => {
     const html = render(
@@ -99,14 +101,27 @@ describe('ai-markdown', () => {
     const header = 'By plan:\n\n| Plan | MRR |'
     const partial = render(header, { streaming: true })
     assert.doesNotMatch(partial, /\|/)
-    assert.match(partial, /By plan:/)
+    assert.match(textOf(partial), /By plan:/)
 
     const table = render(`${header}\n| --- | ---: |\n| Pro | $4,815 |`, {
       streaming: true,
     })
     assert.match(table, /<table/)
-    assert.match(table, /<th[^>]*><span>Plan<\/span><\/th>/)
+    assert.match(table, /<th[^>]*>(<span[^>]*>)+Plan(<\/span>)+<\/th>/)
     assert.match(table, /\$4,815/)
+  })
+
+  it('fades in each word while the text streams, and no word once it is done', () => {
+    const sources = [{ label: 'billing.mrr_by_plan' }]
+    const streaming = render('Pro fell **12%** [1].', { sources, streaming: true })
+    const faded = [
+      ...streaming.matchAll(/<span class="[^"]*fade-in[^"]*">([^<]*)<\/span>/g),
+    ]
+    assert.deepEqual(
+      faded.map((match) => match[1]),
+      ['Pro ', 'fell ', '12%', '.'],
+    )
+    assert.doesNotMatch(render('Pro fell **12%** [1].', { sources }), /fade-in/)
   })
 
   it('reads a reply without its Markdown, for an announcement', () => {
