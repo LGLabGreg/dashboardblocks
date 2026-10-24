@@ -2053,7 +2053,7 @@
           "chart-panel-02"
         ],
         "component": "Leaderboard1",
-        "props": "{ description?: string; onViewAll?: () => void; pages?: { path: string; visitors: number }[]; status?: \"loading\" | \"error\"; title: string }"
+        "props": "{ description?: string; labelHeader?: string; onViewAll?: () => void; pages?: { path: string; visitors: number }[]; status?: \"loading\" | \"error\"; title: string; valueHeader?: string; viewAllLabel?: null | string }"
       },
       "description": "Ranked rows with a background bar sized relative to the leader."
     },
@@ -2153,6 +2153,7 @@
         "button",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/format.json",
+        "https://www.dashboardblocks.com/r/aria/geo.json",
         "https://www.dashboardblocks.com/r/aria/leaderboard.json"
       ],
       "files": [
@@ -3948,7 +3949,7 @@
           "breakdown-01"
         ],
         "component": "Geo2",
-        "props": "{ countries?: { code: string; name: string; value: number }[]; description?: string; formatter?: (value: number) => string; limit?: number; status?: \"loading\" | \"error\"; title: string; total?: number; unit?: string }"
+        "props": "{ countries?: { code: string; name: string; value: number }[]; description?: string; formatter?: (value: number) => string; limit?: number; otherLabel?: null | string; status?: \"loading\" | \"error\"; title: string; total?: number; unit?: string }"
       },
       "description": "The leading countries with flags, values and shares, and the rest summed into one row."
     },
@@ -3975,7 +3976,7 @@
           "geo-02"
         ],
         "component": "Geo3",
-        "props": "{ description?: string; locations?: { id: string; lat: number; lon: number; name: string; value: number }[]; status?: \"loading\" | \"error\"; title: string; unit: string }"
+        "props": "{ description?: string; locations?: { country?: string; id: string; lat: number; lon: number; name: string; value: number }[]; status?: \"loading\" | \"error\"; title: string; unit: string }"
       },
       "description": "Active users by city right now as markers sized by value on a dotted world map, with the busiest city named."
     },

@@ -27,11 +27,17 @@ interface PageStat {
 interface Leaderboard1Props {
   /** Defaults to a sentence about the visitors and the top page's share. */
   description?: string
+  /** Heads the column of names. @default 'Page' */
+  labelHeader?: string
   onViewAll?: () => void
   /** Leave out, or pass none, to show the empty state. */
   pages?: PageStat[]
   status?: BlockStatus
   title: string
+  /** Heads the column of counts. @default 'Visitors' */
+  valueHeader?: string
+  /** Names the button that opens the full list; `null` leaves it out. @default 'View all' */
+  viewAllLabel?: string | null
 }
 
 const exampleProps: Leaderboard1Props = {
@@ -55,7 +61,15 @@ const summarize = (pages: PageStat[]) => {
 }
 
 const Leaderboard1 = (props: Leaderboard1Props) => {
-  const { onViewAll, pages = [], status, title } = props
+  const {
+    labelHeader = 'Page',
+    onViewAll,
+    pages = [],
+    status,
+    title,
+    valueHeader = 'Visitors',
+    viewAllLabel = 'View all',
+  } = props
   const { description = summarize(pages) } = props
   const state = getBlockState(status, pages)
   const max = Math.max(...pages.map((page) => page.visitors), 1)
@@ -70,22 +84,24 @@ const Leaderboard1 = (props: Leaderboard1Props) => {
               <p className='text-muted-foreground text-sm'>{description}</p>
             </BlockReady>
           </div>
-          <Button variant='outline' size='sm' onClick={onViewAll}>
-            View all
-            <IconPlaceholder
-              lucide='ArrowRightIcon'
-              tabler='IconArrowRight'
-              hugeicons='ArrowRight01Icon'
-              phosphor='ArrowRightIcon'
-              remixicon='RiArrowRightLine'
-              data-icon='inline-end'
-            />
-          </Button>
+          {viewAllLabel !== null && (
+            <Button variant='outline' size='sm' onClick={onViewAll}>
+              {viewAllLabel}
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
+            </Button>
+          )}
         </header>
         <div className='flex flex-col gap-1.5 border-t pt-4'>
           <div className='text-muted-foreground flex justify-between px-2 text-xs'>
-            <span>Page</span>
-            <span>Visitors</span>
+            <span>{labelHeader}</span>
+            <span>{valueHeader}</span>
           </div>
           <BlockStateRows rows={6} />
           {!state && (

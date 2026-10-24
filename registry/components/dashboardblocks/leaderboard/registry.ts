@@ -99,6 +99,7 @@ export const examples: Registry['items'] = [
       'button',
       registryUrl('block-state'),
       registryUrl('format'),
+      registryUrl('geo'),
       registryUrl('leaderboard'),
     ],
     files: [

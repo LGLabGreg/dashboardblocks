@@ -34,8 +34,8 @@ function getKPIFormatter(format: KPIFormat | KPIFormatter = 'number'): KPIFormat
 }
 
 interface KPIChangeInput {
-  /** @default 'percent' */
-  changeType?: 'percent' | 'points'
+  /** `points` for a rate's change (`Up 2.3 pts`), `count` for a plain difference (`Up 6`). @default 'percent' */
+  changeType?: 'percent' | 'points' | 'count'
   previous?: number
   value?: number
 }
@@ -44,7 +44,7 @@ const round = (value: number) => Math.round(value * 10) / 10 + 0
 
 function getKPIChange({ changeType = 'percent', previous, value }: KPIChangeInput) {
   if (previous === undefined || value === undefined) return undefined
-  if (changeType === 'points') return round(value - previous)
+  if (changeType === 'points' || changeType === 'count') return round(value - previous)
   if (previous === 0) return value === 0 ? 0 : undefined
   return round(((value - previous) / Math.abs(previous)) * 100)
 }
@@ -165,7 +165,9 @@ function KPIChange({
   const amount =
     input.changeType === 'points'
       ? formatPoints(Math.abs(change))
-      : formatPercent(Math.abs(change) / 100)
+      : input.changeType === 'count'
+        ? formatNumber(Math.abs(change))
+        : formatPercent(Math.abs(change) / 100)
 
   return (
     <Element

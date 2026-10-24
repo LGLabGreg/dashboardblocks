@@ -1573,7 +1573,7 @@
       "component": "Geo2",
       "shows": "The leading countries with flags, values and shares, and the rest summed into one row.",
       "size": "half",
-      "props": "{ countries?: { code: string; name: string; value: number }[]; description?: string; formatter?: (value: number) => string; limit?: number; status?: \"loading\" | \"error\"; title: string; total?: number; unit?: string }",
+      "props": "{ countries?: { code: string; name: string; value: number }[]; description?: string; formatter?: (value: number) => string; limit?: number; otherLabel?: null | string; status?: \"loading\" | \"error\"; title: string; total?: number; unit?: string }",
       "usedWith": [
         "geo-03",
         "chart-panel-02",
@@ -1587,7 +1587,7 @@
       "component": "Geo3",
       "shows": "Active users by city right now as markers sized by value on a dotted world map, with the busiest city named.",
       "size": "full",
-      "props": "{ description?: string; locations?: { id: string; lat: number; lon: number; name: string; value: number }[]; status?: \"loading\" | \"error\"; title: string; unit: string }",
+      "props": "{ description?: string; locations?: { country?: string; id: string; lat: number; lon: number; name: string; value: number }[]; status?: \"loading\" | \"error\"; title: string; unit: string }",
       "usedWith": [
         "realtime-01",
         "geo-02"
@@ -1978,7 +1978,7 @@
       "component": "Leaderboard1",
       "shows": "Ranked rows with a background bar sized relative to the leader.",
       "size": "half",
-      "props": "{ description?: string; onViewAll?: () => void; pages?: { path: string; visitors: number }[]; status?: \"loading\" | \"error\"; title: string }",
+      "props": "{ description?: string; labelHeader?: string; onViewAll?: () => void; pages?: { path: string; visitors: number }[]; status?: \"loading\" | \"error\"; title: string; valueHeader?: string; viewAllLabel?: null | string }",
       "usedWith": [
         "breakdown-01",
         "geo-02",

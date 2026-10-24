@@ -7,6 +7,7 @@ import {
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
 import {
   Leaderboard,
   LeaderboardBar,
@@ -24,6 +25,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface CountryStat {
+  /** ISO 3166-1 alpha-2 code, such as `GB`. */
   code: string
   name: string
   visitors: number
@@ -191,12 +193,7 @@ const Leaderboard5 = (props: Leaderboard5Props) => {
                       value={(country.visitors / max) * 100}
                     />
                     <LeaderboardRank rank={ranked.indexOf(country) + 1} />
-                    <span
-                      aria-hidden='true'
-                      className='w-6 shrink-0 font-mono text-xs text-muted-foreground'
-                    >
-                      {country.code}
-                    </span>
+                    <CountryFlag code={country.code} />
                     <LeaderboardLabel className='truncate'>
                       {country.name}
                     </LeaderboardLabel>

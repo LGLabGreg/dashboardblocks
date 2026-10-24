@@ -19,4 +19,10 @@ describe('getKPIChange', () => {
     assert.equal(getKPIChange({ value: 0, previous: 0 }), 0)
     assert.equal(getKPIChange({ value: 4, previous: 0, changeType: 'points' }), 4)
   })
+
+  it('counts a plain difference, from zero too', () => {
+    assert.equal(getKPIChange({ value: 38, previous: 32, changeType: 'count' }), 6)
+    assert.equal(getKPIChange({ value: 29, previous: 32, changeType: 'count' }), -3)
+    assert.equal(getKPIChange({ value: 5, previous: 0, changeType: 'count' }), 5)
+  })
 })

@@ -1,5 +1,14 @@
 # dashboardblocks
 
+## 1.10.1
+
+### Patch Changes
+
+- 668ea5c: Activity Feed's line between two items can fill in green with `connector='done'`, for a step that's finished.
+- 2e89d40: Leaderboard 01 takes `labelHeader` and `valueHeader` to name its two columns, and `viewAllLabel={null}` leaves out its View all button.
+- 211b9ab: `geo.tsx`: country flags are larger, a map's tooltip goes when the pointer leaves its place, a map marker's tooltip shows its country's flag when the marker has a `country` code, and Geo 03's cities have one. `kpi.tsx`: `KPIChange` takes `changeType='count'` for a plain difference, such as `Up 6`.
+- 2e89d40: Leaderboard 05 shows each country's flag in place of its code, and Geo 02 takes `otherLabel={null}` to leave out the row that sums the rest.
+
 ## 1.10.0
 
 ### Minor Changes

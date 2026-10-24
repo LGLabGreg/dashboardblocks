@@ -51,7 +51,7 @@ function CountryFlag({ className, code }: { className?: string; code?: string })
     <span
       aria-hidden
       className={cn(
-        'inline-flex w-5 shrink-0 items-center justify-center text-base leading-none',
+        'inline-flex w-6 shrink-0 items-center justify-center text-xl leading-none',
         className,
       )}
     >
@@ -165,6 +165,7 @@ function useMapReadout(points: MapPoint[]) {
       show(id, event.currentTarget)
     },
     onPointerEnter: (event: PointerEvent<HTMLElement>) => show(id, event.currentTarget),
+    onPointerLeave: () => setActive((shown) => (shown?.id === id ? null : shown)),
     tabIndex: id === current?.id ? 0 : -1,
   })
 
@@ -183,6 +184,8 @@ function useMapReadout(points: MapPoint[]) {
 interface MapTooltipProps {
   active: ActivePoint | null
   color?: string
+  /** Two-letter country code, such as `GB`; shows the country's flag before the name. */
+  country?: string
   format: (value: number) => string
   name?: string
   share?: number
@@ -193,6 +196,7 @@ interface MapTooltipProps {
 function MapTooltip({
   active,
   color,
+  country,
   format,
   name,
   share,
@@ -202,7 +206,10 @@ function MapTooltip({
   if (!active) return null
   return (
     <ChartFloatingTooltip active flip={active.flip} x={active.x} y={active.y}>
-      <span className='font-medium'>{name}</span>
+      <span className='flex items-center gap-1.5 font-medium'>
+        {country && <CountryFlag code={country} className='w-auto text-lg' />}
+        {name}
+      </span>
       <ChartTooltipItem
         color={value === null ? undefined : color}
         name={valueHeader}
@@ -400,7 +407,10 @@ function TileMap({
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {tiles.map((tile) => {
-            const position = { gridColumn: tile.column + 1, gridRow: tile.row + 1 }
+            const position = {
+              gridColumn: tile.column + 1,
+              gridRow: tile.row + 1,
+            }
             return state === 'loading' ? (
               <Skeleton
                 key={tile.id}
@@ -498,12 +508,32 @@ const LAND_NORTH = 84
 const LAND_STEP = 2.5
 
 let landPath: string | null = null
+let landCells: { x: number; y: number }[] | null = null
+
+function isLandAt(bytes: string, index: number) {
+  return (bytes.charCodeAt(index >> 3) & (128 >> (index & 7))) !== 0
+}
+
+/** The centre of every land dot, in the map's viewBox units (`LAND_COLUMNS` by `LAND_ROWS`). */
+function getLandCells() {
+  if (landCells !== null) return landCells
+  const bytes = atob(LAND_MASK)
+  const cells: { x: number; y: number }[] = []
+  for (let row = 0; row < LAND_ROWS; row++) {
+    for (let column = 0; column < LAND_COLUMNS; column++) {
+      if (isLandAt(bytes, row * LAND_COLUMNS + column)) {
+        cells.push({ x: column + 0.5, y: row + 0.5 })
+      }
+    }
+  }
+  landCells = cells
+  return cells
+}
 
 function getLandPath() {
   if (landPath !== null) return landPath
   const bytes = atob(LAND_MASK)
-  const isLand = (index: number) =>
-    (bytes.charCodeAt(index >> 3) & (128 >> (index & 7))) !== 0
+  const isLand = (index: number) => isLandAt(bytes, index)
   const runs: string[] = []
   for (let row = 0; row < LAND_ROWS; row++) {
     let start = -1
@@ -529,6 +559,8 @@ function projectPoint(lat: number, lon: number) {
 }
 
 interface DotMapMarker {
+  /** Two-letter country code, such as `GB`; shows the country's flag in the tooltip. */
+  country?: string
   id: string
   lat: number
   lon: number
@@ -689,6 +721,7 @@ function DotMap({
         <MapTooltip
           active={active}
           color={markerColor}
+          country={activeMarker?.country}
           format={format}
           name={activeMarker?.name}
           share={
@@ -767,11 +800,25 @@ export {
   CountryFlag,
   DotMap,
   DotMapLegend,
+  GeoTable,
+  LAND_COLUMNS,
+  LAND_ROWS,
+  MapTooltip,
   TileMap,
   US_STATE_TILES,
   countryFlag,
+  getLandCells,
+  getLandPath,
   getMarkerSize,
   projectPoint,
+  useMapReadout,
 }
 
-export type { DotMapLegendProps, DotMapMarker, DotMapProps, TileMapProps, TileMapTile }
+export type {
+  DotMapLegendProps,
+  DotMapMarker,
+  DotMapProps,
+  MapTooltipProps,
+  TileMapProps,
+  TileMapTile,
+}

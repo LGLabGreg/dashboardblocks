@@ -37,7 +37,8 @@ function ActivityFeed({ className, ...props }: ComponentProps<'ol'>) {
 }
 
 interface ActivityFeedItemProps extends ComponentProps<'li'> {
-  connector?: boolean
+  /** Draws the line to the next item. `'done'` fills it in green, for a step that's finished. */
+  connector?: boolean | 'done'
 }
 
 function ActivityFeedItem({
@@ -58,8 +59,15 @@ function ActivityFeedItem({
         <span
           aria-hidden
           data-slot='activity-connector'
-          className='bg-border absolute top-[calc(var(--activity-marker)+0.25rem)] bottom-1 left-[calc(var(--activity-marker)/2)] w-px -translate-x-1/2'
-        />
+          className='bg-border absolute top-[calc(var(--activity-marker)+0.25rem)] bottom-1 left-[calc(var(--activity-marker)/2)] w-px -translate-x-1/2 overflow-hidden'
+        >
+          <span
+            className={cn(
+              'absolute inset-x-0 top-0 bg-emerald-600 transition-[height] duration-700 ease-out motion-reduce:transition-none dark:bg-emerald-400',
+              connector === 'done' ? 'h-full' : 'h-0',
+            )}
+          />
+        </span>
       )}
       {children}
     </li>

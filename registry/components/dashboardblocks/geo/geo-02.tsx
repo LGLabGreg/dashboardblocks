@@ -32,7 +32,10 @@ interface Geo2Props {
   /** Defaults to a sentence about the leading country's share. */
   description?: string
   formatter?: (value: number) => string
+  /** How many countries get a row of their own. @default 8 */
   limit?: number
+  /** Names the row that sums the rest; `null` leaves it out. @default 'Other countries' */
+  otherLabel?: string | null
   status?: BlockStatus
   title: string
   total?: number
@@ -65,6 +68,7 @@ const Geo2 = (props: Geo2Props) => {
     countries = [],
     formatter = (value: number) => formatNumber(value),
     limit = 8,
+    otherLabel = 'Other countries',
     status,
     title,
     unit = 'sessions',
@@ -72,7 +76,10 @@ const Geo2 = (props: Geo2Props) => {
   const sorted = [...countries].sort((a, b) => b.value - a.value)
   const total = props.total ?? countries.reduce((sum, country) => sum + country.value, 0)
   const shown = sorted.slice(0, limit)
-  const other = total - shown.reduce((sum, country) => sum + country.value, 0)
+  const other =
+    otherLabel === null
+      ? 0
+      : total - shown.reduce((sum, country) => sum + country.value, 0)
   const largest = Math.max(shown[0]?.value ?? 0, other)
   const share = (value: number) =>
     formatPercent(total > 0 ? value / total : 0, {
@@ -89,7 +96,7 @@ const Geo2 = (props: Geo2Props) => {
   const rows = [
     ...shown.map((country) => ({ ...country, key: country.code })),
     ...(other > 0
-      ? [{ code: undefined, key: 'other', name: 'Other countries', value: other }]
+      ? [{ code: undefined, key: 'other', name: otherLabel, value: other }]
       : []),
   ]
 
