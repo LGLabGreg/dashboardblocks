@@ -16,6 +16,7 @@ import {
   type LineProps,
   ReferenceLine,
   ResponsiveContainer,
+  Text,
   Tooltip,
   type TooltipContentProps,
   useActiveTooltipLabel,
@@ -52,6 +53,43 @@ const chartTimeGridProps = {
 } as const
 
 const chartValueAxisWidth = 48
+
+type ChartEdgeTickProps = Omit<ComponentProps<typeof Text>, 'children'> & {
+  index?: number
+  payload?: { coordinate: number; value: unknown }
+  tickFormatter?: (value: never, index: number) => string
+  visibleTicksCount?: number
+}
+
+/**
+ * An x axis label that keeps the first and last labels inside the chart: the first starts at its
+ * point and the last ends at its point. Pass it as `tick={<ChartEdgeTick />}` with
+ * `interval='preserveStartEnd'`.
+ */
+function ChartEdgeTick({
+  index = 0,
+  payload,
+  tickFormatter,
+  visibleTicksCount = 0,
+  ...props
+}: ChartEdgeTickProps) {
+  if (!payload) return null
+  const first = index === 0
+  const last = visibleTicksCount > 1 && index === visibleTicksCount - 1
+  const label = tickFormatter
+    ? tickFormatter(payload.value as never, index)
+    : String(payload.value)
+  return (
+    <Text
+      {...props}
+      {...chartAxisProps.tick}
+      textAnchor={first ? 'start' : last ? 'end' : props.textAnchor}
+      x={first || last ? payload.coordinate : props.x}
+    >
+      {label}
+    </Text>
+  )
+}
 
 const chartBarCursor = {
   fill: 'var(--color-muted)',
@@ -833,6 +871,7 @@ function ChartMarkerKey({
 export {
   ChartFloatingTooltip,
   ChartMarkerKey,
+  ChartEdgeTick,
   ChartMarkers,
   ChartPlaceholder,
   ChartTooltipContent,
@@ -862,6 +901,7 @@ export {
 }
 
 export type {
+  ChartEdgeTickProps,
   ChartMarker,
   ChartMarkerAnchor,
   ChartMarkersProps,

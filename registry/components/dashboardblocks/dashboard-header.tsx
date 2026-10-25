@@ -61,6 +61,8 @@ interface DateRangePickerProps {
   onValueChange: (value: DateRangePreset) => void
   /** The ranges to offer, in order. @default every preset */
   presets?: DateRangePreset[]
+  /** `sm` lines the button up with small buttons beside it, such as filters. @default 'default' */
+  size?: 'default' | 'sm'
   today: Date
   value: DateRangePreset
   /** `inline` draws the trigger as underlined text, to sit inside a sentence. */
@@ -74,6 +76,7 @@ function DateRangePicker({
   className,
   onValueChange,
   presets,
+  size = 'default',
   today,
   value,
   variant = 'button',
@@ -112,6 +115,7 @@ function DateRangePicker({
           render={
             <Button
               variant='outline'
+              size={size}
               className={cn('justify-start', className)}
               aria-label={`Date range: ${label}`}
             />

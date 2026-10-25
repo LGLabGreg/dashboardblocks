@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.12.1
+
+### Patch Changes
+
+- 3e77e09: `chart.tsx` adds `ChartEdgeTick`, an x axis label that keeps the first and last dates inside the chart.
+- f63c900: The date range picker takes `size='sm'`, so it lines up with small filter buttons beside it.
+- 9589737: `formatList` takes `'or'` to join choices: "Germany or France".
+
 ## 1.12.0
 
 ### Minor Changes
