@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -43,14 +43,13 @@ import {
   YAxis,
 } from 'recharts'
 
-interface Spend4Props {
+interface Spend4Props extends BlockStateProps {
   /** Month-end cash balances, oldest first, one month apart. Leave out, or pass none, to show the empty state. */
   balances?: number[]
   /** @default 'USD' */
   currency?: string
   description: string
   lastMonth: Date
-  status?: BlockStatus
   /** Months of change to average for the burn. */
   trailing?: number
   title: string
@@ -72,6 +71,7 @@ const Spend4 = (props: Spend4Props) => {
     currency = 'USD',
     description,
     lastMonth,
+    errorMessage,
     status,
     title,
     trailing = 3,
@@ -111,7 +111,7 @@ const Spend4 = (props: Spend4Props) => {
   const empty = rows.find((row) => row.projected === 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

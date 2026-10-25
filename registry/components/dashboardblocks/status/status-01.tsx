@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -21,12 +21,11 @@ interface Service {
   status: StatusLevel
 }
 
-interface Status1Props {
+interface Status1Props extends BlockStateProps {
   /** Defaults to a sentence naming every service that isn't operational. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   services?: Service[]
-  status?: BlockStatus
   title: string
   /** Follows the description, such as `Updated 2 minutes ago.` */
   updated?: string
@@ -69,13 +68,13 @@ const summarize = (services: Service[]) => {
 }
 
 const Status1 = (props: Status1Props) => {
-  const { services = [], status, title, updated } = props
+  const { services = [], errorMessage, status, title, updated } = props
   const { description = summarize(services) } = props
   const state = getBlockState(status, services)
   const overall = getWorstStatus(services.map((service) => service.status))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-1'>
           <BlockReady className='w-40 text-sm'>

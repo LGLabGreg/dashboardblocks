@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
@@ -23,13 +23,12 @@ import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
-interface UsageMeter1Props {
+interface UsageMeter1Props extends BlockStateProps {
   limit: number
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   periodEnd: Date
   periodStart: Date
-  status?: BlockStatus
   timeZone?: string
   title: string
   unit: string
@@ -55,6 +54,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
     now,
     periodEnd,
     periodStart,
+    errorMessage,
     status: blockStatus,
     timeZone = 'UTC',
     title,
@@ -74,7 +74,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
   const limitDate = new Date(now.getTime() + daysToLimit * DAY)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3 border-t pt-3'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

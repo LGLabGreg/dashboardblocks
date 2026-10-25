@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -56,7 +56,7 @@ interface TimeZoneOption {
   value: string
 }
 
-interface Settings7Props {
+interface Settings7Props extends BlockStateProps {
   description: string
   /** Called with the chosen image, or `null` when the photo is removed. Leave out to hide Upload photo. */
   onAvatarChange?: (file: File | null) => void
@@ -64,7 +64,6 @@ interface Settings7Props {
   onSave?: (profile: Profile) => void | ProfileErrors | Promise<void | ProfileErrors>
   /** Leave out to show the empty state. */
   profile?: Profile
-  status?: BlockStatus
   timeZones: TimeZoneOption[]
   title: string
 }
@@ -388,11 +387,14 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
 }
 
 const Settings7 = (props: Settings7Props) => {
-  const { description, profile, status, title } = props
+  const { description, profile, errorMessage, status, title } = props
   const ready = !status && profile !== undefined
 
   return (
-    <BlockStateProvider state={getBlockState(status, profile)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, profile)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

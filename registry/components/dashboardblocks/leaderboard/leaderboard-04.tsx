@@ -1,7 +1,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -35,7 +35,7 @@ interface Product {
   unitsSold: number
 }
 
-interface Leaderboard4Props {
+interface Leaderboard4Props extends BlockStateProps {
   currency?: string
   /** Defaults to a sentence about the biggest climber and new entries. */
   description?: string
@@ -43,7 +43,6 @@ interface Leaderboard4Props {
   period?: string
   /** Leave out, or pass none, to show the empty state. */
   products?: Product[]
-  status?: BlockStatus
   title: string
 }
 
@@ -125,6 +124,7 @@ const Leaderboard4 = (props: Leaderboard4Props) => {
     currency = 'USD',
     period = 'the last period',
     products = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -132,7 +132,7 @@ const Leaderboard4 = (props: Leaderboard4Props) => {
   const { description = summarize(products, period) } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

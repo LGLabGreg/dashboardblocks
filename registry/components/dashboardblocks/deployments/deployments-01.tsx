@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -31,14 +31,13 @@ interface Deployment {
   status: DeployStatus
 }
 
-interface Deployments1Props {
+interface Deployments1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   deployments?: Deployment[]
   /** Defaults to a sentence counting the deploys and any that need a look. */
   description?: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -132,11 +131,14 @@ const summarize = (deployments: Deployment[], now: Date) => {
 }
 
 const Deployments1 = (props: Deployments1Props) => {
-  const { deployments = [], now, status, title } = props
+  const { deployments = [], now, errorMessage, status, title } = props
   const { description = summarize(deployments, now) } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, deployments)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, deployments)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

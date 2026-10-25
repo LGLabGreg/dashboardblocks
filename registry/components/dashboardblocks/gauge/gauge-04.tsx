@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -19,7 +19,7 @@ import {
   formatPoints,
 } from '@/registry/lib/dashboardblocks/format'
 
-interface Gauge4Props {
+interface Gauge4Props extends BlockStateProps {
   /** Follows the previous value in the change, such as `in August`. */
   comparison: string
   description: string
@@ -31,7 +31,6 @@ interface Gauge4Props {
   min?: number
   previous?: number
   scaleFormatter?: (value: number) => string
-  status?: BlockStatus
   target: number
   title: string
   /** Leave out to show the empty state. */
@@ -59,6 +58,7 @@ const Gauge4 = (props: Gauge4Props) => {
     min = 0,
     previous,
     scaleFormatter = formatter,
+    errorMessage,
     status,
     target,
     title,
@@ -69,7 +69,7 @@ const Gauge4 = (props: Gauge4Props) => {
   const met = value >= target
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

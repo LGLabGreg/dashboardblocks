@@ -10,7 +10,7 @@ import {
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -69,7 +69,7 @@ interface OrderEvent {
 type Fulfilment = 'Delivered' | 'Shipped' | 'Unfulfilled'
 type PaymentStatus = 'Paid' | 'Pending' | 'Refunded'
 
-interface RecordDetail2Props {
+interface RecordDetail2Props extends BlockStateProps {
   customer?: { email: string; href: string; name: string; orders: number }
   events?: OrderEvent[]
   items?: LineItem[]
@@ -89,7 +89,6 @@ interface RecordDetail2Props {
     status: PaymentStatus
     taxRate: number
   }
-  status?: BlockStatus
 }
 
 const FULFILMENT_TONE: Record<Fulfilment, StatusTone> = {
@@ -202,6 +201,7 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
     onPrint = () => {},
     onRefund = () => {},
     order,
+    errorMessage,
     status,
   } = props
   const state = getBlockState(status, order)
@@ -222,7 +222,7 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
   ]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Orders</BackLink>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -24,12 +24,11 @@ import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 
-interface Schedule2Props {
+interface Schedule2Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   events?: ScheduleEvent[]
   now: Date
   onSelect?: (day: Date) => void
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -164,6 +163,7 @@ const Schedule2 = (props: Schedule2Props) => {
     events = [],
     now,
     onSelect,
+    errorMessage,
     status,
     timeZone = 'UTC',
     title,
@@ -188,7 +188,7 @@ const Schedule2 = (props: Schedule2Props) => {
     setMonth(new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + months, 1)))
 
   return (
-    <BlockStateProvider state={getBlockState(status, events)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, events)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

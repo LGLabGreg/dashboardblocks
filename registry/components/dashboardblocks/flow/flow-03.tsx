@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -17,14 +17,13 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Flow3Props {
+interface Flow3Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   description: string
   /** Leave out, or pass none, to show the empty state. */
   links?: FlowLink[]
   nodes?: FlowNode[]
-  status?: BlockStatus
   /** Node ids for the headline figures. */
   totals: { grossProfit?: string; profit: string; revenue: string }
   title: string
@@ -68,6 +67,7 @@ const Flow3 = (props: Flow3Props) => {
     description,
     links = [],
     nodes = [],
+    errorMessage,
     status,
     title,
     totals: ids,
@@ -82,7 +82,7 @@ const Flow3 = (props: Flow3Props) => {
   const margin = (value: number) => formatPercent(value / (revenue || 1))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

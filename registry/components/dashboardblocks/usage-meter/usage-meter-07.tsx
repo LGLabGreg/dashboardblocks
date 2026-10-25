@@ -5,7 +5,7 @@ import { AnimatedWave } from '@/registry/components/dashboardblocks/animated-wav
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -23,11 +23,10 @@ import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
-interface UsageMeter7Props {
+interface UsageMeter7Props extends BlockStateProps {
   icon: ReactNode
   limit: number
   onUpgrade?: () => void
-  status?: BlockStatus
   title: string
   unit: string
   /** Leave out to show the empty state. */
@@ -59,14 +58,23 @@ const waveColors: Record<UsageStatus, string> = {
 }
 
 const UsageMeter7 = (props: UsageMeter7Props) => {
-  const { icon, limit, onUpgrade, status: blockStatus, title, unit, used = 0 } = props
+  const {
+    icon,
+    limit,
+    onUpgrade,
+    errorMessage,
+    status: blockStatus,
+    title,
+    unit,
+    used = 0,
+  } = props
   const state = getBlockState(blockStatus, props.used)
   const remaining = Math.max(0, limit - used)
   const share = getUsageShare(used, limit)
   const status = getUsageStatus(used, limit)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3 border-t pt-3'>
         <header className='flex min-h-8 items-center justify-between gap-3'>
           <p className='text-muted-foreground flex min-w-0 items-center gap-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0'>

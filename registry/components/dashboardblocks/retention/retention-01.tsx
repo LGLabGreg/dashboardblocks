@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { HeatmapLegend } from '@/registry/components/dashboardblocks/heatmap'
@@ -15,14 +15,13 @@ import {
 } from '@/registry/components/dashboardblocks/retention'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Retention1Props {
+interface Retention1Props extends BlockStateProps {
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   cohorts?: RetentionCohort[]
   description: string
   mode?: 'percent' | 'count'
   /** @default 'Month' */
   periodName?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -57,6 +56,7 @@ const Retention1 = (props: Retention1Props) => {
     description,
     mode = 'percent',
     periodName = 'Month',
+    errorMessage,
     status,
     title,
   } = props
@@ -77,7 +77,7 @@ const Retention1 = (props: Retention1Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

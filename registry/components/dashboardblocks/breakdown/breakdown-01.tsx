@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -18,12 +18,11 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Breakdown1Props {
+interface Breakdown1Props extends BlockStateProps {
   description: string
   formatter?: (value: number) => string
   /** Leave out, or pass none, to show the empty state. */
   segments?: BreakdownSegment[]
-  status?: BlockStatus
   title: string
 }
 
@@ -44,6 +43,7 @@ const Breakdown1 = (props: Breakdown1Props) => {
     description,
     formatter = (value) => formatNumber(value),
     segments = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -55,7 +55,7 @@ const Breakdown1 = (props: Breakdown1Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

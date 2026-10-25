@@ -36,7 +36,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -44,7 +44,7 @@ import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
-interface AiAssistant3Props {
+interface AiAssistant3Props extends BlockStateProps {
   /**
    * The chat it runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies.
    * A reply's tokens show under it when its `metadata.usage` is `{ input, cached, output }`: send it from the route with `messageMetadata`.
@@ -55,7 +55,6 @@ interface AiAssistant3Props {
   /** The conversation the canned replies start from. With `chat`, pass it to the chat instead. */
   messages?: AIMessage[]
   prices: TokenPrices
-  status?: BlockStatus
   suggestions: SuggestedPrompt[]
   title: string
   /** What each tool is called, by its name. Others read as their name in words. */
@@ -289,6 +288,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
     description,
     messages: initialMessages = [],
     prices,
+    errorMessage,
     status: blockStatus,
     suggestions,
     title,
@@ -309,7 +309,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
   const total = tokens.input + (tokens.cached ?? 0) + tokens.output
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

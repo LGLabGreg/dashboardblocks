@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -18,12 +18,11 @@ import {
 } from '@/registry/components/dashboardblocks/kpi-provenance'
 import { joinDetails } from '@/registry/lib/dashboardblocks/format'
 
-interface KPI4Props {
+interface KPI4Props extends BlockStateProps {
   comparison: string
   format?: KPIFormat
   previous?: number
   provenance: Provenance
-  status?: BlockStatus
   title: string
   /** Leave out to show the empty state. */
   value?: number
@@ -46,11 +45,12 @@ const exampleProps: KPI4Props = {
 }
 
 const KPI4 = (props: KPI4Props) => {
-  const { comparison, format, previous, provenance, status, title, value } = props
+  const { comparison, format, previous, provenance, errorMessage, status, title, value } =
+    props
   const filters = Object.values(provenance.filters)
 
   return (
-    <BlockStateProvider state={getBlockState(status, value)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
       <KPI className='gap-1'>
         <KPITitle>{title}</KPITitle>
         <div className='flex min-w-0 items-center gap-1'>

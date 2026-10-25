@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -48,13 +48,12 @@ interface SignInDay {
   succeeded: number
 }
 
-interface Security1Props {
+interface Security1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   days?: SignInDay[]
   description: string
   /** Share of active users with multi-factor authentication, 0–1. */
   mfaCoverage?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -104,7 +103,7 @@ const median = (values: number[]) => {
 }
 
 const Security1 = (props: Security1Props) => {
-  const { days = [], description, mfaCoverage, status, title } = props
+  const { days = [], description, mfaCoverage, errorMessage, status, title } = props
   const state = getBlockState(status, days)
   const totals = days.reduce(
     (sum, day) => ({
@@ -126,7 +125,7 @@ const Security1 = (props: Security1Props) => {
   const spikeBlocked = spikes.reduce((sum, day) => sum + day.blocked, 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

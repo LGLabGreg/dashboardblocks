@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -27,14 +27,13 @@ interface MeteredItem {
   used: number
 }
 
-interface UsageMeter3Props {
+interface UsageMeter3Props extends BlockStateProps {
   /** When the overage is billed, such as `Oct 1`. */
   billedOn: string
   /** Defaults to a sentence naming the meters past what the plan includes. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   items?: MeteredItem[]
-  status?: BlockStatus
   title: string
 }
 
@@ -82,13 +81,13 @@ function describe(items: MeteredItem[]) {
 }
 
 const UsageMeter3 = (props: UsageMeter3Props) => {
-  const { billedOn, items = [], status, title } = props
+  const { billedOn, items = [], errorMessage, status, title } = props
   const { description = describe(items) } = props
   const state = getBlockState(status, items)
   const total = items.reduce((sum, item) => sum + getOverageCost(item), 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

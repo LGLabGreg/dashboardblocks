@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -34,7 +34,7 @@ interface ApiKey {
   scope: KeyScope
 }
 
-interface Settings2Props {
+interface Settings2Props extends BlockStateProps {
   /** Creates a key and returns it with its secret, which is shown once. */
   createKey: (name: string, scope: KeyScope) => { key: ApiKey; secret: string }
   /** @default a sentence counting the keys and any unused ones */
@@ -46,7 +46,6 @@ interface Settings2Props {
   onRevoke?: (id: string) => void
   /** @default 90 */
   staleAfterDays?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -121,7 +120,15 @@ const scopeLabel: Record<KeyScope, string> = {
 }
 
 const Settings2 = (props: Settings2Props) => {
-  const { createKey, now, onRevoke, staleAfterDays = 90, status, title } = props
+  const {
+    createKey,
+    now,
+    onRevoke,
+    staleAfterDays = 90,
+    errorMessage,
+    status,
+    title,
+  } = props
   const id = useId()
   const [keys, setKeys] = useState(props.keys ?? [])
   const unused = keys.filter(
@@ -162,7 +169,7 @@ const Settings2 = (props: Settings2Props) => {
   }
 
   return (
-    <BlockStateProvider state={getBlockState(status, keys)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, keys)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -22,7 +22,7 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
-interface StatGroup5Props {
+interface StatGroup5Props extends BlockStateProps {
   /** Follows each previous value, such as `the previous 30 days`. */
   comparison: string
   /** @default 'This period' */
@@ -32,7 +32,6 @@ interface StatGroup5Props {
   metrics?: StatMetric[]
   /** How many metrics to sketch while loading. @default 4 */
   placeholders?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -107,6 +106,7 @@ const StatGroup5 = (props: StatGroup5Props) => {
     description,
     metrics = [],
     placeholders = 4,
+    errorMessage,
     status,
     title,
   } = props
@@ -114,7 +114,7 @@ const StatGroup5 = (props: StatGroup5Props) => {
   const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

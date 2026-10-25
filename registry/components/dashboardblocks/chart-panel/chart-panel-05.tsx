@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { BreakdownTable } from '@/registry/components/dashboardblocks/breakdown'
@@ -35,12 +35,11 @@ interface Segment {
   value: number
 }
 
-interface ChartPanel5Props {
+interface ChartPanel5Props extends BlockStateProps {
   description: string
   formatter?: ChartValueFormatter
   /** Leave out, or pass none, to show the empty state. */
   segments?: Segment[]
-  status?: BlockStatus
   title: string
   totalLabel?: string
 }
@@ -68,6 +67,7 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
     description,
     formatter = (value) => formatNumber(value),
     segments = [],
+    errorMessage,
     status,
     title,
     totalLabel = 'Total',
@@ -83,7 +83,7 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

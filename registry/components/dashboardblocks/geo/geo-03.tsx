@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -14,12 +14,11 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Geo3Props {
+interface Geo3Props extends BlockStateProps {
   /** Defaults to a sentence about the most active city. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   locations?: DotMapMarker[]
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -128,7 +127,7 @@ const exampleProps: Geo3Props = {
 }
 
 const Geo3 = (props: Geo3Props) => {
-  const { locations = [], status, title, unit } = props
+  const { locations = [], errorMessage, status, title, unit } = props
   const state = getBlockState(status, locations)
   const unitName = unit.charAt(0).toUpperCase() + unit.slice(1)
   const total = locations.reduce((sum, location) => sum + location.value, 0)
@@ -146,7 +145,7 @@ const Geo3 = (props: Geo3Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

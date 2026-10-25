@@ -7,7 +7,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -34,14 +34,13 @@ interface AlertRule {
   severity: AlertSeverity
 }
 
-interface Alerts3Props {
+interface Alerts3Props extends BlockStateProps {
   /** Defaults to a sentence counting the active rules and the last one to fire. */
   description?: string
   now: Date
   onEnabledChange?: (id: string, enabled: boolean) => void
   /** Leave out, or pass none, to show the empty state. */
   rules?: AlertRule[]
-  status?: BlockStatus
   title: string
 }
 
@@ -102,7 +101,7 @@ const summarize = (rules: AlertRule[], active: number, now: Date) => {
 }
 
 const Alerts3 = (props: Alerts3Props) => {
-  const { now, onEnabledChange, rules = [], status, title } = props
+  const { now, onEnabledChange, rules = [], errorMessage, status, title } = props
   const [enabled, setEnabled] = useState<ReadonlyMap<string, boolean>>(() => new Map())
   const state = getBlockState(status, rules)
   const isEnabled = (rule: AlertRule) => enabled.get(rule.id) ?? rule.enabled
@@ -110,7 +109,7 @@ const Alerts3 = (props: Alerts3Props) => {
   const { description = summarize(rules, active, now) } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

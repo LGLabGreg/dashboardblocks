@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPlaceholder, useChartId } from '@/registry/components/dashboardblocks/chart'
@@ -26,7 +26,7 @@ interface Phase {
   planned: { end: Date; start: Date }
 }
 
-interface Timeline4Props {
+interface Timeline4Props extends BlockStateProps {
   /** What the plan is for, such as a project name. */
   description: string
   end: Date
@@ -35,7 +35,6 @@ interface Timeline4Props {
   /** In order. Leave out, or pass none, to show the empty state. */
   phases?: Phase[]
   start: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -108,7 +107,7 @@ function Slip({ slip }: { slip: number | null }) {
 }
 
 const Timeline4 = (props: Timeline4Props) => {
-  const { description, end, now, phases = [], start, status, title } = props
+  const { description, end, now, phases = [], start, errorMessage, status, title } = props
   const id = useChartId()
   const state = getBlockState(status, phases)
   const ticks = getTimelineTicks(start, end, 'month')
@@ -133,7 +132,7 @@ const Timeline4 = (props: Timeline4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

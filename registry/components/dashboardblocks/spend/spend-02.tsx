@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -23,7 +23,7 @@ interface SpendLine {
   spent: number
 }
 
-interface Spend2Props {
+interface Spend2Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   /** Defaults to a sentence naming the services over budget, or on pace to go over. */
@@ -32,7 +32,6 @@ interface Spend2Props {
   elapsed: number
   /** Leave out, or pass none, to show the empty state. */
   lines?: SpendLine[]
-  status?: BlockStatus
   title: string
 }
 
@@ -71,7 +70,7 @@ const describe = (lines: SpendLine[], elapsed: number) => {
 }
 
 const Spend2 = (props: Spend2Props) => {
-  const { currency = 'USD', elapsed, lines = [], status, title } = props
+  const { currency = 'USD', elapsed, lines = [], errorMessage, status, title } = props
   const { description = describe(lines, elapsed) } = props
   const state = getBlockState(status, lines)
   const format = (value: number) =>
@@ -83,7 +82,7 @@ const Spend2 = (props: Spend2Props) => {
   const total = getBudgetPace({ ...totals, elapsed })
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

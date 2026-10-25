@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -13,11 +13,10 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
-interface KPI1Props {
+interface KPI1Props extends BlockStateProps {
   comparison: string
   format?: KPIFormat
   previous?: number
-  status?: BlockStatus
   title: string
   /** Leave out to show the empty state. */
   value?: number
@@ -32,10 +31,10 @@ const exampleProps: KPI1Props = {
 }
 
 const KPI1 = (props: KPI1Props) => {
-  const { comparison, format, previous, status, title, value } = props
+  const { comparison, format, previous, errorMessage, status, title, value } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, value)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
       <KPI className='gap-1'>
         <KPITitle>{title}</KPITitle>
         <KPIValue value={value} format={format} animated />

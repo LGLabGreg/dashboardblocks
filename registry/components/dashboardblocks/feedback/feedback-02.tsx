@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -14,9 +14,8 @@ import {
 } from '@/registry/components/dashboardblocks/feedback'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Feedback2Props {
+interface Feedback2Props extends BlockStateProps {
   description: string
-  status?: BlockStatus
   title: string
   /** Leave out, or pass none, to show the empty state. */
   topics?: SentimentTopic[]
@@ -35,7 +34,7 @@ const exampleProps: Feedback2Props = {
 }
 
 const Feedback2 = (props: Feedback2Props) => {
-  const { description, status, title, topics = [] } = props
+  const { description, errorMessage, status, title, topics = [] } = props
   const state = getBlockState(status, topics)
   const sorted = [...topics].sort((a, b) => getNetSentiment(b) - getNetSentiment(a))
   const mentions = topics.reduce(
@@ -47,7 +46,7 @@ const Feedback2 = (props: Feedback2Props) => {
   const worst = negative.at(-1)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

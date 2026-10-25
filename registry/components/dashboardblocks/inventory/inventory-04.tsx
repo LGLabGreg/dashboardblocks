@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -48,7 +48,7 @@ interface IncomingOrder {
   quantity: number
 }
 
-interface Inventory4Props {
+interface Inventory4Props extends BlockStateProps {
   dailyDemand: number
   /** Defaults to a sentence saying when stock runs out. */
   description?: string
@@ -61,7 +61,6 @@ interface Inventory4Props {
   /** Names the item in the default description, such as `the merino socks 3-pack`. */
   product: string
   reorderPoint: number
-  status?: BlockStatus
   title: string
 }
 
@@ -90,6 +89,7 @@ const Inventory4 = (props: Inventory4Props) => {
     onHand,
     product,
     reorderPoint,
+    errorMessage,
     status,
     title,
   } = props
@@ -117,7 +117,7 @@ const Inventory4 = (props: Inventory4Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

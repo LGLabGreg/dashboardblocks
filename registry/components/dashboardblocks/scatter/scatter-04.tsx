@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -28,11 +28,10 @@ interface Risk {
   title: string
 }
 
-interface Scatter4Props {
+interface Scatter4Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   risks?: Risk[]
-  status?: BlockStatus
   title: string
 }
 
@@ -111,7 +110,7 @@ const IMPACT = ['Minor', 'Moderate', 'Major', 'Severe', 'Critical']
 const LEVELS: RiskLevel[] = ['critical', 'high', 'medium', 'low']
 
 const Scatter4 = (props: Scatter4Props) => {
-  const { description, risks = [], status, title } = props
+  const { description, risks = [], errorMessage, status, title } = props
   const state = getBlockState(status, risks)
   const [selected, setSelected] = useState<{ impact: number; likelihood: number } | null>(
     null,
@@ -125,7 +124,7 @@ const Scatter4 = (props: Scatter4Props) => {
         .slice(0, 3)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,11 +26,10 @@ import { Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { cn } from '@/lib/utils'
 
-interface Breakdown3Props {
+interface Breakdown3Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   segments?: BreakdownSegment[]
-  status?: BlockStatus
   title: string
 }
 
@@ -75,7 +74,7 @@ function toCells(segments: BreakdownSegment[]) {
 }
 
 const Breakdown3 = (props: Breakdown3Props) => {
-  const { description, segments = [], status, title } = props
+  const { description, segments = [], errorMessage, status, title } = props
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const state = getBlockState(status, segments)
   const total = getTotal(segments)
@@ -84,7 +83,7 @@ const Breakdown3 = (props: Breakdown3Props) => {
     .map((segment, cell) => ({ segment, x: cell % SIDE, y: Math.floor(cell / SIDE) }))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

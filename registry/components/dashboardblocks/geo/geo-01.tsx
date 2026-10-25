@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TileMap, US_STATE_TILES } from '@/registry/components/dashboardblocks/geo'
@@ -19,11 +19,10 @@ import {
 } from '@/registry/components/dashboardblocks/leaderboard'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Geo1Props {
+interface Geo1Props extends BlockStateProps {
   /** Defaults to a sentence about the leading states' share. */
   description?: string
   formatter?: (value: number) => string
-  status?: BlockStatus
   title: string
   valueLabel: string
   /** By two-letter state code, including DC. Leave out, or pass none, to show the empty state. */
@@ -92,7 +91,14 @@ const exampleProps: Geo1Props = {
 }
 
 const Geo1 = (props: Geo1Props) => {
-  const { formatter = currency, status, title, valueLabel, values = {} } = props
+  const {
+    formatter = currency,
+    errorMessage,
+    status,
+    title,
+    valueLabel,
+    values = {},
+  } = props
   const total = Object.values(values).reduce((sum, value) => sum + value, 0)
   const ranked = US_STATE_TILES.filter((tile) => values[tile.id] !== undefined).sort(
     (a, b) => values[b.id] - values[a.id],
@@ -116,7 +122,7 @@ const Geo1 = (props: Geo1Props) => {
   const state = getBlockState(status, ranked)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

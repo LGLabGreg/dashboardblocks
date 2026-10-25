@@ -12,7 +12,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -31,14 +31,13 @@ interface FeatureUsage {
   tokens: TokenCounts
 }
 
-interface AiUsage2Props {
+interface AiUsage2Props extends BlockStateProps {
   /** Defaults to a sentence naming the feature that costs the most. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   features?: FeatureUsage[]
   /** Ends the sentence under the total. @default 'this month' */
   period?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -85,14 +84,14 @@ const describe = (sorted: FeatureUsage[], total: number) => {
 }
 
 const AiUsage2 = (props: AiUsage2Props) => {
-  const { features = [], period = 'this month', status, title } = props
+  const { features = [], period = 'this month', errorMessage, status, title } = props
   const state = getBlockState(status, features)
   const total = features.reduce((sum, feature) => sum + feature.cost, 0)
   const sorted = [...features].sort((a, b) => b.cost - a.cost)
   const { description = describe(sorted, total) } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

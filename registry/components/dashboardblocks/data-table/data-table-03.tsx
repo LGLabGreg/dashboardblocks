@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { getKPIChange, KPIChange } from '@/registry/components/dashboardblocks/kpi'
@@ -33,7 +33,7 @@ interface CampaignRow {
   spend: number
 }
 
-interface DataTable3Props {
+interface DataTable3Props extends BlockStateProps {
   /** Follows each change, such as `the previous 14 days`. */
   comparison: string
   /** Defaults to a sentence with the total conversions, spend and change. */
@@ -42,7 +42,6 @@ interface DataTable3Props {
   period?: string
   /** Leave out, or pass none, to show the empty state. */
   rows?: CampaignRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -115,11 +114,11 @@ const summarize = (rows: CampaignRow[], comparison: string, period?: string) => 
 }
 
 const DataTable3 = (props: DataTable3Props) => {
-  const { comparison, period, rows = [], status, title } = props
+  const { comparison, period, rows = [], errorMessage, status, title } = props
   const { description = summarize(rows, comparison, period) } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

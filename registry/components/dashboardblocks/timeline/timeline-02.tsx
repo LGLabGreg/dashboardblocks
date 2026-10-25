@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -32,14 +32,13 @@ interface Milestone {
   status: TimelineStatus
 }
 
-interface Timeline2Props {
+interface Timeline2Props extends BlockStateProps {
   /** What the milestones are for, such as a release name. */
   description: string
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   milestones?: Milestone[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -89,14 +88,14 @@ const exampleProps: Timeline2Props = {
 }
 
 const Timeline2 = (props: Timeline2Props) => {
-  const { description, milestones = [], now, status, title } = props
+  const { description, milestones = [], now, errorMessage, status, title } = props
   const state = getBlockState(status, milestones)
   const next = milestones.find((milestone) => milestone.status !== 'done')
   const done = milestones.filter((milestone) => milestone.status === 'done').length
   const nextDays = next?.date ? getDaysBetween(now, next.date) : 0
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

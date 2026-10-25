@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -38,7 +38,7 @@ const statusTones: Record<DocumentStatusTone, StatusTone> = {
   warning: 'warning',
 }
 
-interface Comments3Props {
+interface Comments3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   comments?: ReviewComment[]
   currentUser: CommentAuthor
@@ -56,7 +56,6 @@ interface Comments3Props {
   onResolve?: (commentId: string, resolved: boolean) => void
   onSubmit?: (body: string, options: { parentId: string }) => Promise<void>
   people: CommentAuthor[]
-  status?: BlockStatus
 }
 
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
@@ -176,6 +175,7 @@ const Comments3 = (props: Comments3Props) => {
     onResolve = () => {},
     onSubmit = saveReply,
     people,
+    errorMessage,
     status,
   } = props
   const [comments, setComments] = useState(initialComments)
@@ -215,7 +215,7 @@ const Comments3 = (props: Comments3Props) => {
   ]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container'>
         <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem] @3xl:gap-8'>
           <article className='flex flex-col gap-4 self-start'>

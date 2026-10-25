@@ -10,7 +10,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
@@ -32,13 +32,12 @@ interface Notification {
   target: string
 }
 
-interface ActivityFeed3Props {
+interface ActivityFeed3Props extends BlockStateProps {
   /** Newest first. Leave out, or pass none, to show the empty state. */
   notifications?: Notification[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   onRead?: (ids: string[]) => void
-  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -104,7 +103,15 @@ const describe = (unread: Notification[]) => {
 }
 
 const ActivityFeed3 = (props: ActivityFeed3Props) => {
-  const { notifications = [], now, onRead, status, timeZone = 'UTC', title } = props
+  const {
+    notifications = [],
+    now,
+    onRead,
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const [filter, setFilter] = useState<Filter>('all')
   const [markedRead, setMarkedRead] = useState<ReadonlySet<string>>(() => new Set())
   const state = getBlockState(status, notifications)
@@ -129,7 +136,7 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
   ]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

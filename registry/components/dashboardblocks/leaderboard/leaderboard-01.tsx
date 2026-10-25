@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -24,7 +24,7 @@ interface PageStat {
   visitors: number
 }
 
-interface Leaderboard1Props {
+interface Leaderboard1Props extends BlockStateProps {
   /** Defaults to a sentence about the visitors and the top page's share. */
   description?: string
   /** Heads the column of names. @default 'Page' */
@@ -32,7 +32,6 @@ interface Leaderboard1Props {
   onViewAll?: () => void
   /** Leave out, or pass none, to show the empty state. */
   pages?: PageStat[]
-  status?: BlockStatus
   title: string
   /** Heads the column of counts. @default 'Visitors' */
   valueHeader?: string
@@ -65,6 +64,7 @@ const Leaderboard1 = (props: Leaderboard1Props) => {
     labelHeader = 'Page',
     onViewAll,
     pages = [],
+    errorMessage,
     status,
     title,
     valueHeader = 'Visitors',
@@ -75,7 +75,7 @@ const Leaderboard1 = (props: Leaderboard1Props) => {
   const max = Math.max(...pages.map((page) => page.visitors), 1)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

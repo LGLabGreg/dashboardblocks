@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -31,13 +31,12 @@ interface OwnerPipeline {
   quota: number
 }
 
-interface Pipeline4Props {
+interface Pipeline4Props extends BlockStateProps {
   /** Defaults to a sentence counting who is on course for quota. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   owners?: OwnerPipeline[]
   stages: PipelineStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -103,7 +102,7 @@ const exampleProps: Pipeline4Props = {
 const compact = (value: number) => formatCurrency(value, { compact: true })
 
 const Pipeline4 = (props: Pipeline4Props) => {
-  const { owners = [], stages, status, title } = props
+  const { owners = [], stages, errorMessage, status, title } = props
   const state = getBlockState(status, owners)
   const ready = state === undefined || state === 'loading'
   const probability = new Map(stages.map((stage) => [stage.id, stage.probability ?? 0]))
@@ -122,7 +121,7 @@ const Pipeline4 = (props: Pipeline4Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

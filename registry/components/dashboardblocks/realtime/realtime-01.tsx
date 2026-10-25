@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -29,7 +29,7 @@ interface ActivePage {
   users: number
 }
 
-interface Realtime1Props {
+interface Realtime1Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   activeUsers?: number
   description: string
@@ -37,7 +37,6 @@ interface Realtime1Props {
   pageViews?: number[]
   pages?: ActivePage[]
   simulate?: boolean
-  status?: BlockStatus
   title: string
 }
 
@@ -68,6 +67,7 @@ const Realtime1 = (props: Realtime1Props) => {
     pageViews = noViews,
     pages: loadedPages = noPages,
     simulate = false,
+    errorMessage,
     status,
     title,
   } = props
@@ -111,7 +111,7 @@ const Realtime1 = (props: Realtime1Props) => {
   const top = Math.max(1, ...pages.map((page) => page.users))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

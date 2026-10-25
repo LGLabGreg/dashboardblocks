@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -31,10 +31,9 @@ interface Warehouse {
   stored: number
 }
 
-interface Inventory2Props {
+interface Inventory2Props extends BlockStateProps {
   /** Defaults to a sentence with the units stored and the warehouses filling up. */
   description?: string
-  status?: BlockStatus
   title: string
   /** Leave out, or pass none, to show the empty state. */
   warehouses?: Warehouse[]
@@ -87,7 +86,7 @@ const FILL: Record<Fill, { color: string; label: string; tone: StatusTone }> = {
 const percent = (ratio: number) => formatPercent(ratio, { maximumFractionDigits: 0 })
 
 const Inventory2 = (props: Inventory2Props) => {
-  const { status, title, warehouses = [], warnAt = 0.85 } = props
+  const { errorMessage, status, title, warehouses = [], warnAt = 0.85 } = props
   const state = getBlockState(status, warehouses)
   const stored = warehouses.reduce((sum, warehouse) => sum + warehouse.stored, 0)
   const capacity = warehouses.reduce((sum, warehouse) => sum + warehouse.capacity, 0)
@@ -105,7 +104,7 @@ const Inventory2 = (props: Inventory2Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

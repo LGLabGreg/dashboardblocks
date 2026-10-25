@@ -4,7 +4,7 @@ import {
   BlockMessage,
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { FilterChip } from '@/registry/components/dashboardblocks/dashboard-header'
@@ -43,11 +43,10 @@ interface Filter {
   value: string
 }
 
-interface States3Props {
+interface States3Props extends BlockStateProps {
   defaultFilters: Filter[]
   /** Leave out, or pass none, to show the empty state. */
   orders?: Order[]
-  status?: BlockStatus
   title: string
 }
 
@@ -114,7 +113,7 @@ function describe(shown: number, total: number, filters: Filter[]) {
 }
 
 const States3 = (props: States3Props) => {
-  const { defaultFilters, orders = [], status, title } = props
+  const { defaultFilters, orders = [], errorMessage, status, title } = props
   const [filters, setFilters] = useState(defaultFilters)
   const state = getBlockState(status, orders)
   const rows = orders.filter((order) =>
@@ -122,7 +121,7 @@ const States3 = (props: States3Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

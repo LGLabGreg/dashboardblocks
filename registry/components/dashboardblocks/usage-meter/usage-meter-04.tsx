@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
@@ -23,7 +23,7 @@ import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
-interface UsageMeter4Props {
+interface UsageMeter4Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   balance?: number
   /** Credits used each day, oldest first; the last is today. */
@@ -32,7 +32,6 @@ interface UsageMeter4Props {
   now: Date
   onTopUp?: () => void
   purchased: number
-  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -67,6 +66,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
     now,
     onTopUp,
     purchased,
+    errorMessage,
     status: blockStatus,
     timeZone = 'UTC',
     title,
@@ -92,7 +92,7 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
   const latest = days[days.length - 1]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3 border-t pt-3'>
         <header className='flex min-h-8 items-center justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

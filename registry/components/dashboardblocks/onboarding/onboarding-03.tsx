@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Link } from '@/registry/components/dashboardblocks/link'
@@ -38,13 +38,12 @@ interface DataSource {
   popular?: boolean
 }
 
-interface Onboarding3Props {
+interface Onboarding3Props extends BlockStateProps {
   onConnect?: (id: string) => Promise<void>
   onContinue?: (id: string) => void
   requestHref: string
   /** Leave out, or pass none, to show the empty state. */
   sources?: DataSource[]
-  status?: BlockStatus
 }
 
 const exampleProps: Onboarding3Props = {
@@ -139,6 +138,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
     onContinue,
     requestHref,
     sources = [],
+    errorMessage,
     status: blockStatus,
   } = props
   const blockState = getBlockState(blockStatus, sources)
@@ -225,7 +225,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
           : ''
 
   return (
-    <BlockStateProvider state={blockState}>
+    <BlockStateProvider errorMessage={errorMessage} state={blockState}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 id={`${id}-title`} className='font-semibold tracking-tight'>

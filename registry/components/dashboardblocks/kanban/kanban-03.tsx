@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -35,7 +35,7 @@ interface Ticket extends KanbanItem {
   slaDueAt: Date
 }
 
-interface Kanban3Props {
+interface Kanban3Props extends BlockStateProps {
   columns: KanbanColumnDef[]
   /** Pass a fixed date, so SLA times render the same on the server and in the browser. */
   now: Date
@@ -43,7 +43,6 @@ interface Kanban3Props {
   onMove?: (id: string, column: string, index: number) => void
   pausedColumns: string[]
   slaHours: number
-  status?: BlockStatus
   /** Leave out, or pass none, to show the empty state. */
   tickets?: Ticket[]
   title: string
@@ -238,6 +237,7 @@ const Kanban3 = (props: Kanban3Props) => {
     onMove,
     pausedColumns,
     slaHours,
+    errorMessage,
     status,
     tickets: loadedTickets = noTickets,
     title,
@@ -281,7 +281,7 @@ const Kanban3 = (props: Kanban3Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

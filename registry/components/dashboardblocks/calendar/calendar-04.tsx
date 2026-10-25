@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -30,7 +30,7 @@ interface Room {
   seats: number
 }
 
-interface Calendar4Props {
+interface Calendar4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   bookings?: CalendarEvent[]
   endHour?: number
@@ -38,7 +38,6 @@ interface Calendar4Props {
   onSelectBooking?: (booking: CalendarEvent) => void
   rooms: Room[]
   startHour?: number
-  status?: BlockStatus
   teams: { color: string; name: string }[]
   /** @default 'UTC' */
   timeZone?: string
@@ -246,6 +245,7 @@ const Calendar4 = (props: Calendar4Props) => {
     onSelectBooking,
     rooms,
     startHour = 7,
+    errorMessage,
     status: blockStatus,
     teams,
     timeZone = 'UTC',
@@ -297,7 +297,7 @@ const Calendar4 = (props: Calendar4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={formatDate(day, 'weekday-long-day')}

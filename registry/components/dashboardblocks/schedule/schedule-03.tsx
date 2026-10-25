@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -27,12 +27,11 @@ interface Deadline {
   title: string
 }
 
-interface Schedule3Props {
+interface Schedule3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   deadlines?: Deadline[]
   now: Date
   soonDays?: number
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -92,7 +91,15 @@ const exampleProps: Schedule3Props = {
 }
 
 const Schedule3 = (props: Schedule3Props) => {
-  const { deadlines = [], now, soonDays = 7, status, timeZone = 'UTC', title } = props
+  const {
+    deadlines = [],
+    now,
+    soonDays = 7,
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const rows = [...deadlines]
     .sort((a, b) => a.due.getTime() - b.due.getTime())
     .map((deadline) => ({
@@ -107,7 +114,10 @@ const Schedule3 = (props: Schedule3Props) => {
   const hasAmounts = rows.some((row) => row.amount !== undefined)
 
   return (
-    <BlockStateProvider state={getBlockState(status, deadlines)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, deadlines)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

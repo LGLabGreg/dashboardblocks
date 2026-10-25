@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyBarChart } from '@/registry/components/dashboardblocks/chart'
@@ -24,7 +24,7 @@ interface DailyValue {
   value: number
 }
 
-interface BarChartKPI1Props {
+interface BarChartKPI1Props extends BlockStateProps {
   comparison: string
   /** Leave out, or pass no days, to show the empty state. */
   data?: DailyValue[]
@@ -32,7 +32,6 @@ interface BarChartKPI1Props {
   /** @default 144 */
   height?: number
   previous?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -56,7 +55,16 @@ const compactFormat = (format: KPIFormat = 'number'): KPIFormat =>
   format === 'currency' ? 'currency-compact' : format === 'number' ? 'compact' : format
 
 const BarChartKPI1 = (props: BarChartKPI1Props) => {
-  const { comparison, data = [], format, height = 144, previous, status, title } = props
+  const {
+    comparison,
+    data = [],
+    format,
+    height = 144,
+    previous,
+    errorMessage,
+    status,
+    title,
+  } = props
   const total = data.reduce((sum, point) => sum + point.value, 0)
   const formatter = getKPIFormatter(format)
   const best = data.reduce(
@@ -65,7 +73,7 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
   )
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

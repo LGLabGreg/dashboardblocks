@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -23,10 +23,9 @@ interface TaskCount {
   status: TaskStatus
 }
 
-interface ProgressKPI2Props {
+interface ProgressKPI2Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   counts?: TaskCount[]
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -53,7 +52,7 @@ const exampleProps: ProgressKPI2Props = {
 }
 
 const ProgressKPI2 = (props: ProgressKPI2Props) => {
-  const { counts = [], status, title, unit } = props
+  const { counts = [], errorMessage, status, title, unit } = props
   const state = getBlockState(status, counts)
   const sorted = statusOrder.flatMap((taskStatus) =>
     counts.filter((item) => item.status === taskStatus),
@@ -63,7 +62,7 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
   const share = (count: number) => (total > 0 ? count / total : 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

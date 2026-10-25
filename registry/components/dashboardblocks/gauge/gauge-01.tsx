@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   Skeleton,
   SkeletonText,
   getBlockState,
@@ -23,13 +23,12 @@ import {
 
 import { cn } from '@/lib/utils'
 
-interface Gauge1Props {
+interface Gauge1Props extends BlockStateProps {
   /** Follows the response count in the description, such as `over the last 90 days`. */
   period: string
   previous?: number
   /** Leave out to show the empty state. */
   responses?: NpsResponses
-  status?: BlockStatus
   title: string
 }
 
@@ -55,13 +54,13 @@ const GROUPS = [
 ] as const
 
 const Gauge1 = (props: Gauge1Props) => {
-  const { period, previous, responses, status, title } = props
+  const { period, previous, responses, errorMessage, status, title } = props
   const state = getBlockState(status, responses)
   const counts = responses ?? { detractors: 0, passives: 0, promoters: 0 }
   const nps = getNps(counts)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

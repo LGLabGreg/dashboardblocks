@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { FlowPathSteps } from '@/registry/components/dashboardblocks/flow'
@@ -16,12 +16,11 @@ interface FlowPath {
   steps: string[]
 }
 
-interface Flow4Props {
+interface Flow4Props extends BlockStateProps {
   description: string
   goal: string
   /** Leave out, or pass none, to show the empty state. */
   paths?: FlowPath[]
-  status?: BlockStatus
   title: string
   /** Everyone, including paths not listed. @default the listed paths' total */
   total?: number
@@ -46,7 +45,15 @@ const exampleProps: Flow4Props = {
 }
 
 const Flow4 = (props: Flow4Props) => {
-  const { description, goal, paths = [], status, title, unit = 'sessions' } = props
+  const {
+    description,
+    goal,
+    paths = [],
+    errorMessage,
+    status,
+    title,
+    unit = 'sessions',
+  } = props
   const listed = paths.reduce((sum, path) => sum + path.count, 0)
   const { total = listed } = props
   const widest = Math.max(1, ...paths.map((path) => path.count))
@@ -60,7 +67,7 @@ const Flow4 = (props: Flow4Props) => {
   )
 
   return (
-    <BlockStateProvider state={getBlockState(status, paths)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, paths)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

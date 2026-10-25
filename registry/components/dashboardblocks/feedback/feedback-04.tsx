@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -43,11 +43,10 @@ interface CsatPeriod {
   satisfied: number
 }
 
-interface Feedback4Props {
+interface Feedback4Props extends BlockStateProps {
   description: string
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   periods?: CsatPeriod[]
-  status?: BlockStatus
   /** The CSAT to stay above, 0–1. */
   target?: number
   title: string
@@ -90,7 +89,7 @@ const exactPercent = (value: number) =>
   formatPercent(value, { maximumFractionDigits: 1, minimumFractionDigits: 1 })
 
 const Feedback4 = (props: Feedback4Props) => {
-  const { description, periods = [], status, target, title } = props
+  const { description, periods = [], errorMessage, status, target, title } = props
   const gradient = useChartId()
   const state = getBlockState(status, periods)
   const rows = periods.map((period) => ({
@@ -111,7 +110,7 @@ const Feedback4 = (props: Feedback4Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -7,7 +7,7 @@ import {
 import {
   BlockBusy,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanel6 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-06'
 import {
@@ -38,9 +38,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-interface Dashboard5Props {
+interface Dashboard5Props extends BlockStateProps {
   empty?: boolean
-  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -530,7 +529,7 @@ const THROUGHPUT = Array.from({ length: 60 }, (_, index) => {
 })
 
 const Dashboard5 = (props: Dashboard5Props) => {
-  const { empty = false, status, title, today } = props
+  const { empty = false, errorMessage, status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '30d', service: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -547,7 +546,10 @@ const Dashboard5 = (props: Dashboard5Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider state={status ?? (empty ? 'empty' : undefined)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={status ?? (empty ? 'empty' : undefined)}
+    >
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3'>
           <div className='flex flex-col gap-2'>
@@ -596,6 +598,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
           </div>
         </header>
         <Realtime2
+          errorMessage={errorMessage}
           status={status}
           description='Requests per second across every service, over the last 5 minutes.'
           samples={empty ? [] : THROUGHPUT}
@@ -609,6 +612,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
         >
           <div className='@4xl:col-span-3'>
             <Deployments3
+              errorMessage={errorMessage}
               status={status}
               comparison={
                 displayedQuery.preset === 'today'
@@ -622,6 +626,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
           </div>
           <div className='@4xl:col-span-2'>
             <ChartPanel6
+              errorMessage={errorMessage}
               status={status}
               comparison={
                 displayedQuery.preset === 'today'
@@ -644,6 +649,7 @@ const Dashboard5 = (props: Dashboard5Props) => {
             />
           </div>
           <Alerts1
+            errorMessage={errorMessage}
             status={status}
             alerts={empty ? [] : data.alerts}
             now={data.now}
@@ -651,18 +657,21 @@ const Dashboard5 = (props: Dashboard5Props) => {
           />
           <div className='@4xl:col-span-2'>
             <Status2
+              errorMessage={errorMessage}
               status={status}
               services={empty ? [] : data.uptime}
               title='Uptime, last 90 days'
             />
           </div>
           <Deployments4
+            errorMessage={errorMessage}
             status={status}
             pipelines={empty ? [] : data.pipelines}
             title='Build health'
           />
           <div className='@4xl:col-span-3'>
             <Deployments1
+              errorMessage={errorMessage}
               status={status}
               deployments={empty ? [] : data.deployments}
               now={data.now}

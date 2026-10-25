@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -35,12 +35,11 @@ interface Region {
   status: StatusLevel
 }
 
-interface Status4Props {
+interface Status4Props extends BlockStateProps {
   /** Defaults to a sentence counting the healthy regions and naming the worst. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   regions?: Region[]
-  status?: BlockStatus
   title: string
 }
 
@@ -107,13 +106,13 @@ const summarize = (regions: Region[]) => {
 }
 
 const Status4 = (props: Status4Props) => {
-  const { regions = [], status, title } = props
+  const { regions = [], errorMessage, status, title } = props
   const { description = summarize(regions) } = props
   const state = getBlockState(status, regions)
   const slowest = Math.max(...regions.map((region) => region.latency), 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

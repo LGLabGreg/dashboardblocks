@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
@@ -34,14 +34,13 @@ interface ComparedMetric {
   previous: number
 }
 
-interface Comparison1Props {
+interface Comparison1Props extends BlockStateProps {
   currentLabel: string
   /** Defaults to a sentence saying how many metrics improved. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   metrics?: ComparedMetric[]
   previousLabel: string
-  status?: BlockStatus
   title: string
 }
 
@@ -100,11 +99,14 @@ function summarize(metrics: ComparedMetric[], previousLabel: string) {
 }
 
 const Comparison1 = (props: Comparison1Props) => {
-  const { currentLabel, metrics = [], previousLabel, status, title } = props
+  const { currentLabel, metrics = [], previousLabel, errorMessage, status, title } = props
   const { description = summarize(metrics, previousLabel) } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, metrics)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, metrics)}
+    >
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -31,11 +31,10 @@ interface InsightItem {
   topic: string
 }
 
-interface Insights1Props {
+interface Insights1Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   insights?: InsightItem[]
-  status?: BlockStatus
   title: string
 }
 
@@ -104,10 +103,13 @@ const exampleProps: Insights1Props = {
 }
 
 const Insights1 = (props: Insights1Props) => {
-  const { description, insights = [], status, title } = props
+  const { description, insights = [], errorMessage, status, title } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, insights)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, insights)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -19,14 +19,13 @@ interface RetentionMilestone {
   previous: number
 }
 
-interface Retention3Props {
+interface Retention3Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   milestones?: RetentionMilestone[]
   /** How many milestones to sketch while loading. @default 3 */
   placeholders?: number
   previousLabel?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -47,13 +46,14 @@ const Retention3 = (props: Retention3Props) => {
     milestones = [],
     placeholders = 3,
     previousLabel = 'the cohort before',
+    errorMessage,
     status,
     title,
   } = props
   const state = getBlockState(status, milestones)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

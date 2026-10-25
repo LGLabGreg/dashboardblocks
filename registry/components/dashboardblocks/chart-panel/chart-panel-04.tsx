@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -46,14 +46,13 @@ interface MonthValue {
   value: number
 }
 
-interface ChartPanel4Props {
+interface ChartPanel4Props extends BlockStateProps {
   /** Leave out, or pass no months, to show the empty state. */
   data?: MonthValue[]
   description: string
   formatter?: ChartValueFormatter
   /** A target drawn as a line across the bars, and said in words against the latest value. */
   goal?: { label: string; value: number }
-  status?: BlockStatus
   title: string
 }
 
@@ -87,6 +86,7 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
     description,
     formatter = (value) => formatNumber(value),
     goal,
+    errorMessage,
     status,
     title,
   } = props
@@ -96,7 +96,7 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
   const gap = latest && goal ? goal.value - latest.value : 0
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

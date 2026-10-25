@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { HeatmapLegend } from '@/registry/components/dashboardblocks/heatmap'
@@ -15,12 +15,11 @@ import {
 } from '@/registry/components/dashboardblocks/retention'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Heatmap2Props {
+interface Heatmap2Props extends BlockStateProps {
   /** Oldest first, one per signup week. Leave out, or pass none, to show the empty state. */
   cohorts?: RetentionCohort[]
   /** Defaults to a sentence about week 1 retention. */
   description?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -47,7 +46,7 @@ const exampleProps: Heatmap2Props = {
 }
 
 const Heatmap2 = (props: Heatmap2Props) => {
-  const { cohorts = [], status, title } = props
+  const { cohorts = [], errorMessage, status, title } = props
   const state = getBlockState(status, cohorts)
   const averages = getAverageRetention(cohorts)
   const firstWeek = averages[1]
@@ -58,7 +57,7 @@ const Heatmap2 = (props: Heatmap2Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

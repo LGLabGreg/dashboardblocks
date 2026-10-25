@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,7 +41,7 @@ interface WebhookEndpoint {
   url: string
 }
 
-interface Settings5Props {
+interface Settings5Props extends BlockStateProps {
   /** @default a sentence counting the endpoints and any failing ones */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -50,7 +50,6 @@ interface Settings5Props {
   now: Date
   onAdd?: () => void
   onEnabledChange?: (id: string, enabled: boolean) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -182,7 +181,7 @@ function DeliveryChart({
 }
 
 const Settings5 = (props: Settings5Props) => {
-  const { now, onAdd, onEnabledChange, status: blockStatus, title } = props
+  const { now, onAdd, onEnabledChange, errorMessage, status: blockStatus, title } = props
   const [endpoints, setEndpoints] = useState(props.endpoints ?? [])
   const failing = endpoints.filter(
     (endpoint) => getEndpointStatus(endpoint) === 'error',
@@ -192,7 +191,10 @@ const Settings5 = (props: Settings5Props) => {
     `${endpoints.length} ${endpoints.length === 1 ? 'endpoint gets' : 'endpoints get'} a JSON POST when their events happen${failing > 0 ? `, and ${failing} ${failing === 1 ? 'is' : 'are'} failing` : ''}.`
 
   return (
-    <BlockStateProvider state={getBlockState(blockStatus, endpoints)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(blockStatus, endpoints)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

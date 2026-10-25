@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Link } from '@/registry/components/dashboardblocks/link'
@@ -20,12 +20,11 @@ import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 
-interface Notifications1Props {
+interface Notifications1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   notifications?: AppNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   title: string
   viewAllHref: string
 }
@@ -114,7 +113,14 @@ const exampleProps: Notifications1Props = {
 }
 
 const Notifications1 = (props: Notifications1Props) => {
-  const { notifications: loaded = [], now, status, title, viewAllHref } = props
+  const {
+    notifications: loaded = [],
+    now,
+    errorMessage,
+    status,
+    title,
+    viewAllHref,
+  } = props
   const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set())
   const state = getBlockState(status, loaded)
   const notifications = loaded.map((notification) =>
@@ -129,7 +135,7 @@ const Notifications1 = (props: Notifications1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex items-center justify-between gap-3'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <NotificationBell unreadCount={unread}>

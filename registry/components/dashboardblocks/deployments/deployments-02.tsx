@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -26,7 +26,7 @@ interface Environment {
   version: string
 }
 
-interface Deployments2Props {
+interface Deployments2Props extends BlockStateProps {
   /** How many commits each environment is ahead of the next, in order. */
   ahead?: number[]
   /** Defaults to a sentence naming what the last environment runs and what is waiting. */
@@ -35,7 +35,6 @@ interface Deployments2Props {
   environments?: Environment[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -87,12 +86,12 @@ const summarize = (environments: Environment[], ahead: number[]) => {
 }
 
 const Deployments2 = (props: Deployments2Props) => {
-  const { ahead = [], environments = [], now, status, title } = props
+  const { ahead = [], environments = [], now, errorMessage, status, title } = props
   const { description = summarize(environments, ahead) } = props
   const state = getBlockState(status, environments)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

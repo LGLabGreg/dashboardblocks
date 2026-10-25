@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -17,12 +17,11 @@ import {
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
-interface Schedule1Props {
+interface Schedule1Props extends BlockStateProps {
   days?: number
   /** Leave out, or pass none, to show the empty state. */
   events?: ScheduleEvent[]
   now: Date
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -116,7 +115,15 @@ const exampleProps: Schedule1Props = {
 }
 
 const Schedule1 = (props: Schedule1Props) => {
-  const { days = 7, events = [], now, status, timeZone = 'UTC', title } = props
+  const {
+    days = 7,
+    events = [],
+    now,
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const upcoming = events.filter((event) => {
     const offset = getDayOffset(event.start, now, timeZone)
     return offset >= 0 && offset < days
@@ -128,7 +135,7 @@ const Schedule1 = (props: Schedule1Props) => {
     .sort((a, b) => a.start.getTime() - b.start.getTime())[0]
 
   return (
-    <BlockStateProvider state={getBlockState(status, events)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, events)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

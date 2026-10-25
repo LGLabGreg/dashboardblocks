@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -20,10 +20,9 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Heatmap1Props {
+interface Heatmap1Props extends BlockStateProps {
   /** Defaults to a sentence about the busiest time. */
   description?: string
-  status?: BlockStatus
   title: string
   unit: string
   /** Seven rows, Monday first, of 24 hourly values. Leave out to show the empty state. */
@@ -60,7 +59,7 @@ const hourRange = (hour: number) =>
   `${HOURS[hour]}:00–${String((hour + 1) % 24).padStart(2, '0')}:00`
 
 const Heatmap1 = (props: Heatmap1Props) => {
-  const { status, title, unit, values = [] } = props
+  const { errorMessage, status, title, unit, values = [] } = props
   const peak = getPeak(values)
   const byHour = getColumnTotals(values)
   const peakHour = byHour.reduce(
@@ -80,7 +79,7 @@ const Heatmap1 = (props: Heatmap1Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, peak)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, peak)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

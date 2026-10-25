@@ -29,7 +29,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -60,7 +60,7 @@ interface Account {
   plan: string
 }
 
-interface AiAssistant1Props {
+interface AiAssistant1Props extends BlockStateProps {
   accounts?: Account[]
   /**
    * The chat the panel runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies.
@@ -78,7 +78,6 @@ interface AiAssistant1Props {
   messages?: AIMessage[]
   /** Leave out, or pass none, to show the empty state. */
   metrics?: Metric[]
-  status?: BlockStatus
   suggestions: SuggestedPrompt[]
   title: string
 }
@@ -289,6 +288,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     historyLabels,
     messages: initialMessages = [],
     metrics = [],
+    errorMessage,
     status: blockStatus,
     suggestions,
     title,
@@ -340,7 +340,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <div className='bg-background @container flex h-svh'>
         <div
           className={

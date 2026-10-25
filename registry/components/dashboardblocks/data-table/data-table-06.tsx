@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -45,7 +45,7 @@ interface CustomerRow {
   status: CustomerStatus
 }
 
-interface DataTable6Props {
+interface DataTable6Props extends BlockStateProps {
   /** Defaults to a sentence counting the accounts and what they pay. */
   description?: string
   onEmail?: (rows: CustomerRow[]) => void
@@ -53,7 +53,6 @@ interface DataTable6Props {
   pageSize?: number
   /** Leave out, or pass none, to show the empty state. */
   rows?: CustomerRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -245,6 +244,7 @@ const DataTable6 = (props: DataTable6Props) => {
     onExport = downloadCsv,
     pageSize = 8,
     rows = noRows,
+    errorMessage,
     status,
     title,
   } = props
@@ -262,7 +262,7 @@ const DataTable6 = (props: DataTable6Props) => {
   const selected = table.getSelectedRowModel().rows.map((row) => row.original)
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

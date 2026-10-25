@@ -7,7 +7,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -44,7 +44,7 @@ interface Refund {
   reason: string
 }
 
-interface Invoice2Props {
+interface Invoice2Props extends BlockStateProps {
   brand: { name: string; website: string }
   /** @default 'USD' */
   currency?: string
@@ -62,7 +62,6 @@ interface Invoice2Props {
   refunds: Refund[]
   shipping?: number
   shippingMethod: string
-  status?: BlockStatus
   supportEmail: string
   taxRate?: number
 }
@@ -151,6 +150,7 @@ const Invoice2 = (props: Invoice2Props) => {
     refunds,
     shipping,
     shippingMethod,
+    errorMessage,
     status,
     supportEmail,
     taxRate,
@@ -193,7 +193,7 @@ const Invoice2 = (props: Invoice2Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <DocumentLayout className='max-w-md'>
         <DocumentToolbar
           description={

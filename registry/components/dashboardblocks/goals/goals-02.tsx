@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -23,13 +23,12 @@ interface Goal {
   target: number
 }
 
-interface Goals2Props {
+interface Goals2Props extends BlockStateProps {
   description: string
   /** Share of the period that has passed, 0–1. */
   elapsed: number
   /** Leave out, or pass none, to show the empty state. */
   goals?: Goal[]
-  status?: BlockStatus
   title: string
 }
 
@@ -68,7 +67,7 @@ const exampleProps: Goals2Props = {
 }
 
 const Goals2 = (props: Goals2Props) => {
-  const { description, elapsed, goals = [], status, title } = props
+  const { description, elapsed, goals = [], errorMessage, status, title } = props
   const rows = goals.map((goal) => ({
     format:
       goal.formatter ??
@@ -79,7 +78,7 @@ const Goals2 = (props: Goals2Props) => {
   const onPace = rows.filter((row) => row.pace.status !== 'behind').length
 
   return (
-    <BlockStateProvider state={getBlockState(status, goals)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, goals)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

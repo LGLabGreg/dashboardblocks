@@ -7,10 +7,12 @@ export const examples: Registry['items'] = [
     name: 'funnel-01',
     type: 'registry:component',
     registryDependencies: [
+      'button',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('funnel'),
       registryUrl('kpi'),
+      registryUrl('link'),
       registryUrl('table'),
     ],
     files: [

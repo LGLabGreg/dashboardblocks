@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { InlineEditField, isEmail } from '@/registry/components/dashboardblocks/forms'
@@ -17,11 +17,10 @@ interface CustomerDetails {
   website: string
 }
 
-interface Forms4Props {
+interface Forms4Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   defaultValues?: CustomerDetails
   onSave?: (field: keyof CustomerDetails, value: string) => Promise<string | void>
-  status?: BlockStatus
   title: string
 }
 
@@ -98,11 +97,14 @@ function Forms4Content(props: Forms4Props & { defaultValues: CustomerDetails }) 
 }
 
 const Forms4 = (props: Forms4Props) => {
-  const { defaultValues, status, title } = props
+  const { defaultValues, errorMessage, status, title } = props
   const ready = !status && defaultValues !== undefined
 
   return (
-    <BlockStateProvider state={getBlockState(status, defaultValues)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, defaultValues)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

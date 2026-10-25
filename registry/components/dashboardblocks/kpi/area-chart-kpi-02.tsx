@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
@@ -24,7 +24,7 @@ interface DailyValue {
   value: number
 }
 
-interface AreaChartKPI2Props {
+interface AreaChartKPI2Props extends BlockStateProps {
   comparison: string
   /** Leave out, or pass no days, to show the empty state. */
   data?: DailyValue[]
@@ -32,7 +32,6 @@ interface AreaChartKPI2Props {
   /** @default 88 */
   height?: number
   previous?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -53,7 +52,16 @@ const exampleProps: AreaChartKPI2Props = {
 }
 
 const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
-  const { comparison, data = [], format, height = 88, previous, status, title } = props
+  const {
+    comparison,
+    data = [],
+    format,
+    height = 88,
+    previous,
+    errorMessage,
+    status,
+    title,
+  } = props
   const formatter = getKPIFormatter(format)
   const total = data.reduce((sum, point) => sum + point.value, 0)
   const peak = data.reduce<DailyValue | undefined>(
@@ -62,7 +70,7 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
   )
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <KPI className='relative overflow-hidden'>
         <KPIContent className='gap-1 pb-20'>
           <KPITitle className='relative z-10'>{title}</KPITitle>

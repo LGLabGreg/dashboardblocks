@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -44,7 +44,7 @@ type NotificationPreferences = Record<string, string[]>
 
 type NotificationChangeResult = void | { status: 'error'; message: string }
 
-interface Settings3Props {
+interface Settings3Props extends BlockStateProps {
   channels: NotificationChannel[]
   description: string
   /** Leave out, or pass none, to show the empty state. */
@@ -54,7 +54,6 @@ interface Settings3Props {
     preferences: NotificationPreferences,
   ) => NotificationChangeResult | Promise<NotificationChangeResult>
   preferences?: NotificationPreferences
-  status?: BlockStatus
   title: string
 }
 
@@ -143,7 +142,15 @@ function revert(
 }
 
 const Settings3 = (props: Settings3Props) => {
-  const { channels, description, groups = [], onChange, status, title } = props
+  const {
+    channels,
+    description,
+    groups = [],
+    onChange,
+    errorMessage,
+    status,
+    title,
+  } = props
   const [preferences, setPreferences] = useState(props.preferences ?? {})
   const [error, setError] = useState<string | null>(null)
   const [said, setSaid] = useState<{ id: number; text: string }[]>([])
@@ -206,7 +213,7 @@ const Settings3 = (props: Settings3Props) => {
     )
 
   return (
-    <BlockStateProvider state={getBlockState(status, groups)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, groups)}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

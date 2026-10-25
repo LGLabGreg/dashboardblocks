@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
@@ -25,7 +25,7 @@ interface DailyProfit {
   revenue: number
 }
 
-interface AreaChartKPI1Props {
+interface AreaChartKPI1Props extends BlockStateProps {
   comparison: string
   /** Leave out, or pass no days, to show the empty state. */
   data?: DailyProfit[]
@@ -33,7 +33,6 @@ interface AreaChartKPI1Props {
   /** @default 112 */
   height?: number
   previous?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -54,7 +53,16 @@ const exampleProps: AreaChartKPI1Props = {
 }
 
 const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
-  const { comparison, data = [], format, height = 112, previous, status, title } = props
+  const {
+    comparison,
+    data = [],
+    format,
+    height = 112,
+    previous,
+    errorMessage,
+    status,
+    title,
+  } = props
   const formatter = getKPIFormatter(format)
   const profit = data.reduce((sum, point) => sum + point.profit, 0)
   const revenue = data.reduce((sum, point) => sum + point.revenue, 0)
@@ -66,7 +74,7 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
   )
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

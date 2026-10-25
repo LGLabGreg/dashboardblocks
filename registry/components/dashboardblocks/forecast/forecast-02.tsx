@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -57,7 +57,7 @@ import {
   YAxis,
 } from 'recharts'
 
-interface Forecast2Props {
+interface Forecast2Props extends BlockStateProps {
   /** Running totals so far, oldest first, one step apart. Leave out, or pass none, to show the empty state. */
   actuals?: number[]
   deadline: Date
@@ -67,7 +67,6 @@ interface Forecast2Props {
   level?: ConfidenceLevel
   metric: string
   now: Date
-  status?: BlockStatus
   stepDays?: number
   target: number
   title: string
@@ -99,6 +98,7 @@ const Forecast2 = (props: Forecast2Props) => {
     level = 0.8,
     metric,
     now,
+    errorMessage,
     status: blockStatus,
     stepDays = 7,
     target,
@@ -152,7 +152,7 @@ const Forecast2 = (props: Forecast2Props) => {
     .map((row) => row.date)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-4'>
           <div className='flex flex-col gap-0.5'>

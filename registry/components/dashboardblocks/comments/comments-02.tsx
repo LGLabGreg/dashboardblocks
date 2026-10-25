@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -25,7 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type Tab = 'write' | 'preview'
 
-interface Comments2Props {
+interface Comments2Props extends BlockStateProps {
   currentUser: CommentAuthor
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
@@ -34,7 +34,6 @@ interface Comments2Props {
   onSubmit?: (body: string, options: { mentions: string[] }) => Promise<void>
   people: CommentAuthor[]
   project: string
-  status?: BlockStatus
   title: string
   /** Newest first. Leave out, or pass none, to show the empty state. */
   updates?: ThreadComment[]
@@ -99,6 +98,7 @@ const Comments2 = (props: Comments2Props) => {
     onSubmit = saveUpdate,
     people,
     project,
+    errorMessage,
     status,
     title,
     updates: initialUpdates = noUpdates,
@@ -162,7 +162,7 @@ const Comments2 = (props: Comments2Props) => {
     )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

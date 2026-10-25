@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -14,6 +14,7 @@ import {
   getFunnelSteps,
 } from '@/registry/components/dashboardblocks/funnel'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   DataTable,
   DataTableBody,
@@ -23,19 +24,26 @@ import {
   DataTableRow,
   DataTableRowHead,
 } from '@/registry/components/dashboardblocks/table'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment } from 'react'
 
-interface Funnel1Props {
+import { buttonVariants } from '@/components/ui/button'
+
+import { cn } from '@/lib/utils'
+
+interface Funnel1Props extends BlockStateProps {
   description: string
+  /** Where the chart opens in full, such as the explorer it was saved from. */
+  link?: { href: string; label: string }
   /** Leave out, or pass none, to show the empty state. */
   stages?: FunnelStage[]
-  status?: BlockStatus
   title: string
 }
 
 const exampleProps: Funnel1Props = {
   description: 'Visitors to paid customers, last 30 days.',
+  link: { href: '/dashboard/funnels', label: 'Open in Funnels' },
   stages: [
     { label: 'Visited site', value: 48_210 },
     { label: 'Signed up', value: 9_870 },
@@ -47,18 +55,41 @@ const exampleProps: Funnel1Props = {
 }
 
 const Funnel1 = (props: Funnel1Props) => {
-  const { description, stages = [], status, title } = props
+  const { description, errorMessage, link, stages = [], status, title } = props
   const state = getBlockState(status, stages)
   const steps = getFunnelSteps(stages)
   const first = steps[0]
   const last = steps.at(-1)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
+          {link && (
+            <Link
+              href={link.href}
+              className={cn(
+                buttonVariants({ size: 'xs', variant: 'outline' }),
+                'group/open shrink-0',
+              )}
+            >
+              {link.label}
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                className='transition-transform group-hover/open:translate-x-0.5 motion-reduce:transition-none'
+                data-icon='inline-end'
+                aria-hidden
+              />
+            </Link>
+          )}
         </header>
         <dl className='flex flex-col gap-1 border-t pt-4'>
           <dt className='text-muted-foreground text-sm'>Overall conversion</dt>

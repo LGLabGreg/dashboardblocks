@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -25,12 +25,11 @@ interface InboxNotification extends AppNotification {
 
 type Filter = 'all' | 'unread' | 'mentions'
 
-interface Notifications3Props {
+interface Notifications3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   notifications?: InboxNotification[]
   /** Pass a fixed date, so times and day headings render the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -133,7 +132,14 @@ const exampleProps: Notifications3Props = {
 }
 
 const Notifications3 = (props: Notifications3Props) => {
-  const { notifications: loaded = [], now, status, timeZone = 'UTC', title } = props
+  const {
+    notifications: loaded = [],
+    now,
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const [readOverrides, setReadOverrides] = useState<ReadonlyMap<string, boolean>>(
     () => new Map(),
   )
@@ -178,7 +184,7 @@ const Notifications3 = (props: Notifications3Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

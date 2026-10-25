@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -30,7 +30,7 @@ interface ServiceRow {
   status: StatusLevel
 }
 
-interface DataTable4Props {
+interface DataTable4Props extends BlockStateProps {
   /** Defaults to a sentence naming the services with issues. */
   description?: string
   /** An error rate above this, in percent, shows in red. @default 1 */
@@ -39,7 +39,6 @@ interface DataTable4Props {
   latencyLimit?: number
   /** Leave out, or pass none, to show the empty state. */
   rows?: ServiceRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -175,7 +174,14 @@ const getColumns = (latencyLimit: number, errorRateLimit: number) =>
   ])
 
 const DataTable4 = (props: DataTable4Props) => {
-  const { errorRateLimit = 1, latencyLimit = 500, rows = noRows, status, title } = props
+  const {
+    errorRateLimit = 1,
+    latencyLimit = 500,
+    rows = noRows,
+    errorMessage,
+    status,
+    title,
+  } = props
   const { description = summarize(rows) } = props
   const columns = useMemo(
     () => getColumns(latencyLimit, errorRateLimit),
@@ -188,7 +194,7 @@ const DataTable4 = (props: DataTable4Props) => {
   })
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

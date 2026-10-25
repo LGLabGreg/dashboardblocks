@@ -11,7 +11,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,7 +41,7 @@ interface HistoryEvent {
 
 type RecordStatusTone = 'success' | 'warning' | 'danger' | 'info' | 'neutral'
 
-interface ActivityFeed2Props {
+interface ActivityFeed2Props extends BlockStateProps {
   /** What the record is about; a sentence on its history follows it. */
   description: string
   /** Oldest first, so the history reads as a story. Leave out, or pass none, to show the empty state. */
@@ -49,7 +49,6 @@ interface ActivityFeed2Props {
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   recordStatus: { label: string; tone?: RecordStatusTone }
-  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -218,6 +217,7 @@ const ActivityFeed2 = (props: ActivityFeed2Props) => {
     events = [],
     now,
     recordStatus,
+    errorMessage,
     status,
     timeZone = 'UTC',
     title,
@@ -225,7 +225,7 @@ const ActivityFeed2 = (props: ActivityFeed2Props) => {
   const state = getBlockState(status, events)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

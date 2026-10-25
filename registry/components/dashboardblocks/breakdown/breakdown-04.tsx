@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { BreakdownLegend } from '@/registry/components/dashboardblocks/breakdown'
@@ -36,13 +36,12 @@ interface ShareShift {
   previous: number
 }
 
-interface Breakdown4Props {
+interface Breakdown4Props extends BlockStateProps {
   currentLabel: string
   description: string
   /** Leave out, or pass none, to show the empty state. */
   items?: ShareShift[]
   previousLabel: string
-  status?: BlockStatus
   title: string
 }
 
@@ -133,7 +132,15 @@ const ShiftShape = ({
 }
 
 const Breakdown4 = (props: Breakdown4Props) => {
-  const { currentLabel, description, items = [], previousLabel, status, title } = props
+  const {
+    currentLabel,
+    description,
+    items = [],
+    previousLabel,
+    errorMessage,
+    status,
+    title,
+  } = props
   const state = getBlockState(status, items)
   const rows: ShiftRow[] = items.map((item) => ({
     ...item,
@@ -152,7 +159,7 @@ const Breakdown4 = (props: Breakdown4Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

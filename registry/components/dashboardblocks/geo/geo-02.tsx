@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
@@ -26,7 +26,7 @@ interface CountryRow {
   value: number
 }
 
-interface Geo2Props {
+interface Geo2Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   countries?: CountryRow[]
   /** Defaults to a sentence about the leading country's share. */
@@ -36,7 +36,6 @@ interface Geo2Props {
   limit?: number
   /** Names the row that sums the rest; `null` leaves it out. @default 'Other countries' */
   otherLabel?: string | null
-  status?: BlockStatus
   title: string
   total?: number
   /** @default 'sessions' */
@@ -69,6 +68,7 @@ const Geo2 = (props: Geo2Props) => {
     formatter = (value: number) => formatNumber(value),
     limit = 8,
     otherLabel = 'Other countries',
+    errorMessage,
     status,
     title,
     unit = 'sessions',
@@ -101,7 +101,10 @@ const Geo2 = (props: Geo2Props) => {
   ]
 
   return (
-    <BlockStateProvider state={getBlockState(status, countries)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, countries)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -32,7 +32,7 @@ interface AuthenticatorSetup {
   secret: string
 }
 
-interface Security5Props {
+interface Security5Props extends BlockStateProps {
   authenticatorAddedAt?: Date
   description: string
   onAddSecurityKey?: () => void
@@ -49,7 +49,6 @@ interface Security5Props {
   /** Leave out to show the empty state. */
   securityKeys?: SecurityKey[]
   setup: AuthenticatorSetup
-  status?: BlockStatus
   title: string
 }
 
@@ -424,11 +423,11 @@ function TwoFactorSettings(props: Security5Props) {
 }
 
 const Security5 = (props: Security5Props) => {
-  const { securityKeys, status } = props
+  const { securityKeys, errorMessage, status } = props
   const state = getBlockState(status, securityKeys)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <TwoFactorSettings key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

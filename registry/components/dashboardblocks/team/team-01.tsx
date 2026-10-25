@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -22,14 +22,13 @@ interface Member extends Person {
   role: string
 }
 
-interface Team1Props {
+interface Team1Props extends BlockStateProps {
   /** @default a sentence counting who's online and away */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   members?: Member[]
   now: Date
   onInvite?: () => void
-  status?: BlockStatus
   title: string
 }
 
@@ -104,11 +103,11 @@ function summarize(members: Member[]) {
 }
 
 const Team1 = (props: Team1Props) => {
-  const { description, members = [], now, onInvite, status, title } = props
+  const { description, members = [], now, onInvite, errorMessage, status, title } = props
   const state = getBlockState(status, members)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

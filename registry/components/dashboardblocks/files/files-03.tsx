@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -48,7 +48,7 @@ interface StorageKind {
   size: number
 }
 
-interface Files3Props {
+interface Files3Props extends BlockStateProps {
   /** Storage used by kind, largest first. Leave out, or pass none, to show the empty state. */
   breakdown?: StorageKind[]
   /** The biggest files, largest first, to free up space. */
@@ -57,7 +57,6 @@ interface Files3Props {
   limit: number
   onDelete?: (file: StorageFile) => Promise<void>
   plan: string
-  status?: BlockStatus
   title: string
   upgradeHint: string
   upgradeHref: string
@@ -157,6 +156,7 @@ const Files3 = (props: Files3Props) => {
     limit,
     onDelete = deleteFile,
     plan,
+    errorMessage,
     status,
     title,
     upgradeHint,
@@ -243,7 +243,7 @@ const Files3 = (props: Files3Props) => {
   ]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

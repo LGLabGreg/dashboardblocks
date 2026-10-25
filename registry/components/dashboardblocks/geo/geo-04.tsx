@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -31,7 +31,7 @@ interface Region {
   previous: number
 }
 
-interface Geo4Props {
+interface Geo4Props extends BlockStateProps {
   /** Follows the previous value in a sentence, such as `in Q2`. */
   comparison: string
   /** Defaults to a sentence about the fastest-growing region. */
@@ -39,7 +39,6 @@ interface Geo4Props {
   formatter?: (value: number) => string
   /** Leave out, or pass none, to show the empty state. */
   regions?: Region[]
-  status?: BlockStatus
   title: string
 }
 
@@ -88,6 +87,7 @@ const Geo4 = (props: Geo4Props) => {
     comparison,
     formatter = (value: number) => formatNumber(value),
     regions = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -107,7 +107,7 @@ const Geo4 = (props: Geo4Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

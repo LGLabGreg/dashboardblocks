@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -24,6 +24,7 @@ import {
   ChartPanelTable,
 } from '@/registry/components/dashboardblocks/chart-panel'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   RetentionChange,
   type RetentionCohort,
@@ -31,6 +32,7 @@ import {
   getPlateau,
   getRetentionRates,
 } from '@/registry/components/dashboardblocks/retention'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
   Area,
@@ -44,14 +46,19 @@ import {
   YAxis,
 } from 'recharts'
 
-interface Retention2Props {
+import { buttonVariants } from '@/components/ui/button'
+
+import { cn } from '@/lib/utils'
+
+interface Retention2Props extends BlockStateProps {
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   cohorts?: RetentionCohort[]
   description: string
   highlight?: number
+  /** Where the chart opens in full, such as the explorer it was saved from. */
+  link?: { href: string; label: string }
   /** @default 'Month' */
   periodName?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -75,12 +82,21 @@ const exampleProps: Retention2Props = {
   description:
     'Share of each monthly signup cohort still active, by months since signup.',
   highlight: 4,
+  link: { href: '/dashboard/retention', label: 'Open in Retention' },
   periodName: 'Month',
   title: 'Retention curves',
 }
 
 const Retention2 = (props: Retention2Props) => {
-  const { cohorts = [], description, periodName = 'Month', status, title } = props
+  const {
+    cohorts = [],
+    description,
+    periodName = 'Month',
+    errorMessage,
+    link,
+    status,
+    title,
+  } = props
   const state = getBlockState(status, cohorts)
   let fallback = cohorts.length - 1
   while (fallback > 0 && cohorts[fallback].retained.length < 2) fallback--
@@ -107,16 +123,41 @@ const Retention2 = (props: Retention2Props) => {
   const otherCohortColor = chartFadedColor('var(--color-muted-foreground)')
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
+        <header className='flex items-start justify-between gap-3'>
+          <div className='flex min-w-0 flex-col gap-0.5'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <p className='text-muted-foreground text-sm'>{description}</p>
+          </div>
+          {link && (
+            <Link
+              href={link.href}
+              className={cn(
+                buttonVariants({ size: 'xs', variant: 'outline' }),
+                'group/open shrink-0',
+              )}
+            >
+              {link.label}
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                className='transition-transform group-hover/open:translate-x-0.5 motion-reduce:transition-none'
+                data-icon='inline-end'
+                aria-hidden
+              />
+            </Link>
+          )}
         </header>
         <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
           <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
             <dt className='text-muted-foreground text-sm'>
-              {selected ? `${selected.label}, ${unit} ${latest}` : 'Latest cohort'}
+              {selected && !state
+                ? `${selected.label}, ${unit} ${latest}`
+                : 'Latest cohort'}
             </dt>
             <dd>
               <KPIValue value={selected ? selectedRate : undefined} format={format} />

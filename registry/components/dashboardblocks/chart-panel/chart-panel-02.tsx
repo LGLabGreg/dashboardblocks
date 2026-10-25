@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   ChartPlaceholder,
@@ -51,7 +51,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-interface ChartPanel2Props {
+interface ChartPanel2Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `the previous 14 days`. @default 'the previous period' */
   comparison?: string
   /** Leave out, or pass no days, to show the empty state. */
@@ -61,7 +61,6 @@ interface ChartPanel2Props {
   metrics?: StatMetric[]
   /** How many metrics to sketch while loading. @default 3 */
   placeholders?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -107,6 +106,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
     description,
     metrics = [],
     placeholders = 3,
+    errorMessage,
     status,
     title,
   } = props
@@ -124,7 +124,7 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
 
   if (state) {
     return (
-      <BlockStateProvider state={state}>
+      <BlockStateProvider errorMessage={errorMessage} state={state}>
         <section className='@container flex flex-col gap-4'>
           {header}
           <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-3'>

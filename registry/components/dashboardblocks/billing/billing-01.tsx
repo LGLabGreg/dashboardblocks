@@ -8,7 +8,7 @@ import {
 } from '@/registry/components/dashboardblocks/billing'
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPlaceholder } from '@/registry/components/dashboardblocks/chart'
@@ -20,13 +20,12 @@ import {
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
 
-interface Billing1Props {
+interface Billing1Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   description: string
   /** Leave out to show the empty state. */
   movement?: MrrMovementInput
-  status?: BlockStatus
   title: string
 }
 
@@ -48,6 +47,7 @@ const Billing1 = (props: Billing1Props) => {
     currency = 'USD',
     description,
     movement = { churn: 0, contraction: 0, expansion: 0, newBusiness: 0, starting: 0 },
+    errorMessage,
     status,
     title,
   } = props
@@ -57,7 +57,7 @@ const Billing1 = (props: Billing1Props) => {
   const format = (value: number) => formatCurrency(value, { currency })
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

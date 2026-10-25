@@ -26,12 +26,12 @@ import {
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { useState } from 'react'
 
-interface AiAssistant2Props {
+interface AiAssistant2Props extends BlockStateProps {
   /** The chat it runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies. */
   chat?: AIChat
   description: string
@@ -40,7 +40,6 @@ interface AiAssistant2Props {
   /** The conversation the canned replies start from. With `chat`, pass it to the chat instead. Leave out, or pass none, for a new chat. */
   messages?: AIMessage[]
   onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -226,6 +225,7 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
     followUps,
     messages: initialMessages = [],
     onFeedback = () => {},
+    errorMessage,
     status: blockStatus,
     title,
   } = props
@@ -245,7 +245,7 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex h-[40rem] flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

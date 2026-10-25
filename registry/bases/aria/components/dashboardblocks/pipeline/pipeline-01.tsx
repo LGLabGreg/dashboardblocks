@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/pipeline/pipeline-01.tsx for React Aria
-// source-hash: 02c9a777c6eb
+// source-hash: aea8298e0011
 
 'use client'
 
@@ -8,7 +8,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   Skeleton,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-interface Pipeline1Props {
+interface Pipeline1Props extends BlockStateProps {
   /** Defaults to a sentence with the open value and how many items are stuck. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -42,7 +42,6 @@ interface Pipeline1Props {
   now: Date
   onMove?: (id: string, stage: string) => void
   stages: PipelineStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -177,7 +176,15 @@ const exampleProps: Pipeline1Props = {
 const compact = (value: number) => formatCurrency(value, { compact: true })
 
 const Pipeline1 = (props: Pipeline1Props) => {
-  const { items: loadedItems = noItems, now, onMove, stages, status, title } = props
+  const {
+    items: loadedItems = noItems,
+    now,
+    onMove,
+    stages,
+    errorMessage,
+    status,
+    title,
+  } = props
   const id = useId()
   const [moves, setMoves] = useState<{ id: string; stage: string }[]>([])
   const [announcement, setAnnouncement] = useState('')
@@ -209,7 +216,7 @@ const Pipeline1 = (props: Pipeline1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -13,7 +13,7 @@ import {
   type TimelineStatus,
 } from '@/registry/components/dashboardblocks/timeline'
 
-interface Timeline1Props {
+interface Timeline1Props extends BlockStateProps {
   /** Defaults to a sentence about how many projects are running and at risk. */
   description?: string
   end: Date
@@ -22,7 +22,6 @@ interface Timeline1Props {
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   start: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -120,7 +119,7 @@ const summarize = (items: TimelineItem[]) => {
 }
 
 const Timeline1 = (props: Timeline1Props) => {
-  const { end, items = [], now, start, status, title } = props
+  const { end, items = [], now, start, errorMessage, status, title } = props
   const { description = summarize(items) } = props
   const state = getBlockState(status, items)
   const counts = STATUSES.map((itemStatus) => ({
@@ -129,7 +128,7 @@ const Timeline1 = (props: Timeline1Props) => {
   })).filter((entry) => entry.count > 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-end justify-between gap-x-6 gap-y-2'>
           <div className='flex min-w-0 flex-col gap-0.5'>

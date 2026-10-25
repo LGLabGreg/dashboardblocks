@@ -2,7 +2,7 @@
 
 import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
-import { type ComponentProps, type ReactNode, useId } from 'react'
+import { type ComponentProps, type ReactNode, useEffect, useId } from 'react'
 import {
   Area,
   AreaChart,
@@ -18,6 +18,9 @@ import {
   ResponsiveContainer,
   Tooltip,
   type TooltipContentProps,
+  useActiveTooltipLabel,
+  usePlotArea,
+  useXAxisScale,
   XAxis,
   YAxis,
 } from 'recharts'
@@ -114,6 +117,34 @@ function chartLastDot(count: number, color: string) {
   }
 }
 
+/** A `dot` for a line or area that marks its last point as still filling: the dot pulses until the period ends and the line takes `chartLastDot` instead. */
+function chartLiveDot(count: number, color: string) {
+  return function LiveDot({ cx, cy, index }: ChartDotProps) {
+    return index === count - 1 ? (
+      <g key={index}>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={4}
+          fill={color}
+          opacity={0.5}
+          className='origin-center animate-ping [transform-box:fill-box] motion-reduce:hidden'
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={4}
+          fill={color}
+          stroke='var(--color-background)'
+          strokeWidth={2}
+        />
+      </g>
+    ) : (
+      <g key={index} />
+    )
+  }
+}
+
 interface ChartBarLabelProps {
   index?: number
   value?: unknown
@@ -187,6 +218,11 @@ function ChartTooltipItem({ color, name, value }: ChartTooltipItemProps) {
       <span className='ml-auto pl-3 font-medium tabular-nums'>{value}</span>
     </div>
   )
+}
+
+/** A line under a tooltip's values about the hovered point, such as the release that shipped that day. */
+function ChartTooltipNote({ children }: { children: ReactNode }) {
+  return <div className='border-t pt-1.5'>{children}</div>
 }
 
 type ChartTooltipContentProps = Partial<
@@ -610,12 +646,199 @@ function TinyAreaChart({
   )
 }
 
+interface ChartMarker {
+  /** The x axis value the marker stands on, such as the day in the axis's `dataKey`. */
+  x: string | number
+  label: string
+}
+
+type ChartMarkerAnchor = 'start' | 'end'
+
+const MARKER_CHAR_WIDTH = 6.6
+const MARKER_GAP = 9
+const MARKER_SPACE = 12
+
+/**
+ * Where each marker's name goes: left of its line (`end`), or right of it (`start`) when the left
+ * side runs off the plot. `null` when two names can't both fit, so every marker is drawn as a
+ * numbered pin instead. `xs` are the markers' positions in px, left to right.
+ */
+function layoutChartMarkers(
+  xs: number[],
+  labels: string[],
+  plot: { left: number; right: number },
+): ChartMarkerAnchor[] | null {
+  const anchors: ChartMarkerAnchor[] = []
+  let taken = plot.left - MARKER_SPACE
+  for (const [index, x] of xs.entries()) {
+    const width = labels[index].length * MARKER_CHAR_WIDTH
+    const before = x - MARKER_GAP - width
+    if (before >= plot.left && before >= taken + MARKER_SPACE) {
+      anchors.push('end')
+      taken = x
+      continue
+    }
+    const after = x + MARKER_GAP + width
+    if (after > plot.right || x < taken + MARKER_SPACE) return null
+    anchors.push('start')
+    taken = after
+  }
+  return anchors
+}
+
+interface ChartMarkersProps {
+  /** Milliseconds before the first marker drops in, such as the time the chart's line takes to draw. @default 0 */
+  delay?: number
+  markers: ChartMarker[]
+  /** Called with the markers in their pins' order when the names don't fit and they show as numbered pins, and with `null` when they show their names. Draw `ChartMarkerKey` from it under the chart. */
+  onPinsChange?: (pins: ChartMarker[] | null) => void
+}
+
+/**
+ * Named dashed lines across a cartesian chart, such as releases: put it inside the chart, and leave
+ * about 24px of top margin for the names. A marker's line turns the chart's colour while the
+ * tooltip is on its point. Names that don't fit become numbered pins.
+ */
+function ChartMarkers({ delay = 0, markers, onPinsChange }: ChartMarkersProps) {
+  const scale = useXAxisScale()
+  const plot = usePlotArea()
+  const activeLabel = useActiveTooltipLabel()
+
+  const placed =
+    scale && plot
+      ? markers
+          .map((marker) => ({ ...marker, at: scale(marker.x, { position: 'middle' }) }))
+          .filter(
+            (marker): marker is ChartMarker & { at: number } => marker.at !== undefined,
+          )
+          .sort((a, b) => a.at - b.at)
+      : []
+  const anchors = plot
+    ? layoutChartMarkers(
+        placed.map((marker) => marker.at),
+        placed.map((marker) => marker.label),
+        { left: plot.x, right: plot.x + plot.width },
+      )
+    : []
+  const pins =
+    anchors === null ? JSON.stringify(placed.map(({ label, x }) => ({ label, x }))) : null
+
+  useEffect(() => {
+    onPinsChange?.(pins === null ? null : (JSON.parse(pins) as ChartMarker[]))
+  }, [onPinsChange, pins])
+
+  if (!plot) return null
+  const top = plot.y
+
+  return (
+    <g aria-hidden data-slot='chart-markers'>
+      {placed.map((marker, index) => {
+        const active =
+          activeLabel !== undefined && String(activeLabel) === String(marker.x)
+        const color = active ? 'var(--color-chart-2)' : 'var(--color-foreground)'
+        const anchor = anchors?.[index]
+        return (
+          <g
+            key={`${marker.x}-${marker.label}`}
+            className='animate-in fade-in slide-in-from-top-2 fill-mode-both duration-500 ease-out motion-reduce:animate-none'
+            style={{ animationDelay: `${delay + index * 180}ms` }}
+          >
+            <line
+              x1={marker.at}
+              x2={marker.at}
+              y1={top}
+              y2={top + plot.height}
+              stroke={active ? 'var(--color-chart-2)' : chartReferenceColor}
+              strokeDasharray='3 3'
+              className='transition-[stroke] duration-200'
+            />
+            {anchor ? (
+              <>
+                <circle
+                  cx={marker.at}
+                  cy={top - 7}
+                  r={3}
+                  fill={color}
+                  className='transition-[fill] duration-200'
+                />
+                <text
+                  x={anchor === 'end' ? marker.at - MARKER_GAP : marker.at + MARKER_GAP}
+                  y={top - 3}
+                  textAnchor={anchor}
+                  fontSize={12}
+                  fontWeight={500}
+                  fill={color}
+                  className='transition-[fill] duration-200'
+                >
+                  {marker.label}
+                </text>
+              </>
+            ) : (
+              <>
+                <circle
+                  cx={marker.at}
+                  cy={top - 10}
+                  r={8}
+                  fill={color}
+                  className='transition-[fill] duration-200'
+                />
+                <text
+                  x={marker.at}
+                  y={top - 6}
+                  textAnchor='middle'
+                  fontSize={11}
+                  fontWeight={600}
+                  fill='var(--color-background)'
+                >
+                  {index + 1}
+                </text>
+              </>
+            )}
+          </g>
+        )
+      })}
+    </g>
+  )
+}
+
+/** The names of `ChartMarkers` shown as numbered pins, in the pins' order: put it under the chart. */
+function ChartMarkerKey({
+  className,
+  markers,
+}: {
+  className?: string
+  markers: ChartMarker[]
+}) {
+  return (
+    <ol
+      aria-hidden
+      data-slot='chart-marker-key'
+      className={cn('flex flex-wrap gap-x-4 gap-y-1.5 text-xs', className)}
+    >
+      {markers.map((marker, index) => (
+        <li
+          key={`${marker.x}-${marker.label}`}
+          className='flex min-w-0 items-center gap-1.5'
+        >
+          <span className='bg-foreground text-background grid size-4 shrink-0 place-items-center rounded-full font-semibold tabular-nums'>
+            {index + 1}
+          </span>
+          <span className='truncate'>{marker.label}</span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
 export {
   ChartFloatingTooltip,
+  ChartMarkerKey,
+  ChartMarkers,
   ChartPlaceholder,
   ChartTooltipContent,
   ChartTooltipFrame,
   ChartTooltipItem,
+  ChartTooltipNote,
   TinyAreaChart,
   TinyBarChart,
   TinyLineChart,
@@ -627,16 +850,21 @@ export {
   chartGridProps,
   chartLastDot,
   chartLineCursor,
+  chartLiveDot,
   chartNiceTicks,
   chartReferenceColor,
   chartReferenceLabel,
   chartReferenceProps,
   chartTimeGridProps,
   chartValueAxisWidth,
+  layoutChartMarkers,
   useChartId,
 }
 
 export type {
+  ChartMarker,
+  ChartMarkerAnchor,
+  ChartMarkersProps,
   ChartPlaceholderProps,
   ChartFloatingTooltipProps,
   ChartTooltipContentProps,

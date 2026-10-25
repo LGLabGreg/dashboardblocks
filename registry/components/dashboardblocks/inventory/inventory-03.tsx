@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -20,7 +20,7 @@ import {
 } from '@/registry/components/dashboardblocks/inventory'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Inventory3Props {
+interface Inventory3Props extends BlockStateProps {
   annualCogs?: number
   /** Leave out, with `value`, to show the empty state. */
   counts?: Record<StockStatus, number>
@@ -28,7 +28,6 @@ interface Inventory3Props {
   currency?: string
   /** Defaults to a sentence counting the SKUs that need ordering. */
   description?: string
-  status?: BlockStatus
   title: string
   /** Leave out, with `counts`, to show the empty state. */
   value?: number
@@ -46,7 +45,15 @@ const ORDER: StockStatus[] = ['ok', 'low', 'out', 'over']
 const noCounts: Record<StockStatus, number> = { low: 0, ok: 0, out: 0, over: 0 }
 
 const Inventory3 = (props: Inventory3Props) => {
-  const { annualCogs, counts = noCounts, currency = 'USD', status, title, value } = props
+  const {
+    annualCogs,
+    counts = noCounts,
+    currency = 'USD',
+    errorMessage,
+    status,
+    title,
+    value,
+  } = props
   const state = getBlockState(status, value)
   const segments = ORDER.map((stock) => ({
     color: stockStatusConfig[stock].color,
@@ -64,7 +71,7 @@ const Inventory3 = (props: Inventory3Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

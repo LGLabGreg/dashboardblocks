@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -22,12 +22,11 @@ interface ServiceUptime {
   name: string
 }
 
-interface Status2Props {
+interface Status2Props extends BlockStateProps {
   /** Defaults to a sentence naming the service with the lowest uptime. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   services?: ServiceUptime[]
-  status?: BlockStatus
   title: string
 }
 
@@ -103,12 +102,12 @@ const summarize = (services: ServiceUptime[]) => {
 }
 
 const Status2 = (props: Status2Props) => {
-  const { services = [], status, title } = props
+  const { services = [], errorMessage, status, title } = props
   const { description = summarize(services) } = props
   const state = getBlockState(status, services)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

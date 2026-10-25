@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 1.12.0
+
+### Minor Changes
+
+- 79d0dc6: Every block that takes `status` also takes an optional `errorMessage`: one sentence your API writes on why a read failed, such as "The query took too long. Try a shorter range." It shows under "Couldn’t load". Leave it out to show "Couldn’t load" alone, as before.
+
+### Patch Changes
+
+- fd346fd: The shared loading, empty and error parts take an `emptyMessage`, so a block can say what belongs there instead of "No data".
+- b05900f: Charts can mark named events, such as releases, with dashed lines that light up while the tooltip is on their day, and a dot that pulses on a point still filling. When the names don't fit, the markers become numbered pins with a key under the chart.
+- 0792a65: Funnel 01 and Retention 02 take an optional `link`, shown beside the title, to open the full chart. Retention 02 and 04 no longer name a cohort or week when they fail to load.
+
 ## 1.11.0
 
 ### Minor Changes

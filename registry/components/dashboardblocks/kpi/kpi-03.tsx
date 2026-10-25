@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -14,7 +14,7 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
-interface KPI3Props {
+interface KPI3Props extends BlockStateProps {
   /** Use `points` for rates, so the change reads in percentage points; 'percent' by default. */
   changeType?: 'percent' | 'points'
   comparison: string
@@ -24,7 +24,6 @@ interface KPI3Props {
   /** Use `down` for metrics like churn, where a decrease is good. */
   goodDirection?: 'up' | 'down'
   previous?: number
-  status?: BlockStatus
   title: string
   /** Leave out to show the empty state. */
   value?: number
@@ -47,6 +46,7 @@ const KPI3 = (props: KPI3Props) => {
     format,
     goodDirection,
     previous,
+    errorMessage,
     status,
     title,
     value,
@@ -54,7 +54,7 @@ const KPI3 = (props: KPI3Props) => {
   const state = getBlockState(status, value)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -27,13 +27,12 @@ interface ActionableNotification extends AppNotification {
   request?: { approve: string; decline: string }
 }
 
-interface Notifications2Props {
+interface Notifications2Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   notifications?: ActionableNotification[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   onDecide?: (id: string, decision: Decision) => Promise<void>
-  status?: BlockStatus
   title: string
 }
 
@@ -116,6 +115,7 @@ const Notifications2 = (props: Notifications2Props) => {
     notifications: loaded = [],
     now,
     onDecide = saveDecision,
+    errorMessage,
     status,
     title,
   } = props
@@ -214,7 +214,7 @@ const Notifications2 = (props: Notifications2Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex items-center justify-between gap-3'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <NotificationBell unreadCount={unread}>

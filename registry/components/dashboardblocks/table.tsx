@@ -37,9 +37,13 @@ function useOverflows() {
   useEffect(() => {
     const container = ref.current
     if (!container) return
-    const observer = new ResizeObserver(() =>
-      setOverflows(container.scrollWidth > container.clientWidth),
-    )
+    const observer = new ResizeObserver(() => {
+      container.style.setProperty(
+        '--data-table-visible-width',
+        `${container.clientWidth}px`,
+      )
+      setOverflows(container.scrollWidth > container.clientWidth)
+    })
     observer.observe(container)
     if (container.firstElementChild) observer.observe(container.firstElementChild)
     return () => observer.disconnect()
@@ -352,7 +356,9 @@ function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
     return (
       <DataTableRow>
         <DataTableCell colSpan={colSpan}>
-          <BlockStateText />
+          <span className='sticky start-[var(--data-table-inset,0.75rem)] block max-w-[calc(var(--data-table-visible-width,100%)_-_2*var(--data-table-inset,0.75rem))]'>
+            <BlockStateText />
+          </span>
         </DataTableCell>
       </DataTableRow>
     )

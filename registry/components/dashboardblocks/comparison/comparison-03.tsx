@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { DivergingBar, getDelta } from '@/registry/components/dashboardblocks/comparison'
@@ -24,13 +24,12 @@ interface Segment {
   previous: number
 }
 
-interface Comparison3Props {
+interface Comparison3Props extends BlockStateProps {
   /** Defaults to a sentence naming the biggest gain and drop. */
   description?: string
   formatter?: (value: number) => string
   /** Leave out, or pass none, to show the empty state. */
   segments?: Segment[]
-  status?: BlockStatus
   title: string
 }
 
@@ -51,6 +50,7 @@ const Comparison3 = (props: Comparison3Props) => {
   const {
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     segments = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -77,7 +77,7 @@ const Comparison3 = (props: Comparison3Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

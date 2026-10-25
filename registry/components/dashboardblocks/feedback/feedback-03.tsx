@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -24,13 +24,12 @@ interface Review {
   text: string
 }
 
-interface Feedback3Props {
+interface Feedback3Props extends BlockStateProps {
   description: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   /** Newest first. Leave out, or pass none, to show the empty state. */
   reviews?: Review[]
-  status?: BlockStatus
   title: string
 }
 
@@ -82,14 +81,14 @@ const exampleProps: Feedback3Props = {
 }
 
 const Feedback3 = (props: Feedback3Props) => {
-  const { description, now, reviews = [], status, title } = props
+  const { description, now, reviews = [], errorMessage, status, title } = props
   const state = getBlockState(status, reviews)
   const needsReply = reviews.filter(
     (review) => review.rating <= 2 && !review.replied,
   ).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -20,13 +20,12 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 
-interface PageHeader4Props {
+interface PageHeader4Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   count?: number
   description?: string
   onCreate?: () => void
   onSearch?: (query: string) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -42,6 +41,7 @@ const PageHeader4 = (props: PageHeader4Props) => {
     description,
     onCreate = () => {},
     onSearch = () => {},
+    errorMessage,
     status,
     title,
   } = props
@@ -49,7 +49,7 @@ const PageHeader4 = (props: PageHeader4Props) => {
   const state = getBlockState(status, count)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { SaveBar } from '@/registry/components/dashboardblocks/forms'
@@ -48,7 +48,7 @@ interface PermissionGroup {
 /** `grants[roleId]` lists the permission ids that role has. */
 type PermissionGrants = Record<string, string[]>
 
-interface Team5Props {
+interface Team5Props extends BlockStateProps {
   description: string
   /** Leave out, with `roles`, to show the empty state. */
   grants?: PermissionGrants
@@ -56,7 +56,6 @@ interface Team5Props {
   onSave?: (grants: PermissionGrants) => void
   /** Leave out, or pass none, to show the empty state. */
   roles?: PermissionRole[]
-  status?: BlockStatus
   title: string
 }
 
@@ -314,11 +313,11 @@ function PermissionMatrix(props: PermissionMatrixProps) {
 }
 
 const Team5 = (props: Team5Props) => {
-  const { description, grants = {}, roles = [], status, title } = props
+  const { description, grants = {}, roles = [], errorMessage, status, title } = props
   const state = getBlockState(status, roles)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

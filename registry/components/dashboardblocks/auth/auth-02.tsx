@@ -4,7 +4,7 @@ import { AuthLayout, WorkspaceAvatar } from '@/registry/components/dashboardbloc
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -32,14 +32,13 @@ interface PendingInvite {
   name: string
 }
 
-interface Auth2Props {
+interface Auth2Props extends BlockStateProps {
   brand: ReactNode
   createHref: string
   email: string
   invites?: PendingInvite[]
   onAcceptInvite?: (id: string) => void | Promise<void>
   signOutHref: string
-  status?: BlockStatus
   /** Leave out, or pass none, to show the empty state. */
   workspaces?: PickerWorkspace[]
 }
@@ -75,7 +74,8 @@ const exampleProps: Auth2Props = {
 const SEARCH_AFTER = 5
 
 const Auth2 = (props: Auth2Props) => {
-  const { brand, createHref, email, onAcceptInvite, signOutHref, status } = props
+  const { brand, createHref, email, onAcceptInvite, signOutHref, errorMessage, status } =
+    props
   const id = useId()
   const [workspaces, setWorkspaces] = useState(props.workspaces ?? [])
   const [invites, setInvites] = useState(props.invites ?? [])
@@ -115,7 +115,10 @@ const Auth2 = (props: Auth2Props) => {
   }
 
   return (
-    <BlockStateProvider state={getBlockState(status, workspaces)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, workspaces)}
+    >
       <AuthLayout
         brand={brand}
         title='Choose a workspace'

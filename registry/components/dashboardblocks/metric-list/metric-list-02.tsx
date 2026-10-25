@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -21,13 +21,12 @@ interface MetricSection {
   metrics: Metric[]
 }
 
-interface MetricList2Props {
+interface MetricList2Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `in August`. */
   comparison?: string
   description: string
   /** Leave out, or pass none, to show the empty state. */
   sections?: MetricSection[]
-  status?: BlockStatus
   title: string
 }
 
@@ -127,7 +126,7 @@ const exampleProps: MetricList2Props = {
 }
 
 const MetricList2 = (props: MetricList2Props) => {
-  const { comparison, description, sections = [], status, title } = props
+  const { comparison, description, sections = [], errorMessage, status, title } = props
   const id = useId()
   const isBetter = (metric: Metric) => {
     const change = getMetricChange(metric) ?? 0
@@ -144,7 +143,7 @@ const MetricList2 = (props: MetricList2Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

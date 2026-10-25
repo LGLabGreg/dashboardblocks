@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
@@ -25,12 +25,11 @@ interface DistributionGroup {
   q3: number
 }
 
-interface Distribution2Props {
+interface Distribution2Props extends BlockStateProps {
   description: string
   formatter?: (value: number) => string
   /** Leave out, or pass none, to show the empty state. */
   groups?: DistributionGroup[]
-  status?: BlockStatus
   tickFormatter?: (value: number) => string
   whiskerLabel?: string
   title: string
@@ -80,6 +79,7 @@ const Distribution2 = (props: Distribution2Props) => {
     description,
     formatter = (value) => formatNumber(value),
     groups = [],
+    errorMessage,
     status,
     tickFormatter = formatter,
     title,
@@ -99,7 +99,7 @@ const Distribution2 = (props: Distribution2Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -16,7 +16,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 
-interface PageHeader1Props {
+interface PageHeader1Props extends BlockStateProps {
   /** Names the main action; `null` leaves the main action out. @default 'New order' */
   createLabel?: string | null
   /** Leave out to show the empty state. */
@@ -25,7 +25,6 @@ interface PageHeader1Props {
   exportLabel?: string | null
   onCreate?: () => void
   onExport?: () => void
-  status?: BlockStatus
   title: string
 }
 
@@ -41,13 +40,14 @@ const PageHeader1 = (props: PageHeader1Props) => {
     exportLabel = 'Export',
     onCreate = () => {},
     onExport = () => {},
+    errorMessage,
     status,
     title,
   } = props
   const state = getBlockState(status, description)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

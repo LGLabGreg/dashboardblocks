@@ -5,6 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
+  type BlockStateProps,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -51,7 +52,7 @@ interface HelpLink {
   title: string
 }
 
-interface Onboarding2Props {
+interface Onboarding2Props extends BlockStateProps {
   firstName: string
   help: HelpLink[]
   quickStarts: QuickStart[]
@@ -207,6 +208,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
     firstName,
     help,
     quickStarts,
+    errorMessage,
     status,
     tasks = [],
     templatesHref,
@@ -219,7 +221,7 @@ const Onboarding2 = (props: Onboarding2Props) => {
   const next = getNextStep(tasks)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <div className='bg-background @container/page flex min-h-svh flex-col'>
         <div className='mx-auto flex w-full max-w-6xl flex-col gap-8 p-4 sm:p-6 lg:p-8'>
           <header className='flex flex-col gap-4 @3xl/page:flex-row @3xl/page:items-end @3xl/page:justify-between'>

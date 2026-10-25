@@ -4,7 +4,7 @@ import { modelPalette } from '@/registry/components/dashboardblocks/ai-usage'
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -37,14 +37,13 @@ interface ModelPerformance {
   ttftP95: number
 }
 
-interface AiUsage3Props {
+interface AiUsage3Props extends BlockStateProps {
   /** Defaults to a sentence naming the busiest model and any over the error threshold. */
   description?: string
   /** Error rate above which a model is flagged, 0–1. */
   errorThreshold?: number
   /** Leave out, or pass none, to show the empty state. */
   models?: ModelPerformance[]
-  status?: BlockStatus
   title: string
 }
 
@@ -123,13 +122,13 @@ function LatencyRange({ max, p50, p95 }: { max: number; p50: number; p95: number
 }
 
 const AiUsage3 = (props: AiUsage3Props) => {
-  const { errorThreshold = 0.01, models = [], status, title } = props
+  const { errorThreshold = 0.01, models = [], errorMessage, status, title } = props
   const { description = describe(models, errorThreshold) } = props
   const state = getBlockState(status, models)
   const slowest = Math.max(0, ...models.map((model) => model.ttftP95))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

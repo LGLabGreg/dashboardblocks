@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -50,7 +50,7 @@ import {
   YAxis,
 } from 'recharts'
 
-interface Forecast1Props {
+interface Forecast1Props extends BlockStateProps {
   /** Values so far, oldest first, one step apart. Leave out, or pass none, to show the empty state. */
   actuals?: number[]
   description: string
@@ -60,7 +60,6 @@ interface Forecast1Props {
   /** @default 0.8 */
   level?: ConfidenceLevel
   now: Date
-  status?: BlockStatus
   stepDays?: number
   title: string
 }
@@ -90,6 +89,7 @@ const Forecast1 = (props: Forecast1Props) => {
     lastDate,
     level = 0.8,
     now,
+    errorMessage,
     status,
     stepDays = 7,
     title,
@@ -111,7 +111,7 @@ const Forecast1 = (props: Forecast1Props) => {
   const unit = stepDays === 7 ? 'week' : `${stepDays} days`
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

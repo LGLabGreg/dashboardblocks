@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,7 +41,7 @@ interface SprintIssue extends KanbanItem {
   subtasks?: { done: number; total: number }
 }
 
-interface Kanban1Props {
+interface Kanban1Props extends BlockStateProps {
   columns: KanbanColumnDef[]
   /** The column that counts as finished: its due dates lose their urgency. */
   doneColumn: string
@@ -53,7 +53,6 @@ interface Kanban1Props {
   /** Such as `Sep 21 – Oct 4`. */
   period: string
   project: string
-  status?: BlockStatus
   title: string
 }
 
@@ -218,6 +217,7 @@ const Kanban1 = (props: Kanban1Props) => {
     onMove,
     period,
     project,
+    errorMessage,
     status,
     title,
   } = props
@@ -238,7 +238,7 @@ const Kanban1 = (props: Kanban1Props) => {
   ).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

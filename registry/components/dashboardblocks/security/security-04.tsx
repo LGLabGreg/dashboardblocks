@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -28,11 +28,10 @@ interface SecurityCheck {
   weight?: number
 }
 
-interface Security4Props {
+interface Security4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   checks?: SecurityCheck[]
   description: string
-  status?: BlockStatus
   title: string
 }
 
@@ -92,7 +91,7 @@ const ORDER: Record<CheckResult, number> = { fail: 0, pass: 2, warn: 1 }
 const countChecks = (count: number) => `${count} ${count === 1 ? 'check' : 'checks'}`
 
 const Security4 = (props: Security4Props) => {
-  const { checks = [], description, status, title } = props
+  const { checks = [], description, errorMessage, status, title } = props
   const state = getBlockState(status, checks)
   const score = getSecurityScore(checks)
   const band = getGaugeBand(score, BANDS)
@@ -102,7 +101,7 @@ const Security4 = (props: Security4Props) => {
   const passing = checks.length - failing - warnings
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

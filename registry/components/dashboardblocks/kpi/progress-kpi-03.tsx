@@ -4,7 +4,7 @@ import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-n
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -16,13 +16,12 @@ import {
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface ProgressKPI3Props {
+interface ProgressKPI3Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   current?: number
   /** Days left in the period. Leave it out to skip the daily rate needed. */
   daysLeft?: number
   goal: number
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -40,13 +39,16 @@ const wholePercent = (value: number) =>
   formatPercent(value / 100, { maximumFractionDigits: 0 })
 
 const ProgressKPI3 = (props: ProgressKPI3Props) => {
-  const { current, daysLeft, goal, status, title, unit } = props
+  const { current, daysLeft, goal, errorMessage, status, title, unit } = props
   const reached = current ?? 0
   const percentage = goal > 0 ? Math.min(100, Math.max(0, (reached / goal) * 100)) : 0
   const remaining = Math.max(0, goal - reached)
 
   return (
-    <BlockStateProvider state={getBlockState(status, current)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, current)}
+    >
       <KPI>
         <KPIContent className='flex-row items-center justify-between gap-4'>
           <div className='flex min-w-0 flex-col gap-1'>

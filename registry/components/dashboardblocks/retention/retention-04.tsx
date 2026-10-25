@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -47,12 +47,11 @@ interface GrowthAccountingPeriod extends GrowthAccountingInput {
   label: string
 }
 
-interface Retention4Props {
+interface Retention4Props extends BlockStateProps {
   description: string
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   periods?: GrowthAccountingPeriod[]
   periodName?: string
-  status?: BlockStatus
   title: string
   /** @default 'users' */
   unit?: string
@@ -98,6 +97,7 @@ const Retention4 = (props: Retention4Props) => {
     description,
     periodName = 'week',
     periods = [],
+    errorMessage,
     status,
     title,
     unit = 'users',
@@ -116,7 +116,7 @@ const Retention4 = (props: Retention4Props) => {
   const netTotal = rows.reduce((sum, row) => sum + row.net, 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
@@ -125,7 +125,7 @@ const Retention4 = (props: Retention4Props) => {
         <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
           <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
             <dt className='text-muted-foreground text-sm'>
-              {latest ? `Quick ratio, ${latest.label}` : 'Quick ratio'}
+              {latest && !state ? `Quick ratio, ${latest.label}` : 'Quick ratio'}
             </dt>
             <dd>
               <KPIValue value={latest ? ratio : undefined} format={formatRatio} />

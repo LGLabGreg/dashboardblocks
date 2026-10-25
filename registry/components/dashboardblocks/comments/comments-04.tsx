@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -30,7 +30,7 @@ interface TicketMessage extends ThreadComment {
 
 type Mode = 'reply' | 'note'
 
-interface Comments4Props {
+interface Comments4Props extends BlockStateProps {
   currentUser: CommentAuthor
   customer: { company: string; email: string; name: string }
   /** Oldest first. Leave out, or pass none, to show the empty state. */
@@ -40,7 +40,6 @@ interface Comments4Props {
   onReact?: (messageId: string, emoji: string) => void
   onSubmit?: (body: string, options: { internal: boolean }) => Promise<void>
   people: CommentAuthor[]
-  status?: BlockStatus
   ticketId: string
   title: string
 }
@@ -129,6 +128,7 @@ const Comments4 = (props: Comments4Props) => {
     onReact = () => {},
     onSubmit = saveMessage,
     people,
+    errorMessage,
     status,
     ticketId,
     title,
@@ -192,7 +192,7 @@ const Comments4 = (props: Comments4Props) => {
       : `${customer.name.split(' ')[0]} has waited ${waitingHours < 1 ? 'under an hour' : `${waitingHours} ${waitingHours === 1 ? 'hour' : 'hours'}`} for a reply.`
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

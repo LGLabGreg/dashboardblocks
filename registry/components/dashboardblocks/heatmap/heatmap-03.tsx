@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -19,13 +19,12 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatDate, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Heatmap3Props {
+interface Heatmap3Props extends BlockStateProps {
   /** One value per day, oldest first, ending on `endDate`. Leave out, or pass none, to show the empty state. */
   daily?: number[]
   /** Defaults to a sentence about how many days had any. */
   description?: string
   endDate: Date
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -67,7 +66,7 @@ function getLongestRun(daily: number[]) {
 }
 
 const Heatmap3 = (props: Heatmap3Props) => {
-  const { daily = [], endDate, status, title, unit } = props
+  const { daily = [], endDate, errorMessage, status, title, unit } = props
   const endWeekday = (endDate.getUTCDay() + 6) % 7
   const start = endDate.getTime() - ((WEEKS - 1) * 7 + endWeekday) * DAY
   const dateAt = (row: number, column: number) =>
@@ -99,7 +98,7 @@ const Heatmap3 = (props: Heatmap3Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, daily)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, daily)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

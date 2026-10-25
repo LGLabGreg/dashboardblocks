@@ -4,7 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
@@ -22,11 +22,10 @@ interface StorageCategory {
   value: number
 }
 
-interface UsageMeter5Props {
+interface UsageMeter5Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   categories?: StorageCategory[]
   limit: number
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -52,7 +51,7 @@ const colors = [
 ]
 
 const UsageMeter5 = (props: UsageMeter5Props) => {
-  const { categories = [], limit, status: blockStatus, title, unit } = props
+  const { categories = [], limit, errorMessage, status: blockStatus, title, unit } = props
   const state = getBlockState(blockStatus, categories)
   const used = categories.reduce((sum, category) => sum + category.value, 0)
   const free = Math.max(0, limit - used)
@@ -72,7 +71,7 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
   ]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-1 border-t pt-3'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>

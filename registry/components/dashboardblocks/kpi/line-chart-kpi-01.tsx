@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { TinyAreaChart } from '@/registry/components/dashboardblocks/chart'
@@ -26,7 +26,7 @@ interface DailyComparison {
   value: number
 }
 
-interface LineChartKPI1Props {
+interface LineChartKPI1Props extends BlockStateProps {
   comparison: string
   /** @default 'This week' */
   currentLabel?: string
@@ -35,7 +35,6 @@ interface LineChartKPI1Props {
   format?: KPIFormat
   /** @default 112 */
   height?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -72,6 +71,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
     data = [],
     format,
     height = 112,
+    errorMessage,
     status,
     title,
   } = props
@@ -80,7 +80,7 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
   const [lead, rest] = describeLead(data)
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

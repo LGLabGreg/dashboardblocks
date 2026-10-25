@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { getKPIChange } from '@/registry/components/dashboardblocks/kpi'
@@ -29,7 +29,7 @@ interface SparklineMetric extends StatMetric {
   history: number[]
 }
 
-interface StatGroup2Props {
+interface StatGroup2Props extends BlockStateProps {
   /** Follows each previous value, such as `the 14 days before`. @default 'the previous period' */
   comparison?: string
   /** Defaults to a sentence saying how many metrics improved. */
@@ -38,7 +38,6 @@ interface StatGroup2Props {
   metrics?: SparklineMetric[]
   /** How many metrics to sketch while loading. @default 4 */
   placeholders?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -117,6 +116,7 @@ const StatGroup2 = (props: StatGroup2Props) => {
     comparison = 'the previous period',
     metrics = [],
     placeholders = 4,
+    errorMessage,
     status,
     title,
   } = props
@@ -130,7 +130,10 @@ const StatGroup2 = (props: StatGroup2Props) => {
       : metrics
 
   return (
-    <BlockStateProvider state={getBlockState(status, metrics)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, metrics)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

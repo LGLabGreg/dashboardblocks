@@ -3,6 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
+  type BlockStateProps,
   type BlockStatus,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -45,7 +46,7 @@ interface Campaign {
   spend: number
 }
 
-interface Scatter3Props {
+interface Scatter3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   campaigns?: Campaign[]
   channels: string[]
@@ -125,7 +126,15 @@ const money = (value: number) => formatCurrency(value, { compact: value >= 1_000
 const percent = (value: number) => formatPercent(value, { minimumFractionDigits: 1 })
 
 const Scatter3 = (props: Scatter3Props) => {
-  const { campaigns = [], channels, description, status, target, title } = props
+  const {
+    campaigns = [],
+    channels,
+    description,
+    errorMessage,
+    status,
+    target,
+    title,
+  } = props
   const state = getBlockState(status, campaigns)
   const colorOf = (channel: string) =>
     scatterPalette[Math.max(0, channels.indexOf(channel)) % scatterPalette.length]
@@ -137,7 +146,7 @@ const Scatter3 = (props: Scatter3Props) => {
     : []
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

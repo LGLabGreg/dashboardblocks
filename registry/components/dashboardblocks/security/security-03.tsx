@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -28,7 +28,7 @@ interface Session {
   location: string
 }
 
-interface Security3Props {
+interface Security3Props extends BlockStateProps {
   /** Defaults to a sentence counting the devices and where they are. */
   description?: string
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
@@ -36,7 +36,6 @@ interface Security3Props {
   onSignOut?: (id: string) => void
   /** Leave out, or pass none, to show the empty state. */
   sessions?: Session[]
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -166,11 +165,11 @@ function SessionList(props: Security3Props) {
 }
 
 const Security3 = (props: Security3Props) => {
-  const { sessions = [], status } = props
+  const { sessions = [], errorMessage, status } = props
   const state = getBlockState(status, sessions)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <SessionList key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

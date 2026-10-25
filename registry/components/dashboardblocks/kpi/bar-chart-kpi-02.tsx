@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -34,13 +34,12 @@ interface DailyGoal {
   value: number
 }
 
-interface BarChartKPI2Props {
+interface BarChartKPI2Props extends BlockStateProps {
   /** Leave out, or pass no days, to show the empty state. */
   data?: DailyGoal[]
   format?: KPIFormat
   /** @default 144 */
   height?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -98,7 +97,7 @@ function BarWithGoal({
 }
 
 const BarChartKPI2 = (props: BarChartKPI2Props) => {
-  const { data = [], format, height = 144, status, title } = props
+  const { data = [], format, height = 144, errorMessage, status, title } = props
   const state = getBlockState(status, data)
   const formatter = getKPIFormatter(format)
   const total = data.reduce((sum, point) => sum + point.value, 0)
@@ -107,7 +106,7 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
   const daysMet = data.filter((point) => point.value >= point.goal).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <KPI>
         <KPIContent className='gap-3'>
           <div className='flex flex-col gap-1'>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
@@ -31,13 +31,12 @@ interface CountryStat {
   visitors: number
 }
 
-interface Leaderboard5Props {
+interface Leaderboard5Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   countries?: CountryStat[]
   /** Defaults to a sentence about the leading country and the top three. */
   description?: string
   initialCount?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -116,7 +115,7 @@ function IconSwap({
 }
 
 const Leaderboard5 = (props: Leaderboard5Props) => {
-  const { countries = [], initialCount = 5, status, title } = props
+  const { countries = [], initialCount = 5, errorMessage, status, title } = props
   const state = getBlockState(status, countries)
   const [ascending, setAscending] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -131,7 +130,7 @@ const Leaderboard5 = (props: Leaderboard5Props) => {
   const { description = summarize(ranked) } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -32,7 +32,7 @@ interface Deal extends KanbanItem {
   value: number
 }
 
-interface Kanban2Props {
+interface Kanban2Props extends BlockStateProps {
   closedColumns: { lost: string; won: string }
   columns: KanbanColumnDef[]
   /** Leave out, or pass none, to show the empty state. */
@@ -40,7 +40,6 @@ interface Kanban2Props {
   /** Pass a fixed date, so next-step dates render the same on the server and in the browser. */
   now: Date
   onMove?: (id: string, column: string, index: number) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -186,6 +185,7 @@ const Kanban2 = (props: Kanban2Props) => {
     deals: loadedDeals = noDeals,
     now,
     onMove,
+    errorMessage,
     status,
     title,
   } = props
@@ -205,7 +205,7 @@ const Kanban2 = (props: Kanban2Props) => {
   const won = getColumnItems(deals, closedColumns.won)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

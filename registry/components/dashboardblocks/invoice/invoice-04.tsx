@@ -4,7 +4,7 @@ import { formatBillingDate } from '@/registry/components/dashboardblocks/billing
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -31,7 +31,7 @@ import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 
-interface Invoice4Props {
+interface Invoice4Props extends BlockStateProps {
   billTo: DocumentParty
   brand: { name: string; website: string }
   /** Facts about the sender, printed at the foot of the page. */
@@ -48,7 +48,6 @@ interface Invoice4Props {
   shipBy: Date
   shipping: string
   shipTo: DocumentParty
-  status?: BlockStatus
   weight?: string
 }
 
@@ -157,6 +156,7 @@ const Invoice4 = (props: Invoice4Props) => {
     shipBy,
     shipping,
     shipTo,
+    errorMessage,
     status,
     weight,
   } = props
@@ -177,7 +177,7 @@ const Invoice4 = (props: Invoice4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

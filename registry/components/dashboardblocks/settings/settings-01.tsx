@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -38,7 +38,7 @@ interface Invite {
   sentAt: Date
 }
 
-interface Settings1Props {
+interface Settings1Props extends BlockStateProps {
   /** The signed-in member, who can't change their own role or remove themselves. */
   currentMemberId: string
   description: string
@@ -53,7 +53,6 @@ interface Settings1Props {
   onRevokeInvite?: (id: string) => void
   onRoleChange?: (id: string, role: Role) => void
   seats?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -124,6 +123,7 @@ const Settings1 = (props: Settings1Props) => {
     onRevokeInvite,
     onRoleChange,
     seats,
+    errorMessage,
     status,
     title,
   } = props
@@ -167,7 +167,7 @@ const Settings1 = (props: Settings1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-5'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -35,10 +35,9 @@ interface OnboardingStep {
   title: string
 }
 
-interface Checklist1Props {
+interface Checklist1Props extends BlockStateProps {
   onAction?: (id: string) => void
   onSkip?: (id: string) => void
-  status?: BlockStatus
   /** Leave out, or pass none, to show the empty state. */
   steps?: OnboardingStep[]
   title: string
@@ -249,11 +248,11 @@ function ChecklistSteps(props: ChecklistStepsProps) {
 }
 
 const Checklist1 = (props: Checklist1Props) => {
-  const { status, steps = [], title } = props
+  const { errorMessage, status, steps = [], title } = props
   const state = getBlockState(status, steps)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

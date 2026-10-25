@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -21,7 +21,7 @@ interface BeforeAfterRow {
   label: string
 }
 
-interface Comparison4Props {
+interface Comparison4Props extends BlockStateProps {
   afterLabel: string
   beforeLabel: string
   /** Defaults to a sentence saying how many rows improved and which most. */
@@ -31,7 +31,6 @@ interface Comparison4Props {
   goodDirection?: 'up' | 'down'
   /** Leave out, or pass none, to show the empty state. */
   rows?: BeforeAfterRow[]
-  status?: BlockStatus
   title: string
   /** Names what each row measures, under the title. */
   unitLabel?: string
@@ -60,6 +59,7 @@ const Comparison4 = (props: Comparison4Props) => {
     formatter = (value) => formatNumber(value),
     goodDirection = 'up',
     rows = [],
+    errorMessage,
     status,
     title,
     unitLabel,
@@ -86,7 +86,7 @@ const Comparison4 = (props: Comparison4Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

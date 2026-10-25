@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,7 +26,7 @@ import { useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-interface Schedule4Props {
+interface Schedule4Props extends BlockStateProps {
   calendars: { color: string; name: string }[]
   /** Last hour on the axis, 1–24. */
   endHour?: number
@@ -35,7 +35,6 @@ interface Schedule4Props {
   now: Date
   /** First hour on the axis, 0–23. */
   startHour?: number
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -191,6 +190,7 @@ const Schedule4 = (props: Schedule4Props) => {
     events = [],
     now,
     startHour = 8,
+    errorMessage,
     status,
     timeZone = 'UTC',
     title,
@@ -251,7 +251,7 @@ const Schedule4 = (props: Schedule4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

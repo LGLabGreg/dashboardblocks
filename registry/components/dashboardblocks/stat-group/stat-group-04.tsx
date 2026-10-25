@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -17,12 +17,11 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface StatGroup4Props {
+interface StatGroup4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   metrics?: StatMetric[]
   /** How many metrics to sketch while loading. @default 5 */
   placeholders?: number
-  status?: BlockStatus
 }
 
 const exampleProps: StatGroup4Props = {
@@ -62,11 +61,14 @@ const exampleProps: StatGroup4Props = {
 }
 
 const StatGroup4 = (props: StatGroup4Props) => {
-  const { metrics = [], placeholders = 5, status } = props
+  const { metrics = [], placeholders = 5, errorMessage, status } = props
   const shown = status === 'loading' ? getStatPlaceholders(placeholders) : metrics
 
   return (
-    <BlockStateProvider state={getBlockState(status, metrics)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, metrics)}
+    >
       <section className='@container flex flex-col gap-4'>
         <StatGroup className='grid-cols-2 gap-x-4 gap-y-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
           {shown.map((metric) => (

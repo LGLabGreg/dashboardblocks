@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -29,7 +29,7 @@ interface OrderRow {
   state: OrderState
 }
 
-interface DataTable5Props {
+interface DataTable5Props extends BlockStateProps {
   /** Defaults to a sentence with the orders' total and any that failed. */
   description?: string
   pageSize?: number
@@ -37,7 +37,6 @@ interface DataTable5Props {
   period?: string
   /** Leave out, or pass none, to show the empty state. */
   rows?: OrderRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -135,7 +134,7 @@ const columns = columnHelper.columns([
 ])
 
 const DataTable5 = (props: DataTable5Props) => {
-  const { pageSize = 5, period, rows = noRows, status, title } = props
+  const { pageSize = 5, period, rows = noRows, errorMessage, status, title } = props
   const { description = summarize(rows, period) } = props
   const table = useDataTable({
     columns,
@@ -146,7 +145,7 @@ const DataTable5 = (props: DataTable5Props) => {
   const { pageIndex } = table.state.pagination
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

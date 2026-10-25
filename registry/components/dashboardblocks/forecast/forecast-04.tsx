@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -66,14 +66,13 @@ interface Scenario {
   rate: number
 }
 
-interface Forecast4Props {
+interface Forecast4Props extends BlockStateProps {
   /** Values so far, oldest first. Leave out, or pass none, to show the empty state. */
   actuals?: { label: string; value: number }[]
   description: string
   formatter?: (value: number) => string
   horizon: string[]
   scenarios: Record<ScenarioKey, Scenario>
-  status?: BlockStatus
   target?: number
   title: string
 }
@@ -115,6 +114,7 @@ const Forecast4 = (props: Forecast4Props) => {
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     horizon,
     scenarios,
+    errorMessage,
     status,
     target,
     title,
@@ -170,7 +170,7 @@ const Forecast4 = (props: Forecast4Props) => {
       ) : null
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

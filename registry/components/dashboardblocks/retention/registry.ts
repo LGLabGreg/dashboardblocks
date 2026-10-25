@@ -30,9 +30,11 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'button',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('kpi'),
+      registryUrl('link'),
       registryUrl('retention'),
     ],
     files: [

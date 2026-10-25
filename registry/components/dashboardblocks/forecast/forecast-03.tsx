@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -20,13 +20,12 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
-interface Forecast3Props {
+interface Forecast3Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   current?: number
   description: string
   elapsed: number
   formatter?: (value: number) => string
-  status?: BlockStatus
   target: number
   title: string
   total: number
@@ -48,6 +47,7 @@ const Forecast3 = (props: Forecast3Props) => {
     description,
     elapsed,
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
+    errorMessage,
     status: blockStatus,
     target,
     title,
@@ -68,7 +68,7 @@ const Forecast3 = (props: Forecast3Props) => {
   })
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-4'>
           <div className='flex flex-col gap-0.5'>

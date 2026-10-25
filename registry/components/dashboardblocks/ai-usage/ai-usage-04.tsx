@@ -14,7 +14,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -24,14 +24,13 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
-interface AiUsage4Props {
+interface AiUsage4Props extends BlockStateProps {
   /** Follows the previous hit rate in the sentence. @default 'last month' */
   comparison?: string
   description: string
   /** Hit rate for the period before, 0–1, to show the change. */
   previousHitRate?: number
   prices: TokenPrices
-  status?: BlockStatus
   title: string
   /** Leave out to show the empty state. */
   tokens?: TokenCounts
@@ -57,6 +56,7 @@ const AiUsage4 = (props: AiUsage4Props) => {
     description,
     previousHitRate,
     prices,
+    errorMessage,
     status,
     title,
     tokens = { input: 0, output: 0 },
@@ -68,7 +68,7 @@ const AiUsage4 = (props: AiUsage4Props) => {
   const asPercent = (rate: number) => Math.round(rate * 1_000) / 10
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

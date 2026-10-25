@@ -4,7 +4,7 @@ import { getRevenueMetrics } from '@/registry/components/dashboardblocks/billing
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -30,7 +30,7 @@ interface RevenueSnapshot {
   netRevenueRetention: number
 }
 
-interface Billing4Props {
+interface Billing4Props extends BlockStateProps {
   /** Follows each previous value. @default 'last month' */
   comparison?: string
   /** @default 'USD' */
@@ -39,7 +39,6 @@ interface Billing4Props {
   current?: RevenueSnapshot
   description: string
   previous?: RevenueSnapshot
-  status?: BlockStatus
   title: string
 }
 
@@ -107,6 +106,7 @@ const Billing4 = (props: Billing4Props) => {
     current,
     description,
     previous,
+    errorMessage,
     status,
     title,
   } = props
@@ -115,7 +115,10 @@ const Billing4 = (props: Billing4Props) => {
     status === 'loading' ? getStatPlaceholders(4) : metrics
 
   return (
-    <BlockStateProvider state={getBlockState(status, metrics)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, metrics)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

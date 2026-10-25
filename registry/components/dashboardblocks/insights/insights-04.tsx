@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,13 +26,12 @@ interface Takeaway {
   segments: InsightSegment[]
 }
 
-interface Insights4Props {
+interface Insights4Props extends BlockStateProps {
   defaultFeedback?: DigestFeedback | null
   headline: string
   /** Called with `null` when the reader takes their feedback back. */
   onFeedback?: (feedback: DigestFeedback | null) => void
   period: string
-  status?: BlockStatus
   /** Leave out, or pass none, to show the empty state. */
   takeaways?: Takeaway[]
 }
@@ -83,6 +82,7 @@ const Insights4 = (props: Insights4Props) => {
     headline,
     onFeedback,
     period,
+    errorMessage,
     status,
     takeaways = [],
   } = props
@@ -99,7 +99,10 @@ const Insights4 = (props: Insights4Props) => {
   }
 
   return (
-    <BlockStateProvider state={getBlockState(status, takeaways)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, takeaways)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{headline}</h2>

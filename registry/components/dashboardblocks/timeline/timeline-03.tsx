@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -45,7 +45,7 @@ interface Release {
   summary?: string
 }
 
-interface Timeline3Props {
+interface Timeline3Props extends BlockStateProps {
   /** Defaults to a sentence about the median gap and when the next release is due. */
   description?: string
   end: Date
@@ -54,7 +54,6 @@ interface Timeline3Props {
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   releases?: Release[]
   start: Date
-  status?: BlockStatus
   title: string
 }
 
@@ -150,7 +149,7 @@ function ActiveRing({ cx, cy, r }: { cx: number; cy: number; r: number }) {
 }
 
 const Timeline3 = (props: Timeline3Props) => {
-  const { end, now, releases = [], start, status, title } = props
+  const { end, now, releases = [], start, errorMessage, status, title } = props
   const state = getBlockState(status, releases)
   const ticks = getTimelineTicks(start, end, 'month')
   const gaps = releases
@@ -243,7 +242,7 @@ const Timeline3 = (props: Timeline3Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

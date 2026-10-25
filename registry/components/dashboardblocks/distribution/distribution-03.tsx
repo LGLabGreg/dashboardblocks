@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -21,10 +21,9 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
-interface Distribution3Props {
+interface Distribution3Props extends BlockStateProps {
   description: string
   formatter?: (value: number) => string
-  status?: BlockStatus
   title: string
   /** @default 'orders' */
   unit?: string
@@ -51,6 +50,7 @@ const Distribution3 = (props: Distribution3Props) => {
   const {
     description,
     formatter = (value) => formatNumber(value),
+    errorMessage,
     status,
     title,
     unit = 'orders',
@@ -67,7 +67,7 @@ const Distribution3 = (props: Distribution3Props) => {
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

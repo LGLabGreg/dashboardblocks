@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -38,13 +38,12 @@ type WorkspaceSettings = {
   workspaceName: string
 }
 
-interface Forms1Props {
+interface Forms1Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   defaultValues?: WorkspaceSettings
   description: string
   domain: string
   onSubmit?: (values: WorkspaceSettings) => Promise<FormErrors<WorkspaceSettings> | void>
-  status?: BlockStatus
   timezones: { label: string; value: string }[]
   title: string
 }
@@ -199,11 +198,14 @@ function Forms1Content(props: Forms1Props & { defaultValues: WorkspaceSettings }
 }
 
 const Forms1 = (props: Forms1Props) => {
-  const { defaultValues, description, status, title } = props
+  const { defaultValues, description, errorMessage, status, title } = props
   const ready = !status && defaultValues !== undefined
 
   return (
-    <BlockStateProvider state={getBlockState(status, defaultValues)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, defaultValues)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

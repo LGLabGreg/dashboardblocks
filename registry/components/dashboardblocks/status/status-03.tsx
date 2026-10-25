@@ -8,7 +8,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -28,12 +28,11 @@ interface IncidentUpdate {
   time: string
 }
 
-interface Status3Props {
+interface Status3Props extends BlockStateProps {
   affected: string[]
   onSubscribe?: () => void
   severity: StatusLevel
   started: string
-  status?: BlockStatus
   title: string
   /** Newest first. Leave out, or pass none, to show the empty state. */
   updates?: IncidentUpdate[]
@@ -66,11 +65,20 @@ const exampleProps: Status3Props = {
 }
 
 const Status3 = (props: Status3Props) => {
-  const { affected, onSubscribe, severity, started, status, title, updates = [] } = props
+  const {
+    affected,
+    onSubscribe,
+    severity,
+    started,
+    errorMessage,
+    status,
+    title,
+    updates = [],
+  } = props
   const state = getBlockState(status, updates)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-1'>

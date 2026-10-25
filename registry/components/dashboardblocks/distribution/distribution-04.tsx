@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
@@ -16,7 +16,7 @@ import {
 import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Distribution4Props {
+interface Distribution4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   current?: number[]
   /** @default 'This week' */
@@ -29,7 +29,6 @@ interface Distribution4Props {
   previous?: number[]
   /** @default 'Last week' */
   previousLabel?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -56,6 +55,7 @@ const Distribution4 = (props: Distribution4Props) => {
     lowerIsBetter = true,
     previous = [],
     previousLabel = 'Last week',
+    errorMessage,
     status,
     title,
   } = props
@@ -79,7 +79,7 @@ const Distribution4 = (props: Distribution4Props) => {
   const median = stats[0]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -62,7 +62,7 @@ interface Reading {
   value: number
 }
 
-interface Insights2Props {
+interface Insights2Props extends BlockStateProps {
   description: string
   drivers?: InsightDriver[]
   explanation: InsightSegment[]
@@ -72,7 +72,6 @@ interface Insights2Props {
   onMarkExpected?: () => void
   /** Leave out, or pass none, to show the empty state. */
   readings?: Reading[]
-  status?: BlockStatus
   title: string
 }
 
@@ -141,6 +140,7 @@ const Insights2 = (props: Insights2Props) => {
     metric,
     onMarkExpected,
     readings = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -180,7 +180,7 @@ const Insights2 = (props: Insights2Props) => {
     .map((point) => point.index)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

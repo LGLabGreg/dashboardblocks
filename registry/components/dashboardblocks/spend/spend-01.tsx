@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -19,7 +19,7 @@ import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/fo
 
 import { cn } from '@/lib/utils'
 
-interface Spend1Props {
+interface Spend1Props extends BlockStateProps {
   budget: number
   /** @default 'USD' */
   currency?: string
@@ -30,7 +30,6 @@ interface Spend1Props {
   periodStart: Date
   /** Leave out to show the empty state. */
   spent?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -55,6 +54,7 @@ const Spend1 = (props: Spend1Props) => {
     periodEnd,
     periodStart,
     spent = 0,
+    errorMessage,
     status,
     title,
   } = props
@@ -70,7 +70,7 @@ const Spend1 = (props: Spend1Props) => {
   const share = budget > 0 ? spent / budget : 0
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

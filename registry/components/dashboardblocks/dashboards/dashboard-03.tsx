@@ -3,7 +3,7 @@
 import {
   BlockBusy,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
 } from '@/registry/components/dashboardblocks/block-state'
 import { BREAKDOWN_OTHER_COLOR } from '@/registry/components/dashboardblocks/breakdown'
 import { Breakdown1 } from '@/registry/components/dashboardblocks/breakdown/breakdown-01'
@@ -31,9 +31,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-interface Dashboard3Props {
+interface Dashboard3Props extends BlockStateProps {
   empty?: boolean
-  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -275,7 +274,7 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
 }
 
 const Dashboard3 = (props: Dashboard3Props) => {
-  const { empty = false, status, title, today } = props
+  const { empty = false, errorMessage, status, title, today } = props
   const [query, setQuery] = useState<Query>({ device: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -292,7 +291,10 @@ const Dashboard3 = (props: Dashboard3Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider state={status ?? (empty ? 'empty' : undefined)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={status ?? (empty ? 'empty' : undefined)}
+    >
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3'>
           <div className='flex flex-col gap-2'>
@@ -343,6 +345,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
         <div className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'>
           <BlockBusy busy={busy} label='Updating traffic' className='@4xl:col-span-2'>
             <ChartPanel2
+              errorMessage={errorMessage}
               status={status}
               data={empty ? [] : data.traffic.data}
               description={status || empty ? '' : data.traffic.summary}
@@ -351,6 +354,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
             />
           </BlockBusy>
           <Realtime1
+            errorMessage={errorMessage}
             status={status}
             activeUsers={empty ? undefined : 284}
             description='People on the site in the last 5 minutes, on every device.'
@@ -384,6 +388,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
           >
             <div className='@4xl:col-span-3'>
               <Flow1
+                errorMessage={errorMessage}
                 status={status}
                 description='Sessions from each source, through the page they landed on, to how the visit ended.'
                 goal='signed-up'
@@ -393,11 +398,13 @@ const Dashboard3 = (props: Dashboard3Props) => {
               />
             </div>
             <Leaderboard1
+              errorMessage={errorMessage}
               status={status}
               pages={empty ? [] : data.pages}
               title='Top pages'
             />
             <Geo2
+              errorMessage={errorMessage}
               status={status}
               countries={empty ? [] : data.countries}
               limit={6}
@@ -405,6 +412,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
               unit='visitors'
             />
             <Breakdown1
+              errorMessage={errorMessage}
               status={status}
               description={status || empty ? '' : data.browserSummary}
               formatter={(value) => formatNumber(value)}

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -38,12 +38,11 @@ interface TaskGroup {
   tasks: Task[]
 }
 
-interface Checklist4Props {
+interface Checklist4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   groups?: TaskGroup[]
   now: Date
   onToggle?: (id: string, done: boolean) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -245,14 +244,14 @@ function TaskGroups(props: TaskGroupsProps) {
 }
 
 const Checklist4 = (props: Checklist4Props) => {
-  const { groups = [], status, title } = props
+  const { groups = [], errorMessage, status, title } = props
   const state = getBlockState(
     status,
     groups.flatMap((group) => group.tasks),
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       {state ? (
         <section className='@container flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -22,13 +22,12 @@ import {
 } from '@/registry/components/dashboardblocks/schedule'
 import { useRef, useState } from 'react'
 
-interface Calendar2Props {
+interface Calendar2Props extends BlockStateProps {
   calendars: { color: string; name: string }[]
   /** Leave out, or pass none, to show the empty state. */
   events?: CalendarEvent[]
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   /** 0 for Sunday, 1 for Monday. */
@@ -278,6 +277,7 @@ const Calendar2 = (props: Calendar2Props) => {
     events: data = [],
     now,
     onSelectEvent,
+    errorMessage,
     status,
     timeZone = 'UTC',
     weekStartsOn = 0,
@@ -319,7 +319,7 @@ const Calendar2 = (props: Calendar2Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={formatDayRange(days[0], days[6])}

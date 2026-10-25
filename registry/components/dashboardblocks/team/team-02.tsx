@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -19,12 +19,11 @@ interface Assignee extends Person {
   role?: string
 }
 
-interface Team2Props {
+interface Team2Props extends BlockStateProps {
   /** @default a sentence naming who is over capacity */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   people?: Assignee[]
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -143,7 +142,7 @@ function summarize(people: Assignee[]) {
 }
 
 const Team2 = (props: Team2Props) => {
-  const { people = [], status, title, unit } = props
+  const { people = [], errorMessage, status, title, unit } = props
   const state = getBlockState(status, people)
   const { ref, revealed } = useReveal<HTMLElement>(true)
   const max = Math.max(
@@ -158,7 +157,7 @@ const Team2 = (props: Team2Props) => {
   const load = capacity > 0 ? assigned / capacity : 0
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section ref={ref} className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

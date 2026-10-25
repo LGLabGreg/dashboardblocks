@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -19,13 +19,12 @@ import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
-interface ProgressKPI1Props {
+interface ProgressKPI1Props extends BlockStateProps {
   comparison: string
   daysElapsed: number
   daysInPeriod: number
   format?: KPIFormat
   previous?: number
-  status?: BlockStatus
   target: number
   title: string
   /** Leave out to show the empty state. */
@@ -50,6 +49,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
     daysInPeriod,
     format,
     previous,
+    errorMessage,
     status,
     target,
     title,
@@ -65,7 +65,7 @@ const ProgressKPI1 = (props: ProgressKPI1Props) => {
   const gap = projected - target
 
   return (
-    <BlockStateProvider state={getBlockState(status, value)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
       <KPI>
         <KPIContent className='gap-1'>
           <KPITitle>{title}</KPITitle>

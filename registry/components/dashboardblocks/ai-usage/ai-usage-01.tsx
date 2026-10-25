@@ -8,7 +8,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -47,12 +47,11 @@ interface UsageDay {
   tokens: Record<string, number>
 }
 
-interface AiUsage1Props {
+interface AiUsage1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   days?: UsageDay[]
   description: string
   models?: ModelUsage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -96,7 +95,7 @@ const exampleProps: AiUsage1Props = {
 }
 
 const AiUsage1 = (props: AiUsage1Props) => {
-  const { days = [], description, models = [], status, title } = props
+  const { days = [], description, models = [], errorMessage, status, title } = props
   const state = getBlockState(status, days)
   const colorOf = (index: number) => modelPalette[index % modelPalette.length]
   const rows = days.map((day) => ({ label: day.label, ...day.tokens }))
@@ -108,7 +107,7 @@ const AiUsage1 = (props: AiUsage1Props) => {
   const average = days.length > 0 ? tokens / days.length : 0
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

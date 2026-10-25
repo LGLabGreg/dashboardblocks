@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -29,12 +29,11 @@ interface Pipeline {
   runs: DeployStatus[]
 }
 
-interface Deployments4Props {
+interface Deployments4Props extends BlockStateProps {
   /** Defaults to a sentence naming the pipeline that fails most. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   pipelines?: Pipeline[]
-  status?: BlockStatus
   title: string
 }
 
@@ -106,11 +105,14 @@ const summarize = (pipelines: Pipeline[]) => {
 }
 
 const Deployments4 = (props: Deployments4Props) => {
-  const { pipelines = [], status, title } = props
+  const { pipelines = [], errorMessage, status, title } = props
   const { description = summarize(pipelines) } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, pipelines)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, pipelines)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

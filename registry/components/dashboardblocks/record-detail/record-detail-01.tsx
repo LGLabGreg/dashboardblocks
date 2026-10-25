@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -53,7 +53,7 @@ interface CustomerOrder {
   total: number
 }
 
-interface RecordDetail1Props {
+interface RecordDetail1Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   customer?: {
     avatar?: string
@@ -71,7 +71,6 @@ interface RecordDetail1Props {
   onMerge?: () => void
   orders?: CustomerOrder[]
   stats?: PageHeaderFact[]
-  status?: BlockStatus
 }
 
 const exampleProps: RecordDetail1Props = {
@@ -124,6 +123,7 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
     onMerge = () => {},
     orders = [],
     stats = [],
+    errorMessage,
     status,
   } = props
   const state = getBlockState(status, customer)
@@ -133,7 +133,7 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
     .reduce((sum, order) => sum + order.total, 0)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Customers</BackLink>

@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   Skeleton,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -17,11 +17,10 @@ import {
 
 import { cn } from '@/lib/utils'
 
-interface Team3Props {
+interface Team3Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   people?: Person[]
-  status?: BlockStatus
   title: string
 }
 
@@ -71,7 +70,7 @@ const barFill: Record<Presence, string> = {
 }
 
 const Team3 = (props: Team3Props) => {
-  const { description, people = [], status, title } = props
+  const { description, people = [], errorMessage, status, title } = props
   const state = getBlockState(status, people)
   const byPresence = Object.fromEntries(
     presenceOrder.map((presence) => [
@@ -82,7 +81,7 @@ const Team3 = (props: Team3Props) => {
   const online = byPresence.online.length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

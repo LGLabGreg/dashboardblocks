@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -38,7 +38,7 @@ interface Contributor extends Pick<Person, 'avatar' | 'name'> {
   count: number
 }
 
-interface ActivityFeed4Props {
+interface ActivityFeed4Props extends BlockStateProps {
   /** Most active first. */
   contributors?: Contributor[]
   counts?: ActivityCount[]
@@ -46,7 +46,6 @@ interface ActivityFeed4Props {
   days?: ActivityDay[]
   /** The dates the week covers, such as "Sep 20 – 26". */
   range: string
-  status?: BlockStatus
   title: string
 }
 
@@ -155,7 +154,15 @@ function CountChange({ previous, value }: { previous: number; value: number }) {
 }
 
 const ActivityFeed4 = (props: ActivityFeed4Props) => {
-  const { contributors = [], counts = [], days = [], range, status, title } = props
+  const {
+    contributors = [],
+    counts = [],
+    days = [],
+    range,
+    errorMessage,
+    status,
+    title,
+  } = props
   const id = useId()
   const state = getBlockState(status, days)
   const total = days.reduce((sum, day) => sum + day.value, 0)
@@ -173,7 +180,7 @@ const ActivityFeed4 = (props: ActivityFeed4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

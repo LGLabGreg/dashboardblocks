@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -15,7 +15,7 @@ import {
 } from '@/registry/components/dashboardblocks/metric-list'
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
-interface MetricList1Props {
+interface MetricList1Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `the 14 days before`. */
   comparison: string
   /** Names each point of the histories, oldest first. */
@@ -23,7 +23,6 @@ interface MetricList1Props {
   /** Leave out, or pass none, to show the empty state. */
   metrics?: Metric[]
   period: string
-  status?: BlockStatus
   title: string
 }
 
@@ -104,7 +103,7 @@ const exampleProps: MetricList1Props = {
 }
 
 const MetricList1 = (props: MetricList1Props) => {
-  const { comparison, labels, metrics = [], period, status, title } = props
+  const { comparison, labels, metrics = [], period, errorMessage, status, title } = props
   const state = getBlockState(status, metrics)
   const improved = metrics.filter((metric) => {
     const change = getMetricChange(metric) ?? 0
@@ -112,7 +111,7 @@ const MetricList1 = (props: MetricList1Props) => {
   }).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

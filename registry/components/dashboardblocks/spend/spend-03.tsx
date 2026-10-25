@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -43,13 +43,12 @@ interface SpendPeriod {
   spent: number
 }
 
-interface Spend3Props {
+interface Spend3Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   description: string
   /** Leave out, or pass none, to show the empty state. */
   periods?: SpendPeriod[]
-  status?: BlockStatus
   title: string
 }
 
@@ -70,7 +69,14 @@ const exampleProps: Spend3Props = {
 const MIN_LABELLED_BAR_WIDTH = 30
 
 const Spend3 = (props: Spend3Props) => {
-  const { currency = 'USD', description, periods = [], status, title } = props
+  const {
+    currency = 'USD',
+    description,
+    periods = [],
+    errorMessage,
+    status,
+    title,
+  } = props
   const state = getBlockState(status, periods)
   const format = (value: number) => formatCurrency(value, { currency })
   const compact = (value: number) => formatCurrency(value, { compact: true, currency })
@@ -80,7 +86,7 @@ const Spend3 = (props: Spend3Props) => {
   const overMonths = periods.filter((period) => period.spent > period.budget).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

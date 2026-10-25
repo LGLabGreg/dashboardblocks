@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -46,14 +46,13 @@ import {
 
 import { cn } from '@/lib/utils'
 
-interface Goals3Props {
+interface Goals3Props extends BlockStateProps {
   /** Daily values so far, oldest first. Leave out, or pass none, to show the empty state. */
   daily?: number[]
   description: string
   /** Day labels for the whole period, including days still to come. */
   days: string[]
   formatter?: (value: number) => string
-  status?: BlockStatus
   target: number
   title: string
 }
@@ -80,6 +79,7 @@ const Goals3 = (props: Goals3Props) => {
     description,
     days,
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
+    errorMessage,
     status,
     target,
     title,
@@ -110,7 +110,7 @@ const Goals3 = (props: Goals3Props) => {
   const shortfall = target - projected
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

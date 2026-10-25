@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -22,14 +22,13 @@ interface PageRow {
   visitors: number
 }
 
-interface DataTable1Props {
+interface DataTable1Props extends BlockStateProps {
   /** Defaults to a sentence counting page views and the top page's share. */
   description?: string
   /** Follows the page view count in the default description. */
   period?: string
   /** Leave out, or pass none, to show the empty state. */
   rows?: PageRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -110,7 +109,7 @@ const columns = columnHelper.columns([
 ])
 
 const DataTable1 = (props: DataTable1Props) => {
-  const { period, rows = noRows, status, title } = props
+  const { period, rows = noRows, errorMessage, status, title } = props
   const { description = summarize(rows, period) } = props
   const table = useDataTable({
     columns,
@@ -119,7 +118,7 @@ const DataTable1 = (props: DataTable1Props) => {
   })
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

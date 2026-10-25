@@ -23,11 +23,11 @@ import {
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 
-interface AiAssistant4Props {
+interface AiAssistant4Props extends BlockStateProps {
   /**
    * The chat it runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies.
    * The AI SDK sends "An error occurred." for any error on the server unless the route's `onError` returns a message to show.
@@ -38,7 +38,6 @@ interface AiAssistant4Props {
   error?: string
   /** The conversation the canned replies start from. With `chat`, pass it to the chat instead. Leave out, or pass none, for a new chat. */
   messages?: AIMessage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -152,6 +151,7 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
     description,
     error: initialError,
     messages: initialMessages = [],
+    errorMessage,
     status: blockStatus,
     title,
   } = props
@@ -162,7 +162,7 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
   const state = getBlockState(blockStatus, messages)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex h-[34rem] flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

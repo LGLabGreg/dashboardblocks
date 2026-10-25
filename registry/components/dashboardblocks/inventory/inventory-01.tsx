@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -30,12 +30,11 @@ interface StockItem {
   sku: string
 }
 
-interface Inventory1Props {
+interface Inventory1Props extends BlockStateProps {
   /** Defaults to a sentence counting the items that are out or run out before an order arrives. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   items?: StockItem[]
-  status?: BlockStatus
   targetDays?: number
   title: string
 }
@@ -109,7 +108,7 @@ const formatCover = (cover: number) =>
       : 'No demand'
 
 const Inventory1 = (props: Inventory1Props) => {
-  const { items = [], status, targetDays = 30, title } = props
+  const { items = [], errorMessage, status, targetDays = 30, title } = props
   const state = getBlockState(status, items)
   const { description = summarize(items) } = props
   const sorted = [...items].sort(
@@ -120,7 +119,7 @@ const Inventory1 = (props: Inventory1Props) => {
     Math.max(...items.map((item) => Math.max(item.onHand, item.reorderPoint))) * 1.1
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

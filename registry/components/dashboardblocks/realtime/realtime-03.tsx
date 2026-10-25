@@ -9,7 +9,7 @@ import {
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -35,7 +35,7 @@ interface LiveEvent {
   label: string
 }
 
-interface Realtime3Props {
+interface Realtime3Props extends BlockStateProps {
   description: string
   /** Newest first. Leave out, or pass none, to show the empty state. */
   events?: LiveEvent[]
@@ -43,7 +43,6 @@ interface Realtime3Props {
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
   simulate?: boolean
-  status?: BlockStatus
   title: string
 }
 
@@ -172,6 +171,7 @@ const Realtime3 = (props: Realtime3Props) => {
     events: loadedEvents = noEvents,
     limit = 6,
     simulate = false,
+    errorMessage,
     status,
     title,
   } = props
@@ -207,7 +207,7 @@ const Realtime3 = (props: Realtime3Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -19,11 +19,10 @@ import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 import { cn } from '@/lib/utils'
 
-interface Funnel3Props {
+interface Funnel3Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   stages?: FunnelStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -40,14 +39,14 @@ const exampleProps: Funnel3Props = {
 }
 
 const Funnel3 = (props: Funnel3Props) => {
-  const { description, stages = [], status, title } = props
+  const { description, stages = [], errorMessage, status, title } = props
   const state = getBlockState(status, stages)
   const steps = getFunnelSteps(stages)
   const biggestDrop = getBiggestDropIndex(steps)
   const last = steps.at(-1)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

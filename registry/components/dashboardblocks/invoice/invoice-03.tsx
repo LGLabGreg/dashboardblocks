@@ -7,7 +7,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -52,7 +52,7 @@ const quoteStatusConfig: Record<QuoteStatus, { label: string; tone: StatusTone }
   open: { label: 'Awaiting response', tone: 'info' },
 }
 
-interface Invoice3Props {
+interface Invoice3Props extends BlockStateProps {
   brand: { name: string; website: string }
   /** @default 'USD' */
   currency?: string
@@ -74,7 +74,6 @@ interface Invoice3Props {
   onDecline?: () => Promise<void>
   preparedBy: string
   preparedFor: DocumentParty
-  status?: BlockStatus
   terms: string
 }
 
@@ -186,6 +185,7 @@ const Invoice3 = (props: Invoice3Props) => {
     onDecline = respond,
     preparedBy,
     preparedFor,
+    errorMessage,
     status: blockStatus,
     terms,
   } = props
@@ -219,7 +219,7 @@ const Invoice3 = (props: Invoice3Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

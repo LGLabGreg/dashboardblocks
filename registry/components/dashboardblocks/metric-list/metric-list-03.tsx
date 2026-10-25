@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -24,11 +24,10 @@ interface TargetMetric extends Omit<Metric, 'history' | 'previous'> {
   tolerance?: number
 }
 
-interface MetricList3Props {
+interface MetricList3Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   metrics?: TargetMetric[]
-  status?: BlockStatus
   title: string
 }
 
@@ -85,7 +84,7 @@ const exampleProps: MetricList3Props = {
 }
 
 const MetricList3 = (props: MetricList3Props) => {
-  const { description, metrics = [], status, title } = props
+  const { description, metrics = [], errorMessage, status, title } = props
   const state = getBlockState(status, metrics)
   const statuses = metrics.map((metric) => getTargetStatus(metric))
   const met = statuses.filter((status) => status === 'met').length
@@ -93,7 +92,7 @@ const MetricList3 = (props: MetricList3Props) => {
   const missed = statuses.filter((status) => status === 'missed').length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

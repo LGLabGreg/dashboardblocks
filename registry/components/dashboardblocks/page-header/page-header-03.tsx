@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   Skeleton,
   SkeletonText,
   getBlockState,
@@ -50,7 +50,7 @@ interface Customer {
   status: CustomerStatus
 }
 
-interface PageHeader3Props {
+interface PageHeader3Props extends BlockStateProps {
   back: { href: string; label: string }
   /** Leave out to show the empty state. */
   customer?: Customer
@@ -59,7 +59,6 @@ interface PageHeader3Props {
   onDuplicate?: () => void
   onEdit?: () => void
   onMessage?: () => void
-  status?: BlockStatus
 }
 
 const exampleProps: PageHeader3Props = {
@@ -120,6 +119,7 @@ const PageHeader3 = (props: PageHeader3Props) => {
     onDuplicate = () => {},
     onEdit = () => {},
     onMessage = () => {},
+    errorMessage,
     status,
   } = props
   const state = getBlockState(status, customer)
@@ -127,7 +127,7 @@ const PageHeader3 = (props: PageHeader3Props) => {
   const loading = state === 'loading'
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <PageHeader>
         <BackLink href={back.href}>{back.label}</BackLink>
         <PageHeaderRow className='@2xl/page-header:items-end'>

@@ -8,7 +8,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -29,14 +29,13 @@ interface AlertItem {
   title: string
 }
 
-interface Alerts1Props {
+interface Alerts1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   alerts?: AlertItem[]
   /** Defaults to a sentence counting what is still open. */
   description?: string
   now: Date
   onAcknowledge?: (id: string) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -101,7 +100,7 @@ const summarize = (alerts: AlertItem[], now: Date) => {
 }
 
 const Alerts1 = (props: Alerts1Props) => {
-  const { alerts = [], now, onAcknowledge, status, title } = props
+  const { alerts = [], now, onAcknowledge, errorMessage, status, title } = props
   const [acknowledged, setAcknowledged] = useState<ReadonlySet<string>>(() => new Set())
   const [announcement, setAnnouncement] = useState('')
   const state = getBlockState(status, alerts)
@@ -123,7 +122,7 @@ const Alerts1 = (props: Alerts1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

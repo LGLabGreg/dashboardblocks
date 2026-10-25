@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -17,14 +17,13 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Flow1Props {
+interface Flow1Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   links?: FlowLink[]
   /** Sources first, then each step, then outcomes. */
   nodes?: FlowNode[]
   goal: string
-  status?: BlockStatus
   title: string
   /** @default 'sessions' */
   unit?: string
@@ -76,6 +75,7 @@ const Flow1 = (props: Flow1Props) => {
     goal,
     links = [],
     nodes = [],
+    errorMessage,
     status,
     title,
     unit = 'sessions',
@@ -104,7 +104,7 @@ const Flow1 = (props: Flow1Props) => {
     .sort((a, b) => b.rate - a.rate)[0]
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

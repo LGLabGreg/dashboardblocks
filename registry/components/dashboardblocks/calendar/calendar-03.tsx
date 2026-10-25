@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,13 +26,12 @@ import { useId, useRef, useState } from 'react'
 
 type View = 'month' | 'week'
 
-interface Calendar3Props {
+interface Calendar3Props extends BlockStateProps {
   calendars: { color: string; name: string }[]
   /** Leave out, or pass none, to show the empty state. */
   events?: CalendarEvent[]
   now: Date
   onSelectEvent?: (event: CalendarEvent) => void
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   /** @default 'month' */
@@ -279,6 +278,7 @@ const Calendar3 = (props: Calendar3Props) => {
     events: data = [],
     now,
     onSelectEvent,
+    errorMessage,
     status,
     timeZone = 'UTC',
     weekStartsOn = 0,
@@ -331,7 +331,7 @@ const Calendar3 = (props: Calendar3Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--calendar-surface:var(--color-background)]'>
         <CalendarToolbar
           title={view === 'month' ? monthLabel : formatDayRange(days[0], days[6])}

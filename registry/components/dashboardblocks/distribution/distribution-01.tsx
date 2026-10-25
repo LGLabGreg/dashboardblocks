@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanelTable } from '@/registry/components/dashboardblocks/chart-panel'
@@ -19,13 +19,12 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Distribution1Props {
+interface Distribution1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   bins?: DistributionBin[]
   description: string
   formatter?: (value: number) => string
   limit?: { label: string; value: number }
-  status?: BlockStatus
   title: string
   /** @default 'requests' */
   unit?: string
@@ -55,6 +54,7 @@ const Distribution1 = (props: Distribution1Props) => {
     description,
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     limit,
+    errorMessage,
     status,
     title,
     unit = 'requests',
@@ -72,7 +72,7 @@ const Distribution1 = (props: Distribution1Props) => {
   const range = (bin: DistributionBin) => `${formatter(bin.x0)}–${formatter(bin.x1)}`
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

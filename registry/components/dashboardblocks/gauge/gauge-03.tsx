@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -24,13 +24,12 @@ interface Resource {
   value: number
 }
 
-interface Gauge3Props {
+interface Gauge3Props extends BlockStateProps {
   description: string
   /** How many gauges to sketch while loading. @default 3 */
   placeholders?: number
   /** Leave out, or pass none, to show the empty state. */
   resources?: Resource[]
-  status?: BlockStatus
   /** Percent used at which each resource turns to warning, then critical. */
   thresholds: { critical: number; warning: number }
   title: string
@@ -54,6 +53,7 @@ const Gauge3 = (props: Gauge3Props) => {
     description,
     placeholders = 3,
     resources = [],
+    errorMessage,
     status,
     thresholds,
     title,
@@ -76,7 +76,7 @@ const Gauge3 = (props: Gauge3Props) => {
   const worst = busiest ? getGaugeBand(busiest.value, bands) : undefined
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

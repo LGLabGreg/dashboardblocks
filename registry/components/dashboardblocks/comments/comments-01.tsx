@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -18,7 +18,7 @@ import {
 } from '@/registry/components/dashboardblocks/comments'
 import { startTransition, useRef, useState } from 'react'
 
-interface Comments1Props {
+interface Comments1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   comments?: ThreadComment[]
   currentUser: CommentAuthor
@@ -31,7 +31,6 @@ interface Comments1Props {
   /** Posts a comment, or a reply when `parentId` is set. */
   onSubmit?: (body: string, options: { parentId?: string }) => Promise<void>
   people: CommentAuthor[]
-  status?: BlockStatus
   title: string
 }
 
@@ -118,6 +117,7 @@ const Comments1 = (props: Comments1Props) => {
     onResolve = () => {},
     onSubmit = save,
     people,
+    errorMessage,
     status,
     title,
   } = props
@@ -153,7 +153,7 @@ const Comments1 = (props: Comments1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

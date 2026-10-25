@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -21,14 +21,13 @@ import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
-interface DashboardHeader4Props {
+interface DashboardHeader4Props extends BlockStateProps {
   defaultPreset?: DateRangePreset
   /** Leave out to show the empty state. */
   description?: string
   lastUpdated: string
   onExport?: (format: string) => void
   onRefresh?: () => Promise<void>
-  status?: BlockStatus
   title: string
   /** The last day of every date range preset. */
   today: Date
@@ -50,6 +49,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
     lastUpdated,
     onExport = () => {},
     onRefresh = async () => {},
+    errorMessage,
     status,
     title,
     today,
@@ -71,7 +71,7 @@ const DashboardHeader4 = (props: DashboardHeader4Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <header className='@container'>
         <div className='flex flex-col gap-4 @3xl:flex-row @3xl:items-end @3xl:justify-between'>
           <div className='flex flex-col gap-2'>

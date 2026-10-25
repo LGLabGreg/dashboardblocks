@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -23,13 +23,12 @@ import {
 
 import { cn } from '@/lib/utils'
 
-interface Goals1Props {
+interface Goals1Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   current?: number
   end: Date
   formatter?: (value: number) => string
   start: Date
-  status?: BlockStatus
   target: number
   title: string
   today: Date
@@ -52,6 +51,7 @@ const Goals1 = (props: Goals1Props) => {
     end,
     formatter = (value) => formatNumber(value, { maximumFractionDigits: 0 }),
     start,
+    errorMessage,
     status,
     target,
     title,
@@ -75,7 +75,7 @@ const Goals1 = (props: Goals1Props) => {
   const shortfall = target - pace.projected
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

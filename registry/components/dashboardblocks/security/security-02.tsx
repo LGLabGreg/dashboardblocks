@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -27,14 +27,13 @@ interface AuditEvent {
   target?: string
 }
 
-interface Security2Props {
+interface Security2Props extends BlockStateProps {
   /** Defaults to a sentence counting the changes and the critical ones. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   events?: AuditEvent[]
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -109,7 +108,7 @@ const summarize = (events: AuditEvent[]) => {
 }
 
 const Security2 = (props: Security2Props) => {
-  const { description, events = [], now, status, timeZone, title } = props
+  const { description, events = [], now, errorMessage, status, timeZone, title } = props
   const [importantOnly, setImportantOnly] = useState(false)
   const state = getBlockState(status, events)
   const shown = importantOnly
@@ -117,7 +116,7 @@ const Security2 = (props: Security2Props) => {
     : events
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex flex-col gap-0.5'>

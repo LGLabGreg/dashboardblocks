@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -28,14 +28,13 @@ interface Integration {
   status: ConnectionStatus
 }
 
-interface Settings4Props {
+interface Settings4Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   integrations?: Integration[]
   onConfigure?: (id: string) => void
   onConnect?: (id: string) => void
   onDisconnect?: (id: string) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -98,7 +97,15 @@ const needsAttention = (item: Integration) =>
   item.status === 'error' || item.status === 'revoked'
 
 const Settings4 = (props: Settings4Props) => {
-  const { description, onConfigure, onConnect, onDisconnect, status, title } = props
+  const {
+    description,
+    onConfigure,
+    onConnect,
+    onDisconnect,
+    errorMessage,
+    status,
+    title,
+  } = props
   const [integrations, setIntegrations] = useState(props.integrations ?? [])
   const ready = !status && integrations.length > 0
   const [filter, setFilter] = useState<Filter>('all')
@@ -130,7 +137,10 @@ const Settings4 = (props: Settings4Props) => {
   const attention = integrations.filter(needsAttention).length
 
   return (
-    <BlockStateProvider state={getBlockState(status, integrations)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, integrations)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

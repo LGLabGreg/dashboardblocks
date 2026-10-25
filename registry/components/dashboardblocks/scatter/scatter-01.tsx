@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -49,12 +49,11 @@ interface CorrelationPoint {
   y: number
 }
 
-interface Scatter1Props {
+interface Scatter1Props extends BlockStateProps {
   description: string
   groups: string[]
   /** Leave out, or pass none, to show the empty state. */
   points?: CorrelationPoint[]
-  status?: BlockStatus
   title: string
   x: { format: (value: number) => string; label: string }
   y: {
@@ -103,7 +102,7 @@ const formatCorrelation = (r: number) =>
   })}`
 
 const Scatter1 = (props: Scatter1Props) => {
-  const { description, groups, points = [], status, title, x, y } = props
+  const { description, groups, points = [], errorMessage, status, title, x, y } = props
   const state = getBlockState(status, points)
   const fit = fitLine(points)
   const xs = points.map((point) => point.x)
@@ -115,7 +114,7 @@ const Scatter1 = (props: Scatter1Props) => {
   const perUnit = fit.slope
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

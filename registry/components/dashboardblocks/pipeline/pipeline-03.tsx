@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,7 +26,7 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
-interface Pipeline3Props {
+interface Pipeline3Props extends BlockStateProps {
   /** Defaults to a sentence counting the stuck items and naming the one waiting longest. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -34,7 +34,6 @@ interface Pipeline3Props {
   noun?: string
   now: Date
   stages: PipelineStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -137,7 +136,7 @@ const exampleProps: Pipeline3Props = {
 }
 
 const Pipeline3 = (props: Pipeline3Props) => {
-  const { items = [], noun = 'items', now, stages, status, title } = props
+  const { items = [], noun = 'items', now, stages, errorMessage, status, title } = props
   const state = getBlockState(status, items)
   const stageById = new Map(stages.map((stage) => [stage.id, stage]))
 
@@ -161,7 +160,7 @@ const Pipeline3 = (props: Pipeline3Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

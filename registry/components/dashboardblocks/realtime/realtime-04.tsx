@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -48,7 +48,7 @@ interface TodayMetric {
   yesterday: number
 }
 
-interface Realtime4Props {
+interface Realtime4Props extends BlockStateProps {
   /** Defaults to a sentence about the first metric against yesterday. */
   description?: string
   /** Orders (or any count) per hour so far today, from midnight; the last hour is still counting. */
@@ -57,7 +57,6 @@ interface Realtime4Props {
   /** Leave out, or pass none, to show the empty state. */
   metrics?: TodayMetric[]
   simulate?: boolean
-  status?: BlockStatus
   title: string
   /** The same count for each of yesterday's 24 hours, drawn as a dashed line. */
   yesterdayHourly?: number[]
@@ -104,6 +103,7 @@ const Realtime4 = (props: Realtime4Props) => {
     hourlyLabel = 'Orders',
     metrics: loadedMetrics = noMetrics,
     simulate = false,
+    errorMessage,
     status,
     title,
     yesterdayHourly,
@@ -177,7 +177,7 @@ const Realtime4 = (props: Realtime4Props) => {
     Number.isFinite(value) ? formatNumber(value) : 'Not yet'
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

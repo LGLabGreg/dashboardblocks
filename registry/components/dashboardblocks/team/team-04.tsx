@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
@@ -25,13 +25,12 @@ interface Shift {
   start: Date
 }
 
-interface Team4Props {
+interface Team4Props extends BlockStateProps {
   description: string
   now: Date
   onPage?: (person: Person) => void
   /** Leave out, or pass none, to show the empty state. */
   shifts?: Shift[]
-  status?: BlockStatus
   /** @default 'UTC' */
   timeZone?: string
   title: string
@@ -111,7 +110,16 @@ function formatDuration(ms: number) {
 }
 
 const Team4 = (props: Team4Props) => {
-  const { description, now, onPage, shifts = [], status, timeZone = 'UTC', title } = props
+  const {
+    description,
+    now,
+    onPage,
+    shifts = [],
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const state = getBlockState(status, shifts)
   const id = useId()
 
@@ -131,7 +139,7 @@ const Team4 = (props: Team4Props) => {
       : 'Nobody is on call.'
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

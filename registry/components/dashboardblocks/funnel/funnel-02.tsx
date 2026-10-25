@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -40,11 +40,10 @@ import {
   YAxis,
 } from 'recharts'
 
-interface Funnel2Props {
+interface Funnel2Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   stages?: FunnelStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -63,7 +62,7 @@ const exampleProps: Funnel2Props = {
 const DROPPED_COLOR = chartFadedColor(FUNNEL_COLOR)
 
 const Funnel2 = (props: Funnel2Props) => {
-  const { description, stages = [], status, title } = props
+  const { description, stages = [], errorMessage, status, title } = props
   const state = getBlockState(status, stages)
   const steps = getFunnelSteps(stages)
   const first = steps[0]
@@ -77,7 +76,7 @@ const Funnel2 = (props: Funnel2Props) => {
   }))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

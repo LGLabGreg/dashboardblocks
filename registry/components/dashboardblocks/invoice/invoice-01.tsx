@@ -9,7 +9,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -43,7 +43,7 @@ import { startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 
-interface Invoice1Props {
+interface Invoice1Props extends BlockStateProps {
   bank: { accountName: string; accountNumber: string; bank: string; routing: string }
   billTo: DocumentParty
   brand: { name: string; website: string }
@@ -68,7 +68,6 @@ interface Invoice1Props {
   payUrl: string
   poNumber?: string
   sentTo: string
-  status?: BlockStatus
   taxRate?: number
   terms: string
 }
@@ -192,6 +191,7 @@ const Invoice1 = (props: Invoice1Props) => {
     payUrl,
     poNumber,
     sentTo,
+    errorMessage,
     status: blockStatus,
     taxRate,
     terms,
@@ -225,7 +225,7 @@ const Invoice1 = (props: Invoice1Props) => {
   }
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <DocumentLayout>
         <DocumentToolbar
           description={

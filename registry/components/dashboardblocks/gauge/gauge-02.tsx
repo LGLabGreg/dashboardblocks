@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -28,13 +28,12 @@ interface HealthFactor {
   weight: number
 }
 
-interface Gauge2Props {
+interface Gauge2Props extends BlockStateProps {
   /** Bands from 0 to 100, in order. */
   bands: GaugeBand[]
   description: string
   /** Leave out, or pass none, to show the empty state. */
   factors?: HealthFactor[]
-  status?: BlockStatus
   title: string
 }
 
@@ -86,7 +85,7 @@ const joinLabels = (labels: string[]) =>
     : `${labels.slice(0, -1).join(', ')} and ${labels[labels.length - 1]}`
 
 const Gauge2 = (props: Gauge2Props) => {
-  const { bands, description, factors = [], status, title } = props
+  const { bands, description, factors = [], errorMessage, status, title } = props
   const state = getBlockState(status, factors)
   const exact = getWeightedScore(factors)
   const score = Math.round(exact)
@@ -100,7 +99,7 @@ const Gauge2 = (props: Gauge2Props) => {
     .map((factor) => factor.label.toLowerCase())
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

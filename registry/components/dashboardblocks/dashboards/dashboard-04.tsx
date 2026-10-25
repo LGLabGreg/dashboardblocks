@@ -7,7 +7,7 @@ import {
 import {
   BlockBusy,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
 } from '@/registry/components/dashboardblocks/block-state'
 import { ChartPanel4 } from '@/registry/components/dashboardblocks/chart-panel/chart-panel-04'
 import {
@@ -38,9 +38,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-interface Dashboard4Props {
+interface Dashboard4Props extends BlockStateProps {
   empty?: boolean
-  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -443,7 +442,7 @@ function buildCrmData({ preset, segment }: Query, today: Date) {
 }
 
 const Dashboard4 = (props: Dashboard4Props) => {
-  const { empty = false, status, title, today } = props
+  const { empty = false, errorMessage, status, title, today } = props
   const [query, setQuery] = useState<Query>({ preset: '90d', segment: null })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -460,7 +459,10 @@ const Dashboard4 = (props: Dashboard4Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider state={status ?? (empty ? 'empty' : undefined)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={status ?? (empty ? 'empty' : undefined)}
+    >
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3'>
           <div className='flex flex-col gap-2'>
@@ -516,6 +518,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
         >
           <div className='@4xl:col-span-3'>
             <StatGroup2
+              errorMessage={errorMessage}
               status={status}
               comparison={data.previousLabel}
               metrics={empty ? [] : data.stats}
@@ -524,6 +527,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
           </div>
           <div className='@4xl:col-span-3'>
             <Pipeline2
+              errorMessage={errorMessage}
               status={status}
               noun='deals'
               stages={empty ? [] : data.stages}
@@ -532,6 +536,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
           </div>
           <div className='@4xl:col-span-2'>
             <ChartPanel4
+              errorMessage={errorMessage}
               status={status}
               data={empty ? [] : data.months}
               description={status || empty ? '' : data.bookingsSummary}
@@ -540,6 +545,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
             />
           </div>
           <Funnel3
+            errorMessage={errorMessage}
             status={status}
             description='How far the leads that came in got, one step at a time.'
             stages={empty ? [] : data.funnel}
@@ -547,6 +553,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
           />
           <div className='@4xl:col-span-2'>
             <Pipeline4
+              errorMessage={errorMessage}
               status={status}
               owners={empty ? [] : data.owners}
               stages={STAGES}
@@ -554,6 +561,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
             />
           </div>
           <ActivityFeed1
+            errorMessage={errorMessage}
             status={status}
             activities={empty ? [] : data.activity}
             now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
@@ -561,6 +569,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
           />
           <div className='@4xl:col-span-3'>
             <Pipeline3
+              errorMessage={errorMessage}
               status={status}
               items={empty ? [] : data.deals}
               noun='open deals'

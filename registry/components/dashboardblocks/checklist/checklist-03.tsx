@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -19,11 +19,10 @@ import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
 
-interface Checklist3Props {
+interface Checklist3Props extends BlockStateProps {
   /** @default 'Continue' */
   continueLabel?: string
   onContinue?: () => void
-  status?: BlockStatus
   /** Leave out, or pass none, to show the empty state. */
   steps?: { duration?: string; id: string; state: StepState; title: string }[]
   title: string
@@ -41,7 +40,14 @@ const exampleProps: Checklist3Props = {
 }
 
 const Checklist3 = (props: Checklist3Props) => {
-  const { continueLabel = 'Continue', onContinue, status, steps = [], title } = props
+  const {
+    continueLabel = 'Continue',
+    onContinue,
+    errorMessage,
+    status,
+    steps = [],
+    title,
+  } = props
   const state = getBlockState(status, steps)
   const progress = getChecklistProgress(steps)
   const next = getNextStep(steps)
@@ -66,7 +72,7 @@ const Checklist3 = (props: Checklist3Props) => {
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <h2 className='font-semibold tracking-tight'>{title}</h2>
         <div className='flex flex-col gap-2'>

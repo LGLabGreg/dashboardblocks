@@ -8,7 +8,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -37,7 +37,7 @@ interface Invoice {
   status: InvoiceStatus
 }
 
-interface Billing3Props {
+interface Billing3Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -45,7 +45,6 @@ interface Billing3Props {
   /** Leave out to hide Download. */
   onDownload?: (id: string) => void
   onViewAll?: () => void
-  status?: BlockStatus
   title: string
 }
 
@@ -104,7 +103,15 @@ const exampleProps: Billing3Props = {
 }
 
 const Billing3 = (props: Billing3Props) => {
-  const { currency = 'USD', invoices = [], onDownload, onViewAll, status, title } = props
+  const {
+    currency = 'USD',
+    invoices = [],
+    onDownload,
+    onViewAll,
+    errorMessage,
+    status,
+    title,
+  } = props
   const state = getBlockState(status, invoices)
   const unpaid = invoices.filter((invoice) => invoice.status !== 'paid')
   const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0)
@@ -119,7 +126,7 @@ const Billing3 = (props: Billing3Props) => {
       : `${money(outstanding)} outstanding across ${unpaid.length} ${unpaid.length === 1 ? 'invoice' : 'invoices'}, the oldest from ${formatBillingDate(oldest.date)}.`
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

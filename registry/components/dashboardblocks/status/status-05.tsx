@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
@@ -24,14 +24,13 @@ interface Incident {
   title: string
 }
 
-interface Status5Props {
+interface Status5Props extends BlockStateProps {
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   days?: UptimeDay[]
   description: string
   downtime?: string
   /** Newest first. */
   incidents?: Incident[]
-  status?: BlockStatus
   title: string
 }
 
@@ -84,11 +83,19 @@ const exampleProps: Status5Props = {
 }
 
 const Status5 = (props: Status5Props) => {
-  const { days = [], description, downtime, incidents = [], status, title } = props
+  const {
+    days = [],
+    description,
+    downtime,
+    incidents = [],
+    errorMessage,
+    status,
+    title,
+  } = props
   const state = getBlockState(status, days)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

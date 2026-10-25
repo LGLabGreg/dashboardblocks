@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -53,7 +53,7 @@ interface WatchedMetric extends Metric {
   history: number[]
 }
 
-interface MetricList4Props {
+interface MetricList4Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `30 days ago`. */
   comparison: string
   defaultSelected?: string
@@ -62,7 +62,6 @@ interface MetricList4Props {
   /** Leave out, or pass none, to show the empty state. */
   metrics?: WatchedMetric[]
   onSelectedChange?: (key: string) => void
-  status?: BlockStatus
   title: string
 }
 
@@ -138,6 +137,7 @@ const MetricList4 = (props: MetricList4Props) => {
     labels,
     metrics = [],
     onSelectedChange,
+    errorMessage,
     status,
     title,
   } = props
@@ -158,7 +158,7 @@ const MetricList4 = (props: MetricList4Props) => {
   const last = data.length - 1
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -6,7 +6,7 @@ import {
 } from '@/registry/components/dashboardblocks/alerts'
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -51,7 +51,7 @@ interface Reading {
   value: number
 }
 
-interface Alerts2Props {
+interface Alerts2Props extends BlockStateProps {
   description: string
   formatter?: (value: number) => string
   metric: string
@@ -59,7 +59,6 @@ interface Alerts2Props {
   readings?: Reading[]
   runbookHref?: string
   severity: AlertSeverity
-  status?: BlockStatus
   threshold: number
   title: string
 }
@@ -92,6 +91,7 @@ const Alerts2 = (props: Alerts2Props) => {
     readings = [],
     runbookHref,
     severity,
+    errorMessage,
     status,
     threshold,
     title,
@@ -112,7 +112,7 @@ const Alerts2 = (props: Alerts2Props) => {
   const gap = formatter(Math.abs(current - threshold))
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

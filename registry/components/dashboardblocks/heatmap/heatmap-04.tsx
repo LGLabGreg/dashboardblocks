@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -19,12 +19,11 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
-interface Heatmap4Props {
+interface Heatmap4Props extends BlockStateProps {
   /** Defaults to a sentence about the windows over the target. */
   description?: string
   /** Leave out, with `values`, to show the empty state. */
   endpoints?: string[]
-  status?: BlockStatus
   /** The p95 target in ms; windows over it get a dot. */
   target?: number
   title: string
@@ -68,7 +67,7 @@ const windowRange = (index: number) =>
   `${WINDOWS[index]}:00–${String((index * 2 + 2) % 24).padStart(2, '0')}:00`
 
 const Heatmap4 = (props: Heatmap4Props) => {
-  const { endpoints = [], status, target, title, values = [] } = props
+  const { endpoints = [], errorMessage, status, target, title, values = [] } = props
   const peak = getPeak(values)
   const windows = values.flat()
   const over = target === undefined ? [] : windows.filter((value) => value > target)
@@ -82,7 +81,7 @@ const Heatmap4 = (props: Heatmap4Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, peak)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, peak)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -44,7 +44,7 @@ interface PeriodPoint {
   previous: number
 }
 
-interface ChartPanel1Props {
+interface ChartPanel1Props extends BlockStateProps {
   /** Follows the previous total in the change sentence, such as `the previous 30 days`. @default 'the previous period' */
   comparison?: string
   currentLabel?: string
@@ -55,7 +55,6 @@ interface ChartPanel1Props {
   previousLabel?: string
   /** @default true */
   showPrevious?: boolean
-  status?: BlockStatus
   title: string
 }
 
@@ -89,6 +88,7 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
     formatter = (value) => formatNumber(value),
     previousLabel = 'Previous period',
     showPrevious = true,
+    errorMessage,
     status,
     title,
   } = props
@@ -98,7 +98,7 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
   const previousTotal = data.reduce((sum, point) => sum + point.previous, 0)
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -45,12 +45,11 @@ interface ComparedStage {
   values: Record<string, number>
 }
 
-interface Funnel4Props {
+interface Funnel4Props extends BlockStateProps {
   description: string
   segments: FunnelSegment[]
   /** Leave out, or pass none, to show the empty state. */
   stages?: ComparedStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -72,7 +71,7 @@ const exampleProps: Funnel4Props = {
 const GAP_COLOR = 'color-mix(in oklab, var(--color-chart-2) 12%, transparent)'
 
 const Funnel4 = (props: Funnel4Props) => {
-  const { description, segments, stages = [], status, title } = props
+  const { description, segments, stages = [], errorMessage, status, title } = props
   const state = getBlockState(status, stages)
   const first = stages[0]
   const rate = (stage: ComparedStage, key: string) => {
@@ -102,7 +101,7 @@ const Funnel4 = (props: Funnel4Props) => {
     : undefined
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

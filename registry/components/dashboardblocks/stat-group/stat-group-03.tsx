@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -62,14 +62,13 @@ interface ChartMetric extends StatMetric {
   daily: DailyValue[]
 }
 
-interface StatGroup3Props {
+interface StatGroup3Props extends BlockStateProps {
   currentLabel?: string
   /** Leave out, or pass none, to show the empty state. */
   metrics?: ChartMetric[]
   /** How many metrics to sketch while loading. @default 4 */
   placeholders?: number
   previousLabel?: string
-  status?: BlockStatus
   title: string
 }
 
@@ -143,6 +142,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
     metrics = [],
     placeholders = 4,
     previousLabel = 'Previous period',
+    errorMessage,
     status,
     title,
   } = props
@@ -161,7 +161,7 @@ const StatGroup3 = (props: StatGroup3Props) => {
 
   if (state) {
     return (
-      <BlockStateProvider state={state}>
+      <BlockStateProvider errorMessage={errorMessage} state={state}>
         <section className='@container flex flex-col gap-4'>
           {header}
           <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @2xl:grid-cols-4'>

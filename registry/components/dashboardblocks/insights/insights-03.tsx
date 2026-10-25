@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { DivergingBar } from '@/registry/components/dashboardblocks/comparison'
@@ -26,7 +26,7 @@ interface Contribution {
   value: number
 }
 
-interface Insights3Props {
+interface Insights3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   contributions?: Contribution[]
   description: string
@@ -35,7 +35,6 @@ interface Insights3Props {
   goodDirection?: 'up' | 'down'
   metric: string
   previous: number
-  status?: BlockStatus
   title: string
 }
 
@@ -68,6 +67,7 @@ const Insights3 = (props: Insights3Props) => {
     goodDirection = 'up',
     metric,
     previous,
+    errorMessage,
     status,
     title,
   } = props
@@ -107,7 +107,7 @@ const Insights3 = (props: Insights3Props) => {
   summary.push('.')
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

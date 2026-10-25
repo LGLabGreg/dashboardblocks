@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,13 +41,12 @@ interface QuadrantItem {
   y: number
 }
 
-interface Scatter2Props {
+interface Scatter2Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   items?: QuadrantItem[]
   /** Names for the four quadrants: top left, top right, bottom left, bottom right. */
   quadrants: [string, string, string, string]
-  status?: BlockStatus
   title: string
   split?: { x: number; y: number }
   x: {
@@ -95,7 +94,7 @@ const exampleProps: Scatter2Props = {
 }
 
 const Scatter2 = (props: Scatter2Props) => {
-  const { description, items = [], quadrants, status, title, x, y } = props
+  const { description, items = [], quadrants, errorMessage, status, title, x, y } = props
   const state = getBlockState(status, items)
   const split = props.split ?? {
     x: getMedian(items.map((item) => item.x)),
@@ -113,7 +112,7 @@ const Scatter2 = (props: Scatter2Props) => {
   ) => ({ ...chartReferenceLabel, fontWeight: 500, position, value })
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

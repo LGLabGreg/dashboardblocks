@@ -4,7 +4,7 @@ import {
   BlockStateProvider,
   BlockStateText,
   type BlockState,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -32,13 +32,12 @@ const STATUS: Record<ProjectStatus, { label: string; tone: StatusTone }> = {
   paused: { label: 'Paused', tone: 'warning' },
 }
 
-interface PageHeader2Props {
+interface PageHeader2Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   description?: string
   onInvite?: () => void
   pathname: string
   projectStatus?: ProjectStatus
-  status?: BlockStatus
   tabs: PageTab[]
   title: string
 }
@@ -69,6 +68,7 @@ const PageHeader2 = (props: PageHeader2Props) => {
     onInvite = () => {},
     pathname,
     projectStatus,
+    errorMessage,
     status,
     tabs,
     title,
@@ -76,7 +76,7 @@ const PageHeader2 = (props: PageHeader2Props) => {
   const state = getBlockState(status, description)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <PageHeader>
         <PageHeaderRow className='@2xl/page-header:items-end'>
           <PageHeaderHeading

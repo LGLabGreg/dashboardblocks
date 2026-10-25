@@ -4,7 +4,7 @@ import { Billing1 } from '@/registry/components/dashboardblocks/billing/billing-
 import {
   BlockBusy,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type DateRangePreset,
@@ -33,9 +33,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-interface Dashboard2Props {
+interface Dashboard2Props extends BlockStateProps {
   empty?: boolean
-  status?: BlockStatus
   title: string
   /** The last day of every date range. */
   today: Date
@@ -207,7 +206,7 @@ function buildSaasData({ plan, preset }: Query, today: Date) {
 }
 
 const Dashboard2 = (props: Dashboard2Props) => {
-  const { empty = false, status, title, today } = props
+  const { empty = false, errorMessage, status, title, today } = props
   const [query, setQuery] = useState<Query>({ plan: null, preset: '30d' })
   const [displayedQuery, setDisplayedQuery] = useState(query)
   const busy = displayedQuery !== query
@@ -224,7 +223,10 @@ const Dashboard2 = (props: Dashboard2Props) => {
   const range = getDateRange(query.preset, today)
 
   return (
-    <BlockStateProvider state={status ?? (empty ? 'empty' : undefined)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={status ?? (empty ? 'empty' : undefined)}
+    >
       <div className='@container flex w-full flex-col gap-8'>
         <header className='flex flex-col gap-3'>
           <div className='flex flex-col gap-2'>
@@ -280,6 +282,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
         >
           <div className='@4xl:col-span-3'>
             <StatGroup3
+              errorMessage={errorMessage}
               status={status}
               currentLabel={data.currentLabel}
               metrics={empty ? [] : data.metrics}
@@ -289,6 +292,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
           </div>
           <div className='@4xl:col-span-2'>
             <Billing1
+              errorMessage={errorMessage}
               status={status}
               description={status || empty ? '' : data.movementSummary}
               movement={empty ? undefined : data.movement}
@@ -296,6 +300,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
             />
           </div>
           <Geo4
+            errorMessage={errorMessage}
             status={status}
             comparison={`in ${data.previousLabel}`}
             formatter={(value) => formatCurrency(value)}
@@ -304,6 +309,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
           />
           <div className='@4xl:col-span-2'>
             <Heatmap1
+              errorMessage={errorMessage}
               status={status}
               title='When customers are active'
               unit='accounts'
@@ -311,6 +317,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
             />
           </div>
           <Retention3
+            errorMessage={errorMessage}
             status={status}
             description='Share of the latest monthly signup cohort still active, against the cohort before.'
             milestones={empty ? [] : data.retention}
@@ -318,6 +325,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
           />
           <div className='@4xl:col-span-3'>
             <DataTable4
+              errorMessage={errorMessage}
               status={status}
               {...dataTable4ExampleProps}
               rows={empty ? [] : dataTable4ExampleProps.rows}

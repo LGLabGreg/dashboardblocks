@@ -9,6 +9,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -47,7 +48,17 @@ type BlockState = BlockStatus | 'empty'
 
 type BlockData = readonly unknown[] | string | number | object | null | undefined
 
-const BlockStateContext = createContext<BlockState | undefined>(undefined)
+interface BlockStateProps {
+  /**
+   * Shown under "Couldn’t load" while `status` is `'error'`: one sentence for people on
+   * what went wrong and what to do, such as `The query took too long. Try a shorter range.`
+   * Never the raw error.
+   */
+  errorMessage?: string
+  status?: BlockStatus
+}
+
+const BlockStateContext = createContext<{ errorMessage?: string; state?: BlockState }>({})
 
 /** `data` is empty when it's left out, `null`, `''` or `[]`. */
 function getBlockState(status: BlockStatus | undefined, data: BlockData) {
@@ -62,15 +73,19 @@ function getBlockState(status: BlockStatus | undefined, data: BlockData) {
 
 interface BlockStateProviderProps {
   children: ReactNode
+  errorMessage?: string
   state?: BlockState
 }
 
-function BlockStateProvider({ children, state }: BlockStateProviderProps) {
-  return <BlockStateContext.Provider value={state}>{children}</BlockStateContext.Provider>
+function BlockStateProvider({ children, errorMessage, state }: BlockStateProviderProps) {
+  const outer = useContext(BlockStateContext)
+  const message = errorMessage ?? outer.errorMessage
+  const value = useMemo(() => ({ errorMessage: message, state }), [message, state])
+  return <BlockStateContext.Provider value={value}>{children}</BlockStateContext.Provider>
 }
 
 function useBlockState() {
-  return useContext(BlockStateContext)
+  return useContext(BlockStateContext).state
 }
 
 const blockStateMessages = {
@@ -80,6 +95,8 @@ const blockStateMessages = {
 
 interface BlockStateTextProps {
   className?: string
+  /** Says what belongs here when there's nothing yet, in place of "No data". */
+  emptyMessage?: string
   /** Shows this state instead of the block's own. */
   state?: BlockState
   /** `short` sizes the loading placeholder to fit beside a title. @default 'sentence' */
@@ -88,10 +105,11 @@ interface BlockStateTextProps {
 
 function BlockStateText({
   className,
+  emptyMessage,
   state: shown,
   variant = 'sentence',
 }: BlockStateTextProps) {
-  const blockState = useBlockState()
+  const { errorMessage, state: blockState } = useContext(BlockStateContext)
   const state = shown ?? blockState
   if (!state) return null
 
@@ -114,7 +132,18 @@ function BlockStateText({
         'text-xl font-light tracking-normal',
       )}
     >
-      {blockStateMessages[state]}
+      {state === 'error' && errorMessage ? (
+        <>
+          <span className='block'>{blockStateMessages.error}</span>
+          <span className='text-muted-foreground mt-1 block max-w-prose text-sm font-normal text-pretty whitespace-normal'>
+            {errorMessage}
+          </span>
+        </>
+      ) : state === 'empty' && emptyMessage ? (
+        emptyMessage
+      ) : (
+        blockStateMessages[state]
+      )}
     </span>
   )
 }
@@ -138,16 +167,23 @@ function BlockReady({ children, className }: BlockReadyProps) {
 
 interface BlockStateRowsProps {
   className?: string
+  /** Says what belongs here when there's nothing yet, in place of "No data". */
+  emptyMessage?: string
   /** How many rows to sketch while loading. @default 4 */
   rows?: number
 }
 
-function BlockStateRows({ className, rows = 4 }: BlockStateRowsProps) {
+function BlockStateRows({ className, emptyMessage, rows = 4 }: BlockStateRowsProps) {
   const state = useBlockState()
   if (!state) return null
 
   if (state !== 'loading') {
-    return <BlockStateText className={cn('py-2.5 text-sm', className)} />
+    return (
+      <BlockStateText
+        className={cn('py-2.5 text-sm', className)}
+        emptyMessage={emptyMessage}
+      />
+    )
   }
 
   return (
@@ -343,6 +379,7 @@ export type {
   BlockMessageProps,
   BlockReadyProps,
   BlockState,
+  BlockStateProps,
   BlockStateProviderProps,
   BlockStateRowsProps,
   BlockStateTextProps,

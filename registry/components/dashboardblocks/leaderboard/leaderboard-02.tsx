@@ -2,7 +2,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
@@ -35,13 +35,12 @@ interface SalesRep {
   trend: number
 }
 
-interface Leaderboard2Props {
+interface Leaderboard2Props extends BlockStateProps {
   currency?: string
   /** Defaults to a sentence about the leader and how many reps passed quota. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   reps?: SalesRep[]
-  status?: BlockStatus
   title: string
 }
 
@@ -117,14 +116,14 @@ function summarize(reps: SalesRep[], format: (value: number) => string) {
 }
 
 const Leaderboard2 = (props: Leaderboard2Props) => {
-  const { currency = 'USD', reps = [], status, title } = props
+  const { currency = 'USD', reps = [], errorMessage, status, title } = props
   const state = getBlockState(status, reps)
   const format = (value: number) => formatCurrency(value, { currency })
   const { description = summarize(reps, format) } = props
   const scale = Math.max(...reps.map((rep) => rep.revenue / (rep.quota || 1)), 1)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

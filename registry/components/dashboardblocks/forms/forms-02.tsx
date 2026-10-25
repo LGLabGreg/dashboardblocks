@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -36,12 +36,11 @@ interface Customer {
   plan: string
 }
 
-interface Forms2Props {
+interface Forms2Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   customers?: Customer[]
   onCreate?: (values: NewCustomer) => Promise<FormErrors<NewCustomer> | void>
   plans: string[]
-  status?: BlockStatus
   title: string
 }
 
@@ -78,6 +77,7 @@ const Forms2 = (props: Forms2Props) => {
     customers: initialCustomers = [],
     onCreate = createCustomer,
     plans,
+    errorMessage,
     status,
     title,
   } = props
@@ -108,7 +108,10 @@ const Forms2 = (props: Forms2Props) => {
   })
 
   return (
-    <BlockStateProvider state={getBlockState(status, customers)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, customers)}
+    >
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -28,12 +28,11 @@ interface Contributor {
   value: number
 }
 
-interface Leaderboard3Props {
+interface Leaderboard3Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   contributors?: Contributor[]
   /** Defaults to a sentence about the winner's lead. */
   description?: string
-  status?: BlockStatus
   title: string
   unit: string
 }
@@ -171,14 +170,14 @@ function Podium({ top, unit }: PodiumProps) {
 }
 
 const Leaderboard3 = (props: Leaderboard3Props) => {
-  const { contributors = [], status, title, unit } = props
+  const { contributors = [], errorMessage, status, title, unit } = props
   const state = getBlockState(status, contributors)
   const { description = summarize(contributors, unit) } = props
   const top = contributors.slice(0, 3)
   const rest = contributors.slice(3)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

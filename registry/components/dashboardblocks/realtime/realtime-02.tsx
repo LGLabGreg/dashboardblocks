@@ -2,7 +2,7 @@
 
 import {
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -53,14 +53,13 @@ interface ThroughputSample {
   requests: number
 }
 
-interface Realtime2Props {
+interface Realtime2Props extends BlockStateProps {
   description: string
   /** One sample per interval, oldest first. Leave out, or pass none, to show the empty state. */
   samples?: ThroughputSample[]
   /** Seconds between samples. */
   interval?: number
   simulate?: boolean
-  status?: BlockStatus
   title: string
 }
 
@@ -92,6 +91,7 @@ const Realtime2 = (props: Realtime2Props) => {
     interval = 5,
     samples: loadedSamples = noSamples,
     simulate = false,
+    errorMessage,
     status,
     title,
   } = props
@@ -135,7 +135,7 @@ const Realtime2 = (props: Realtime2Props) => {
   const minutes = Math.round((samples.length * interval) / 60)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

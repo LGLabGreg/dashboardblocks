@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -31,7 +31,7 @@ interface SharePerson {
   access: ShareAccess
 }
 
-interface Team6Props {
+interface Team6Props extends BlockStateProps {
   /** The signed-in person, who can't change their own access. */
   currentPersonId: string
   /** @default a sentence counting who has access and who can open the link */
@@ -43,7 +43,6 @@ interface Team6Props {
   onLinkAccessChange?: (access: LinkAccess) => void
   /** Leave out, or pass none, to show the empty state. */
   people?: SharePerson[]
-  status?: BlockStatus
   title: string
   url: string
   workspace: string
@@ -388,11 +387,11 @@ function ShareSettings(props: Team6Props) {
 }
 
 const Team6 = (props: Team6Props) => {
-  const { people = [], status } = props
+  const { people = [], errorMessage, status } = props
   const state = getBlockState(status, people)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <ShareSettings key={state ?? 'ready'} {...props} />
     </BlockStateProvider>
   )

@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,7 +41,7 @@ interface Percentile {
   label: string
 }
 
-interface ChartPanel6Props {
+interface ChartPanel6Props extends BlockStateProps {
   /** Follows `previous` in the change sentence. @default 'the previous period' */
   comparison?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -56,7 +56,6 @@ interface ChartPanel6Props {
   percentiles: Percentile[]
   /** The headline percentile's value at the start of the comparison. */
   previous?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -101,6 +100,7 @@ const ChartPanel6 = (props: ChartPanel6Props) => {
     limit,
     percentiles,
     previous,
+    errorMessage,
     status,
     title,
   } = props
@@ -111,7 +111,7 @@ const ChartPanel6 = (props: ChartPanel6Props) => {
     : 0
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

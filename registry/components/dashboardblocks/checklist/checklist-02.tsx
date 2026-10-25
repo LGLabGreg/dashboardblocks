@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,14 +26,13 @@ interface SetupStage {
   title: string
 }
 
-interface Checklist2Props {
+interface Checklist2Props extends BlockStateProps {
   /** @default 'Continue setup' */
   continueLabel?: string
   description: string
   onContinue?: () => void
   /** Leave out, or pass none, to show the empty state. */
   stages?: SetupStage[]
-  status?: BlockStatus
   title: string
 }
 
@@ -60,6 +59,7 @@ const Checklist2 = (props: Checklist2Props) => {
     description,
     onContinue,
     stages = [],
+    errorMessage,
     status,
     title,
   } = props
@@ -69,7 +69,7 @@ const Checklist2 = (props: Checklist2Props) => {
   const position = next ? stages.indexOf(next) + 1 : stages.length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

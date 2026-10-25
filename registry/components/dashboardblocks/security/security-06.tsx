@@ -3,7 +3,7 @@
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
@@ -35,7 +35,7 @@ interface SsoDomain {
   verified: boolean
 }
 
-interface Security6Props {
+interface Security6Props extends BlockStateProps {
   acsUrl: string
   /** Leave out to show the empty state. */
   connection?: SsoConnection
@@ -49,7 +49,6 @@ interface Security6Props {
   onSave?: (connection: SsoConnection) => void
   onVerifyDomain?: (id: string) => boolean | Promise<boolean>
   providers: string[]
-  status?: BlockStatus
   title: string
 }
 
@@ -350,11 +349,11 @@ function SsoSettings(props: SsoSettingsProps) {
 }
 
 const Security6 = (props: Security6Props) => {
-  const { connection, description, status, title } = props
+  const { connection, description, errorMessage, status, title } = props
   const state = getBlockState(status, connection)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       {state || !connection ? (
         <section className='@container flex flex-col gap-4'>
           <header className='flex flex-col gap-0.5'>

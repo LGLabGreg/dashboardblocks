@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -29,14 +29,13 @@ interface ProductRow {
   units: number
 }
 
-interface DataTable2Props {
+interface DataTable2Props extends BlockStateProps {
   /** Defaults to a sentence with the total and the top product's share. */
   description?: string
   /** Follows the total in the default description. */
   period?: string
   /** Leave out, or pass none, to show the empty state. */
   rows?: ProductRow[]
-  status?: BlockStatus
   title: string
 }
 
@@ -57,7 +56,7 @@ const share = (value: number, total: number) =>
   formatPercent(total > 0 ? value / total : 0, { maximumFractionDigits: 0 })
 
 const DataTable2 = (props: DataTable2Props) => {
-  const { period, rows = [], status, title } = props
+  const { period, rows = [], errorMessage, status, title } = props
   const sorted = [...rows].sort((a, b) => b.revenue - a.revenue)
   const total = rows.reduce((sum, row) => sum + row.revenue, 0)
   const top = sorted[0]
@@ -68,7 +67,7 @@ const DataTable2 = (props: DataTable2Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={getBlockState(status, rows)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
       <section className='@container/data-table flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

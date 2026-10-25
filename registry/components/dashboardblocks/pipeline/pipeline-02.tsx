@@ -5,7 +5,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { BreakdownBar } from '@/registry/components/dashboardblocks/breakdown'
@@ -27,13 +27,12 @@ interface StageTotal {
   value: number
 }
 
-interface Pipeline2Props {
+interface Pipeline2Props extends BlockStateProps {
   /** Defaults to a sentence naming the stage that holds the most value. */
   description?: string
   noun?: string
   /** Leave out, or pass none, to show the empty state. */
   stages?: StageTotal[]
-  status?: BlockStatus
   title: string
 }
 
@@ -57,7 +56,7 @@ const MEASURES: { label: string; value: Measure }[] = [
 ]
 
 const Pipeline2 = (props: Pipeline2Props) => {
-  const { noun = 'items', stages = [], status, title } = props
+  const { noun = 'items', stages = [], errorMessage, status, title } = props
   const state = getBlockState(status, stages)
   const [measure, setMeasure] = useState<Measure>('value')
 
@@ -76,7 +75,7 @@ const Pipeline2 = (props: Pipeline2Props) => {
   } = props
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

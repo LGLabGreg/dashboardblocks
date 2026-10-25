@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -41,12 +41,11 @@ interface StackSeries {
   label: string
 }
 
-interface ChartPanel3Props {
+interface ChartPanel3Props extends BlockStateProps {
   /** Leave out, or pass no months, to show the empty state. */
   data?: Array<Record<string, number | string> & { label: string }>
   description: string
   series: StackSeries[]
-  status?: BlockStatus
   title: string
 }
 
@@ -75,7 +74,7 @@ const exampleProps: ChartPanel3Props = {
 }
 
 const ChartPanel3 = (props: ChartPanel3Props) => {
-  const { data = [], description, series, status, title } = props
+  const { data = [], description, series, errorMessage, status, title } = props
   const totals = data.map((point) =>
     series.reduce((sum, item) => sum + Number(point[item.key] ?? 0), 0),
   )
@@ -87,7 +86,7 @@ const ChartPanel3 = (props: ChartPanel3Props) => {
   const format = (value: number) => formatNumber(value, { maximumFractionDigits: 0 })
 
   return (
-    <BlockStateProvider state={getBlockState(status, data)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

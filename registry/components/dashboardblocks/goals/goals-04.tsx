@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -19,13 +19,12 @@ interface DailyGoal {
   unit: string
 }
 
-interface Goals4Props {
+interface Goals4Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
   goals?: DailyGoal[]
   /** How many rings to sketch while loading. @default 3 */
   placeholders?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -40,12 +39,12 @@ const exampleProps: Goals4Props = {
 }
 
 const Goals4 = (props: Goals4Props) => {
-  const { description, goals = [], placeholders = 3, status, title } = props
+  const { description, goals = [], placeholders = 3, errorMessage, status, title } = props
   const state = getBlockState(status, goals)
   const met = goals.filter((goal) => goal.current >= goal.target).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

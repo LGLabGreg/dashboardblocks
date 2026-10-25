@@ -4,7 +4,7 @@ import { formatBillingDate } from '@/registry/components/dashboardblocks/billing
 import {
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -32,7 +32,7 @@ interface PlanChange {
   seats: number
 }
 
-interface Billing5Props {
+interface Billing5Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
   current: PlanChange
@@ -46,7 +46,6 @@ interface Billing5Props {
   plans?: Plan[]
   renewsAt: Date
   seatsInUse: number
-  status?: BlockStatus
   title: string
 }
 
@@ -127,6 +126,7 @@ const Billing5 = (props: Billing5Props) => {
     plans = [],
     renewsAt,
     seatsInUse,
+    errorMessage,
     status,
     title,
   } = props
@@ -203,7 +203,7 @@ const Billing5 = (props: Billing5Props) => {
       )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

@@ -8,7 +8,7 @@ import {
 import {
   BlockStateProvider,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -50,7 +50,7 @@ interface TicketEvent {
   text: string
 }
 
-interface RecordDetail3Props {
+interface RecordDetail3Props extends BlockStateProps {
   currentUser: TicketPerson
   events?: TicketEvent[]
   /** Pass a fixed date, so times render the same on the server and in the browser. */
@@ -58,7 +58,6 @@ interface RecordDetail3Props {
   onAssignToMe?: () => void
   onClose?: () => void
   onComment?: (text: string) => Promise<void>
-  status?: BlockStatus
   /** Leave out to show the empty state. */
   ticket?: {
     assignee: TicketPerson
@@ -155,6 +154,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
     onAssignToMe = () => {},
     onClose = () => {},
     onComment = saveComment,
+    errorMessage,
     status,
     ticket,
   } = props
@@ -194,7 +194,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
   const comments = events.filter((event) => event.comment).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <div className='flex flex-col gap-8'>
         <PageHeader>
           <BackLink href='#'>Issues</BackLink>

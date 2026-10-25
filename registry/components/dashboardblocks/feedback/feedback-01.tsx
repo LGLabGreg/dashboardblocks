@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { chartFadedColor } from '@/registry/components/dashboardblocks/chart'
@@ -17,14 +17,13 @@ import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { useReveal } from '@/registry/hooks/use-reveal'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Feedback1Props {
+interface Feedback1Props extends BlockStateProps {
   /** Follows the previous average in the change sentence, such as `last quarter`. */
   comparison?: string
   /** How many 1, 2, 3, 4 and 5-star ratings. Leave out to show the empty state. */
   counts?: number[]
   description: string
   previousAverage?: number
-  status?: BlockStatus
   title: string
 }
 
@@ -47,6 +46,7 @@ const Feedback1 = (props: Feedback1Props) => {
     counts = [],
     description,
     previousAverage,
+    errorMessage,
     status,
     title,
   } = props
@@ -56,7 +56,7 @@ const Feedback1 = (props: Feedback1Props) => {
   const state = getBlockState(status, counts)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

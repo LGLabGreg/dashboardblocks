@@ -4,7 +4,7 @@ import { ActivityTime } from '@/registry/components/dashboardblocks/activity-fee
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -49,7 +49,7 @@ interface FileRow extends DriveFile {
   kind: FileKind
 }
 
-interface Files2Props {
+interface Files2Props extends BlockStateProps {
   /** Leave out to describe the files shown. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
@@ -59,7 +59,6 @@ interface Files2Props {
   onCopyLink?: (file: DriveFile) => Promise<void>
   onDelete?: (files: DriveFile[]) => Promise<void>
   onDownload?: (files: DriveFile[]) => void
-  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -253,6 +252,7 @@ const Files2 = (props: Files2Props) => {
     onCopyLink = copyLink,
     onDelete = deleteFiles,
     onDownload = () => {},
+    errorMessage,
     status,
     timeZone = 'UTC',
     title,
@@ -333,7 +333,7 @@ const Files2 = (props: Files2Props) => {
   const shownDescription = description ?? summarize(rows)
 
   return (
-    <BlockStateProvider state={getBlockState(status, files)}>
+    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, files)}>
       <FileTable value={{ actionsFor, now, timeZone }}>
         <section className='@container/data-table flex flex-col gap-3'>
           <header className='flex flex-col gap-0.5'>

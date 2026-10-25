@@ -4,7 +4,7 @@ import { AnimatedNumber } from '@/registry/components/dashboardblocks/animated-n
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -20,9 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface UsageMeter2Props {
+interface UsageMeter2Props extends BlockStateProps {
   limit: number
-  status?: BlockStatus
   title: string
   unit: string
   /** Leave out to show the empty state. */
@@ -37,13 +36,16 @@ const exampleProps: UsageMeter2Props = {
 }
 
 const UsageMeter2 = (props: UsageMeter2Props) => {
-  const { limit, status: blockStatus, title, unit, used = 0 } = props
+  const { limit, errorMessage, status: blockStatus, title, unit, used = 0 } = props
   const share = getUsageShare(used, limit)
   const status = getUsageStatus(used, limit)
   const free = Math.max(0, limit - used)
 
   return (
-    <BlockStateProvider state={getBlockState(blockStatus, props.used)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(blockStatus, props.used)}
+    >
       <section className='@container flex items-center gap-6 border-t pt-4'>
         <Ring
           ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}

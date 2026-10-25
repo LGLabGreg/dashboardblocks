@@ -4,7 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -38,12 +38,11 @@ interface Variant {
   visitors: number
 }
 
-interface Comparison2Props {
+interface Comparison2Props extends BlockStateProps {
   /** Leave out, with `variant`, to show the empty state. */
   control?: Variant
   description: string
   metric: string
-  status?: BlockStatus
   title: string
   variant?: Variant
 }
@@ -88,12 +87,12 @@ function verdict(result: ReturnType<typeof compareProportions>, variant: Variant
 }
 
 const Comparison2 = (props: Comparison2Props) => {
-  const { control, description, metric, status, title, variant } = props
+  const { control, description, metric, errorMessage, status, title, variant } = props
   const state = getBlockState(status, control && variant)
 
   if (state || !control || !variant) {
     return (
-      <BlockStateProvider state={state}>
+      <BlockStateProvider errorMessage={errorMessage} state={state}>
         <section className='@container flex flex-col gap-4'>
           <header className='flex flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>

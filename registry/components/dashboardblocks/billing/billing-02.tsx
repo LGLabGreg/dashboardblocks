@@ -8,7 +8,7 @@ import {
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
@@ -25,7 +25,7 @@ interface PaymentMethod {
   last4: string
 }
 
-interface Billing2Props {
+interface Billing2Props extends BlockStateProps {
   cancelsAtPeriodEnd?: boolean
   /** @default 'USD' */
   currency?: string
@@ -39,7 +39,6 @@ interface Billing2Props {
   /** Leave out to show the empty state. */
   price?: number
   renewsAt: Date
-  status?: BlockStatus
   summary?: string
   title: string
 }
@@ -71,6 +70,7 @@ const Billing2 = (props: Billing2Props) => {
     plan,
     price = 0,
     renewsAt,
+    errorMessage,
     status,
     summary,
     title,
@@ -81,7 +81,7 @@ const Billing2 = (props: Billing2Props) => {
   const renewal = formatBillingDate(renewsAt)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-1 basis-56 flex-col gap-0.5'>

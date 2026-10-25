@@ -4,7 +4,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -26,12 +26,11 @@ interface PlanLimit {
   used: number
 }
 
-interface UsageMeter6Props {
+interface UsageMeter6Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   limits?: PlanLimit[]
   onUpgrade?: () => void
   plan: string
-  status?: BlockStatus
 }
 
 const exampleProps: UsageMeter6Props = {
@@ -99,14 +98,14 @@ const exampleProps: UsageMeter6Props = {
 }
 
 const UsageMeter6 = (props: UsageMeter6Props) => {
-  const { limits = [], onUpgrade, plan, status: blockStatus } = props
+  const { limits = [], onUpgrade, plan, errorMessage, status: blockStatus } = props
   const state = getBlockState(blockStatus, limits)
   const nearLimit = limits.filter(
     (item) => getUsageStatus(item.used, item.limit) !== 'ok',
   )
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

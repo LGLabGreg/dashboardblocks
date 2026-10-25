@@ -5,7 +5,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Details } from '@/registry/components/dashboardblocks/details'
@@ -40,14 +40,13 @@ interface BrowserFolder {
 
 type BrowserItem = BrowserFile | BrowserFolder
 
-interface Files4Props {
+interface Files4Props extends BlockStateProps {
   onCopyLink?: (file: BrowserFile) => Promise<void>
   onDelete?: (file: BrowserFile) => Promise<void>
   /** Pass a fixed date, so times render the same on the server and in the browser. */
   now: Date
   /** Pass a root with no children to show the empty state. */
   root: BrowserFolder
-  status?: BlockStatus
   timeZone?: string
 }
 
@@ -144,6 +143,7 @@ const Files4 = (props: Files4Props) => {
     onCopyLink = copyLink,
     onDelete = deleteFile,
     root: storedRoot,
+    errorMessage,
     status,
     timeZone = 'UTC',
   } = props
@@ -248,7 +248,7 @@ const Files4 = (props: Files4Props) => {
     ) || 'Empty'
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <FileBreadcrumbs

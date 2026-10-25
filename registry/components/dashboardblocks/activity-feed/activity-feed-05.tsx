@@ -9,7 +9,7 @@ import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Icons } from '@/registry/components/dashboardblocks/icon'
@@ -40,7 +40,7 @@ interface SocialEvent {
   platform: Platform
 }
 
-interface ActivityFeed5Props {
+interface ActivityFeed5Props extends BlockStateProps {
   /** Defaults to a sentence about where the events came from and what waits on you. */
   description?: string
   /** Newest first. Leave out, or pass none, to show the empty state. */
@@ -49,7 +49,6 @@ interface ActivityFeed5Props {
   now: Date
   onAction?: (event: SocialEvent) => void
   onViewAll?: () => void
-  status?: BlockStatus
   timeZone?: string
   title: string
 }
@@ -144,12 +143,21 @@ const summarize = (events: SocialEvent[]) => {
 }
 
 const ActivityFeed5 = (props: ActivityFeed5Props) => {
-  const { events = [], now, onAction, onViewAll, status, timeZone = 'UTC', title } = props
+  const {
+    events = [],
+    now,
+    onAction,
+    onViewAll,
+    errorMessage,
+    status,
+    timeZone = 'UTC',
+    title,
+  } = props
   const { description = summarize(events) } = props
   const state = getBlockState(status, events)
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>

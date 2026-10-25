@@ -3,7 +3,7 @@
 import {
   BlockReady,
   BlockStateProvider,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -22,7 +22,7 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
-interface Deployments3Props {
+interface Deployments3Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `the 30 days before`. */
   comparison?: string
   /** Leave out to show the empty state. */
@@ -30,7 +30,6 @@ interface Deployments3Props {
   /** Defaults to a sentence counting the elite metrics and naming any that got worse. */
   description?: string
   previous?: DoraInput
-  status?: BlockStatus
   title: string
 }
 
@@ -120,12 +119,22 @@ const summarize = (current: DoraInput, previous: DoraInput | undefined) => {
 }
 
 const Deployments3 = (props: Deployments3Props) => {
-  const { comparison = 'the period before', current, previous, status, title } = props
+  const {
+    comparison = 'the period before',
+    current,
+    previous,
+    errorMessage,
+    status,
+    title,
+  } = props
   const { description = current ? summarize(current, previous) : undefined } = props
   const levels = current ? getDoraLevels(current) : undefined
 
   return (
-    <BlockStateProvider state={getBlockState(status, current)}>
+    <BlockStateProvider
+      errorMessage={errorMessage}
+      state={getBlockState(status, current)}
+    >
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>

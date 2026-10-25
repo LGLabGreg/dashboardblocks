@@ -4,7 +4,7 @@ import {
   BlockStateProvider,
   BlockStateRows,
   BlockStateText,
-  type BlockStatus,
+  type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
@@ -33,7 +33,7 @@ interface CompositionGroup {
   values: Record<string, number>
 }
 
-interface Breakdown2Props {
+interface Breakdown2Props extends BlockStateProps {
   categories: CompositionCategory[]
   description: string
   /** Leave out, or pass none, to show the empty state. */
@@ -41,7 +41,6 @@ interface Breakdown2Props {
   /** What the groups are, plural, for the summary sentence. @default 'groups' */
   groupsLabel?: string
   highlight: string
-  status?: BlockStatus
   title: string
 }
 
@@ -74,6 +73,7 @@ const Breakdown2 = (props: Breakdown2Props) => {
     groups = [],
     groupsLabel = 'groups',
     highlight,
+    errorMessage,
     status,
     title,
   } = props
@@ -103,7 +103,7 @@ const Breakdown2 = (props: Breakdown2Props) => {
   const leads = rows.filter((row) => row.leads).length
 
   return (
-    <BlockStateProvider state={state}>
+    <BlockStateProvider errorMessage={errorMessage} state={state}>
       <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
