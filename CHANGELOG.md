@@ -1,5 +1,12 @@
 # dashboardblocks
 
+## 1.12.3
+
+### Patch Changes
+
+- 8dd8813: `chart.tsx` adds `ChartHatch`, one hatching for a part of a chart that is left over or estimated. Realtime's Today So Far draws the hour still counting with it.
+- f4cc4de: `formatDuration` takes `style: 'rough'` for a typical wait, in one unit up to days: "6 min", "1.8 days".
+
 ## 1.12.2
 
 ### Patch Changes

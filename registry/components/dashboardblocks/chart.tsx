@@ -125,6 +125,33 @@ function chartFadedColor(color: string, percent = 30) {
   return `color-mix(in oklab, ${color} ${percent}%, transparent)`
 }
 
+/**
+ * Diagonal hatching over a light fill of `color`, for a part that is left over or estimated.
+ * Put it in the chart's `<defs>` and fill with `url(#id)`; take `id` from `useChartId()`.
+ */
+function ChartHatch({ color, id }: { color: string; id: string }) {
+  return (
+    <pattern
+      id={id}
+      width={6}
+      height={6}
+      patternTransform='rotate(45)'
+      patternUnits='userSpaceOnUse'
+    >
+      <rect width={6} height={6} fill={chartFadedColor(color)} />
+      <line
+        x1={0}
+        x2={0}
+        y1={0}
+        y2={6}
+        stroke={color}
+        strokeOpacity={0.35}
+        strokeWidth={2}
+      />
+    </pattern>
+  )
+}
+
 /** A gradient or pattern id that is safe inside `url(#…)`. */
 function useChartId() {
   return useId().replace(/:/g, '')
@@ -870,6 +897,7 @@ function ChartMarkerKey({
 
 export {
   ChartFloatingTooltip,
+  ChartHatch,
   ChartMarkerKey,
   ChartEdgeTick,
   ChartMarkers,

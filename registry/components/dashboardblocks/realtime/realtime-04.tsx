@@ -11,6 +11,7 @@ import {
   ChartTooltipContent,
   chartAxisProps,
   chartBarCursor,
+  ChartHatch,
   useChartId,
 } from '@/registry/components/dashboardblocks/chart'
 import {
@@ -228,28 +229,7 @@ const Realtime4 = (props: Realtime4Props) => {
                   margin={{ top: 8, right: 0, bottom: 0, left: 0 }}
                 >
                   <defs>
-                    <pattern
-                      id={`${id}-counting`}
-                      width={4}
-                      height={4}
-                      patternTransform='rotate(45)'
-                      patternUnits='userSpaceOnUse'
-                    >
-                      <rect
-                        width={4}
-                        height={4}
-                        fill='var(--color-chart-2)'
-                        fillOpacity={0.25}
-                      />
-                      <line
-                        x1={0}
-                        x2={0}
-                        y1={0}
-                        y2={4}
-                        stroke='var(--color-chart-2)'
-                        strokeWidth={2}
-                      />
-                    </pattern>
+                    <ChartHatch color='var(--color-chart-2)' id={`${id}-counting`} />
                   </defs>
                   <XAxis
                     {...chartAxisProps}
