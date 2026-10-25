@@ -40,6 +40,23 @@ interface ActiveCell extends HeatmapCellPosition {
   y: number
 }
 
+const RIPPLE_REACH = 5.5
+
+const rippleStyles = `
+  @keyframes dashboardblocks-heatmap-ripple {
+    0% { opacity: 0; transform: scale(1); }
+    20% { opacity: var(--heatmap-ripple-peak); transform: scale(var(--heatmap-ripple-scale)); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+  [data-heatmap-ripple] {
+    animation: dashboardblocks-heatmap-ripple 1.1s ease-out both;
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-heatmap-ripple] { animation: none; }
+  }
+`
+
 function getHeatColor(t: number, color = 'var(--color-chart-2)') {
   const share = Math.round(8 + Math.min(1, Math.max(0, t)) * 62)
   return `color-mix(in oklab, ${color} ${share}%, var(--color-muted))`
@@ -92,6 +109,13 @@ interface HeatmapColumnSummary {
   values: number[]
 }
 
+type HeatmapShape = 'dot' | 'square'
+
+interface HeatmapRipple extends HeatmapCellPosition {
+  /** Change it to ripple again. */
+  key: number
+}
+
 interface HeatmapGridProps {
   /** A sentence under the grid, such as the busiest cell. */
   children?: ReactNode
@@ -118,12 +142,18 @@ interface HeatmapGridProps {
   min?: number
   /** Keeps cells legible in narrow cards: below this width the grid scrolls sideways, starting at the end (the most recent columns). */
   minWidth?: string
+  /** Ripples out from this cell over its neighbours each time `key` changes, such as when new events land on today. */
+  ripple?: HeatmapRipple
   rowHeader: string
   rowLabelClassName?: string
   /** While loading with none, five blank rows are sketched. */
   rows: string[]
   /** Full row names for assistive technology, when `rows` are abbreviated or blank. */
   rowNames?: string[]
+  /** Turns a value into its shade, from 0 to 1; by default its place between `min` and `max`. Return steps of 0.25 to match `HeatmapLegend`. */
+  scale?: (value: number) => number
+  /** @default 'square' */
+  shape?: HeatmapShape
   /** Names the value in the tooltip, such as `Sessions`. */
   valueName?: string
   values: HeatmapValue[][]
@@ -147,15 +177,21 @@ function HeatmapGrid({
   max: maxProp,
   min: minProp,
   minWidth,
+  ripple,
   rowHeader,
   rowLabelClassName,
   rowNames,
   rows,
+  scale,
+  shape = 'square',
   valueName,
   values,
 }: HeatmapGridProps) {
   const [active, setActive] = useState<ActiveCell | null>(null)
-  const [cursor, setCursor] = useState<HeatmapCellPosition>({ column: 0, row: 0 })
+  const [cursor, setCursor] = useState<HeatmapCellPosition>({
+    column: 0,
+    row: 0,
+  })
   const frame = useRef<HTMLDivElement>(null)
   const grid = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
@@ -167,12 +203,16 @@ function HeatmapGrid({
   }, [state])
 
   const stickyLabel = minWidth && 'bg-background sticky left-0 z-10'
+  const dot = shape === 'dot'
 
   if (state) {
     const sketched = rows.length > 0 ? rows : Array.from({ length: 5 }, () => '')
     return (
       <div aria-hidden className={cn('flex flex-col gap-3', className)}>
-        <div ref={scroller} className={cn(minWidth && '-my-1 overflow-x-auto py-1')}>
+        <div
+          ref={scroller}
+          className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
+        >
           <div
             className='grid gap-[3px]'
             style={{
@@ -210,13 +250,20 @@ function HeatmapGrid({
                   state === 'loading' ? (
                     <Skeleton
                       key={column}
-                      className={cn('min-h-3 rounded-[3px]', cellClassName)}
+                      className={cn(
+                        'min-h-3',
+                        dot ? 'scale-70 rounded-full' : 'rounded-[3px]',
+                        cellClassName,
+                      )}
                     />
                   ) : (
                     <span
                       key={column}
                       className={cn(
-                        'min-h-3 rounded-[3px] border border-dashed',
+                        'min-h-3',
+                        dot
+                          ? 'bg-muted scale-70 rounded-full'
+                          : 'rounded-[3px] border border-dashed',
                         cellClassName,
                       )}
                     />
@@ -235,7 +282,9 @@ function HeatmapGrid({
   const min = minProp ?? extent.min
   const max = maxProp ?? extent.max
   const range = max - min || 1
-  const heat = (value: number) => getHeatColor((value - min) / range, color)
+  const fill = color ?? 'var(--color-chart-2)'
+  const heat = (value: number) =>
+    getHeatColor(scale ? scale(value) : (value - min) / range, color)
   const describeCell = (position: HeatmapCellPosition, value: HeatmapValue) =>
     describe?.(position, value) ??
     `${cellName(position)}: ${value === null ? 'no data' : format(value)}`
@@ -299,8 +348,16 @@ function HeatmapGrid({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
+      {ripple && (
+        <style href='dashboardblocks-heatmap-ripple' precedence='default'>
+          {rippleStyles}
+        </style>
+      )}
       <div ref={frame} className='relative' onPointerLeave={() => setActive(null)}>
-        <div ref={scroller} className={cn(minWidth && '-my-1 overflow-x-auto py-1')}>
+        <div
+          ref={scroller}
+          className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
+        >
           <div
             className='grid gap-[3px]'
             style={{
@@ -385,6 +442,9 @@ function HeatmapGrid({
                     const isActive = active?.row === rowIndex && active.column === column
                     const isCursor = cursor.row === rowIndex && cursor.column === column
                     const isFlagged = value !== null && flagged?.(position, value)
+                    const reach = ripple
+                      ? Math.hypot(column - ripple.column, rowIndex - ripple.row)
+                      : Infinity
                     const style: CSSProperties =
                       value === null ? {} : { backgroundColor: heat(value) }
                     return (
@@ -401,13 +461,56 @@ function HeatmapGrid({
                         onPointerEnter={(event) => show(position, event.currentTarget)}
                         onPointerDown={(event) => show(position, event.currentTarget)}
                         className={cn(
-                          'ring-offset-background relative flex min-h-3 items-center justify-center rounded-[3px] text-xs font-medium tabular-nums outline-none',
-                          value === null && 'border border-dashed',
-                          isActive && 'ring-foreground ring-2 ring-offset-1',
+                          'ring-offset-background relative flex min-h-3 items-center justify-center text-xs font-medium tabular-nums outline-none',
+                          dot ? 'rounded-full' : 'rounded-[3px]',
+                          value === null &&
+                            (dot ? 'pointer-events-none' : 'border border-dashed'),
+                          !dot && isActive && 'ring-foreground ring-2 ring-offset-1',
                           cellClassName,
                         )}
-                        style={style}
+                        style={dot ? undefined : style}
                       >
+                        {dot && (
+                          <span
+                            aria-hidden
+                            data-slot='heatmap-dot'
+                            className={cn(
+                              'absolute inset-[15%] rounded-full transition-[background-color,scale] duration-200 ease-out motion-reduce:transition-none',
+                              value === null && (isActive ? 'bg-muted' : 'hidden'),
+                              isActive && 'scale-150',
+                            )}
+                            style={
+                              isActive && value !== null
+                                ? { backgroundColor: fill }
+                                : style
+                            }
+                          />
+                        )}
+                        {ripple && value !== null && reach <= RIPPLE_REACH && (
+                          <span
+                            key={ripple.key}
+                            aria-hidden
+                            data-heatmap-ripple
+                            className={cn(
+                              'pointer-events-none absolute',
+                              dot ? 'inset-[15%] rounded-full' : 'inset-0 rounded-[3px]',
+                            )}
+                            style={
+                              {
+                                '--heatmap-ripple-peak': (
+                                  1 -
+                                  reach / (RIPPLE_REACH + 1)
+                                ).toFixed(2),
+                                '--heatmap-ripple-scale': (
+                                  1.2 +
+                                  0.3 * (1 - reach / RIPPLE_REACH)
+                                ).toFixed(2),
+                                animationDelay: `${Math.round(reach * 70)}ms`,
+                                backgroundColor: fill,
+                              } as CSSProperties
+                            }
+                          />
+                        )}
                         {cellLabels && value !== null ? (
                           <span aria-hidden>{format(value)}</span>
                         ) : null}
@@ -461,6 +564,8 @@ interface HeatmapLegendProps {
   flag?: string
   high?: string
   low?: string
+  /** Match the grid's. @default 'square' */
+  shape?: HeatmapShape
   /** @default 5 */
   steps?: number
 }
@@ -471,6 +576,7 @@ function HeatmapLegend({
   flag,
   high = 'More',
   low = 'Less',
+  shape = 'square',
   steps = 5,
 }: HeatmapLegendProps) {
   return (
@@ -492,8 +598,10 @@ function HeatmapLegend({
         {Array.from({ length: steps }, (_, index) => (
           <span
             key={index}
-            className='size-3 rounded-[3px]'
-            style={{ backgroundColor: getHeatColor(index / (steps - 1), color) }}
+            className={shape === 'dot' ? 'size-2.5 rounded-full' : 'size-3 rounded-[3px]'}
+            style={{
+              backgroundColor: getHeatColor(index / (steps - 1), color),
+            }}
           />
         ))}
         <span className='ml-0.5'>{high}</span>
@@ -518,5 +626,7 @@ export type {
   HeatmapFormatter,
   HeatmapGridProps,
   HeatmapLegendProps,
+  HeatmapRipple,
+  HeatmapShape,
   HeatmapValue,
 }

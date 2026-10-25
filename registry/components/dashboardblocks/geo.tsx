@@ -30,6 +30,7 @@ import {
   type MouseEvent,
   type PointerEvent,
   type ReactNode,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react'
@@ -453,13 +454,17 @@ function TileMap({
                 type='button'
                 aria-label={`${tile.code}, ${describe(tile, value)}`}
                 className={cn(
-                  'ring-offset-background flex aspect-square min-w-0 items-center justify-center rounded-[3px] text-xs font-medium outline-none',
+                  'relative flex aspect-square min-w-0 items-center justify-center rounded-[3px] text-xs font-medium outline-none transition-[background-color,scale] duration-200 ease-out motion-reduce:transition-none',
                   value === null && 'text-muted-foreground border border-dashed',
-                  'focus-visible:ring-foreground focus-visible:ring-2 focus-visible:ring-offset-1',
-                  active?.id === tile.id && 'ring-foreground ring-2 ring-offset-1',
+                  active?.id === tile.id && 'z-10 scale-110',
                 )}
                 style={{
-                  backgroundColor: value === null ? undefined : heat(value),
+                  backgroundColor:
+                    value === null
+                      ? undefined
+                      : active?.id === tile.id
+                        ? (color ?? 'var(--color-chart-2)')
+                        : heat(value),
                   gridColumn: tile.column + 1,
                   gridRow: tile.row + 1,
                 }}
@@ -556,6 +561,60 @@ function projectPoint(lat: number, lon: number) {
     x: ((lon + 180) / 360) * 100,
     y: ((LAND_NORTH - lat) / (LAND_ROWS * LAND_STEP)) * 100,
   }
+}
+
+interface MapRippleProps {
+  /** Milliseconds before the ripple leaves `point`. @default 0 */
+  delay?: number
+  /** In the map's viewBox units, `LAND_COLUMNS` by `LAND_ROWS`. */
+  point: { x: number; y: number }
+  /** How far it spreads, in land dots. */
+  radius: number
+  /** Milliseconds it takes to reach the next dot out. @default 55 */
+  step?: number
+}
+
+/** Land dots that flash in `currentColor`, one ring after another, out from `point`; drawn inside the map's `svg`. Shown again after being hidden, it carries on from where it was. */
+function MapRipple({ delay = 0, point, radius, step = 55 }: MapRippleProps) {
+  const group = useRef<SVGGElement>(null)
+  const started = useRef<number | null>(null)
+  const cells = getLandCells().flatMap((cell) => {
+    const distance = Math.hypot(cell.x - point.x, cell.y - point.y)
+    return distance < radius ? [{ ...cell, distance }] : []
+  })
+
+  useLayoutEffect(() => {
+    const element = group.current
+    if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    started.current ??= performance.now()
+    const elapsed = performance.now() - started.current
+    const animations = [...element.children].map((dot) =>
+      dot.animate([{ opacity: 0 }, { offset: 0.18, opacity: 1 }, { opacity: 0 }], {
+        delay:
+          delay + Math.round(Number(dot.getAttribute('data-distance')) * step) - elapsed,
+        duration: 1_600,
+        easing: 'ease-out',
+      }),
+    )
+    return () => {
+      for (const animation of animations) animation.cancel()
+    }
+  }, [delay, point.x, point.y, radius, step])
+
+  return (
+    <g ref={group} aria-hidden fill='currentColor'>
+      {cells.map((cell) => (
+        <circle
+          key={`${cell.x} ${cell.y}`}
+          cx={cell.x}
+          cy={cell.y}
+          data-distance={cell.distance}
+          opacity={0}
+          r={0.42}
+        />
+      ))}
+    </g>
+  )
 }
 
 interface DotMapMarker {
@@ -693,11 +752,11 @@ function DotMap({
               <span
                 aria-hidden
                 className={cn(
-                  'ring-background group-focus-visible/marker:ring-foreground block rounded-full ring-2',
-                  active?.id === marker.id && 'ring-foreground',
+                  'ring-background block rounded-full ring-2 transition-[background-color,scale] duration-200 ease-out motion-reduce:transition-none',
+                  active?.id === marker.id && 'scale-125',
                 )}
                 style={{
-                  backgroundColor: markerColor,
+                  backgroundColor: active?.id === marker.id ? color : markerColor,
                   height: size,
                   width: size,
                 }}
@@ -803,6 +862,7 @@ export {
   GeoTable,
   LAND_COLUMNS,
   LAND_ROWS,
+  MapRipple,
   MapTooltip,
   TileMap,
   US_STATE_TILES,
@@ -818,6 +878,7 @@ export type {
   DotMapLegendProps,
   DotMapMarker,
   DotMapProps,
+  MapRippleProps,
   MapTooltipProps,
   TileMapProps,
   TileMapTile,

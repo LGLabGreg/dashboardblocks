@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 1.11.0
+
+### Minor Changes
+
+- 133f917: Code in blocks is highlighted: syntax in a muted grey and values in your chart colour, through one new part, Highlighted Code, which can also mark text such as a key. AI Chat's code blocks and tool values use it, in place of shadcn's `use-highlighted-code`.
+
+### Patch Changes
+
+- 5853552: The heatmap grid can draw its cells as dots, ripple out from one cell, and take a stepped colour scale. Its legend can draw dots too. On the Tile Map and Dot Map, a hovered or focused tile or marker grows and turns the series colour instead of showing a black ring.
+- 2d4f133: The geo part adds `MapRipple`: land dots that flash in rings out from a point on the dotted world map.
+- 0f4e383: Record Detail has `RecordHeadline`, the number that leads a record's page or panel, which counts up as it shows. Progress bars, rings and numbers that start when they come into view now start in a panel that slides in, where they sometimes stayed empty.
+
 ## 1.10.2
 
 ### Patch Changes

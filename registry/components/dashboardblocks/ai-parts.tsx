@@ -22,6 +22,7 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from '@/registry/components/dashboardblocks/disclosure'
+import { HighlightedCode } from '@/registry/components/dashboardblocks/highlighted-code'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatDuration } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useEffect, useId, useRef, useState } from 'react'
@@ -34,18 +35,7 @@ import {
   AttachmentTitle,
 } from '@/components/ui/attachment'
 import { Button } from '@/components/ui/button'
-import {
-  CodeBlock,
-  CodeBlockActions,
-  CodeBlockContent,
-  CodeBlockCopyButton,
-  CodeBlockHeader,
-  CodeBlockLine,
-  CodeBlockTitle,
-} from '@/components/ui/code-block'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
-
-import { useHighlightedCode } from '@/hooks/use-highlighted-code'
 
 import { cn } from '@/lib/utils'
 
@@ -143,31 +133,17 @@ function isJson(text: string) {
 /** A tool's input or output, or any JSON a model call sent or got back: highlighted, in a code block with copy. */
 function ToolValue({ label, tool, value }: ToolValueProps) {
   const code = stringify(value)
-  const lines = useHighlightedCode(
-    code,
-    typeof value !== 'string' || isJson(value) ? 'json' : '',
-  )
   const name = tool ? `${label} of ${tool}` : label
   return (
     <div data-slot='tool-value' className='flex max-h-80 w-full min-w-0 flex-col'>
-      <CodeBlock size='sm'>
-        <CodeBlockHeader>
-          <CodeBlockTitle>{label}</CodeBlockTitle>
-          <CodeBlockActions>
-            <CodeBlockCopyButton aria-label={`Copy ${name.toLowerCase()}`} value={code} />
-          </CodeBlockActions>
-        </CodeBlockHeader>
-        <CodeBlockContent
-          wrap
-          className='mask-none data-wrap:mask-none'
-          role='region'
-          aria-label={name}
-        >
-          {lines.map((line, index) => (
-            <CodeBlockLine key={index}>{line}</CodeBlockLine>
-          ))}
-        </CodeBlockContent>
-      </CodeBlock>
+      <HighlightedCode
+        code={code}
+        language={typeof value !== 'string' || isJson(value) ? 'json' : ''}
+        title={label}
+        copyLabel={`Copy ${name.toLowerCase()}`}
+        label={name}
+        wrap
+      />
     </div>
   )
 }

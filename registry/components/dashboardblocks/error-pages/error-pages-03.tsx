@@ -6,20 +6,13 @@ import {
   DisclosureTrigger,
 } from '@/registry/components/dashboardblocks/disclosure'
 import { ErrorPageLayout } from '@/registry/components/dashboardblocks/error-pages'
+import { HighlightedCode } from '@/registry/components/dashboardblocks/highlighted-code'
 import { CopyButton } from '@/registry/components/dashboardblocks/settings'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, startTransition, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  CodeBlock,
-  CodeBlockActions,
-  CodeBlockContent,
-  CodeBlockCopyButton,
-  CodeBlockHeader,
-  CodeBlockTitle,
-} from '@/components/ui/code-block'
 
 interface ErrorPages3Props {
   brand?: ReactNode
@@ -148,17 +141,12 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
                   Details
                 </DisclosureTrigger>
                 <DisclosureContent>
-                  <CodeBlock size='sm'>
-                    <CodeBlockHeader>
-                      <CodeBlockTitle>Error details</CodeBlockTitle>
-                      <CodeBlockActions>
-                        <CodeBlockCopyButton aria-label='Copy details' value={details} />
-                      </CodeBlockActions>
-                    </CodeBlockHeader>
-                    <CodeBlockContent wrap className='data-wrap:mask-none'>
-                      {details}
-                    </CodeBlockContent>
-                  </CodeBlock>
+                  <HighlightedCode
+                    code={details}
+                    title='Error details'
+                    copyLabel='Copy details'
+                    wrap
+                  />
                 </DisclosureContent>
               </Disclosure>
             </dd>

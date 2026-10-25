@@ -277,7 +277,7 @@
       "name": "heatmap",
       "type": "registry:component",
       "title": "Heatmap",
-      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with the shared chart tooltip, optional bars above its columns and dots on flagged cells, and a legend.",
+      "description": "Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid of squares or dots with the shared chart tooltip, optional bars above its columns, dots on flagged cells, a ripple out from one cell, and a legend.",
       "registryDependencies": [
         "@dashboardblocks/heatmap"
       ]
@@ -403,7 +403,7 @@
       "name": "record-detail",
       "type": "registry:component",
       "title": "Record Detail",
-      "description": "Primitives for a record's page: a layout with a details column beside the main content, titled sections under a rule and a list of labelled properties.",
+      "description": "Primitives for a record's page or panel: a layout with a details column beside the main content, the number that leads the record, titled sections under a rule and a list of labelled properties.",
       "registryDependencies": [
         "@dashboardblocks/record-detail"
       ]
@@ -595,6 +595,15 @@
       "description": "A line of muted text with a chevron that shows or hides what is under it, such as a tool call’s input and output or a model’s reasoning.",
       "registryDependencies": [
         "@dashboardblocks/disclosure"
+      ]
+    },
+    {
+      "name": "highlighted-code",
+      "type": "registry:component",
+      "title": "Highlighted Code",
+      "description": "Code in a code block with copy, highlighted with Shiki in the theme’s own colours: syntax muted, values in the chart colour, and any text you name marked, such as a key to check. It highlights code as a model streams it.",
+      "registryDependencies": [
+        "@dashboardblocks/highlighted-code"
       ]
     },
     {

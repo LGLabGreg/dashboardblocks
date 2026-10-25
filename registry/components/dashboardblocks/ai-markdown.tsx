@@ -5,6 +5,7 @@ import {
   getSafeHref,
 } from '@/registry/components/dashboardblocks/ai-message'
 import { AILink, Citation } from '@/registry/components/dashboardblocks/ai-sources'
+import { HighlightedCode } from '@/registry/components/dashboardblocks/highlighted-code'
 import {
   DataTable,
   DataTableBody,
@@ -17,18 +18,6 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Lexer, type Token, type Tokens } from 'marked'
 import type { ReactNode } from 'react'
 import remend from 'remend'
-
-import {
-  CodeBlock,
-  CodeBlockActions,
-  CodeBlockContent,
-  CodeBlockCopyButton,
-  CodeBlockHeader,
-  CodeBlockLine,
-  CodeBlockTitle,
-} from '@/components/ui/code-block'
-
-import { useHighlightedCode } from '@/hooks/use-highlighted-code'
 
 import { cn } from '@/lib/utils'
 
@@ -160,29 +149,6 @@ function getCitedNumbers(text: string, sourceCount: number) {
     if (number >= 1 && number <= sourceCount) cited.add(number)
   }
   return [...cited].sort((a, b) => a - b)
-}
-
-function highlightable(language: string) {
-  return !Object.hasOwn(Object.prototype, language.toLowerCase())
-}
-
-function AICodeBlock({ code, language }: { code: string; language: string }) {
-  const lines = useHighlightedCode(code, highlightable(language) ? language : '')
-  return (
-    <CodeBlock size='sm'>
-      <CodeBlockHeader>
-        <CodeBlockTitle>{language || 'code'}</CodeBlockTitle>
-        <CodeBlockActions>
-          <CodeBlockCopyButton aria-label='Copy code' value={code} />
-        </CodeBlockActions>
-      </CodeBlockHeader>
-      <CodeBlockContent className='mask-none'>
-        {lines.map((line, index) => (
-          <CodeBlockLine key={index}>{line}</CodeBlockLine>
-        ))}
-      </CodeBlockContent>
-    </CodeBlock>
-  )
 }
 
 interface RenderContext {
@@ -400,11 +366,13 @@ function renderBlocks(
         )
       case 'code': {
         const code = token as Tokens.Code
+        const language = (code.lang ?? '').split(/\s/)[0]
         return (
-          <AICodeBlock
+          <HighlightedCode
             key={key}
             code={code.text}
-            language={(code.lang ?? '').split(/\s/)[0]}
+            language={language}
+            title={language || 'code'}
           />
         )
       }

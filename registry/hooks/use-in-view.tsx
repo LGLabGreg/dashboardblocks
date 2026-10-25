@@ -20,8 +20,9 @@ export function useInView(options: UseInViewOptions = {}) {
     if (!element) return
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting)
+      (entries) => {
+        const latest = entries.at(-1)
+        if (latest) setIsInView(latest.isIntersecting)
       },
       { threshold, rootMargin },
     )

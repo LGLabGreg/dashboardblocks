@@ -47,10 +47,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'code-block',
       registryUrl('disclosure'),
       registryUrl('settings'),
       registryUrl('error-pages'),
+      registryUrl('highlighted-code'),
       registryUrl('format'),
     ],
     files: [

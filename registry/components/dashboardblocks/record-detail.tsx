@@ -4,6 +4,12 @@ import {
   BlockStateRows,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import {
+  type KPIFormat,
+  type KPIFormatter,
+  KPITitle,
+  KPIValue,
+} from '@/registry/components/dashboardblocks/kpi'
 import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -57,6 +63,40 @@ function RecordSection({
       </header>
       {children}
     </section>
+  )
+}
+
+interface RecordHeadlineProps {
+  /** Lines under the number, such as a `KPIChange` or a muted sentence. */
+  children?: ReactNode
+  className?: string
+  format?: KPIFormat | KPIFormatter
+  label: string
+  /** Words after the number, such as `a month`. */
+  unit?: string
+  value: number
+}
+
+function RecordHeadline({
+  children,
+  className,
+  format,
+  label,
+  unit,
+  value,
+}: RecordHeadlineProps) {
+  const state = useBlockState()
+  return (
+    <div data-slot='record-headline' className={cn('flex flex-col gap-1', className)}>
+      <KPITitle>{label}</KPITitle>
+      <div className='flex flex-wrap items-baseline'>
+        <KPIValue animated format={format} value={value} />
+        {unit && !state && (
+          <span className='text-muted-foreground ml-1 text-base'>{unit}</span>
+        )}
+      </div>
+      {children}
+    </div>
   )
 }
 
@@ -117,6 +157,13 @@ function RecordPlaceholder({ aside = [], sections }: RecordPlaceholderProps) {
   )
 }
 
-export { Property, PropertyList, RecordLayout, RecordPlaceholder, RecordSection }
+export {
+  Property,
+  PropertyList,
+  RecordHeadline,
+  RecordLayout,
+  RecordPlaceholder,
+  RecordSection,
+}
 
-export type { RecordPlaceholderProps, RecordSectionProps }
+export type { RecordHeadlineProps, RecordPlaceholderProps, RecordSectionProps }

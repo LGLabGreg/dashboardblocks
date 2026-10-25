@@ -492,7 +492,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Heatmap',
     description:
-      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid with the shared chart tooltip, optional bars above its columns and dots on flagged cells, and a legend.',
+      'Primitives for heatmaps: a single-hue colour scale, a keyboard-readable grid of squares or dots with the shared chart tooltip, optional bars above its columns, dots on flagged cells, a ripple out from one cell, and a legend.',
     registryDependencies: [registryUrl('chart'), registryUrl('format')],
     files: [
       {
@@ -714,8 +714,8 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Record Detail',
     description:
-      "Primitives for a record's page: a layout with a details column beside the main content, titled sections under a rule and a list of labelled properties.",
-    registryDependencies: [registryUrl('block-state')],
+      "Primitives for a record's page or panel: a layout with a details column beside the main content, the number that leads the record, titled sections under a rule and a list of labelled properties.",
+    registryDependencies: [registryUrl('block-state'), registryUrl('kpi')],
     files: [
       {
         path: 'registry/components/dashboardblocks/record-detail.tsx',
@@ -1067,6 +1067,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'highlighted-code',
+    type: 'registry:component',
+    title: 'Highlighted Code',
+    description:
+      'Code in a code block with copy, highlighted with Shiki in the theme’s own colours: syntax muted, values in the chart colour, and any text you name marked, such as a key to check. It highlights code as a model streams it.',
+    dependencies: ['shiki@^4.5.0'],
+    registryDependencies: ['code-block'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/highlighted-code.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'ai-chat',
     type: 'registry:component',
     title: 'AI Chat',
@@ -1076,11 +1091,10 @@ export const components: Registry['items'] = [
     registryDependencies: [
       'attachment',
       'button',
-      'code-block',
       'marker',
-      'use-highlighted-code',
       registryUrl('disclosure'),
       registryUrl('format'),
+      registryUrl('highlighted-code'),
       registryUrl('link'),
       registryUrl('table'),
     ],

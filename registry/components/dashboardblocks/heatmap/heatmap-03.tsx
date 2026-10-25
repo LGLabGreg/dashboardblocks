@@ -144,7 +144,7 @@ const Heatmap3 = (props: Heatmap3Props) => {
           footer={<HeatmapLegend />}
           label={`${title}: ${unit} per day over the last ${WEEKS} weeks`}
           rowHeader='Day'
-          rowLabelClassName='leading-none'
+          rowLabelClassName='h-0 min-h-full leading-none'
           rowNames={DAY_NAMES}
           rows={ROW_LABELS}
           valueName={unitName}
