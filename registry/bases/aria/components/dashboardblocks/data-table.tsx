@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 35edd7e97f90
+// source-hash: 20cca1528a77
 
 'use client'
 
@@ -317,6 +317,7 @@ function DataTableContent<TData extends RowData>({
           rows.map((row) => (
             <DataTableRow
               key={row.id}
+              data-row-id={row.id}
               data-state={row.getIsSelected() ? 'selected' : undefined}
             >
               {row.getVisibleCells().map((cell) => {

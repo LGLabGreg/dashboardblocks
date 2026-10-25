@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.12.2
+
+### Patch Changes
+
+- 15ee9bd: Data Table's body rows carry `data-row-id`, each row's id, so a block can follow a row as it moves.
+
 ## 1.12.1
 
 ### Patch Changes
