@@ -99,6 +99,7 @@ const Breakdown3 = (props: Breakdown3Props) => {
                 .map((segment) => `${segment.label} ${formatShare(segment.value, total)}`)
                 .join(', ')}`}
               className='shrink-0'
+              onPointerLeave={() => setActiveIndex(null)}
             >
               <ScatterChart
                 accessibilityLayer={false}
@@ -140,7 +141,6 @@ const Breakdown3 = (props: Breakdown3Props) => {
                     data={squares.filter((square) => square.segment === index)}
                     fill={segment.color}
                     onMouseEnter={() => setActiveIndex(index)}
-                    onMouseLeave={() => setActiveIndex(null)}
                     shape={({ cx = 0, cy = 0 }: { cx?: number; cy?: number }) => (
                       <g>
                         <rect

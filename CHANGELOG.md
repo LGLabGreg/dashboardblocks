@@ -1,5 +1,15 @@
 # dashboardblocks
 
+## 1.12.4
+
+### Patch Changes
+
+- 0152590: Buttons whose action has a clear symbol now show it: Add a plus, Edit a pencil, Remove a bin, Copy a copy icon that turns into a tick, Undo and Try again their arrows, View all and Go to an arrow after the label. `DataTablePager`'s Previous and Next show chevrons. Reload in States and the upload retry in Files use the same refresh icon as every other refresh.
+- ac9bb44: `CohortTable` can make its cells buttons that open a cell (`onCellSelect`, `selected`, `selectedDetail`), report the row under the pointer (`onRowHover`), and stripe a cohort's period that is still filling, which the average leaves out (`filling`). A row that groups cohorts can pass `eligible`, the people old enough to reach each period, and each period's share counts over them. Hovering a cell shows its tooltip without a ring. `getPlateau` now finds where retention holds by a share of the rate, so a low curve no longer levels off before it falls again. `chart.tsx` adds `chartHatchFill`, the same stripes for an HTML cell or bar, which Forecast's key uses. `table.tsx` adds `DataTablePager`, the range and Previous and Next that Data Table's pagination now draws with.
+- 114b490: Flow draws in once per set of data, not again when the page is resized, and a step's tooltip sits clear of its label.
+- b360eeb: Flow can light a path through the chart (`highlight`), make its steps buttons (`onNodeSelect`) and keep the last column's labels outside it (`lastLabels`). Every flow now draws in column by column, and its labels sit on a backing that keeps them readable over the links. A flow of buttons is one tab stop: the arrow keys move between its steps. A chart's hover now holds across the gaps between its marks, so the tooltip and highlight no longer flicker on Flow, Breakdown's squares chart and Chart Panel's donut. A table's loading rows can sketch one cell per column (`DataTableStateRows`' `columns` and `detail`), so the table keeps its height and columns while it loads.
+- 02c8601: `CountryFlag` in `geo.tsx` draws SVG flags from `country-flag-icons` in place of flag emoji, which Chrome and Edge on Windows showed as two letters. `countryFlag`, which returned the emoji, is gone.
+
 ## 1.12.3
 
 ### Patch Changes

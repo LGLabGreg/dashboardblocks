@@ -154,6 +154,14 @@ const Notifications1 = (props: Notifications1Props) => {
                     markRead(notifications.map((notification) => notification.id))
                   }
                 >
+                  <IconPlaceholder
+                    lucide='CheckCheckIcon'
+                    tabler='IconChecks'
+                    hugeicons='TickDouble02Icon'
+                    phosphor='ChecksIcon'
+                    remixicon='RiCheckDoubleLine'
+                    data-icon='inline-start'
+                  />
                   Mark all as read
                 </Button>
               )

@@ -38,6 +38,7 @@ import {
   DataTableRowLink,
 } from '@/registry/components/dashboardblocks/table'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
 import { Badge } from '@/components/ui/badge'
@@ -157,6 +158,14 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
             )}
             <PageHeaderActions>
               <Button variant='outline' disabled={!ready} onClick={onEdit}>
+                <IconPlaceholder
+                  lucide='PencilIcon'
+                  tabler='IconPencil'
+                  hugeicons='PencilEdit02Icon'
+                  phosphor='PencilSimpleIcon'
+                  remixicon='RiPencilLine'
+                  data-icon='inline-start'
+                />
                 Edit
               </Button>
               <ActionsMenu

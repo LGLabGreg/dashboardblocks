@@ -14,6 +14,7 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -127,6 +128,14 @@ const ActivityFeed1 = (props: ActivityFeed1Props) => {
           {onViewAll && (
             <Button variant='outline' size='sm' onClick={onViewAll}>
               View all
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
             </Button>
           )}
         </header>

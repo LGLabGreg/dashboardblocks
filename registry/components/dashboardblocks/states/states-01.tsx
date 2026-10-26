@@ -92,9 +92,9 @@ const States1 = (props: States1Props) => {
             onClick={() => void reload({ clear: true })}
           >
             <IconPlaceholder
-              lucide='RotateCwIcon'
-              tabler='IconRotateClockwise2'
-              hugeicons='Rotate01Icon'
+              lucide='RefreshCwIcon'
+              tabler='IconRefresh'
+              hugeicons='RefreshIcon'
               phosphor='ArrowClockwiseIcon'
               remixicon='RiRefreshLine'
             />

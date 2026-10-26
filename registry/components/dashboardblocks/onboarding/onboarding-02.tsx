@@ -305,6 +305,14 @@ const Onboarding2 = (props: Onboarding2Props) => {
                         className={buttonVariants({ size: 'sm', variant: 'outline' })}
                       >
                         Browse templates
+                        <IconPlaceholder
+                          lucide='ArrowRightIcon'
+                          tabler='IconArrowRight'
+                          hugeicons='ArrowRight01Icon'
+                          phosphor='ArrowRightIcon'
+                          remixicon='RiArrowRightLine'
+                          data-icon='inline-end'
+                        />
                       </Link>
                     }
                   />

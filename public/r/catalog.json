@@ -1290,7 +1290,7 @@
       "component": "Flow1",
       "shows": "Sessions from each source through the landing page, to signing up, browsing on or bouncing.",
       "size": "full",
-      "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "funnel-01",
         "chart-panel-02",
@@ -1304,7 +1304,7 @@
       "component": "Flow2",
       "shows": "Where visitors go in their first pages after landing, with the ones who left at each step.",
       "size": "full",
-      "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "flow-04",
         "funnel-01"
@@ -1317,7 +1317,7 @@
       "component": "Flow3",
       "shows": "Revenue streams into total revenue, then out to costs and profit, with each part's share of revenue.",
       "size": "full",
-      "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "spend-02",
         "billing-01"
@@ -1683,7 +1683,7 @@
       "component": "Heatmap2",
       "shows": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid.",
       "size": "full",
-      "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "retention-02",
         "retention-04"
@@ -2452,7 +2452,7 @@
       "component": "Retention1",
       "shows": "A retention triangle with a row per cohort and a weighted average row, shaded by share.",
       "size": "full",
-      "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "retention-02",
         "heatmap-02"
@@ -2465,7 +2465,7 @@
       "component": "Retention2",
       "shows": "Every cohort's retention curve, with one highlighted against the average and where the average levels off.",
       "size": "full",
-      "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "retention-01",
         "retention-04"

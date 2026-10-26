@@ -7,6 +7,7 @@ import {
   type ChartValueFormatter,
   chartReferenceColor,
   chartReferenceProps,
+  chartHatchFill,
 } from '@/registry/components/dashboardblocks/chart'
 import {
   StatusLabel,
@@ -266,10 +267,6 @@ type ForecastKeyShape =
   | 'bar'
   | 'striped'
 
-function stripes(color: string) {
-  return `repeating-linear-gradient(-45deg, color-mix(in oklab, ${color} 55%, transparent) 0 2px, color-mix(in oklab, ${color} 18%, transparent) 2px 5px)`
-}
-
 function ForecastKey({
   className,
   color,
@@ -286,7 +283,9 @@ function ForecastKey({
         aria-hidden
         className={cn('inline-block size-2.5 shrink-0 rounded-[3px]', className)}
         style={
-          shape === 'bar' ? { backgroundColor: fill } : { backgroundImage: stripes(fill) }
+          shape === 'bar'
+            ? { backgroundColor: fill }
+            : { backgroundImage: chartHatchFill(fill) }
         }
       />
     )
@@ -474,7 +473,7 @@ function ProjectionBar({
         <div
           className='h-full transition-[width] delay-300 duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none motion-reduce:delay-0'
           style={{
-            backgroundImage: stripes(color),
+            backgroundImage: chartHatchFill(color),
             width: `${revealed ? projectedWidth : 0}%`,
           }}
         />
@@ -507,7 +506,6 @@ export {
   predictLinear,
   projectGrowth,
   solveForTarget,
-  stripes,
   zScores,
 }
 

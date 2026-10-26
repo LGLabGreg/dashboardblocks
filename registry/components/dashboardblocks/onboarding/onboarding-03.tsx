@@ -418,7 +418,17 @@ const Onboarding3 = (props: Onboarding3Props) => {
                   description={status.message}
                   action={
                     <div className='flex flex-wrap justify-center gap-2'>
-                      <Button onClick={() => void connect(status.id)}>Try again</Button>
+                      <Button onClick={() => void connect(status.id)}>
+                        <IconPlaceholder
+                          lucide='RefreshCwIcon'
+                          tabler='IconRefresh'
+                          hugeicons='RefreshIcon'
+                          phosphor='ArrowClockwiseIcon'
+                          remixicon='RiRefreshLine'
+                          data-icon='inline-start'
+                        />
+                        Try again
+                      </Button>
                       <Button variant='outline' onClick={backToSources}>
                         Pick another source
                       </Button>

@@ -250,6 +250,14 @@ const RecordDetail2 = (props: RecordDetail2Props) => {
             )}
             <PageHeaderActions>
               <Button variant='outline' disabled={!ready} onClick={onPrint}>
+                <IconPlaceholder
+                  lucide='PrinterIcon'
+                  tabler='IconPrinter'
+                  hugeicons='PrinterIcon'
+                  phosphor='PrinterIcon'
+                  remixicon='RiPrinterLine'
+                  data-icon='inline-start'
+                />
                 Print
               </Button>
               <Button variant='outline' disabled={!ready} onClick={onRefund}>

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: c804295acaf8
+// source-hash: 336666a94e30
 
 'use client'
 
@@ -857,9 +857,9 @@ function FileUploadItem({
             onClick={() => onRetry(upload.id)}
           >
             <IconPlaceholder
-              lucide='RotateCwIcon'
-              tabler='IconRotateClockwise2'
-              hugeicons='Rotate01Icon'
+              lucide='RefreshCwIcon'
+              tabler='IconRefresh'
+              hugeicons='RefreshIcon'
               phosphor='ArrowClockwiseIcon'
               remixicon='RiRefreshLine'
             />

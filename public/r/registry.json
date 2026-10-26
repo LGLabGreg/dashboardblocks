@@ -245,9 +245,12 @@
       "name": "table",
       "type": "registry:component",
       "title": "Table",
-      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.",
+      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, a pager, and loading, empty and error rows.",
       "registryDependencies": [
+        "button",
         "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/details.json",
+        "https://www.dashboardblocks.com/r/format.json",
         "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
@@ -522,6 +525,9 @@
       "type": "registry:component",
       "title": "Geo",
       "description": "Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.",
+      "dependencies": [
+        "country-flag-icons"
+      ],
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/chart.json",
         "https://www.dashboardblocks.com/r/format.json",
@@ -3231,7 +3237,7 @@
           "retention-04"
         ],
         "component": "Heatmap2",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid."
     },
@@ -5201,7 +5207,7 @@
           "heatmap-02"
         ],
         "component": "Retention1",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A retention triangle with a row per cohort and a weighted average row, shaded by share."
     },
@@ -5234,7 +5240,7 @@
           "retention-04"
         ],
         "component": "Retention2",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Every cohort's retention curve, with one highlighted against the average and where the average levels off."
     },
@@ -5552,7 +5558,7 @@
           "geo-02"
         ],
         "component": "Flow1",
-        "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Sessions from each source through the landing page, to signing up, browsing on or bouncing."
     },
@@ -5580,7 +5586,7 @@
           "funnel-01"
         ],
         "component": "Flow2",
-        "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Where visitors go in their first pages after landing, with the ones who left at each step."
     },
@@ -5601,7 +5607,7 @@
           "billing-01"
         ],
         "component": "Flow3",
-        "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "files": [
         {

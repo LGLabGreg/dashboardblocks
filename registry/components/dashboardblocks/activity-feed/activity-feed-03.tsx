@@ -14,6 +14,7 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -151,6 +152,14 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
             size='sm'
             variant='ghost'
           >
+            <IconPlaceholder
+              lucide='CheckCheckIcon'
+              tabler='IconChecks'
+              hugeicons='TickDouble02Icon'
+              phosphor='ChecksIcon'
+              remixicon='RiCheckDoubleLine'
+              data-icon='inline-start'
+            />
             Mark all as read
           </Button>
         </header>

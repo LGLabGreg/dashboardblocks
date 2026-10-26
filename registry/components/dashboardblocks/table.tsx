@@ -7,7 +7,10 @@ import {
   SkeletonText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { Link, type LinkProps } from '@/registry/components/dashboardblocks/link'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   type ComponentProps,
   type ReactNode,
@@ -16,6 +19,8 @@ import {
   useRef,
   useState,
 } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
@@ -344,11 +349,20 @@ function DataTableSpacerRow({ colSpan, height }: DataTableSpacerRowProps) {
 
 interface DataTableStateRowsProps {
   colSpan: number
+  /** Sketches one cell per column while loading, aligned as listed, the first being the row's name, so the rows keep the loaded rows' columns. */
+  columns?: ('start' | 'end')[]
+  /** Sketches a smaller second line under the name, for rows whose name has a detail line under it. */
+  detail?: boolean
   /** How many rows to sketch while loading. @default 5 */
   rows?: number
 }
 
-function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
+function DataTableStateRows({
+  colSpan,
+  columns,
+  detail = false,
+  rows = 5,
+}: DataTableStateRowsProps) {
   const state = useBlockState()
   if (!state) return null
 
@@ -364,6 +378,34 @@ function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
     )
   }
 
+  if (columns) {
+    return Array.from({ length: rows }, (_, index) => (
+      <DataTableRow key={index} aria-hidden={index > 0 || undefined}>
+        {columns.map((align, column) =>
+          column === 0 ? (
+            <DataTableCell key={column}>
+              <span className='flex flex-col'>
+                {index === 0 && <span className='sr-only'>Loading</span>}
+                <span className='text-sm'>
+                  <SkeletonText className='w-32' />
+                </span>
+                {detail && (
+                  <span className='text-xs'>
+                    <SkeletonText className='w-24' />
+                  </span>
+                )}
+              </span>
+            </DataTableCell>
+          ) : (
+            <DataTableCell key={column} align={align}>
+              <SkeletonText className='w-14' />
+            </DataTableCell>
+          ),
+        )}
+      </DataTableRow>
+    ))
+  }
+
   return Array.from({ length: rows }, (_, index) => (
     <DataTableRow key={index} aria-hidden={index > 0 || undefined}>
       <DataTableCell colSpan={colSpan}>
@@ -376,6 +418,122 @@ function DataTableStateRows({ colSpan, rows = 5 }: DataTableStateRowsProps) {
       </DataTableCell>
     </DataTableRow>
   ))
+}
+
+interface DataTablePagerProps {
+  /** Controls before Previous and Next, such as a page size menu. */
+  children?: ReactNode
+  className?: string
+  /** A fact after the range on the same line, such as `3 selected`. */
+  detail?: ReactNode
+  /** The first row on the page, counted from 1. */
+  from: number
+  onNext: () => void
+  onPrevious: () => void
+  /** The last row on the page. */
+  to: number
+  total: number
+}
+
+function DataTablePager({
+  children,
+  className,
+  detail,
+  from,
+  onNext,
+  onPrevious,
+  to,
+  total,
+}: DataTablePagerProps) {
+  const state = useBlockState()
+  const previousRef = useRef<HTMLButtonElement>(null)
+  const nextRef = useRef<HTMLButtonElement>(null)
+  const pressed = useRef<HTMLButtonElement | null>(null)
+  const loading = state === 'loading'
+  const canPrevious = !loading && from > 1
+  const canNext = !loading && to < total
+
+  useEffect(() => {
+    const button = pressed.current
+    if (!button || loading) return
+    pressed.current = null
+    if (!button.disabled) {
+      if (document.activeElement !== button) button.focus()
+      return
+    }
+    const other = button === previousRef.current ? nextRef.current : previousRef.current
+    other?.focus()
+  })
+
+  if (state === 'empty' || state === 'error') return null
+
+  return (
+    <div
+      className={cn(
+        'flex flex-wrap items-center justify-between gap-x-4 gap-y-2',
+        className,
+      )}
+    >
+      <p
+        className='text-muted-foreground text-xs whitespace-nowrap tabular-nums'
+        aria-live='polite'
+      >
+        {loading ? (
+          <SkeletonText className='w-24' />
+        ) : (
+          <Details>
+            {`${formatNumber(total === 0 ? 0 : from)}–${formatNumber(to)} of ${formatNumber(total)}`}
+            {detail}
+          </Details>
+        )}
+      </p>
+      <div className='flex flex-wrap items-center gap-2'>
+        {children}
+        <div className='flex gap-2'>
+          <Button
+            variant='outline'
+            size='sm'
+            ref={previousRef}
+            disabled={!canPrevious}
+            onClick={() => {
+              pressed.current = previousRef.current
+              onPrevious()
+            }}
+          >
+            <IconPlaceholder
+              lucide='ChevronLeftIcon'
+              tabler='IconChevronLeft'
+              hugeicons='ArrowLeft01Icon'
+              phosphor='CaretLeftIcon'
+              remixicon='RiArrowLeftSLine'
+              data-icon='inline-start'
+            />
+            Previous
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            ref={nextRef}
+            disabled={!canNext}
+            onClick={() => {
+              pressed.current = nextRef.current
+              onNext()
+            }}
+          >
+            Next
+            <IconPlaceholder
+              lucide='ChevronRightIcon'
+              tabler='IconChevronRight'
+              hugeicons='ArrowRight01Icon'
+              phosphor='CaretRightIcon'
+              remixicon='RiArrowRightSLine'
+              data-icon='inline-end'
+            />
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 interface DataTableBarProps {
@@ -425,6 +583,7 @@ export {
   DataTableHead,
   DataTableHeader,
   DataTableListItem,
+  DataTablePager,
   DataTableRow,
   DataTableRowHead,
   DataTableRowLink,
@@ -439,6 +598,7 @@ export type {
   DataTableDensity,
   DataTableGroupHeadProps,
   DataTableHeadProps,
+  DataTablePagerProps,
   DataTableProps,
   DataTableRowHeadProps,
   DataTableRowProps,

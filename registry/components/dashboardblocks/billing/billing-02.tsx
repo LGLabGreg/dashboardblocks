@@ -15,6 +15,7 @@ import {
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
@@ -107,6 +108,14 @@ const Billing2 = (props: Billing2Props) => {
               disabled={unavailable}
               onClick={onUpdatePaymentMethod}
             >
+              <IconPlaceholder
+                lucide='CreditCardIcon'
+                tabler='IconCreditCard'
+                hugeicons='CreditCardIcon'
+                phosphor='CreditCardIcon'
+                remixicon='RiBankCardLine'
+                data-icon='inline-start'
+              />
               {paymentMethod ? 'Update card' : 'Add a card'}
             </Button>
             <Button variant='outline' size='sm' disabled={unavailable} onClick={onManage}>

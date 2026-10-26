@@ -93,7 +93,10 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
           {state ? (
             <Ring className='size-44' percentage={0} radius={41} strokeWidth={12} />
           ) : (
-            <div className='relative size-44 shrink-0'>
+            <div
+              className='relative size-44 shrink-0'
+              onPointerLeave={() => setActiveIndex(null)}
+            >
               <ResponsiveContainer width='100%' height='100%'>
                 <PieChart
                   aria-label={`${title} chart`}
@@ -118,7 +121,6 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
                     innerRadius='70%'
                     nameKey='label'
                     onMouseEnter={(_, index) => setActiveIndex(index)}
-                    onMouseLeave={() => setActiveIndex(null)}
                     outerRadius='94%'
                     paddingAngle={1}
                     startAngle={90}

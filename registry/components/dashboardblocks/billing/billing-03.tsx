@@ -138,6 +138,14 @@ const Billing3 = (props: Billing3Props) => {
           {onViewAll && (
             <Button variant='outline' size='sm' onClick={onViewAll}>
               View all
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
             </Button>
           )}
         </header>

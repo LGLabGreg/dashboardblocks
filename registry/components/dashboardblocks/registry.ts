@@ -215,8 +215,14 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Table',
     description:
-      'The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.',
-    registryDependencies: [registryUrl('block-state'), registryUrl('link')],
+      'The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, a pager, and loading, empty and error rows.',
+    registryDependencies: [
+      'button',
+      registryUrl('block-state'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('link'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/table.tsx',
@@ -456,6 +462,7 @@ export const components: Registry['items'] = [
     title: 'Geo',
     description:
       'Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.',
+    dependencies: ['country-flag-icons'],
     registryDependencies: [
       registryUrl('chart'),
       registryUrl('format'),

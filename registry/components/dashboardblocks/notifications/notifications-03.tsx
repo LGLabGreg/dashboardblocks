@@ -208,6 +208,14 @@ const Notifications3 = (props: Notifications3Props) => {
               )
             }
           >
+            <IconPlaceholder
+              lucide='CheckCheckIcon'
+              tabler='IconChecks'
+              hugeicons='TickDouble02Icon'
+              phosphor='ChecksIcon'
+              remixicon='RiCheckDoubleLine'
+              data-icon='inline-start'
+            />
             Mark all as read
           </Button>
         </header>

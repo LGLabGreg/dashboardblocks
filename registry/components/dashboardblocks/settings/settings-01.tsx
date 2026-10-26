@@ -366,6 +366,14 @@ const Settings1 = (props: Settings1Props) => {
                           onResendInvite?.(pending.id)
                         }}
                       >
+                        <IconPlaceholder
+                          lucide='SendIcon'
+                          tabler='IconSend'
+                          hugeicons='SentIcon'
+                          phosphor='PaperPlaneTiltIcon'
+                          remixicon='RiSendPlaneLine'
+                          data-icon='inline-start'
+                        />
                         Resend
                       </Button>
                       <Button

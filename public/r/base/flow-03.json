@@ -24,7 +24,7 @@
       "billing-01"
     ],
     "component": "Flow3",
-    "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ currency?: string; description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; totals: { grossProfit?: string; profit: string; revenue: string }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

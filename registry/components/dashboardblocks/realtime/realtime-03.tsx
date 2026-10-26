@@ -222,6 +222,27 @@ const Realtime3 = (props: Realtime3Props) => {
               variant='outline'
               onClick={() => setPaused((value) => !value)}
             >
+              {paused ? (
+                <IconPlaceholder
+                  lucide='PlayIcon'
+                  tabler='IconPlayerPlayFilled'
+                  hugeicons='PlayIcon'
+                  phosphor='PlayIcon'
+                  remixicon='RiPlayFill'
+                  className='fill-current'
+                  data-icon='inline-start'
+                />
+              ) : (
+                <IconPlaceholder
+                  lucide='PauseIcon'
+                  tabler='IconPlayerPauseFilled'
+                  hugeicons='PauseIcon'
+                  phosphor='PauseIcon'
+                  remixicon='RiPauseFill'
+                  className='fill-current'
+                  data-icon='inline-start'
+                />
+              )}
               {paused ? 'Resume' : 'Pause'}
             </Button>
           </div>

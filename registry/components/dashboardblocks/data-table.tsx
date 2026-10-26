@@ -2,10 +2,8 @@
 
 import {
   BlockStateText,
-  SkeletonText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { Details } from '@/registry/components/dashboardblocks/details'
 import {
   DataTable,
   DataTableBody,
@@ -14,6 +12,7 @@ import {
   DataTableHead,
   type DataTableHeadProps,
   DataTableHeader,
+  DataTablePager,
   DataTableRow,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
@@ -50,7 +49,7 @@ import {
   tableFeatures,
   useTable,
 } from '@tanstack/react-table'
-import { type ComponentProps, type ReactNode, useEffect, useRef } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -628,106 +627,49 @@ function DataTablePagination<TData extends RowData>({
   'use no memo'
   const { pageIndex, pageSize } = table.state.pagination
   const total = table.getRowCount()
-  const from = total === 0 ? 0 : pageIndex * pageSize + 1
-  const to = Math.min(total, (pageIndex + 1) * pageSize)
   const selected = selectedCount ?? table.getSelectedRowModel().rows.length
-  const pageCount = table.getPageCount()
-  const state = useBlockState()
-
-  const previousRef = useRef<HTMLButtonElement>(null)
-  const nextRef = useRef<HTMLButtonElement>(null)
-  const focusAfterRender = useRef<HTMLButtonElement | null>(null)
-  useEffect(() => {
-    focusAfterRender.current?.focus()
-    focusAfterRender.current = null
-  })
-
-  if (state === 'empty' || state === 'error') return null
 
   return (
-    <div
-      className={cn(
-        'flex flex-wrap items-center justify-between gap-x-4 gap-y-2',
-        className,
-      )}
+    <DataTablePager
+      className={className}
+      detail={selected > 0 && `${formatNumber(selected)} selected`}
+      from={pageIndex * pageSize + 1}
+      to={Math.min(total, (pageIndex + 1) * pageSize)}
+      total={total}
+      onNext={() => table.nextPage()}
+      onPrevious={() => table.previousPage()}
     >
-      <p
-        className='text-muted-foreground text-xs whitespace-nowrap tabular-nums'
-        aria-live='polite'
-      >
-        {state === 'loading' ? (
-          <SkeletonText className='w-24' />
-        ) : (
-          <Details>
-            {`${formatNumber(from)}–${formatNumber(to)} of ${formatNumber(total)}`}
-            {selected > 0 && `${formatNumber(selected)} selected`}
-          </Details>
-        )}
-      </p>
-      <div className='flex flex-wrap items-center gap-2'>
-        {pageSizeOptions && (
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
-              {pageSize} per page
-              <IconPlaceholder
-                lucide='ChevronDownIcon'
-                tabler='IconChevronDown'
-                hugeicons='ArrowDown01Icon'
-                phosphor='CaretDownIcon'
-                remixicon='RiArrowDownSLine'
-                className='text-muted-foreground'
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-auto min-w-32'>
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>Rows per page</DropdownMenuLabel>
-                <DropdownMenuRadioGroup
-                  value={String(pageSize)}
-                  onValueChange={(value: string) => table.setPageSize(Number(value))}
-                >
-                  {pageSizeOptions.map((option) => (
-                    <DropdownMenuRadioItem
-                      key={option}
-                      value={String(option)}
-                      closeOnClick
-                    >
-                      {option}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-        <div className='flex gap-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            ref={previousRef}
-            disabled={state === 'loading' || !table.getCanPreviousPage()}
-            onClick={() => {
-              if (pageIndex === 1) focusAfterRender.current = nextRef.current
-              table.previousPage()
-            }}
-          >
-            Previous
-          </Button>
-          <Button
-            variant='outline'
-            size='sm'
-            ref={nextRef}
-            disabled={state === 'loading' || !table.getCanNextPage()}
-            onClick={() => {
-              if (pageIndex + 2 === pageCount)
-                focusAfterRender.current = previousRef.current
-              table.nextPage()
-            }}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
+      {pageSizeOptions && (
+        <DropdownMenu>
+          <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
+            {pageSize} per page
+            <IconPlaceholder
+              lucide='ChevronDownIcon'
+              tabler='IconChevronDown'
+              hugeicons='ArrowDown01Icon'
+              phosphor='CaretDownIcon'
+              remixicon='RiArrowDownSLine'
+              className='text-muted-foreground'
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-auto min-w-32'>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Rows per page</DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={String(pageSize)}
+                onValueChange={(value: string) => table.setPageSize(Number(value))}
+              >
+                {pageSizeOptions.map((option) => (
+                  <DropdownMenuRadioItem key={option} value={String(option)} closeOnClick>
+                    {option}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </DataTablePager>
   )
 }
 

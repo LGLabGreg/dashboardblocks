@@ -264,6 +264,14 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
                         size='sm'
                         onClick={removeAvatar}
                       >
+                        <IconPlaceholder
+                          lucide='Trash2Icon'
+                          tabler='IconTrash'
+                          hugeicons='Delete02Icon'
+                          phosphor='TrashIcon'
+                          remixicon='RiDeleteBinLine'
+                          data-icon='inline-start'
+                        />
                         {onAvatarChange ? 'Remove' : 'Remove photo'}
                       </Button>
                     )}

@@ -24,7 +24,7 @@
       "heatmap-02"
     ],
     "component": "Retention1",
-    "props": "{ cohorts?: { label: string; size: number; retained: number[] }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

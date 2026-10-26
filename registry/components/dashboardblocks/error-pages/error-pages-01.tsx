@@ -161,8 +161,24 @@ const ErrorPages1 = ({ brand, homeHref, links, onSearch, path }: ErrorPages1Prop
       <div className='flex flex-wrap gap-2'>
         <a href={homeHref} className={buttonVariants()}>
           Go to dashboards
+          <IconPlaceholder
+            lucide='ArrowRightIcon'
+            tabler='IconArrowRight'
+            hugeicons='ArrowRight01Icon'
+            phosphor='ArrowRightIcon'
+            remixicon='RiArrowRightLine'
+            data-icon='inline-end'
+          />
         </a>
         <Button variant='ghost' onClick={() => window.history.back()}>
+          <IconPlaceholder
+            lucide='ArrowLeftIcon'
+            tabler='IconArrowLeft'
+            hugeicons='ArrowLeft01Icon'
+            phosphor='ArrowLeftIcon'
+            remixicon='RiArrowLeftLine'
+            data-icon='inline-start'
+          />
           Go back
         </Button>
       </div>

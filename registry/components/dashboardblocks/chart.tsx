@@ -152,6 +152,14 @@ function ChartHatch({ color, id }: { color: string; id: string }) {
   )
 }
 
+/**
+ * Diagonal stripes of `color` as a CSS `background-image`, for an HTML bar or cell that is
+ * estimated, projected or still filling. `ChartHatch` is the same for an SVG chart.
+ */
+function chartHatchFill(color: string) {
+  return `repeating-linear-gradient(-45deg, color-mix(in oklab, ${color} 55%, transparent) 0 2px, color-mix(in oklab, ${color} 18%, transparent) 2px 5px)`
+}
+
 /** A gradient or pattern id that is safe inside `url(#…)`. */
 function useChartId() {
   return useId().replace(/:/g, '')
@@ -914,6 +922,7 @@ export {
   chartBarCursor,
   chartBarValueLabel,
   chartFadedColor,
+  chartHatchFill,
   chartGridProps,
   chartLastDot,
   chartLineCursor,

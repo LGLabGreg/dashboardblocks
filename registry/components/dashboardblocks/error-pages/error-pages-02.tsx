@@ -143,6 +143,14 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
           </a>
         </p>
         <a href={homeHref} className={buttonVariants({ variant: 'outline' })}>
+          <IconPlaceholder
+            lucide='ArrowLeftIcon'
+            tabler='IconArrowLeft'
+            hugeicons='ArrowLeft01Icon'
+            phosphor='ArrowLeftIcon'
+            remixicon='RiArrowLeftLine'
+            data-icon='inline-start'
+          />
           Back to dashboards
         </a>
       </div>

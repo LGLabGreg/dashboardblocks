@@ -24,6 +24,7 @@ import {
   formatNumber,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
+import * as Flags from 'country-flag-icons/react/3x2'
 import {
   type FocusEvent,
   type KeyboardEvent,
@@ -37,26 +38,20 @@ import {
 
 import { cn } from '@/lib/utils'
 
-function countryFlag(code: string) {
-  if (!/^[a-z]{2}$/i.test(code)) return ''
-  const upper = code.toUpperCase()
-  return String.fromCodePoint(
-    0x1f1e6 + upper.charCodeAt(0) - 65,
-    0x1f1e6 + upper.charCodeAt(1) - 65,
-  )
-}
+const flags: Partial<Record<string, (props: { className?: string }) => ReactNode>> = Flags
 
 function CountryFlag({ className, code }: { className?: string; code?: string }) {
-  const flag = code ? countryFlag(code) : ''
+  const Flag = code ? flags[code.toUpperCase()] : undefined
   return (
     <span
       aria-hidden
-      className={cn(
-        'inline-flex w-6 shrink-0 items-center justify-center text-xl leading-none',
-        className,
-      )}
+      className={cn('inline-flex w-6 shrink-0 items-center justify-center', className)}
     >
-      {flag || (
+      {Flag ? (
+        <span className='flex w-5 overflow-hidden rounded-xs'>
+          <Flag className='block h-auto! w-full!' />
+        </span>
+      ) : (
         <IconPlaceholder
           lucide='GlobeIcon'
           tabler='IconGlobe'
@@ -208,7 +203,7 @@ function MapTooltip({
   return (
     <ChartFloatingTooltip active flip={active.flip} x={active.x} y={active.y}>
       <span className='flex items-center gap-1.5 font-medium'>
-        {country && <CountryFlag code={country} className='w-auto text-lg' />}
+        {country && <CountryFlag code={country} className='w-auto' />}
         {name}
       </span>
       <ChartTooltipItem
@@ -866,7 +861,6 @@ export {
   MapTooltip,
   TileMap,
   US_STATE_TILES,
-  countryFlag,
   getLandCells,
   getLandPath,
   getMarkerSize,

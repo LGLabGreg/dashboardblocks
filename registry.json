@@ -124,7 +124,7 @@
       "name": "table",
       "type": "registry:component",
       "title": "Table",
-      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, and loading, empty and error rows.",
+      "description": "The parts every table is drawn with: rows, headers, row headers, group headers and cells that pad the edges of the table, numbers aligned to the end, a compact density for a small table in a headline block, rows that open a record or a page on click, a sticky first column, a sideways scroller, inline bars, a pager, and loading, empty and error rows.",
       "registryDependencies": [
         "@dashboardblocks/table"
       ]

@@ -158,6 +158,14 @@ const Forms3 = (props: Forms3Props) => {
         </div>
         <div className='border-t pt-4'>
           <Button variant='outline' size='sm' onClick={startOver}>
+            <IconPlaceholder
+              lucide='PlusIcon'
+              tabler='IconPlus'
+              hugeicons='PlusSignIcon'
+              phosphor='PlusIcon'
+              remixicon='RiAddLine'
+              data-icon='inline-start'
+            />
             Create another project
           </Button>
         </div>
@@ -260,6 +268,14 @@ const Forms3 = (props: Forms3Props) => {
             disabled={step === 0 || form.isSubmitting}
             onClick={() => setStep(step - 1)}
           >
+            <IconPlaceholder
+              lucide='ArrowLeftIcon'
+              tabler='IconArrowLeft'
+              hugeicons='ArrowLeft01Icon'
+              phosphor='ArrowLeftIcon'
+              remixicon='RiArrowLeftLine'
+              data-icon='inline-start'
+            />
             Back
           </Button>
           {last ? (
@@ -269,6 +285,14 @@ const Forms3 = (props: Forms3Props) => {
           ) : (
             <Button key='next' type='button' onClick={next}>
               Next
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
             </Button>
           )}
         </div>

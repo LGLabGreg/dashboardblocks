@@ -25,7 +25,7 @@
       "geo-02"
     ],
     "component": "Flow1",
-    "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ description: string; links?: { source: string; target: string; value: number }[]; nodes?: { color?: string; id: string; kind?: \"default\" | \"exit\" | \"gap\"; label: string }[]; goal: string; title: string; unit?: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

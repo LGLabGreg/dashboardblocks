@@ -12,6 +12,7 @@ import {
   useCopyToClipboard,
 } from '@/registry/components/dashboardblocks/settings'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, type ReactNode, startTransition, useId, useState } from 'react'
 
@@ -224,6 +225,14 @@ function TwoFactorSettings(props: Security5Props) {
                   onRemoveAuthenticator?.()
                 }}
               >
+                <IconPlaceholder
+                  lucide='Trash2Icon'
+                  tabler='IconTrash'
+                  hugeicons='Delete02Icon'
+                  phosphor='TrashIcon'
+                  remixicon='RiDeleteBinLine'
+                  data-icon='inline-start'
+                />
                 Remove
               </Button>
             ) : (
@@ -311,6 +320,14 @@ function TwoFactorSettings(props: Security5Props) {
               </span>
             </div>
             <Button variant='outline' size='sm' onClick={onAddSecurityKey}>
+              <IconPlaceholder
+                lucide='PlusIcon'
+                tabler='IconPlus'
+                hugeicons='PlusSignIcon'
+                phosphor='PlusIcon'
+                remixicon='RiAddLine'
+                data-icon='inline-start'
+              />
               Add
             </Button>
           </div>
@@ -338,6 +355,14 @@ function TwoFactorSettings(props: Security5Props) {
                       onRemoveSecurityKey?.(key.id)
                     }}
                   >
+                    <IconPlaceholder
+                      lucide='Trash2Icon'
+                      tabler='IconTrash'
+                      hugeicons='Delete02Icon'
+                      phosphor='TrashIcon'
+                      remixicon='RiDeleteBinLine'
+                      data-icon='inline-start'
+                    />
                     Remove
                   </Button>
                 </li>
@@ -374,6 +399,14 @@ function TwoFactorSettings(props: Security5Props) {
                     onRegenerateRecoveryCodes?.()
                   }}
                 >
+                  <IconPlaceholder
+                    lucide='RefreshCwIcon'
+                    tabler='IconRefresh'
+                    hugeicons='RefreshIcon'
+                    phosphor='ArrowClockwiseIcon'
+                    remixicon='RiRefreshLine'
+                    data-icon='inline-start'
+                  />
                   New codes
                 </Button>
               )}
@@ -398,9 +431,36 @@ function TwoFactorSettings(props: Security5Props) {
                     size='sm'
                     onClick={() => void copy(recoveryCodes.join('\n'))}
                   >
+                    {copied ? (
+                      <IconPlaceholder
+                        lucide='CheckIcon'
+                        tabler='IconCheck'
+                        hugeicons='Tick02Icon'
+                        phosphor='CheckIcon'
+                        remixicon='RiCheckLine'
+                        data-icon='inline-start'
+                      />
+                    ) : (
+                      <IconPlaceholder
+                        lucide='CopyIcon'
+                        tabler='IconCopy'
+                        hugeicons='Copy01Icon'
+                        phosphor='CopyIcon'
+                        remixicon='RiFileCopyLine'
+                        data-icon='inline-start'
+                      />
+                    )}
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
                   <Button variant='outline' size='sm' onClick={download}>
+                    <IconPlaceholder
+                      lucide='DownloadIcon'
+                      tabler='IconDownload'
+                      hugeicons='Download01Icon'
+                      phosphor='DownloadIcon'
+                      remixicon='RiDownloadLine'
+                      data-icon='inline-start'
+                    />
                     Download
                   </Button>
                   <Button size='sm' className='ml-auto' onClick={() => setStep('idle')}>
