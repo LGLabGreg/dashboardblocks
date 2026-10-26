@@ -206,7 +206,7 @@ function buildStoreData({ compare, preset, region }: Query, today: Date) {
   return {
     bestDay: `${hourly ? 'Busiest hour' : 'Best day'} was ${label(best)}, at ${currency(current[best].revenue)}.`,
     channels,
-    channelSummary: `Search brings in ${formatPercent(search / now.revenue, { maximumFractionDigits: 0 })} of revenue, organic and paid together.`,
+    channelSummary: `Search brings in ${formatPercent(search / now.revenue, { maximumFractionDigits: 0 })} of revenue.`,
     chart: current.map((point, index) => ({
       current: Math.round(point.revenue),
       label: label(index),
@@ -400,7 +400,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
             errorMessage={errorMessage}
             status={status}
             current={empty ? undefined : data.month.current}
-            description='Month to date, projected at the daily run-rate so far.'
+            description='Projected at the daily run-rate.'
             elapsed={data.month.elapsed}
             formatter={currency}
             target={data.month.target}
@@ -418,7 +418,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
           <Funnel1
             errorMessage={errorMessage}
             status={status}
-            description='Most shoppers who leave do it between viewing a product and adding it to the cart.'
+            description='Most shoppers leave before adding to cart.'
             stages={empty ? [] : data.funnel}
             title='Checkout funnel'
           />

@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.12.5
+
+### Patch Changes
+
+- 3617d60: Dashboards line up the lines under the titles of blocks side by side, with shorter descriptions. Alerts: Inbox and Deployments: Build Health sum up their state in fewer words.
+
 ## 1.12.4
 
 ### Patch Changes

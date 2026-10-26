@@ -319,7 +319,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
           <Retention3
             errorMessage={errorMessage}
             status={status}
-            description='Share of the latest monthly signup cohort still active, against the cohort before.'
+            description='The latest cohort, against the one before.'
             milestones={empty ? [] : data.retention}
             title='Retention milestones'
           />

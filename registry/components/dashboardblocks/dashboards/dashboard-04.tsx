@@ -547,7 +547,7 @@ const Dashboard4 = (props: Dashboard4Props) => {
           <Funnel3
             errorMessage={errorMessage}
             status={status}
-            description='How far the leads that came in got, one step at a time.'
+            description='How far new leads got, step by step.'
             stages={empty ? [] : data.funnel}
             title='Lead conversion'
           />

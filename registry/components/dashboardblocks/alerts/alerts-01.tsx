@@ -87,16 +87,12 @@ const exampleProps: Alerts1Props = {
   title: 'Alerts',
 }
 
-const summarize = (alerts: AlertItem[], now: Date) => {
-  const waiting = alerts
-  if (waiting.length === 0) return 'Every alert is acknowledged.'
-  const critical = waiting.filter((alert) => alert.severity === 'critical').length
-  const latest = waiting.reduce((newest, alert) =>
-    alert.firedAt > newest.firedAt ? alert : newest,
-  )
-  const count = `${waiting.length} ${waiting.length === 1 ? 'alert needs' : 'alerts need'} a response`
-  const urgent = critical > 0 ? `, ${critical} of them critical` : ''
-  return `${count}${urgent}. The latest fired ${formatRelativeTime(latest.firedAt, now)}.`
+const summarize = (alerts: AlertItem[]) => {
+  if (alerts.length === 0) return 'All acknowledged.'
+  const critical = alerts.filter((alert) => alert.severity === 'critical').length
+  return critical > 0
+    ? `${alerts.length} open, ${critical} critical.`
+    : `${alerts.length} open.`
 }
 
 const Alerts1 = (props: Alerts1Props) => {
@@ -107,7 +103,7 @@ const Alerts1 = (props: Alerts1Props) => {
   const isAcknowledged = (alert: AlertItem) =>
     alert.acknowledged || acknowledged.has(alert.id)
   const open = alerts.filter((alert) => !isAcknowledged(alert))
-  const { description = summarize(open, now) } = props
+  const { description = summarize(open) } = props
 
   const acknowledge = (alert: AlertItem) => {
     setAcknowledged((current) => new Set(current).add(alert.id))
@@ -123,7 +119,7 @@ const Alerts1 = (props: Alerts1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3'>
+      <section className='@container flex flex-col gap-4'>
         <header className='flex items-start justify-between gap-3'>
           <div className='flex min-w-0 flex-col gap-0.5'>
             <h2 className='font-semibold tracking-tight'>{title}</h2>

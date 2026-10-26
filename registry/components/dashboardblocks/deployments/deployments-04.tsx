@@ -91,17 +91,10 @@ const rateTone = (rate: number): StatusTone =>
 
 const summarize = (pipelines: Pipeline[]) => {
   if (pipelines.length === 0) return 'No pipelines yet.'
-  const rated = pipelines.map((pipeline) => ({
-    name: pipeline.name,
-    ...passRate(pipeline.runs),
-  }))
-  const healthy = rated.filter((pipeline) => pipeline.rate >= HEALTHY_RATE).length
-  const worst = rated.reduce((low, pipeline) =>
-    pipeline.rate < low.rate ? pipeline : low,
-  )
-  const lead = `${healthy} of ${pipelines.length} pipelines pass ${formatPercent(HEALTHY_RATE)} of runs or more`
-  if (worst.rate >= HEALTHY_RATE) return `${lead}.`
-  return `${lead}; ${worst.name} passes only ${formatPercent(worst.rate, { maximumFractionDigits: 0 })}.`
+  const healthy = pipelines.filter(
+    (pipeline) => passRate(pipeline.runs).rate >= HEALTHY_RATE,
+  ).length
+  return `${healthy} of ${pipelines.length} pipelines pass ${formatPercent(HEALTHY_RATE)} of runs.`
 }
 
 const Deployments4 = (props: Deployments4Props) => {
@@ -113,7 +106,7 @@ const Deployments4 = (props: Deployments4Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, pipelines)}
     >
-      <section className='@container flex flex-col gap-3'>
+      <section className='@container flex flex-col gap-4'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <BlockReady className='text-sm'>

@@ -218,9 +218,15 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
   }))
   const [first, second] = [...browserSegments].sort((a, b) => b.value - a.value)
 
+  const pages = splitTotal(
+    Math.round(now.visitors * TOP_PAGES.reduce((sum, page) => sum + page.share, 0)),
+    TOP_PAGES.map((page) => page.share),
+  ).map((visitors, index) => ({ path: TOP_PAGES[index].path, visitors }))
+  const pageVisits = pages.reduce((sum, page) => sum + page.visitors, 0)
+
   return {
     browsers: browserSegments,
-    browserSummary: `${first.label} and ${second.label} together serve ${formatPercent((first.value + second.value) / now.visitors, { maximumFractionDigits: 0 })} of visitors.`,
+    browserSummary: `${first.label} and ${second.label} serve ${formatPercent((first.value + second.value) / now.visitors, { maximumFractionDigits: 0 })} of visitors.`,
     countries: splitTotal(
       now.visitors,
       COUNTRIES.map((country) => country.share),
@@ -239,10 +245,8 @@ function buildAnalyticsData({ device, preset }: Query, today: Date) {
         { id: 'bounced', kind: 'exit' as const, label: 'Bounced' },
       ],
     },
-    pages: splitTotal(
-      Math.round(now.visitors * TOP_PAGES.reduce((sum, page) => sum + page.share, 0)),
-      TOP_PAGES.map((page) => page.share),
-    ).map((visitors, index) => ({ path: TOP_PAGES[index].path, visitors })),
+    pages,
+    pagesSummary: `${formatPercent(pages[0].visitors / pageVisits, { maximumFractionDigits: 0 })} of visits are to ${pages[0].path}.`,
     traffic: {
       summary: `${hourly ? 'The busiest hour was' : 'The busiest day was'} ${labelAt(peak)}, with ${formatNumber(current[peak].visitors)} visitors.`,
       data: current.map((item, index) => ({ ...item, label: labelAt(index) })),
@@ -357,7 +361,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
             errorMessage={errorMessage}
             status={status}
             activeUsers={empty ? undefined : 284}
-            description='People on the site in the last 5 minutes, on every device.'
+            description='Visitors in the last 5 minutes.'
             pageViews={
               empty
                 ? []
@@ -400,6 +404,7 @@ const Dashboard3 = (props: Dashboard3Props) => {
             <Leaderboard1
               errorMessage={errorMessage}
               status={status}
+              description={status || empty ? '' : data.pagesSummary}
               pages={empty ? [] : data.pages}
               title='Top pages'
             />
