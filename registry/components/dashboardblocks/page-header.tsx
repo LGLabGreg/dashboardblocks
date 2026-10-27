@@ -300,7 +300,7 @@ function useHiddenRailItems<T extends HTMLElement>(
     })
     observer.observe(element)
     return () => observer.disconnect()
-  }, [activeId, items])
+  }, [activeId, items, hidden.length > 0])
   return [rail, hidden] as const
 }
 

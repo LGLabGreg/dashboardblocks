@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: f9b826c8a35b
+// source-hash: 49646aa65e1c
 
 'use client'
 
@@ -302,7 +302,7 @@ function useHiddenRailItems<T extends HTMLElement>(
     })
     observer.observe(element)
     return () => observer.disconnect()
-  }, [activeId, items])
+  }, [activeId, items, hidden.length > 0])
   return [rail, hidden] as const
 }
 

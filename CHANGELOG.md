@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.12.6
+
+### Patch Changes
+
+- b19efcb: `TabLinks` and `useHiddenRailItems` in `page-header.tsx` measure the rail again once More shows, so a tab that fits beside More no longer goes under it on a narrow screen.
+
 ## 1.12.5
 
 ### Patch Changes
