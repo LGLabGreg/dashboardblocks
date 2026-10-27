@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 5aa4b00bc233
+// source-hash: 44734b20fd9e
 
 'use client'
 
@@ -38,6 +38,7 @@ type FormErrors<T extends FormValues> = Partial<Record<keyof T & string, string>
 type SubmitResult<T extends FormValues> = void | FormErrors<T>
 
 interface UseSimpleFormOptions<T extends FormValues> {
+  /** The saved values. When one changes, its field follows unless it has an unsaved change. */
   defaultValues: T
   onSubmit: (values: T) => SubmitResult<T> | Promise<SubmitResult<T>>
   validate?: (values: T) => FormErrors<T>
@@ -79,6 +80,23 @@ function useSimpleForm<T extends FormValues>({
   }, [refusedIds])
 
   const names = Object.keys(defaultValues) as (keyof T & string)[]
+  const [lastDefaults, setLastDefaults] = useState(defaultValues)
+  const moved = names.filter((name) => defaultValues[name] !== lastDefaults[name])
+  if (moved.length) {
+    setLastDefaults(defaultValues)
+    setValues((current) => {
+      const next = { ...current }
+      for (const name of moved) {
+        if (current[name] === savedValues[name]) next[name] = defaultValues[name]
+      }
+      return next
+    })
+    setSavedValues((current) => {
+      const next = { ...current }
+      for (const name of moved) next[name] = defaultValues[name]
+      return next
+    })
+  }
   const clientErrors: FormErrors<T> = validate?.(values) ?? {}
   const errors: FormErrors<T> = {}
   for (const name of names) {

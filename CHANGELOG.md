@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.13.1
+
+### Patch Changes
+
+- b01cb6e: Settings 07 shows a theme saved elsewhere, such as from a user menu, unless you've changed it on the form.
+
 ## 1.13.0
 
 ### Minor Changes

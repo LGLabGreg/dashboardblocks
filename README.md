@@ -1,6 +1,6 @@
 # Dashboardblocks
 
-Dashboardblocks is a set of open-source dashboard blocks built on [shadcn/ui](https://ui.shadcn.com). The shadcn CLI copies each block's source into your project, so you add only the blocks you use and can edit every line.
+Dashboardblocks is a set of open-source dashboard blocks for your AI agents, built on [shadcn/ui](https://ui.shadcn.com). The shadcn CLI copies each block's source into your project, so you add only the blocks you use and can edit every line.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/LGLabGreg/dashboardblocks/main/.github/assets/store-dark.png">
