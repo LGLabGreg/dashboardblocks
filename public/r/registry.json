@@ -3237,7 +3237,7 @@
           "retention-04"
         ],
         "component": "Heatmap2",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; icon?: ReactNode; eligible?: number[]; filling?: boolean }[]; description?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "The share of each weekly signup cohort still active in each week after signup, as a shaded grid."
     },
@@ -5207,7 +5207,7 @@
           "heatmap-02"
         ],
         "component": "Retention1",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; icon?: ReactNode; eligible?: number[]; filling?: boolean }[]; description: string; mode?: \"percent\" | \"count\"; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A retention triangle with a row per cohort and a weighted average row, shaded by share."
     },
@@ -5240,7 +5240,7 @@
           "retention-04"
         ],
         "component": "Retention2",
-        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; eligible?: number[]; filling?: boolean }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ cohorts?: { label: string; size: number; retained: number[]; color?: string; icon?: ReactNode; eligible?: number[]; filling?: boolean }[]; description: string; highlight?: number; link?: { href: string; label: string }; periodName?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Every cohort's retention curve, with one highlighted against the average and where the average levels off."
     },
@@ -6890,7 +6890,7 @@
           "app-shell-02"
         ],
         "component": "AppShell1",
-        "props": "{ banner?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; onWorkspaceChange?: (id: string) => void; panel?: { children: ReactNode; label: string; icon?: ReactNode; onOpenChange: (open: boolean) => void; open: boolean; shortcut?: string }; pathname: string; searchPlaceholder?: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaceId?: string; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
+        "props": "{ banner?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount?: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; onWorkspaceChange?: (id: string) => void; panel?: { children: ReactNode; label: string; icon?: ReactNode; onOpenChange: (open: boolean) => void; open: boolean; shortcut?: string }; pathname: string; searchPlaceholder?: string; secondarySections?: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; title: string }[]; label?: string }[]; theme?: { onValueChange: (theme: \"light\" | \"dark\" | \"system\") => void; value: \"light\" | \"dark\" | \"system\" }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaceId?: string; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
       },
       "description": "A sidebar app shell with a workspace switcher, navigation sections with count badges, a user menu and a top bar with breadcrumbs, search and notifications."
     },

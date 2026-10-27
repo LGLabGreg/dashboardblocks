@@ -12,6 +12,7 @@ import {
   Fragment,
   type ReactNode,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -364,10 +365,158 @@ interface UserMenuLink {
   label: string
 }
 
+type AppTheme = 'dark' | 'light' | 'system'
+
+interface ThemeChoice {
+  onValueChange: (theme: AppTheme) => void
+  /** `system` follows the device's setting. */
+  value: AppTheme
+}
+
 interface UserMenuProps {
   links: UserMenuLink[]
   onSignOut: () => void
+  /** Adds a Light, Dark and System choice, such as `useTheme()` from next-themes. */
+  theme?: ThemeChoice
   user: AppUser
+}
+
+const themes: { icon: ReactNode; label: string; value: AppTheme }[] = [
+  {
+    icon: (
+      <IconPlaceholder
+        lucide='SunIcon'
+        tabler='IconSun'
+        hugeicons='Sun03Icon'
+        phosphor='SunIcon'
+        remixicon='RiSunLine'
+        className='size-3.5'
+      />
+    ),
+    label: 'Light',
+    value: 'light',
+  },
+  {
+    icon: (
+      <IconPlaceholder
+        lucide='MoonIcon'
+        tabler='IconMoon'
+        hugeicons='Moon02Icon'
+        phosphor='MoonIcon'
+        remixicon='RiMoonLine'
+        className='size-3.5'
+      />
+    ),
+    label: 'Dark',
+    value: 'dark',
+  },
+  {
+    icon: (
+      <IconPlaceholder
+        lucide='MonitorIcon'
+        tabler='IconDeviceDesktop'
+        hugeicons='ComputerIcon'
+        phosphor='MonitorIcon'
+        remixicon='RiComputerLine'
+        className='size-3.5'
+      />
+    ),
+    label: 'System',
+    value: 'system',
+  },
+]
+
+function themeIndex(value: AppTheme) {
+  return Math.max(
+    0,
+    themes.findIndex((theme) => theme.value === value),
+  )
+}
+
+function pickedTheme(target: EventTarget | null, value: AppTheme) {
+  const picked =
+    target instanceof Element
+      ? target.closest<HTMLElement>('[data-app-theme]')?.dataset.appTheme
+      : undefined
+  return (
+    themes.find((theme) => theme.value === picked)?.value ??
+    themes[(themeIndex(value) + 1) % themes.length].value
+  )
+}
+
+const themeMotion = { duration: 500, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+
+function themeIconStyle(index: number, position: number) {
+  return {
+    opacity: position === index ? 1 : 0,
+    rotate: `${(index - position) * 120}deg`,
+    scale: position === index ? 1 : 0.5,
+  }
+}
+
+function ThemeSwitch({ value }: { value: AppTheme }) {
+  const index = themeIndex(value)
+  const thumbRef = useRef<HTMLSpanElement>(null)
+  const shown = useRef(index)
+
+  // next-themes' `disableTransitionOnChange` turns off every CSS transition while the
+  // theme changes, so the switch moves with the Web Animations API instead.
+  useLayoutEffect(() => {
+    const from = shown.current
+    shown.current = index
+    const thumb = thumbRef.current
+    if (from === index || !thumb) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    thumb.animate(
+      { transform: [`translateX(${from * 100}%)`, `translateX(${index * 100}%)`] },
+      themeMotion,
+    )
+    Array.from(thumb.children).forEach((icon, position) => {
+      const start = themeIconStyle(from, position)
+      const end = themeIconStyle(index, position)
+      icon.animate(
+        {
+          opacity: [start.opacity, end.opacity],
+          rotate: [start.rotate, end.rotate],
+          scale: [start.scale, end.scale],
+        },
+        themeMotion,
+      )
+    })
+  }, [index])
+
+  return (
+    <span
+      aria-hidden
+      className='bg-muted relative ml-auto grid grid-cols-3 rounded-md p-0.5'
+    >
+      {themes.map((theme) => (
+        <span
+          key={theme.value}
+          data-app-theme={theme.value}
+          className='text-muted-foreground flex h-6 w-7 items-center justify-center'
+        >
+          {theme.icon}
+        </span>
+      ))}
+      <span
+        ref={thumbRef}
+        data-app-theme={value}
+        className='bg-background text-foreground dark:ring-input absolute inset-y-0.5 left-0.5 w-7 rounded-sm shadow-sm dark:ring-1'
+        style={{ transform: `translateX(${index * 100}%)` }}
+      >
+        {themes.map((theme, position) => (
+          <span
+            key={theme.value}
+            className='absolute inset-0 flex items-center justify-center'
+            style={themeIconStyle(index, position)}
+          >
+            {theme.icon}
+          </span>
+        ))}
+      </span>
+    </span>
+  )
 }
 
 function UserAvatar({ className, user }: { className?: string; user: AppUser }) {
@@ -392,6 +541,7 @@ function UserMenuItems({
   links,
   onNavigate,
   onSignOut,
+  theme,
   user,
 }: UserMenuProps & { onNavigate?: () => void }) {
   return (
@@ -415,6 +565,30 @@ function UserMenuItems({
                 {link.label}
               </DropdownMenuItem>
             ))}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+        </>
+      )}
+      {theme && (
+        <>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              closeOnClick={false}
+              onClick={(event) =>
+                theme.onValueChange(pickedTheme(event.target, theme.value))
+              }
+            >
+              <IconPlaceholder
+                lucide='SunMoonIcon'
+                tabler='IconSunMoon'
+                hugeicons='ContrastIcon'
+                phosphor='CircleHalfIcon'
+                remixicon='RiContrast2Line'
+              />
+              Theme
+              <span className='sr-only'>: {themes[themeIndex(theme.value)].label}</span>
+              <ThemeSwitch value={theme.value} />
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
         </>
@@ -655,6 +829,35 @@ function AppPanel({ children, label, onOpenChange, open }: AppPanelProps) {
   const sheetFocus = useRef<HTMLElement | null>(null)
   const returnTo = useRef<HTMLElement | null>(null)
   const focused = useRef(false)
+  const frameRef = useRef<HTMLDivElement>(null)
+  // A docked panel stays while it slides out, and the page narrows and widens with it.
+  const [present, setPresent] = useState(open)
+  const [shown, setShown] = useState(open)
+  if (open && !present) setPresent(true)
+  if (!open && shown) setShown(false)
+
+  useEffect(() => {
+    if (!open || shown) return
+    const frame = requestAnimationFrame(() => setShown(true))
+    return () => cancelAnimationFrame(frame)
+  }, [open, shown])
+
+  useEffect(() => {
+    const frame = frameRef.current
+    if (open || !present) return
+    let current = true
+    Promise.all(
+      (frame?.getAnimations() ?? []).map((animation) => animation.finished),
+    ).then(
+      () => {
+        if (current) setPresent(false)
+      },
+      () => {},
+    )
+    return () => {
+      current = false
+    }
+  }, [open, present])
 
   useEffect(() => {
     if (!docked || open === focused.current) return
@@ -669,15 +872,22 @@ function AppPanel({ children, label, onOpenChange, open }: AppPanelProps) {
   }, [docked, open])
 
   if (docked) {
-    if (!open) return null
+    if (!open && !present) return null
     return (
-      <aside
-        ref={panelRef}
-        aria-label={label}
-        className='bg-background sticky top-0 flex h-svh w-96 shrink-0 flex-col border-l'
+      <div
+        ref={frameRef}
+        data-state={shown ? 'open' : 'closed'}
+        inert={!open}
+        className='sticky top-0 h-svh w-96 shrink-0 overflow-clip transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] data-[state=closed]:w-0 motion-reduce:transition-none'
       >
-        {children}
-      </aside>
+        <aside
+          ref={panelRef}
+          aria-label={label}
+          className='bg-background flex h-full w-96 flex-col border-l'
+        >
+          {children}
+        </aside>
+      </div>
     )
   }
   return (
@@ -863,6 +1073,7 @@ export {
 
 export type {
   AppBrandProps,
+  AppTheme,
   AppPanelProps,
   AppHeaderProps,
   AppNavProps,
@@ -875,6 +1086,7 @@ export type {
   PanelButtonProps,
   PlanUsageProps,
   SearchButtonProps,
+  ThemeChoice,
   TopNavProps,
   UserMenuLink,
   UserMenuProps,

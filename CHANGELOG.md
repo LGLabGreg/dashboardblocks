@@ -1,5 +1,18 @@
 # dashboardblocks
 
+## 1.13.0
+
+### Minor Changes
+
+- 217b5f9: App Shell 01 can pin links to the bottom of the sidebar and leave out the notifications button.
+- f5263bb: App Shell's user menu can offer a Light, Dark and System theme choice.
+
+### Patch Changes
+
+- 2e89d40: Leaderboard 01 takes `labelHeader` and `valueHeader` to name its two columns, and `viewAllLabel={null}` leaves out its View all button.
+- 2e89d40: Leaderboard 05 shows each country's flag in place of its code, and Geo 02 takes `otherLabel={null}` to leave out the row that sums the rest.
+- da24432: The retention part's cohort rows can show an icon before their label, such as a country's flag.
+
 ## 1.12.6
 
 ### Patch Changes

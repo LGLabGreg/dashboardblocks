@@ -13,6 +13,7 @@ import {
   type PanelButtonProps,
   SearchButton,
   SidebarUserMenu,
+  type ThemeChoice,
   type UserMenuLink,
   type Workspace,
   WorkspaceSwitcher,
@@ -38,7 +39,8 @@ interface AppShell1Props {
   banner?: ReactNode
   breadcrumbs: Crumb[]
   children?: ReactNode
-  notificationCount: number
+  /** Leave out to hide the notifications button. */
+  notificationCount?: number
   /** Adds "New workspace…" to the workspace switcher. */
   onCreateWorkspace?: () => void
   onNotificationsClick?: () => void
@@ -51,7 +53,11 @@ interface AppShell1Props {
   pathname: string
   /** @default 'Search…' */
   searchPlaceholder?: string
+  /** Pinned to the bottom of the sidebar, above the user menu, such as Help and Settings. */
+  secondarySections?: NavSection[]
   sections: NavSection[]
+  /** Adds a Light, Dark and System choice to the user menu, such as `useTheme()` from next-themes. */
+  theme?: ThemeChoice
   user: AppUser
   userLinks: UserMenuLink[]
   /** The workspace that's open. Leave out to start on the first. */
@@ -251,7 +257,9 @@ const AppShell1 = (props: AppShell1Props) => {
     panel,
     pathname,
     searchPlaceholder,
+    secondarySections,
     sections,
+    theme,
     user,
     userLinks,
     workspaceId,
@@ -272,9 +280,21 @@ const AppShell1 = (props: AppShell1Props) => {
         </SidebarHeader>
         <SidebarContent>
           <AppNav pathname={pathname} sections={sections} />
+          {secondarySections && (
+            <AppNav
+              className='mt-auto'
+              pathname={pathname}
+              sections={secondarySections}
+            />
+          )}
         </SidebarContent>
         <SidebarFooter>
-          <SidebarUserMenu links={userLinks} onSignOut={onSignOut} user={user} />
+          <SidebarUserMenu
+            links={userLinks}
+            onSignOut={onSignOut}
+            theme={theme}
+            user={user}
+          />
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className='min-w-0'>
@@ -296,10 +316,12 @@ const AppShell1 = (props: AppShell1Props) => {
               />
             )}
             <SearchButton onOpen={onSearch} placeholder={searchPlaceholder} />
-            <NotificationsButton
-              count={notificationCount}
-              onClick={onNotificationsClick}
-            />
+            {notificationCount !== undefined && (
+              <NotificationsButton
+                count={notificationCount}
+                onClick={onNotificationsClick}
+              />
+            )}
           </div>
         </AppHeader>
         {banner}

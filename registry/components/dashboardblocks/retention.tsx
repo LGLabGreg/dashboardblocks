@@ -35,6 +35,8 @@ interface RetentionCohort {
   retained: number[]
   /** A swatch before the label, tying the row to its line in a chart. */
   color?: string
+  /** Shown before the label, after the swatch, such as a country's flag. */
+  icon?: ReactNode
   /**
    * How many were old enough to reach each period, starting with period 0. A row that groups
    * cohorts (one per source, say) needs it: its later periods count only its older cohorts.
@@ -435,13 +437,16 @@ function CohortTable({
                           : 'text-muted-foreground',
                       )}
                     >
-                      {cohort.color ? (
+                      {cohort.color || cohort.icon ? (
                         <span className='flex items-center gap-2'>
-                          <span
-                            aria-hidden
-                            className='size-2 shrink-0 rounded-xs'
-                            style={{ background: cohort.color }}
-                          />
+                          {cohort.color && (
+                            <span
+                              aria-hidden
+                              className='size-2 shrink-0 rounded-xs'
+                              style={{ background: cohort.color }}
+                            />
+                          )}
+                          {cohort.icon}
                           {cohort.label}
                         </span>
                       ) : (

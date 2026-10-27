@@ -353,6 +353,8 @@ interface DataTableStateRowsProps {
   columns?: ('start' | 'end')[]
   /** Sketches a smaller second line under the name, for rows whose name has a detail line under it. */
   detail?: boolean
+  /** What the empty row says, such as `Nobody matches these conditions.` */
+  emptyMessage?: string
   /** How many rows to sketch while loading. @default 5 */
   rows?: number
 }
@@ -361,6 +363,7 @@ function DataTableStateRows({
   colSpan,
   columns,
   detail = false,
+  emptyMessage,
   rows = 5,
 }: DataTableStateRowsProps) {
   const state = useBlockState()
@@ -371,7 +374,7 @@ function DataTableStateRows({
       <DataTableRow>
         <DataTableCell colSpan={colSpan}>
           <span className='sticky start-[var(--data-table-inset,0.75rem)] block max-w-[calc(var(--data-table-visible-width,100%)_-_2*var(--data-table-inset,0.75rem))]'>
-            <BlockStateText />
+            <BlockStateText emptyMessage={emptyMessage} />
           </span>
         </DataTableCell>
       </DataTableRow>
