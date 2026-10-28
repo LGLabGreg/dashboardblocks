@@ -242,6 +242,52 @@ function chartNiceTicks(max: number, intervals = 5) {
   )
 }
 
+interface ChartRisingBarProps {
+  height?: number
+  index?: number
+  width?: number
+  x?: number
+  y?: number
+}
+
+/**
+ * A `Bar` `shape` that grows from its base once `revealed`, each bar `stagger` milliseconds after
+ * the one before, so a row of days fills from left to right. Turn the `Bar`'s own animation off.
+ */
+function chartRisingBar({
+  fill,
+  revealed,
+  stagger = 20,
+}: {
+  fill: (index: number) => string
+  revealed: boolean
+  stagger?: number
+}) {
+  return function RisingBar({
+    height = 0,
+    index = 0,
+    width = 0,
+    x = 0,
+    y = 0,
+  }: ChartRisingBarProps) {
+    return (
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={2}
+        fill={fill(index)}
+        className='origin-bottom transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] [transform-box:fill-box] motion-reduce:transition-none'
+        style={{
+          transform: revealed ? undefined : 'scaleY(0)',
+          transitionDelay: `${index * stagger}ms`,
+        }}
+      />
+    )
+  }
+}
+
 function chartBarValueLabel(
   highlightIndex: number | undefined,
   formatter: ChartValueFormatter = formatNumber,
@@ -931,6 +977,7 @@ export {
   chartReferenceColor,
   chartReferenceLabel,
   chartReferenceProps,
+  chartRisingBar,
   chartTimeGridProps,
   chartValueAxisWidth,
   layoutChartMarkers,

@@ -4,8 +4,10 @@ import {
   AuthIcon,
   AuthLayout,
   AuthResendButton,
+  AuthReveal,
   OtpInput,
 } from '@/registry/components/dashboardblocks/auth'
+import { RollingText } from '@/registry/components/dashboardblocks/rolling-text'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
@@ -140,153 +142,151 @@ const Auth4 = (props: Auth4Props) => {
     }
   }
 
-  if (verified) {
-    return (
-      <AuthLayout
-        media={<AuthIcon tone='done' />}
-        title='Email verified'
-        description='Taking you to your workspace…'
-      >
-        <p role='status' className='sr-only'>
-          Email verified
-        </p>
-      </AuthLayout>
-    )
-  }
-
   return (
     <AuthLayout
       media={
-        <AuthIcon>
-          <IconPlaceholder
-            lucide='MailIcon'
-            tabler='IconMail'
-            hugeicons='MailIcon'
-            phosphor='EnvelopeIcon'
-            remixicon='RiMailLine'
-            aria-hidden
-          />
-        </AuthIcon>
+        verified ? (
+          <AuthIcon tone='done' />
+        ) : (
+          <AuthIcon>
+            <IconPlaceholder
+              lucide='MailIcon'
+              tabler='IconMail'
+              hugeicons='MailIcon'
+              phosphor='EnvelopeIcon'
+              remixicon='RiMailLine'
+              aria-hidden
+            />
+          </AuthIcon>
+        )
       }
-      title='Check your email'
+      title={<RollingText text={verified ? 'Email verified' : 'Check your email'} wrap />}
       description={
-        <>
-          We sent a 6-digit code to{' '}
-          <span className='text-foreground font-medium break-all'>{email}</span>. It
-          expires in 10 minutes.
-        </>
+        <RollingText
+          wrap
+          text={
+            verified
+              ? 'Taking you to your workspace…'
+              : `We sent a 6-digit code to ${email}. It expires in 10 minutes.`
+          }
+        />
       }
     >
-      <div ref={formsRef} className='flex flex-col gap-4'>
-        {editing ? (
-          <form
-            method='post'
-            noValidate
-            onSubmit={(event) => void saveEmail(event)}
-            className='flex flex-col gap-2'
-          >
-            <label htmlFor={`${id}-email`} className='text-sm font-medium'>
-              Email
-            </label>
-            <Input
-              id={`${id}-email`}
-              type='email'
-              autoComplete='email'
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              aria-invalid={error ? true : undefined}
-              aria-describedby={error ? `${id}-error` : undefined}
-            />
-            <div className='mt-2 flex flex-col gap-2'>
-              <Button type='submit'>Send code</Button>
-              <Button
-                type='button'
-                variant='ghost'
-                onClick={() => {
-                  setEditing(false)
-                  setDraft(email)
-                  setError(null)
-                  setSendError(null)
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        ) : (
-          <form
-            method='post'
-            noValidate
-            onSubmit={(event) => {
-              event.preventDefault()
-              void verify(code)
-            }}
-            className='flex flex-col gap-4'
-          >
-            <OtpInput
-              aria-label='Code from the email'
-              aria-describedby={error ? `${id}-error` : undefined}
-              focusOnMount={focusOnMount}
-              value={code}
-              onChange={(next) => {
-                setCode(next)
-                setError(null)
-                setSendError(null)
-              }}
-              onComplete={(next) => void verify(next)}
-              invalid={Boolean(error)}
-              disabled={checking}
-            />
-            <Button type='submit' disabled={checking}>
-              {checking ? 'Checking…' : 'Verify email'}
-            </Button>
-          </form>
-        )}
-        {!editing && (
-          <div className='flex flex-col gap-4'>
-            <p className='text-muted-foreground text-sm text-pretty'>
-              Not in your inbox? Check your spam folder, or send it again.
-            </p>
-            <div className='-mx-2.5 flex items-center justify-between gap-2'>
-              <Button
-                type='button'
-                variant='ghost'
-                size='sm'
-                onClick={() => {
-                  setEditing(true)
-                  setError(null)
-                  setSendError(null)
-                }}
-              >
-                <IconPlaceholder
-                  lucide='PencilIcon'
-                  tabler='IconPencil'
-                  hugeicons='PencilEdit02Icon'
-                  phosphor='PencilSimpleIcon'
-                  remixicon='RiPencilLine'
-                  data-icon='inline-start'
-                  aria-hidden
-                />
-                Use another email
-              </Button>
-              <AuthResendButton
-                cooldown={cooldown}
-                total={resendAfter}
-                pending={resending}
-                onClick={() => void resend()}
+      <AuthReveal open={!verified}>
+        <div ref={formsRef} className='flex flex-col gap-4'>
+          {editing ? (
+            <form
+              method='post'
+              noValidate
+              onSubmit={(event) => void saveEmail(event)}
+              className='flex flex-col gap-2'
+            >
+              <label htmlFor={`${id}-email`} className='text-sm font-medium'>
+                Email
+              </label>
+              <Input
+                id={`${id}-email`}
+                type='email'
+                autoComplete='email'
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? `${id}-error` : undefined}
               />
+              <div className='mt-2 flex flex-col gap-2'>
+                <Button type='submit'>Send code</Button>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  onClick={() => {
+                    setEditing(false)
+                    setDraft(email)
+                    setError(null)
+                    setSendError(null)
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <form
+              method='post'
+              noValidate
+              onSubmit={(event) => {
+                event.preventDefault()
+                void verify(code)
+              }}
+              className='flex flex-col gap-4'
+            >
+              <OtpInput
+                aria-label='Code from the email'
+                aria-describedby={error ? `${id}-error` : undefined}
+                focusOnMount={focusOnMount}
+                value={code}
+                onChange={(next) => {
+                  setCode(next)
+                  setError(null)
+                  setSendError(null)
+                }}
+                onComplete={(next) => void verify(next)}
+                invalid={Boolean(error)}
+                disabled={checking}
+              />
+              <Button type='submit' disabled={checking}>
+                {checking ? 'Checking…' : 'Verify email'}
+              </Button>
+            </form>
+          )}
+          {!editing && (
+            <div className='flex flex-col gap-4'>
+              <p className='text-muted-foreground text-sm text-pretty'>
+                Not in your inbox? Check your spam folder, or send it again.
+              </p>
+              <div className='-mx-2.5 flex items-center justify-between gap-2'>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='sm'
+                  onClick={() => {
+                    setEditing(true)
+                    setError(null)
+                    setSendError(null)
+                  }}
+                >
+                  <IconPlaceholder
+                    lucide='PencilIcon'
+                    tabler='IconPencil'
+                    hugeicons='PencilEdit02Icon'
+                    phosphor='PencilSimpleIcon'
+                    remixicon='RiPencilLine'
+                    data-icon='inline-start'
+                    aria-hidden
+                  />
+                  Use another email
+                </Button>
+                <AuthResendButton
+                  cooldown={cooldown}
+                  total={resendAfter}
+                  pending={resending}
+                  onClick={() => void resend()}
+                />
+              </div>
             </div>
-          </div>
-        )}
-        {(error ?? sendError) && (
-          <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
-            {error ?? sendError}
+          )}
+          {(error ?? sendError) && (
+            <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
+              {error ?? sendError}
+            </p>
+          )}
+          <p role='status' className='text-muted-foreground text-sm empty:sr-only'>
+            {status}
           </p>
-        )}
-        <p role='status' className='text-muted-foreground text-sm empty:sr-only'>
-          {status}
-        </p>
-      </div>
+        </div>
+      </AuthReveal>
+      <p role='status' className='sr-only'>
+        {verified ? 'Email verified' : ''}
+      </p>
     </AuthLayout>
   )
 }

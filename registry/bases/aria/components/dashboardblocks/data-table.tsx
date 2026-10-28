@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: cbe0696dc307
+// source-hash: c63ff8549e36
 
 'use client'
 
@@ -273,6 +273,8 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
   caption?: ReactNode
   /** Shown when there are no rows, in the block's empty state too. */
   empty?: ReactNode
+  /** The id of a row to highlight, such as the one hovered in a chart beside the table. */
+  highlightedRowId?: string | null
   /** How many rows to sketch while loading. @default 5 */
   loadingRows?: number
   table: DataTableInstance<TData>
@@ -281,6 +283,7 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
 function DataTableContent<TData extends RowData>({
   caption,
   empty,
+  highlightedRowId,
   loadingRows,
   table,
   ...props
@@ -318,6 +321,7 @@ function DataTableContent<TData extends RowData>({
               key={row.id}
               data-row-id={row.id}
               data-state={row.getIsSelected() ? 'selected' : undefined}
+              highlighted={row.id === highlightedRowId}
             >
               {row.getVisibleCells().map((cell) => {
                 const { meta } = cell.column.columnDef

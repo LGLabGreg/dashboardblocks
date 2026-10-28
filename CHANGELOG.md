@@ -1,5 +1,14 @@
 # dashboardblocks
 
+## 1.14.1
+
+### Patch Changes
+
+- 4f3836c: Auth: Sign In, Two-Factor Code and Verify Email stay on one page when they finish, so the title and description roll into the done step while the form folds away.
+- 4f3836c: `AuthIcon` in `auth.tsx` takes `tone='waiting'`: a dot on its corner pulses while the page waits on the person.
+- 4f3836c: `AuthReveal` in `auth.tsx` leaves 16px beside its content, so a ghost button lined up with the column, such as Forgot Password's Use another email, keeps its padding instead of being cut off.
+- 7a8e2fa: `chartRisingBar` in `chart.tsx`: a bar shape that grows each bar from its base in turn, left to right, once the block reveals it.
+
 ## 1.14.0
 
 ### Minor Changes

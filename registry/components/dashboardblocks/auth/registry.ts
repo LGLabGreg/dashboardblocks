@@ -46,7 +46,13 @@ export const examples: Registry['items'] = [
   {
     name: 'auth-03',
     type: 'registry:component',
-    registryDependencies: ['button', 'input', 'switch', registryUrl('auth')],
+    registryDependencies: [
+      'button',
+      'input',
+      'switch',
+      registryUrl('auth'),
+      registryUrl('rolling-text'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/auth/auth-03.tsx',
@@ -63,7 +69,12 @@ export const examples: Registry['items'] = [
   {
     name: 'auth-04',
     type: 'registry:component',
-    registryDependencies: ['button', 'input', registryUrl('auth')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('auth'),
+      registryUrl('rolling-text'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/auth/auth-04.tsx',

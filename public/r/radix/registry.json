@@ -8428,7 +8428,8 @@
         "button",
         "input",
         "switch",
-        "https://www.dashboardblocks.com/r/radix/auth.json"
+        "https://www.dashboardblocks.com/r/radix/auth.json",
+        "https://www.dashboardblocks.com/r/radix/rolling-text.json"
       ],
       "files": [
         {
@@ -8454,7 +8455,8 @@
       "registryDependencies": [
         "button",
         "input",
-        "https://www.dashboardblocks.com/r/radix/auth.json"
+        "https://www.dashboardblocks.com/r/radix/auth.json",
+        "https://www.dashboardblocks.com/r/radix/rolling-text.json"
       ],
       "files": [
         {

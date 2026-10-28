@@ -60,7 +60,7 @@ function AuthLayout({ children, className, description, media, title }: AuthLayo
   )
 }
 
-/** The icon above an auth page's title. `done` draws a tick for a step that just finished. */
+/** The icon above an auth page's title. `waiting` pulses while the page waits on the person, such as for a passkey; `done` draws a tick for a step that just finished. */
 function AuthIcon({
   children,
   className,
@@ -69,19 +69,28 @@ function AuthIcon({
   children?: ReactNode
   className?: string
   /** @default 'default' */
-  tone?: 'default' | 'done'
+  tone?: 'default' | 'waiting' | 'done'
 }) {
   return (
     <span
       data-slot='auth-icon'
+      data-tone={tone}
       className={cn(
-        'flex size-12 shrink-0 items-center justify-center rounded-xl [&_svg]:size-6',
+        'relative flex size-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-200 [&_svg]:size-6',
         tone === 'done'
           ? 'animate-in zoom-in-75 fade-in bg-emerald-500/10 text-emerald-700 duration-300 ease-out motion-reduce:animate-none dark:text-emerald-400'
-          : 'bg-muted text-muted-foreground',
+          : tone === 'waiting'
+            ? 'bg-muted text-foreground'
+            : 'bg-muted text-muted-foreground',
         className,
       )}
     >
+      {tone === 'waiting' && (
+        <span className='absolute -end-1 -top-1 flex size-2.5 text-(--color-chart-2)'>
+          <span className='absolute inline-flex size-full animate-ping rounded-full bg-current opacity-60 motion-reduce:animate-none' />
+          <span className='relative inline-flex size-full rounded-full bg-current' />
+        </span>
+      )}
       {tone === 'done' ? (
         <IconPlaceholder
           lucide='CircleCheckIcon'
@@ -286,12 +295,12 @@ function AuthReveal({
       data-open={open || undefined}
       inert={!open}
       className={cn(
-        '-mx-1 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
+        '-mx-4 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
         open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
       )}
     >
       <div className='min-h-0 overflow-clip'>
-        <div className={cn('px-1 pt-1', className)}>{children}</div>
+        <div className={cn('px-4 pt-1', className)}>{children}</div>
       </div>
     </div>
   )
@@ -377,7 +386,9 @@ function PasswordStrength({
       <div
         aria-hidden
         className='grid gap-1.5'
-        style={{ gridTemplateColumns: `repeat(${rules.length}, minmax(0, 1fr))` }}
+        style={{
+          gridTemplateColumns: `repeat(${rules.length}, minmax(0, 1fr))`,
+        }}
       >
         {rules.map((rule, index) => (
           <span key={rule.label} className='bg-muted h-1 overflow-hidden rounded-full'>
@@ -446,7 +457,9 @@ function AuthProviderButtons({
     >
       <div
         className='grid gap-2'
-        style={{ gridTemplateColumns: `repeat(${providers.length}, minmax(0, 1fr))` }}
+        style={{
+          gridTemplateColumns: `repeat(${providers.length}, minmax(0, 1fr))`,
+        }}
       >
         {providers.map((provider) => {
           const isPending = pending === provider.id

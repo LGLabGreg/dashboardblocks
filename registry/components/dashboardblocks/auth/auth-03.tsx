@@ -3,9 +3,11 @@
 import {
   AuthIcon,
   AuthLayout,
+  AuthReveal,
   AuthSwitch,
   OtpInput,
 } from '@/registry/components/dashboardblocks/auth'
+import { RollingText } from '@/registry/components/dashboardblocks/rolling-text'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
@@ -123,120 +125,131 @@ const Auth3 = (props: Auth3Props) => {
     void verify(kind === 'app' ? code : recovery)
   }
 
-  if (verified) {
-    return (
-      <AuthLayout
-        media={<AuthIcon tone='done' />}
-        title='You’re signed in'
-        description='Taking you to your dashboards…'
-      >
-        <p role='status' className='sr-only'>
-          Signed in
-        </p>
-      </AuthLayout>
-    )
-  }
-
   return (
     <AuthLayout
       media={
-        <AuthIcon>
-          <IconPlaceholder
-            lucide='SmartphoneIcon'
-            tabler='IconDeviceMobile'
-            hugeicons='SmartPhone01Icon'
-            phosphor='DeviceMobileIcon'
-            remixicon='RiSmartphoneLine'
-            aria-hidden
-          />
-        </AuthIcon>
+        verified ? (
+          <AuthIcon tone='done' />
+        ) : (
+          <AuthIcon>
+            <IconPlaceholder
+              lucide='SmartphoneIcon'
+              tabler='IconDeviceMobile'
+              hugeicons='SmartPhone01Icon'
+              phosphor='DeviceMobileIcon'
+              remixicon='RiSmartphoneLine'
+              aria-hidden
+            />
+          </AuthIcon>
+        )
       }
-      title='Two-factor authentication'
+      title={
+        <RollingText
+          text={verified ? 'You’re signed in' : 'Two-factor authentication'}
+          wrap
+        />
+      }
       description={
-        kind === 'app'
-          ? 'Enter the 6-digit code from your authenticator app.'
-          : 'Enter one of the recovery codes you saved when you set up two-factor.'
+        <RollingText
+          wrap
+          text={
+            verified
+              ? 'Taking you to your dashboards…'
+              : kind === 'app'
+                ? 'Enter the 6-digit code from your authenticator app.'
+                : 'Enter one of the recovery codes you saved when you set up two-factor.'
+          }
+        />
       }
     >
-      <form
-        method='post'
-        ref={formRef}
-        noValidate
-        onSubmit={submit}
-        className='flex flex-col gap-4'
-      >
-        {kind === 'app' ? (
-          <OtpInput
-            aria-label='Code from your authenticator app'
-            aria-describedby={error ? `${id}-error` : undefined}
-            focusOnMount={focusOnMount}
-            value={code}
-            onChange={(next) => {
-              setCode(next)
-              setError(null)
-            }}
-            onComplete={(next) => void verify(next)}
-            invalid={Boolean(error)}
-            disabled={checking || locked}
-          />
-        ) : (
-          <div className='flex flex-col gap-2'>
-            <label htmlFor={`${id}-recovery`} className='text-sm font-medium'>
-              Recovery code
-            </label>
-            <Input
-              id={`${id}-recovery`}
-              autoComplete='off'
-              spellCheck={false}
-              placeholder='xxxx-xxxx'
-              value={recovery}
-              onChange={(event) => {
-                setRecovery(event.target.value)
+      <AuthReveal open={!verified}>
+        <div className='flex flex-col gap-6'>
+          <form
+            method='post'
+            ref={formRef}
+            noValidate
+            onSubmit={submit}
+            className='flex flex-col gap-4'
+          >
+            {kind === 'app' ? (
+              <OtpInput
+                aria-label='Code from your authenticator app'
+                aria-describedby={error ? `${id}-error` : undefined}
+                focusOnMount={focusOnMount}
+                value={code}
+                onChange={(next) => {
+                  setCode(next)
+                  setError(null)
+                }}
+                onComplete={(next) => void verify(next)}
+                invalid={Boolean(error)}
+                disabled={checking || locked}
+              />
+            ) : (
+              <div className='flex flex-col gap-2'>
+                <label htmlFor={`${id}-recovery`} className='text-sm font-medium'>
+                  Recovery code
+                </label>
+                <Input
+                  id={`${id}-recovery`}
+                  autoComplete='off'
+                  spellCheck={false}
+                  placeholder='xxxx-xxxx'
+                  value={recovery}
+                  onChange={(event) => {
+                    setRecovery(event.target.value)
+                    setError(null)
+                  }}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? `${id}-error` : undefined}
+                  disabled={checking || locked}
+                  className='font-mono'
+                />
+              </div>
+            )}
+            {error && (
+              <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
+                {error}
+              </p>
+            )}
+            {trustDays !== undefined && (
+              <div className='flex items-center justify-between gap-4 border-y py-3'>
+                <span id={`${id}-trust`} className='text-sm'>
+                  Trust this device for {trustDays} days
+                </span>
+                <Switch
+                  aria-labelledby={`${id}-trust`}
+                  checked={trustDevice}
+                  onCheckedChange={setTrustDevice}
+                />
+              </div>
+            )}
+            <Button type='submit' disabled={checking || locked}>
+              {checking ? 'Checking…' : 'Verify'}
+            </Button>
+            <Button
+              type='button'
+              variant='ghost'
+              onClick={() => {
+                setKind(kind === 'app' ? 'recovery' : 'app')
                 setError(null)
               }}
-              aria-invalid={error ? true : undefined}
-              aria-describedby={error ? `${id}-error` : undefined}
-              disabled={checking || locked}
-              className='font-mono'
-            />
-          </div>
-        )}
-        {error && (
-          <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>
-            {error}
-          </p>
-        )}
-        {trustDays !== undefined && (
-          <div className='flex items-center justify-between gap-4 border-y py-3'>
-            <span id={`${id}-trust`} className='text-sm'>
-              Trust this device for {trustDays} days
-            </span>
-            <Switch
-              aria-labelledby={`${id}-trust`}
-              checked={trustDevice}
-              onCheckedChange={setTrustDevice}
-            />
-          </div>
-        )}
-        <Button type='submit' disabled={checking || locked}>
-          {checking ? 'Checking…' : 'Verify'}
-        </Button>
-        <Button
-          type='button'
-          variant='ghost'
-          onClick={() => {
-            setKind(kind === 'app' ? 'recovery' : 'app')
-            setError(null)
-          }}
-        >
-          {kind === 'app' ? 'Use a recovery code instead' : 'Use your authenticator app'}
-        </Button>
-      </form>
-      <AuthSwitch
-        href={signOutHref}
-        title='Use another account'
-        description={`Sign out of ${email} first.`}
-      />
+            >
+              {kind === 'app'
+                ? 'Use a recovery code instead'
+                : 'Use your authenticator app'}
+            </Button>
+          </form>
+          <AuthSwitch
+            href={signOutHref}
+            title='Use another account'
+            description={`Sign out of ${email} first.`}
+          />
+        </div>
+      </AuthReveal>
+      <p role='status' className='sr-only'>
+        {verified ? 'Signed in' : ''}
+      </p>
     </AuthLayout>
   )
 }

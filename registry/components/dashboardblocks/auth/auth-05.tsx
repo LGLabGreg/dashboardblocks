@@ -188,155 +188,167 @@ const Auth5 = (props: Auth5Props) => {
     setMessage(null)
   }
 
-  if (done) {
-    return (
-      <AuthLayout
-        media={<AuthIcon tone='done' />}
-        title={signUp ? 'Account created' : 'You’re signed in'}
-        description='Taking you to your workspace…'
-      >
-        <p role='status' className='sr-only'>
-          {signUp ? 'Account created' : 'You’re signed in'}
-        </p>
-      </AuthLayout>
-    )
-  }
-
   const pending = form.isSubmitting
   const strengthId = `${form.getId('password')}-strength`
 
   return (
     <AuthLayout
       media={
-        <AuthIcon>
-          <IconPlaceholder
-            lucide='LogInIcon'
-            tabler='IconLogin'
-            hugeicons='Login03Icon'
-            phosphor='SignInIcon'
-            remixicon='RiLoginBoxLine'
-            aria-hidden
-          />
-        </AuthIcon>
+        done ? (
+          <AuthIcon tone='done' />
+        ) : (
+          <AuthIcon>
+            <IconPlaceholder
+              lucide='LogInIcon'
+              tabler='IconLogin'
+              hugeicons='Login03Icon'
+              phosphor='SignInIcon'
+              remixicon='RiLoginBoxLine'
+              aria-hidden
+            />
+          </AuthIcon>
+        )
       }
-      title={<RollingText text={signUp ? 'Create your account' : 'Welcome back'} wrap />}
+      title={
+        <RollingText
+          text={
+            done
+              ? signUp
+                ? 'Account created'
+                : 'You’re signed in'
+              : signUp
+                ? 'Create your account'
+                : 'Welcome back'
+          }
+          wrap
+        />
+      }
       description={
         <RollingText
           text={
-            signUp
-              ? (signUpNote ?? 'It takes a minute.')
-              : 'Sign in to pick up where you left off.'
+            done
+              ? 'Taking you to your workspace…'
+              : signUp
+                ? (signUpNote ?? 'It takes a minute.')
+                : 'Sign in to pick up where you left off.'
           }
           wrap
         />
       }
     >
-      <form
-        method='post'
-        noValidate
-        onSubmit={(event) => void submit(event)}
-        className='flex flex-col'
-      >
-        <AuthReveal open={signUp} className='pb-4'>
-          <Field data-invalid={form.errors.name ? true : undefined}>
-            <FieldLabel htmlFor={form.getId('name')}>Name</FieldLabel>
-            <Input autoComplete='name' disabled={pending} {...form.field('name')} />
-            <FieldError {...form.error('name')} />
-          </Field>
-        </AuthReveal>
-        <div className='flex flex-col gap-4'>
-          <Field data-invalid={form.errors.email ? true : undefined}>
-            <FieldLabel htmlFor={form.getId('email')}>Email</FieldLabel>
-            <Input
-              type='email'
-              autoComplete='email'
-              disabled={pending}
-              {...form.field('email')}
-            />
-            <FieldError {...form.error('email')} />
-          </Field>
-          <Field data-invalid={form.errors.password ? true : undefined}>
-            <div className='flex items-baseline justify-between gap-3'>
-              <FieldLabel htmlFor={form.getId('password')}>Password</FieldLabel>
-              {forgotPasswordHref && (
-                <a
-                  href={forgotPasswordHref}
-                  inert={signUp}
-                  className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-opacity duration-200 hover:underline data-[hidden]:opacity-0'
-                  data-hidden={signUp || undefined}
-                >
-                  Forgot password?
-                </a>
-              )}
+      <AuthReveal open={!done}>
+        <div className='flex flex-col gap-6'>
+          <form
+            method='post'
+            noValidate
+            onSubmit={(event) => void submit(event)}
+            className='flex flex-col'
+          >
+            <AuthReveal open={signUp} className='pb-4'>
+              <Field data-invalid={form.errors.name ? true : undefined}>
+                <FieldLabel htmlFor={form.getId('name')}>Name</FieldLabel>
+                <Input autoComplete='name' disabled={pending} {...form.field('name')} />
+                <FieldError {...form.error('name')} />
+              </Field>
+            </AuthReveal>
+            <div className='flex flex-col gap-4'>
+              <Field data-invalid={form.errors.email ? true : undefined}>
+                <FieldLabel htmlFor={form.getId('email')}>Email</FieldLabel>
+                <Input
+                  type='email'
+                  autoComplete='email'
+                  disabled={pending}
+                  {...form.field('email')}
+                />
+                <FieldError {...form.error('email')} />
+              </Field>
+              <Field data-invalid={form.errors.password ? true : undefined}>
+                <div className='flex items-baseline justify-between gap-3'>
+                  <FieldLabel htmlFor={form.getId('password')}>Password</FieldLabel>
+                  {forgotPasswordHref && (
+                    <a
+                      href={forgotPasswordHref}
+                      inert={signUp}
+                      className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-opacity duration-200 hover:underline data-[hidden]:opacity-0'
+                      data-hidden={signUp || undefined}
+                    >
+                      Forgot password?
+                    </a>
+                  )}
+                </div>
+                <PasswordInput
+                  autoComplete={signUp ? 'new-password' : 'current-password'}
+                  disabled={pending}
+                  {...form.field('password')}
+                  aria-describedby={
+                    [signUp && strengthId, form.field('password')['aria-describedby']]
+                      .filter(Boolean)
+                      .join(' ') || undefined
+                  }
+                />
+                <FieldError {...form.error('password')} />
+              </Field>
             </div>
-            <PasswordInput
-              autoComplete={signUp ? 'new-password' : 'current-password'}
-              disabled={pending}
-              {...form.field('password')}
-              aria-describedby={
-                [signUp && strengthId, form.field('password')['aria-describedby']]
-                  .filter(Boolean)
-                  .join(' ') || undefined
-              }
-            />
-            <FieldError {...form.error('password')} />
-          </Field>
-        </div>
-        <AuthReveal open={signUp} className='pt-3'>
-          <PasswordStrength id={strengthId} password={form.values.password} />
-        </AuthReveal>
-        {message && (
-          <p role='alert' className='text-destructive mt-4 text-sm text-pretty'>
-            {message}
-          </p>
-        )}
-        <Button
-          type='submit'
-          size='lg'
-          className='mt-5 aria-disabled:opacity-50'
-          aria-disabled={pending || undefined}
-        >
-          <RollingText
-            text={
-              pending
-                ? signUp
-                  ? 'Creating account…'
-                  : 'Signing in…'
-                : signUp
-                  ? 'Create account'
-                  : 'Sign in'
+            <AuthReveal open={signUp} className='pt-3'>
+              <PasswordStrength id={strengthId} password={form.values.password} />
+            </AuthReveal>
+            {message && (
+              <p role='alert' className='text-destructive mt-4 text-sm text-pretty'>
+                {message}
+              </p>
+            )}
+            <Button
+              type='submit'
+              size='lg'
+              className='mt-5 aria-disabled:opacity-50'
+              aria-disabled={pending || undefined}
+            >
+              <RollingText
+                text={
+                  pending
+                    ? signUp
+                      ? 'Creating account…'
+                      : 'Signing in…'
+                    : signUp
+                      ? 'Create account'
+                      : 'Sign in'
+                }
+              />
+            </Button>
+            {terms && (
+              <AuthReveal open={signUp} className='pt-3'>
+                <p className='text-muted-foreground text-xs text-pretty'>{terms}</p>
+              </AuthReveal>
+            )}
+          </form>
+          {providers.length > 0 && (
+            <>
+              <AuthDivider />
+              <AuthProviderButtons
+                providers={providers}
+                disabled={pending}
+                onSelect={onProvider}
+              />
+            </>
+          )}
+          <AuthSwitch
+            title={signUp ? 'Already have an account?' : `New to ${productName}?`}
+            description={
+              signUp
+                ? providers.length
+                  ? 'Sign in with your email or an account you already use.'
+                  : 'Sign in with your email.'
+                : signUpNote
+                  ? `Create an account. ${signUpNote}`
+                  : 'Create an account.'
             }
+            onClick={switchMode}
           />
-        </Button>
-        {terms && (
-          <AuthReveal open={signUp} className='pt-3'>
-            <p className='text-muted-foreground text-xs text-pretty'>{terms}</p>
-          </AuthReveal>
-        )}
-      </form>
-      {providers.length > 0 && (
-        <>
-          <AuthDivider />
-          <AuthProviderButtons
-            providers={providers}
-            disabled={pending}
-            onSelect={onProvider}
-          />
-        </>
-      )}
-      <AuthSwitch
-        title={signUp ? 'Already have an account?' : `New to ${productName}?`}
-        description={
-          signUp
-            ? providers.length
-              ? 'Sign in with your email or an account you already use.'
-              : 'Sign in with your email.'
-            : signUpNote
-              ? `Create an account. ${signUpNote}`
-              : 'Create an account.'
-        }
-        onClick={switchMode}
-      />
+        </div>
+      </AuthReveal>
+      <p role='status' className='sr-only'>
+        {done ? (signUp ? 'Account created' : 'You’re signed in') : ''}
+      </p>
     </AuthLayout>
   )
 }
