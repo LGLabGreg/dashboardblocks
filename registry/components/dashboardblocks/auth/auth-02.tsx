@@ -1,6 +1,10 @@
 'use client'
 
-import { AuthLayout, WorkspaceAvatar } from '@/registry/components/dashboardblocks/auth'
+import {
+  AuthLayout,
+  AuthSwitch,
+  WorkspaceAvatar,
+} from '@/registry/components/dashboardblocks/auth'
 import {
   BlockStateProvider,
   BlockStateRows,
@@ -20,6 +24,8 @@ interface PickerWorkspace {
   href: string
   id: string
   logo?: string
+  /** Drawn in the primary colour when there's no `logo`. */
+  mark?: ReactNode
   members: number
   name: string
   role: string
@@ -29,11 +35,12 @@ interface PendingInvite {
   id: string
   invitedBy: string
   logo?: string
+  /** Drawn in the primary colour when there's no `logo`. */
+  mark?: ReactNode
   name: string
 }
 
 interface Auth2Props extends BlockStateProps {
-  brand: ReactNode
   createHref: string
   email: string
   invites?: PendingInvite[]
@@ -44,23 +51,27 @@ interface Auth2Props extends BlockStateProps {
 }
 
 const exampleProps: Auth2Props = {
-  brand: (
-    <>
-      <span className='bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md [&_svg]:size-4'>
-        <IconPlaceholder
-          lucide='BlocksIcon'
-          tabler='IconCube'
-          hugeicons='CubeIcon'
-          phosphor='CubeIcon'
-          remixicon='RiBox3Line'
-        />
-      </span>
-      Acme Analytics
-    </>
-  ),
   createHref: '#',
   email: 'amara@acme.co',
-  invites: [{ id: 'i1', invitedBy: 'Liam Chen', name: 'Northwind Finance' }],
+  invites: [
+    {
+      id: 'i1',
+      invitedBy: 'Liam Chen',
+      mark: (
+        <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden>
+          <rect x='4.5' y='2.5' width='5' height='19' rx='2.5' />
+          <path
+            d='M7 5l9.75 14'
+            stroke='currentColor'
+            strokeWidth='5'
+            strokeLinecap='round'
+          />
+          <circle cx='17' cy='6.25' r='3.75' />
+        </svg>
+      ),
+      name: 'Northwind Finance',
+    },
+  ],
   onAcceptInvite: () => new Promise((resolve) => setTimeout(resolve, 600)),
   signOutHref: '#',
   workspaces: [
@@ -74,8 +85,7 @@ const exampleProps: Auth2Props = {
 const SEARCH_AFTER = 5
 
 const Auth2 = (props: Auth2Props) => {
-  const { brand, createHref, email, onAcceptInvite, signOutHref, errorMessage, status } =
-    props
+  const { createHref, email, onAcceptInvite, signOutHref, errorMessage, status } = props
   const id = useId()
   const [workspaces, setWorkspaces] = useState(props.workspaces ?? [])
   const [invites, setInvites] = useState(props.invites ?? [])
@@ -101,6 +111,7 @@ const Auth2 = (props: Auth2Props) => {
             href: '#',
             id: invite.id,
             logo: invite.logo,
+            mark: invite.mark,
             members: 0,
             name: invite.name,
             role: 'Member',
@@ -120,7 +131,6 @@ const Auth2 = (props: Auth2Props) => {
       state={getBlockState(status, workspaces)}
     >
       <AuthLayout
-        brand={brand}
         title='Choose a workspace'
         description={
           <>
@@ -136,14 +146,6 @@ const Auth2 = (props: Auth2Props) => {
               </>
             )}
           </>
-        }
-        footer={
-          <a
-            href={signOutHref}
-            className='hover:text-foreground underline underline-offset-4'
-          >
-            Use another account
-          </a>
         }
       >
         <div className='flex flex-col gap-6'>
@@ -178,7 +180,11 @@ const Auth2 = (props: Auth2Props) => {
                       href={workspace.href}
                       className='hover:bg-muted focus-visible:ring-ring/50 -mx-2 flex items-center gap-3 rounded-md px-2 py-2.5 outline-none focus-visible:ring-3 focus-visible:ring-inset'
                     >
-                      <WorkspaceAvatar name={workspace.name} logo={workspace.logo} />
+                      <WorkspaceAvatar
+                        name={workspace.name}
+                        logo={workspace.logo}
+                        mark={workspace.mark}
+                      />
                       <span className='flex min-w-0 flex-1 flex-col'>
                         <span className='truncate text-sm font-medium'>
                           {workspace.name}
@@ -217,7 +223,11 @@ const Auth2 = (props: Auth2Props) => {
               <ul className='flex flex-col divide-y border-y'>
                 {invites.map((invite) => (
                   <li key={invite.id} className='flex items-center gap-3 py-2.5'>
-                    <WorkspaceAvatar name={invite.name} logo={invite.logo} />
+                    <WorkspaceAvatar
+                      name={invite.name}
+                      logo={invite.logo}
+                      mark={invite.mark}
+                    />
                     <span className='flex min-w-0 flex-1 flex-col'>
                       <span className='truncate text-sm font-medium'>{invite.name}</span>
                       <span className='text-muted-foreground truncate text-xs'>
@@ -260,6 +270,11 @@ const Auth2 = (props: Auth2Props) => {
             Create a workspace
           </a>
         </div>
+        <AuthSwitch
+          href={signOutHref}
+          title='Use another account'
+          description={`Sign out of ${email} first.`}
+        />
       </AuthLayout>
     </BlockStateProvider>
   )

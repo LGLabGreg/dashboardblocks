@@ -11,13 +11,14 @@ import { cn } from '@/lib/utils'
 
 interface InviteWorkspace {
   logo?: string
+  /** Drawn in the primary colour when there's no `logo`. */
+  mark?: ReactNode
   members: { avatar?: string; id: string; name: string }[]
   memberCount: number
   name: string
 }
 
 interface Auth1Props {
-  brand: ReactNode
   email: string
   expired?: boolean
   invitedBy: { avatar?: string; name: string }
@@ -32,20 +33,6 @@ interface Auth1Props {
 }
 
 const exampleProps: Auth1Props = {
-  brand: (
-    <>
-      <span className='bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md [&_svg]:size-4'>
-        <IconPlaceholder
-          lucide='BlocksIcon'
-          tabler='IconCube'
-          hugeicons='CubeIcon'
-          phosphor='CubeIcon'
-          remixicon='RiBox3Line'
-        />
-      </span>
-      Acme Analytics
-    </>
-  ),
   email: 'noah@northwind.io',
   invitedBy: { avatar: '/images/avatar-04.webp', name: 'Liam Chen' },
   onAccept: () => new Promise((resolve) => setTimeout(resolve, 800)),
@@ -54,6 +41,18 @@ const exampleProps: Auth1Props = {
   signedInAs: 'noah@northwind.io',
   switchAccountHref: '#',
   workspace: {
+    mark: (
+      <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden>
+        <rect x='4.5' y='2.5' width='5' height='19' rx='2.5' />
+        <path
+          d='M7 5l9.75 14'
+          stroke='currentColor'
+          strokeWidth='5'
+          strokeLinecap='round'
+        />
+        <circle cx='17' cy='6.25' r='3.75' />
+      </svg>
+    ),
     memberCount: 24,
     members: [
       { avatar: '/images/avatar-05.webp', id: 'm1', name: 'Amara Okafor' },
@@ -69,7 +68,6 @@ type Outcome = 'pending' | 'accepted' | 'declined'
 
 const Auth1 = (props: Auth1Props) => {
   const {
-    brand,
     email,
     expired = false,
     invitedBy,
@@ -124,9 +122,14 @@ const Auth1 = (props: Auth1Props) => {
 
   return (
     <AuthLayout
-      brand={brand}
-      aside={signedInAs && <span className='truncate'>{signedInAs}</span>}
-      media={<WorkspaceAvatar name={workspace.name} logo={workspace.logo} size='lg' />}
+      media={
+        <WorkspaceAvatar
+          name={workspace.name}
+          logo={workspace.logo}
+          mark={workspace.mark}
+          size='lg'
+        />
+      }
       title={title}
       description={description}
     >

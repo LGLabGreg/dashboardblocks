@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.14.0
+
+### Minor Changes
+
+- ad8cdf1: New Auth blocks: Sign In (signing up in the same form), Forgot Password and Reset Password. Every Auth block now has the same icon over its title and the same row at the bottom.
+
 ## 1.13.1
 
 ### Patch Changes

@@ -1,10 +1,14 @@
 'use client'
 
-import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
+import {
+  AuthIcon,
+  AuthLayout,
+  AuthSwitch,
+  OtpInput,
+} from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
-  type ReactNode,
   startTransition,
   useEffect,
   useId,
@@ -22,33 +26,18 @@ interface VerifyResult {
 }
 
 interface Auth3Props {
-  focusOnMount?: boolean
-  brand: ReactNode
   email: string
-  signOutHref: string
-  trustDays?: number
+  focusOnMount?: boolean
+  onVerified?: () => void
   onVerify?: (
     code: string,
     options: { kind: 'app' | 'recovery'; trustDevice: boolean },
   ) => VerifyResult | Promise<VerifyResult>
-  onVerified?: () => void
+  signOutHref: string
+  trustDays?: number
 }
 
 const exampleProps: Auth3Props = {
-  brand: (
-    <>
-      <span className='bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md [&_svg]:size-4'>
-        <IconPlaceholder
-          lucide='BlocksIcon'
-          tabler='IconCube'
-          hugeicons='CubeIcon'
-          phosphor='CubeIcon'
-          remixicon='RiBox3Line'
-        />
-      </span>
-      Acme Analytics
-    </>
-  ),
   email: 'amara@acme.co',
   signOutHref: '#',
   trustDays: 30,
@@ -58,9 +47,8 @@ const EXAMPLE_ATTEMPTS = 5
 
 const Auth3 = (props: Auth3Props) => {
   const {
-    focusOnMount = false,
-    brand,
     email,
+    focusOnMount = false,
     onVerified,
     onVerify,
     signOutHref,
@@ -138,19 +126,7 @@ const Auth3 = (props: Auth3Props) => {
   if (verified) {
     return (
       <AuthLayout
-        brand={brand}
-        media={
-          <span className='flex size-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 [&_svg]:size-6'>
-            <IconPlaceholder
-              lucide='CircleCheckIcon'
-              tabler='IconCircleCheck'
-              hugeicons='CheckmarkCircle02Icon'
-              phosphor='CheckCircleIcon'
-              remixicon='RiCheckboxCircleLine'
-              aria-hidden
-            />
-          </span>
-        }
+        media={<AuthIcon tone='done' />}
         title='You’re signed in'
         description='Taking you to your dashboards…'
       >
@@ -163,9 +139,8 @@ const Auth3 = (props: Auth3Props) => {
 
   return (
     <AuthLayout
-      brand={brand}
       media={
-        <span className='bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-xl [&_svg]:size-6'>
+        <AuthIcon>
           <IconPlaceholder
             lucide='SmartphoneIcon'
             tabler='IconDeviceMobile'
@@ -174,26 +149,13 @@ const Auth3 = (props: Auth3Props) => {
             remixicon='RiSmartphoneLine'
             aria-hidden
           />
-        </span>
+        </AuthIcon>
       }
       title='Two-factor authentication'
       description={
         kind === 'app'
           ? 'Enter the 6-digit code from your authenticator app.'
           : 'Enter one of the recovery codes you saved when you set up two-factor.'
-      }
-      footer={
-        <>
-          <span>
-            Signed in as <span className='text-foreground'>{email}</span>
-          </span>
-          <a
-            href={signOutHref}
-            className='hover:text-foreground underline underline-offset-4'
-          >
-            Sign out
-          </a>
-        </>
       }
     >
       <form
@@ -270,6 +232,11 @@ const Auth3 = (props: Auth3Props) => {
           {kind === 'app' ? 'Use a recovery code instead' : 'Use your authenticator app'}
         </Button>
       </form>
+      <AuthSwitch
+        href={signOutHref}
+        title='Use another account'
+        description={`Sign out of ${email} first.`}
+      />
     </AuthLayout>
   )
 }

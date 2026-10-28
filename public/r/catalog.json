@@ -317,7 +317,7 @@
       "component": "Auth1",
       "shows": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs.",
       "size": "page",
-      "props": "{ brand: ReactNode; email: string; expired?: boolean; invitedBy: { avatar?: string; name: string }; onAccept?: () => void | Promise<void>; onDecline?: () => void; role: string; roleDescription?: string; signedInAs?: string; switchAccountHref: string; workspace: { logo?: string; members: { avatar?: string; id: string; name: string }[]; memberCount: number; name: string } }",
+      "props": "{ email: string; expired?: boolean; invitedBy: { avatar?: string; name: string }; onAccept?: () => void | Promise<void>; onDecline?: () => void; role: string; roleDescription?: string; signedInAs?: string; switchAccountHref: string; workspace: { logo?: string; mark?: ReactNode; members: { avatar?: string; id: string; name: string }[]; memberCount: number; name: string } }",
       "usedWith": [
         "auth-02"
       ]
@@ -329,7 +329,7 @@
       "component": "Auth2",
       "shows": "A list of the workspaces you belong to with your role in each, pending invites to join and a search once there are many.",
       "size": "page",
-      "props": "{ brand: ReactNode; createHref: string; email: string; invites?: { id: string; invitedBy: string; logo?: string; name: string }[]; onAcceptInvite?: (id: string) => void | Promise<void>; signOutHref: string; workspaces?: { href: string; id: string; logo?: string; members: number; name: string; role: string }[]; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ createHref: string; email: string; invites?: { id: string; invitedBy: string; logo?: string; mark?: ReactNode; name: string }[]; onAcceptInvite?: (id: string) => void | Promise<void>; signOutHref: string; workspaces?: { href: string; id: string; logo?: string; mark?: ReactNode; members: number; name: string; role: string }[]; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "auth-01"
       ]
@@ -341,7 +341,7 @@
       "component": "Auth3",
       "shows": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device.",
       "size": "page",
-      "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; signOutHref: string; trustDays?: number; onVerify?: (code: string, options: { kind: \"app\" | \"recovery\"; trustDevice: boolean }) => { ok: boolean; attemptsLeft?: number } | Promise<{ ok: boolean; attemptsLeft?: number }>; onVerified?: () => void }",
+      "props": "{ email: string; focusOnMount?: boolean; onVerified?: () => void; onVerify?: (code: string, options: { kind: \"app\" | \"recovery\"; trustDevice: boolean }) => { ok: boolean; attemptsLeft?: number } | Promise<{ ok: boolean; attemptsLeft?: number }>; signOutHref: string; trustDays?: number }",
       "usedWith": [
         "auth-04"
       ]
@@ -353,9 +353,48 @@
       "component": "Auth4",
       "shows": "An email verification code form with a resend that waits between emails and a way to fix a mistyped address.",
       "size": "page",
-      "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; resendAfter?: number; onChangeEmail?: (email: string) => void | Promise<void>; onResend?: () => void | Promise<void>; onVerify?: (code: string) => boolean | Promise<boolean>; onVerified?: () => void }",
+      "props": "{ email: string; focusOnMount?: boolean; onChangeEmail?: (email: string) => void | Promise<void>; onResend?: () => void | Promise<void>; onVerified?: () => void; onVerify?: (code: string) => boolean | Promise<boolean>; resendAfter?: number }",
       "usedWith": [
         "auth-03"
+      ]
+    },
+    {
+      "name": "auth-05",
+      "install": "@dashboardblocks/auth-05",
+      "import": "@/components/dashboardblocks/auth/auth-05",
+      "component": "Auth5",
+      "shows": "One form to sign in or sign up, with Google, X and GitHub on one row, a password you can show, and a switch at the bottom that unfolds the sign-up fields and a password strength meter.",
+      "size": "page",
+      "props": "{ defaultMode?: \"sign-in\" | \"sign-up\"; focusOnMount?: boolean; forgotPasswordHref?: string; onProvider?: (id: string) => void | Promise<void>; onSignIn?: (values: { email: string; password: string }) => Promise<void | { errors?: { name?: string; email?: string; password?: string }; message?: string; status: \"error\" }>; onSignUp?: (values: { email: string; name: string; password: string }) => Promise<void | { errors?: { name?: string; email?: string; password?: string }; message?: string; status: \"error\" }>; productName: string; providers?: { icon: ReactNode; id: string; name: string }[]; signUpNote?: string; terms?: ReactNode }",
+      "usedWith": [
+        "auth-06",
+        "auth-04"
+      ]
+    },
+    {
+      "name": "auth-06",
+      "install": "@dashboardblocks/auth-06",
+      "import": "@/components/dashboardblocks/auth/auth-06",
+      "component": "Auth6",
+      "shows": "A forgot password form that turns into a check your email page, with buttons to open the mail app and a resend that counts down.",
+      "size": "page",
+      "props": "{ defaultEmail?: string; focusOnMount?: boolean; linkLifetime?: string; mailLinks?: { href: string; name: string }[]; onSend?: (email: string) => Promise<void | { message: string; status: \"error\" }>; resendAfter?: number; signInHref: string }",
+      "usedWith": [
+        "auth-05",
+        "auth-07"
+      ]
+    },
+    {
+      "name": "auth-07",
+      "install": "@dashboardblocks/auth-07",
+      "import": "@/components/dashboardblocks/auth/auth-07",
+      "component": "Auth7",
+      "shows": "A new password form with a strength meter and the rules it still needs, a done state that leads to sign-in, and an expired link state.",
+      "size": "page",
+      "props": "{ email?: string; forgotPasswordHref: string; linkExpired?: boolean; onSave?: (password: string) => Promise<void | { message: string; status: \"error\" } | { status: \"expired\" }>; signInHref: string }",
+      "usedWith": [
+        "auth-06",
+        "auth-05"
       ]
     },
     {

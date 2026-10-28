@@ -121,8 +121,15 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Auth',
     description:
-      'Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.',
-    registryDependencies: ['input', registryUrl('team')],
+      "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, Google, X and GitHub logos, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
+    registryDependencies: [
+      'button',
+      'input',
+      'input-group',
+      registryUrl('format'),
+      registryUrl('rolling-text'),
+      registryUrl('team'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/auth.tsx',
@@ -858,6 +865,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/details.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'rolling-text',
+    type: 'registry:component',
+    title: 'Rolling Text',
+    description:
+      'Text that rolls up to its next value: the old text slides out the top as the new one slides in, and it swaps in place under reduced motion.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/rolling-text.tsx',
         type: 'registry:component',
       },
     ],

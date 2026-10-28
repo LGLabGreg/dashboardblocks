@@ -1,10 +1,14 @@
 'use client'
 
-import { AuthLayout, OtpInput } from '@/registry/components/dashboardblocks/auth'
+import {
+  AuthIcon,
+  AuthLayout,
+  AuthResendButton,
+  OtpInput,
+} from '@/registry/components/dashboardblocks/auth'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type FormEvent,
-  type ReactNode,
   startTransition,
   useEffect,
   useId,
@@ -16,32 +20,17 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 interface Auth4Props {
-  focusOnMount?: boolean
-  brand: ReactNode
   email: string
-  /** Seconds before another email can be sent, 60 by default. */
-  resendAfter?: number
+  focusOnMount?: boolean
   onChangeEmail?: (email: string) => void | Promise<void>
   onResend?: () => void | Promise<void>
-  onVerify?: (code: string) => boolean | Promise<boolean>
   onVerified?: () => void
+  onVerify?: (code: string) => boolean | Promise<boolean>
+  /** Seconds before another email can be sent. @default 60 */
+  resendAfter?: number
 }
 
 const exampleProps: Auth4Props = {
-  brand: (
-    <>
-      <span className='bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md [&_svg]:size-4'>
-        <IconPlaceholder
-          lucide='BlocksIcon'
-          tabler='IconCube'
-          hugeicons='CubeIcon'
-          phosphor='CubeIcon'
-          remixicon='RiBox3Line'
-        />
-      </span>
-      Acme Analytics
-    </>
-  ),
   email: 'amara@acme.co',
 }
 
@@ -50,7 +39,6 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const Auth4 = (props: Auth4Props) => {
   const {
     focusOnMount = false,
-    brand,
     onChangeEmail,
     onResend,
     onVerified,
@@ -65,6 +53,7 @@ const Auth4 = (props: Auth4Props) => {
   const [sendError, setSendError] = useState<string | null>(null)
   const [status, setStatus] = useState('')
   const [cooldown, setCooldown] = useState(0)
+  const [resending, setResending] = useState(false)
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(props.email)
   const [verified, setVerified] = useState(false)
@@ -112,6 +101,7 @@ const Auth4 = (props: Auth4Props) => {
   }
 
   const resend = async () => {
+    setResending(true)
     setError(null)
     setSendError(null)
     setStatus('')
@@ -125,6 +115,8 @@ const Auth4 = (props: Auth4Props) => {
       startTransition(() =>
         setSendError('We couldn’t send the email. Try again in a moment.'),
       )
+    } finally {
+      startTransition(() => setResending(false))
     }
   }
 
@@ -151,19 +143,7 @@ const Auth4 = (props: Auth4Props) => {
   if (verified) {
     return (
       <AuthLayout
-        brand={brand}
-        media={
-          <span className='flex size-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 [&_svg]:size-6'>
-            <IconPlaceholder
-              lucide='CircleCheckIcon'
-              tabler='IconCircleCheck'
-              hugeicons='CheckmarkCircle02Icon'
-              phosphor='CheckCircleIcon'
-              remixicon='RiCheckboxCircleLine'
-              aria-hidden
-            />
-          </span>
-        }
+        media={<AuthIcon tone='done' />}
         title='Email verified'
         description='Taking you to your workspace…'
       >
@@ -176,9 +156,8 @@ const Auth4 = (props: Auth4Props) => {
 
   return (
     <AuthLayout
-      brand={brand}
       media={
-        <span className='bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-xl [&_svg]:size-6'>
+        <AuthIcon>
           <IconPlaceholder
             lucide='MailIcon'
             tabler='IconMail'
@@ -187,7 +166,7 @@ const Auth4 = (props: Auth4Props) => {
             remixicon='RiMailLine'
             aria-hidden
           />
-        </span>
+        </AuthIcon>
       }
       title='Check your email'
       description={
@@ -195,22 +174,6 @@ const Auth4 = (props: Auth4Props) => {
           We sent a 6-digit code to{' '}
           <span className='text-foreground font-medium break-all'>{email}</span>. It
           expires in 10 minutes.
-        </>
-      }
-      footer={
-        <>
-          <p>Can’t find it? Check your spam folder.</p>
-          {cooldown > 0 ? (
-            <p className='tabular-nums'>You can send a new code in {cooldown}s</p>
-          ) : (
-            <button
-              type='button'
-              onClick={() => void resend()}
-              className='text-foreground font-medium underline underline-offset-4'
-            >
-              Send a new code
-            </button>
-          )}
         </>
       }
     >
@@ -277,18 +240,43 @@ const Auth4 = (props: Auth4Props) => {
             <Button type='submit' disabled={checking}>
               {checking ? 'Checking…' : 'Verify email'}
             </Button>
-            <Button
-              type='button'
-              variant='ghost'
-              onClick={() => {
-                setEditing(true)
-                setError(null)
-                setSendError(null)
-              }}
-            >
-              Wrong address? Change it
-            </Button>
           </form>
+        )}
+        {!editing && (
+          <div className='flex flex-col gap-4'>
+            <p className='text-muted-foreground text-sm text-pretty'>
+              Not in your inbox? Check your spam folder, or send it again.
+            </p>
+            <div className='-mx-2.5 flex items-center justify-between gap-2'>
+              <Button
+                type='button'
+                variant='ghost'
+                size='sm'
+                onClick={() => {
+                  setEditing(true)
+                  setError(null)
+                  setSendError(null)
+                }}
+              >
+                <IconPlaceholder
+                  lucide='PencilIcon'
+                  tabler='IconPencil'
+                  hugeicons='PencilEdit02Icon'
+                  phosphor='PencilSimpleIcon'
+                  remixicon='RiPencilLine'
+                  data-icon='inline-start'
+                  aria-hidden
+                />
+                Use another email
+              </Button>
+              <AuthResendButton
+                cooldown={cooldown}
+                total={resendAfter}
+                pending={resending}
+                onClick={() => void resend()}
+              />
+            </div>
+          </div>
         )}
         {(error ?? sendError) && (
           <p id={`${id}-error`} role='alert' className='text-destructive text-sm'>

@@ -139,9 +139,13 @@
       "name": "auth",
       "type": "registry:component",
       "title": "Auth",
-      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, a one-time code input with a box per digit that handles paste, autofill and Backspace, a square workspace avatar with initials, and an email masking helper.",
+      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, Google, X and GitHub logos, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
       "registryDependencies": [
+        "button",
         "input",
+        "input-group",
+        "https://www.dashboardblocks.com/r/aria/format.json",
+        "https://www.dashboardblocks.com/r/aria/rolling-text.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -974,6 +978,19 @@
           "path": "registry/components/dashboardblocks/details.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/details.tsx"
+        }
+      ]
+    },
+    {
+      "name": "rolling-text",
+      "type": "registry:component",
+      "title": "Rolling Text",
+      "description": "Text that rolls up to its next value: the old text slides out the top as the new one slides in, and it swaps in place under reduced motion.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/rolling-text.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/rolling-text.tsx"
         }
       ]
     },
@@ -8372,7 +8389,7 @@
           "auth-02"
         ],
         "component": "Auth1",
-        "props": "{ brand: ReactNode; email: string; expired?: boolean; invitedBy: { avatar?: string; name: string }; onAccept?: () => void | Promise<void>; onDecline?: () => void; role: string; roleDescription?: string; signedInAs?: string; switchAccountHref: string; workspace: { logo?: string; members: { avatar?: string; id: string; name: string }[]; memberCount: number; name: string } }"
+        "props": "{ email: string; expired?: boolean; invitedBy: { avatar?: string; name: string }; onAccept?: () => void | Promise<void>; onDecline?: () => void; role: string; roleDescription?: string; signedInAs?: string; switchAccountHref: string; workspace: { logo?: string; mark?: ReactNode; members: { avatar?: string; id: string; name: string }[]; memberCount: number; name: string } }"
       },
       "description": "An invite page showing the workspace, who invited you, your role and the people already there, with a prompt to switch account when the address differs."
     },
@@ -8400,7 +8417,7 @@
           "auth-01"
         ],
         "component": "Auth2",
-        "props": "{ brand: ReactNode; createHref: string; email: string; invites?: { id: string; invitedBy: string; logo?: string; name: string }[]; onAcceptInvite?: (id: string) => void | Promise<void>; signOutHref: string; workspaces?: { href: string; id: string; logo?: string; members: number; name: string; role: string }[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ createHref: string; email: string; invites?: { id: string; invitedBy: string; logo?: string; mark?: ReactNode; name: string }[]; onAcceptInvite?: (id: string) => void | Promise<void>; signOutHref: string; workspaces?: { href: string; id: string; logo?: string; mark?: ReactNode; members: number; name: string; role: string }[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A list of the workspaces you belong to with your role in each, pending invites to join and a search once there are many."
     },
@@ -8427,7 +8444,7 @@
           "auth-04"
         ],
         "component": "Auth3",
-        "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; signOutHref: string; trustDays?: number; onVerify?: (code: string, options: { kind: \"app\" | \"recovery\"; trustDevice: boolean }) => { ok: boolean; attemptsLeft?: number } | Promise<{ ok: boolean; attemptsLeft?: number }>; onVerified?: () => void }"
+        "props": "{ email: string; focusOnMount?: boolean; onVerified?: () => void; onVerify?: (code: string, options: { kind: \"app\" | \"recovery\"; trustDevice: boolean }) => { ok: boolean; attemptsLeft?: number } | Promise<{ ok: boolean; attemptsLeft?: number }>; signOutHref: string; trustDays?: number }"
       },
       "description": "A six-digit authenticator code form with a recovery code option, the tries left and a choice to trust the device."
     },
@@ -8453,9 +8470,98 @@
           "auth-03"
         ],
         "component": "Auth4",
-        "props": "{ focusOnMount?: boolean; brand: ReactNode; email: string; resendAfter?: number; onChangeEmail?: (email: string) => void | Promise<void>; onResend?: () => void | Promise<void>; onVerify?: (code: string) => boolean | Promise<boolean>; onVerified?: () => void }"
+        "props": "{ email: string; focusOnMount?: boolean; onChangeEmail?: (email: string) => void | Promise<void>; onResend?: () => void | Promise<void>; onVerified?: () => void; onVerify?: (code: string) => boolean | Promise<boolean>; resendAfter?: number }"
       },
       "description": "An email verification code form with a resend that waits between emails and a way to fix a mistyped address."
+    },
+    {
+      "name": "auth-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input",
+        "https://www.dashboardblocks.com/r/aria/auth.json",
+        "https://www.dashboardblocks.com/r/aria/forms.json",
+        "https://www.dashboardblocks.com/r/aria/rolling-text.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-05.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-05.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "One form to sign in or sign up, with Google, X and GitHub on one row, a password you can show, and a switch at the bottom that unfolds the sign-up fields and a password strength meter.",
+        "size": "page",
+        "usedWith": [
+          "auth-06",
+          "auth-04"
+        ],
+        "component": "Auth5",
+        "props": "{ defaultMode?: \"sign-in\" | \"sign-up\"; focusOnMount?: boolean; forgotPasswordHref?: string; onProvider?: (id: string) => void | Promise<void>; onSignIn?: (values: { email: string; password: string }) => Promise<void | { errors?: { name?: string; email?: string; password?: string }; message?: string; status: \"error\" }>; onSignUp?: (values: { email: string; name: string; password: string }) => Promise<void | { errors?: { name?: string; email?: string; password?: string }; message?: string; status: \"error\" }>; productName: string; providers?: { icon: ReactNode; id: string; name: string }[]; signUpNote?: string; terms?: ReactNode }"
+      },
+      "description": "One form to sign in or sign up, with Google, X and GitHub on one row, a password you can show, and a switch at the bottom that unfolds the sign-up fields and a password strength meter."
+    },
+    {
+      "name": "auth-06",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input",
+        "https://www.dashboardblocks.com/r/aria/auth.json",
+        "https://www.dashboardblocks.com/r/aria/forms.json",
+        "https://www.dashboardblocks.com/r/aria/rolling-text.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-06.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-06.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A forgot password form that turns into a check your email page, with buttons to open the mail app and a resend that counts down.",
+        "size": "page",
+        "usedWith": [
+          "auth-05",
+          "auth-07"
+        ],
+        "component": "Auth6",
+        "props": "{ defaultEmail?: string; focusOnMount?: boolean; linkLifetime?: string; mailLinks?: { href: string; name: string }[]; onSend?: (email: string) => Promise<void | { message: string; status: \"error\" }>; resendAfter?: number; signInHref: string }"
+      },
+      "description": "A forgot password form that turns into a check your email page, with buttons to open the mail app and a resend that counts down."
+    },
+    {
+      "name": "auth-07",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "field",
+        "https://www.dashboardblocks.com/r/aria/auth.json",
+        "https://www.dashboardblocks.com/r/aria/forms.json",
+        "https://www.dashboardblocks.com/r/aria/rolling-text.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/auth/auth-07.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/auth/auth-07.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A new password form with a strength meter and the rules it still needs, a done state that leads to sign-in, and an expired link state.",
+        "size": "page",
+        "usedWith": [
+          "auth-06",
+          "auth-05"
+        ],
+        "component": "Auth7",
+        "props": "{ email?: string; forgotPasswordHref: string; linkExpired?: boolean; onSave?: (password: string) => Promise<void | { message: string; status: \"error\" } | { status: \"expired\" }>; signInHref: string }"
+      },
+      "description": "A new password form with a strength meter and the rules it still needs, a done state that leads to sign-in, and an expired link state."
     },
     {
       "name": "use-animated-number",
