@@ -221,7 +221,7 @@ const Comments1 = (props: Comments1Props) => {
             className='min-w-0 flex-1'
             disabled={state === 'loading' || state === 'error'}
             people={people}
-            placeholder='Add to the discussion…'
+            placeholder='Add to the discussion'
             onSubmit={(body) => post(body)}
           />
         </div>

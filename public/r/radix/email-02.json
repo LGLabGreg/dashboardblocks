@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-02",
+  "description": "An invite email naming who invited you, the workspace and your role, with an Accept button and when the invite runs out.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/radix/email.json",
+    "https://www.dashboardblocks.com/r/radix/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-02.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailPanel,\n  EmailPanelButton,\n  EmailPanelNote,\n  EmailPanelTitle,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport {\n  formatDate,\n  formatNumber,\n  joinDetails,\n} from '@/registry/lib/dashboardblocks/format'\n\ninterface Email2Props {\n  acceptUrl: string\n  brand: EmailBrand\n  /** The address the invite was sent to: only it can accept. */\n  email: string\n  expiresAt: Date\n  inviter: { email: string; name: string }\n  role: string\n  workspace: { members: number; name: string }\n  /** A postal address for the footer. */\n  address?: string\n  /** The time zone `expiresAt` is written in. @default 'UTC' */\n  timeZone?: string\n}\n\nconst exampleProps: Email2Props = {\n  acceptUrl: 'https://app.acme.com/invites/accept',\n  address: '548 Market St, San Francisco',\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  email: 'ana@northwind.com',\n  expiresAt: new Date(Date.UTC(2026, 10, 5, 9, 42)),\n  inviter: { email: 'maya@northwind.com', name: 'Maya Patel' },\n  role: 'Editor',\n  timeZone: 'Europe/London',\n  workspace: { members: 24, name: 'Northwind Finance' },\n}\n\nconst article = (word: string) => (/^[aeiou]/i.test(word) ? 'an' : 'a')\n\nconst email2Subject = ({ inviter, workspace }: Email2Props) =>\n  `${inviter.name} invited you to ${workspace.name}`\n\nconst Email2 = ({\n  acceptUrl,\n  address,\n  brand,\n  email,\n  expiresAt,\n  inviter,\n  role,\n  timeZone = 'UTC',\n  workspace,\n}: Email2Props) => (\n  <EmailLayout\n    brand={brand}\n    preview={`${inviter.name} invited you to join as ${article(role)} ${role}.`}\n    footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n  >\n    <EmailTitle\n      description={`${inviter.name} (${inviter.email}) invited you to work with the team as ${article(role)} ${role}.`}\n    >\n      Join {workspace.name} on {brand.name}\n    </EmailTitle>\n    <EmailPanel label='Workspace'>\n      <EmailPanelTitle>{workspace.name}</EmailPanelTitle>\n      <EmailPanelNote>\n        {formatNumber(workspace.members)} {workspace.members === 1 ? 'member' : 'members'}\n      </EmailPanelNote>\n      <EmailPanelButton href={acceptUrl}>Accept invite</EmailPanelButton>\n    </EmailPanel>\n    <EmailSection>\n      <EmailText>\n        The invite works until {formatDate(expiresAt, 'day', timeZone)}, and only for{' '}\n        {email}. Not expecting it? You can ignore this email and nothing will change.\n      </EmailText>\n    </EmailSection>\n  </EmailLayout>\n)\n\nEmail2.PreviewProps = exampleProps\n\nexport default Email2\nexport { Email2, email2Subject, exampleProps as email2ExampleProps, type Email2Props }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-02.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "An invite email naming who invited you, the workspace and your role, with an Accept button and when the invite runs out.",
+    "size": "email",
+    "usedWith": [
+      "email-01",
+      "email-03",
+      "auth-01"
+    ],
+    "component": "Email2",
+    "props": "{ acceptUrl: string; brand: { name: string; logo?: string }; email: string; expiresAt: Date; inviter: { email: string; name: string }; role: string; workspace: { members: number; name: string }; address?: string; timeZone?: string }"
+  },
+  "type": "registry:component"
+}

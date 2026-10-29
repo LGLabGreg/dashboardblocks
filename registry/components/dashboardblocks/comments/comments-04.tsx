@@ -261,7 +261,7 @@ const Comments4 = (props: Comments4Props) => {
             <TabsContent value='reply'>
               <CommentComposer
                 label={`Reply to ${customer.name}`}
-                placeholder={`Reply to ${customer.name.split(' ')[0]}…`}
+                placeholder={`Reply to ${customer.name.split(' ')[0]}`}
                 submitLabel='Send reply'
                 pendingLabel='Sending…'
                 disabled={unavailable}

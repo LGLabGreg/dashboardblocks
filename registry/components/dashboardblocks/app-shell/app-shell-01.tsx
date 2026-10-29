@@ -51,7 +51,7 @@ interface AppShell1Props {
   /** A panel beside the page, such as a copilot, opened from a button in the header: docked on a wide screen, a sheet on a smaller one. */
   panel?: AppShell1Panel
   pathname: string
-  /** @default 'Search…' */
+  /** @default 'Search' */
   searchPlaceholder?: string
   /** Pinned to the bottom of the sidebar, above the user menu, such as Help and Settings. */
   secondarySections?: NavSection[]

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-04",
+  "description": "A failed payment email with the amount due on a dark panel, the card and the bank's reason, Update card, and when it's tried again.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/aria/email.json",
+    "https://www.dashboardblocks.com/r/aria/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-04.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailLink,\n  EmailPanel,\n  EmailPanelButton,\n  EmailPanelMoney,\n  EmailPanelNote,\n  EmailRows,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport {\n  formatCurrency,\n  formatDate,\n  joinDetails,\n} from '@/registry/lib/dashboardblocks/format'\n\ninterface Email4Props {\n  /** What the charge was for, tax included. */\n  amount: number\n  brand: EmailBrand\n  invoiceUrl: string\n  /** `Visa ending 4242` */\n  paymentMethod: string\n  plan: string\n  updateUrl: string\n  /** A postal address for the footer. */\n  address?: string\n  /** @default 'USD' */\n  currency?: string\n  /** The bank's reason, as your payment provider gives it: `Insufficient funds`. */\n  reason?: string\n  /** When the card is charged again, if your provider retries it. */\n  retryAt?: Date\n  /** When the plan is paused if the payment still fails. */\n  suspendsAt?: Date\n  /** The time zone dates are written in. @default 'UTC' */\n  timeZone?: string\n}\n\nconst exampleProps: Email4Props = {\n  address: '548 Market St, San Francisco',\n  amount: 58.8,\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  invoiceUrl: 'https://app.acme.com/settings/billing/invoices/2026-0431',\n  paymentMethod: 'Visa ending 4242',\n  plan: 'Pro',\n  reason: 'Insufficient funds',\n  retryAt: new Date(Date.UTC(2026, 10, 1, 9, 42)),\n  suspendsAt: new Date(Date.UTC(2026, 10, 12, 9, 42)),\n  timeZone: 'Europe/London',\n  updateUrl: 'https://app.acme.com/settings/billing/payment-method',\n}\n\nconst email4Subject = ({ amount, brand, currency }: Email4Props) =>\n  `Your ${brand.name} payment of ${formatCurrency(amount, { currency, precision: 'exact' })} didn’t go through`\n\nconst Email4 = ({\n  address,\n  amount,\n  brand,\n  currency = 'USD',\n  invoiceUrl,\n  paymentMethod,\n  plan,\n  reason,\n  retryAt,\n  suspendsAt,\n  timeZone = 'UTC',\n  updateUrl,\n}: Email4Props) => {\n  const due = formatCurrency(amount, { currency, precision: 'exact' })\n  const day = (date: Date) => formatDate(date, 'day', timeZone)\n  const next = [\n    retryAt && {\n      detail: `${paymentMethod}, or the card you add before then`,\n      label: 'We try again',\n      value: day(retryAt),\n    },\n    suspendsAt && {\n      detail: 'If the payment still fails',\n      label: `Your ${plan} plan is paused`,\n      value: day(suspendsAt),\n    },\n  ].filter((row) => !!row)\n  return (\n    <EmailLayout\n      brand={brand}\n      preview={`${paymentMethod} was declined. Update your card to keep your ${plan} plan.`}\n      footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n    >\n      <EmailTitle\n        description={`We couldn’t charge ${paymentMethod} for your ${plan} plan. Update your card and we’ll take the payment straight away.`}\n      >\n        Your payment didn’t go through\n      </EmailTitle>\n      <EmailPanel label='Amount due'>\n        <EmailPanelMoney>{due}</EmailPanelMoney>\n        <EmailPanelNote>{joinDetails(paymentMethod, reason)}</EmailPanelNote>\n        <EmailPanelButton href={updateUrl}>Update card</EmailPanelButton>\n      </EmailPanel>\n      {next.length > 0 ? (\n        <EmailSection title='What happens next'>\n          <EmailRows rows={next} />\n        </EmailSection>\n      ) : null}\n      <EmailSection>\n        <EmailText>\n          The <EmailLink href={invoiceUrl}>invoice</EmailLink> shows what the payment is\n          for.\n        </EmailText>\n      </EmailSection>\n    </EmailLayout>\n  )\n}\n\nEmail4.PreviewProps = exampleProps\n\nexport default Email4\nexport { Email4, email4Subject, exampleProps as email4ExampleProps, type Email4Props }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-04.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A failed payment email with the amount due on a dark panel, the card and the bank's reason, Update card, and when it's tried again.",
+    "size": "email",
+    "usedWith": [
+      "email-03",
+      "email-05",
+      "billing-02"
+    ],
+    "component": "Email4",
+    "props": "{ amount: number; brand: { name: string; logo?: string }; invoiceUrl: string; paymentMethod: string; plan: string; updateUrl: string; address?: string; currency?: string; reason?: string; retryAt?: Date; suspendsAt?: Date; timeZone?: string }"
+  },
+  "type": "registry:component"
+}

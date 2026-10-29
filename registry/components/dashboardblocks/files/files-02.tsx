@@ -356,7 +356,7 @@ const Files2 = (props: Files2Props) => {
               </DataTableSelectionBar>
             ) : (
               <>
-                <DataTableSearch table={table} placeholder='Search files…' />
+                <DataTableSearch table={table} placeholder='Search files' />
                 <DataTableFacetFilter
                   table={table}
                   columnId='kind'

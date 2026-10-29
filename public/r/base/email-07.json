@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-07",
+  "description": "A welcome email with the first step and its button on a dark panel, the steps after it, and who answers a reply.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/base/email.json",
+    "https://www.dashboardblocks.com/r/base/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-07.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailLink,\n  EmailPanel,\n  EmailPanelButton,\n  EmailPanelNote,\n  EmailPanelTitle,\n  EmailRows,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport { joinDetails } from '@/registry/lib/dashboardblocks/format'\n\ninterface WelcomeStep {\n  /** The link's words: `Add the snippet` */\n  action: string\n  description: string\n  title: string\n  url: string\n}\n\ninterface Email7Props {\n  brand: EmailBrand\n  /** The one thing to do first, on the panel. */\n  firstStep: WelcomeStep\n  /** A postal address for the footer. */\n  address?: string\n  /** A guide for anyone who gets stuck. */\n  helpUrl?: string\n  /** The person's first name. */\n  name?: string\n  /** What to do after the first step, in order. */\n  nextSteps?: WelcomeStep[]\n  /** Who gets the reply when someone answers this email. */\n  sender?: { name: string; role: string }\n  workspace?: string\n}\n\nconst exampleProps: Email7Props = {\n  address: '548 Market St, San Francisco',\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  firstStep: {\n    action: 'Add the snippet',\n    description:\n      'One line in your site’s head. Visitors show up a few seconds after the first page view.',\n    title: 'Add the tracking snippet',\n    url: 'https://app.acme.com/setup',\n  },\n  helpUrl: 'https://acme.com/docs/getting-started',\n  name: 'Ana',\n  nextSteps: [\n    {\n      action: 'Invite',\n      description: 'Share dashboards and the weekly report with them.',\n      title: 'Invite your team',\n      url: 'https://app.acme.com/settings/members',\n    },\n    {\n      action: 'Set a goal',\n      description: 'Count signups or purchases, not only visits.',\n      title: 'Set your first goal',\n      url: 'https://app.acme.com/goals/new',\n    },\n  ],\n  sender: { name: 'Sam Lee', role: 'co-founder' },\n  workspace: 'Northwind',\n}\n\nconst email7Subject = ({ brand, name }: Email7Props) =>\n  name ? `Welcome to ${brand.name}, ${name}` : `Welcome to ${brand.name}`\n\nconst Email7 = ({\n  address,\n  brand,\n  firstStep,\n  helpUrl,\n  name,\n  nextSteps,\n  sender,\n  workspace,\n}: Email7Props) => (\n  <EmailLayout\n    brand={brand}\n    preview={firstStep.description}\n    footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n  >\n    <EmailTitle\n      description={`${workspace ? `Your ${workspace} workspace` : 'Your account'} is ready. Here’s where to start.`}\n    >\n      {name ? `Welcome to ${brand.name}, ${name}` : `Welcome to ${brand.name}`}\n    </EmailTitle>\n    <EmailPanel label='Start here'>\n      <EmailPanelTitle>{firstStep.title}</EmailPanelTitle>\n      <EmailPanelNote>{firstStep.description}</EmailPanelNote>\n      <EmailPanelButton href={firstStep.url}>{firstStep.action}</EmailPanelButton>\n    </EmailPanel>\n    {nextSteps && nextSteps.length > 0 ? (\n      <EmailSection title='After that'>\n        <EmailRows\n          rows={nextSteps.map((step) => ({\n            detail: step.description,\n            label: step.title,\n            value: <EmailLink href={step.url}>{step.action}</EmailLink>,\n          }))}\n        />\n      </EmailSection>\n    ) : null}\n    {sender || helpUrl ? (\n      <EmailSection>\n        <EmailText>\n          {helpUrl ? (\n            <>\n              Stuck? The <EmailLink href={helpUrl}>setup guide</EmailLink> walks through\n              each step.{' '}\n            </>\n          ) : null}\n          {sender\n            ? `${helpUrl ? 'Or reply' : 'Questions? Reply'} to this email: it goes straight to ${sender.name}, ${sender.role}.`\n            : null}\n        </EmailText>\n      </EmailSection>\n    ) : null}\n  </EmailLayout>\n)\n\nEmail7.PreviewProps = exampleProps\n\nexport default Email7\nexport {\n  Email7,\n  email7Subject,\n  exampleProps as email7ExampleProps,\n  type Email7Props,\n  type WelcomeStep,\n}\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-07.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A welcome email with the first step and its button on a dark panel, the steps after it, and who answers a reply.",
+    "size": "email",
+    "usedWith": [
+      "email-01",
+      "email-02",
+      "onboarding-01"
+    ],
+    "component": "Email7",
+    "props": "{ brand: { name: string; logo?: string }; firstStep: { action: string; description: string; title: string; url: string }; address?: string; helpUrl?: string; name?: string; nextSteps?: { action: string; description: string; title: string; url: string }[]; sender?: { name: string; role: string }; workspace?: string }"
+  },
+  "type": "registry:component"
+}

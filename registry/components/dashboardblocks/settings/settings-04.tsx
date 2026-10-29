@@ -6,11 +6,13 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   ConnectionRow,
   type ConnectionStatus,
 } from '@/registry/components/dashboardblocks/settings'
 import { getAvatarColor } from '@/registry/components/dashboardblocks/team'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -163,9 +165,7 @@ const Settings4 = (props: Settings4Props) => {
               <TabsTrigger key={view.value} value={view.value}>
                 {view.label}
                 {ready && view.value !== 'all' && view.items.length > 0 && (
-                  <span className='text-muted-foreground tabular-nums'>
-                    {view.items.length}
-                  </span>
+                  <NavTag>{formatNumber(view.items.length)}</NavTag>
                 )}
               </TabsTrigger>
             ))}

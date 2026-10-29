@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "nav-tag",
+  "title": "Nav Tag",
+  "description": "A count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag: neutral, or a status tone when it needs attention.",
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/base/format.json",
+    "https://www.dashboardblocks.com/r/base/status-label.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/nav-tag.tsx",
+      "content": "import type { StatusTone } from '@/registry/components/dashboardblocks/status-label'\nimport { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'\nimport { formatNumber } from '@/registry/lib/dashboardblocks/format'\nimport type { ComponentProps, ReactNode } from 'react'\n\nimport { cn } from '@/lib/utils'\n\nconst navTagToneClasses: Record<StatusTone, string> = {\n  bad: 'bg-red-500/5 dark:bg-red-500/10',\n  good: 'bg-emerald-500/5 dark:bg-emerald-500/10',\n  info: 'bg-sky-500/5 dark:bg-sky-500/10',\n  neutral: 'text-foreground/70 bg-current/10',\n  warning: 'bg-orange-500/5 dark:bg-orange-500/10',\n}\n\ninterface NavTagProps extends ComponentProps<'span'> {\n  /** Drawn before the count, such as a live dot. */\n  indicator?: ReactNode\n  /** `neutral` for a plain count; another tone when it needs attention. @default 'neutral' */\n  tone?: StatusTone\n}\n\nfunction NavTag({\n  children,\n  className,\n  indicator,\n  tone = 'neutral',\n  ...props\n}: NavTagProps) {\n  return (\n    <span\n      data-slot='nav-tag'\n      data-tone={tone}\n      className={cn(\n        'inline-flex h-5 min-w-5 shrink-0 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-medium whitespace-nowrap tabular-nums',\n        tone !== 'neutral' && statusToneClasses[tone],\n        navTagToneClasses[tone],\n        className,\n      )}\n      {...props}\n    >\n      {indicator}\n      {children}\n    </span>\n  )\n}\n\n/** Draws a plain number or string as a `NavTag`; any other node as it is. */\nfunction renderNavTag(badge: ReactNode) {\n  if (typeof badge === 'number') return <NavTag>{formatNumber(badge)}</NavTag>\n  if (typeof badge === 'string') return <NavTag>{badge}</NavTag>\n  return badge\n}\n\nexport { NavTag, renderNavTag }\n\nexport type { NavTagProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/nav-tag.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

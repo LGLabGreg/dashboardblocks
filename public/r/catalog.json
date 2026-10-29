@@ -5,7 +5,8 @@
     "compact": "A quarter of the row or more, down to a 280px card.",
     "half": "A third of the row or more: one of a pair, or one column of a three-column dashboard.",
     "full": "Two thirds of the row or more: a row of its own, or two columns of a three-column dashboard.",
-    "page": "A whole page, such as an app shell, a sign-in screen or a dashboard. Never inside a dashboard."
+    "page": "A whole page, such as an app shell, a sign-in screen or a dashboard. Never inside a dashboard.",
+    "email": "An email, rendered to HTML on the server and sent. Never on a page."
   },
   "blocks": [
     {
@@ -1156,6 +1157,103 @@
       "usedWith": [
         "distribution-01",
         "stat-group-02"
+      ]
+    },
+    {
+      "name": "email-01",
+      "install": "@dashboardblocks/email-01",
+      "import": "@/components/dashboardblocks/email/email-01",
+      "component": "Email1",
+      "shows": "A sign-in code email with the code on a dark panel, how long it works and who asked for it.",
+      "size": "email",
+      "props": "{ brand: { name: string; logo?: string }; code: string; expiresInMinutes: number; address?: string; request?: { at: Date; device: string; email: string; location: string }; timeZone?: string }",
+      "usedWith": [
+        "email-02",
+        "email-03",
+        "auth-04"
+      ]
+    },
+    {
+      "name": "email-02",
+      "install": "@dashboardblocks/email-02",
+      "import": "@/components/dashboardblocks/email/email-02",
+      "component": "Email2",
+      "shows": "An invite email naming who invited you, the workspace and your role, with an Accept button and when the invite runs out.",
+      "size": "email",
+      "props": "{ acceptUrl: string; brand: { name: string; logo?: string }; email: string; expiresAt: Date; inviter: { email: string; name: string }; role: string; workspace: { members: number; name: string }; address?: string; timeZone?: string }",
+      "usedWith": [
+        "email-01",
+        "email-03",
+        "auth-01"
+      ]
+    },
+    {
+      "name": "email-03",
+      "install": "@dashboardblocks/email-03",
+      "import": "@/components/dashboardblocks/email/email-03",
+      "component": "Email3",
+      "shows": "A receipt email with the amount paid on a dark panel, the lines that add up to it and a link to the invoice.",
+      "size": "email",
+      "props": "{ amount: number; billingUrl: string; brand: { name: string; logo?: string }; invoiceUrl: string; lines: { amount: number; label: string; detail?: string }[]; number: string; paidAt: Date; paymentMethod: string; plan: { name: string; renewsAt: Date }; address?: string; currency?: string; timeZone?: string }",
+      "usedWith": [
+        "email-01",
+        "email-02"
+      ]
+    },
+    {
+      "name": "email-04",
+      "install": "@dashboardblocks/email-04",
+      "import": "@/components/dashboardblocks/email/email-04",
+      "component": "Email4",
+      "shows": "A failed payment email with the amount due on a dark panel, the card and the bank's reason, Update card, and when it's tried again.",
+      "size": "email",
+      "props": "{ amount: number; brand: { name: string; logo?: string }; invoiceUrl: string; paymentMethod: string; plan: string; updateUrl: string; address?: string; currency?: string; reason?: string; retryAt?: Date; suspendsAt?: Date; timeZone?: string }",
+      "usedWith": [
+        "email-03",
+        "email-05",
+        "billing-02"
+      ]
+    },
+    {
+      "name": "email-05",
+      "install": "@dashboardblocks/email-05",
+      "import": "@/components/dashboardblocks/email/email-05",
+      "component": "Email5",
+      "shows": "A trial ending email counting the days left on a dark panel, with Add a card and what changes on the plan the workspace moves to.",
+      "size": "email",
+      "props": "{ billingUrl: string; brand: { name: string; logo?: string }; endsAt: Date; plan: { interval: \"month\" | \"year\"; name: string; price: number }; workspace: string; address?: string; currency?: string; downgrade?: { changes: { now: string; label: string; after: string }[]; plan: string }; paymentMethod?: string; sentAt?: Date; timeZone?: string }",
+      "usedWith": [
+        "email-04",
+        "email-06",
+        "billing-02"
+      ]
+    },
+    {
+      "name": "email-06",
+      "install": "@dashboardblocks/email-06",
+      "import": "@/components/dashboardblocks/email/email-06",
+      "component": "Email6",
+      "shows": "A usage alert email with how much of a limit is used, a meter on a dark panel, when it resets, and the usage by project.",
+      "size": "email",
+      "props": "{ brand: { name: string; logo?: string }; limit: number; metric: string; plan: string; resetsAt: Date; upgradeUrl: string; used: number; usageUrl: string; address?: string; atLimit?: string; projectedAt?: Date; sources?: { name: string; used: number }[]; sourcesTitle?: string; timeZone?: string }",
+      "usedWith": [
+        "email-04",
+        "email-05",
+        "usage-meter-01"
+      ]
+    },
+    {
+      "name": "email-07",
+      "install": "@dashboardblocks/email-07",
+      "import": "@/components/dashboardblocks/email/email-07",
+      "component": "Email7",
+      "shows": "A welcome email with the first step and its button on a dark panel, the steps after it, and who answers a reply.",
+      "size": "email",
+      "props": "{ brand: { name: string; logo?: string }; firstStep: { action: string; description: string; title: string; url: string }; address?: string; helpUrl?: string; name?: string; nextSteps?: { action: string; description: string; title: string; url: string }[]; sender?: { name: string; role: string }; workspace?: string }",
+      "usedWith": [
+        "email-01",
+        "email-02",
+        "onboarding-01"
       ]
     },
     {

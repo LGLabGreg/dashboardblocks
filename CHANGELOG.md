@@ -1,5 +1,19 @@
 # dashboardblocks
 
+## 1.15.0
+
+### Minor Changes
+
+- 1a1de75: New Email block: Welcome. The `email` part adds `EmailPanelTitle`, which Invite now uses, so install it again.
+- 6f60e06: New Email blocks: Payment Failed, Trial Ending and Usage Alert. The `email` part adds a money value and a usage meter for the dark panel, and `email-theme` adds the dark muted colour the meter's track uses, so install both again.
+- 5cffd0f: New Email blocks, built with React Email in your app's colours: Sign-in Code, Invite and Receipt, on the shared `email` part and the `email-theme` lib, where you paste your globals.css colours.
+- 0058216: Add `NavTag`, a count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag, neutral or in a status tone. The App Shell sidebar, `TabLinks`, `TopNav` and `ActionsMenu` draw a plain number or string `badge` with it, and the count tabs in App Shell, Page Header, Notifications, Comments, Activity Feed and Settings blocks use it.
+
+### Patch Changes
+
+- 1a1de75: Usage Alert's plain-text copy leaves out the meter, which said nothing as text: `renderEmail` skips any part marked `data-email-chart`.
+- e1fed9c: Placeholders no longer end with an ellipsis ("Search customers", not "Search customers…") in the AI Assistant, App Shell, Command Menu, Comments, Data Table, Files, Onboarding, Page Header and Record Detail blocks, and `DataTableSearch` uses its placeholder as its accessible name as it is.
+
 ## 1.14.1
 
 ### Patch Changes

@@ -85,7 +85,7 @@ const PageHeader4 = (props: PageHeader4Props) => {
               <InputGroupInput
                 type='search'
                 aria-label={`Search ${title.toLowerCase()}`}
-                placeholder={`Search ${title.toLowerCase()}…`}
+                placeholder={`Search ${title.toLowerCase()}`}
                 value={query}
                 disabled={state !== undefined}
                 onChange={(event) => {

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: c63ff8549e36
+// source-hash: 11efc2bc8ef0
 
 'use client'
 
@@ -415,7 +415,7 @@ interface DataTableSearchProps<TData extends RowData> extends Omit<
 
 function DataTableSearch<TData extends RowData>({
   className,
-  placeholder = 'Search…',
+  placeholder = 'Search',
   table,
   ...props
 }: DataTableSearchProps<TData>) {
@@ -424,7 +424,7 @@ function DataTableSearch<TData extends RowData>({
   return (
     <Input
       type='search'
-      aria-label={placeholder.replace(/…$/, '')}
+      aria-label={placeholder}
       placeholder={placeholder}
       value={String(table.state.globalFilter ?? '')}
       onChange={(event) => table.setGlobalFilter(event.target.value)}

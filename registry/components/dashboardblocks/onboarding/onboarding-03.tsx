@@ -264,7 +264,7 @@ const Onboarding3 = (props: Onboarding3Props) => {
                     type='search'
                     aria-label='Search sources'
                     aria-controls={`${id}-results`}
-                    placeholder='Search sources…'
+                    placeholder='Search sources'
                     disabled={blockState !== undefined}
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}

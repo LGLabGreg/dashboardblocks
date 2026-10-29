@@ -296,7 +296,7 @@ const DataTable6 = (props: DataTable6Props) => {
             </DataTableSelectionBar>
           ) : (
             <>
-              <DataTableSearch table={table} placeholder='Search customers…' />
+              <DataTableSearch table={table} placeholder='Search customers' />
               <DataTableFacetFilter
                 table={table}
                 columnId='status'

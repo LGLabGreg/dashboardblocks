@@ -1,6 +1,7 @@
 'use client'
 
 import { isPlainClick, Link } from '@/registry/components/dashboardblocks/link'
+import { renderNavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import { TabLinks } from '@/registry/components/dashboardblocks/page-header'
 import {
   StatusLabel,
@@ -161,7 +162,9 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           {item.icon}
           <span>{item.title}</span>
         </SidebarMenuButton>
-        {item.badge !== undefined && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+        {item.badge !== undefined && (
+          <SidebarMenuBadge>{renderNavTag(item.badge)}</SidebarMenuBadge>
+        )}
       </SidebarMenuItem>
     )
   }
@@ -203,9 +206,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
               >
                 <span>{child.title}</span>
                 {child.badge !== undefined && (
-                  <span className='text-muted-foreground ml-auto text-xs tabular-nums'>
-                    {child.badge}
-                  </span>
+                  <span className='ml-auto flex'>{renderNavTag(child.badge)}</span>
                 )}
               </SidebarMenuSubButton>
             </SidebarMenuSubItem>
@@ -468,7 +469,9 @@ function ThemeSwitch({ value }: { value: AppTheme }) {
     if (from === index || !thumb) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     thumb.animate(
-      { transform: [`translateX(${from * 100}%)`, `translateX(${index * 100}%)`] },
+      {
+        transform: [`translateX(${from * 100}%)`, `translateX(${index * 100}%)`],
+      },
       themeMotion,
     )
     Array.from(thumb.children).forEach((icon, position) => {
@@ -738,7 +741,7 @@ function AppBreadcrumbs({ className, items }: { className?: string; items: Crumb
 interface SearchButtonProps {
   className?: string
   onOpen: () => void
-  /** @default 'Search…' */
+  /** @default 'Search' */
   placeholder?: string
 }
 
@@ -759,7 +762,7 @@ function useShortcut(key: string | undefined, onPress: () => void) {
   }, [key, onPress])
 }
 
-function SearchButton({ className, onOpen, placeholder = 'Search…' }: SearchButtonProps) {
+function SearchButton({ className, onOpen, placeholder = 'Search' }: SearchButtonProps) {
   useShortcut('k', onOpen)
 
   return (

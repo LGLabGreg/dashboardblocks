@@ -53,6 +53,7 @@ export const examples: Registry['items'] = [
       'tabs',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
+      registryUrl('nav-tag'),
       registryUrl('team'),
     ],
     files: [

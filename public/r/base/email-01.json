@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-01",
+  "description": "A sign-in code email with the code on a dark panel, how long it works and who asked for it.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/base/email.json",
+    "https://www.dashboardblocks.com/r/base/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-01.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailPanel,\n  EmailPanelNote,\n  EmailPanelValue,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport { formatDate, joinDetails } from '@/registry/lib/dashboardblocks/format'\n\ninterface SignInRequest {\n  at: Date\n  /** `Chrome on macOS` */\n  device: string\n  email: string\n  /** `London, United Kingdom` */\n  location: string\n}\n\ninterface Email1Props {\n  brand: EmailBrand\n  code: string\n  expiresInMinutes: number\n  /** A postal address for the footer. */\n  address?: string\n  /** Who asked for the code, so someone who didn't can tell. */\n  request?: SignInRequest\n  /** The time zone `request.at` is written in. @default 'UTC' */\n  timeZone?: string\n}\n\nconst exampleProps: Email1Props = {\n  address: '548 Market St, San Francisco',\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  code: '482913',\n  expiresInMinutes: 10,\n  request: {\n    at: new Date(Date.UTC(2026, 9, 29, 9, 42)),\n    device: 'Chrome on macOS',\n    email: 'ana@northwind.com',\n    location: 'London, United Kingdom',\n  },\n  timeZone: 'Europe/London',\n}\n\nconst email1Subject = ({ brand, code }: Email1Props) =>\n  `${code} is your ${brand.name} sign-in code`\n\nconst Email1 = ({\n  address,\n  brand,\n  code,\n  expiresInMinutes,\n  request,\n  timeZone = 'UTC',\n}: Email1Props) => (\n  <EmailLayout\n    brand={brand}\n    preview={`Enter it on the sign-in page. It works for ${expiresInMinutes} minutes.`}\n    footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n  >\n    <EmailTitle description='Enter it on the sign-in page to continue.'>\n      Your sign-in code\n    </EmailTitle>\n    <EmailPanel label='Sign-in code'>\n      <EmailPanelValue>\n        <span className='tracking-[0.18em]'>{code}</span>\n      </EmailPanelValue>\n      <EmailPanelNote>It works for {expiresInMinutes} minutes.</EmailPanelNote>\n    </EmailPanel>\n    <EmailSection title='Didn’t ask for it?'>\n      <EmailText>\n        {request\n          ? `Someone asked to sign in as ${request.email} from ${request.device} in ${request.location} at ${formatDate(request.at, 'time-zone', timeZone)}. `\n          : null}\n        You can ignore this email: nobody can sign in without the code.\n      </EmailText>\n    </EmailSection>\n  </EmailLayout>\n)\n\nEmail1.PreviewProps = exampleProps\n\nexport default Email1\nexport {\n  Email1,\n  email1Subject,\n  exampleProps as email1ExampleProps,\n  type Email1Props,\n  type SignInRequest,\n}\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-01.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A sign-in code email with the code on a dark panel, how long it works and who asked for it.",
+    "size": "email",
+    "usedWith": [
+      "email-02",
+      "email-03",
+      "auth-04"
+    ],
+    "component": "Email1",
+    "props": "{ brand: { name: string; logo?: string }; code: string; expiresInMinutes: number; address?: string; request?: { at: Date; device: string; email: string; location: string }; timeZone?: string }"
+  },
+  "type": "registry:component"
+}

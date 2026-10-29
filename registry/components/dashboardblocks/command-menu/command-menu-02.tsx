@@ -146,7 +146,7 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
     <section className='@container flex flex-col items-center gap-3'>
       <CommandMenuTrigger
         onClick={() => setOpen(true)}
-        placeholder='Search customers and orders…'
+        placeholder='Search customers and orders'
         shortcut={null}
       />
       <p role='status' className='text-muted-foreground min-h-5 text-sm'>
@@ -160,7 +160,7 @@ const CommandMenu2 = (props: CommandMenu2Props) => {
         groups={query.trim() ? results : [recent]}
         loading={loading}
         onNavigate={onNavigate}
-        placeholder='Search customers and orders…'
+        placeholder='Search customers and orders'
       />
     </section>
   )

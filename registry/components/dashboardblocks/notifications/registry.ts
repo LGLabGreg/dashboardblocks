@@ -32,6 +32,7 @@ export const examples: Registry['items'] = [
       'button',
       'tabs',
       registryUrl('block-state'),
+      registryUrl('nav-tag'),
       registryUrl('notifications'),
       registryUrl('status-label'),
     ],
@@ -56,6 +57,8 @@ export const examples: Registry['items'] = [
       'tabs',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('nav-tag'),
       registryUrl('notifications'),
     ],
     files: [

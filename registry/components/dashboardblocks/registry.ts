@@ -88,6 +88,7 @@ export const components: Registry['items'] = [
       'sidebar',
       registryUrl('format'),
       registryUrl('link'),
+      registryUrl('nav-tag'),
       registryUrl('page-header'),
       registryUrl('status-label'),
     ],
@@ -329,6 +330,35 @@ export const components: Registry['items'] = [
       {
         path: 'registry/components/dashboardblocks/distribution.tsx',
         type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'email',
+    type: 'registry:component',
+    title: 'Email',
+    description:
+      'Primitives for emails built with React Email: a layout with your brand and footer, a title with a sentence, a dark panel for the one thing the email is about with its value, a money value with smaller cents, a usage meter drawn as table cells, a note and a button, sections a rule opens, label and value rows with a total, and a render helper that returns the HTML and its plain-text copy.',
+    dependencies: ['react-email'],
+    registryDependencies: [registryUrl('email-theme')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/email.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'email-theme',
+    type: 'registry:lib',
+    title: 'Email Theme',
+    description:
+      'Your shadcn theme for emails: paste the :root and .dark blocks of your globals.css, and every email uses the same colour names as your app, turned into values mail apps can read.',
+    dependencies: ['react-email'],
+    files: [
+      {
+        path: 'registry/lib/dashboardblocks/email-theme.ts',
+        type: 'registry:lib',
       },
     ],
   },
@@ -665,12 +695,31 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'nav-tag',
+    type: 'registry:component',
+    title: 'Nav Tag',
+    description:
+      'A count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag: neutral, or a status tone when it needs attention.',
+    registryDependencies: [registryUrl('format'), registryUrl('status-label')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/nav-tag.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'page-header',
     type: 'registry:component',
     title: 'Page Header',
     description:
       'Primitives for page headers: a heading with a badge, media and description, actions that wrap, a row of key numbers, a back link, section tabs that put what doesn’t fit under More, and a more-actions menu.',
-    registryDependencies: ['button', 'dropdown-menu', registryUrl('link')],
+    registryDependencies: [
+      'button',
+      'dropdown-menu',
+      registryUrl('link'),
+      registryUrl('nav-tag'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/page-header.tsx',

@@ -480,7 +480,7 @@ interface CommentComposerProps {
   onValueChange?: (value: string) => void
   pendingLabel?: string
   people?: CommentAuthor[]
-  /** @default 'Leave a comment…' */
+  /** @default 'Leave a comment' */
   placeholder?: string
   /** @default 'Comment' */
   submitLabel?: string
@@ -500,7 +500,7 @@ function CommentComposer({
   onValueChange,
   pendingLabel = 'Posting…',
   people = [],
-  placeholder = 'Leave a comment…',
+  placeholder = 'Leave a comment',
   submitLabel = 'Comment',
   value,
 }: CommentComposerProps) {
@@ -1021,7 +1021,7 @@ function CommentThread({
                   focusOnMount
                   className='min-w-0 flex-1'
                   label={`Reply to ${comment.author.name}`}
-                  placeholder='Reply…'
+                  placeholder='Reply'
                   submitLabel='Reply'
                   people={people}
                   value={draft}

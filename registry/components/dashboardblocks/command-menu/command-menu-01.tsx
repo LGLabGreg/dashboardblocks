@@ -154,7 +154,7 @@ const CommandMenu1 = (props: CommandMenu1Props) => {
     <section className='@container flex flex-col items-center gap-3'>
       <CommandMenuTrigger
         onClick={openMenu}
-        placeholder='Search or run a command…'
+        placeholder='Search or run a command'
         shortcut={`⌘${shortcutKey.toUpperCase()}`}
       />
       <p role='status' className='text-muted-foreground min-h-5 text-sm'>
@@ -165,7 +165,7 @@ const CommandMenu1 = (props: CommandMenu1Props) => {
         onOpenChange={setOpen}
         groups={groups}
         onNavigate={onNavigate}
-        placeholder='Search pages and actions…'
+        placeholder='Search pages and actions'
       />
     </section>
   )

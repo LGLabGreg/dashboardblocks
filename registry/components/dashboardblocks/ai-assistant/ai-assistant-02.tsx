@@ -317,7 +317,7 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
           status={status}
           onSubmit={chat.sendMessage}
           onStop={chat.stop}
-          placeholder='Ask a follow-up…'
+          placeholder='Ask a follow-up'
         />
       </section>
     </BlockStateProvider>

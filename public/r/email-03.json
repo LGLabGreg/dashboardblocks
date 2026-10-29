@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-03",
+  "description": "A receipt email with the amount paid on a dark panel, the lines that add up to it and a link to the invoice.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/email.json",
+    "https://www.dashboardblocks.com/r/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-03.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailLink,\n  EmailPanel,\n  EmailPanelMoney,\n  EmailPanelNote,\n  EmailRows,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport {\n  formatCurrency,\n  formatDate,\n  joinDetails,\n} from '@/registry/lib/dashboardblocks/format'\n\ninterface ReceiptLine {\n  amount: number\n  label: string\n  /** `5 seats, until Oct 29, 2027` */\n  detail?: string\n}\n\ninterface Email3Props {\n  /** What was paid, tax included. */\n  amount: number\n  billingUrl: string\n  brand: EmailBrand\n  invoiceUrl: string\n  /** Every charge, tax included, adding up to `amount`. */\n  lines: ReceiptLine[]\n  number: string\n  paidAt: Date\n  /** `Visa ending 4242` */\n  paymentMethod: string\n  plan: { name: string; renewsAt: Date }\n  /** A postal address for the footer. */\n  address?: string\n  /** @default 'USD' */\n  currency?: string\n  /** The time zone dates are written in. @default 'UTC' */\n  timeZone?: string\n}\n\nconst exampleProps: Email3Props = {\n  address: '548 Market St, San Francisco',\n  amount: 588,\n  billingUrl: 'https://app.acme.com/settings/billing',\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  invoiceUrl: 'https://app.acme.com/settings/billing/invoices/2026-0412',\n  lines: [\n    { amount: 490, detail: '5 seats, until Oct 29, 2027', label: 'Pro plan, yearly' },\n    { amount: 98, label: 'VAT (20%)' },\n  ],\n  number: '2026-0412',\n  paidAt: new Date(Date.UTC(2026, 9, 29, 9, 42)),\n  paymentMethod: 'Visa ending 4242',\n  plan: { name: 'Pro', renewsAt: new Date(Date.UTC(2027, 9, 29, 9, 42)) },\n  timeZone: 'Europe/London',\n}\n\nconst email3Subject = ({ amount, brand, currency }: Email3Props) =>\n  `Your ${brand.name} receipt for ${formatCurrency(amount, { currency, precision: 'exact' })}`\n\nconst Email3 = ({\n  address,\n  amount,\n  billingUrl,\n  brand,\n  currency = 'USD',\n  invoiceUrl,\n  lines,\n  number,\n  paidAt,\n  paymentMethod,\n  plan,\n  timeZone = 'UTC',\n}: Email3Props) => {\n  const money = (value: number) => formatCurrency(value, { currency, precision: 'exact' })\n  const paid = money(amount)\n  return (\n    <EmailLayout\n      brand={brand}\n      preview={`${paid} paid with ${paymentMethod}. Your invoice is ready to download.`}\n      footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n    >\n      <EmailTitle\n        description={`Thanks for your payment. Your ${plan.name} plan now runs until ${formatDate(plan.renewsAt, 'date', timeZone)}.`}\n      >\n        Receipt for your {plan.name} plan\n      </EmailTitle>\n      <EmailPanel label='Amount paid'>\n        <EmailPanelMoney>{paid}</EmailPanelMoney>\n        <EmailPanelNote>\n          {joinDetails(formatDate(paidAt, 'date', timeZone), paymentMethod)}\n        </EmailPanelNote>\n      </EmailPanel>\n      <EmailSection title={`Receipt #${number}`}>\n        <EmailRows\n          rows={lines.map((line) => ({\n            detail: line.detail,\n            label: line.label,\n            value: money(line.amount),\n          }))}\n          total={{ label: 'Paid', value: paid }}\n        />\n      </EmailSection>\n      <EmailSection>\n        <EmailText>\n          <EmailLink href={invoiceUrl}>Download the invoice (PDF)</EmailLink> or see every\n          payment in <EmailLink href={billingUrl}>Billing</EmailLink>.\n        </EmailText>\n      </EmailSection>\n    </EmailLayout>\n  )\n}\n\nEmail3.PreviewProps = exampleProps\n\nexport default Email3\nexport {\n  Email3,\n  email3Subject,\n  exampleProps as email3ExampleProps,\n  type Email3Props,\n  type ReceiptLine,\n}\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-03.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A receipt email with the amount paid on a dark panel, the lines that add up to it and a link to the invoice.",
+    "size": "email",
+    "usedWith": [
+      "email-01",
+      "email-02"
+    ],
+    "component": "Email3",
+    "props": "{ amount: number; billingUrl: string; brand: { name: string; logo?: string }; invoiceUrl: string; lines: { amount: number; label: string; detail?: string }[]; number: string; paidAt: Date; paymentMethod: string; plan: { name: string; renewsAt: Date }; address?: string; currency?: string; timeZone?: string }"
+  },
+  "type": "registry:component"
+}

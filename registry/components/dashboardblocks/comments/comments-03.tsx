@@ -15,10 +15,12 @@ import {
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
 import { Details } from '@/registry/components/dashboardblocks/details'
+import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment, type ReactNode, startTransition, useId, useRef, useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -260,11 +262,7 @@ const Comments3 = (props: Comments3Props) => {
                 {filters.map((item) => (
                   <TabsTrigger key={item.value} value={item.value}>
                     {item.label}
-                    {!state && (
-                      <span className='text-muted-foreground tabular-nums'>
-                        {item.items.length}
-                      </span>
-                    )}
+                    {!state && <NavTag>{formatNumber(item.items.length)}</NavTag>}
                   </TabsTrigger>
                 ))}
               </TabsList>

@@ -7,6 +7,7 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   type AppNotification,
   NotificationBell,
@@ -16,6 +17,7 @@ import {
 } from '@/registry/components/dashboardblocks/notifications'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -235,11 +237,7 @@ const Notifications2 = (props: Notifications2Props) => {
               <TabsTrigger value='all'>All</TabsTrigger>
               <TabsTrigger value='requests'>
                 Requests
-                {requests.length > 0 && (
-                  <span className='text-muted-foreground tabular-nums'>
-                    {requests.length}
-                  </span>
-                )}
+                {requests.length > 0 && <NavTag>{formatNumber(requests.length)}</NavTag>}
               </TabsTrigger>
             </TabsList>
             <TabsContent value='all' className='border-t'>

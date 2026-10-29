@@ -859,7 +859,7 @@ interface ChatComposerProps {
   /** Takes the chat's `sendMessage` as it is. */
   onSubmit: (message: { files?: AIFilePart[]; text: string }) => void
   onValueChange?: (value: string) => void
-  /** @default 'Ask anything…' */
+  /** @default 'Ask anything' */
   placeholder?: string
   /** Sending waits until the status is `ready` or `error`. */
   status?: AIChatStatus
@@ -877,7 +877,7 @@ function ChatComposer({
   onStop,
   onSubmit,
   onValueChange,
-  placeholder = 'Ask anything…',
+  placeholder = 'Ask anything',
   status = 'ready',
   textareaRef,
   tools,

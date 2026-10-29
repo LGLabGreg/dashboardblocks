@@ -315,7 +315,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
                 <Textarea
                   id={commentId}
                   rows={3}
-                  placeholder='Leave a comment…'
+                  placeholder='Leave a comment'
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
                 />

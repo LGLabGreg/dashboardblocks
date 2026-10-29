@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-theme",
+  "title": "Email Theme",
+  "description": "Your shadcn theme for emails: paste the :root and .dark blocks of your globals.css, and every email uses the same colour names as your app, turned into values mail apps can read.",
+  "dependencies": [
+    "react-email"
+  ],
+  "files": [
+    {
+      "path": "registry/lib/dashboardblocks/email-theme.ts",
+      "content": "import { pixelBasedPreset, type TailwindConfig } from 'react-email'\n\n/** The `:root` block of your globals.css, pasted as it is. */\nconst light = `\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --chart-1: oklch(0.809 0.105 251.813);\n  --chart-2: oklch(0.623 0.214 259.815);\n  --chart-3: oklch(0.546 0.245 262.881);\n  --chart-4: oklch(0.488 0.243 264.376);\n  --chart-5: oklch(0.424 0.199 265.638);\n`\n\n/** The `.dark` block of your globals.css, pasted as it is. Emails use it for the panel that holds what the email is about. */\nconst dark = `\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n`\n\nconst emailTheme = `\n:root {\n  ${light}\n  ${dark.replace(/--([\\w-]+)\\s*:/g, '--dark-$1:')}\n}\n\n@theme inline {\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-panel: var(--dark-background);\n  --color-panel-foreground: var(--dark-foreground);\n  --color-panel-muted: var(--dark-muted);\n  --color-panel-muted-foreground: var(--dark-muted-foreground);\n  --color-panel-primary: var(--dark-primary);\n  --color-panel-primary-foreground: var(--dark-primary-foreground);\n  --radius-sm: 4px;\n  --radius-md: 8px;\n  --radius-lg: 10px;\n  --radius-xl: 14px;\n  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;\n  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n}\n`\n\nconst emailConfig = { presets: [pixelBasedPreset] } satisfies TailwindConfig\n\nexport { emailConfig, emailTheme }\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboardblocks/email-theme.ts"
+    }
+  ],
+  "type": "registry:lib"
+}

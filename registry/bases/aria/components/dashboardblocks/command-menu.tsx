@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: ff08a79d1816
+// source-hash: a6d27d7d9698
 
 'use client'
 
@@ -83,7 +83,7 @@ interface CommandMenuProps {
   open: boolean
   /** Shown between the search field and the results, such as an answer to what was typed. The empty message is left out while it's there. */
   panel?: ReactNode
-  /** @default 'Search…' */
+  /** @default 'Search' */
   placeholder?: string
   /** The search text, when you pass `onQueryChange`. */
   query?: string
@@ -99,7 +99,7 @@ function CommandMenu({
   onQueryChange,
   open,
   panel,
-  placeholder = 'Search…',
+  placeholder = 'Search',
   query: controlledQuery,
   title = 'Search',
 }: CommandMenuProps) {
@@ -216,12 +216,12 @@ function CommandMenuKeys() {
 function CommandMenuTrigger({
   className,
   onClick,
-  placeholder = 'Search…',
+  placeholder = 'Search',
   shortcut = '⌘K',
 }: {
   className?: string
   onClick: () => void
-  /** @default 'Search…' */
+  /** @default 'Search' */
   placeholder?: string
   shortcut?: string | null
 }) {

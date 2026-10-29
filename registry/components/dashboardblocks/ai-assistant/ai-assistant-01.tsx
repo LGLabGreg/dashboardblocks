@@ -539,7 +539,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
               status={status}
               onSubmit={send}
               onStop={chat.stop}
-              placeholder='Ask about this page…'
+              placeholder='Ask about this page'
               context={
                 withContext && (
                   <ChatContextChip

@@ -216,7 +216,7 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
           status={status}
           onSubmit={chat.sendMessage}
           onStop={chat.stop}
-          placeholder='Ask about incidents or deploys…'
+          placeholder='Ask about incidents or deploys'
         />
       </section>
     </BlockStateProvider>

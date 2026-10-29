@@ -99,6 +99,7 @@
         "sidebar",
         "https://www.dashboardblocks.com/r/aria/format.json",
         "https://www.dashboardblocks.com/r/aria/link.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/page-header.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
@@ -377,6 +378,41 @@
           "path": "registry/components/dashboardblocks/distribution.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/distribution.tsx"
+        }
+      ]
+    },
+    {
+      "name": "email",
+      "type": "registry:component",
+      "title": "Email",
+      "description": "Primitives for emails built with React Email: a layout with your brand and footer, a title with a sentence, a dark panel for the one thing the email is about with its value, a money value with smaller cents, a usage meter drawn as table cells, a note and a button, sections a rule opens, label and value rows with a total, and a render helper that returns the HTML and its plain-text copy.",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email-theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email.tsx"
+        }
+      ]
+    },
+    {
+      "name": "email-theme",
+      "type": "registry:lib",
+      "title": "Email Theme",
+      "description": "Your shadcn theme for emails: paste the :root and .dark blocks of your globals.css, and every email uses the same colour names as your app, turned into values mail apps can read.",
+      "dependencies": [
+        "react-email"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/dashboardblocks/email-theme.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboardblocks/email-theme.ts"
         }
       ]
     },
@@ -747,6 +783,23 @@
       ]
     },
     {
+      "name": "nav-tag",
+      "type": "registry:component",
+      "title": "Nav Tag",
+      "description": "A count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag: neutral, or a status tone when it needs attention.",
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/format.json",
+        "https://www.dashboardblocks.com/r/aria/status-label.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/nav-tag.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/nav-tag.tsx"
+        }
+      ]
+    },
+    {
       "name": "page-header",
       "type": "registry:component",
       "title": "Page Header",
@@ -754,7 +807,8 @@
       "registryDependencies": [
         "button",
         "dropdown-menu",
-        "https://www.dashboardblocks.com/r/aria/link.json"
+        "https://www.dashboardblocks.com/r/aria/link.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json"
       ],
       "files": [
         {
@@ -1750,6 +1804,7 @@
         "tabs",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -6770,6 +6825,8 @@
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/format.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/settings.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
@@ -6969,7 +7026,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/aria/app-shell.json",
-        "https://www.dashboardblocks.com/r/aria/link.json"
+        "https://www.dashboardblocks.com/r/aria/link.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json"
       ],
       "files": [
         {
@@ -7361,6 +7419,7 @@
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/notifications.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
@@ -7391,6 +7450,8 @@
         "tabs",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/format.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/notifications.json"
       ],
       "files": [
@@ -7607,6 +7668,7 @@
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/comments.json",
         "https://www.dashboardblocks.com/r/aria/details.json",
+        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
       "files": [
@@ -8564,6 +8626,215 @@
         "props": "{ email?: string; forgotPasswordHref: string; linkExpired?: boolean; onSave?: (password: string) => Promise<void | { message: string; status: \"error\" } | { status: \"expired\" }>; signInHref: string }"
       },
       "description": "A new password form with a strength meter and the rules it still needs, a done state that leads to sign-in, and an expired link state."
+    },
+    {
+      "name": "email-01",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-01.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-01.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A sign-in code email with the code on a dark panel, how long it works and who asked for it.",
+        "size": "email",
+        "usedWith": [
+          "email-02",
+          "email-03",
+          "auth-04"
+        ],
+        "component": "Email1",
+        "props": "{ brand: { name: string; logo?: string }; code: string; expiresInMinutes: number; address?: string; request?: { at: Date; device: string; email: string; location: string }; timeZone?: string }"
+      },
+      "description": "A sign-in code email with the code on a dark panel, how long it works and who asked for it."
+    },
+    {
+      "name": "email-02",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-02.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-02.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "An invite email naming who invited you, the workspace and your role, with an Accept button and when the invite runs out.",
+        "size": "email",
+        "usedWith": [
+          "email-01",
+          "email-03",
+          "auth-01"
+        ],
+        "component": "Email2",
+        "props": "{ acceptUrl: string; brand: { name: string; logo?: string }; email: string; expiresAt: Date; inviter: { email: string; name: string }; role: string; workspace: { members: number; name: string }; address?: string; timeZone?: string }"
+      },
+      "description": "An invite email naming who invited you, the workspace and your role, with an Accept button and when the invite runs out."
+    },
+    {
+      "name": "email-03",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-03.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-03.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A receipt email with the amount paid on a dark panel, the lines that add up to it and a link to the invoice.",
+        "size": "email",
+        "usedWith": [
+          "email-01",
+          "email-02"
+        ],
+        "component": "Email3",
+        "props": "{ amount: number; billingUrl: string; brand: { name: string; logo?: string }; invoiceUrl: string; lines: { amount: number; label: string; detail?: string }[]; number: string; paidAt: Date; paymentMethod: string; plan: { name: string; renewsAt: Date }; address?: string; currency?: string; timeZone?: string }"
+      },
+      "description": "A receipt email with the amount paid on a dark panel, the lines that add up to it and a link to the invoice."
+    },
+    {
+      "name": "email-04",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-04.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-04.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A failed payment email with the amount due on a dark panel, the card and the bank's reason, Update card, and when it's tried again.",
+        "size": "email",
+        "usedWith": [
+          "email-03",
+          "email-05",
+          "billing-02"
+        ],
+        "component": "Email4",
+        "props": "{ amount: number; brand: { name: string; logo?: string }; invoiceUrl: string; paymentMethod: string; plan: string; updateUrl: string; address?: string; currency?: string; reason?: string; retryAt?: Date; suspendsAt?: Date; timeZone?: string }"
+      },
+      "description": "A failed payment email with the amount due on a dark panel, the card and the bank's reason, Update card, and when it's tried again."
+    },
+    {
+      "name": "email-05",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-05.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-05.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A trial ending email counting the days left on a dark panel, with Add a card and what changes on the plan the workspace moves to.",
+        "size": "email",
+        "usedWith": [
+          "email-04",
+          "email-06",
+          "billing-02"
+        ],
+        "component": "Email5",
+        "props": "{ billingUrl: string; brand: { name: string; logo?: string }; endsAt: Date; plan: { interval: \"month\" | \"year\"; name: string; price: number }; workspace: string; address?: string; currency?: string; downgrade?: { changes: { now: string; label: string; after: string }[]; plan: string }; paymentMethod?: string; sentAt?: Date; timeZone?: string }"
+      },
+      "description": "A trial ending email counting the days left on a dark panel, with Add a card and what changes on the plan the workspace moves to."
+    },
+    {
+      "name": "email-06",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-06.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-06.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A usage alert email with how much of a limit is used, a meter on a dark panel, when it resets, and the usage by project.",
+        "size": "email",
+        "usedWith": [
+          "email-04",
+          "email-05",
+          "usage-meter-01"
+        ],
+        "component": "Email6",
+        "props": "{ brand: { name: string; logo?: string }; limit: number; metric: string; plan: string; resetsAt: Date; upgradeUrl: string; used: number; usageUrl: string; address?: string; atLimit?: string; projectedAt?: Date; sources?: { name: string; used: number }[]; sourcesTitle?: string; timeZone?: string }"
+      },
+      "description": "A usage alert email with how much of a limit is used, a meter on a dark panel, when it resets, and the usage by project."
+    },
+    {
+      "name": "email-07",
+      "type": "registry:component",
+      "dependencies": [
+        "react-email"
+      ],
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/email.json",
+        "https://www.dashboardblocks.com/r/aria/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/email/email-07.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/email/email-07.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A welcome email with the first step and its button on a dark panel, the steps after it, and who answers a reply.",
+        "size": "email",
+        "usedWith": [
+          "email-01",
+          "email-02",
+          "onboarding-01"
+        ],
+        "component": "Email7",
+        "props": "{ brand: { name: string; logo?: string }; firstStep: { action: string; description: string; title: string; url: string }; address?: string; helpUrl?: string; name?: string; nextSteps?: { action: string; description: string; title: string; url: string }[]; sender?: { name: string; role: string }; workspace?: string }"
+      },
+      "description": "A welcome email with the first step and its button on a dark panel, the steps after it, and who answers a reply."
     },
     {
       "name": "use-animated-number",

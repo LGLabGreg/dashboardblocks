@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-06",
+  "description": "A usage alert email with how much of a limit is used, a meter on a dark panel, when it resets, and the usage by project.",
+  "dependencies": [
+    "react-email"
+  ],
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/radix/email.json",
+    "https://www.dashboardblocks.com/r/radix/format.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/email/email-06.tsx",
+      "content": "import {\n  type EmailBrand,\n  EmailFooter,\n  EmailLayout,\n  EmailLink,\n  EmailPanel,\n  EmailPanelButton,\n  EmailPanelMeter,\n  EmailPanelNote,\n  EmailPanelValue,\n  EmailRows,\n  EmailSection,\n  EmailText,\n  EmailTitle,\n} from '@/registry/components/dashboardblocks/email'\nimport {\n  formatCompact,\n  formatDate,\n  formatPercent,\n  joinDetails,\n} from '@/registry/lib/dashboardblocks/format'\n\ninterface UsageSource {\n  name: string\n  used: number\n}\n\ninterface Email6Props {\n  brand: EmailBrand\n  limit: number\n  /** What's counted, in the plural: `events`. */\n  metric: string\n  plan: string\n  resetsAt: Date\n  upgradeUrl: string\n  used: number\n  usageUrl: string\n  /** A postal address for the footer. */\n  address?: string\n  /** What happens at the limit, to end the sentence `At the limit, …`. */\n  atLimit?: string\n  /** When usage reaches the limit at the pace so far. */\n  projectedAt?: Date\n  /** Where the usage came from, largest first: projects, keys or sites. */\n  sources?: UsageSource[]\n  /** The heading over `sources`. @default 'By project' */\n  sourcesTitle?: string\n  /** The time zone dates are written in. @default 'UTC' */\n  timeZone?: string\n}\n\nconst exampleProps: Email6Props = {\n  address: '548 Market St, San Francisco',\n  atLimit: 'new events are dropped until it resets',\n  brand: {\n    logo: 'https://www.dashboardblocks.com/images/logo-01.png',\n    name: 'Acme Analytics',\n  },\n  limit: 10_000_000,\n  metric: 'events',\n  plan: 'Pro',\n  projectedAt: new Date(Date.UTC(2026, 10, 24, 12)),\n  resetsAt: new Date(Date.UTC(2026, 11, 1)),\n  sources: [\n    { name: 'Web app', used: 5_120_000 },\n    { name: 'iOS app', used: 2_340_000 },\n    { name: 'Marketing site', used: 1_040_000 },\n  ],\n  timeZone: 'Europe/London',\n  upgradeUrl: 'https://app.acme.com/settings/billing/plans',\n  usageUrl: 'https://app.acme.com/settings/usage',\n  used: 8_500_000,\n}\n\nconst email6Subject = ({ brand, limit, metric, used }: Email6Props) =>\n  used >= limit\n    ? `You’ve reached your ${brand.name} limit of ${formatCompact(limit)} ${metric}`\n    : `You’ve used ${formatPercent(used / limit, { maximumFractionDigits: 0 })} of your ${brand.name} ${metric}`\n\nconst Email6 = ({\n  address,\n  atLimit,\n  brand,\n  limit,\n  metric,\n  plan,\n  projectedAt,\n  resetsAt,\n  sources,\n  sourcesTitle = 'By project',\n  timeZone = 'UTC',\n  upgradeUrl,\n  usageUrl,\n  used,\n}: Email6Props) => {\n  const share = formatPercent(used / limit, { maximumFractionDigits: 0 })\n  const resets = formatDate(resetsAt, 'day', timeZone)\n  const left = Math.max(0, limit - used)\n  return (\n    <EmailLayout\n      brand={brand}\n      preview={`${formatCompact(used)} of ${formatCompact(limit)} ${metric} used. The limit resets on ${resets}.`}\n      footer={<EmailFooter>{joinDetails(brand.name, address)}</EmailFooter>}\n    >\n      <EmailTitle\n        description={\n          projectedAt && projectedAt < resetsAt\n            ? `At this pace you’ll reach the limit around ${formatDate(projectedAt, 'day', timeZone)}, before it resets on ${resets}.`\n            : `The limit resets on ${resets}.`\n        }\n      >\n        {used >= limit\n          ? `You’ve reached your ${plan} plan’s limit of ${formatCompact(limit)} ${metric}`\n          : `You’ve used ${share} of your ${plan} plan’s ${metric}`}\n      </EmailTitle>\n      <EmailPanel label={`${metric[0].toUpperCase()}${metric.slice(1)} used`}>\n        <EmailPanelValue unit={` of ${formatCompact(limit)}`}>\n          {formatCompact(used)}\n        </EmailPanelValue>\n        <EmailPanelMeter\n          label={`${share} of ${formatCompact(limit)} ${metric} used`}\n          value={used / limit}\n        />\n        <EmailPanelNote>\n          {joinDetails(\n            left > 0 ? `${formatCompact(left)} left` : 'None left',\n            `Resets ${resets}`,\n          )}\n        </EmailPanelNote>\n        <EmailPanelButton href={upgradeUrl}>Raise the limit</EmailPanelButton>\n      </EmailPanel>\n      {sources && sources.length > 0 ? (\n        <EmailSection title={sourcesTitle}>\n          <EmailRows\n            rows={sources.map((source) => ({\n              detail: `${formatPercent(source.used / used, { maximumFractionDigits: 0 })} of the ${metric}`,\n              label: source.name,\n              value: formatCompact(source.used),\n            }))}\n          />\n        </EmailSection>\n      ) : null}\n      <EmailSection>\n        <EmailText>\n          {atLimit ? `At the limit, ${atLimit}. ` : null}\n          See each day’s {metric} in <EmailLink href={usageUrl}>Usage</EmailLink>.\n        </EmailText>\n      </EmailSection>\n    </EmailLayout>\n  )\n}\n\nEmail6.PreviewProps = exampleProps\n\nexport default Email6\nexport {\n  Email6,\n  email6Subject,\n  exampleProps as email6ExampleProps,\n  type Email6Props,\n  type UsageSource,\n}\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/email/email-06.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A usage alert email with how much of a limit is used, a meter on a dark panel, when it resets, and the usage by project.",
+    "size": "email",
+    "usedWith": [
+      "email-04",
+      "email-05",
+      "usage-meter-01"
+    ],
+    "component": "Email6",
+    "props": "{ brand: { name: string; logo?: string }; limit: number; metric: string; plan: string; resetsAt: Date; upgradeUrl: string; used: number; usageUrl: string; address?: string; atLimit?: string; projectedAt?: Date; sources?: { name: string; used: number }[]; sourcesTitle?: string; timeZone?: string }"
+  },
+  "type": "registry:component"
+}

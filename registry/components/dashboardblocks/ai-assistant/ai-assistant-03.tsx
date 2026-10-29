@@ -447,7 +447,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
                 onSubmit={chat.sendMessage}
                 onStop={chat.stop}
                 label='Ask about this data'
-                placeholder='Ask about token usage…'
+                placeholder='Ask about token usage'
               />
             </section>
           </>
