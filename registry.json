@@ -517,6 +517,24 @@
       ]
     },
     {
+      "name": "choice-cards",
+      "type": "registry:component",
+      "title": "Choice Cards",
+      "description": "One or several options drawn as cards on native radio and checkbox inputs, each with its title, a line of detail, an optional icon, a label and a value to compare, such as a price.",
+      "registryDependencies": [
+        "@dashboardblocks/choice-cards"
+      ]
+    },
+    {
+      "name": "number-field",
+      "type": "registry:component",
+      "title": "Number Field",
+      "description": "A number with its unit or currency, formatted when the field loses focus, kept between its minimum and maximum, with arrow keys and optional minus and plus buttons.",
+      "registryDependencies": [
+        "@dashboardblocks/number-field"
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
@@ -682,7 +700,7 @@
       "name": "onboarding",
       "type": "registry:component",
       "title": "Onboarding",
-      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.",
+      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.",
       "registryDependencies": [
         "@dashboardblocks/onboarding"
       ]
@@ -2274,6 +2292,22 @@
       "description": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save.",
       "registryDependencies": [
         "@dashboardblocks/forms-05"
+      ]
+    },
+    {
+      "name": "forms-06",
+      "type": "registry:component",
+      "description": "One option and several options picked from cards, each with its price and a line of detail, saved together.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-06"
+      ]
+    },
+    {
+      "name": "forms-07",
+      "type": "registry:component",
+      "description": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-07"
       ]
     },
     {

@@ -1,10 +1,10 @@
 'use client'
 
 import {
-  ActionCard,
   type ChoiceCardOption,
   ChoiceCards,
-} from '@/registry/components/dashboardblocks/onboarding'
+} from '@/registry/components/dashboardblocks/choice-cards'
+import { ActionCard } from '@/registry/components/dashboardblocks/onboarding'
 import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {

@@ -10,13 +10,12 @@ import {
 import {
   type StepState,
   StepIndicator,
-  StepStateLabel,
   describeChecklistProgress,
   getChecklistProgress,
+  stepStateConfig,
   getNextStep,
   skipStep,
 } from '@/registry/components/dashboardblocks/checklist'
-import { Details } from '@/registry/components/dashboardblocks/details'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
@@ -177,7 +176,7 @@ function ChecklistSteps(props: ChecklistStepsProps) {
                 aria-current={step.state === 'current' ? 'step' : undefined}
                 aria-expanded={isOpen}
                 onClick={() => toggle(step.id)}
-                className='group/step focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-md py-2.5 text-left outline-none focus-visible:ring-3'
+                className='group/step focus-visible:ring-ring/50 flex w-full items-start gap-3 rounded-md py-2.5 text-left outline-none focus-visible:ring-3'
               >
                 <StepIndicator index={index + 1} state={step.state} />
                 <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
@@ -189,11 +188,11 @@ function ChecklistSteps(props: ChecklistStepsProps) {
                     )}
                   >
                     {step.title}
+                    <span className='sr-only'>, {stepStateConfig[step.state].label}</span>
                   </span>
-                  <Details className='text-muted-foreground text-sm'>
-                    <StepStateLabel variant='text' state={step.state} />
-                    {step.optional && 'Optional'}
-                  </Details>
+                  {step.optional && (
+                    <span className='text-muted-foreground text-sm'>Optional</span>
+                  )}
                 </span>
                 {step.duration && (
                   <span className='text-muted-foreground shrink-0 text-sm tabular-nums'>
@@ -208,12 +207,12 @@ function ChecklistSteps(props: ChecklistStepsProps) {
                   remixicon='RiArrowDownSLine'
                   aria-hidden
                   className={cn(
-                    'text-muted-foreground size-4 shrink-0 transition-transform motion-reduce:transition-none',
+                    'text-muted-foreground mt-0.5 size-4 shrink-0 transition-transform motion-reduce:transition-none',
                     isOpen && 'rotate-180',
                   )}
                 />
               </button>
-              <div id={panelId} hidden={!isOpen} className='pr-7 pb-3 pl-9'>
+              <div id={panelId} hidden={!isOpen} className='pr-7 pb-3 pl-8'>
                 <p className='text-muted-foreground text-sm'>{step.description}</p>
                 {step.state !== 'done' && (step.action || step.optional) && (
                   <div className='mt-3 flex flex-wrap gap-2'>

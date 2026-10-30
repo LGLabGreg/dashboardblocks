@@ -2,6 +2,10 @@
 
 import { StepIndicator } from '@/registry/components/dashboardblocks/checklist'
 import {
+  type ChoiceCardOption,
+  ChoiceCards,
+} from '@/registry/components/dashboardblocks/choice-cards'
+import {
   type FormErrors,
   type FormStep,
   FormSteps,
@@ -9,8 +13,6 @@ import {
 } from '@/registry/components/dashboardblocks/forms'
 import { Link } from '@/registry/components/dashboardblocks/link'
 import {
-  type ChoiceCardOption,
-  ChoiceCards,
   getFilledInvites,
   getInviteErrors,
   type Invite,

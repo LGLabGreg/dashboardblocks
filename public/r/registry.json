@@ -236,7 +236,8 @@
       "title": "Checklist",
       "description": "Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and a status word, progress maths and wording that leave skipped steps out, and a styled checkbox.",
       "registryDependencies": [
-        "https://www.dashboardblocks.com/r/status-label.json"
+        "https://www.dashboardblocks.com/r/status-label.json",
+        "https://www.dashboardblocks.com/r/tag.json"
       ],
       "files": [
         {
@@ -501,7 +502,8 @@
       "registryDependencies": [
         "button",
         "input",
-        "sheet"
+        "sheet",
+        "https://www.dashboardblocks.com/r/checklist.json"
       ],
       "files": [
         {
@@ -1045,6 +1047,40 @@
       ]
     },
     {
+      "name": "choice-cards",
+      "type": "registry:component",
+      "title": "Choice Cards",
+      "description": "One or several options drawn as cards on native radio and checkbox inputs, each with its title, a line of detail, an optional icon, a label and a value to compare, such as a price.",
+      "registryDependencies": [
+        "field",
+        "https://www.dashboardblocks.com/r/tag.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/choice-cards.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/choice-cards.tsx"
+        }
+      ]
+    },
+    {
+      "name": "number-field",
+      "type": "registry:component",
+      "title": "Number Field",
+      "description": "A number with its unit or currency, formatted when the field loses focus, kept between its minimum and maximum, with arrow keys and optional minus and plus buttons.",
+      "registryDependencies": [
+        "input-group",
+        "https://www.dashboardblocks.com/r/format.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/number-field.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/number-field.tsx"
+        }
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
@@ -1407,7 +1443,7 @@
       "name": "onboarding",
       "type": "registry:component",
       "title": "Onboarding",
-      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.",
+      "description": "Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.",
       "registryDependencies": [
         "button",
         "field",
@@ -2673,7 +2709,8 @@
         "https://www.dashboardblocks.com/r/format.json",
         "https://www.dashboardblocks.com/r/funnel.json",
         "https://www.dashboardblocks.com/r/kpi.json",
-        "https://www.dashboardblocks.com/r/status-label.json"
+        "https://www.dashboardblocks.com/r/status-label.json",
+        "https://www.dashboardblocks.com/r/tag.json"
       ],
       "files": [
         {
@@ -4258,10 +4295,10 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "input",
         "https://www.dashboardblocks.com/r/billing.json",
         "https://www.dashboardblocks.com/r/block-state.json",
-        "https://www.dashboardblocks.com/r/format.json"
+        "https://www.dashboardblocks.com/r/format.json",
+        "https://www.dashboardblocks.com/r/number-field.json"
       ],
       "files": [
         {
@@ -4815,7 +4852,6 @@
         "button",
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/checklist.json",
-        "https://www.dashboardblocks.com/r/details.json",
         "https://www.dashboardblocks.com/r/progress-bar.json"
       ],
       "files": [
@@ -4860,7 +4896,7 @@
           "onboarding-02"
         ],
         "component": "Checklist2",
-        "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages?: { detail?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages?: { id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "The stages of a multi-stage setup as a row of rules, side by side when wide and stacked when narrow."
     },
@@ -7220,6 +7256,65 @@
       "description": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save."
     },
     {
+      "name": "forms-06",
+      "type": "registry:component",
+      "registryDependencies": [
+        "field",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/choice-cards.json",
+        "https://www.dashboardblocks.com/r/forms.json",
+        "https://www.dashboardblocks.com/r/format.json",
+        "https://www.dashboardblocks.com/r/tag.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-06.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-06.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "One option and several options picked from cards, each with its price and a line of detail, saved together.",
+        "size": "half",
+        "usedWith": [
+          "forms-05",
+          "settings-01"
+        ],
+        "component": "Forms6",
+        "props": "{ addOns: { description: string; disabled?: boolean; id: string; name: string; per: \"month\" | \"seat\"; price: number }[]; defaultValues?: { addOns: string[]; period: \"month\" | \"year\" }; description: string; onSubmit?: (values: { addOns: string[]; period: \"month\" | \"year\" }) => Promise<void | { addOns?: string; period?: string }>; seatPrice: { month: number; year: number }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+      },
+      "description": "One option and several options picked from cards, each with its price and a line of detail, saved together."
+    },
+    {
+      "name": "forms-07",
+      "type": "registry:component",
+      "registryDependencies": [
+        "field",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/format.json",
+        "https://www.dashboardblocks.com/r/forms.json",
+        "https://www.dashboardblocks.com/r/number-field.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-07.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-07.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.",
+        "size": "half",
+        "usedWith": [
+          "forms-06",
+          "settings-01"
+        ],
+        "component": "Forms7",
+        "props": "{ defaultValues?: { alertAt: null | number; cap: null | number; seats: null | number }; description: string; members: number; onSubmit?: (values: { alertAt: null | number; cap: null | number; seats: null | number }) => Promise<void | { alertAt?: string; cap?: string; seats?: string }>; seatPrice: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+      },
+      "description": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats."
+    },
+    {
       "name": "record-detail-01",
       "type": "registry:component",
       "registryDependencies": [
@@ -8238,6 +8333,7 @@
         "input",
         "input-group",
         "https://www.dashboardblocks.com/r/checklist.json",
+        "https://www.dashboardblocks.com/r/choice-cards.json",
         "https://www.dashboardblocks.com/r/forms.json",
         "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/onboarding.json"
@@ -8256,7 +8352,7 @@
           "onboarding-02"
         ],
         "component": "Onboarding1",
-        "props": "{ defaultRole: string; domain: string; onCheckSlug?: (slug: string) => Promise<string | void>; onComplete?: (workspace: { name: string; slug: string; useCase: string }, invites: { email: string; id: string; role: string }[]) => Promise<void>; product: string; roles: { label: string; value: string }[]; useCases: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; userEmail: string }"
+        "props": "{ defaultRole: string; domain: string; onCheckSlug?: (slug: string) => Promise<string | void>; onComplete?: (workspace: { name: string; slug: string; useCase: string }, invites: { email: string; id: string; role: string }[]) => Promise<void>; product: string; roles: { label: string; value: string }[]; useCases: { aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; userEmail: string }"
       },
       "description": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on."
     },
@@ -8298,8 +8394,8 @@
         "input-group",
         "https://www.dashboardblocks.com/r/option-select.json",
         "https://www.dashboardblocks.com/r/block-state.json",
-        "https://www.dashboardblocks.com/r/link.json",
-        "https://www.dashboardblocks.com/r/onboarding.json"
+        "https://www.dashboardblocks.com/r/choice-cards.json",
+        "https://www.dashboardblocks.com/r/link.json"
       ],
       "files": [
         {
@@ -8326,6 +8422,7 @@
       "registryDependencies": [
         "button",
         "field",
+        "https://www.dashboardblocks.com/r/choice-cards.json",
         "https://www.dashboardblocks.com/r/onboarding.json",
         "https://www.dashboardblocks.com/r/option-select.json"
       ],
@@ -8344,7 +8441,7 @@
           "checklist-01"
         ],
         "component": "Onboarding4",
-        "props": "{ goals: { dashboard: { description: string; href: string; title: string }; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; maxGoals?: number; onSave?: (answers: { goals: string[]; role: string; teamSize: string }) => Promise<void>; roles: { label: string; value: string }[]; teamSizes: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[] }"
+        "props": "{ goals: { dashboard: { description: string; href: string; title: string }; aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; maxGoals?: number; onSave?: (answers: { goals: string[]; role: string; teamSize: string }) => Promise<void>; roles: { label: string; value: string }[]; teamSizes: { aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[] }"
       },
       "description": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them."
     },

@@ -12,6 +12,7 @@ export const examples: Registry['items'] = [
       'input',
       'input-group',
       registryUrl('checklist'),
+      registryUrl('choice-cards'),
       registryUrl('forms'),
       registryUrl('link'),
       registryUrl('onboarding'),
@@ -62,8 +63,8 @@ export const examples: Registry['items'] = [
       'input-group',
       registryUrl('option-select'),
       registryUrl('block-state'),
+      registryUrl('choice-cards'),
       registryUrl('link'),
-      registryUrl('onboarding'),
     ],
     files: [
       {
@@ -84,6 +85,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'field',
+      registryUrl('choice-cards'),
       registryUrl('onboarding'),
       registryUrl('option-select'),
     ],

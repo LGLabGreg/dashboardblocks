@@ -276,7 +276,7 @@ function renderLine(tokens: Token[], marks: readonly string[]): ReactNode[] {
       <mark
         key={`mark-${range}`}
         data-slot='highlighted-code-mark'
-        className='bg-chart-2/15 ring-chart-2/35 -mx-0.5 box-decoration-clone rounded-sm px-0.5 text-inherit ring-1 ring-inset'
+        className='bg-chart-2/10 dark:bg-chart-2/15 ring-chart-2/35 -mx-0.5 box-decoration-clone rounded-sm px-0.5 text-inherit ring-1 ring-inset'
       >
         {marked}
       </mark>,

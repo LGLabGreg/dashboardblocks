@@ -9,9 +9,10 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type StepState,
-  StepStateLabel,
+  StepIndicator,
   getChecklistProgress,
   getNextStep,
+  stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
@@ -20,7 +21,6 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface SetupStage {
-  detail?: string
   id: string
   state: StepState
   title: string
@@ -39,14 +39,9 @@ interface Checklist2Props extends BlockStateProps {
 const exampleProps: Checklist2Props = {
   description: 'Sync your production database into the warehouse.',
   stages: [
-    { detail: 'PostgreSQL 16', id: 'source', state: 'done', title: 'Choose source' },
-    { detail: 'db.acme.internal', id: 'connect', state: 'done', title: 'Connect' },
-    {
-      detail: '12 of 48 tables',
-      id: 'tables',
-      state: 'current',
-      title: 'Select tables',
-    },
+    { id: 'source', state: 'done', title: 'Choose source' },
+    { id: 'connect', state: 'done', title: 'Connect' },
+    { id: 'tables', state: 'current', title: 'Select tables' },
     { id: 'schedule', state: 'todo', title: 'Schedule sync' },
     { id: 'review', state: 'todo', title: 'Review and launch' },
   ],
@@ -105,40 +100,19 @@ const Checklist2 = (props: Checklist2Props) => {
                 key={stage.id}
                 aria-current={stage.state === 'current' ? 'step' : undefined}
                 data-state={stage.state}
-                className='border-border data-[state=current]:border-foreground data-[state=done]:border-foreground flex min-w-0 flex-col gap-0.5 border-l-2 pl-3 data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-2 @xl:pl-0'
+                className='border-border data-[state=current]:border-foreground data-[state=done]:border-chart-2 flex min-w-0 items-start gap-2 border-l-2 pl-3 text-sm data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-3 @xl:pl-0'
               >
-                <span className='flex min-w-0 items-baseline gap-1.5 text-sm'>
-                  {stage.state === 'done' ? (
-                    <IconPlaceholder
-                      lucide='CheckIcon'
-                      tabler='IconCheck'
-                      hugeicons='Tick02Icon'
-                      phosphor='CheckIcon'
-                      remixicon='RiCheckLine'
-                      aria-hidden
-                      className='text-muted-foreground size-3.5 shrink-0 self-center'
-                    />
-                  ) : (
-                    <span aria-hidden className='text-muted-foreground tabular-nums'>
-                      {index + 1}
-                    </span>
+                <StepIndicator index={index + 1} state={stage.state} />
+                <span
+                  className={cn(
+                    'min-w-0 font-medium break-words',
+                    (stage.state === 'todo' || stage.state === 'skipped') &&
+                      'text-muted-foreground',
                   )}
-                  <span
-                    className={cn(
-                      'min-w-0 font-medium break-words',
-                      (stage.state === 'todo' || stage.state === 'skipped') &&
-                        'text-muted-foreground',
-                    )}
-                  >
-                    {stage.title}
-                  </span>
+                >
+                  {stage.title}
+                  <span className='sr-only'>, {stepStateConfig[stage.state].label}</span>
                 </span>
-                <StepStateLabel state={stage.state} />
-                {stage.detail && (
-                  <span className='text-muted-foreground text-sm break-words'>
-                    {stage.detail}
-                  </span>
-                )}
               </li>
             ))}
           </ol>

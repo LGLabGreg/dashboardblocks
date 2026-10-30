@@ -1,5 +1,17 @@
 # dashboardblocks
 
+## 1.17.0
+
+### Minor Changes
+
+- 4ddb590: New Forms block: Choice Cards, and the `choice-cards` part it uses, which Onboarding's choice cards moved into. A card can now show a value to compare, such as a price, and its label is drawn as a tag.
+- b849b37: New Forms block: Number and Money, and the `number-field` part it uses: a number with its unit or currency, formatted when you leave the field, kept inside its range, with minus and plus for a count. `useSimpleForm` gets a `number(name)` binding for it, and Billing's Change Plan uses it for seats.
+- 5206e24: Step numbers are tags. The `checklist` part's `StepIndicator` draws a blue tick when done, black for the current step and a grey number to do, and the `forms` part's `FormSteps` uses it, so install both again. Checklist 01 drops the Done and In progress words under each step, and Checklist 02 drops its status badges and its stages' `detail`. The `highlighted-code` part's marked text sits on a lighter tint, so it passes contrast in light mode.
+
+### Patch Changes
+
+- 995d59f: The `block-state` part's `BlockStateRows` takes a `skeleton`, so a list can draw its loading rows the way it draws its rows.
+
 ## 1.16.0
 
 ### Minor Changes

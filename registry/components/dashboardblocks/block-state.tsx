@@ -171,9 +171,16 @@ interface BlockStateRowsProps {
   emptyMessage?: string
   /** How many rows to sketch while loading. @default 4 */
   rows?: number
+  /** Drawn while loading in place of the default rows: the block's own rows and headings in outline, which lay themselves out, so the list keeps its shape when they arrive. `className` then styles only the message. */
+  skeleton?: ReactNode
 }
 
-function BlockStateRows({ className, emptyMessage, rows = 4 }: BlockStateRowsProps) {
+function BlockStateRows({
+  className,
+  emptyMessage,
+  rows = 4,
+  skeleton,
+}: BlockStateRowsProps) {
   const state = useBlockState()
   if (!state) return null
 
@@ -183,6 +190,15 @@ function BlockStateRows({ className, emptyMessage, rows = 4 }: BlockStateRowsPro
         className={cn('py-2.5 text-sm', className)}
         emptyMessage={emptyMessage}
       />
+    )
+  }
+
+  if (skeleton) {
+    return (
+      <div data-slot='block-state-rows'>
+        <span className='sr-only'>Loading</span>
+        <div aria-hidden>{skeleton}</div>
+      </div>
     )
   }
 

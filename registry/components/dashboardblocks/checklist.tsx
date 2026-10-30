@@ -4,6 +4,7 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ComponentProps } from 'react'
 
@@ -137,15 +138,14 @@ interface StepIndicatorProps {
 
 function StepIndicator({ className, index, state }: StepIndicatorProps) {
   return (
-    <span
+    <Tag
       aria-hidden
       data-state={state}
       className={cn(
-        'flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium tabular-nums [&_svg]:size-3.5',
-        state === 'done' && 'border-current text-emerald-700 dark:text-emerald-400',
-        state === 'current' && 'border-foreground text-foreground border-2',
-        state === 'todo' && 'text-muted-foreground border-border',
-        state === 'skipped' && 'text-muted-foreground border-border border-dashed',
+        '[&_svg]:size-3',
+        (state === 'done' || state === 'skipped') && 'px-1',
+        state === 'done' && 'text-chart-2 bg-chart-2/10 dark:bg-chart-2/15',
+        state === 'current' && 'bg-foreground text-background',
         className,
       )}
     >
@@ -156,7 +156,7 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
           hugeicons='Tick02Icon'
           phosphor='CheckIcon'
           remixicon='RiCheckLine'
-          strokeWidth={3}
+          strokeWidth={2.5}
         />
       )}
       {state === 'skipped' && (
@@ -170,9 +170,9 @@ function StepIndicator({ className, index, state }: StepIndicatorProps) {
       )}
       {(state === 'current' || state === 'todo') &&
         (index === undefined
-          ? state === 'current' && <span className='bg-foreground size-2 rounded-full' />
+          ? state === 'current' && <span className='size-1.5 rounded-full bg-current' />
           : index)}
-    </span>
+    </Tag>
   )
 }
 

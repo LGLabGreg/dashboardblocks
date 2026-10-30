@@ -103,10 +103,10 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'button',
-      'input',
       registryUrl('billing'),
       registryUrl('block-state'),
       registryUrl('format'),
+      registryUrl('number-field'),
     ],
     files: [
       {

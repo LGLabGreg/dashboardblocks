@@ -939,6 +939,7 @@ function ChartMarkerKey({
           key={`${marker.x}-${marker.label}`}
           className='flex min-w-0 items-center gap-1.5'
         >
+          {/* Not a step: an annotation's key, matching its marker on the chart */}
           <span className='bg-foreground text-background grid size-4 shrink-0 place-items-center rounded-full font-semibold tabular-nums'>
             {index + 1}
           </span>

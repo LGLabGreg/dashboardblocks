@@ -702,7 +702,7 @@
       "component": "Checklist2",
       "shows": "The stages of a multi-stage setup as a row of rules, side by side when wide and stacked when narrow.",
       "size": "full",
-      "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages?: { detail?: string; id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ continueLabel?: string; description: string; onContinue?: () => void; stages?: { id: string; state: \"done\" | \"todo\" | \"current\" | \"skipped\"; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "checklist-01",
         "onboarding-02"
@@ -1595,6 +1595,32 @@
       ]
     },
     {
+      "name": "forms-06",
+      "install": "@dashboardblocks/forms-06",
+      "import": "@/components/dashboardblocks/forms/forms-06",
+      "component": "Forms6",
+      "shows": "One option and several options picked from cards, each with its price and a line of detail, saved together.",
+      "size": "half",
+      "props": "{ addOns: { description: string; disabled?: boolean; id: string; name: string; per: \"month\" | \"seat\"; price: number }[]; defaultValues?: { addOns: string[]; period: \"month\" | \"year\" }; description: string; onSubmit?: (values: { addOns: string[]; period: \"month\" | \"year\" }) => Promise<void | { addOns?: string; period?: string }>; seatPrice: { month: number; year: number }; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "usedWith": [
+        "forms-05",
+        "settings-01"
+      ]
+    },
+    {
+      "name": "forms-07",
+      "install": "@dashboardblocks/forms-07",
+      "import": "@/components/dashboardblocks/forms/forms-07",
+      "component": "Forms7",
+      "shows": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.",
+      "size": "half",
+      "props": "{ defaultValues?: { alertAt: null | number; cap: null | number; seats: null | number }; description: string; members: number; onSubmit?: (values: { alertAt: null | number; cap: null | number; seats: null | number }) => Promise<void | { alertAt?: string; cap?: string; seats?: string }>; seatPrice: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "usedWith": [
+        "forms-06",
+        "settings-01"
+      ]
+    },
+    {
       "name": "funnel-01",
       "install": "@dashboardblocks/funnel-01",
       "import": "@/components/dashboardblocks/funnel/funnel-01",
@@ -2307,7 +2333,7 @@
       "component": "Onboarding1",
       "shows": "A setup wizard that names the workspace, sets its URL, asks what it is for and invites the team, checking each step before moving on.",
       "size": "page",
-      "props": "{ defaultRole: string; domain: string; onCheckSlug?: (slug: string) => Promise<string | void>; onComplete?: (workspace: { name: string; slug: string; useCase: string }, invites: { email: string; id: string; role: string }[]) => Promise<void>; product: string; roles: { label: string; value: string }[]; useCases: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; userEmail: string }",
+      "props": "{ defaultRole: string; domain: string; onCheckSlug?: (slug: string) => Promise<string | void>; onComplete?: (workspace: { name: string; slug: string; useCase: string }, invites: { email: string; id: string; role: string }[]) => Promise<void>; product: string; roles: { label: string; value: string }[]; useCases: { aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; userEmail: string }",
       "usedWith": [
         "onboarding-02"
       ]
@@ -2344,7 +2370,7 @@
       "component": "Onboarding4",
       "shows": "A short form asking for a role, a team size and up to three goals, then listing the dashboards set up for them.",
       "size": "half",
-      "props": "{ goals: { dashboard: { description: string; href: string; title: string }; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; maxGoals?: number; onSave?: (answers: { goals: string[]; role: string; teamSize: string }) => Promise<void>; roles: { label: string; value: string }[]; teamSizes: { badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[] }",
+      "props": "{ goals: { dashboard: { description: string; href: string; title: string }; aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[]; maxGoals?: number; onSave?: (answers: { goals: string[]; role: string; teamSize: string }) => Promise<void>; roles: { label: string; value: string }[]; teamSizes: { aside?: ReactNode; badge?: ReactNode; description?: ReactNode; disabled?: boolean; icon?: ReactNode; title: string; value: string }[] }",
       "usedWith": [
         "onboarding-03",
         "checklist-01"

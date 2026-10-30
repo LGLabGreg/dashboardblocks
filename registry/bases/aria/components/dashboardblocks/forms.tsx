@@ -1,8 +1,9 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 95da548071d5
+// source-hash: ad0c8e8deb34
 
 'use client'
 
+import { StepIndicator } from '@/registry/components/dashboardblocks/checklist'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   type ChangeEvent,
@@ -31,7 +32,7 @@ import {
 
 import { cn } from '@/lib/utils'
 
-type FormValues = Record<string, string | boolean | readonly string[]>
+type FormValues = Record<string, string | number | boolean | readonly string[] | null>
 
 type FormErrors<T extends FormValues> = Partial<Record<keyof T & string, string>>
 
@@ -59,7 +60,7 @@ function hasErrors(errors: Record<string, string | undefined>) {
 }
 
 function sameValue(a: FormValues[string], b: FormValues[string]) {
-  if (typeof a === 'object' && typeof b === 'object') {
+  if (Array.isArray(a) && Array.isArray(b)) {
     return a.length === b.length && a.every((item) => b.includes(item))
   }
   return a === b
@@ -192,7 +193,21 @@ function useSimpleForm<T extends FormValues>({
       name,
       onValueChange: (next: string[]) =>
         setValue(name, next as unknown as T[typeof name]),
-      value: typeof value === 'object' ? value : [],
+      value: Array.isArray(value) ? value : [],
+    }
+  }
+
+  /** For a number field: the value is a number, or `null` while the field is empty. */
+  function number(name: keyof T & string) {
+    const id = getId(name)
+    const value = values[name]
+    return {
+      'aria-describedby': errors[name] ? `${id}-error` : undefined,
+      'aria-invalid': errors[name] ? true : undefined,
+      id,
+      name,
+      onValueChange: (next: number | null) => setValue(name, next as T[typeof name]),
+      value: typeof value === 'number' ? value : null,
     }
   }
 
@@ -262,6 +277,7 @@ function useSimpleForm<T extends FormValues>({
     isDirty,
     isSubmitting,
     list,
+    number,
     reset,
     select,
     setValue,
@@ -363,23 +379,14 @@ function FormSteps({ className, current, steps }: FormStepsProps) {
             key={step.title}
             aria-current={state === 'current' ? 'step' : undefined}
             data-state={state}
-            className='group/step data-[state=upcoming]:border-border border-foreground flex min-w-0 flex-1 flex-col gap-0.5 border-t-2 pt-2'
+            className='group/step data-[state=done]:border-chart-2 data-[state=upcoming]:border-border border-foreground flex min-w-0 flex-1 items-start gap-2 border-t-2 pt-3'
           >
-            <span className='flex min-w-0 items-center gap-1.5 text-sm'>
-              {state === 'done' ? (
-                <IconPlaceholder
-                  lucide='CheckIcon'
-                  tabler='IconCheck'
-                  hugeicons='Tick02Icon'
-                  phosphor='CheckIcon'
-                  remixicon='RiCheckLine'
-                  aria-hidden
-                  className='text-muted-foreground size-3.5 shrink-0'
-                />
-              ) : (
-                <span className='text-muted-foreground tabular-nums'>{index + 1}</span>
-              )}
-              <span className='group-data-[state=upcoming]/step:text-muted-foreground truncate font-medium'>
+            <StepIndicator
+              index={index + 1}
+              state={state === 'upcoming' ? 'todo' : state}
+            />
+            <span className='sr-only min-w-0 flex-col gap-0.5 @md:not-sr-only @md:flex'>
+              <span className='group-data-[state=upcoming]/step:text-muted-foreground text-sm font-medium break-words'>
                 {step.title}
               </span>
               <span className='sr-only'>
@@ -389,12 +396,12 @@ function FormSteps({ className, current, steps }: FormStepsProps) {
                     ? ', not started'
                     : ''}
               </span>
+              {step.description && (
+                <span className='text-muted-foreground hidden text-xs break-words @md:block'>
+                  {step.description}
+                </span>
+              )}
             </span>
-            {step.description && (
-              <span className='text-muted-foreground hidden truncate text-xs @md:block'>
-                {step.description}
-              </span>
-            )}
           </li>
         )
       })}

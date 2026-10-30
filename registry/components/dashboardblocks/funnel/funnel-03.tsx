@@ -15,9 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/funnel'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
-
-import { cn } from '@/lib/utils'
 
 interface Funnel3Props extends BlockStateProps {
   description: string
@@ -69,20 +68,13 @@ const Funnel3 = (props: Funnel3Props) => {
                   {!isLast && (
                     <span
                       aria-hidden
-                      className='bg-border absolute top-7 bottom-1 left-3 w-px -translate-x-1/2'
+                      className='bg-border absolute top-6 bottom-1 left-2.5 w-px -translate-x-1/2'
                     />
                   )}
-                  <span
-                    className={cn(
-                      'relative flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',
-                      isBiggestDrop
-                        ? 'bg-foreground text-background'
-                        : 'bg-muted text-foreground',
-                    )}
-                  >
+                  <Tag className='relative'>
                     <span className='sr-only'>Step </span>
                     {index + 1}
-                  </span>
+                  </Tag>
                   <div className='flex min-w-0 flex-1 flex-col gap-1'>
                     <div className='flex items-baseline justify-between gap-3'>
                       <span className='text-sm font-medium'>{step.label}</span>

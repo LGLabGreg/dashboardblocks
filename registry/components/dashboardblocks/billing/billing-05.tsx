@@ -7,12 +7,12 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { NumberField } from '@/registry/components/dashboardblocks/number-field'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 type BillingInterval = 'month' | 'year'
 
@@ -136,7 +136,6 @@ const Billing5 = (props: Billing5Props) => {
   const [interval, setBillingInterval] = useState(current.interval)
   const [planId, setPlanId] = useState(current.planId)
   const [seats, setSeats] = useState(current.seats)
-  const [seatsText, setSeatsText] = useState(String(current.seats))
   const [scheduled, setScheduled] = useState<PlanChange | null>(null)
   const [confirmed, setConfirmed] = useState('')
 
@@ -178,9 +177,7 @@ const Billing5 = (props: Billing5Props) => {
     scheduled.seats === seats
 
   const setSeatCount = (value: number) => {
-    const next = Math.max(seatsInUse, Math.round(value) || seatsInUse)
-    setSeats(next)
-    setSeatsText(String(next))
+    setSeats(Math.round(value))
     setConfirmed('')
   }
 
@@ -338,52 +335,20 @@ const Billing5 = (props: Billing5Props) => {
                   <label htmlFor={`${id}-seats`} className='text-sm font-medium'>
                     Seats
                   </label>
-                  <div className='flex items-center gap-2'>
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='icon'
-                      aria-label='Remove a seat'
-                      disabled={seats <= seatsInUse}
-                      onClick={() => setSeatCount(seats - 1)}
-                    >
-                      <IconPlaceholder
-                        lucide='MinusIcon'
-                        tabler='IconMinus'
-                        hugeicons='MinusSignIcon'
-                        phosphor='MinusIcon'
-                        remixicon='RiSubtractLine'
-                        aria-hidden
-                      />
-                    </Button>
-                    <Input
-                      id={`${id}-seats`}
-                      type='number'
-                      inputMode='numeric'
-                      min={seatsInUse}
-                      value={seatsText}
-                      onChange={(event) => setSeatsText(event.target.value)}
-                      onBlur={() => setSeatCount(Number(seatsText))}
-                      aria-describedby={`${id}-seats-hint`}
-                      className='w-20 text-center tabular-nums'
-                    />
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='icon'
-                      aria-label='Add a seat'
-                      onClick={() => setSeatCount(seats + 1)}
-                    >
-                      <IconPlaceholder
-                        lucide='PlusIcon'
-                        tabler='IconPlus'
-                        hugeicons='PlusSignIcon'
-                        phosphor='PlusIcon'
-                        remixicon='RiAddLine'
-                        aria-hidden
-                      />
-                    </Button>
-                  </div>
+                  <NumberField
+                    id={`${id}-seats`}
+                    className='w-44'
+                    decrementLabel='Remove a seat'
+                    incrementLabel='Add a seat'
+                    min={seatsInUse}
+                    stepper
+                    unit='seats'
+                    value={seats}
+                    onValueChange={(value) => {
+                      if (value !== null) setSeatCount(value)
+                    }}
+                    aria-describedby={`${id}-seats-hint`}
+                  />
                   <p id={`${id}-seats-hint`} className='text-muted-foreground text-sm'>
                     {seatsInUse} in use by members and invites.
                   </p>

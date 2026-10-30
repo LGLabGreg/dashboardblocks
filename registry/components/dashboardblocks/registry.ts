@@ -210,7 +210,7 @@ export const components: Registry['items'] = [
     title: 'Checklist',
     description:
       'Primitives for checklists and steppers: done, in progress, to do and skipped states, each with a marker shape and a status word, progress maths and wording that leave skipped steps out, and a styled checkbox.',
-    registryDependencies: [registryUrl('status-label')],
+    registryDependencies: [registryUrl('status-label'), registryUrl('tag')],
     files: [
       {
         path: 'registry/components/dashboardblocks/checklist.tsx',
@@ -436,7 +436,7 @@ export const components: Registry['items'] = [
     title: 'Forms',
     description:
       'Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.',
-    registryDependencies: ['button', 'input', 'sheet'],
+    registryDependencies: ['button', 'input', 'sheet', registryUrl('checklist')],
     files: [
       {
         path: 'registry/components/dashboardblocks/forms.tsx',
@@ -922,6 +922,34 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'choice-cards',
+    type: 'registry:component',
+    title: 'Choice Cards',
+    description:
+      'One or several options drawn as cards on native radio and checkbox inputs, each with its title, a line of detail, an optional icon, a label and a value to compare, such as a price.',
+    registryDependencies: ['field', registryUrl('tag')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/choice-cards.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'number-field',
+    type: 'registry:component',
+    title: 'Number Field',
+    description:
+      'A number with its unit or currency, formatted when the field loses focus, kept between its minimum and maximum, with arrow keys and optional minus and plus buttons.',
+    registryDependencies: ['input-group', registryUrl('format')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/number-field.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'details',
     type: 'registry:component',
     title: 'Details',
@@ -1259,7 +1287,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Onboarding',
     description:
-      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, radio and checkbox choice cards on native inputs, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.',
+      'Primitives for first-run setup: a full-page frame with step progress and Back, Skip and Continue actions that moves focus to each new step, an invite list of email and role rows that splits pasted lists and checks for invalid and duplicate addresses, action rows for quick starts, and a URL slug helper.',
     registryDependencies: [
       'button',
       'field',

@@ -10,7 +10,6 @@ export const examples: Registry['items'] = [
       'button',
       registryUrl('block-state'),
       registryUrl('checklist'),
-      registryUrl('details'),
       registryUrl('progress-bar'),
     ],
     files: [

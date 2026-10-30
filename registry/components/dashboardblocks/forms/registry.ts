@@ -117,4 +117,51 @@ export const examples: Registry['items'] = [
       usedWith: ['forms-01', 'settings-01'],
     },
   },
+  {
+    name: 'forms-06',
+    type: 'registry:component',
+    registryDependencies: [
+      'field',
+      registryUrl('block-state'),
+      registryUrl('choice-cards'),
+      registryUrl('forms'),
+      registryUrl('format'),
+      registryUrl('tag'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms/forms-06.tsx',
+        type: 'registry:component',
+      },
+    ],
+    meta: {
+      shows:
+        'One option and several options picked from cards, each with its price and a line of detail, saved together.',
+      size: 'half',
+      usedWith: ['forms-05', 'settings-01'],
+    },
+  },
+  {
+    name: 'forms-07',
+    type: 'registry:component',
+    registryDependencies: [
+      'field',
+      registryUrl('block-state'),
+      registryUrl('format'),
+      registryUrl('forms'),
+      registryUrl('number-field'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms/forms-07.tsx',
+        type: 'registry:component',
+      },
+    ],
+    meta: {
+      shows:
+        'Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.',
+      size: 'half',
+      usedWith: ['forms-06', 'settings-01'],
+    },
+  },
 ]

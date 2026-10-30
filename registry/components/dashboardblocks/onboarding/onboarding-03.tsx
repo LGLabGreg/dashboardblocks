@@ -8,11 +8,11 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { Link } from '@/registry/components/dashboardblocks/link'
 import {
   type ChoiceCardOption,
   ChoiceCards,
-} from '@/registry/components/dashboardblocks/onboarding'
+} from '@/registry/components/dashboardblocks/choice-cards'
+import { Link } from '@/registry/components/dashboardblocks/link'
 import { OptionSelect } from '@/registry/components/dashboardblocks/option-select'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
