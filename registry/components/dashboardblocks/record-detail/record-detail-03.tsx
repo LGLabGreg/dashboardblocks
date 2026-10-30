@@ -30,11 +30,11 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { joinDetails } from '@/registry/lib/dashboardblocks/format'
 import { type FormEvent, startTransition, useId, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -251,9 +251,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
                   <Property label='Labels'>
                     <span className='flex flex-wrap gap-1'>
                       {ticket.labels.map((label) => (
-                        <Badge key={label} variant='outline'>
-                          {label}
-                        </Badge>
+                        <Tag key={label}>{label}</Tag>
                       ))}
                     </span>
                   </Property>

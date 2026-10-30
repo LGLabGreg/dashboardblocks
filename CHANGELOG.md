@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.15.1
+
+### Patch Changes
+
+- bc00499: Counts beside a group's heading are tags, like counts beside a link or tab: Kanban's column counts, Pipeline's stage counts and Activity Feed 01's day counts use `Tag`, which `NavTag` is renamed to (the `nav-tag` item is now `tag`). Kanban's labels are tags with their dot.
+
 ## 1.15.0
 
 ### Minor Changes

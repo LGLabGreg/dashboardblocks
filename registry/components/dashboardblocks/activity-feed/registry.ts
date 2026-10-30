@@ -10,6 +10,7 @@ export const examples: Registry['items'] = [
       'button',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
+      registryUrl('tag'),
       registryUrl('team'),
     ],
     files: [
@@ -53,7 +54,7 @@ export const examples: Registry['items'] = [
       'tabs',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
-      registryUrl('nav-tag'),
+      registryUrl('tag'),
       registryUrl('team'),
     ],
     files: [
@@ -95,12 +96,12 @@ export const examples: Registry['items'] = [
     name: 'activity-feed-05',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('icon'),
+      registryUrl('tag'),
       registryUrl('team'),
     ],
     files: [

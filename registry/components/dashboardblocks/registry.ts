@@ -88,7 +88,7 @@ export const components: Registry['items'] = [
       'sidebar',
       registryUrl('format'),
       registryUrl('link'),
-      registryUrl('nav-tag'),
+      registryUrl('tag'),
       registryUrl('page-header'),
       registryUrl('status-label'),
     ],
@@ -253,6 +253,7 @@ export const components: Registry['items'] = [
       'input',
       registryUrl('details'),
       registryUrl('table'),
+      registryUrl('tag'),
       registryUrl('format'),
     ],
     files: [
@@ -695,15 +696,15 @@ export const components: Registry['items'] = [
     ],
   },
   {
-    name: 'nav-tag',
+    name: 'tag',
     type: 'registry:component',
-    title: 'Nav Tag',
+    title: 'Tag',
     description:
-      'A count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag: neutral, or a status tone when it needs attention.',
+      "A small tinted tag for a count or short word beside a sidebar link, tab, menu item or group heading, or an item's label with its dot: neutral, or a status tone when it needs attention.",
     registryDependencies: [registryUrl('format'), registryUrl('status-label')],
     files: [
       {
-        path: 'registry/components/dashboardblocks/nav-tag.tsx',
+        path: 'registry/components/dashboardblocks/tag.tsx',
         type: 'registry:component',
       },
     ],
@@ -718,7 +719,7 @@ export const components: Registry['items'] = [
       'button',
       'dropdown-menu',
       registryUrl('link'),
-      registryUrl('nav-tag'),
+      registryUrl('tag'),
     ],
     files: [
       {
@@ -733,7 +734,7 @@ export const components: Registry['items'] = [
     title: 'Pipeline',
     description:
       'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.',
-    registryDependencies: [registryUrl('team')],
+    registryDependencies: [registryUrl('tag'), registryUrl('team')],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline.tsx',
@@ -1058,6 +1059,7 @@ export const components: Registry['items'] = [
       'kbd',
       registryUrl('activity-feed'),
       registryUrl('schedule'),
+      registryUrl('tag'),
       registryUrl('status-label'),
       registryUrl('block-state'),
     ],

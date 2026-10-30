@@ -7,7 +7,6 @@ export const examples: Registry['items'] = [
     name: 'record-detail-01',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       registryUrl('block-state'),
       registryUrl('format'),
@@ -15,6 +14,7 @@ export const examples: Registry['items'] = [
       registryUrl('record-detail'),
       registryUrl('status-label'),
       registryUrl('table'),
+      registryUrl('tag'),
       registryUrl('team'),
     ],
     files: [
@@ -61,7 +61,6 @@ export const examples: Registry['items'] = [
     name: 'record-detail-03',
     type: 'registry:component',
     registryDependencies: [
-      'badge',
       'button',
       'textarea',
       registryUrl('activity-feed'),
@@ -70,6 +69,7 @@ export const examples: Registry['items'] = [
       registryUrl('page-header'),
       registryUrl('record-detail'),
       registryUrl('status-label'),
+      registryUrl('tag'),
       registryUrl('team'),
     ],
     files: [

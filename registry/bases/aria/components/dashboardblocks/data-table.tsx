@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/data-table.tsx for React Aria
-// source-hash: 11efc2bc8ef0
+// source-hash: 7fbc6ec14902
 
 'use client'
 
@@ -19,6 +19,7 @@ import {
   DataTableRow,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -487,11 +488,7 @@ function DataTableFacetFilter<TData extends RowData>({
           className='text-muted-foreground'
         />
         {label}
-        {selected.length > 0 && (
-          <span className='bg-muted text-foreground rounded-sm px-1 text-xs tabular-nums'>
-            {selected.length}
-          </span>
-        )}
+        {selected.length > 0 && <Tag>{formatNumber(selected.length)}</Tag>}
       </Button>
       <DropdownMenu className='w-auto min-w-48'>
         <DropdownMenuGroup

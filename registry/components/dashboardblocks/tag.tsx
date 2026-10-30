@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-const navTagToneClasses: Record<StatusTone, string> = {
+const tagToneClasses: Record<StatusTone, string> = {
   bad: 'bg-red-500/5 dark:bg-red-500/10',
   good: 'bg-emerald-500/5 dark:bg-emerald-500/10',
   info: 'bg-sky-500/5 dark:bg-sky-500/10',
@@ -13,28 +13,22 @@ const navTagToneClasses: Record<StatusTone, string> = {
   warning: 'bg-orange-500/5 dark:bg-orange-500/10',
 }
 
-interface NavTagProps extends ComponentProps<'span'> {
+interface TagProps extends ComponentProps<'span'> {
   /** Drawn before the count, such as a live dot. */
   indicator?: ReactNode
   /** `neutral` for a plain count; another tone when it needs attention. @default 'neutral' */
   tone?: StatusTone
 }
 
-function NavTag({
-  children,
-  className,
-  indicator,
-  tone = 'neutral',
-  ...props
-}: NavTagProps) {
+function Tag({ children, className, indicator, tone = 'neutral', ...props }: TagProps) {
   return (
     <span
-      data-slot='nav-tag'
+      data-slot='tag'
       data-tone={tone}
       className={cn(
         'inline-flex h-5 min-w-5 shrink-0 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-medium whitespace-nowrap tabular-nums',
         tone !== 'neutral' && statusToneClasses[tone],
-        navTagToneClasses[tone],
+        tagToneClasses[tone],
         className,
       )}
       {...props}
@@ -45,13 +39,13 @@ function NavTag({
   )
 }
 
-/** Draws a plain number or string as a `NavTag`; any other node as it is. */
-function renderNavTag(badge: ReactNode) {
-  if (typeof badge === 'number') return <NavTag>{formatNumber(badge)}</NavTag>
-  if (typeof badge === 'string') return <NavTag>{badge}</NavTag>
+/** Draws a plain number or string as a `Tag`; any other node as it is. */
+function renderTag(badge: ReactNode) {
+  if (typeof badge === 'number') return <Tag>{formatNumber(badge)}</Tag>
+  if (typeof badge === 'string') return <Tag>{badge}</Tag>
   return badge
 }
 
-export { NavTag, renderNavTag }
+export { Tag, renderTag }
 
-export type { NavTagProps }
+export type { TagProps }

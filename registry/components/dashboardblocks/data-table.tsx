@@ -16,6 +16,7 @@ import {
   DataTableRow,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -497,11 +498,7 @@ function DataTableFacetFilter<TData extends RowData>({
           className='text-muted-foreground'
         />
         {label}
-        {selected.length > 0 && (
-          <span className='bg-muted text-foreground rounded-sm px-1 text-xs tabular-nums'>
-            {selected.length}
-          </span>
-        )}
+        {selected.length > 0 && <Tag>{formatNumber(selected.length)}</Tag>}
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='w-auto min-w-48'>
         <DropdownMenuGroup>

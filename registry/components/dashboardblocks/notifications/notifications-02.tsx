@@ -7,7 +7,6 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   type AppNotification,
   NotificationBell,
@@ -16,6 +15,7 @@ import {
   NotificationsHeader,
 } from '@/registry/components/dashboardblocks/notifications'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useState } from 'react'
@@ -237,7 +237,7 @@ const Notifications2 = (props: Notifications2Props) => {
               <TabsTrigger value='all'>All</TabsTrigger>
               <TabsTrigger value='requests'>
                 Requests
-                {requests.length > 0 && <NavTag>{formatNumber(requests.length)}</NavTag>}
+                {requests.length > 0 && <Tag>{formatNumber(requests.length)}</Tag>}
               </TabsTrigger>
             </TabsList>
             <TabsContent value='all' className='border-t'>

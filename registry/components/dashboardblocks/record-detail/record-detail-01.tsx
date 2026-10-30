@@ -37,11 +37,11 @@ import {
   DataTableRow,
   DataTableRowLink,
 } from '@/registry/components/dashboardblocks/table'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 type OrderStatus = 'Delivered' | 'Refunded' | 'Shipped'
@@ -212,9 +212,7 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
                     <Property label='Tags'>
                       <span className='flex flex-wrap gap-1'>
                         {customer.tags.map((tag) => (
-                          <Badge key={tag} variant='outline'>
-                            {tag}
-                          </Badge>
+                          <Tag key={tag}>{tag}</Tag>
                         ))}
                       </span>
                     </Property>

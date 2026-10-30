@@ -172,6 +172,7 @@ const Schedule1 = (props: Schedule1Props) => {
                 className='text-muted-foreground flex justify-between text-xs font-medium'
               >
                 {group.label}
+                {/* Not a count: the day's date */}
                 <span className='font-normal tabular-nums'>
                   {formatDate(group.day, 'day')}
                 </span>

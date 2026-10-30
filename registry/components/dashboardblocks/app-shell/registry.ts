@@ -60,7 +60,7 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       registryUrl('app-shell'),
       registryUrl('link'),
-      registryUrl('nav-tag'),
+      registryUrl('tag'),
     ],
     files: [
       {

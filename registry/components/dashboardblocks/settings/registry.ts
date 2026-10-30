@@ -79,7 +79,7 @@ export const examples: Registry['items'] = [
       'tabs',
       registryUrl('block-state'),
       registryUrl('format'),
-      registryUrl('nav-tag'),
+      registryUrl('tag'),
       registryUrl('settings'),
       registryUrl('team'),
     ],

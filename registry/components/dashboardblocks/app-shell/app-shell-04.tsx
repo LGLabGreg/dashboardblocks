@@ -11,7 +11,7 @@ import {
   type UserMenuLink,
 } from '@/registry/components/dashboardblocks/app-shell'
 import { Link } from '@/registry/components/dashboardblocks/link'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
@@ -36,7 +36,7 @@ const exampleProps: AppShell4Props = {
   links: [
     { href: '/', title: 'Overview' },
     { href: '/deployments', title: 'Deployments' },
-    { badge: <NavTag tone='bad'>2</NavTag>, href: '/incidents', title: 'Incidents' },
+    { badge: <Tag tone='bad'>2</Tag>, href: '/incidents', title: 'Incidents' },
     { href: '/logs', title: 'Logs' },
     { href: '/usage', title: 'Usage' },
     { href: '/settings', title: 'Settings' },

@@ -13,11 +13,11 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { Icons } from '@/registry/components/dashboardblocks/icon'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatList, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 type Platform = 'slack' | 'github'
@@ -222,7 +222,7 @@ const ActivityFeed5 = (props: ActivityFeed5Props) => {
                               <ul aria-label='Tags' className='flex flex-wrap gap-1'>
                                 {tags.map((tag) => (
                                   <li key={tag}>
-                                    <Badge variant='outline'>#{tag}</Badge>
+                                    <Tag>#{tag}</Tag>
                                   </li>
                                 ))}
                               </ul>

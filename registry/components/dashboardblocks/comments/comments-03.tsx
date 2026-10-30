@@ -15,11 +15,11 @@ import {
   updateComment,
 } from '@/registry/components/dashboardblocks/comments'
 import { Details } from '@/registry/components/dashboardblocks/details'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment, type ReactNode, startTransition, useId, useRef, useState } from 'react'
 
@@ -262,7 +262,7 @@ const Comments3 = (props: Comments3Props) => {
                 {filters.map((item) => (
                   <TabsTrigger key={item.value} value={item.value}>
                     {item.label}
-                    {!state && <NavTag>{formatNumber(item.items.length)}</NavTag>}
+                    {!state && <Tag>{formatNumber(item.items.length)}</Tag>}
                   </TabsTrigger>
                 ))}
               </TabsList>

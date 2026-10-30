@@ -1,5 +1,6 @@
 'use client'
 
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import type { ReactNode } from 'react'
 
@@ -156,10 +157,10 @@ function PipelineStageHeader({
         />
         <span className='truncate'>{label}</span>
         {count !== undefined && (
-          <span className='text-muted-foreground ml-auto font-normal tabular-nums'>
+          <Tag className='ml-auto'>
             {count}
             <span className='sr-only'> {count === 1 ? 'item' : 'items'}</span>
-          </span>
+          </Tag>
         )}
       </h3>
       {total !== undefined && (

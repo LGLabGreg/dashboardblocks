@@ -13,6 +13,7 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId } from 'react'
@@ -153,12 +154,15 @@ const ActivityFeed1 = (props: ActivityFeed1Props) => {
             >
               <h3
                 id={`${id}-${day.key}`}
-                className='text-muted-foreground flex justify-between text-xs font-medium'
+                className='text-muted-foreground flex items-center justify-between text-xs font-medium'
               >
                 {day.label}
-                <span className='font-normal tabular-nums'>
-                  {day.items.length} {day.items.length === 1 ? 'update' : 'updates'}
-                </span>
+                <Tag>
+                  {day.items.length}
+                  <span className='sr-only'>
+                    {day.items.length === 1 ? ' update' : ' updates'}
+                  </span>
+                </Tag>
               </h3>
               <ActivityFeed>
                 {day.items.map((activity) => (

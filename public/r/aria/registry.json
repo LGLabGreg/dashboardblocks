@@ -99,7 +99,7 @@
         "sidebar",
         "https://www.dashboardblocks.com/r/aria/format.json",
         "https://www.dashboardblocks.com/r/aria/link.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/page-header.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
@@ -282,6 +282,7 @@
         "input",
         "https://www.dashboardblocks.com/r/aria/details.json",
         "https://www.dashboardblocks.com/r/aria/table.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/format.json"
       ],
       "files": [
@@ -783,19 +784,19 @@
       ]
     },
     {
-      "name": "nav-tag",
+      "name": "tag",
       "type": "registry:component",
-      "title": "Nav Tag",
-      "description": "A count or short word beside a sidebar link, tab or menu item, drawn as a small tinted tag: neutral, or a status tone when it needs attention.",
+      "title": "Tag",
+      "description": "A small tinted tag for a count or short word beside a sidebar link, tab, menu item or group heading, or an item's label with its dot: neutral, or a status tone when it needs attention.",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/aria/format.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
       "files": [
         {
-          "path": "registry/components/dashboardblocks/nav-tag.tsx",
+          "path": "registry/components/dashboardblocks/tag.tsx",
           "type": "registry:component",
-          "target": "@components/dashboardblocks/nav-tag.tsx"
+          "target": "@components/dashboardblocks/tag.tsx"
         }
       ]
     },
@@ -808,7 +809,7 @@
         "button",
         "dropdown-menu",
         "https://www.dashboardblocks.com/r/aria/link.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json"
+        "https://www.dashboardblocks.com/r/aria/tag.json"
       ],
       "files": [
         {
@@ -824,6 +825,7 @@
       "title": "Pipeline",
       "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -1190,6 +1192,7 @@
         "kbd",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/schedule.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json"
       ],
@@ -1748,6 +1751,7 @@
         "button",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -1804,7 +1808,7 @@
         "tabs",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -1859,12 +1863,12 @@
       "name": "activity-feed-05",
       "type": "registry:component",
       "registryDependencies": [
-        "badge",
         "button",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/format.json",
         "https://www.dashboardblocks.com/r/aria/icon.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -6826,7 +6830,7 @@
         "tabs",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/format.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/settings.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
@@ -7027,7 +7031,7 @@
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/aria/app-shell.json",
         "https://www.dashboardblocks.com/r/aria/link.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json"
+        "https://www.dashboardblocks.com/r/aria/tag.json"
       ],
       "files": [
         {
@@ -7170,7 +7174,6 @@
       "name": "record-detail-01",
       "type": "registry:component",
       "registryDependencies": [
-        "badge",
         "button",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/format.json",
@@ -7178,6 +7181,7 @@
         "https://www.dashboardblocks.com/r/aria/record-detail.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json",
         "https://www.dashboardblocks.com/r/aria/table.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -7238,7 +7242,6 @@
       "name": "record-detail-03",
       "type": "registry:component",
       "registryDependencies": [
-        "badge",
         "button",
         "textarea",
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
@@ -7247,6 +7250,7 @@
         "https://www.dashboardblocks.com/r/aria/page-header.json",
         "https://www.dashboardblocks.com/r/aria/record-detail.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/team.json"
       ],
       "files": [
@@ -7419,7 +7423,7 @@
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/notifications.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
@@ -7451,7 +7455,7 @@
         "https://www.dashboardblocks.com/r/aria/activity-feed.json",
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/format.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/notifications.json"
       ],
       "files": [
@@ -7668,7 +7672,7 @@
         "https://www.dashboardblocks.com/r/aria/block-state.json",
         "https://www.dashboardblocks.com/r/aria/comments.json",
         "https://www.dashboardblocks.com/r/aria/details.json",
-        "https://www.dashboardblocks.com/r/aria/nav-tag.json",
+        "https://www.dashboardblocks.com/r/aria/tag.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
       "files": [

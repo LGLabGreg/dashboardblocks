@@ -192,6 +192,7 @@ function TaskGroups(props: TaskGroupsProps) {
                 className='flex items-baseline justify-between gap-3 border-b pb-2 text-sm font-medium'
               >
                 {group.name}
+                {/* Not a count: the group's progress, written as words */}
                 <span className='text-muted-foreground font-normal tabular-nums'>
                   {groupDone} of {group.tasks.length} done
                 </span>

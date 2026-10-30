@@ -6,11 +6,11 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   ConnectionRow,
   type ConnectionStatus,
 } from '@/registry/components/dashboardblocks/settings'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { getAvatarColor } from '@/registry/components/dashboardblocks/team'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useState } from 'react'
@@ -165,7 +165,7 @@ const Settings4 = (props: Settings4Props) => {
               <TabsTrigger key={view.value} value={view.value}>
                 {view.label}
                 {ready && view.value !== 'all' && view.items.length > 0 && (
-                  <NavTag>{formatNumber(view.items.length)}</NavTag>
+                  <Tag>{formatNumber(view.items.length)}</Tag>
                 )}
               </TabsTrigger>
             ))}

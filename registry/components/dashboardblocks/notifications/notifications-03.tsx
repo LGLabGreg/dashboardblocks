@@ -8,12 +8,12 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import {
   type AppNotification,
   NotificationItem,
   NotificationList,
 } from '@/registry/components/dashboardblocks/notifications'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
@@ -227,7 +227,7 @@ const Notifications3 = (props: Notifications3Props) => {
               <TabsTrigger key={item.value} value={item.value}>
                 {item.label}
                 {!state && item.value !== 'all' && item.items.length > 0 && (
-                  <NavTag>{formatNumber(item.items.length)}</NavTag>
+                  <Tag>{formatNumber(item.items.length)}</Tag>
                 )}
               </TabsTrigger>
             ))}

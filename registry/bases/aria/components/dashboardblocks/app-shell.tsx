@@ -1,15 +1,15 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 898a7fe00150
+// source-hash: 47f9dae096c2
 
 'use client'
 
 import { isPlainClick, Link } from '@/registry/components/dashboardblocks/link'
-import { renderNavTag } from '@/registry/components/dashboardblocks/nav-tag'
 import { TabLinks } from '@/registry/components/dashboardblocks/page-header'
 import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { renderTag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -161,7 +161,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
           <span>{item.title}</span>
         </SidebarMenuButton>
         {item.badge !== undefined && (
-          <SidebarMenuBadge>{renderNavTag(item.badge)}</SidebarMenuBadge>
+          <SidebarMenuBadge>{renderTag(item.badge)}</SidebarMenuBadge>
         )}
       </SidebarMenuItem>
     )
@@ -202,7 +202,7 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
               >
                 <span>{child.title}</span>
                 {child.badge !== undefined && (
-                  <span className='ml-auto flex'>{renderNavTag(child.badge)}</span>
+                  <span className='ml-auto flex'>{renderTag(child.badge)}</span>
                 )}
               </SidebarMenuSubButton>
             </SidebarMenuSubItem>

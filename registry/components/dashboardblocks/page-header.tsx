@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
-import { renderNavTag } from '@/registry/components/dashboardblocks/nav-tag'
+import { renderTag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, type ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -225,7 +225,7 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
           )}
         >
           {item.title}
-          {item.badge !== undefined && renderNavTag(item.badge)}
+          {item.badge !== undefined && renderTag(item.badge)}
         </Link>
       ))}
       {hidden.length > 0 && (
@@ -379,7 +379,7 @@ function ActionsMenuItemContent({ item }: { item: ActionsMenuItem }) {
       {item.icon}
       {item.label}
       {item.badge !== undefined && (
-        <span className='ms-auto flex ps-4'>{renderNavTag(item.badge)}</span>
+        <span className='ms-auto flex ps-4'>{renderTag(item.badge)}</span>
       )}
     </>
   )

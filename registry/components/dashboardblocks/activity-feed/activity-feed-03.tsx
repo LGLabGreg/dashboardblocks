@@ -13,7 +13,7 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { NavTag } from '@/registry/components/dashboardblocks/nav-tag'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
@@ -171,7 +171,7 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
               <TabsTrigger key={item.value} value={item.value}>
                 {item.label}
                 {!state && item.value !== 'all' && item.items.length > 0 && (
-                  <NavTag>{formatNumber(item.items.length)}</NavTag>
+                  <Tag>{formatNumber(item.items.length)}</Tag>
                 )}
               </TabsTrigger>
             ))}

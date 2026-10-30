@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: b7be20375bd0
+// source-hash: 9a4f7bcded99
 
 'use client'
 
@@ -16,6 +16,7 @@ import {
   getUrgency,
 } from '@/registry/components/dashboardblocks/schedule'
 import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatDate, formatList } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -707,28 +708,23 @@ function KanbanCount({
           ? 'at'
           : 'under'
   return (
-    <span
+    <Tag
       data-state={state}
-      className={cn(
-        'inline-flex shrink-0 items-center gap-1 text-sm whitespace-nowrap tabular-nums [&_svg]:size-3.5 [&_svg]:shrink-0',
-        state === 'over'
-          ? cn('font-medium', statusToneClasses.bad)
-          : state === 'at'
-            ? cn('font-medium', statusToneClasses.warning)
-            : statusToneClasses.neutral,
-        className,
-      )}
+      className={cn('[&_svg]:size-3.5 [&_svg]:shrink-0', className)}
+      indicator={
+        state === 'over' && (
+          <IconPlaceholder
+            lucide='TriangleAlertIcon'
+            tabler='IconAlertTriangle'
+            hugeicons='Alert02Icon'
+            phosphor='WarningIcon'
+            remixicon='RiErrorWarningLine'
+            aria-hidden
+          />
+        )
+      }
+      tone={state === 'over' ? 'bad' : state === 'at' ? 'warning' : 'neutral'}
     >
-      {state === 'over' && (
-        <IconPlaceholder
-          lucide='TriangleAlertIcon'
-          tabler='IconAlertTriangle'
-          hugeicons='Alert02Icon'
-          phosphor='WarningIcon'
-          remixicon='RiErrorWarningLine'
-          aria-hidden
-        />
-      )}
       <span aria-hidden>{limit === undefined ? count : `${count} / ${limit}`}</span>
       <span className='sr-only'>
         {count} {count === 1 ? itemName.one : itemName.other}
@@ -736,7 +732,7 @@ function KanbanCount({
         {state === 'over' && ', over the limit'}
         {state === 'at' && ', at the limit'}
       </span>
-    </span>
+    </Tag>
   )
 }
 
@@ -1089,23 +1085,23 @@ function KanbanLabels({
   labels: KanbanLabelDef[]
 }) {
   return (
-    <ul
-      aria-label='Labels'
-      className={cn(
-        'text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-xs',
-        className,
-      )}
-    >
+    <ul aria-label='Labels' className={cn('flex flex-wrap gap-1.5 text-xs', className)}>
       {labels.map((label) => (
-        <li key={label.name} className='inline-flex items-center gap-1.5'>
-          <span
-            aria-hidden
-            className={cn(
-              'size-1.5 shrink-0 rounded-full',
-              labelDotClasses[label.tone ?? 'neutral'],
-            )}
-          />
-          {label.name}
+        <li key={label.name} className='flex'>
+          <Tag
+            className='gap-1.5'
+            indicator={
+              <span
+                aria-hidden
+                className={cn(
+                  'size-1.5 shrink-0 rounded-full',
+                  labelDotClasses[label.tone ?? 'neutral'],
+                )}
+              />
+            }
+          >
+            {label.name}
+          </Tag>
         </li>
       ))}
     </ul>
