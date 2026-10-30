@@ -100,8 +100,8 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'field',
       registryUrl('block-state'),
+      registryUrl('country-flag'),
       registryUrl('forms'),
-      registryUrl('geo'),
       registryUrl('multi-select'),
     ],
     files: [
@@ -162,6 +162,29 @@ export const examples: Registry['items'] = [
         'Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.',
       size: 'half',
       usedWith: ['forms-06', 'settings-01'],
+    },
+  },
+  {
+    name: 'forms-08',
+    type: 'registry:component',
+    registryDependencies: [
+      'field',
+      'input',
+      registryUrl('address-fields'),
+      registryUrl('block-state'),
+      registryUrl('forms'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms/forms-08.tsx',
+        type: 'registry:component',
+      },
+    ],
+    meta: {
+      shows:
+        'A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.',
+      size: 'half',
+      usedWith: ['forms-07', 'billing-05'],
     },
   },
 ]

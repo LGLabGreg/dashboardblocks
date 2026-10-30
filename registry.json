@@ -274,6 +274,33 @@
       ]
     },
     {
+      "name": "address-fields",
+      "type": "registry:component",
+      "title": "Address Fields",
+      "description": "Country first, then the fields its addresses use, named its way and in its order, with a list of states or provinces where the country has one and a check of the postal code.",
+      "registryDependencies": [
+        "@dashboardblocks/address-fields"
+      ]
+    },
+    {
+      "name": "countries",
+      "type": "registry:lib",
+      "title": "Countries",
+      "description": "Every country’s two-letter code and English name, in alphabetical order.",
+      "registryDependencies": [
+        "@dashboardblocks/countries"
+      ]
+    },
+    {
+      "name": "country-flag",
+      "type": "registry:component",
+      "title": "Country Flag",
+      "description": "A country's flag from its two-letter code, drawn as SVG so it shows on Windows too, with a globe for a code it has no flag for.",
+      "registryDependencies": [
+        "@dashboardblocks/country-flag"
+      ]
+    },
+    {
       "name": "geo",
       "type": "registry:component",
       "title": "Geo",
@@ -502,7 +529,7 @@
       "name": "option-select",
       "type": "registry:component",
       "title": "Option Select",
-      "description": "A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
+      "description": "A select for one value from a list of options, each with an optional icon such as a flag, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
       "registryDependencies": [
         "@dashboardblocks/option-select"
       ]
@@ -2308,6 +2335,14 @@
       "description": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats.",
       "registryDependencies": [
         "@dashboardblocks/forms-07"
+      ]
+    },
+    {
+      "name": "forms-08",
+      "type": "registry:component",
+      "description": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-08"
       ]
     },
     {

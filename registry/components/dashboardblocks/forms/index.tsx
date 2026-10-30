@@ -5,6 +5,7 @@ import { Forms4, forms4ExampleProps } from './forms-04'
 import { Forms5, forms5ExampleProps } from './forms-05'
 import { Forms6, forms6ExampleProps } from './forms-06'
 import { Forms7, forms7ExampleProps } from './forms-07'
+import { Forms8, forms8ExampleProps } from './forms-08'
 
 export const formsComponents = {
   'forms-01': Forms1,
@@ -14,6 +15,7 @@ export const formsComponents = {
   'forms-05': Forms5,
   'forms-06': Forms6,
   'forms-07': Forms7,
+  'forms-08': Forms8,
 }
 
 export const formsExampleProps = {
@@ -24,6 +26,7 @@ export const formsExampleProps = {
   'forms-05': forms5ExampleProps,
   'forms-06': forms6ExampleProps,
   'forms-07': forms7ExampleProps,
+  'forms-08': forms8ExampleProps,
 }
 
 export const formsEmptyProps = {
@@ -33,4 +36,5 @@ export const formsEmptyProps = {
   'forms-05': { defaultValues: undefined },
   'forms-06': { defaultValues: undefined },
   'forms-07': { defaultValues: undefined },
+  'forms-08': { defaultValues: undefined },
 }

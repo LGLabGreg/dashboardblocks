@@ -1621,6 +1621,19 @@
       ]
     },
     {
+      "name": "forms-08",
+      "install": "@dashboardblocks/forms-08",
+      "import": "@/components/dashboardblocks/forms/forms-08",
+      "component": "Forms8",
+      "shows": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.",
+      "size": "half",
+      "props": "{ defaultValues?: BillingAddress; description: string; onSubmit?: (values: BillingAddress) => Promise<void | { name?: string; city?: string; country?: string; line1?: string; line2?: string; postalCode?: string; state?: string }>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "usedWith": [
+        "forms-07",
+        "billing-05"
+      ]
+    },
+    {
       "name": "funnel-01",
       "install": "@dashboardblocks/funnel-01",
       "import": "@/components/dashboardblocks/funnel/funnel-01",

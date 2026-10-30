@@ -142,12 +142,16 @@ function DataTableRow({ className, highlighted, ...props }: DataTableRowProps) {
   )
 }
 
-/** A list row that a `DataTableRowLink` or `DataTableRowTrigger` inside it opens as a whole. */
+/** A list row that a `DataTableRowLink` or `DataTableRowTrigger` inside it opens as a whole. A row someone ticked takes `data-state='selected'`, as a table row does. */
 function DataTableListItem({ className, ...props }: ComponentProps<'li'>) {
   return (
     <li
       data-slot='data-table-list-item'
-      className={cn('px-[var(--data-table-inset,0.75rem)]', ROW_HOST, className)}
+      className={cn(
+        'data-[state=selected]:bg-muted/50 px-[var(--data-table-inset,0.75rem)]',
+        ROW_HOST,
+        className,
+      )}
       {...props}
     />
   )

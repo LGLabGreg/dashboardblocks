@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: 9a4f7bcded99
+// source-hash: 94cb5dddb744
 
 'use client'
 
@@ -1077,6 +1077,25 @@ const labelDotClasses: Record<ActivityTone, string> = {
   warning: 'bg-orange-500',
 }
 
+function KanbanLabel({ label }: { label: KanbanLabelDef }) {
+  return (
+    <Tag
+      className='gap-1.5'
+      indicator={
+        <span
+          aria-hidden
+          className={cn(
+            'size-1.5 shrink-0 rounded-full',
+            labelDotClasses[label.tone ?? 'neutral'],
+          )}
+        />
+      }
+    >
+      {label.name}
+    </Tag>
+  )
+}
+
 function KanbanLabels({
   className,
   labels,
@@ -1088,20 +1107,7 @@ function KanbanLabels({
     <ul aria-label='Labels' className={cn('flex flex-wrap gap-1.5 text-xs', className)}>
       {labels.map((label) => (
         <li key={label.name} className='flex'>
-          <Tag
-            className='gap-1.5'
-            indicator={
-              <span
-                aria-hidden
-                className={cn(
-                  'size-1.5 shrink-0 rounded-full',
-                  labelDotClasses[label.tone ?? 'neutral'],
-                )}
-              />
-            }
-          >
-            {label.name}
-          </Tag>
+          <KanbanLabel label={label} />
         </li>
       ))}
     </ul>
@@ -1155,6 +1161,15 @@ function KanbanAssignees({
   )
 }
 
+/** How a due date reads on a card: `Today`, `Tomorrow`, `Yesterday`, else `Nov 6`. */
+function getDueDateLabel(date: Date, now: Date, timeZone = 'UTC') {
+  const offset = getDayOffset(date, now, timeZone)
+  if (offset === 0) return 'Today'
+  if (offset === 1) return 'Tomorrow'
+  if (offset === -1) return 'Yesterday'
+  return formatDate(getDay(date, timeZone), 'day')
+}
+
 function KanbanDueDate({
   className,
   date,
@@ -1173,15 +1188,7 @@ function KanbanDueDate({
   /** @default 'UTC' */
   timeZone?: string
 }) {
-  const offset = getDayOffset(date, now, timeZone)
-  const label =
-    offset === 0
-      ? 'Today'
-      : offset === 1
-        ? 'Tomorrow'
-        : offset === -1
-          ? 'Yesterday'
-          : formatDate(getDay(date, timeZone), 'day')
+  const label = getDueDateLabel(date, now, timeZone)
   const urgency = done ? 'later' : getUrgency(date, now, timeZone, soonDays)
   return (
     <span className={cn('inline-flex', className)}>
@@ -1487,10 +1494,13 @@ export {
   KanbanComments,
   KanbanCount,
   KanbanDueDate,
+  KanbanLabel,
   KanbanLabels,
   KanbanPriority,
   KanbanSubtasks,
   getColumnItems,
+  getDueDateLabel,
+  labelDotClasses,
   moveItem,
 }
 

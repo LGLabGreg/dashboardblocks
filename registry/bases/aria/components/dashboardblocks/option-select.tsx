@@ -1,9 +1,9 @@
 // Override of registry/components/dashboardblocks/option-select.tsx for React Aria
-// source-hash: b5475cdd6ea9
+// source-hash: 6d98dc21ea8a
 
 'use client'
 
-import type { KeyboardEvent, Ref } from 'react'
+import type { KeyboardEvent, ReactNode, Ref } from 'react'
 
 import {
   Select,
@@ -15,6 +15,8 @@ import {
 
 interface SelectOption<V extends string = string> {
   disabled?: boolean
+  /** Shown before the label, in the menu and once picked, such as a country's flag. */
+  icon?: ReactNode
   label: string
   value: V
 }
@@ -38,6 +40,16 @@ interface OptionSelectProps<V extends string = string> {
   size?: 'default' | 'sm'
   value: V | null
   [data: `data-${string}`]: string | undefined
+}
+
+function OptionLabel({ option }: { option: SelectOption }) {
+  if (!option.icon) return option.label
+  return (
+    <span className='flex min-w-0 items-center gap-2'>
+      {option.icon}
+      <span className='truncate'>{option.label}</span>
+    </span>
+  )
 }
 
 function OptionSelect<V extends string>({
@@ -82,8 +94,8 @@ function OptionSelect<V extends string>({
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option.value} id={option.value}>
-            {option.label}
+          <SelectItem key={option.value} id={option.value} textValue={option.label}>
+            <OptionLabel option={option} />
           </SelectItem>
         ))}
       </SelectContent>

@@ -72,7 +72,10 @@ function OnboardingLayout({
       </div>
       <div className='flex-1'>{children}</div>
       {footer && (
-        <div className='bg-background sticky bottom-0 z-10 mt-8 border-t py-4'>
+        <div
+          data-floating-bar
+          className='bg-background sticky bottom-0 z-10 mt-8 border-t py-4'
+        >
           {footer}
         </div>
       )}

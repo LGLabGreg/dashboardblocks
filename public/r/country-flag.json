@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "country-flag",
+  "title": "Country Flag",
+  "description": "A country's flag from its two-letter code, drawn as SVG so it shows on Windows too, with a globe for a code it has no flag for.",
+  "dependencies": [
+    "country-flag-icons"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/country-flag.tsx",
+      "content": "'use client'\n\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport * as Flags from 'country-flag-icons/react/3x2'\nimport type { ReactNode } from 'react'\n\nimport { cn } from '@/lib/utils'\n\nconst flags: Partial<Record<string, (props: { className?: string }) => ReactNode>> = Flags\n\nfunction CountryFlag({ className, code }: { className?: string; code?: string }) {\n  const Flag = code ? flags[code.toUpperCase()] : undefined\n  return (\n    <span\n      aria-hidden\n      data-slot='country-flag'\n      className={cn('inline-flex w-6 shrink-0 items-center justify-center', className)}\n    >\n      {Flag ? (\n        <span className='after:ring-foreground/10 relative flex w-5 overflow-hidden rounded-xs after:absolute after:inset-0 after:rounded-xs after:ring-1 after:ring-inset'>\n          <Flag className='block h-auto! w-full!' />\n        </span>\n      ) : (\n        <IconPlaceholder\n          lucide='GlobeIcon'\n          tabler='IconGlobe'\n          hugeicons='Globe02Icon'\n          phosphor='GlobeIcon'\n          remixicon='RiGlobeLine'\n          className='text-muted-foreground size-4'\n        />\n      )}\n    </span>\n  )\n}\n\nexport { CountryFlag }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/country-flag.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

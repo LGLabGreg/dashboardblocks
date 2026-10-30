@@ -1,5 +1,18 @@
 # dashboardblocks
 
+## 1.18.0
+
+### Minor Changes
+
+- 69b24a6: New Forms block: Address, and the `address-fields` part it uses. Country comes first, then the fields that country's addresses use, named its way and in its order, with a list of states or provinces where it has one and a check of the postal code. `validateAddress` gives an error for each field. Also new: a `countries` list, a `country-flag` part that blocks with a flag now install in place of the whole `geo` part, an `icon` on each `OptionSelect` option, and a faint edge on every flag.
+
+### Patch Changes
+
+- 50ef0dc: Address Fields exports `getCountryOptions`, its country list with flags as options for a select.
+- 807e92d: The `kanban` part exports `KanbanLabel`, one label drawn as `KanbanLabels` draws each, and `getDueDateLabel`, the words `KanbanDueDate` shows for a due date.
+- edbe3e4: `SaveBar` and the onboarding footer mark themselves with `data-floating-bar`, so parts that float at the bottom of the window can keep clear of them. `DataTableListItem` shades a ticked row (`data-state='selected'`) as a table row does.
+- 50ef0dc: `zonedParts` in `format.ts` reads a `YYYY-MM-DD` day as that day in every time zone, as the other date helpers do.
+
 ## 1.17.0
 
 ### Minor Changes

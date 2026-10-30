@@ -7,7 +7,7 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
+import { CountryFlag } from '@/registry/components/dashboardblocks/country-flag'
 import {
   Leaderboard,
   LeaderboardBar,

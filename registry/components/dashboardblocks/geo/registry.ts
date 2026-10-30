@@ -31,7 +31,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       registryUrl('block-state'),
-      registryUrl('geo'),
+      registryUrl('country-flag'),
+      registryUrl('format'),
       registryUrl('leaderboard'),
     ],
     files: [

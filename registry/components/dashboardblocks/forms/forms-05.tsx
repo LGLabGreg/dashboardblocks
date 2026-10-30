@@ -6,12 +6,12 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { CountryFlag } from '@/registry/components/dashboardblocks/country-flag'
 import {
   type FormErrors,
   SaveBar,
   useSimpleForm,
 } from '@/registry/components/dashboardblocks/forms'
-import { CountryFlag } from '@/registry/components/dashboardblocks/geo'
 import {
   MultiSelect,
   type MultiSelectOption,

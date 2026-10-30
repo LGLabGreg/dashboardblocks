@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: ad0c8e8deb34
+// source-hash: 2f5f4e143c1f
 
 'use client'
 
@@ -334,6 +334,7 @@ function SaveBar({
     <div
       role='region'
       aria-label='Unsaved changes'
+      data-floating-bar
       className={cn(
         'bg-popover text-popover-foreground animate-in fade-in slide-in-from-bottom-2 sticky bottom-4 z-10 mx-auto flex w-full max-w-xl items-center justify-between gap-3 rounded-xl p-2 pl-4 shadow-lg ring-1 ring-foreground/10',
         className,

@@ -8,6 +8,7 @@ import {
   ChartFloatingTooltip,
   ChartTooltipItem,
 } from '@/registry/components/dashboardblocks/chart'
+import { CountryFlag } from '@/registry/components/dashboardblocks/country-flag'
 import { getHeatColor } from '@/registry/components/dashboardblocks/heatmap'
 import {
   DataTable,
@@ -18,13 +19,11 @@ import {
   DataTableRow,
   DataTableRowHead,
 } from '@/registry/components/dashboardblocks/table'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   formatCompact,
   formatNumber,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
-import * as Flags from 'country-flag-icons/react/3x2'
 import {
   type FocusEvent,
   type KeyboardEvent,
@@ -37,33 +36,6 @@ import {
 } from 'react'
 
 import { cn } from '@/lib/utils'
-
-const flags: Partial<Record<string, (props: { className?: string }) => ReactNode>> = Flags
-
-function CountryFlag({ className, code }: { className?: string; code?: string }) {
-  const Flag = code ? flags[code.toUpperCase()] : undefined
-  return (
-    <span
-      aria-hidden
-      className={cn('inline-flex w-6 shrink-0 items-center justify-center', className)}
-    >
-      {Flag ? (
-        <span className='flex w-5 overflow-hidden rounded-xs'>
-          <Flag className='block h-auto! w-full!' />
-        </span>
-      ) : (
-        <IconPlaceholder
-          lucide='GlobeIcon'
-          tabler='IconGlobe'
-          hugeicons='Globe02Icon'
-          phosphor='GlobeIcon'
-          remixicon='RiGlobeLine'
-          className='text-muted-foreground size-4'
-        />
-      )}
-    </span>
-  )
-}
 
 interface MapPoint {
   id: string
@@ -851,7 +823,6 @@ function DotMapLegend({
 }
 
 export {
-  CountryFlag,
   DotMap,
   DotMapLegend,
   GeoTable,

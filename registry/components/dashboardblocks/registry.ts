@@ -86,6 +86,7 @@ export const components: Registry['items'] = [
       'progress',
       'sheet',
       'sidebar',
+      'tooltip',
       registryUrl('format'),
       registryUrl('link'),
       registryUrl('tag'),
@@ -495,14 +496,61 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'address-fields',
+    type: 'registry:component',
+    title: 'Address Fields',
+    description:
+      'Country first, then the fields its addresses use, named its way and in its order, with a list of states or provinces where the country has one and a check of the postal code.',
+    registryDependencies: [
+      'field',
+      'input',
+      registryUrl('countries'),
+      registryUrl('country-flag'),
+      registryUrl('option-select'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/address-fields.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'countries',
+    type: 'registry:lib',
+    title: 'Countries',
+    description:
+      'Every country’s two-letter code and English name, in alphabetical order.',
+    files: [
+      {
+        path: 'registry/lib/dashboardblocks/countries.ts',
+        type: 'registry:lib',
+      },
+    ],
+  },
+  {
+    name: 'country-flag',
+    type: 'registry:component',
+    title: 'Country Flag',
+    description:
+      "A country's flag from its two-letter code, drawn as SVG so it shows on Windows too, with a globe for a code it has no flag for.",
+    dependencies: ['country-flag-icons'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/country-flag.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'geo',
     type: 'registry:component',
     title: 'Geo',
     description:
       'Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.',
-    dependencies: ['country-flag-icons'],
     registryDependencies: [
       registryUrl('chart'),
+      registryUrl('country-flag'),
       registryUrl('format'),
       registryUrl('heatmap'),
       registryUrl('table'),
@@ -897,7 +945,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Option Select',
     description:
-      'A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.',
+      'A select for one value from a list of options, each with an optional icon such as a flag, with a placeholder, built on the shadcn Select so its menu follows your style and font.',
     registryDependencies: ['select'],
     files: [
       {

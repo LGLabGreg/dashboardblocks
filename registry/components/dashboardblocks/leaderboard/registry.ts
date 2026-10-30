@@ -98,8 +98,8 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       registryUrl('block-state'),
+      registryUrl('country-flag'),
       registryUrl('format'),
-      registryUrl('geo'),
       registryUrl('leaderboard'),
     ],
     files: [

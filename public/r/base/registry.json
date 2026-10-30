@@ -97,6 +97,7 @@
         "progress",
         "sheet",
         "sidebar",
+        "tooltip",
         "https://www.dashboardblocks.com/r/base/format.json",
         "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/tag.json",
@@ -564,15 +565,62 @@
       ]
     },
     {
+      "name": "address-fields",
+      "type": "registry:component",
+      "title": "Address Fields",
+      "description": "Country first, then the fields its addresses use, named its way and in its order, with a list of states or provinces where the country has one and a check of the postal code.",
+      "registryDependencies": [
+        "field",
+        "input",
+        "https://www.dashboardblocks.com/r/base/countries.json",
+        "https://www.dashboardblocks.com/r/base/country-flag.json",
+        "https://www.dashboardblocks.com/r/base/option-select.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/address-fields.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/address-fields.tsx"
+        }
+      ]
+    },
+    {
+      "name": "countries",
+      "type": "registry:lib",
+      "title": "Countries",
+      "description": "Every country’s two-letter code and English name, in alphabetical order.",
+      "files": [
+        {
+          "path": "registry/lib/dashboardblocks/countries.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboardblocks/countries.ts"
+        }
+      ]
+    },
+    {
+      "name": "country-flag",
+      "type": "registry:component",
+      "title": "Country Flag",
+      "description": "A country's flag from its two-letter code, drawn as SVG so it shows on Windows too, with a globe for a code it has no flag for.",
+      "dependencies": [
+        "country-flag-icons"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/country-flag.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/country-flag.tsx"
+        }
+      ]
+    },
+    {
       "name": "geo",
       "type": "registry:component",
       "title": "Geo",
       "description": "Primitives for location metrics: a US state tile map and a dotted world map from an embedded land mask with markers sized by value, both with the shared chart tooltip, a marker size legend and country flags.",
-      "dependencies": [
-        "country-flag-icons"
-      ],
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/base/chart.json",
+        "https://www.dashboardblocks.com/r/base/country-flag.json",
         "https://www.dashboardblocks.com/r/base/format.json",
         "https://www.dashboardblocks.com/r/base/heatmap.json",
         "https://www.dashboardblocks.com/r/base/table.json"
@@ -1014,7 +1062,7 @@
       "name": "option-select",
       "type": "registry:component",
       "title": "Option Select",
-      "description": "A select for one value from a list of options, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
+      "description": "A select for one value from a list of options, each with an optional icon such as a flag, with a placeholder, built on the shadcn Select so its menu follows your style and font.",
       "registryDependencies": [
         "select"
       ],
@@ -2309,8 +2357,8 @@
       "registryDependencies": [
         "button",
         "https://www.dashboardblocks.com/r/base/block-state.json",
+        "https://www.dashboardblocks.com/r/base/country-flag.json",
         "https://www.dashboardblocks.com/r/base/format.json",
-        "https://www.dashboardblocks.com/r/base/geo.json",
         "https://www.dashboardblocks.com/r/base/leaderboard.json"
       ],
       "files": [
@@ -4090,7 +4138,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/base/block-state.json",
-        "https://www.dashboardblocks.com/r/base/geo.json",
+        "https://www.dashboardblocks.com/r/base/country-flag.json",
+        "https://www.dashboardblocks.com/r/base/format.json",
         "https://www.dashboardblocks.com/r/base/leaderboard.json"
       ],
       "files": [
@@ -7232,8 +7281,8 @@
       "registryDependencies": [
         "field",
         "https://www.dashboardblocks.com/r/base/block-state.json",
+        "https://www.dashboardblocks.com/r/base/country-flag.json",
         "https://www.dashboardblocks.com/r/base/forms.json",
-        "https://www.dashboardblocks.com/r/base/geo.json",
         "https://www.dashboardblocks.com/r/base/multi-select.json"
       ],
       "files": [
@@ -7313,6 +7362,35 @@
         "props": "{ defaultValues?: { alertAt: null | number; cap: null | number; seats: null | number }; description: string; members: number; onSubmit?: (values: { alertAt: null | number; cap: null | number; seats: null | number }) => Promise<void | { alertAt?: string; cap?: string; seats?: string }>; seatPrice: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Numbers with their unit or currency, formatted when you leave the field, with minus and plus for a count of seats."
+    },
+    {
+      "name": "forms-08",
+      "type": "registry:component",
+      "registryDependencies": [
+        "field",
+        "input",
+        "https://www.dashboardblocks.com/r/base/address-fields.json",
+        "https://www.dashboardblocks.com/r/base/block-state.json",
+        "https://www.dashboardblocks.com/r/base/forms.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-08.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-08.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.",
+        "size": "half",
+        "usedWith": [
+          "forms-07",
+          "billing-05"
+        ],
+        "component": "Forms8",
+        "props": "{ defaultValues?: BillingAddress; description: string; onSubmit?: (values: BillingAddress) => Promise<void | { name?: string; city?: string; country?: string; line1?: string; line2?: string; postalCode?: string; state?: string }>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+      },
+      "description": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany."
     },
     {
       "name": "record-detail-01",

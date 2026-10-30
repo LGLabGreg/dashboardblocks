@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "forms-08",
+  "description": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.",
+  "registryDependencies": [
+    "field",
+    "input",
+    "https://www.dashboardblocks.com/r/aria/address-fields.json",
+    "https://www.dashboardblocks.com/r/aria/block-state.json",
+    "https://www.dashboardblocks.com/r/aria/forms.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/forms/forms-08.tsx",
+      "content": "'use client'\n\nimport {\n  type Address,\n  AddressFields,\n  validateAddress,\n} from '@/registry/components/dashboardblocks/address-fields'\nimport {\n  BlockStateProvider,\n  BlockStateRows,\n  type BlockStateProps,\n  getBlockState,\n} from '@/registry/components/dashboardblocks/block-state'\nimport {\n  type FormErrors,\n  SaveBar,\n  useSimpleForm,\n} from '@/registry/components/dashboardblocks/forms'\n\nimport {\n  Field,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLabel,\n} from '@/components/ui/field'\nimport { Input } from '@/components/ui/input'\n\ntype BillingAddress = Address & {\n  /** The person or company the invoices are made out to. */\n  name: string\n}\n\ninterface Forms8Props extends BlockStateProps {\n  /** Leave out to show the empty state. */\n  defaultValues?: BillingAddress\n  description: string\n  onSubmit?: (values: BillingAddress) => Promise<FormErrors<BillingAddress> | void>\n  title: string\n}\n\nconst exampleProps: Forms8Props = {\n  defaultValues: {\n    city: 'San Francisco',\n    country: 'US',\n    line1: '500 Howard Street',\n    line2: 'Floor 4',\n    name: 'Northwind Labs, Inc.',\n    postalCode: '94105',\n    state: 'CA',\n  },\n  description: 'Printed on every invoice, and used to work out sales tax.',\n  title: 'Billing address',\n}\n\nasync function saveAddress() {\n  await new Promise((resolve) => setTimeout(resolve, 800))\n}\n\nfunction Forms8Content(props: Forms8Props & { defaultValues: BillingAddress }) {\n  const { defaultValues, onSubmit = saveAddress } = props\n  const form = useSimpleForm({\n    defaultValues,\n    onSubmit,\n    validate: (values): FormErrors<BillingAddress> => ({\n      ...validateAddress(values),\n      name: values.name.trim() ? undefined : 'Enter a name for the invoices.',\n    }),\n  })\n  const changes = form.changedFields.length\n\n  return (\n    <form method='post' noValidate onSubmit={(event) => void form.submit(event)}>\n      <FieldGroup className='border-t pt-4'>\n        <Field data-invalid={form.errors.name ? true : undefined}>\n          <FieldLabel htmlFor={form.getId('name')}>Name on invoices</FieldLabel>\n          <Input {...form.field('name')} autoComplete='organization' />\n          <FieldDescription>\n            Your company’s name, or yours if you pay personally.\n          </FieldDescription>\n          <FieldError {...form.error('name')} />\n        </Field>\n        <AddressFields\n          errors={form.errors}\n          getId={form.getId}\n          value={form.values}\n          onFieldChange={(field, value) => form.setValue(field, value)}\n        />\n      </FieldGroup>\n      <SaveBar\n        className='mt-6'\n        isDirty={form.isDirty}\n        isSubmitting={form.isSubmitting}\n        message={`${changes} unsaved ${changes === 1 ? 'change' : 'changes'}`}\n        onDiscard={() => form.reset()}\n      />\n    </form>\n  )\n}\n\nconst Forms8 = (props: Forms8Props) => {\n  const { defaultValues, description, errorMessage, status, title } = props\n  const ready = !status && defaultValues !== undefined\n\n  return (\n    <BlockStateProvider\n      errorMessage={errorMessage}\n      state={getBlockState(status, defaultValues)}\n    >\n      <section className='@container flex flex-col gap-3'>\n        <header className='flex flex-col gap-0.5'>\n          <h2 className='font-semibold tracking-tight'>{title}</h2>\n          <p className='text-muted-foreground text-sm'>{description}</p>\n        </header>\n        {ready ? (\n          <Forms8Content {...props} defaultValues={defaultValues} />\n        ) : (\n          <div className='border-t'>\n            <BlockStateRows rows={4} />\n          </div>\n        )}\n      </section>\n    </BlockStateProvider>\n  )\n}\n\nexport { Forms8, exampleProps as forms8ExampleProps, type Forms8Props }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/forms/forms-08.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A billing address whose fields follow the country: a state and ZIP code in the US, a postcode in the UK, the postal code before the city in Germany.",
+    "size": "half",
+    "usedWith": [
+      "forms-07",
+      "billing-05"
+    ],
+    "component": "Forms8",
+    "props": "{ defaultValues?: BillingAddress; description: string; onSubmit?: (values: BillingAddress) => Promise<void | { name?: string; city?: string; country?: string; line1?: string; line2?: string; postalCode?: string; state?: string }>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+  },
+  "type": "registry:component"
+}
