@@ -1,5 +1,15 @@
 # dashboardblocks
 
+## 1.16.0
+
+### Minor Changes
+
+- 07d7a9b: New Forms block: Multi-select, and the `multi-select` part it uses. The `forms` part's `useSimpleForm` now takes list values, so install it again.
+
+### Patch Changes
+
+- e365795: A facet filter's count of picked values is a `Tag`, and Record Detail's customer tags and ticket labels and Activity Feed 05's message tags are tags instead of outline badges.
+
 ## 1.15.1
 
 ### Patch Changes

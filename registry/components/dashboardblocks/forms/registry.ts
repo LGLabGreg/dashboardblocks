@@ -94,4 +94,27 @@ export const examples: Registry['items'] = [
       usedWith: ['record-detail-01', 'forms-01'],
     },
   },
+  {
+    name: 'forms-05',
+    type: 'registry:component',
+    registryDependencies: [
+      'field',
+      registryUrl('block-state'),
+      registryUrl('forms'),
+      registryUrl('geo'),
+      registryUrl('multi-select'),
+    ],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/forms/forms-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+    meta: {
+      shows:
+        'Several values picked from a searchable list and shown as removable chips, with a limit checked on save.',
+      size: 'half',
+      usedWith: ['forms-01', 'settings-01'],
+    },
+  },
 ]

@@ -907,6 +907,21 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'multi-select',
+    type: 'registry:component',
+    title: 'Multi-select',
+    description:
+      'A field for several values from a searchable list, shown as chips you can remove, built on the shadcn Combobox so its list follows your style and font.',
+    dependencies: ['@base-ui/react'],
+    registryDependencies: ['button', 'combobox'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/multi-select.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'details',
     type: 'registry:component',
     title: 'Details',

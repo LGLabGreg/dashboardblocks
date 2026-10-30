@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "multi-select",
+  "title": "Multi-select",
+  "description": "A field for several values from a searchable list, shown as chips you can remove, built on the shadcn Combobox so its list follows your style and font.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "button",
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/multi-select.tsx",
+      "content": "'use client'\n\nimport { type ReactNode, useState } from 'react'\n\nimport {\n  Combobox,\n  ComboboxChip,\n  ComboboxChipList,\n  ComboboxChips,\n  ComboboxChipsInput,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxItem,\n  ComboboxList,\n} from '@/components/ui/combobox'\n\ninterface MultiSelectOption<V extends string = string> {\n  disabled?: boolean\n  /** Drawn before the label, in the list and on its chip, such as a flag or an avatar. */\n  icon?: ReactNode\n  label: string\n  value: V\n}\n\ninterface MultiSelectProps<V extends string = string> {\n  'aria-describedby'?: string\n  'aria-invalid'?: boolean\n  'aria-label'?: string\n  /**\n   * Name the field with this rather than a `<label htmlFor>` alone: while the list is open,\n   * Base UI hides the rest of the page from screen readers, the label included.\n   */\n  'aria-labelledby'?: string\n  className?: string\n  disabled?: boolean\n  id?: string\n  /** Submits each picked value under this name, as a native multiple select does. */\n  name?: string\n  onValueChange?: (value: V[]) => void\n  options: readonly MultiSelectOption<V>[]\n  /** Shown while nothing is picked. */\n  placeholder?: string\n  /** The values picked, in the order they were picked. */\n  value: readonly V[]\n}\n\nfunction MultiSelect<V extends string>({\n  'aria-describedby': describedBy,\n  'aria-invalid': invalid,\n  'aria-label': label,\n  'aria-labelledby': labelledBy,\n  className,\n  disabled,\n  id,\n  name,\n  onValueChange,\n  options,\n  placeholder,\n  value,\n}: MultiSelectProps<V>) {\n  const [query, setQuery] = useState('')\n\n  return (\n    <Combobox\n      allowsEmptyCollection\n      aria-describedby={describedBy}\n      aria-label={label}\n      aria-labelledby={labelledBy}\n      disabledKeys={options\n        .filter((option) => option.disabled)\n        .map((option) => option.value)}\n      id={id}\n      inputValue={query}\n      isDisabled={disabled}\n      isInvalid={invalid}\n      name={name}\n      selectionMode='multiple'\n      value={[...value]}\n      onChange={(keys) => {\n        const picked = new Set(keys.map(String))\n        const kept = value.filter((item) => picked.has(item))\n        const added = options\n          .map((option) => option.value)\n          .filter((item) => picked.has(item) && !kept.includes(item))\n        onValueChange?.([...kept, ...added])\n      }}\n      onInputChange={setQuery}\n    >\n      <ComboboxChips className={className}>\n        <ComboboxChipList<MultiSelectOption<V>>>\n          {(item) => (\n            <ComboboxChip\n              id={item.value}\n              className='[&_svg]:size-3.5'\n              textValue={item.label}\n            >\n              {item.icon}\n              {item.label}\n            </ComboboxChip>\n          )}\n        </ComboboxChipList>\n        <ComboboxChipsInput placeholder={value.length === 0 ? placeholder : undefined} />\n      </ComboboxChips>\n      <ComboboxContent>\n        <ComboboxList\n          renderEmptyState={() => (\n            <ComboboxEmpty>Nothing matches “{query.trim()}”.</ComboboxEmpty>\n          )}\n        >\n          {options.map((item) => (\n            <ComboboxItem\n              key={item.value}\n              id={item.value}\n              textValue={item.label}\n              value={item}\n            >\n              {item.icon}\n              {item.label}\n            </ComboboxItem>\n          ))}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  )\n}\n\nexport { MultiSelect }\nexport type { MultiSelectOption, MultiSelectProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/multi-select.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

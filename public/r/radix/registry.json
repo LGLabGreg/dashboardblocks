@@ -1025,6 +1025,26 @@
       ]
     },
     {
+      "name": "multi-select",
+      "type": "registry:component",
+      "title": "Multi-select",
+      "description": "A field for several values from a searchable list, shown as chips you can remove, built on the shadcn Combobox so its list follows your style and font.",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/multi-select.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/multi-select.tsx"
+        }
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
@@ -7169,6 +7189,35 @@
         "props": "{ defaultValues?: { company: string; email: string; name: string; phone: string; website: string }; onSave?: (field: \"name\" | \"email\" | \"company\" | \"phone\" | \"website\", value: string) => Promise<string | void>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Single values edited in place, saved with Enter and cancelled with Escape."
+    },
+    {
+      "name": "forms-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "field",
+        "https://www.dashboardblocks.com/r/radix/block-state.json",
+        "https://www.dashboardblocks.com/r/radix/forms.json",
+        "https://www.dashboardblocks.com/r/radix/geo.json",
+        "https://www.dashboardblocks.com/r/radix/multi-select.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/forms/forms-05.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/forms/forms-05.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save.",
+        "size": "half",
+        "usedWith": [
+          "forms-01",
+          "settings-01"
+        ],
+        "component": "Forms5",
+        "props": "{ countries: { code: string; name: string }[]; defaultValues?: { markets: string[]; metrics: string[]; recipients: string[] }; description: string; maxMetrics?: number; metrics: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; onSubmit?: (values: { markets: string[]; metrics: string[]; recipients: string[] }) => Promise<void | { markets?: string; metrics?: string; recipients?: string }>; people: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+      },
+      "description": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save."
     },
     {
       "name": "record-detail-01",

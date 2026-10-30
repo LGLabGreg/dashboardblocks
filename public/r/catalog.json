@@ -1582,6 +1582,19 @@
       ]
     },
     {
+      "name": "forms-05",
+      "install": "@dashboardblocks/forms-05",
+      "import": "@/components/dashboardblocks/forms/forms-05",
+      "component": "Forms5",
+      "shows": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save.",
+      "size": "half",
+      "props": "{ countries: { code: string; name: string }[]; defaultValues?: { markets: string[]; metrics: string[]; recipients: string[] }; description: string; maxMetrics?: number; metrics: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; onSubmit?: (values: { markets: string[]; metrics: string[]; recipients: string[] }) => Promise<void | { markets?: string; metrics?: string; recipients?: string }>; people: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "usedWith": [
+        "forms-01",
+        "settings-01"
+      ]
+    },
+    {
       "name": "funnel-01",
       "install": "@dashboardblocks/funnel-01",
       "import": "@/components/dashboardblocks/funnel/funnel-01",

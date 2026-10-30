@@ -508,6 +508,15 @@
       ]
     },
     {
+      "name": "multi-select",
+      "type": "registry:component",
+      "title": "Multi-select",
+      "description": "A field for several values from a searchable list, shown as chips you can remove, built on the shadcn Combobox so its list follows your style and font.",
+      "registryDependencies": [
+        "@dashboardblocks/multi-select"
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
@@ -2257,6 +2266,14 @@
       "description": "Single values edited in place, saved with Enter and cancelled with Escape.",
       "registryDependencies": [
         "@dashboardblocks/forms-04"
+      ]
+    },
+    {
+      "name": "forms-05",
+      "type": "registry:component",
+      "description": "Several values picked from a searchable list and shown as removable chips, with a limit checked on save.",
+      "registryDependencies": [
+        "@dashboardblocks/forms-05"
       ]
     },
     {

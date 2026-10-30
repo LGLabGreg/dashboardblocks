@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 44734b20fd9e
+// source-hash: 95da548071d5
 
 'use client'
 
@@ -31,7 +31,7 @@ import {
 
 import { cn } from '@/lib/utils'
 
-type FormValues = Record<string, string | boolean>
+type FormValues = Record<string, string | boolean | readonly string[]>
 
 type FormErrors<T extends FormValues> = Partial<Record<keyof T & string, string>>
 
@@ -58,6 +58,13 @@ function hasErrors(errors: Record<string, string | undefined>) {
   return Object.values(errors).some(Boolean)
 }
 
+function sameValue(a: FormValues[string], b: FormValues[string]) {
+  if (typeof a === 'object' && typeof b === 'object') {
+    return a.length === b.length && a.every((item) => b.includes(item))
+  }
+  return a === b
+}
+
 function useSimpleForm<T extends FormValues>({
   defaultValues,
   onSubmit,
@@ -81,13 +88,15 @@ function useSimpleForm<T extends FormValues>({
 
   const names = Object.keys(defaultValues) as (keyof T & string)[]
   const [lastDefaults, setLastDefaults] = useState(defaultValues)
-  const moved = names.filter((name) => defaultValues[name] !== lastDefaults[name])
+  const moved = names.filter(
+    (name) => !sameValue(defaultValues[name], lastDefaults[name]),
+  )
   if (moved.length) {
     setLastDefaults(defaultValues)
     setValues((current) => {
       const next = { ...current }
       for (const name of moved) {
-        if (current[name] === savedValues[name]) next[name] = defaultValues[name]
+        if (sameValue(current[name], savedValues[name])) next[name] = defaultValues[name]
       }
       return next
     })
@@ -104,7 +113,9 @@ function useSimpleForm<T extends FormValues>({
       ((touched[name] || submitted) && clientErrors[name]) || serverErrors[name]
     if (error) errors[name] = error
   }
-  const changedFields = names.filter((name) => values[name] !== savedValues[name])
+  const changedFields = names.filter(
+    (name) => !sameValue(values[name], savedValues[name]),
+  )
   const isDirty = changedFields.length > 0
 
   const getId = (name: keyof T & string) => `${formId}-${name}`
@@ -163,6 +174,25 @@ function useSimpleForm<T extends FormValues>({
       name,
       onValueChange: (value: string) => setValue(name, value as T[typeof name]),
       value: String(values[name]),
+    }
+  }
+
+  /**
+   * For a field that holds a list, such as a multi-select. It's named by the element with the id
+   * `${getId(name)}-label`.
+   */
+  function list(name: keyof T & string) {
+    const id = getId(name)
+    const value = values[name]
+    return {
+      'aria-describedby': errors[name] ? `${id}-error` : undefined,
+      'aria-invalid': errors[name] ? true : undefined,
+      'aria-labelledby': `${id}-label`,
+      id,
+      name,
+      onValueChange: (next: string[]) =>
+        setValue(name, next as unknown as T[typeof name]),
+      value: typeof value === 'object' ? value : [],
     }
   }
 
@@ -231,6 +261,7 @@ function useSimpleForm<T extends FormValues>({
     getId,
     isDirty,
     isSubmitting,
+    list,
     reset,
     select,
     setValue,
