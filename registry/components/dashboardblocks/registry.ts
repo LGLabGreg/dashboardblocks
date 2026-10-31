@@ -1025,6 +1025,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'agent-ring',
+    type: 'registry:component',
+    title: 'Agent Ring',
+    description:
+      'A ring that shows how work is going: an arc spins while it runs, the ring pulses while it waits for a person, and it closes into a tick, an exclamation mark, a cross or a dash once done, warning, failed or stopped. Also `AgentMark`, an agent’s initials in its ring.',
+    registryDependencies: [registryUrl('status-label')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/agent-ring.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'rolling-text',
     type: 'registry:component',
     title: 'Rolling Text',
@@ -1269,16 +1283,17 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'AI Chat',
     description:
-      'The parts every AI block shares: message types that take the Vercel AI SDK’s useChat and UIMessage as they are, Markdown from a model drawn with safe links and no HTML while it streams, each word fading in as it arrives, thinking that collapses to one line, tool calls with their state, approval and details, attached files, and numbered sources and citations.',
+      'The parts every AI block shares: message types that take the Vercel AI SDK’s useChat and UIMessage as they are, Markdown from a model drawn with safe links and no HTML while it streams, each word fading in as it arrives, a reply that leads with one line rolling through what the model is doing beside a ring that spins, then folds its thinking, tool calls and sources into “Used 2 tools in 3.4 s”, tool calls with their state, approval and details, tool results drawn as blocks, attached files, and numbered sources and citations.',
     dependencies: ['marked@^18.1.0', 'remend@^1.4.0'],
     registryDependencies: [
       'attachment',
       'button',
-      'marker',
+      registryUrl('agent-ring'),
       registryUrl('disclosure'),
       registryUrl('format'),
       registryUrl('highlighted-code'),
       registryUrl('link'),
+      registryUrl('rolling-text'),
       registryUrl('table'),
     ],
     files: [
@@ -1305,7 +1320,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'AI Assistant',
     description:
-      'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
+      'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
     registryDependencies: [
       'attachment',
       'bubble',
@@ -1314,6 +1329,7 @@ export const components: Registry['items'] = [
       'message',
       'message-scroller',
       registryUrl('ai-chat'),
+      registryUrl('block-state'),
       registryUrl('format'),
     ],
     files: [

@@ -2,12 +2,9 @@
 
 import {
   ChatComposer,
-  ChatError,
-  ChatMessage,
-  ChatMessageActions,
+  ChatConversation,
   ChatMessages,
   ChatWelcome,
-  TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
 import {
@@ -18,7 +15,6 @@ import {
   type AIReply,
   type AITextPart,
   getMessageText,
-  getStreamingMessageId,
 } from '@/registry/components/dashboardblocks/ai-message'
 import {
   BlockStateProvider,
@@ -26,6 +22,7 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { useRef } from 'react'
 
 interface AiAssistant4Props extends BlockStateProps {
   /**
@@ -158,12 +155,12 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
   const demo = useChatStream({ initialError, initialMessages, onSend: demoReply })
   const chat = props.chat ?? demo
   const { messages, status } = chat
-  const streamingId = getStreamingMessageId(messages, status)
   const state = getBlockState(blockStatus, messages)
+  const composerRef = useRef<HTMLTextAreaElement>(null)
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex h-[34rem] flex-col gap-3'>
+      <section className='@container flex h-[44rem] flex-col gap-3'>
         <header className='flex flex-col gap-0.5'>
           <h2 className='font-semibold tracking-tight'>{title}</h2>
           <p className='text-muted-foreground text-sm'>{description}</p>
@@ -183,37 +180,13 @@ const AiAssistant4 = (props: AiAssistant4Props) => {
           ) : (
             state && <BlockStateRows rows={3} />
           )}
-          {!state &&
-            messages.map((message, index) => {
-              const isLast = index === messages.length - 1
-              const streaming = message.id === streamingId
-              return (
-                <ChatMessage
-                  key={message.id}
-                  message={message}
-                  streaming={streaming}
-                  onToolApprovalResponse={chat.addToolApprovalResponse}
-                  actions={
-                    message.role === 'assistant' &&
-                    !streaming && (
-                      <ChatMessageActions
-                        content={getMessageText(message)}
-                        onRegenerate={isLast ? chat.regenerate : undefined}
-                      />
-                    )
-                  }
-                />
-              )
-            })}
-          {!state && status === 'submitted' && !streamingId && <TypingIndicator />}
-          {!state && status === 'error' && (
-            <ChatError message={chat.error?.message} onRetry={chat.regenerate} />
-          )}
+          {!state && <ChatConversation chat={chat} composerRef={composerRef} />}
         </ChatMessages>
         <ChatComposer
           accept='image/*,.log,.txt,.pdf'
           disabled={blockStatus !== undefined}
           status={status}
+          textareaRef={composerRef}
           onSubmit={chat.sendMessage}
           onStop={chat.stop}
           placeholder='Ask about incidents or deploys'

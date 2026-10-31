@@ -12,6 +12,7 @@ import {
   getMessageFiles,
   getMessageSources,
   getMessageText,
+  getStreamingMessageId,
   getToolLabel,
   isToolPart,
 } from '@/registry/components/dashboardblocks/ai-message'
@@ -21,6 +22,13 @@ import {
   MessageFiles,
   ThinkingIndicator,
 } from '@/registry/components/dashboardblocks/ai-parts'
+import {
+  BlockStateProvider,
+  BlockStateRows,
+  type BlockStateProps,
+  type BlockStatus,
+  useBlockState,
+} from '@/registry/components/dashboardblocks/block-state'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatList } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -28,6 +36,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
   type Ref,
+  type RefObject,
   useEffect,
   useId,
   useImperativeHandle,
@@ -259,6 +268,7 @@ function ChatLog({
   const contentRef = useRef<HTMLDivElement>(null)
   const heldQuestion = useRef<string | null>(null)
   const placedTop = useRef<number | null>(null)
+  const placedMargin = useRef(QUESTION_PEEK_PX)
   const opened = useRef(false)
   const placedForStatus = useRef(status)
   const [announcement, setAnnouncement] = useState('')
@@ -285,9 +295,10 @@ function ChatLog({
     scrollerRef.current = scroller
   })
 
-  function placeQuestion(id: string) {
+  function placeQuestion(id: string, margin = placedMargin.current) {
     heldQuestion.current = id
-    scrollerRef.current.scrollToMessage(id, { scrollMargin: QUESTION_PEEK_PX })
+    placedMargin.current = margin
+    scrollerRef.current.scrollToMessage(id, { scrollMargin: margin })
     placedTop.current = viewportRef.current?.scrollTop ?? null
   }
 
@@ -321,7 +332,7 @@ function ChatLog({
       question.getBoundingClientRect().top +
       QUESTION_PEEK_PX
     if (rest <= viewportRef.current.clientHeight) return
-    placeQuestion(id)
+    placeQuestion(id, 0)
   }, [])
 
   useEffect(() => {
@@ -336,6 +347,7 @@ function ChatLog({
     ].at(-1)
     if (!id || last !== question) return
     heldQuestion.current = id
+    placedMargin.current = QUESTION_PEEK_PX
     const frame = requestAnimationFrame(() => placeQuestion(id))
     return () => cancelAnimationFrame(frame)
   }, [status])
@@ -616,7 +628,11 @@ function TypingIndicator({
     <Message data-role='assistant' className={className}>
       <AssistantMessageAvatar />
       <MessageContent>
-        <ThinkingIndicator label={label} />
+        <Bubble variant='ghost' className='w-full'>
+          <BubbleContent className='w-full'>
+            <ThinkingIndicator label={label} />
+          </BubbleContent>
+        </Bubble>
       </MessageContent>
     </Message>
   )
@@ -649,25 +665,19 @@ function SuggestedPrompts({
       aria-label={label}
       className={cn(
         variant === 'chips'
-          ? 'flex scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain py-1 pe-1'
+          ? 'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 flex flex-wrap gap-2 duration-300'
           : 'flex flex-col divide-y border-y',
         className,
       )}
     >
       {prompts.map((prompt) =>
         variant === 'chips' ? (
-          <li key={prompt.label} className='flex shrink-0'>
+          <li key={prompt.label} className='flex'>
             <Button
               type='button'
               variant='outline'
               size='sm'
               onClick={() => onSelect(prompt.prompt ?? prompt.label)}
-              onFocus={(event) =>
-                event.currentTarget.scrollIntoView({
-                  block: 'nearest',
-                  inline: 'nearest',
-                })
-              }
             >
               {prompt.icon}
               {prompt.label}
@@ -1110,6 +1120,254 @@ function ChatComposer({
   )
 }
 
+interface ChatConversationProps extends Pick<
+  AIMessagePartsProps,
+  'renderToolResult' | 'toolLabels'
+> {
+  chat: AIChat
+  /** The message box, which Retry focuses as it goes. */
+  composerRef?: RefObject<HTMLTextAreaElement | null>
+  feedback?: Record<string, ChatFeedback | null>
+  /** The questions to suggest under the last reply once it has finished. */
+  followUps?: (reply: AIMessage) => SuggestedPrompt[] | undefined
+  /** More to show under a finished reply, such as its tokens and cost. */
+  footer?: (reply: AIMessage) => ReactNode
+  /** What screen readers call the assistant. @default 'Assistant' */
+  name?: string
+  /** Shows thumbs up and down under each reply. */
+  onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
+}
+
+/** A chat's messages for `ChatMessages`: each reply with its actions, the follow-ups under the last one, "Thinking…" until a reply starts, and a failed reply with Retry. */
+function ChatConversation({
+  chat,
+  composerRef,
+  feedback,
+  followUps,
+  footer,
+  name,
+  onFeedback,
+  renderToolResult,
+  toolLabels,
+}: ChatConversationProps) {
+  const { messages, status } = chat
+  const streamingId = getStreamingMessageId(messages, status)
+  return (
+    <>
+      {messages.map((message, index) => {
+        const streaming = message.id === streamingId
+        const lastMessage = index === messages.length - 1
+        const finishedReply = message.role === 'assistant' && !streaming
+        const more = finishedReply ? footer?.(message) : undefined
+        const prompts =
+          finishedReply && lastMessage && status === 'ready'
+            ? followUps?.(message)
+            : undefined
+        return (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            name={message.role === 'assistant' ? name : undefined}
+            streaming={streaming}
+            toolLabels={toolLabels}
+            renderToolResult={renderToolResult}
+            onToolApprovalResponse={chat.addToolApprovalResponse}
+            footer={
+              <>
+                {more}
+                {prompts && prompts.length > 0 && (
+                  <SuggestedPrompts
+                    label='Follow-up questions'
+                    prompts={prompts}
+                    onSelect={(text) => void chat.sendMessage({ text })}
+                  />
+                )}
+              </>
+            }
+            actions={
+              finishedReply && (
+                <ChatMessageActions
+                  content={getMessageText(message)}
+                  feedback={feedback?.[message.id]}
+                  onFeedback={onFeedback && ((value) => onFeedback(message.id, value))}
+                  onRegenerate={lastMessage ? chat.regenerate : undefined}
+                />
+              )
+            }
+          />
+        )
+      })}
+      {status === 'submitted' && !streamingId && <TypingIndicator />}
+      {status === 'error' && (
+        <ChatError
+          message={chat.error?.message}
+          onRetry={() => {
+            void chat.regenerate()
+            composerRef?.current?.focus()
+          }}
+        />
+      )}
+    </>
+  )
+}
+
+interface ChatPanelProps
+  extends
+    BlockStateProps,
+    Pick<ChatConversationProps, 'followUps' | 'renderToolResult' | 'toolLabels'> {
+  /**
+   * The chat the panel runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream.
+   * The AI SDK sends "An error occurred." for a failed reply unless the route's `onError` returns the message to show.
+   */
+  chat: AIChat
+  className?: string
+  /** Shown in the message box above what the person types, such as a chip for the page the question is about. */
+  context?: ReactNode
+  description?: ReactNode
+  id?: string
+  /** Shows a close button, and Escape in the panel calls it. */
+  onClose?: () => void
+  /** @default 'Ask anything' */
+  placeholder?: string
+  /** While a saved conversation loads or fails to. */
+  status?: BlockStatus
+  /** The questions a new conversation suggests. */
+  suggestions?: SuggestedPrompt[]
+  textareaRef?: Ref<HTMLTextAreaElement>
+  title: string
+}
+
+/** An assistant in a panel: a header with New conversation and Close, a welcome with suggested questions, the conversation, and the message box. */
+function ChatPanel({
+  chat,
+  className,
+  context,
+  description,
+  errorMessage,
+  followUps,
+  id,
+  onClose,
+  placeholder,
+  renderToolResult,
+  status: loadStatus,
+  suggestions,
+  textareaRef,
+  title,
+  toolLabels,
+}: ChatPanelProps) {
+  const blockState = useBlockState()
+  const loadState = blockState === 'empty' ? loadStatus : (blockState ?? loadStatus)
+  const composerRef = useRef<HTMLTextAreaElement | null>(null)
+  const { messages, status } = chat
+
+  useImperativeHandle(textareaRef, () => composerRef.current as HTMLTextAreaElement, [])
+
+  function onKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== 'Escape' || event.nativeEvent.isComposing) return
+    if (event.defaultPrevented || !onClose) return
+    if (!event.currentTarget.contains(event.target as Node)) return
+    event.preventDefault()
+    onClose()
+  }
+
+  return (
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Escape from anywhere inside closes the panel
+    <section
+      id={id}
+      aria-label={title}
+      onKeyDown={onKeyDown}
+      className={cn('bg-background flex h-full min-h-0 flex-col', className)}
+    >
+      <ChatHeader
+        title={title}
+        description={description}
+        className='border-b'
+        actions={
+          <>
+            {chat.setMessages && (
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                aria-label='New conversation'
+                disabled={messages.length === 0 || loadState !== undefined}
+                onClick={() => {
+                  void chat.stop()
+                  chat.setMessages?.([])
+                  composerRef.current?.focus()
+                }}
+              >
+                <IconPlaceholder
+                  lucide='SquarePenIcon'
+                  tabler='IconEdit'
+                  hugeicons='PencilEdit02Icon'
+                  phosphor='NotePencilIcon'
+                  remixicon='RiEditBoxLine'
+                />
+              </Button>
+            )}
+            {onClose && (
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                aria-label={`Close ${title}`}
+                onClick={onClose}
+              >
+                <IconPlaceholder
+                  lucide='XIcon'
+                  tabler='IconX'
+                  hugeicons='Cancel01Icon'
+                  phosphor='XIcon'
+                  remixicon='RiCloseLine'
+                />
+              </Button>
+            )}
+          </>
+        }
+      />
+      {loadState ? (
+        <BlockStateProvider errorMessage={errorMessage} state={loadState}>
+          <div className='flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-2'>
+            <BlockStateRows rows={3} />
+          </div>
+        </BlockStateProvider>
+      ) : messages.length === 0 ? (
+        <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
+          <ChatWelcome title={title} description={description} className='m-auto'>
+            {suggestions && suggestions.length > 0 && (
+              <SuggestedPrompts
+                variant='list'
+                prompts={suggestions}
+                onSelect={(text) => void chat.sendMessage({ text })}
+              />
+            )}
+          </ChatWelcome>
+        </div>
+      ) : (
+        <ChatMessages status={status} latest={messages.at(-1)}>
+          <ChatConversation
+            chat={chat}
+            composerRef={composerRef}
+            followUps={followUps}
+            name={title}
+            renderToolResult={renderToolResult}
+            toolLabels={toolLabels}
+          />
+        </ChatMessages>
+      )}
+      <ChatComposer
+        className='p-4 pt-2'
+        context={context}
+        disabled={loadState !== undefined}
+        placeholder={placeholder}
+        status={status}
+        textareaRef={composerRef}
+        onSubmit={chat.sendMessage}
+        onStop={chat.stop}
+      />
+    </section>
+  )
+}
+
 const STOPPED = 'stopped'
 
 interface UseChatStreamOptions {
@@ -1281,11 +1539,13 @@ export {
   AssistantMessageAvatar,
   ChatComposer,
   ChatContextChip,
+  ChatConversation,
   ChatError,
   ChatHeader,
   ChatMessage,
   ChatMessageActions,
   ChatMessages,
+  ChatPanel,
   ChatWelcome,
   SuggestedPrompts,
   TypingIndicator,
@@ -1295,10 +1555,12 @@ export {
 
 export type {
   ChatComposerProps,
+  ChatConversationProps,
   ChatFeedback,
   ChatMessageActionsProps,
   ChatMessageProps,
   ChatMessagesProps,
+  ChatPanelProps,
   SuggestedPrompt,
   SuggestedPromptsProps,
   UseChatStreamOptions,

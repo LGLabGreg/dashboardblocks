@@ -31,6 +31,7 @@ import {
   getCurrencyDigits,
   getDocumentTotals,
   getTotalRows,
+  toMinorUnits,
 } from '@/registry/components/dashboardblocks/invoice'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -160,8 +161,9 @@ const Invoice2 = (props: Invoice2Props) => {
   const amounts = getDocumentTotals(lines, { currency, shipping, taxRate })
   const unit = 10 ** getCurrencyDigits(currency)
   const refunded =
-    refunds.reduce((sum, refund) => sum + Math.round(refund.amount * unit), 0) / unit
-  const netPaid = (Math.round(amounts.total * unit) - Math.round(refunded * unit)) / unit
+    refunds.reduce((sum, refund) => sum + toMinorUnits(refund.amount, currency), 0) / unit
+  const netPaid =
+    (toMinorUnits(amounts.total, currency) - toMinorUnits(refunded, currency)) / unit
 
   const rows: DocumentTotalRow[] = [
     ...getTotalRows(amounts).map((row) =>

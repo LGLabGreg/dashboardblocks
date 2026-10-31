@@ -395,7 +395,11 @@ function renderBlocks(
               {table.rows.map((row, rowIndex) => (
                 <DataTableRow key={rowIndex}>
                   {row.map((cell, cellIndex) => (
-                    <DataTableCell key={cellIndex} align={align(cell.align)}>
+                    <DataTableCell
+                      key={cellIndex}
+                      align={align(cell.align)}
+                      className={cn(cell.align !== 'right' && 'min-w-32')}
+                    >
                       {renderInline(
                         cell.tokens,
                         context,

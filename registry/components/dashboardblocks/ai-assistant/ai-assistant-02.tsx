@@ -3,14 +3,11 @@
 import {
   type ChatFeedback,
   ChatComposer,
-  ChatError,
-  ChatMessage,
-  ChatMessageActions,
+  ChatConversation,
   ChatMessages,
   ChatWelcome,
   type SuggestedPrompt,
   SuggestedPrompts,
-  TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
 import {
@@ -21,15 +18,16 @@ import {
   type AIReply,
   type AITextPart,
   getMessageText,
-  getStreamingMessageId,
+  isToolPart,
 } from '@/registry/components/dashboardblocks/ai-message'
+import type { AIToolLabel } from '@/registry/components/dashboardblocks/ai-parts'
 import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface AiAssistant2Props extends BlockStateProps {
   /** The chat it runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies. */
@@ -41,6 +39,8 @@ interface AiAssistant2Props extends BlockStateProps {
   messages?: AIMessage[]
   onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
   title: string
+  /** What each tool is called, by its name, or `{ running, done }` for what it's doing while it runs. Others read as their name in words. */
+  toolLabels?: Record<string, AIToolLabel>
 }
 
 const text = (value: string): AIMessagePart => ({
@@ -116,6 +116,12 @@ If Safari's \`failure_rate\` is well above the other browsers, the release is th
     },
   ],
   title: 'Analytics assistant',
+  toolLabels: {
+    compare_weeks: {
+      done: 'Compared the two weeks',
+      running: 'Comparing the two weeks',
+    },
+  },
 }
 
 const cannedReplies: Record<string, AIMessagePart[]> = {
@@ -123,6 +129,20 @@ const cannedReplies: Record<string, AIMessagePart[]> = {
     {
       text: 'Line up sessions, checkouts started and orders for Sep 15–21 against Sep 8–14.',
       type: 'reasoning',
+    },
+    {
+      input: {
+        metrics: ['sessions', 'checkouts_started', 'orders'],
+        weeks: ['2026-09-08', '2026-09-15'],
+      },
+      output: [
+        { metric: 'sessions', previous: 44_230, value: 48_210 },
+        { metric: 'checkouts_started', previous: 3_827, value: 3_904 },
+        { metric: 'orders', previous: 1_680, value: 1_495 },
+      ],
+      state: 'output-available',
+      toolCallId: 'call-compare',
+      type: 'tool-compare_weeks',
     },
     text(`Against Sep 8–14, last week had:
 
@@ -194,6 +214,15 @@ async function* simulateReply(
   await wait(400, signal)
   yield { parts }
   for (const step of reply) {
+    if (isToolPart(step)) {
+      const part = { ...step, output: undefined, state: 'input-available' as const }
+      parts.push(part)
+      yield { parts }
+      await wait(900, signal)
+      Object.assign(part, { output: step.output, state: step.state })
+      yield { parts }
+      continue
+    }
     if (step.type !== 'text' && step.type !== 'reasoning') continue
     const part: AITextPart | AIReasoningPart = { ...step, state: 'streaming', text: '' }
     parts.push(part)
@@ -228,14 +257,14 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
     errorMessage,
     status: blockStatus,
     title,
+    toolLabels,
   } = props
   const demo = useChatStream({ initialMessages, onSend: demoReply })
   const chat = props.chat ?? demo
   const { messages, status } = chat
-  const streamingId = getStreamingMessageId(messages, status)
   const state = getBlockState(blockStatus, messages)
+  const composerRef = useRef<HTMLTextAreaElement>(null)
   const [feedback, setFeedback] = useState<Record<string, ChatFeedback | null>>({})
-  const latest = messages.at(-1)
   const asked = new Set(messages.map(getMessageText))
   const send = (question: string) => chat.sendMessage({ text: question })
 
@@ -253,7 +282,7 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
         </header>
         <ChatMessages
           status={status}
-          latest={latest}
+          latest={messages.at(-1)}
           className='min-h-0 border-t'
           contentClassName='ps-0 pe-4'
         >
@@ -273,41 +302,16 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
           ) : (
             state && <BlockStateRows rows={3} />
           )}
-          {!state &&
-            messages.map((message, index) => {
-              const isLast = index === messages.length - 1
-              const streaming = message.id === streamingId
-              return (
-                <ChatMessage
-                  key={message.id}
-                  message={message}
-                  streaming={streaming}
-                  onToolApprovalResponse={chat.addToolApprovalResponse}
-                  actions={
-                    message.role === 'assistant' &&
-                    !streaming && (
-                      <ChatMessageActions
-                        content={getMessageText(message)}
-                        feedback={feedback[message.id]}
-                        onFeedback={(value) => rate(message.id, value)}
-                        onRegenerate={isLast ? chat.regenerate : undefined}
-                      />
-                    )
-                  }
-                />
-              )
-            })}
-          {!state && status === 'submitted' && !streamingId && <TypingIndicator />}
-          {!state && status === 'error' && (
-            <ChatError message={chat.error?.message} onRetry={chat.regenerate} />
-          )}
-          {!state && status === 'ready' && latest?.role === 'assistant' && (
-            <SuggestedPrompts
-              label='Follow-up questions'
-              prompts={followUps.filter(
-                (prompt) => !asked.has(prompt.prompt ?? prompt.label),
-              )}
-              onSelect={send}
+          {!state && (
+            <ChatConversation
+              chat={chat}
+              composerRef={composerRef}
+              feedback={feedback}
+              onFeedback={rate}
+              toolLabels={toolLabels}
+              followUps={() =>
+                followUps.filter((prompt) => !asked.has(prompt.prompt ?? prompt.label))
+              }
             />
           )}
         </ChatMessages>
@@ -315,6 +319,7 @@ const AiAssistant2 = (props: AiAssistant2Props) => {
           accept='.csv,image/*'
           disabled={blockStatus !== undefined}
           status={status}
+          textareaRef={composerRef}
           onSubmit={chat.sendMessage}
           onStop={chat.stop}
           placeholder='Ask a follow-up'

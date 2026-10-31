@@ -2,13 +2,10 @@
 
 import {
   ChatComposer,
-  ChatError,
-  ChatMessage,
-  ChatMessageActions,
+  ChatConversation,
   ChatMessages,
   type SuggestedPrompt,
   SuggestedPrompts,
-  TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
 import {
@@ -19,9 +16,9 @@ import {
   type AIReply,
   type AITextPart,
   getMessageText,
-  getStreamingMessageId,
   isToolPart,
 } from '@/registry/components/dashboardblocks/ai-message'
+import type { AIToolLabel } from '@/registry/components/dashboardblocks/ai-parts'
 import {
   type TokenCounts,
   type TokenPrices,
@@ -42,7 +39,7 @@ import {
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
-import { useId } from 'react'
+import { useId, useRef } from 'react'
 
 interface AiAssistant3Props extends BlockStateProps {
   /**
@@ -57,8 +54,8 @@ interface AiAssistant3Props extends BlockStateProps {
   prices: TokenPrices
   suggestions: SuggestedPrompt[]
   title: string
-  /** What each tool is called, by its name. Others read as their name in words. */
-  toolLabels?: Record<string, string>
+  /** What each tool is called, by its name, or `{ running, done }` for what it's doing while it runs. Others read as their name in words. */
+  toolLabels?: Record<string, AIToolLabel>
   /** Leave out to show the empty state. */
   tokens?: TokenCounts
 }
@@ -108,7 +105,14 @@ Capping summaries at 400 tokens would save roughly **$150** a month.`),
   ],
   title: 'Token usage',
   toolLabels: {
-    get_usage_by_feature: 'Read usage by feature',
+    get_monthly_usage: {
+      done: 'Read the last three months of usage',
+      running: 'Reading the last three months of usage',
+    },
+    get_usage_by_feature: {
+      done: 'Read usage by feature',
+      running: 'Reading usage by feature',
+    },
     set_output_limit: 'Set an output limit',
   },
   tokens: { cached: 83_000_000, input: 197_000_000, output: 25_500_000 },
@@ -132,6 +136,17 @@ const cannedReplies: Record<string, AIMessagePart[]> = {
     {
       text: 'Take this month’s tokens by type, grow them by the last three months’ support volume trend, and price them.',
       type: 'reasoning',
+    },
+    {
+      input: { months: 3 },
+      output: [
+        { cached: 74_000_000, input: 182_000_000, month: '2026-08', output: 23_600_000 },
+        { cached: 79_000_000, input: 189_000_000, month: '2026-09', output: 24_500_000 },
+        { cached: 83_000_000, input: 197_000_000, month: '2026-10', output: 25_500_000 },
+      ],
+      state: 'output-available',
+      toolCallId: 'call-monthly',
+      type: 'tool-get_monthly_usage',
     },
     text(`At this month's pace, next month comes to about **$1,040**:
 
@@ -205,6 +220,13 @@ async function* simulateReply(
         yield { parts }
       }
       part.state = 'done'
+    } else if (isToolPart(step) && step.state === 'output-available') {
+      const part = { ...step, output: undefined, state: 'input-available' as const }
+      parts.push(part)
+      yield { parts }
+      await wait(900, signal)
+      Object.assign(part, { output: step.output, state: step.state })
+      yield { parts }
     } else {
       await wait(500, signal)
       parts.push(step)
@@ -300,8 +322,7 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
   const demo = useChatStream({ initialMessages, onSend: demoReply })
   const chat = props.chat ?? demo
   const { messages, status } = chat
-  const streamingId = getStreamingMessageId(messages, status)
-  const latest = messages.at(-1)
+  const composerRef = useRef<HTMLTextAreaElement>(null)
   const asked = new Set(messages.map(getMessageText))
   const remaining = suggestions.filter(
     (prompt) => !asked.has(prompt.prompt ?? prompt.label),
@@ -382,68 +403,48 @@ const AiAssistant3 = (props: AiAssistant3Props) => {
               </h3>
               <ChatMessages
                 status={status}
-                latest={latest}
+                latest={messages.at(-1)}
                 label='Questions about this data'
                 className='max-h-96'
                 contentClassName='gap-5 ps-0 pe-4 pt-0'
               >
                 {state && <BlockStateRows rows={2} />}
-                {!state &&
-                  messages.map((message, index) => {
-                    const isLast = index === messages.length - 1
-                    const streaming = message.id === streamingId
-                    const replyUsage = readUsage(message.metadata)
-                    return (
-                      <ChatMessage
-                        key={message.id}
-                        message={message}
-                        streaming={streaming}
-                        toolLabels={toolLabels}
-                        onToolApprovalResponse={chat.addToolApprovalResponse}
-                        footer={
-                          replyUsage &&
-                          !streaming && (
-                            <p className='text-muted-foreground flex justify-between gap-3 text-xs tabular-nums'>
-                              <Details>
-                                <span>
-                                  {formatTokens(
-                                    replyUsage.input + (replyUsage.cached ?? 0),
-                                  )}{' '}
-                                  in
-                                </span>
-                                <span>{formatTokens(replyUsage.output)} out</span>
-                              </Details>
-                              <span>{formatUsd(getTokenCost(replyUsage, prices))}</span>
-                            </p>
-                          )
-                        }
-                        actions={
-                          message.role === 'assistant' &&
-                          !streaming && (
-                            <ChatMessageActions
-                              content={getMessageText(message)}
-                              onRegenerate={isLast ? chat.regenerate : undefined}
-                            />
-                          )
-                        }
-                      />
-                    )
-                  })}
-                {!state && status === 'submitted' && !streamingId && <TypingIndicator />}
-                {!state && status === 'error' && (
-                  <ChatError message={chat.error?.message} onRetry={chat.regenerate} />
+                {!state && messages.length === 0 && (
+                  <SuggestedPrompts
+                    label='Suggested questions'
+                    prompts={suggestions}
+                    onSelect={(question) => chat.sendMessage({ text: question })}
+                  />
+                )}
+                {!state && (
+                  <ChatConversation
+                    chat={chat}
+                    composerRef={composerRef}
+                    followUps={() => remaining}
+                    toolLabels={toolLabels}
+                    footer={(reply) => {
+                      const replyUsage = readUsage(reply.metadata)
+                      if (!replyUsage) return null
+                      return (
+                        <p className='text-muted-foreground flex justify-between gap-3 text-xs tabular-nums'>
+                          <Details>
+                            <span>
+                              {formatTokens(replyUsage.input + (replyUsage.cached ?? 0))}{' '}
+                              in
+                            </span>
+                            <span>{formatTokens(replyUsage.output)} out</span>
+                          </Details>
+                          <span>{formatUsd(getTokenCost(replyUsage, prices))}</span>
+                        </p>
+                      )
+                    }}
+                  />
                 )}
               </ChatMessages>
-              {!state && status === 'ready' && remaining.length > 0 && (
-                <SuggestedPrompts
-                  label='Suggested questions'
-                  prompts={remaining}
-                  onSelect={(question) => chat.sendMessage({ text: question })}
-                />
-              )}
               <ChatComposer
                 disabled={!!state}
                 status={status}
+                textareaRef={composerRef}
                 onSubmit={chat.sendMessage}
                 onStop={chat.stop}
                 label='Ask about this data'

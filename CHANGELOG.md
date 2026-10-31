@@ -1,5 +1,16 @@
 # dashboardblocks
 
+## 1.20.0
+
+### Minor Changes
+
+- b479772: AI Assistant replies lead with one line: a ring spins while the step it's on rolls by ("Checking accounts for warning signs…"), then the thinking, tool calls and sources fold into "Used 1 tool in 2.2 s", with tool results drawn as blocks at the top of the answer. `toolLabels` takes `{ running, done }`. New `agent-ring` part, and the `ai-assistant` part has a `ChatPanel` (an assistant in a panel with New conversation and Close, which AI Assistant 01 now uses) and a `ChatConversation` (a chat's messages with their actions, follow-ups under the last reply, Thinking… and Retry). Follow-up chips wrap instead of scrolling sideways, a saved conversation opens with nothing cut off above its last question, Retry leaves focus in the message box, and a reply's table no longer squeezes a column to a word per line.
+
+### Patch Changes
+
+- aa61d8b: `toMinorUnits` moves from the Invoice part to `format.ts`, so any block rounds money to the currency's smallest unit the same way. Receipt rounds its refunds with it, so a half cent stored just below .5 no longer rounds down.
+- 141c3b6: The unread mark in Activity Feed and Notifications is a smaller blue dot, so it reads as unread without looking like a status. Agent Ring adds `AgentMark`, an agent's initials in its ring.
+
 ## 1.19.0
 
 ### Minor Changes

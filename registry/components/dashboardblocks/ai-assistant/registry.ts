@@ -22,7 +22,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'An assistant docked beside the page with suggested prompts, the page as context, and new chat and close buttons.',
+        'An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons.',
       size: 'page',
       usedWith: ['ai-assistant-02'],
     },

@@ -21,6 +21,7 @@ import {
   formatPercent,
   formatSigned,
   getCurrencyDigits,
+  toMinorUnits,
 } from '@/registry/lib/dashboardblocks/format'
 import { type ComponentProps, type ReactNode, useId } from 'react'
 
@@ -74,11 +75,6 @@ interface DocumentAmounts {
   total: number
 }
 
-function toMinorUnits(value: number, scale: number) {
-  // The epsilon keeps 1.005 from rounding down because it's stored as 1.00499…
-  return Math.sign(value) * Math.round(Math.abs(value) * scale + 1e-6)
-}
-
 function formatDocumentAmount(value: number, currency = 'USD') {
   const format = (amount: number) =>
     formatCurrency(amount, { currency, precision: 'exact' })
@@ -90,7 +86,7 @@ function getLineAmount(
   currency = 'USD',
 ) {
   const scale = 10 ** getCurrencyDigits(currency)
-  return toMinorUnits(line.quantity * line.unitPrice, scale) / scale
+  return toMinorUnits(line.quantity * line.unitPrice, currency) / scale
 }
 
 function getDocumentTotals(
@@ -106,7 +102,7 @@ function getDocumentTotals(
     taxRate = 0,
   } = options
   const scale = 10 ** getCurrencyDigits(currency)
-  const minor = (value: number) => toMinorUnits(value, scale)
+  const minor = (value: number) => toMinorUnits(value, currency)
 
   const groups = new Map<number, number>()
   let subtotal = 0
@@ -889,6 +885,7 @@ export {
   getDocumentTotals,
   getLineAmount,
   getTotalRows,
+  toMinorUnits,
 }
 
 export type {

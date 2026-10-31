@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  AgentRing,
+  type AgentRingStatus,
+} from '@/registry/components/dashboardblocks/agent-ring'
+import {
   AIMarkdown,
   completeMarkdown,
 } from '@/registry/components/dashboardblocks/ai-markdown'
@@ -23,9 +27,17 @@ import {
   DisclosureTrigger,
 } from '@/registry/components/dashboardblocks/disclosure'
 import { HighlightedCode } from '@/registry/components/dashboardblocks/highlighted-code'
+import { RollingText } from '@/registry/components/dashboardblocks/rolling-text'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatDuration } from '@/registry/lib/dashboardblocks/format'
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react'
+import {
+  type ReactNode,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import {
   Attachment,
@@ -35,9 +47,58 @@ import {
   AttachmentTitle,
 } from '@/components/ui/attachment'
 import { Button } from '@/components/ui/button'
-import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
 
 import { cn } from '@/lib/utils'
+
+interface WorkLineProps {
+  /** What the line folds: the steps behind it. Leave out for a line alone. */
+  children?: ReactNode
+  className?: string
+  line: string
+  status: AgentRingStatus
+}
+
+/** The line a reply leads with while a model works: a ring that spins, the step it's on rolling to the next, then what it did, folding the steps under it. */
+function WorkLine({ children, className, line, status }: WorkLineProps) {
+  const text = (
+    <RollingText
+      text={line}
+      className={cn(
+        'h-5 text-sm',
+        status === 'running' && 'shimmer',
+        status === 'waiting' && 'text-orange-700 dark:text-orange-400',
+      )}
+    />
+  )
+  const ring = (
+    <AgentRing status={status} className='size-6 [--agent-ring-icon:0.75rem]' />
+  )
+  if (!children) {
+    return (
+      <div
+        data-slot='work-line'
+        className={cn(
+          'text-muted-foreground flex min-h-7.5 min-w-0 items-center gap-2.5',
+          className,
+        )}
+      >
+        {ring}
+        <div className='min-w-0 flex-1'>{text}</div>
+      </div>
+    )
+  }
+  return (
+    <Disclosure data-slot='work-line' className={cn('gap-3', className)}>
+      <div className='flex min-h-7.5 w-full min-w-0 items-center gap-2.5'>
+        {ring}
+        <DisclosureTrigger className='min-w-0 items-center [&_svg]:mt-0'>
+          {text}
+        </DisclosureTrigger>
+      </div>
+      <DisclosureContent className='gap-3 ps-8.5'>{children}</DisclosureContent>
+    </Disclosure>
+  )
+}
 
 /** The line a reply shows while the model works, before it has anything to show. */
 function ThinkingIndicator({
@@ -48,21 +109,7 @@ function ThinkingIndicator({
   /** @default 'Thinking…' */
   label?: string
 }) {
-  return (
-    <Marker data-slot='thinking-indicator' className={className}>
-      <MarkerIcon>
-        <IconPlaceholder
-          lucide='Loader2Icon'
-          tabler='IconLoader'
-          hugeicons='Loading03Icon'
-          phosphor='SpinnerIcon'
-          remixicon='RiLoaderLine'
-          className='animate-spin motion-reduce:animate-none'
-        />
-      </MarkerIcon>
-      <MarkerContent className='shimmer'>{label}</MarkerContent>
-    </Marker>
-  )
+  return <WorkLine className={className} line={label} status='running' />
 }
 
 interface ThinkingProps {
@@ -83,7 +130,16 @@ function Thinking({ className, streaming, text }: ThinkingProps) {
     return () => setDurationMs(performance.now() - startedAt)
   }, [streaming])
 
-  if (streaming) return <ThinkingIndicator className={className} />
+  if (streaming) {
+    return (
+      <p
+        data-slot='thinking'
+        className={cn('text-muted-foreground shimmer text-sm', className)}
+      >
+        Thinking…
+      </p>
+    )
+  }
   const label =
     durationMs === null ? 'Reasoning' : `Thought for ${formatDuration(durationMs)}`
   if (!text.trim()) {
@@ -491,11 +547,61 @@ function groupParts(message: AIMessage, streaming: boolean): AIMessageGroup[] {
   return groups
 }
 
+/** What a tool is called: once it has run, or `{ running, done }` to say what it's doing while it runs, such as `Looking up MRR by plan`. */
+type AIToolLabel = string | { done: string; running: string }
+
 // A model can call a tool by any name, `__proto__` and `toString` included.
-function getLabel(labels: Record<string, string> | undefined, name: string) {
-  if (!labels || !Object.hasOwn(labels, name)) return undefined
-  const label = labels[name]
-  return typeof label === 'string' ? label : undefined
+function resolveToolLabel(
+  labels: Record<string, AIToolLabel> | undefined,
+  part: AIAnyToolPart,
+) {
+  const name = getToolName(part)
+  const label = labels && Object.hasOwn(labels, name) ? labels[name] : undefined
+  if (typeof label === 'string') return { done: label, running: label }
+  if (label && typeof label.done === 'string' && typeof label.running === 'string') {
+    return { done: label.done, running: `${label.running}…` }
+  }
+  const fallback = getToolLabel(part)
+  return { done: fallback, running: fallback }
+}
+
+function plural(count: number, word: string) {
+  return `${count} ${count === 1 ? word : `${word}s`}`
+}
+
+interface WorkSummary {
+  durationMs: number | null
+  reasoned: boolean
+  stopped: boolean
+  tools: AIAnyToolPart[]
+}
+
+function describeWork({ durationMs, reasoned, stopped, tools }: WorkSummary) {
+  const turnedDown = tools.filter(
+    (part) => part.state === 'output-denied' || part.approval?.approved === false,
+  ).length
+  const failed = tools.filter((part) => part.state === 'output-error').length
+  const time = durationMs === null ? null : formatDuration(durationMs)
+  const facts: string[] = []
+  if (stopped) {
+    facts.push(
+      tools.length > 0 ? `Stopped after ${plural(tools.length, 'tool')}` : 'Stopped',
+    )
+  } else if (tools.length > 0) {
+    facts.push(`Used ${plural(tools.length, 'tool')}${time ? ` in ${time}` : ''}`)
+  } else if (reasoned) {
+    facts.push(time ? `Thought for ${time}` : 'Thought it over')
+  }
+  if (failed > 0) facts.push(`${failed} failed`)
+  if (turnedDown > 0) facts.push(`${turnedDown} denied`)
+  return facts.join(', ')
+}
+
+function isWork(group: AIMessageGroup) {
+  return (
+    group.type === 'thinking' ||
+    (group.type === 'tool' && group.part.state !== 'approval-requested')
+  )
 }
 
 interface AIMessagePartsProps {
@@ -503,16 +609,16 @@ interface AIMessagePartsProps {
   message: AIMessage
   /** Answers a tool call that waits for approval: pass the chat's `addToolApprovalResponse`. Approve and Deny show once the reply has stopped streaming. */
   onToolApprovalResponse?: (response: AIToolApprovalResponse) => void
-  /** Draws a tool's result as a block, such as a chart, under its row. Return nothing to show only the row. */
+  /** Draws a tool's result as a block, such as a chart or a headline number, at the top of the answer. Return nothing to show only the step. */
   renderToolResult?: (part: AIAnyToolPart) => ReactNode
-  /** Lists the sources under a finished reply. Turn it off when the block lists them itself. @default true */
+  /** Lists the sources a reply cites, under its steps once it's done. Turn it off when the block lists them itself. @default true */
   showSources?: boolean
   /** What `[n]` in the reply cites, when the block holds the sources rather than the reply's `source-url` parts. */
   sources?: AISource[]
   /** The reply is still arriving. */
   streaming?: boolean
   /** What each tool is called, by its name. Others read as their name in words. */
-  toolLabels?: Record<string, string>
+  toolLabels?: Record<string, AIToolLabel>
 }
 
 /** Whether a reply holds anything to show: a tool call, or text that reads as more than a cut-off citation such as `[1`. */
@@ -526,7 +632,7 @@ function hasAnswer(reply: Pick<AIMessage, 'parts'>) {
   )
 }
 
-/** Everything a reply holds, in the order it came: thinking, text, tool calls, files, and its sources once it's done. */
+/** Everything a reply holds: one line that rolls through what the model is doing and folds its thinking, tool calls and sources once it's done, then tool results drawn as blocks, approvals, the text and files. */
 function AIMessageParts({
   className,
   message,
@@ -537,51 +643,126 @@ function AIMessageParts({
   streaming = false,
   toolLabels,
 }: AIMessagePartsProps) {
-  const id = useId()
-  const sources = sourcesProp ?? getMessageSources(message)
+  const sourcesId = useId()
   const groups = groupParts(message, streaming)
+  const sources = sourcesProp ?? getMessageSources(message)
+  const listedSources = showSources && !streaming && sources.length > 0
   const files = getMessageFiles(message)
+  const tools = groups.flatMap((group) => (group.type === 'tool' ? [group.part] : []))
+  const last = groups.at(-1)
+  const working = streaming && last?.type !== 'text'
+  const [startedLive] = useState(streaming)
+  const [durationMs, setDurationMs] = useState<number | null>(null)
+
+  useLayoutEffect(() => {
+    if (!working) return
+    const startedAt = performance.now()
+    return () =>
+      setDurationMs((previous) => (previous ?? 0) + performance.now() - startedAt)
+  }, [working])
+
+  const waiting = tools.find((part) => part.state === 'approval-requested')
+  const stopped =
+    !streaming &&
+    (tools.some(isToolUnfinished) ||
+      message.parts.some(
+        (part) =>
+          (part.type === 'reasoning' || part.type === 'text') &&
+          part.state === 'streaming',
+      ))
+  const work = groups.filter(isWork)
+
+  let status: AgentRingStatus = 'done'
+  let line = describeWork({
+    durationMs,
+    reasoned: groups.some((group) => group.type === 'thinking'),
+    stopped,
+    tools,
+  })
+  if (waiting) {
+    status = 'waiting'
+    line = 'Waiting for you to approve'
+  } else if (working || (startedLive && !stopped && durationMs === null)) {
+    status = 'running'
+    line =
+      last?.type === 'tool' && isToolUnfinished(last.part)
+        ? resolveToolLabel(toolLabels, last.part).running
+        : 'Thinking…'
+  } else if (stopped) {
+    status = 'stopped'
+  }
+
   return (
     <div
       data-slot='ai-message-parts'
-      className={cn('flex min-w-0 flex-col gap-3', className)}
+      className={cn('flex min-w-0 flex-col gap-4', className)}
     >
+      {(work.length > 0 || working || waiting) && (
+        <WorkLine line={line} status={status}>
+          {work.length > 0 && (
+            <>
+              {work.map((group) =>
+                group.type === 'thinking' ? (
+                  <Thinking
+                    key={group.key}
+                    streaming={group.streaming}
+                    text={group.text}
+                  />
+                ) : group.type === 'tool' ? (
+                  <ToolCall
+                    key={group.key}
+                    part={group.part}
+                    inProgress={streaming}
+                    label={resolveToolLabel(toolLabels, group.part).done}
+                  />
+                ) : null,
+              )}
+              {listedSources && <SourceList id={sourcesId} sources={sources} />}
+            </>
+          )}
+        </WorkLine>
+      )}
       {groups.map((group) => {
-        switch (group.type) {
-          case 'thinking':
-            return (
-              <Thinking key={group.key} streaming={group.streaming} text={group.text} />
-            )
-          case 'text':
-            return (
-              <AIMarkdown
-                key={group.key}
-                text={group.text}
-                sources={sources}
-                streaming={group.streaming}
-              />
-            )
-          case 'tool': {
-            return (
-              <ToolCall
-                key={group.key}
-                part={group.part}
-                inProgress={streaming}
-                label={getLabel(toolLabels, getToolName(group.part))}
-                onApprovalResponse={streaming ? undefined : onToolApprovalResponse}
-                result={
-                  group.part.state === 'output-available' && !group.part.preliminary
-                    ? renderToolResult?.(group.part)
-                    : undefined
-                }
-              />
-            )
-          }
+        if (group.type === 'text') {
+          return (
+            <AIMarkdown
+              key={group.key}
+              text={group.text}
+              sources={sources}
+              streaming={group.streaming}
+            />
+          )
         }
+        if (group.type !== 'tool') return null
+        const { part } = group
+        if (part.state === 'approval-requested') {
+          return (
+            <ToolCall
+              key={group.key}
+              part={part}
+              inProgress={streaming}
+              label={resolveToolLabel(toolLabels, part).done}
+              onApprovalResponse={streaming ? undefined : onToolApprovalResponse}
+            />
+          )
+        }
+        const result =
+          part.state === 'output-available' && !part.preliminary
+            ? renderToolResult?.(part)
+            : null
+        if (!result) return null
+        return (
+          <div
+            key={group.key}
+            className='motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 flex min-w-0 flex-col gap-5 duration-300'
+          >
+            {result}
+          </div>
+        )
       })}
       <MessageFiles files={files} />
-      {showSources && !streaming && sources.length > 0 && (
-        <SourceList id={id} sources={sources} />
+      {work.length === 0 && listedSources && (
+        <SourceList id={sourcesId} sources={sources} />
       )}
     </div>
   )
@@ -602,6 +783,7 @@ export {
 export type {
   AIMessageGroup,
   AIMessagePartsProps,
+  AIToolLabel,
   ThinkingProps,
   ToolCallProps,
   ToolValueProps,

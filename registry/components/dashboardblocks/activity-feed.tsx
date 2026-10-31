@@ -98,10 +98,22 @@ function ActivityIcon({
   )
 }
 
-function UnreadDot({ className }: { className?: string }) {
+function UnreadDot({
+  className,
+  label = 'Unread',
+}: {
+  className?: string
+  /** What the dot tells a screen reader, such as `Changed since you last looked`. */
+  label?: string
+}) {
   return (
-    <span className={cn('bg-primary size-2 shrink-0 rounded-full', className)}>
-      <span className='sr-only'>Unread</span>
+    <span
+      className={cn(
+        'size-1.5 shrink-0 rounded-full bg-sky-600 dark:bg-sky-400',
+        className,
+      )}
+    >
+      <span className='sr-only'>{label}</span>
     </span>
   )
 }

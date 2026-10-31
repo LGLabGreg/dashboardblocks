@@ -1,30 +1,22 @@
 'use client'
 
 import {
-  ChatComposer,
   ChatContextChip,
-  ChatError,
-  ChatHeader,
-  ChatMessage,
-  ChatMessageActions,
-  ChatMessages,
-  ChatWelcome,
+  ChatPanel,
   type SuggestedPrompt,
-  SuggestedPrompts,
-  TypingIndicator,
   useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
 import {
   type AIChat,
-  type AIFilePart,
   type AIMessage,
   type AIMessagePart,
   type AIReasoningPart,
   type AIReply,
   type AITextPart,
   getMessageText,
-  getStreamingMessageId,
+  isToolPart,
 } from '@/registry/components/dashboardblocks/ai-message'
+import type { AIToolLabel } from '@/registry/components/dashboardblocks/ai-parts'
 import {
   BlockReady,
   BlockStateProvider,
@@ -80,6 +72,8 @@ interface AiAssistant1Props extends BlockStateProps {
   metrics?: Metric[]
   suggestions: SuggestedPrompt[]
   title: string
+  /** What each tool is called, by its name, or `{ running, done }` for what it's doing while it runs. Others read as their name in words. */
+  toolLabels?: Record<string, AIToolLabel>
 }
 
 const asCurrency = (value: number) => formatCurrency(value)
@@ -174,6 +168,12 @@ const exampleProps: AiAssistant1Props = {
     },
   ],
   title: 'Revenue',
+  toolLabels: {
+    find_at_risk_accounts: {
+      done: 'Checked accounts for warning signs',
+      running: 'Checking accounts for warning signs',
+    },
+  },
 }
 
 const cannedReplies: Record<string, AIMessagePart[]> = {
@@ -208,6 +208,32 @@ Churn rose to 1.8%, mostly Starter customers after the price change. Next week w
     {
       text: 'Look for falling seat use, failed payments and a run of support tickets among the top accounts, then sort by renewal date.',
       type: 'reasoning',
+    },
+    {
+      input: { limit: 3, signals: ['seat use', 'failed payments', 'support tickets'] },
+      output: [
+        {
+          account: 'Brightline Studio',
+          mrr: 4_200,
+          renews: '2026-10-14',
+          signal: '19 of 42 seats used',
+        },
+        {
+          account: 'Kestrel Analytics',
+          mrr: 3_780,
+          renews: '2026-11-02',
+          signal: 'Two failed payments',
+        },
+        {
+          account: 'Oakridge Dental Group',
+          mrr: 2_640,
+          renews: '2026-12-09',
+          signal: '4 export tickets',
+        },
+      ],
+      state: 'output-available',
+      toolCallId: 'call-at-risk',
+      type: 'tool-find_at_risk_accounts',
     },
     {
       text: `Three accounts show the usual warning signs:
@@ -264,8 +290,21 @@ async function* simulateReply(
   await wait(400, signal)
   yield { parts }
   for (const step of reply) {
+    if (isToolPart(step)) {
+      const part = { ...step, output: undefined, state: 'input-available' as const }
+      parts.push(part)
+      yield { parts }
+      await wait(900, signal)
+      Object.assign(part, { output: step.output, state: step.state })
+      yield { parts }
+      continue
+    }
     if (step.type !== 'text' && step.type !== 'reasoning') continue
-    const part: AITextPart | AIReasoningPart = { ...step, state: 'streaming', text: '' }
+    const part: AITextPart | AIReasoningPart = {
+      ...step,
+      state: 'streaming',
+      text: '',
+    }
     parts.push(part)
     await wait(step.type === 'reasoning' ? 900 : 200, signal)
     for (const word of step.text.split(/(?<=\s)/)) {
@@ -292,6 +331,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     status: blockStatus,
     suggestions,
     title,
+    toolLabels,
   } = props
   const state = getBlockState(blockStatus, metrics)
   const shown: (StatMetric & { history?: number[] })[] =
@@ -311,13 +351,18 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
       return simulateReply(reply, signal)
     },
   })
-  const chat = props.chat ?? demo
-  const { messages, status } = chat
-  const streamingId = getStreamingMessageId(messages, status)
+  const baseChat = props.chat ?? demo
+  const chat: AIChat = {
+    ...baseChat,
+    sendMessage: (message) =>
+      baseChat.sendMessage({
+        ...message,
+        metadata: withContext ? { context: contextLabel } : undefined,
+      }),
+  }
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const focusNext = useRef<'composer' | 'toggle' | null>(null)
-  const latest = messages.at(-1)
 
   useEffect(() => {
     const target = focusNext.current === 'composer' ? composerRef : toggleRef
@@ -325,23 +370,14 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     focusNext.current = null
   }, [open])
 
-  function send(message: { files?: AIFilePart[]; text: string }) {
-    chat.sendMessage({
-      ...message,
-      metadata: withContext ? { context: contextLabel } : undefined,
-    })
-    composerRef.current?.focus()
-  }
-
-  function newChat() {
-    chat.stop()
-    chat.setMessages?.([])
-    composerRef.current?.focus()
+  function close() {
+    focusNext.current = 'toggle'
+    setOpen(false)
   }
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <div className='bg-background @container flex h-svh'>
+    <div className='bg-background @container flex h-svh'>
+      <BlockStateProvider errorMessage={errorMessage} state={state}>
         <div
           className={
             open
@@ -441,130 +477,42 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
             )}
           </div>
         </div>
-        {open && (
-          <aside
-            id={panelId}
-            aria-label='Assistant'
-            className='bg-background flex w-full flex-col border-s @3xl:w-96'
-          >
-            <ChatHeader
-              title='Assistant'
-              description='Answers from your revenue data'
-              className='border-b'
-              actions={
-                <>
-                  {chat.setMessages && (
-                    <Button
-                      variant='ghost'
-                      size='icon-sm'
-                      aria-label='New chat'
-                      disabled={messages.length === 0}
-                      onClick={newChat}
-                    >
-                      <IconPlaceholder
-                        lucide='SquarePenIcon'
-                        tabler='IconEdit'
-                        hugeicons='PencilEdit02Icon'
-                        phosphor='NotePencilIcon'
-                        remixicon='RiEditBoxLine'
-                      />
-                    </Button>
-                  )}
-                  <Button
-                    variant='ghost'
-                    size='icon-sm'
-                    aria-label='Close assistant'
-                    onClick={() => {
-                      focusNext.current = 'toggle'
-                      setOpen(false)
-                    }}
-                  >
-                    <IconPlaceholder
-                      lucide='XIcon'
-                      tabler='IconX'
-                      hugeicons='Cancel01Icon'
-                      phosphor='XIcon'
-                      remixicon='RiCloseLine'
-                    />
-                  </Button>
-                </>
-              }
-            />
-            {messages.length === 0 ? (
-              <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
-                <ChatWelcome
-                  className='m-auto'
-                  title='How can I help?'
-                  description='Ask about revenue, customers or churn on this page.'
-                >
-                  <SuggestedPrompts
-                    variant='list'
-                    prompts={suggestions}
-                    onSelect={(text) => send({ text })}
+      </BlockStateProvider>
+      {open && (
+        <ChatPanel
+          id={panelId}
+          className='w-full border-s @3xl:w-96'
+          chat={chat}
+          title='Assistant'
+          description='Answers from your revenue data'
+          placeholder='Ask about this page'
+          suggestions={suggestions}
+          textareaRef={composerRef}
+          toolLabels={toolLabels}
+          onClose={close}
+          context={
+            withContext && (
+              <ChatContextChip
+                label={contextLabel}
+                icon={
+                  <IconPlaceholder
+                    lucide='LayoutDashboardIcon'
+                    tabler='IconDashboard'
+                    hugeicons='DashboardSquare01Icon'
+                    phosphor='SquaresFourIcon'
+                    remixicon='RiDashboardLine'
                   />
-                </ChatWelcome>
-              </div>
-            ) : (
-              <ChatMessages status={status} latest={latest}>
-                {messages.map((message, index) => {
-                  const isLast = index === messages.length - 1
-                  const streaming = message.id === streamingId
-                  return (
-                    <ChatMessage
-                      key={message.id}
-                      message={message}
-                      streaming={streaming}
-                      onToolApprovalResponse={chat.addToolApprovalResponse}
-                      actions={
-                        message.role === 'assistant' &&
-                        !streaming && (
-                          <ChatMessageActions
-                            content={getMessageText(message)}
-                            onRegenerate={isLast ? chat.regenerate : undefined}
-                          />
-                        )
-                      }
-                    />
-                  )
-                })}
-                {status === 'submitted' && !streamingId && <TypingIndicator />}
-                {status === 'error' && (
-                  <ChatError message={chat.error?.message} onRetry={chat.regenerate} />
-                )}
-              </ChatMessages>
-            )}
-            <ChatComposer
-              className='p-4 pt-0'
-              textareaRef={composerRef}
-              status={status}
-              onSubmit={send}
-              onStop={chat.stop}
-              placeholder='Ask about this page'
-              context={
-                withContext && (
-                  <ChatContextChip
-                    label={contextLabel}
-                    icon={
-                      <IconPlaceholder
-                        lucide='LayoutDashboardIcon'
-                        tabler='IconDashboard'
-                        hugeicons='DashboardSquare01Icon'
-                        phosphor='SquaresFourIcon'
-                        remixicon='RiDashboardLine'
-                      />
-                    }
-                    onRemove={() => {
-                      setWithContext(false)
-                      composerRef.current?.focus()
-                    }}
-                  />
-                )
-              }
-            />
-          </aside>
-        )}
-      </div>
-    </BlockStateProvider>
+                }
+                onRemove={() => {
+                  setWithContext(false)
+                  composerRef.current?.focus()
+                }}
+              />
+            )
+          }
+        />
+      )}
+    </div>
   )
 }
 
