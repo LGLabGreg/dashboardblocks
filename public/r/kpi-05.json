@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kpi-05",
+  "description": "A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard.",
+  "registryDependencies": [
+    "card",
+    "https://www.dashboardblocks.com/r/block-state.json",
+    "https://www.dashboardblocks.com/r/kpi-01.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/kpi/kpi-05.tsx",
+      "content": "'use client'\n\nimport {\n  BlockStateProvider,\n  type BlockStateProps,\n  getBlockState,\n} from '@/registry/components/dashboardblocks/block-state'\nimport { KPI1, type KPI1Props } from '@/registry/components/dashboardblocks/kpi/kpi-01'\n\nimport { Card, CardContent } from '@/components/ui/card'\n\ninterface KPI5Props extends BlockStateProps {\n  /** One card each, in order. A metric without a `value` shows its card's empty state. */\n  metrics: (Omit<KPI1Props, keyof BlockStateProps> & { key: string })[]\n}\n\nconst exampleProps: KPI5Props = {\n  metrics: [\n    {\n      comparison: 'last month',\n      format: 'currency',\n      key: 'revenue',\n      previous: 37_660,\n      title: 'Total revenue',\n      value: 45_231,\n    },\n    {\n      comparison: 'last month',\n      key: 'customers',\n      previous: 1_402,\n      title: 'New customers',\n      value: 1_284,\n    },\n    {\n      comparison: 'last month',\n      key: 'accounts',\n      previous: 4_183,\n      title: 'Active accounts',\n      value: 4_512,\n    },\n    {\n      comparison: 'last month',\n      format: 'currency',\n      key: 'order',\n      previous: 118,\n      title: 'Average order',\n      value: 126,\n    },\n  ],\n}\n\nconst KPI5 = ({ errorMessage, metrics, status }: KPI5Props) => (\n  <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, metrics)}>\n    <section className='@container'>\n      <div className='grid gap-4 @xl:grid-cols-2 @5xl:grid-cols-4'>\n        {metrics.map(({ key, ...metric }) => (\n          <Card key={key}>\n            <CardContent>\n              <KPI1 {...metric} errorMessage={errorMessage} status={status} />\n            </CardContent>\n          </Card>\n        ))}\n      </div>\n    </section>\n  </BlockStateProvider>\n)\n\nexport { KPI5, exampleProps as kpi5ExampleProps, type KPI5Props }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/kpi/kpi-05.tsx"
+    }
+  ],
+  "meta": {
+    "shows": "A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard.",
+    "size": "full",
+    "usedWith": [
+      "kpi-01",
+      "chart-panel-01",
+      "data-table-06"
+    ],
+    "component": "KPI5",
+    "props": "{ metrics: Omit<KPI1Props, keyof BlockStateProps> & { key: string; }[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
+  },
+  "type": "registry:component"
+}

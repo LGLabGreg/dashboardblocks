@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shortcut-button",
+  "title": "Shortcut Button",
+  "description": "A button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.",
+  "registryDependencies": [
+    "button",
+    "kbd",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/shortcut-button.tsx",
+      "content": "'use client'\n\nimport { type ComponentProps, useEffect, useRef } from 'react'\n\nimport { Button } from '@/components/ui/button'\nimport { Kbd } from '@/components/ui/kbd'\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from '@/components/ui/tooltip'\n\nimport { cn } from '@/lib/utils'\n\nconst OWNS_ITS_KEYS =\n  'input, textarea, select, [contenteditable], [role=dialog], [role=alertdialog], [role=menu], [role=listbox]'\n\n/**\n * Clicks the button when `key` is pressed alone, unless someone is typing, a menu or dialog has\n * focus, or the page already used the key.\n */\nfunction usePressOnKey(\n  key: string,\n  button: { current: HTMLButtonElement | null },\n  on: boolean,\n) {\n  useEffect(() => {\n    if (!on) return\n    const match = key.toLowerCase()\n    const onKeyDown = (event: KeyboardEvent) => {\n      // Chrome's autofill sends keydown events without a key.\n      if (event.defaultPrevented || event.repeat || event.key?.toLowerCase() !== match)\n        return\n      if (event.metaKey || event.ctrlKey || event.altKey) return\n      if (event.target instanceof Element && event.target.closest(OWNS_ITS_KEYS)) return\n      event.preventDefault()\n      button.current?.click()\n    }\n    window.addEventListener('keydown', onKeyDown, { capture: true })\n    return () => window.removeEventListener('keydown', onKeyDown, { capture: true })\n  }, [button, key, on])\n}\n\nconst collapsed = {\n  lg: 'max-lg:aspect-square max-lg:px-0',\n  sm: 'max-sm:aspect-square max-sm:px-0',\n}\n\ninterface ShortcutButtonProps extends Omit<ComponentProps<'button'>, 'ref'> {\n  /** Below this width the button squares to its icon. Hide its text there too, with `max-lg:sr-only` or `max-sm:sr-only`. */\n  collapseBelow?: 'lg' | 'sm'\n  /** The tooltip's text, such as `New issue`. The button's name comes from `aria-label` or its text. */\n  label: string\n  /**\n   * Presses the button when its key is pressed anywhere on the page. Leave it off when a list or\n   * panel already listens for the key, as a row's actions do.\n   */\n  listen?: boolean\n  /** The key, shown in the tooltip, such as `C`. */\n  shortcut: string\n  /** @default 'icon-sm' */\n  size?: 'icon-sm' | 'sm'\n  /** @default 'ghost' */\n  variant?: 'ghost' | 'outline'\n}\n\n/** A button whose tooltip shows its label and its keyboard shortcut. */\nfunction ShortcutButton({\n  children,\n  className,\n  collapseBelow,\n  label,\n  listen = false,\n  shortcut,\n  size = 'icon-sm',\n  variant = 'ghost',\n  ...props\n}: ShortcutButtonProps) {\n  const button = useRef<HTMLButtonElement>(null)\n  usePressOnKey(shortcut, button, listen)\n\n  return (\n    <TooltipProvider>\n      <Tooltip>\n        <TooltipTrigger aria-keyshortcuts={shortcut} ref={button} {...props} asChild>\n          <Button\n            variant={variant}\n            size={size}\n            className={cn(collapseBelow && collapsed[collapseBelow], className)}\n          >\n            {children}\n          </Button>\n        </TooltipTrigger>\n        <TooltipContent>\n          {label}\n          <Kbd>{shortcut}</Kbd>\n        </TooltipContent>\n      </Tooltip>\n    </TooltipProvider>\n  )\n}\n\nexport { ShortcutButton }\n\nexport type { ShortcutButtonProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/shortcut-button.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

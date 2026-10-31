@@ -49,7 +49,7 @@ const Alerts4 = (props: Alerts4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
+      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
         <div className='flex shrink-0 flex-col gap-0.5'>
           {state === 'error' || state === 'empty' ? (
             <p className='flex items-baseline gap-2'>

@@ -75,7 +75,7 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3'>
+      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>
           <UsageStatusLabel status={status} />

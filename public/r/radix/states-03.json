@@ -25,7 +25,7 @@
       "dashboard-header-01"
     ],
     "component": "States3",
-    "props": "{ defaultFilters: { field: \"region\" | \"status\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ defaultFilters: { field: \"status\" | \"region\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

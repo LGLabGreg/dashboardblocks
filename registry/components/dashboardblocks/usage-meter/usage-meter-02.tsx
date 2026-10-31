@@ -46,7 +46,7 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
       errorMessage={errorMessage}
       state={getBlockState(blockStatus, props.used)}
     >
-      <section className='@container flex items-center gap-6 border-t pt-4'>
+      <section className='@container flex items-center gap-6 border-t pt-4 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
         <Ring
           ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}
           className='size-24'

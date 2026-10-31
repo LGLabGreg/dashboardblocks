@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: 1f2002acca10
+// source-hash: c324a9f7e408
 
 'use client'
 
@@ -173,6 +173,10 @@ function BackLink({
 interface PageTab {
   badge?: ReactNode
   href: string
+  /** The link's id, for a page that moves focus to the tab, such as after it saved a view. */
+  id?: string
+  /** Shown after the title, such as a dot for a view with changes that aren't saved yet. */
+  indicator?: ReactNode
   title: string
 }
 
@@ -216,6 +220,7 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
       {items.map((item) => (
         <Link
           key={item.href}
+          id={item.id}
           href={item.href}
           aria-current={item.href === pathname ? 'page' : undefined}
           data-active={active(item.href) || undefined}
@@ -227,6 +232,7 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
           )}
         >
           {item.title}
+          {item.indicator}
           {item.badge !== undefined && renderTag(item.badge)}
         </Link>
       ))}
@@ -317,32 +323,52 @@ interface ActionsMenuItem {
 function ActionsMenu({
   children,
   disabled = false,
+  icon,
+  id,
   items,
   label = 'More actions',
+  size = 'icon',
+  variant = 'outline',
 }: {
   /** A text trigger, such as "More (3)", in place of the icon button. */
   children?: ReactNode
   disabled?: boolean
+  /** The icon button's icon, such as a chevron for the menu half of a split button. @default an ellipsis */
+  icon?: ReactNode
+  /** The trigger's id, for a page that moves focus back to it, such as after a dialog the menu opened. */
+  id?: string
   items: ActionsMenuItem[]
   /** Names the icon button. @default 'More actions' */
   label?: string
+  /** The icon button's size. @default 'icon' */
+  size?: 'icon' | 'icon-sm'
+  /** The icon button's variant: the one beside it when it is the menu half of a split button. @default 'outline' */
+  variant?: 'default' | 'outline' | 'secondary'
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
     <DropdownMenuTrigger>
       {children ? (
-        <Button variant='ghost' size='sm' isDisabled={disabled}>
+        <Button id={id} variant='ghost' size='sm' isDisabled={disabled}>
           {children}
         </Button>
       ) : (
-        <Button variant='outline' size='icon' aria-label={label} isDisabled={disabled}>
-          <IconPlaceholder
-            lucide='EllipsisIcon'
-            tabler='IconDots'
-            hugeicons='MoreHorizontalCircle01Icon'
-            phosphor='DotsThreeIcon'
-            remixicon='RiMoreLine'
-          />
+        <Button
+          id={id}
+          variant={variant}
+          size={size}
+          aria-label={label}
+          isDisabled={disabled}
+        >
+          {icon ?? (
+            <IconPlaceholder
+              lucide='EllipsisIcon'
+              tabler='IconDots'
+              hugeicons='MoreHorizontalCircle01Icon'
+              phosphor='DotsThreeIcon'
+              remixicon='RiMoreLine'
+            />
+          )}
         </Button>
       )}
       <DropdownMenu placement='bottom end' className='w-auto min-w-44'>

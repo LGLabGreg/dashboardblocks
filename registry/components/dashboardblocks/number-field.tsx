@@ -30,6 +30,8 @@ interface NumberFieldProps {
   /** Names the minus button. @default 'Decrease' */
   decrementLabel?: string
   disabled?: boolean
+  /** The id of the form the field belongs to when it sits outside it, so Enter submits that form. */
+  form?: string
   id?: string
   /** Names the plus button. @default 'Increase' */
   incrementLabel?: string
@@ -110,6 +112,8 @@ function NumberField({
   }
 
   const shown = text ?? (value === null ? '' : format(value))
+  const atMin = min !== undefined && value !== null && value <= min
+  const atMax = max !== undefined && value !== null && value >= max
 
   return (
     <InputGroup data-slot='number-field' className={cn('w-full', className)}>
@@ -128,7 +132,8 @@ function NumberField({
         onChange={(event) => {
           const typed = event.target.value.replace(/[^\d.,-]/g, '')
           setText(typed)
-          onValueChange(parse(typed))
+          const parsed = parse(typed)
+          onValueChange(parsed === null ? null : Number(parsed.toFixed(decimals)))
         }}
         onBlur={() => {
           setText(null)
@@ -145,12 +150,12 @@ function NumberField({
               <InputGroupButton
                 size='icon-xs'
                 aria-label={decrementLabel}
-                disabled={
-                  disabled ||
-                  readOnly ||
-                  (min !== undefined && value !== null && value <= min)
-                }
-                onClick={() => stepBy(-1)}
+                aria-disabled={atMin || undefined}
+                disabled={disabled || readOnly}
+                className='aria-disabled:opacity-50'
+                onClick={() => {
+                  if (!atMin) stepBy(-1)
+                }}
               >
                 <IconPlaceholder
                   lucide='MinusIcon'
@@ -163,12 +168,12 @@ function NumberField({
               <InputGroupButton
                 size='icon-xs'
                 aria-label={incrementLabel}
-                disabled={
-                  disabled ||
-                  readOnly ||
-                  (max !== undefined && value !== null && value >= max)
-                }
-                onClick={() => stepBy(1)}
+                aria-disabled={atMax || undefined}
+                disabled={disabled || readOnly}
+                className='aria-disabled:opacity-50'
+                onClick={() => {
+                  if (!atMax) stepBy(1)
+                }}
               >
                 <IconPlaceholder
                   lucide='PlusIcon'

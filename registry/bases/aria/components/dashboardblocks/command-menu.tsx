@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: a6d27d7d9698
+// source-hash: efa2648a0d6a
 
 'use client'
 

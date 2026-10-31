@@ -106,6 +106,11 @@ function CommandMenu({
   const query = controlledQuery ?? ownQuery
   const setQuery = onQueryChange ?? setOwnQuery
   const results = onQueryChange ? groups : filterCommandGroups(groups, query)
+  // cmdk picks the first item only when the text changes, so results that arrive later, above
+  // the item it picked, would leave Enter on that item.
+  const first = results[0]?.items[0]?.id ?? ''
+  const [picked, setPicked] = useState({ first, value: first })
+  if (picked.first !== first) setPicked({ first, value: first })
   const empty =
     emptyMessage ??
     (query.trim() ? `No results for “${query.trim()}”.` : 'Nothing here yet.')
@@ -128,7 +133,12 @@ function CommandMenu({
       title={title}
       description={placeholder}
     >
-      <Command shouldFilter={false} className='max-h-[calc(66dvh-1rem)]'>
+      <Command
+        shouldFilter={false}
+        className='max-h-[calc(66dvh-1rem)]'
+        value={picked.value}
+        onValueChange={(value) => setPicked({ first, value })}
+      >
         <CommandInput value={query} onValueChange={setQuery} placeholder={placeholder} />
         {panel !== undefined && (
           <div

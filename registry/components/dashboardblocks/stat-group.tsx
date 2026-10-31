@@ -67,7 +67,10 @@ function StatGroup({ className, ...props }: ComponentProps<'dl'>) {
 
   if (state === 'error' || state === 'empty') {
     return (
-      <div data-slot='stat-group' className='border-t pt-3'>
+      <div
+        data-slot='stat-group'
+        className='border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'
+      >
         <BlockStateText className='text-4xl font-light tracking-tight' variant='short' />
       </div>
     )
@@ -76,7 +79,10 @@ function StatGroup({ className, ...props }: ComponentProps<'dl'>) {
   return (
     <dl
       data-slot='stat-group'
-      className={cn('grid gap-x-6 gap-y-5', className)}
+      className={cn(
+        'grid gap-x-6 gap-y-5 in-data-[slot=card]:first:*:border-t-0 in-data-[slot=card]:first:*:pt-0',
+        className,
+      )}
       {...props}
     />
   )

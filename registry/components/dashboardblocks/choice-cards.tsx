@@ -148,13 +148,21 @@ function ChoiceCards(props: ChoiceCardsProps) {
   )
 }
 
-function ChoiceIndicator({ multiple }: { multiple: boolean }) {
+/** The tick box or radio drawn for the input inside a `group/field-label`. */
+function ChoiceIndicator({
+  className,
+  multiple = false,
+}: {
+  className?: string
+  multiple?: boolean
+}) {
   return (
     <span
       aria-hidden
       className={cn(
         'border-input dark:bg-input/30 group-has-[:checked]/field-label:border-primary group-has-[:checked]/field-label:bg-primary dark:group-has-[:checked]/field-label:bg-primary text-primary-foreground mt-0.5 flex size-4 shrink-0 items-center justify-center border shadow-xs transition-colors',
         multiple ? 'rounded-[4px]' : 'rounded-full',
+        className,
       )}
     >
       {multiple ? (
@@ -174,6 +182,6 @@ function ChoiceIndicator({ multiple }: { multiple: boolean }) {
   )
 }
 
-export { ChoiceCards }
+export { ChoiceCards, ChoiceIndicator }
 
 export type { ChoiceCardOption, ChoiceCardsProps }

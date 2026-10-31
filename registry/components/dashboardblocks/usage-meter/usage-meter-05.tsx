@@ -72,7 +72,7 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-1 border-t pt-3'>
+      <section className='@container flex flex-col gap-1 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
         <header className='flex items-baseline justify-between gap-3'>
           <p className='text-muted-foreground text-sm'>{title}</p>
           {status !== 'ok' && <UsageStatusLabel status={status} />}

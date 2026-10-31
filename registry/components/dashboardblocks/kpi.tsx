@@ -53,7 +53,10 @@ function KPI({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
       data-slot='kpi'
-      className={cn('flex flex-col border-t pt-3', className)}
+      className={cn(
+        'flex flex-col border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0',
+        className,
+      )}
       {...props}
     />
   )

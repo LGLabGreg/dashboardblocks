@@ -74,6 +74,23 @@ export const examples: Registry['items'] = [
     },
   },
   {
+    name: 'kpi-05',
+    type: 'registry:component',
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('kpi-01')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/kpi/kpi-05.tsx',
+        type: 'registry:component',
+      },
+    ],
+    meta: {
+      shows:
+        'A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard.',
+      size: 'full',
+      usedWith: ['kpi-01', 'chart-panel-01', 'data-table-06'],
+    },
+  },
+  {
     name: 'progress-kpi-01',
     type: 'registry:component',
     registryDependencies: [registryUrl('format'), registryUrl('kpi')],

@@ -6,6 +6,7 @@ import { KPI1, kpi1ExampleProps } from './kpi-01'
 import { KPI2, kpi2ExampleProps } from './kpi-02'
 import { KPI3, kpi3ExampleProps } from './kpi-03'
 import { KPI4, kpi4ExampleProps } from './kpi-04'
+import { KPI5, kpi5ExampleProps } from './kpi-05'
 import { LineChartKPI1, lineChartKpi1ExampleProps } from './line-chart-kpi-01'
 import { ProgressKPI1, progressKpi1ExampleProps } from './progress-kpi-01'
 import { ProgressKPI2, progressKpi2ExampleProps } from './progress-kpi-02'
@@ -16,6 +17,7 @@ export const kpiComponents = {
   'kpi-02': KPI2,
   'kpi-03': KPI3,
   'kpi-04': KPI4,
+  'kpi-05': KPI5,
   'progress-kpi-01': ProgressKPI1,
   'progress-kpi-02': ProgressKPI2,
   'progress-kpi-03': ProgressKPI3,
@@ -31,6 +33,7 @@ export const kpiExampleProps = {
   'kpi-02': kpi2ExampleProps,
   'kpi-03': kpi3ExampleProps,
   'kpi-04': kpi4ExampleProps,
+  'kpi-05': kpi5ExampleProps,
   'progress-kpi-01': progressKpi1ExampleProps,
   'progress-kpi-02': progressKpi2ExampleProps,
   'progress-kpi-03': progressKpi3ExampleProps,
@@ -46,6 +49,14 @@ export const kpiEmptyProps = {
   'kpi-02': { previous: undefined, value: undefined },
   'kpi-03': { previous: undefined, value: undefined },
   'kpi-04': { previous: undefined, value: undefined },
+  'kpi-05': {
+    metrics: [
+      { comparison: 'last month', key: 'revenue', title: 'Total revenue' },
+      { comparison: 'last month', key: 'customers', title: 'New customers' },
+      { comparison: 'last month', key: 'accounts', title: 'Active accounts' },
+      { comparison: 'last month', key: 'order', title: 'Average order' },
+    ],
+  },
   'progress-kpi-01': { previous: undefined, value: undefined },
   'progress-kpi-02': { counts: [] },
   'progress-kpi-03': { current: undefined },

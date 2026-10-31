@@ -9,7 +9,13 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
-import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
+import {
+  type Person,
+  PersonAvatar,
+  WorkloadBar,
+  workloadFill,
+  workloadOverFill,
+} from '@/registry/components/dashboardblocks/team'
 import { useReveal } from '@/registry/hooks/use-reveal'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
@@ -81,54 +87,6 @@ const exampleProps: Team2Props = {
   ],
   title: 'Workload',
   unit: 'pts',
-}
-
-const FILL_COLOR = 'var(--color-chart-2)'
-const OVER_FILL =
-  'repeating-linear-gradient(135deg, var(--color-orange-500) 0 3px, color-mix(in oklab, var(--color-orange-500) 45%, var(--color-background)) 3px 6px)'
-
-function WorkloadBar({
-  assigned,
-  capacity,
-  max,
-  revealed,
-}: {
-  assigned: number
-  capacity: number
-  max: number
-  revealed: boolean
-}) {
-  const within = Math.min(assigned, capacity)
-  const over = Math.max(0, assigned - capacity)
-  const toPercent = (value: number) => `${max > 0 ? (value / max) * 100 : 0}%`
-  return (
-    <div aria-hidden className='relative h-2 w-full'>
-      <div className='bg-muted flex h-full w-full overflow-hidden rounded-full'>
-        <div
-          className='flex h-full origin-left transition-transform duration-700 ease-out motion-reduce:transition-none'
-          style={{
-            transform: revealed ? 'scaleX(1)' : 'scaleX(0)',
-            width: toPercent(within + over),
-          }}
-        >
-          <div
-            className='h-full'
-            style={{ backgroundColor: FILL_COLOR, flexGrow: within }}
-          />
-          {over > 0 && (
-            <div
-              className='h-full'
-              style={{ backgroundImage: OVER_FILL, flexGrow: over }}
-            />
-          )}
-        </div>
-      </div>
-      <span
-        className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
-        style={{ left: toPercent(capacity) }}
-      />
-    </div>
-  )
 }
 
 function summarize(people: Assignee[]) {
@@ -226,7 +184,7 @@ const Team2 = (props: Team2Props) => {
               <span
                 aria-hidden
                 className='h-2 w-3 rounded-full'
-                style={{ backgroundColor: FILL_COLOR }}
+                style={{ backgroundColor: workloadFill }}
               />
               Assigned
             </li>
@@ -234,7 +192,7 @@ const Team2 = (props: Team2Props) => {
               <span
                 aria-hidden
                 className='h-2 w-3 rounded-full'
-                style={{ backgroundImage: OVER_FILL }}
+                style={{ backgroundImage: workloadOverFill }}
               />
               Over capacity
             </li>

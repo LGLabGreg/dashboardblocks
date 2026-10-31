@@ -98,6 +98,7 @@ export const examples: Registry['items'] = [
     description:
       'A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.',
     registryDependencies: [
+      'card',
       registryUrl('activity-feed-01'),
       registryUrl('block-state'),
       registryUrl('chart-panel-04'),
@@ -117,7 +118,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.',
+        'A full sales dashboard in shadcn Cards, with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.',
       size: 'page',
       usedWith: [],
     },

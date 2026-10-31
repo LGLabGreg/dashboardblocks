@@ -171,6 +171,10 @@ function BackLink({
 interface PageTab {
   badge?: ReactNode
   href: string
+  /** The link's id, for a page that moves focus to the tab, such as after it saved a view. */
+  id?: string
+  /** Shown after the title, such as a dot for a view with changes that aren't saved yet. */
+  indicator?: ReactNode
   title: string
 }
 
@@ -214,6 +218,7 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
       {items.map((item) => (
         <Link
           key={item.href}
+          id={item.id}
           href={item.href}
           aria-current={item.href === pathname ? 'page' : undefined}
           data-active={active(item.href) || undefined}
@@ -225,6 +230,7 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
           )}
         >
           {item.title}
+          {item.indicator}
           {item.badge !== undefined && renderTag(item.badge)}
         </Link>
       ))}
@@ -315,21 +321,34 @@ interface ActionsMenuItem {
 function ActionsMenu({
   children,
   disabled = false,
+  icon,
+  id,
   items,
   label = 'More actions',
+  size = 'icon',
+  variant = 'outline',
 }: {
   /** A text trigger, such as "More (3)", in place of the icon button. */
   children?: ReactNode
   disabled?: boolean
+  /** The icon button's icon, such as a chevron for the menu half of a split button. @default an ellipsis */
+  icon?: ReactNode
+  /** The trigger's id, for a page that moves focus back to it, such as after a dialog the menu opened. */
+  id?: string
   items: ActionsMenuItem[]
   /** Names the icon button. @default 'More actions' */
   label?: string
+  /** The icon button's size. @default 'icon' */
+  size?: 'icon' | 'icon-sm'
+  /** The icon button's variant: the one beside it when it is the menu half of a split button. @default 'outline' */
+  variant?: 'default' | 'outline' | 'secondary'
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
     <DropdownMenu>
       {children ? (
         <DropdownMenuTrigger
+          id={id}
           disabled={disabled}
           render={<Button variant='ghost' size='sm' />}
         >
@@ -337,16 +356,19 @@ function ActionsMenu({
         </DropdownMenuTrigger>
       ) : (
         <DropdownMenuTrigger
+          id={id}
           disabled={disabled}
-          render={<Button variant='outline' size='icon' aria-label={label} />}
+          render={<Button variant={variant} size={size} aria-label={label} />}
         >
-          <IconPlaceholder
-            lucide='EllipsisIcon'
-            tabler='IconDots'
-            hugeicons='MoreHorizontalCircle01Icon'
-            phosphor='DotsThreeIcon'
-            remixicon='RiMoreLine'
-          />
+          {icon ?? (
+            <IconPlaceholder
+              lucide='EllipsisIcon'
+              tabler='IconDots'
+              hugeicons='MoreHorizontalCircle01Icon'
+              phosphor='DotsThreeIcon'
+              remixicon='RiMoreLine'
+            />
+          )}
         </DropdownMenuTrigger>
       )}
       <DropdownMenuContent align='end' className='w-auto min-w-44'>

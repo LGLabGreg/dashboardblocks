@@ -1011,6 +1011,20 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'shortcut-button',
+    type: 'registry:component',
+    title: 'Shortcut Button',
+    description:
+      'A button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.',
+    registryDependencies: ['button', 'kbd', 'tooltip'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/shortcut-button.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'rolling-text',
     type: 'registry:component',
     title: 'Rolling Text',
@@ -1075,7 +1089,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Team',
     description:
-      'Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, and an avatar stack with a "+N" overflow.',
+      'Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, an avatar stack with a "+N" overflow, and a workload bar of what someone has against what they can take.',
     registryDependencies: ['avatar', registryUrl('status-label')],
     files: [
       {

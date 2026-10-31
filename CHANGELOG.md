@@ -1,5 +1,22 @@
 # dashboardblocks
 
+## 1.19.0
+
+### Minor Changes
+
+- 49acc90: Blocks that open with a line (KPI, Stat Group 01 and 04, Usage Meter, Alerts 04) drop it when they're the first thing in a shadcn Card. New KPI 05: headline KPIs in Cards. The CRM dashboard shows its blocks in Cards.
+
+### Patch Changes
+
+- 8663e70: Command Menu: results that arrive after you type put Enter on the first one.
+- ec3cd36: `daysBetween` and `dayIn` in `format.ts` take a date string, and count a `YYYY-MM-DD` date as that day in every time zone.
+- ce06fc0: Chart Panel's legend draws a `hatched` key, for a part that is estimated or projected.
+- 518f025: Number Field takes a `form` prop, so a field outside its form still submits it on Enter, and passes on a typed value rounded as the field shows it.
+- ec3cd36: Number Field's minus and plus buttons keep focus at the end of the range, marked `aria-disabled`, so a keyboard user keeps their place.
+- 95aedaa: Team has a `WorkloadBar`: one person's load against what they can take, with what's past it hatched in orange and an optional part drawn as done. Team 02 draws its bars with it.
+- 8663e70: New Shortcut Button part: a button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.
+- 30966ec: Page Header's `TabLinks` takes an `id` and an `indicator` on each tab, so a page can move focus to a tab it opened and mark one with unsaved changes. `ActionsMenu` takes an `id`, an `icon`, a `size` and a `variant`, so it can be the menu half of a split button.
+
 ## 1.18.0
 
 ### Minor Changes

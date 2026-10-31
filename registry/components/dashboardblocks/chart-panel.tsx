@@ -2,6 +2,7 @@
 
 import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import {
+  chartHatchFill,
   ChartPlaceholder,
   type ChartValueFormatter,
 } from '@/registry/components/dashboardblocks/chart'
@@ -18,7 +19,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-type ChartPanelKeyShape = 'dashed' | 'line' | 'rect'
+type ChartPanelKeyShape = 'dashed' | 'hatched' | 'line' | 'rect'
 
 interface ChartPanelKeyProps {
   className?: string
@@ -39,7 +40,13 @@ function ChartPanelKey({ className, color, shape = 'rect' }: ChartPanelKeyProps)
             : 'size-2.5 rounded-[3px]',
         className,
       )}
-      style={shape === 'dashed' ? { borderColor: color } : { backgroundColor: color }}
+      style={
+        shape === 'dashed'
+          ? { borderColor: color }
+          : shape === 'hatched'
+            ? { backgroundImage: chartHatchFill(color) }
+            : { backgroundColor: color }
+      }
     />
   )
 }

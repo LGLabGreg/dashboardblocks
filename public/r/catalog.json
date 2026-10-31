@@ -904,7 +904,7 @@
       "install": "@dashboardblocks/dashboard-04",
       "import": "@/components/dashboardblocks/dashboards/dashboard-04",
       "component": "Dashboard4",
-      "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
+      "shows": "A full sales dashboard in shadcn Cards, with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
       "size": "page",
       "props": "{ empty?: boolean; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": []
@@ -2161,6 +2161,20 @@
       ]
     },
     {
+      "name": "kpi-05",
+      "install": "@dashboardblocks/kpi-05",
+      "import": "@/components/dashboardblocks/kpi/kpi-05",
+      "component": "KPI5",
+      "shows": "A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard.",
+      "size": "full",
+      "props": "{ metrics: Omit<KPI1Props, keyof BlockStateProps> & { key: string; }[]; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "usedWith": [
+        "kpi-01",
+        "chart-panel-01",
+        "data-table-06"
+      ]
+    },
+    {
       "name": "leaderboard-01",
       "install": "@dashboardblocks/leaderboard-01",
       "import": "@/components/dashboardblocks/leaderboard/leaderboard-01",
@@ -2279,7 +2293,7 @@
       "component": "MetricList3",
       "shows": "Metrics against their targets, each with a bar, a tick at the target and a status.",
       "size": "half",
-      "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; value: number; changeType?: \"percent\" | \"points\"; goodDirection?: \"up\" | \"down\"; key: string; label: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "goals-02",
         "gauge-02",
@@ -2409,7 +2423,7 @@
       "component": "PageHeader2",
       "shows": "A page title with its status as a coloured word and links to the page's sections, each with a count.",
       "size": "full",
-      "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; id?: string; indicator?: ReactNode; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "data-table-02",
         "record-detail-01"
@@ -3123,7 +3137,7 @@
       "component": "States3",
       "shows": "A filtered table with no matching rows, explaining why it is empty and offering a way out.",
       "size": "full",
-      "props": "{ defaultFilters: { field: \"region\" | \"status\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ defaultFilters: { field: \"status\" | \"region\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "data-table-02",
         "dashboard-header-01"

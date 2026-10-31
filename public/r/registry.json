@@ -1142,6 +1142,24 @@
       ]
     },
     {
+      "name": "shortcut-button",
+      "type": "registry:component",
+      "title": "Shortcut Button",
+      "description": "A button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.",
+      "registryDependencies": [
+        "button",
+        "kbd",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/shortcut-button.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/shortcut-button.tsx"
+        }
+      ]
+    },
+    {
       "name": "rolling-text",
       "type": "registry:component",
       "title": "Rolling Text",
@@ -1210,7 +1228,7 @@
       "name": "team",
       "type": "registry:component",
       "title": "Team",
-      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, and an avatar stack with a \"+N\" overflow.",
+      "description": "Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, an avatar stack with a \"+N\" overflow, and a workload bar of what someone has against what they can take.",
       "registryDependencies": [
         "avatar",
         "https://www.dashboardblocks.com/r/status-label.json"
@@ -1613,6 +1631,34 @@
         "props": "{ comparison: string; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\"; previous?: number; provenance: { query: string; description: string; window: null | { from: Date; to: Date }; filters: Record<string, string>; href: string }; title: string; value?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A value with its change and a button beside it that shows the date range, filters and query behind the number."
+    },
+    {
+      "name": "kpi-05",
+      "type": "registry:component",
+      "registryDependencies": [
+        "card",
+        "https://www.dashboardblocks.com/r/block-state.json",
+        "https://www.dashboardblocks.com/r/kpi-01.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/kpi/kpi-05.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/kpi/kpi-05.tsx"
+        }
+      ],
+      "meta": {
+        "shows": "A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard.",
+        "size": "full",
+        "usedWith": [
+          "kpi-01",
+          "chart-panel-01",
+          "data-table-06"
+        ],
+        "component": "KPI5",
+        "props": "{ metrics: Omit<KPI1Props, keyof BlockStateProps> & { key: string; }[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
+      },
+      "description": "A row of headline KPIs, each in a shadcn Card, for the top of a card-style dashboard."
     },
     {
       "name": "progress-kpi-01",
@@ -3559,7 +3605,7 @@
           "dashboard-header-01"
         ],
         "component": "States3",
-        "props": "{ defaultFilters: { field: \"region\" | \"status\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ defaultFilters: { field: \"status\" | \"region\"; label: string; value: string }[]; orders?: { amount: number; customer: string; id: string; region: string; status: \"Paid\" | \"Pending\" | \"Refunded\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A filtered table with no matching rows, explaining why it is empty and offering a way out."
     },
@@ -3690,6 +3736,7 @@
       "title": "CRM dashboard",
       "description": "A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/activity-feed-01.json",
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/chart-panel-04.json",
@@ -3709,7 +3756,7 @@
         }
       ],
       "meta": {
-        "shows": "A full sales dashboard with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
+        "shows": "A full sales dashboard in shadcn Cards, with stats, open pipeline by stage, bookings, lead conversion, a quarter forecast and stuck deals.",
         "size": "page",
         "usedWith": [],
         "component": "Dashboard4",
@@ -5200,7 +5247,7 @@
           "metric-list-01"
         ],
         "component": "MetricList3",
-        "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; value: number; changeType?: \"percent\" | \"points\"; goodDirection?: \"up\" | \"down\"; key: string; label: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Metrics against their targets, each with a bar, a tick at the target and a status."
     },
@@ -7546,7 +7593,7 @@
           "record-detail-01"
         ],
         "component": "PageHeader2",
-        "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; id?: string; indicator?: ReactNode; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A page title with its status as a coloured word and links to the page's sections, each with a count."
     },

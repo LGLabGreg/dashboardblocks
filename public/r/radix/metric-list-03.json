@@ -23,7 +23,7 @@
       "metric-list-01"
     ],
     "component": "MetricList3",
-    "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; changeType?: \"percent\" | \"points\"; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ description: string; metrics?: { domain?: [number, number]; target: number; tolerance?: number; format?: \"number\" | \"compact\" | \"currency\" | \"currency-compact\" | \"percent\" | \"duration\" | \"milliseconds\" | (value: number) => string; value: number; changeType?: \"percent\" | \"points\"; goodDirection?: \"up\" | \"down\"; key: string; label: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }
