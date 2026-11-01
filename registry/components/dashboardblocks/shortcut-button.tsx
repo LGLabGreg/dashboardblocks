@@ -13,6 +13,8 @@ import {
 
 import { cn } from '@/lib/utils'
 
+const KEY_NAMES: Record<string, string> = { Escape: 'Esc' }
+
 const OWNS_ITS_KEYS =
   'input, textarea, select, [contenteditable], [role=dialog], [role=alertdialog], [role=menu], [role=listbox]'
 
@@ -57,7 +59,7 @@ interface ShortcutButtonProps extends Omit<ComponentProps<'button'>, 'ref'> {
    * panel already listens for the key, as a row's actions do.
    */
   listen?: boolean
-  /** The key, shown in the tooltip, such as `C`. */
+  /** The key, shown in the tooltip, such as `C` or `Escape` (shown as Esc). */
   shortcut: string
   /** @default 'icon-sm' */
   size?: 'icon-sm' | 'sm'
@@ -99,7 +101,7 @@ function ShortcutButton({
         </TooltipTrigger>
         <TooltipContent>
           {label}
-          <Kbd>{shortcut}</Kbd>
+          <Kbd>{KEY_NAMES[shortcut] ?? shortcut}</Kbd>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -7,6 +7,7 @@ import {
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { renderTag } from '@/registry/components/dashboardblocks/tag'
+import { UsageBar } from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -44,11 +45,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Kbd } from '@/components/ui/kbd'
-import { Progress } from '@/components/ui/progress'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuBadge,
   SidebarMenuButton,
@@ -56,6 +61,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -74,6 +81,8 @@ interface NavItem {
   href?: string
   icon: ReactNode
   items?: NavLink[]
+  /** Makes the item a button that does something, such as opening search, in place of a link. */
+  onSelect?: () => void
   title: string
 }
 
@@ -142,6 +151,24 @@ function AppNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
   if (childActive !== wasChildActive) {
     setWasChildActive(childActive)
     if (childActive) setExpanded(true)
+  }
+
+  if (!item.href && item.onSelect) {
+    const { onSelect } = item
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          tooltip={railTooltip(item.title)}
+          onClick={() => {
+            closeMobile()
+            onSelect()
+          }}
+        >
+          {item.icon}
+          <span>{item.title}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
   }
 
   if (!item.items?.length) {
@@ -992,7 +1019,10 @@ function NotificationsButton({ className, count, onClick }: NotificationsButtonP
 interface PlanUsageProps {
   action?: { href: string; label: string }
   limit: number
-  unit: string
+  /** A line under the count, such as when the allowance resets. */
+  note?: ReactNode
+  /** What the allowance counts, such as `messages`. Leave it out to show only the share used. */
+  unit?: string
   title: string
   used: number
 }
@@ -1003,7 +1033,7 @@ function usageTone(percent: number): StatusTone {
   return 'neutral'
 }
 
-function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
+function PlanUsage({ action, limit, note, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
   const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
   const usedLabel = `${formatPercent(percent / 100, { maximumFractionDigits: 0 })} used`
@@ -1019,11 +1049,18 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
           {usedLabel}
         </StatusLabel>
       </div>
-      <Progress value={percent} aria-label={`${title}: ${usedLabel}`} />
-      <p className='text-muted-foreground text-xs text-pretty'>
-        <span className='text-foreground tabular-nums'>{formatNumber(used)}</span> of{' '}
-        <span className='tabular-nums'>{formatNumber(limit)}</span> {unit}
-      </p>
+      <UsageBar critical={90} limit={limit} size='sm' used={used} warning={75} />
+      {(unit || note) && (
+        <div className='text-muted-foreground flex flex-col gap-0.5 text-xs text-pretty'>
+          {unit && (
+            <p>
+              <span className='text-foreground tabular-nums'>{formatNumber(used)}</span>{' '}
+              of <span className='tabular-nums'>{formatNumber(limit)}</span> {unit}
+            </p>
+          )}
+          {note && <p>{note}</p>}
+        </div>
+      )}
       {action && (
         <Link
           href={action.href}
@@ -1034,6 +1071,80 @@ function PlanUsage({ action, limit, title, unit, used }: PlanUsageProps) {
         </Link>
       )}
     </div>
+  )
+}
+
+interface SidebarLayoutProps {
+  /** The bar over the page, after the button that opens the sidebar: a title and the page's actions. */
+  bar?: ReactNode
+  /** The sidebar's head, beside the button that closes it, such as the product's name. */
+  brand: ReactNode
+  children: ReactNode
+  /** Under the links, scrolling inside the sidebar, such as a list of chats. */
+  content?: ReactNode
+  /** The sidebar's foot, such as plan usage and the user menu. */
+  footer?: ReactNode
+  /** Links and actions at the top of the sidebar, which stay in view while the content scrolls. */
+  nav?: NavItem[]
+  pathname: string
+}
+
+/** A sidebar whose head, links and foot stay in view around content that scrolls, beside the page and its bar. */
+function SidebarLayout({
+  bar,
+  brand,
+  children,
+  content,
+  footer,
+  nav,
+  pathname,
+}: SidebarLayoutProps) {
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarLayoutHead brand={brand} nav={nav} pathname={pathname} />
+        <SidebarContent>{content}</SidebarContent>
+        {footer && <SidebarFooter>{footer}</SidebarFooter>}
+      </Sidebar>
+      <SidebarInset className='min-w-0'>
+        <SidebarLayoutBar>{bar}</SidebarLayoutBar>
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}
+
+function SidebarLayoutHead({
+  brand,
+  nav,
+  pathname,
+}: Pick<SidebarLayoutProps, 'brand' | 'nav' | 'pathname'>) {
+  return (
+    <SidebarHeader>
+      <div className='flex h-10 items-center justify-between gap-2 ps-2'>
+        {brand}
+        <SidebarTrigger className='max-md:hidden' />
+      </div>
+      {nav && (
+        <TooltipProvider>
+          <SidebarMenu>
+            {nav.map((item) => (
+              <AppNavItem key={item.title} item={item} pathname={pathname} />
+            ))}
+          </SidebarMenu>
+        </TooltipProvider>
+      )}
+    </SidebarHeader>
+  )
+}
+
+function SidebarLayoutBar({ children }: { children: ReactNode }) {
+  const { state } = useSidebar()
+  return (
+    <AppHeader className='border-b-0'>
+      <SidebarTrigger className={cn('-ml-1', state === 'expanded' && 'md:hidden')} />
+      {children}
+    </AppHeader>
   )
 }
 
@@ -1068,6 +1179,7 @@ export {
   PanelButton,
   PlanUsage,
   SearchButton,
+  SidebarLayout,
   SidebarUserMenu,
   TopNav,
   UserMenu,
@@ -1089,6 +1201,7 @@ export type {
   PanelButtonProps,
   PlanUsageProps,
   SearchButtonProps,
+  SidebarLayoutProps,
   ThemeChoice,
   TopNavProps,
   UserMenuLink,

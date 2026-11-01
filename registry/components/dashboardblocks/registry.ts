@@ -75,7 +75,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'App Shell',
     description:
-      'Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, a side panel with its header button, plan usage and a top navigation row.',
+      'Primitives for app shells built on the shadcn sidebar: navigation sections from data with active links, badges and collapsible child links, a brand link, a workspace switcher, sidebar and avatar user menus, a top bar, breadcrumbs, a search button with a keyboard shortcut, a notifications bell, a side panel with its header button, plan usage, a top navigation row, and a sidebar layout whose links stay in view while its content scrolls.',
     registryDependencies: [
       'avatar',
       'breadcrumb',
@@ -83,7 +83,6 @@ export const components: Registry['items'] = [
       'collapsible',
       'dropdown-menu',
       'kbd',
-      'progress',
       'sheet',
       'sidebar',
       'tooltip',
@@ -92,6 +91,7 @@ export const components: Registry['items'] = [
       registryUrl('tag'),
       registryUrl('page-header'),
       registryUrl('status-label'),
+      registryUrl('usage-meter'),
     ],
     files: [
       {

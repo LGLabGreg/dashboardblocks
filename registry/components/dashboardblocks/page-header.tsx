@@ -320,6 +320,7 @@ interface ActionsMenuItem {
 
 function ActionsMenu({
   children,
+  className,
   disabled = false,
   icon,
   id,
@@ -330,6 +331,8 @@ function ActionsMenu({
 }: {
   /** A text trigger, such as "More (3)", in place of the icon button. */
   children?: ReactNode
+  /** Classes for the trigger, such as showing it only while its row is hovered. */
+  className?: string
   disabled?: boolean
   /** The icon button's icon, such as a chevron for the menu half of a split button. @default an ellipsis */
   icon?: ReactNode
@@ -339,9 +342,9 @@ function ActionsMenu({
   /** Names the icon button. @default 'More actions' */
   label?: string
   /** The icon button's size. @default 'icon' */
-  size?: 'icon' | 'icon-sm'
-  /** The icon button's variant: the one beside it when it is the menu half of a split button. @default 'outline' */
-  variant?: 'default' | 'outline' | 'secondary'
+  size?: 'icon' | 'icon-sm' | 'icon-xs'
+  /** The icon button's variant: the one beside it when it is the menu half of a split button, `ghost` in a row. @default 'outline' */
+  variant?: 'default' | 'ghost' | 'outline' | 'secondary'
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
   return (
@@ -350,7 +353,7 @@ function ActionsMenu({
         <DropdownMenuTrigger
           id={id}
           disabled={disabled}
-          render={<Button variant='ghost' size='sm' />}
+          render={<Button variant='ghost' size='sm' className={className} />}
         >
           {children}
         </DropdownMenuTrigger>
@@ -358,7 +361,14 @@ function ActionsMenu({
         <DropdownMenuTrigger
           id={id}
           disabled={disabled}
-          render={<Button variant={variant} size={size} aria-label={label} />}
+          render={
+            <Button
+              variant={variant}
+              size={size}
+              aria-label={label}
+              className={className}
+            />
+          }
         >
           {icon ?? (
             <IconPlaceholder

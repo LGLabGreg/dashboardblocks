@@ -1,5 +1,14 @@
 # dashboardblocks
 
+## 1.20.1
+
+### Patch Changes
+
+- 6c538e2: Page Header's `ActionsMenu` takes a `className` for its trigger, a `ghost` variant and the `icon-xs` size, for a menu on a row that shows while the row is hovered.
+- 9a8a0a1: App Shell adds `SidebarLayout`, a sidebar whose head, links and foot stay in view while its content scrolls, and `NavItem` takes `onSelect` for an item that does something, such as opening search. `PlanUsage` draws its bar in the chart colour, orange from 75% and red from 90%, takes a `note`, such as when the allowance resets, and leaves out the count when it has no `unit`.
+- 34e3f1a: Shortcut Button: the Escape key shows as Esc in its tooltip.
+- 03ea436: `formatTimeZoneOffset` writes a zero offset as `GMT` in every runtime. ICU 78, in Node 26 and Chrome 153, had made it `GMT+0`, so a server and a browser on different versions rendered different text.
+
 ## 1.20.0
 
 ### Minor Changes
