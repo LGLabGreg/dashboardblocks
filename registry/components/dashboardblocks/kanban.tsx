@@ -53,6 +53,8 @@ import { cn } from '@/lib/utils'
 
 interface KanbanColumnDef {
   color?: string
+  /** Drawn before the title, such as a status's icon. */
+  icon?: ReactNode
   id: string
   title: string
   wipLimit?: number
@@ -110,7 +112,8 @@ function moveItem<T extends KanbanItem>(
 interface KanbanState {
   columns: KanbanColumnDef[]
   items: KanbanItem[]
-  onMove: (id: string, column: string, index: number) => void
+  onMove: KanbanMove
+  onOpen?: (id: string) => void
   wipLimitMode: KanbanWipLimitMode
 }
 
@@ -144,6 +147,9 @@ function isSameTarget(a: KanbanTarget | null, b: KanbanTarget | null) {
   return a?.column === b?.column && a?.index === b?.index && a?.blocked === b?.blocked
 }
 
+/** Return `false` to refuse the move: the card stays where it was, and a screen reader hears that it's back. Say why yourself, with a toast or a dialog. */
+type KanbanMove = (id: string, column: string, index: number) => boolean | void
+
 interface KanbanContextValue {
   canDrop: (id: string, column: string) => boolean
   columns: KanbanColumnDef[]
@@ -157,6 +163,7 @@ interface KanbanContextValue {
   onHandleClick: (event: MouseEvent<HTMLButtonElement>, id: string) => void
   onHandleKeyDown: (event: KeyboardEvent<HTMLButtonElement>, id: string) => void
   onPointerDown: (event: PointerEvent<HTMLElement>, id: string) => void
+  opens: boolean
   registerHandle: (id: string, element: HTMLButtonElement | null) => void
 }
 
@@ -213,7 +220,9 @@ interface KanbanBoardProps {
   itemName?: KanbanItemName
   items: KanbanItem[]
   label: string
-  onMove: (id: string, column: string, index: number) => void
+  onMove: KanbanMove
+  /** Opens a card: a click or tap on it, or Enter on its title. Space then picks a card up to move it. */
+  onOpen?: (id: string) => void
   /** @default 'warn' */
   wipLimitMode?: KanbanWipLimitMode
 }
@@ -226,6 +235,7 @@ function KanbanBoard({
   items,
   label,
   onMove,
+  onOpen,
   wipLimitMode = 'warn',
 }: KanbanBoardProps) {
   const id = useId()
@@ -237,10 +247,10 @@ function KanbanBoard({
   const dragRef = useRef<KanbanDrag | null>(null)
   const session = useRef<PointerSession | null>(null)
   const pendingFocus = useRef<{ id: string; onlyIfLost: boolean } | null>(null)
-  const latest = useRef<KanbanState>({ columns, items, onMove, wipLimitMode })
+  const latest = useRef<KanbanState>({ columns, items, onMove, onOpen, wipLimitMode })
 
   useEffect(() => {
-    latest.current = { columns, items, onMove, wipLimitMode }
+    latest.current = { columns, items, onMove, onOpen, wipLimitMode }
   })
 
   useEffect(() => {
@@ -343,12 +353,14 @@ function KanbanBoard({
       )
       return
     }
+    const note = `Dropped ${title} in ${describePosition(state, current.id, target)}.${limitNote(current.id, target.column)}`
+    if (state.onMove(current.id, target.column, target.index) === false) {
+      announce(`${title} is back in ${describePosition(state, current.id, origin)}.`)
+      return
+    }
     if (current.mode === 'keyboard')
       pendingFocus.current = { id: current.id, onlyIfLost: false }
-    announce(
-      `Dropped ${title} in ${describePosition(state, current.id, target)}.${limitNote(current.id, target.column)}`,
-    )
-    state.onMove(current.id, target.column, target.index)
+    announce(note)
   }
 
   function cancel() {
@@ -416,6 +428,12 @@ function KanbanBoard({
 
   function onHandleKeyDown(event: KeyboardEvent<HTMLButtonElement>, cardId: string) {
     const current = dragRef.current
+    const open = latest.current.onOpen
+    if (!current && open && event.key === 'Enter') {
+      event.preventDefault()
+      open(cardId)
+      return
+    }
     if (current?.mode !== 'keyboard' || current.id !== cardId) return
     if (event.key === 'Escape') {
       event.preventDefault()
@@ -434,11 +452,10 @@ function KanbanBoard({
 
   function moveFromMenu(cardId: string, column: string, index: number) {
     const state = latest.current
+    const note = `Moved ${titleOf(cardId)} to ${describePosition(state, cardId, { column, index })}.${limitNote(cardId, column)}`
+    if (state.onMove(cardId, column, index) === false) return
     pendingFocus.current = { id: cardId, onlyIfLost: true }
-    announce(
-      `Moved ${titleOf(cardId)} to ${describePosition(state, cardId, { column, index })}.${limitNote(cardId, column)}`,
-    )
-    state.onMove(cardId, column, index)
+    announce(note)
   }
 
   function findTarget(cardId: string, x: number, y: number): KanbanTarget | null {
@@ -472,7 +489,7 @@ function KanbanBoard({
     return { column, index }
   }
 
-  function endPointer(commit: boolean) {
+  function endPointer(commit: boolean, released = false) {
     const current = session.current
     if (!current) return
     session.current = null
@@ -480,7 +497,10 @@ function KanbanBoard({
     clearTimeout(current.timer)
     current.removeListeners()
     current.surface.style.transform = ''
-    if (!current.active) return
+    if (!current.active) {
+      if (released) latest.current.onOpen?.(current.id)
+      return
+    }
     if (commit) drop()
     else cancel()
   }
@@ -559,7 +579,7 @@ function KanbanBoard({
       else if (!isTouch && distance > MOUSE_DRAG_DISTANCE_PX) activate()
     }
     const onUp = (upEvent: globalThis.PointerEvent) => {
-      if (upEvent.pointerId === session.current?.pointerId) endPointer(true)
+      if (upEvent.pointerId === session.current?.pointerId) endPointer(true, true)
     }
     const onCancel = (cancelEvent: globalThis.PointerEvent) => {
       if (cancelEvent.pointerId === session.current?.pointerId) endPointer(false)
@@ -628,6 +648,7 @@ function KanbanBoard({
     onHandleClick,
     onHandleKeyDown,
     onPointerDown,
+    opens: onOpen !== undefined,
     registerHandle,
   }
 
@@ -635,9 +656,9 @@ function KanbanBoard({
     <KanbanContext.Provider value={context}>
       <div className='relative min-w-0'>
         <p id={instructionsId} className='sr-only'>
-          To move a {itemName.one} with the keyboard, press Space or Enter on it, use the
-          arrow keys to choose a column and a position, then press Space or Enter to drop
-          it, or Escape to cancel. Each {itemName.one} also has a Move menu.
+          {onOpen
+            ? `Press Enter to open a ${itemName.one}. To move it, press Space, use the arrow keys to choose a column and a position, then press Space to drop it, or Escape to cancel.`
+            : `To move a ${itemName.one} with the keyboard, press Space or Enter on it, use the arrow keys to choose a column and a position, then press Space or Enter to drop it, or Escape to cancel. Each ${itemName.one} also has a Move menu.`}
         </p>
         <p role='status' className='sr-only'>
           {announcement}
@@ -772,6 +793,11 @@ function KanbanColumn({
       style={{ backgroundColor: column.color }}
     />
   )
+  const icon = column.icon && (
+    <span aria-hidden className='flex shrink-0 [&_svg]:size-4'>
+      {column.icon}
+    </span>
+  )
   const toggle = onCollapsedChange && (
     <Button
       aria-expanded={!collapsed}
@@ -800,7 +826,7 @@ function KanbanColumn({
     </Button>
   )
   const columnClassName =
-    'flex shrink-0 snap-start flex-col border-t pt-3 transition-colors data-over:border-primary data-blocked:border-red-500'
+    'flex shrink-0 snap-start flex-col border-t pt-3 transition-colors data-over:border-sidebar-accent data-blocked:border-red-500'
 
   if (collapsed) {
     return (
@@ -822,6 +848,7 @@ function KanbanColumn({
           className='flex items-center gap-2 text-sm font-medium whitespace-nowrap [writing-mode:vertical-rl]'
         >
           {dot}
+          {icon}
           {column.title}
         </h3>
       </section>
@@ -843,6 +870,7 @@ function KanbanColumn({
             className='flex min-w-0 items-center gap-2 text-sm font-medium'
           >
             {dot}
+            {icon}
             <span className='truncate'>{column.title}</span>
           </h3>
           {summary && !loading && (
@@ -885,7 +913,7 @@ function KanbanColumn({
           data-kanban-indicator={isOver ? '' : undefined}
           className={cn(
             'text-muted-foreground flex min-h-20 items-center justify-center rounded-xl border border-dashed px-3 py-6 text-center text-xs transition-colors',
-            isOver && 'border-primary/60 bg-primary/5',
+            isOver && 'border-sidebar-accent bg-sidebar-accent/40',
           )}
         >
           {empty ?? `No ${itemName.other}`}
@@ -902,9 +930,9 @@ function DropIndicator({ edge, over }: { edge: 'after' | 'before'; over: boolean
       aria-hidden
       data-kanban-indicator=''
       className={cn(
-        'pointer-events-none absolute inset-x-0 z-10 h-0.5 rounded-full',
-        edge === 'before' ? '-top-[5px]' : '-bottom-[5px]',
-        over ? 'bg-red-500' : 'bg-primary',
+        'pointer-events-none absolute inset-x-0 z-10 h-1 rounded-full',
+        edge === 'before' ? '-top-1.5' : '-bottom-1.5',
+        over ? 'bg-red-500' : 'bg-sidebar-accent',
       )}
     />
   )
@@ -917,7 +945,7 @@ interface KanbanCardProps {
 }
 
 function KanbanCard({ children, className, item }: KanbanCardProps) {
-  const { drag, exceedsLimit: exceeds, items, onPointerDown } = useKanban()
+  const { drag, exceedsLimit: exceeds, items, onPointerDown, opens } = useKanban()
   const lifted = drag?.id === item.id ? drag.mode : undefined
   const target = drag?.target
   let edge: 'after' | 'before' | undefined
@@ -951,6 +979,9 @@ function KanbanCard({ children, className, item }: KanbanCardProps) {
             lifted === 'keyboard' && '-translate-y-0.5 ring-2 ring-primary',
             !lifted &&
               'has-[[data-kanban-handle]:focus-visible]:ring-3 has-[[data-kanban-handle]:focus-visible]:ring-ring/50',
+            opens &&
+              !lifted &&
+              'hover:bg-muted cursor-pointer hover:[--kanban-card-surface:var(--color-muted)]',
             className,
           )}
         >
@@ -986,7 +1017,7 @@ function KanbanCardTitle({
         onBlur={() => onHandleBlur(item.id)}
         onClick={(event) => onHandleClick(event, item.id)}
         onKeyDown={(event) => onHandleKeyDown(event, item.id)}
-        className='cursor-grab text-left outline-none'
+        className='cursor-[inherit] text-left outline-none'
       >
         {children ?? item.title}
       </button>
@@ -1511,6 +1542,7 @@ export type {
   KanbanItem,
   KanbanItemName,
   KanbanLabelDef,
+  KanbanMove,
   KanbanPriorityLevel,
   KanbanWipLimitMode,
 }

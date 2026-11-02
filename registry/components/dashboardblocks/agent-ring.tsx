@@ -77,7 +77,7 @@ function AgentRing({ children, className, status, tone, ...props }: AgentRingPro
       data-status={status}
       aria-hidden
       className={cn(
-        'relative inline-flex size-9 shrink-0 items-center justify-center [--agent-ring-icon:1rem]',
+        'relative inline-flex size-9 shrink-0 items-center justify-center text-xs [--agent-ring-icon:1rem]',
         statusToneClasses[tone ?? RING_TONES[status]],
         className,
       )}
@@ -164,7 +164,7 @@ function AgentRing({ children, className, status, tone, ...props }: AgentRingPro
           )}
         </span>
       ) : (
-        <span className='text-foreground relative flex text-xs font-medium [&_svg]:size-(--agent-ring-icon)'>
+        <span className='text-foreground relative flex font-medium [&_svg]:size-(--agent-ring-icon)'>
           {children}
         </span>
       )}

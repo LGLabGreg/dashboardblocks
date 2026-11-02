@@ -7,6 +7,9 @@ import {
   AIMarkdown,
   completeMarkdown,
   getCitedNumbers,
+  joinMarkdownBlocks,
+  markChange,
+  markdownBlocks,
   markdownToPlainText,
 } from './ai-markdown'
 import { LinkProvider, type LinkProviderProps } from './link'
@@ -146,5 +149,67 @@ describe('ai-markdown', () => {
       [1, 3],
     )
     assert.deepEqual(getCitedNumbers('No citations.', 3), [])
+  })
+})
+
+describe('markdownBlocks', () => {
+  it('splits a document into its top-level blocks and joins them back as they were', () => {
+    const text =
+      'Dear Rosa,\n\nOur prices change.\n\n| Coffee | Now |\n| :-- | --: |\n| Decaf | £17.60 |\n\n- One\n- Two\n\nBest wishes,\nNadia\n'
+    const blocks = markdownBlocks(text)
+    assert.deepEqual(
+      blocks.map((block) => block.source),
+      [
+        'Dear Rosa,',
+        'Our prices change.',
+        '| Coffee | Now |\n| :-- | --: |\n| Decaf | £17.60 |',
+        '- One\n- Two',
+        'Best wishes,\nNadia',
+      ],
+    )
+    assert.equal(joinMarkdownBlocks(blocks), text)
+  })
+})
+
+describe('markChange', () => {
+  const html = (text: string) =>
+    renderToStaticMarkup(createElement(AIMarkdown, { changes: true, text }))
+
+  it('drops the marks from text that doesn’t ask for changes, such as a model’s reply', () => {
+    assert.equal(
+      render(`Prices ${markChange('rise', 'removed')} in January.`),
+      '<div data-slot="ai-markdown" class="flex min-w-0 flex-col gap-3 leading-relaxed break-words"><p><span>Prices rise in January.</span></p></div>',
+    )
+  })
+
+  it('draws marked words as added or removed, the rest as they are', () => {
+    const out = html(
+      `Prices ${markChange('rise', 'removed')} ${markChange('change', 'added')} in January.`,
+    )
+    assert.match(
+      out,
+      /<p><span>Prices <del[^>]*><span class="sr-only">removed <\/span>rise<\/del> <ins[^>]*><span class="sr-only">added <\/span>change<\/ins> in January\.<\/span><\/p>/,
+    )
+  })
+
+  it('carries a change across bold text inside it', () => {
+    const out = html(markChange('now **six** kilos', 'added'))
+    assert.equal(out.match(/<ins/g)?.length, 3)
+    assert.match(
+      out,
+      /<strong class="font-semibold"><span><ins[^>]*><span class="sr-only">added <\/span>six<\/ins><\/span><\/strong>/,
+    )
+  })
+
+  it('marks a table cell without breaking the table', () => {
+    const out = html(
+      `| Coffee | Price |\n| :-- | --: |\n| Decaf | ${markChange('£17.60', 'removed')} ${markChange('£18.10', 'added')} |`,
+    )
+    assert.match(out, /<table/)
+    assert.match(out, /<del[^>]*><span class="sr-only">removed <\/span>£17.60<\/del>/)
+  })
+
+  it('leaves the marks out of the plain text', () => {
+    assert.equal(markdownToPlainText(`a ${markChange('b', 'added')} c`), 'a b c')
   })
 })

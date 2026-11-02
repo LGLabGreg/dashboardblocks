@@ -7,12 +7,15 @@ import {
   type AIChat,
   type AIMessage,
   type AIReply,
+  branchMessages,
   getMessageSources,
   getMessageText,
   getSafeHref,
   getStreamingMessageId,
+  getMessageVersion,
   getToolLabel,
   replyFromText,
+  selectMessageVersion,
 } from './ai-message'
 
 // Fails to type-check when an AI SDK update changes a message, or a chat, so they no longer pass straight into the blocks.
@@ -131,5 +134,80 @@ describe('ai-message', () => {
       { parts: [{ state: 'streaming', text: 'Up 20%', type: 'text' }] },
       { parts: [{ state: 'done', text: 'Up 20%', type: 'text' }] },
     ])
+  })
+
+  describe('versions', () => {
+    const m = (id: string) => ({ id })
+    const ids = (messages: { id: string }[]) => messages.map((message) => message.id)
+    const start = { messages: ['q1', 'a1', 'q2', 'a2'].map(m), versions: {} }
+
+    it('keeps a regenerated reply as the first version and shows the new one as 2 of 2', () => {
+      const regenerated = branchMessages(start, 3, [m('a2b')])
+      assert.deepEqual(ids(regenerated.messages), ['q1', 'a1', 'q2', 'a2b'])
+      assert.deepEqual(getMessageVersion(regenerated.messages, regenerated.versions, 3), {
+        count: 2,
+        index: 1,
+      })
+      assert.equal(
+        getMessageVersion(regenerated.messages, regenerated.versions, 2),
+        undefined,
+      )
+      const back = selectMessageVersion(regenerated, 'a2b', 0)
+      assert.deepEqual(ids(back.messages), ['q1', 'a1', 'q2', 'a2'])
+      assert.deepEqual(getMessageVersion(back.messages, back.versions, 3), {
+        count: 2,
+        index: 0,
+      })
+      assert.deepEqual(ids(selectMessageVersion(back, 'a2', 1).messages), [
+        'q1',
+        'a1',
+        'q2',
+        'a2b',
+      ])
+    })
+
+    it('makes no version when nothing followed, as when a reply failed before it began', () => {
+      const failed = { messages: ['q1'].map(m), versions: {} }
+      const retried = branchMessages(failed, 1, [m('a1')])
+      assert.deepEqual(ids(retried.messages), ['q1', 'a1'])
+      assert.deepEqual(retried.versions, {})
+    })
+
+    it('keeps everything after an edited question, its own versions included, to step back to', () => {
+      const regenerated = branchMessages(start, 3, [m('a2b')])
+      const edited = branchMessages(regenerated, 0, [m('q1b'), m('a1b')])
+      assert.deepEqual(ids(edited.messages), ['q1b', 'a1b'])
+      assert.deepEqual(getMessageVersion(edited.messages, edited.versions, 0), {
+        count: 2,
+        index: 1,
+      })
+      const back = selectMessageVersion(edited, 'q1b', 0)
+      assert.deepEqual(ids(back.messages), ['q1', 'a1', 'q2', 'a2b'])
+      assert.deepEqual(getMessageVersion(back.messages, back.versions, 3), {
+        count: 2,
+        index: 1,
+      })
+      const forward = selectMessageVersion(back, 'q1', 1)
+      assert.deepEqual(ids(forward.messages), ['q1b', 'a1b'])
+    })
+
+    it('adds a third version after the last, whichever version showed', () => {
+      const two = branchMessages(start, 3, [m('a2b')])
+      const first = selectMessageVersion(two, 'a2b', 0)
+      const three = branchMessages(first, 3, [m('a2c')])
+      assert.deepEqual(getMessageVersion(three.messages, three.versions, 3), {
+        count: 3,
+        index: 2,
+      })
+      assert.deepEqual(ids(selectMessageVersion(three, 'a2c', 0).messages).at(-1), 'a2')
+      assert.deepEqual(ids(selectMessageVersion(three, 'a2c', 1).messages).at(-1), 'a2b')
+    })
+
+    it('leaves the chat as it is for a version that isn’t there', () => {
+      const two = branchMessages(start, 3, [m('a2b')])
+      assert.equal(selectMessageVersion(two, 'a2b', 5), two)
+      assert.equal(selectMessageVersion(two, 'a2b', 1), two)
+      assert.equal(selectMessageVersion(two, 'nope', 0), two)
+    })
   })
 })

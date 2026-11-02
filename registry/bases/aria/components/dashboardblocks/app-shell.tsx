@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: 5a4db791218e
+// source-hash: 436a7e601cdd
 
 'use client'
 
@@ -492,7 +492,9 @@ function ThemeSwitch({ value }: { value: AppTheme }) {
     if (from === index || !thumb) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     thumb.animate(
-      { transform: [`translateX(${from * 100}%)`, `translateX(${index * 100}%)`] },
+      {
+        transform: [`translateX(${from * 100}%)`, `translateX(${index * 100}%)`],
+      },
       themeMotion,
     )
     Array.from(thumb.children).forEach((icon, position) => {
@@ -1178,6 +1180,7 @@ export {
   SidebarLayout,
   SidebarUserMenu,
   TopNav,
+  useDockedPanel,
   UserMenu,
   WorkspaceSwitcher,
 }

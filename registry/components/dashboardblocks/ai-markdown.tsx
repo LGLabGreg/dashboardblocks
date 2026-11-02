@@ -14,14 +14,21 @@ import {
   DataTableHeader,
   DataTableRow,
 } from '@/registry/components/dashboardblocks/table'
+import { TextChange } from '@/registry/components/dashboardblocks/text-change'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Lexer, type Token, type Tokens } from 'marked'
-import type { ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import remend from 'remend'
 
 import { cn } from '@/lib/utils'
 
 const PARTIAL_CITATION = /\s*\[\d{0,3}$/
+const CHANGE_MARKS = {
+  added: ['\uE000', '\uE001'],
+  removed: ['\uE002', '\uE003'],
+} as const
+const CHANGE_MARK = /([\uE000-\uE003])/
+const CHANGE_MARKS_ALL = /[\uE000-\uE003]/g
 const CITATION = /\[(\d{1,3})\]/g
 
 const ENTITIES: Record<string, string> = {
@@ -136,7 +143,7 @@ function plainTextOf(token: Token, sourceCount: number): string {
 
 /** What a reply says without its Markdown, for a screen reader's announcement. Citations of its `sourceCount` sources are left out. */
 function markdownToPlainText(text: string, sourceCount = 0) {
-  return plainText(lex(text, false), sourceCount)
+  return plainText(lex(text.replace(CHANGE_MARKS_ALL, ''), false), sourceCount)
     .replace(/\n{2,}/g, '\n')
     .trim()
 }
@@ -152,6 +159,8 @@ function getCitedNumbers(text: string, sourceCount: number) {
 }
 
 interface RenderContext {
+  /** The change the text being drawn is inside, from `markChange`, as it carries across inline tokens. */
+  change: 'added' | 'removed' | null
   sources: AISource[]
   streaming: boolean
 }
@@ -168,6 +177,30 @@ function fadeInWords(text: string, key: string): ReactNode[] {
 }
 
 function renderText(raw: string, context: RenderContext, key: string): ReactNode {
+  if (!CHANGE_MARK.test(raw)) {
+    const node = renderWords(raw, context, key)
+    return context.change ? <TextChange change={context.change}>{node}</TextChange> : node
+  }
+  return raw.split(CHANGE_MARK).map((piece, index) => {
+    if (piece === CHANGE_MARKS.added[0]) context.change = 'added'
+    else if (piece === CHANGE_MARKS.removed[0]) context.change = 'removed'
+    else if (piece === CHANGE_MARKS.added[1] || piece === CHANGE_MARKS.removed[1])
+      context.change = null
+    else if (piece) {
+      const node = renderWords(piece, context, `${key}-${index}`)
+      return context.change ? (
+        <TextChange key={index} change={context.change}>
+          {node}
+        </TextChange>
+      ) : (
+        <Fragment key={index}>{node}</Fragment>
+      )
+    }
+    return null
+  })
+}
+
+function renderWords(raw: string, context: RenderContext, key: string): ReactNode {
   const text = decodeEntities(raw)
   // One flat list of words, so a word keeps its node when a citation after it completes.
   const show = (value: string, at: number): ReactNode[] =>
@@ -424,6 +457,8 @@ function renderBlocks(
 }
 
 interface AIMarkdownProps {
+  /** Draws the words `markChange` marked as added or removed. Off, as for a model's own reply, the marks are dropped. */
+  changes?: boolean
   className?: string
   /** `[n]` in the text links to the nth source. */
   sources?: AISource[]
@@ -432,14 +467,52 @@ interface AIMarkdownProps {
   text: string
 }
 
+/** Wraps text so `AIMarkdown` shows it as added or removed, as a document's changes do. Mark the words inside a line or a table cell, after any list or heading marker. */
+function markChange(text: string, change: 'added' | 'removed') {
+  const [start, end] = CHANGE_MARKS[change]
+  return text ? `${start}${text}${end}` : ''
+}
+
+interface MarkdownBlock {
+  /** The blank lines and spaces after it, so the blocks join back into the same text. */
+  after: string
+  /** The block's Markdown: a paragraph, a heading, a whole list or table, a code block. */
+  source: string
+}
+
+/** Splits Markdown into its top-level blocks, which `joinMarkdownBlocks` puts back together as they were. */
+function markdownBlocks(text: string): MarkdownBlock[] {
+  const blocks: MarkdownBlock[] = []
+  for (const token of new Lexer({ breaks: true, gfm: true }).lex(text)) {
+    const last = blocks.at(-1)
+    if (token.type === 'space') {
+      if (last) last.after += token.raw
+      continue
+    }
+    const source = token.raw.trimEnd()
+    blocks.push({ after: token.raw.slice(source.length), source })
+  }
+  return blocks
+}
+
+function joinMarkdownBlocks(blocks: MarkdownBlock[]) {
+  return blocks.map((block) => block.source + block.after).join('')
+}
+
 /** Markdown a model wrote: GitHub's tables, lists, task lists, quotes, links and code. HTML shows as text; links open only http(s), mailto and in-app paths; images show as links. */
 function AIMarkdown({
+  changes = false,
   className,
   sources = [],
   streaming = false,
   text,
 }: AIMarkdownProps) {
-  const blocks = renderBlocks(lex(text, streaming), { sources, streaming })
+  const source = changes ? text : text.replace(CHANGE_MARKS_ALL, '')
+  const blocks = renderBlocks(lex(source, streaming), {
+    change: null,
+    sources,
+    streaming,
+  })
   if (blocks.every((block) => block === null)) return null
   return (
     <div
@@ -451,6 +524,14 @@ function AIMarkdown({
   )
 }
 
-export { AIMarkdown, completeMarkdown, getCitedNumbers, markdownToPlainText }
+export {
+  AIMarkdown,
+  completeMarkdown,
+  getCitedNumbers,
+  joinMarkdownBlocks,
+  markChange,
+  markdownBlocks,
+  markdownToPlainText,
+}
 
-export type { AIMarkdownProps }
+export type { AIMarkdownProps, MarkdownBlock }

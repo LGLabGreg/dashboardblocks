@@ -1182,6 +1182,7 @@ export {
   SidebarLayout,
   SidebarUserMenu,
   TopNav,
+  useDockedPanel,
   UserMenu,
   WorkspaceSwitcher,
 }

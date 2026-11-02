@@ -299,6 +299,10 @@ interface HighlightedCodeProps extends Omit<
   copyLabel?: string
   /** Text to pick out wherever it appears, such as the key the reader must check is theirs. */
   mark?: readonly string[]
+  /** Marks each line, by its index, as added or removed, as a diff shows it. Copy leaves the removed lines out. */
+  lineChanges?: readonly ('added' | 'removed' | undefined)[]
+  /** Shows the copy button. Turn it off where the page has its own Copy. @default true */
+  copyButton?: boolean
   /** Wraps long lines instead of scrolling them sideways. */
   wrap?: boolean
   /** Names the code for screen readers and makes it a region. */
@@ -313,6 +317,8 @@ function HighlightedCode({
   title,
   copyLabel = 'Copy code',
   mark = [],
+  lineChanges,
+  copyButton = true,
   wrap = false,
   label,
   footer,
@@ -321,9 +327,19 @@ function HighlightedCode({
   ...props
 }: HighlightedCodeProps) {
   const lines = useTokenLines(code, language)
-  const copy = (
+  const copy = copyButton && (
     <CodeBlockActions>
-      <CodeBlockCopyButton aria-label={copyLabel} value={code} />
+      <CodeBlockCopyButton
+        aria-label={copyLabel}
+        value={
+          lineChanges
+            ? code
+                .split('\n')
+                .filter((_, index) => lineChanges[index] !== 'removed')
+                .join('\n')
+            : code
+        }
+      />
     </CodeBlockActions>
   )
   return (
@@ -351,7 +367,9 @@ function HighlightedCode({
         aria-label={label}
       >
         {lines.map((line, index) => (
-          <CodeBlockLine key={index}>{renderLine(line, mark)}</CodeBlockLine>
+          <CodeBlockLine key={index} variant={lineChanges?.[index]}>
+            {renderLine(line, mark)}
+          </CodeBlockLine>
         ))}
       </CodeBlockContent>
       {footer && <CodeBlockFooter>{footer}</CodeBlockFooter>}

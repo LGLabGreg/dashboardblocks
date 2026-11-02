@@ -124,8 +124,15 @@ interface DataTableRowProps extends ComponentProps<'tr'> {
   highlighted?: boolean
 }
 
+const OPEN_ITEM =
+  'data-open:bg-muted data-open:relative data-open:before:absolute data-open:before:inset-y-0 data-open:before:start-0 data-open:before:w-0.5 data-open:before:bg-foreground'
+
+// A table row can't hold a positioned ::before, which the browser lays out as a cell.
+const OPEN_ROW =
+  'data-open:bg-muted data-open:[&>:first-child]:shadow-[inset_2px_0_0_var(--color-foreground)] rtl:data-open:[&>:first-child]:shadow-[inset_-2px_0_0_var(--color-foreground)]'
+
 const ROW_HOST =
-  'has-data-[slot=data-table-row-trigger]:hover:bg-muted/50 has-data-[slot=data-table-row-trigger]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:z-10 transition-colors'
+  'has-data-[slot=data-table-row-trigger]:not-data-highlighted:not-data-open:hover:bg-muted/50 has-data-[slot=data-table-row-trigger]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:z-10 transition-colors'
 
 function DataTableRow({ className, highlighted, ...props }: DataTableRowProps) {
   return (
@@ -133,8 +140,9 @@ function DataTableRow({ className, highlighted, ...props }: DataTableRowProps) {
       role='row'
       data-highlighted={highlighted || undefined}
       className={cn(
-        'group/data-table-row data-[state=selected]:bg-muted/50 data-highlighted:bg-muted/50 border-b last:border-b-0',
+        'group/data-table-row data-[state=selected]:bg-muted/50 data-highlighted:bg-muted border-b last:border-b-0',
         ROW_HOST,
+        OPEN_ROW,
         className,
       )}
       {...props}
@@ -150,6 +158,7 @@ function DataTableListItem({ className, ...props }: ComponentProps<'li'>) {
       className={cn(
         'data-[state=selected]:bg-muted/50 px-[var(--data-table-inset,0.75rem)]',
         ROW_HOST,
+        OPEN_ITEM,
         className,
       )}
       {...props}

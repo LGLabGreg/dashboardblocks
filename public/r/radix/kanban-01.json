@@ -23,7 +23,7 @@
       "calendar-01"
     ],
     "component": "Kanban1",
-    "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; doneColumn: string; issues?: { assignees: string[]; attachments?: number; comments?: number; due?: Date; key: string; labels: { name: string; tone?: \"success\" | \"warning\" | \"danger\" | \"info\" | \"neutral\" | \"accent\" }[]; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; subtasks?: { done: number; total: number }; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; period: string; project: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ columns: { color?: string; icon?: ReactNode; id: string; title: string; wipLimit?: number }[]; doneColumn: string; issues?: { assignees: string[]; attachments?: number; comments?: number; due?: Date; key: string; labels: { name: string; tone?: \"success\" | \"warning\" | \"danger\" | \"info\" | \"neutral\" | \"accent\" }[]; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; subtasks?: { done: number; total: number }; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; period: string; project: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

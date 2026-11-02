@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-split",
+  "title": "Resizable Split",
+  "description": "Two panes side by side, such as a chat and the document it writes, with a line between them that people drag, or move with the arrow keys, to share the width.",
+  "registryDependencies": [
+    "resizable"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/resizable-split.tsx",
+      "content": "'use client'\n\nimport type { ReactNode } from 'react'\n\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from '@/components/ui/resizable'\n\nimport { cn } from '@/lib/utils'\n\ninterface ResizableSplitProps {\n  /** The main pane, such as a chat. */\n  children: ReactNode\n  className?: string\n  /** The side pane's share of the width when it opens, in percent. @default 50 */\n  defaultSideSize?: number\n  /** Names the line people drag, for screen readers. @default 'Resize' */\n  label?: string\n  /** The narrowest either pane can be dragged to, in rem. @default 22 */\n  minSize?: number\n  /** The pane beside it, such as a document, at the end of the row. */\n  side: ReactNode\n}\n\n/** Two panes side by side, with a line between them that people drag, or move with the arrow keys, to share the width. Below `xl` they stack: the side pane on top, filling the height, and the main pane under it, as tall as its content. */\nfunction ResizableSplit({\n  children,\n  className,\n  defaultSideSize = 50,\n  label = 'Resize',\n  minSize = 22,\n  side,\n}: ResizableSplitProps) {\n  return (\n    <ResizablePanelGroup\n      data-slot='resizable-split'\n      orientation='horizontal'\n      className={cn(\n        'min-h-0 max-xl:flex-col! max-xl:[&>[data-panel]:first-child]:order-last max-xl:[&>[data-panel]:first-child]:flex-none! max-xl:[&>[data-panel]:last-child]:flex-[1_1_0]! max-xl:[&>[data-separator]]:hidden',\n        className,\n      )}\n    >\n      <ResizablePanel className='flex flex-col' minSize={`${minSize}rem`}>\n        {children}\n      </ResizablePanel>\n      <ResizableHandle aria-label={label} withHandle />\n      <ResizablePanel\n        className='flex flex-col'\n        defaultSize={`${defaultSideSize}%`}\n        minSize={`${minSize}rem`}\n      >\n        {side}\n      </ResizablePanel>\n    </ResizablePanelGroup>\n  )\n}\n\nexport { ResizableSplit }\nexport type { ResizableSplitProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/resizable-split.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

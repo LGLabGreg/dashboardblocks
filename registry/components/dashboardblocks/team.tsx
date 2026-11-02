@@ -5,6 +5,7 @@ import {
   type StatusLabelProps,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
@@ -288,6 +289,48 @@ function WorkloadBar({
   )
 }
 
+interface WorkloadLegendItem {
+  /** The part's fill on the bar, shown as a swatch. */
+  fill: string
+  key: string
+  /** What follows the amount, such as `pts done`. */
+  label: string
+  value: number
+}
+
+/** The key under a `WorkloadBar`: each part's swatch, amount and what it is. */
+function WorkloadLegend({
+  className,
+  items,
+}: {
+  className?: string
+  items: WorkloadLegendItem[]
+}) {
+  return (
+    <ul
+      data-slot='workload-legend'
+      className={cn(
+        'text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs',
+        className,
+      )}
+    >
+      {items.map((item) => (
+        <li key={item.key} className='flex items-center gap-1.5'>
+          <span aria-hidden className='bg-muted size-2 overflow-hidden rounded-full'>
+            <span className='block size-full' style={{ backgroundColor: item.fill }} />
+          </span>
+          <span>
+            <span className='text-foreground font-medium tabular-nums'>
+              {formatNumber(item.value)}
+            </span>{' '}
+            {item.label}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export {
   AvatarStack,
   PersonAvatar,
@@ -297,7 +340,9 @@ export {
   presenceConfig,
   presenceOrder,
   WorkloadBar,
+  WorkloadLegend,
   workloadFill,
+  workloadOpenFill,
   workloadOverFill,
 }
 
@@ -310,5 +355,6 @@ export type {
   PresenceConfig,
   PresenceLabelProps,
   WorkloadBarPart,
+  WorkloadLegendItem,
   WorkloadBarProps,
 }

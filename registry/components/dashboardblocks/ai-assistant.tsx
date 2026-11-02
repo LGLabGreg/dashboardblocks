@@ -7,18 +7,23 @@ import {
   type AIFilePart,
   type AIMessage,
   type AIMessagePart,
+  type AIMessageVersions,
   type AIReply,
   type AIToolApprovalResponse,
+  branchMessages,
   getMessageFiles,
   getMessageSources,
   getMessageText,
   getStreamingMessageId,
+  getMessageVersion,
   getToolLabel,
   isToolPart,
+  selectMessageVersion,
 } from '@/registry/components/dashboardblocks/ai-message'
 import {
   AIMessageParts,
   type AIMessagePartsProps,
+  fileKind,
   MessageFiles,
   ThinkingIndicator,
 } from '@/registry/components/dashboardblocks/ai-parts'
@@ -29,6 +34,10 @@ import {
   type BlockStatus,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import {
+  formatFileSize,
+  validateFiles,
+} from '@/registry/components/dashboardblocks/files'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatList } from '@/registry/lib/dashboardblocks/format'
 import {
@@ -37,6 +46,7 @@ import {
   type ReactNode,
   type Ref,
   type RefObject,
+  startTransition,
   useEffect,
   useId,
   useImperativeHandle,
@@ -44,12 +54,14 @@ import {
   useRef,
   useState,
 } from 'react'
+import { flushSync } from 'react-dom'
 
 import {
   Attachment,
   AttachmentAction,
   AttachmentActions,
   AttachmentContent,
+  AttachmentDescription,
   AttachmentMedia,
   AttachmentTitle,
 } from '@/components/ui/attachment'
@@ -452,7 +464,7 @@ interface ChatMessageProps extends Pick<
 > {
   actions?: ReactNode
   avatar?: ReactNode
-  /** What an assistant's reply shows, in place of its parts in order. */
+  /** What the message shows in place of its text, or of a reply's parts in order, such as a question being edited. */
   children?: ReactNode
   className?: string
   footer?: ReactNode
@@ -486,13 +498,14 @@ function ChatMessage({
           <MessageContent>
             <span className='sr-only'>{name ?? 'You'}: </span>
             <MessageFiles files={getMessageFiles(message)} className='justify-end' />
-            {text && (
-              <Bubble variant='muted' align='end'>
-                <BubbleContent>
-                  <p className='break-words whitespace-pre-wrap'>{text}</p>
-                </BubbleContent>
-              </Bubble>
-            )}
+            {children ??
+              (text && (
+                <Bubble variant='muted' align='end'>
+                  <BubbleContent>
+                    <p className='break-words whitespace-pre-wrap'>{text}</p>
+                  </BubbleContent>
+                </Bubble>
+              ))}
             {actions}
           </MessageContent>
         </Message>
@@ -534,22 +547,92 @@ function AssistantMessageAvatar({ avatar }: { avatar?: ReactNode }) {
   )
 }
 
+interface MessageVersion {
+  count: number
+  /** The version showing, from 0. */
+  index: number
+}
+
 interface ChatMessageActionsProps {
   className?: string
   content: string
+  /** Turns the buttons that change the chat off while a reply arrives. */
+  disabled?: boolean
   feedback?: ChatFeedback | null
   /** Shows thumbs up and down. */
   onFeedback?: (feedback: ChatFeedback | null) => void
   /** Shows a regenerate button, usually on the last reply only. */
   onRegenerate?: () => void
+  /** Steps to another version of the reply. */
+  onVersionChange?: (index: number) => void
+  /** Shows which version of the reply this is, with buttons to the others. */
+  version?: MessageVersion
+}
+
+/** Which version of a message shows, such as 2 / 3, with buttons to the one before and after. */
+function MessageVersions({
+  disabled,
+  onChange,
+  version,
+}: {
+  disabled?: boolean
+  onChange: (index: number) => void
+  version: MessageVersion
+}) {
+  const { count, index } = version
+  return (
+    <div role='group' aria-label='Versions' className='flex items-center'>
+      <Button
+        variant='ghost'
+        size='icon-sm'
+        aria-label='Previous version'
+        disabled={disabled || index === 0}
+        onClick={() => onChange(index - 1)}
+      >
+        <IconPlaceholder
+          lucide='ChevronLeftIcon'
+          tabler='IconChevronLeft'
+          hugeicons='ArrowLeft01Icon'
+          phosphor='CaretLeftIcon'
+          remixicon='RiArrowLeftSLine'
+        />
+      </Button>
+      <span className='min-w-9 text-center text-xs tabular-nums'>
+        <span aria-hidden>
+          {index + 1} / {count}
+        </span>
+        <span className='sr-only'>
+          Version {index + 1} of {count}
+        </span>
+      </span>
+      <Button
+        variant='ghost'
+        size='icon-sm'
+        aria-label='Next version'
+        disabled={disabled || index === count - 1}
+        onClick={() => onChange(index + 1)}
+      >
+        <IconPlaceholder
+          lucide='ChevronRightIcon'
+          tabler='IconChevronRight'
+          hugeicons='ArrowRight01Icon'
+          phosphor='CaretRightIcon'
+          remixicon='RiArrowRightSLine'
+        />
+      </Button>
+    </div>
+  )
 }
 
 function ChatMessageActions({
   className,
   content,
+  disabled,
   feedback,
   onFeedback,
   onRegenerate,
+  onVersionChange,
+  version,
 }: ChatMessageActionsProps) {
   return (
     <div
@@ -557,13 +640,21 @@ function ChatMessageActions({
       aria-label='Message actions'
       className={cn('text-muted-foreground -ms-1.5 flex items-center gap-0.5', className)}
     >
+      {version && onVersionChange && (
+        <MessageVersions
+          disabled={disabled}
+          version={version}
+          onChange={onVersionChange}
+        />
+      )}
       {content && <CopyButton label='Copy message' value={content} />}
       {onRegenerate && (
         <Button
           variant='ghost'
           size='icon-sm'
           aria-label='Regenerate response'
-          onClick={onRegenerate}
+          disabled={disabled}
+          onClick={() => onRegenerate()}
         >
           <IconPlaceholder
             lucide='RefreshCwIcon'
@@ -808,20 +899,16 @@ function ChatContextChip({
   )
 }
 
-interface ComposerFile {
-  file: AIFilePart
-  id: string
-}
+type ComposerFile = { id: string; name: string; preview?: string } & (
+  | { controller: AbortController; state: 'uploading' }
+  | { part: AIFilePart; state: 'done' }
+  | { message: string; state: 'error' }
+)
 
-function accepts(file: File, accept: string) {
-  return accept.split(',').some((rule) => {
-    const pattern = rule.trim().toLowerCase()
-    if (!pattern) return false
-    if (pattern.startsWith('.')) return file.name.toLowerCase().endsWith(pattern)
-    if (pattern.endsWith('/*')) return file.type.startsWith(pattern.slice(0, -1))
-    return file.type === pattern
-  })
-}
+type ComposerUpload = (
+  file: File,
+  options: { signal: AbortSignal },
+) => Promise<AIFilePart | { message: string; status: 'error' }>
 
 const TEXT_TYPES: Record<string, string> = {
   csv: 'text/csv',
@@ -831,7 +918,7 @@ const TEXT_TYPES: Record<string, string> = {
   txt: 'text/plain',
 }
 
-// Browsers give no type to a .log or .md file, and model providers refuse application/octet-stream.
+/** A file's media type, from its name when the browser gives none, as for a .log or .md file: model providers refuse application/octet-stream. */
 function getMediaType(file: File) {
   if (file.type) return file.type
   const extension = file.name.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase() ?? ''
@@ -858,23 +945,107 @@ function readFile(file: File) {
   })
 }
 
+function ComposerAttachment({
+  file,
+  onRemove,
+}: {
+  file: ComposerFile
+  onRemove: () => void
+}) {
+  const description =
+    file.state === 'uploading'
+      ? 'Uploading…'
+      : file.state === 'error'
+        ? file.message
+        : fileKind(file.part)
+  return (
+    <Attachment size='xs' state={file.state}>
+      <AttachmentMedia variant={file.preview ? 'image' : 'icon'}>
+        {file.state === 'uploading' ? (
+          <IconPlaceholder
+            lucide='Loader2Icon'
+            tabler='IconLoader'
+            hugeicons='Loading03Icon'
+            phosphor='SpinnerIcon'
+            remixicon='RiLoaderLine'
+            className='animate-spin motion-reduce:animate-none'
+          />
+        ) : file.state === 'error' ? (
+          <IconPlaceholder
+            lucide='TriangleAlertIcon'
+            tabler='IconAlertTriangle'
+            hugeicons='Alert02Icon'
+            phosphor='WarningIcon'
+            remixicon='RiErrorWarningLine'
+          />
+        ) : file.preview ? (
+          // oxlint-disable-next-line nextjs/no-img-element -- blocks install into any React project
+          <img src={file.preview} alt='' />
+        ) : (
+          <IconPlaceholder
+            lucide='FileTextIcon'
+            tabler='IconFileText'
+            hugeicons='File02Icon'
+            phosphor='FileTextIcon'
+            remixicon='RiFileTextLine'
+          />
+        )}
+      </AttachmentMedia>
+      <AttachmentContent className='max-w-48 min-w-0'>
+        <AttachmentTitle className='block truncate'>{file.name}</AttachmentTitle>
+        <AttachmentDescription
+          className='block truncate'
+          title={file.state === 'error' ? file.message : undefined}
+        >
+          {description}
+        </AttachmentDescription>
+      </AttachmentContent>
+      <AttachmentActions>
+        <AttachmentAction
+          type='button'
+          aria-label={`Remove ${file.name}`}
+          onClick={onRemove}
+        >
+          <IconPlaceholder
+            lucide='XIcon'
+            tabler='IconX'
+            hugeicons='Cancel01Icon'
+            phosphor='XIcon'
+            remixicon='RiCloseLine'
+          />
+        </AttachmentAction>
+      </AttachmentActions>
+    </Attachment>
+  )
+}
+
 interface ChatComposerProps {
-  /** Lets the person attach files of these types, by button, paste or drop, as the file input's `accept` reads it (`image/*,.pdf`). They're sent as data URLs. Leave out for text only. */
+  /** Lets the person attach files of these types, by button, paste or drop, as the file input's `accept` reads it (`image/*,.pdf`). A file of another type shows as one that can't be sent. Leave out for text only. */
   accept?: string
   className?: string
   context?: ReactNode
   disabled?: boolean
   label?: string
+  /** The largest file to attach, in bytes. A larger one shows as one that can't be sent. */
+  maxSize?: number
   onStop?: () => void
-  /** Takes the chat's `sendMessage` as it is. */
-  onSubmit: (message: { files?: AIFilePart[]; text: string }) => void
+  /** Takes the chat's `sendMessage` as it is. Return `false` to keep the message and its files in the box, as when the page holds it. */
+  onSubmit: (message: { files?: AIFilePart[]; text: string }) => unknown
   onValueChange?: (value: string) => void
   /** @default 'Ask anything' */
   placeholder?: string
   /** Sending waits until the status is `ready` or `error`. */
   status?: AIChatStatus
   textareaRef?: Ref<HTMLTextAreaElement>
+  /** Controls beside Attach files. The message box is a size container, so they can drop their labels when it's narrow (`@md:inline`). */
   tools?: ReactNode
+  /**
+   * Uploads each file as it's attached, and Send waits until every one is done. Resolve the file part
+   * to send, with the `url` your storage keeps it at, or `{ status: 'error', message }` to refuse it;
+   * a throw shows "Check your connection and try again." Removing the file aborts `signal`.
+   * Without it, files are read in the browser and sent as data URLs.
+   */
+  upload?: ComposerUpload
   value?: string
 }
 
@@ -884,6 +1055,7 @@ function ChatComposer({
   context,
   disabled,
   label = 'Message',
+  maxSize,
   onStop,
   onSubmit,
   onValueChange,
@@ -891,6 +1063,7 @@ function ChatComposer({
   status = 'ready',
   textareaRef,
   tools,
+  upload = readFile,
   value,
 }: ChatComposerProps) {
   const hintId = useId()
@@ -899,6 +1072,7 @@ function ChatComposer({
   const nextFileId = useRef(0)
   const [draft, setDraft] = useState('')
   const [files, setFiles] = useState<ComposerFile[]>([])
+  const [notices, setNotices] = useState<{ id: string; text: string }[]>([])
   const [dragging, setDragging] = useState(false)
   const text = value ?? draft
   const busy = isBusy(status)
@@ -911,27 +1085,113 @@ function ChatComposer({
     onValueChange?.(next)
   }
 
-  async function attach(list: FileList | File[]) {
+  const previews = useRef(new Set<string>())
+
+  useEffect(() => {
+    const shown = previews.current
+    return () => {
+      for (const url of shown) URL.revokeObjectURL(url)
+      shown.clear()
+    }
+  }, [])
+
+  function preview(file: File) {
+    if (!file.type.startsWith('image/')) return undefined
+    const url = URL.createObjectURL(file)
+    previews.current.add(url)
+    return url
+  }
+
+  function forget(items: ComposerFile[]) {
+    for (const item of items) {
+      if (item.state === 'uploading') item.controller.abort()
+      if (!item.preview) continue
+      URL.revokeObjectURL(item.preview)
+      previews.current.delete(item.preview)
+    }
+  }
+
+  function announce(id: string, name: string, message: string) {
+    setNotices((current) => [...current.slice(-2), { id, text: `${name}: ${message}` }])
+  }
+
+  function finish(
+    id: string,
+    name: string,
+    result: AIFilePart | { message: string; status: 'error' },
+  ) {
+    startTransition(() => {
+      if ('status' in result) announce(id, name, result.message)
+      setFiles((current) =>
+        current.map((item) =>
+          item.id !== id || item.state !== 'uploading'
+            ? item
+            : 'status' in result
+              ? { id, message: result.message, name: item.name, state: 'error' }
+              : {
+                  id,
+                  name: item.name,
+                  part: result,
+                  preview: item.preview,
+                  state: 'done',
+                },
+        ),
+      )
+    })
+  }
+
+  async function start(id: string, file: File, signal: AbortSignal) {
+    const result = await upload(file, { signal }).catch(() => ({
+      message: 'Check your connection and try again.',
+      status: 'error' as const,
+    }))
+    if (!signal.aborted) finish(id, file.name, result)
+  }
+
+  function attach(list: FileList | File[]) {
     if (!accept || disabled) return
-    const picked = [...list].filter((file) => accepts(file, accept))
-    const read = await Promise.allSettled(picked.map(readFile))
-    const added = read.flatMap((result) =>
-      result.status === 'fulfilled'
-        ? [{ file: result.value, id: `${++nextFileId.current}` }]
-        : [],
-    )
+    const added = [...list].map((file): ComposerFile => {
+      const id = `${++nextFileId.current}`
+      const [rejected] = validateFiles([file], { accept, maxSize }).rejected
+      if (rejected) {
+        const message =
+          rejected.reason === 'size' && maxSize !== undefined
+            ? `Over ${formatFileSize(maxSize)}. Try a smaller file.`
+            : 'Can’t read this kind of file.'
+        announce(id, file.name, message)
+        return { id, message, name: file.name, state: 'error' }
+      }
+      const controller = new AbortController()
+      void start(id, file, controller.signal)
+      return {
+        controller,
+        id,
+        name: file.name,
+        preview: preview(file),
+        state: 'uploading',
+      }
+    })
     setFiles((current) => [...current, ...added])
   }
 
+  function remove(id: string) {
+    forget(files.filter((item) => item.id === id))
+    setFiles((current) => current.filter((item) => item.id !== id))
+    inner.current?.focus()
+  }
+
+  const ready = files.flatMap((item) => (item.state === 'done' ? [item.part] : []))
+  const uploading = files.some((item) => item.state === 'uploading')
+
   function send() {
-    if (!canSend) return
-    if (!text.trim() && files.length === 0) return inner.current?.focus()
-    onSubmit(
-      files.length > 0
-        ? { files: files.map(({ file }) => file), text: text.trim() }
-        : { text: text.trim() },
+    if (!canSend || uploading) return
+    if (!text.trim() && ready.length === 0) return inner.current?.focus()
+    const sent = onSubmit(
+      ready.length > 0 ? { files: ready, text: text.trim() } : { text: text.trim() },
     )
+    if (sent === false) return inner.current?.focus()
     change('')
+    forget(files)
     setFiles([])
     inner.current?.focus()
   }
@@ -942,50 +1202,14 @@ function ChatComposer({
     send()
   }
 
-  const attachments = files.map(({ file, id }) => (
-    <Attachment key={id} size='xs'>
-      <AttachmentMedia variant={file.mediaType.startsWith('image') ? 'image' : 'icon'}>
-        {file.mediaType.startsWith('image') ? (
-          // oxlint-disable-next-line nextjs/no-img-element -- blocks install into any React project
-          <img src={file.url} alt='' />
-        ) : (
-          <IconPlaceholder
-            lucide='FileTextIcon'
-            tabler='IconFileText'
-            hugeicons='File02Icon'
-            phosphor='FileTextIcon'
-            remixicon='RiFileTextLine'
-          />
-        )}
-      </AttachmentMedia>
-      <AttachmentContent>
-        <AttachmentTitle>{file.filename}</AttachmentTitle>
-      </AttachmentContent>
-      <AttachmentActions>
-        <AttachmentAction
-          type='button'
-          aria-label={`Remove ${file.filename}`}
-          onClick={() => {
-            setFiles((current) => current.filter((item) => item.id !== id))
-            inner.current?.focus()
-          }}
-        >
-          <IconPlaceholder
-            lucide='XIcon'
-            tabler='IconX'
-            hugeicons='Cancel01Icon'
-            phosphor='XIcon'
-            remixicon='RiCloseLine'
-          />
-        </AttachmentAction>
-      </AttachmentActions>
-    </Attachment>
+  const attachments = files.map((file) => (
+    <ComposerAttachment key={file.id} file={file} onRemove={() => remove(file.id)} />
   ))
 
   return (
     <form
       method='post'
-      className={className}
+      className={cn('@container', className)}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         send()
@@ -1005,9 +1229,14 @@ function ChatComposer({
           if (!accept) return
           event.preventDefault()
           setDragging(false)
-          void attach(event.dataTransfer.files)
+          attach(event.dataTransfer.files)
         }}
       >
+        <div role='status' aria-atomic='false' className='sr-only'>
+          {notices.map((notice) => (
+            <div key={notice.id}>{notice.text}</div>
+          ))}
+        </div>
         {dragging && (
           <div
             aria-hidden
@@ -1035,7 +1264,7 @@ function ChatComposer({
           onPaste={(event) => {
             if (!accept || event.clipboardData.files.length === 0) return
             event.preventDefault()
-            void attach(event.clipboardData.files)
+            attach(event.clipboardData.files)
           }}
           className='max-h-48'
         />
@@ -1050,7 +1279,7 @@ function ChatComposer({
                 hidden
                 tabIndex={-1}
                 onChange={(event) => {
-                  if (event.target.files) void attach(event.target.files)
+                  if (event.target.files) attach(event.target.files)
                   event.target.value = ''
                 }}
               />
@@ -1097,8 +1326,10 @@ function ChatComposer({
             <Button
               type='submit'
               size='icon-sm'
-              aria-label='Send message'
-              disabled={!canSend}
+              aria-label={
+                uploading ? 'Send message, once the files have uploaded' : 'Send message'
+              }
+              disabled={!canSend || uploading}
               className='ms-auto'
             >
               <IconPlaceholder
@@ -1138,7 +1369,126 @@ interface ChatConversationProps extends Pick<
   onFeedback?: (messageId: string, feedback: ChatFeedback | null) => void
 }
 
-/** A chat's messages for `ChatMessages`: each reply with its actions, the follow-ups under the last one, "Thinking…" until a reply starts, and a failed reply with Retry. */
+/** A question being edited, in place of its bubble: Enter sends it as a new version, Escape puts it back. */
+function QuestionEditor({
+  defaultValue,
+  onCancel,
+  onSubmit,
+}: {
+  defaultValue: string
+  onCancel: () => void
+  onSubmit: (text: string) => void
+}) {
+  const [text, setText] = useState(defaultValue)
+  const canSend = text.trim().length > 0
+  const send = () => {
+    if (canSend) onSubmit(text.trim())
+  }
+  return (
+    <form
+      method='post'
+      className='w-full'
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        send()
+      }}
+    >
+      <InputGroup>
+        <InputGroupTextarea
+          // oxlint-disable-next-line jsx-a11y/no-autofocus -- Edit opens the question to type in
+          autoFocus
+          aria-label='Edit your message'
+          rows={1}
+          value={text}
+          onChange={(event) => setText(event.target.value)}
+          onFocus={(event) => {
+            const end = event.currentTarget.value.length
+            event.currentTarget.setSelectionRange(end, end)
+          }}
+          onKeyDown={(event) => {
+            if (event.nativeEvent.isComposing) return
+            if (event.key === 'Escape') {
+              event.preventDefault()
+              onCancel()
+            } else if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault()
+              send()
+            }
+          }}
+          className='max-h-48'
+        />
+        <InputGroupAddon align='block-end' className='justify-end gap-2'>
+          <Button type='button' variant='ghost' size='sm' onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type='submit' size='sm' disabled={!canSend}>
+            Send
+          </Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
+  )
+}
+
+/** Under a question: which version it is, and Copy and Edit, which show on hover. */
+function QuestionActions({
+  content,
+  disabled,
+  editId,
+  onEdit,
+  onVersionChange,
+  version,
+}: {
+  content: string
+  disabled?: boolean
+  editId: string
+  onEdit?: () => void
+  onVersionChange?: (index: number) => void
+  version?: MessageVersion
+}) {
+  return (
+    <div
+      role='group'
+      aria-label='Question actions'
+      className='text-muted-foreground -me-1.5 flex items-center justify-end gap-0.5'
+    >
+      <div className='flex items-center gap-0.5 transition-opacity group-focus-within/message:opacity-100 group-hover/message:opacity-100 pointer-fine:opacity-0'>
+        {content && <CopyButton label='Copy message' value={content} />}
+        {onEdit && (
+          <Button
+            id={editId}
+            variant='ghost'
+            size='icon-sm'
+            aria-label='Edit message'
+            disabled={disabled}
+            onClick={onEdit}
+          >
+            <IconPlaceholder
+              lucide='PencilIcon'
+              tabler='IconPencil'
+              hugeicons='PencilEdit02Icon'
+              phosphor='PencilSimpleIcon'
+              remixicon='RiPencilLine'
+            />
+          </Button>
+        )}
+      </div>
+      {version && onVersionChange && (
+        <MessageVersions
+          disabled={disabled}
+          version={version}
+          onChange={onVersionChange}
+        />
+      )}
+    </div>
+  )
+}
+
+/**
+ * A chat's messages for `ChatMessages`: each reply with its actions, the follow-ups under the last one,
+ * "Thinking…" until a reply starts, and a failed reply with Retry. A question can be edited, and a chat
+ * that keeps versions (`chat.versions`) shows them under each question and reply, to step between.
+ */
 function ChatConversation({
   chat,
   composerRef,
@@ -1151,12 +1501,70 @@ function ChatConversation({
   toolLabels,
 }: ChatConversationProps) {
   const { messages, status } = chat
+  const id = useId()
+  const [editing, setEditing] = useState<string | null>(null)
   const streamingId = getStreamingMessageId(messages, status)
+  const busy = isBusy(status)
+  const keepsVersions = chat.selectVersion !== undefined
+  let lastQuestion = messages.length - 1
+  while (lastQuestion >= 0 && messages[lastQuestion]?.role !== 'user') lastQuestion--
+  const selectVersion = (messageId: string) =>
+    chat.selectVersion && ((index: number) => void chat.selectVersion?.(messageId, index))
+
+  const stopEditing = (messageId: string) => {
+    flushSync(() => setEditing(null))
+    document.getElementById(`${id}-edit-${messageId}`)?.focus()
+  }
+
   return (
     <>
       {messages.map((message, index) => {
         const streaming = message.id === streamingId
         const lastMessage = index === messages.length - 1
+        const version = getMessageVersion(messages, chat.versions, index)
+        if (message.role === 'user') {
+          const text = getMessageText(message)
+          const isEditing = editing === message.id && !busy
+          return (
+            <ChatMessage
+              key={message.id}
+              message={message}
+              actions={
+                !isEditing && (
+                  <QuestionActions
+                    content={text}
+                    disabled={busy}
+                    editId={`${id}-edit-${message.id}`}
+                    onEdit={
+                      keepsVersions || index === lastQuestion
+                        ? () => setEditing(message.id)
+                        : undefined
+                    }
+                    onVersionChange={selectVersion(message.id)}
+                    version={version}
+                  />
+                )
+              }
+            >
+              {isEditing ? (
+                <QuestionEditor
+                  defaultValue={text}
+                  onCancel={() => stopEditing(message.id)}
+                  onSubmit={(next) => {
+                    setEditing(null)
+                    void chat.sendMessage({
+                      files: getMessageFiles(message),
+                      messageId: message.id,
+                      metadata: message.metadata,
+                      text: next,
+                    })
+                    composerRef?.current?.focus()
+                  }}
+                />
+              ) : undefined}
+            </ChatMessage>
+          )
+        }
         const finishedReply = message.role === 'assistant' && !streaming
         const more = finishedReply ? footer?.(message) : undefined
         const prompts =
@@ -1188,9 +1596,19 @@ function ChatConversation({
               finishedReply && (
                 <ChatMessageActions
                   content={getMessageText(message)}
+                  disabled={busy}
                   feedback={feedback?.[message.id]}
                   onFeedback={onFeedback && ((value) => onFeedback(message.id, value))}
-                  onRegenerate={lastMessage ? chat.regenerate : undefined}
+                  onRegenerate={
+                    lastMessage
+                      ? () => {
+                          void chat.regenerate()
+                          composerRef?.current?.focus()
+                        }
+                      : undefined
+                  }
+                  onVersionChange={selectVersion(message.id)}
+                  version={version}
                 />
               )
             }
@@ -1373,6 +1791,8 @@ const STOPPED = 'stopped'
 interface UseChatStreamOptions {
   initialError?: string
   initialMessages?: AIMessage[]
+  /** The versions a saved chat kept, as `chat.versions` gave them. */
+  initialVersions?: AIMessageVersions
   /** Runs when a reply ends, whether it finished or was stopped. */
   onFinish?: (
     message: AIMessage,
@@ -1383,6 +1803,8 @@ interface UseChatStreamOptions {
    * After a tool approval the conversation ends with the assistant's message, and the values continue it, its earlier parts included.
    */
   onSend: (messages: AIMessage[], signal: AbortSignal) => AsyncIterable<AIReply>
+  /** Runs when the person steps to another version of a message, so a saved chat shows it next time. */
+  onVersionChange?: (messageId: string, index: number) => void
 }
 
 // Unique across page loads, so a saved conversation's ids never repeat.
@@ -1396,12 +1818,16 @@ function createId() {
 function useChatStream({
   initialError,
   initialMessages = [],
+  initialVersions = {},
   onFinish,
   onSend,
+  onVersionChange,
 }: UseChatStreamOptions) {
   const controller = useRef<AbortController | null>(null)
   const history = useRef(initialMessages)
+  const kept = useRef(initialVersions)
   const [messages, setMessagesState] = useState(initialMessages)
+  const [versions, setVersionsState] = useState(initialVersions)
   const [status, setStatus] = useState<AIChatStatus>(initialError ? 'error' : 'ready')
   const [error, setError] = useState(() =>
     initialError === undefined ? undefined : new Error(initialError),
@@ -1422,6 +1848,22 @@ function useChatStream({
     setMessagesState(next)
   }
 
+  function setVersions(next: AIMessageVersions) {
+    kept.current = next
+    setVersionsState(next)
+  }
+
+  /** Runs the conversation with the messages from `index` on replaced by `next`, keeping them as a version. */
+  function branch(index: number, next: AIMessage[]) {
+    const branched = branchMessages(
+      { messages: history.current, versions: kept.current },
+      index,
+      next,
+    )
+    setVersions(branched.versions)
+    void run(branched.messages)
+  }
+
   async function run(conversation: AIMessage[]) {
     const current = new AbortController()
     controller.current = current
@@ -1439,6 +1881,7 @@ function useChatStream({
         if (current.signal.aborted) break
         reply = {
           ...reply,
+          id: snapshot.id ?? reply.id,
           metadata: snapshot.metadata ?? reply.metadata,
           parts: structuredClone(snapshot.parts),
         }
@@ -1467,24 +1910,48 @@ function useChatStream({
 
   function sendMessage({
     files = [],
+    messageId,
     metadata,
     text,
-  }: {
-    files?: AIFilePart[]
-    metadata?: unknown
-    text: string
-  }) {
+  }: Parameters<AIChat['sendMessage']>[0]) {
     if (controller.current) return
     const parts: AIMessagePart[] = [...files]
     if (text) parts.push({ state: 'done', text, type: 'text' })
-    void run([...history.current, { id: createId(), metadata, parts, role: 'user' }])
+    const question: AIMessage = {
+      id: createId(),
+      metadata,
+      parts,
+      role: 'user',
+    }
+    const edited = history.current.findIndex(
+      (message) => message.id === messageId && message.role === 'user',
+    )
+    branch(edited === -1 ? history.current.length : edited, [question])
   }
 
-  function regenerate() {
+  function regenerate({ messageId }: { messageId?: string } = {}) {
     if (controller.current) return
-    const conversation = [...history.current]
-    while (conversation.at(-1)?.role === 'assistant') conversation.pop()
-    if (conversation.length > 0) void run(conversation)
+    const conversation = history.current
+    const asked = conversation.findIndex((message) => message.id === messageId)
+    const end = asked === -1 ? conversation.length : asked
+    let question = end - 1
+    while (question >= 0 && conversation[question]?.role !== 'user') question--
+    if (question < 0) return
+    if (status === 'error') void run(conversation.slice(0, question + 1))
+    else branch(question + 1, [])
+  }
+
+  function selectVersion(messageId: string, index: number) {
+    if (controller.current) return
+    const selected = selectMessageVersion(
+      { messages: history.current, versions: kept.current },
+      messageId,
+      index,
+    )
+    if (selected.versions === kept.current) return
+    setMessages(selected.messages)
+    setVersions(selected.versions)
+    onVersionChange?.(messageId, index)
   }
 
   function addToolApprovalResponse({ approved, id, reason }: AIToolApprovalResponse) {
@@ -1518,6 +1985,7 @@ function useChatStream({
     controller.current?.abort()
     controller.current = null
     setMessages(next)
+    setVersions({})
     setError(undefined)
     setStatus('ready')
   }
@@ -1527,10 +1995,12 @@ function useChatStream({
     error,
     messages,
     regenerate,
+    selectVersion,
     sendMessage,
     setMessages: replaceMessages,
     status,
     stop,
+    versions,
   } satisfies AIChat
 }
 
@@ -1549,11 +2019,13 @@ export {
   ChatWelcome,
   SuggestedPrompts,
   TypingIndicator,
+  getMediaType,
   isBusy,
   useChatStream,
 }
 
 export type {
+  MessageVersion,
   ChatComposerProps,
   ChatConversationProps,
   ChatFeedback,
@@ -1561,6 +2033,7 @@ export type {
   ChatMessageProps,
   ChatMessagesProps,
   ChatPanelProps,
+  ComposerUpload,
   SuggestedPrompt,
   SuggestedPromptsProps,
   UseChatStreamOptions,

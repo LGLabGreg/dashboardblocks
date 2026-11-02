@@ -1,5 +1,18 @@
 # dashboardblocks
 
+## 1.20.2
+
+### Patch Changes
+
+- c245519: AI Assistant's `ChatComposer` shows each attached file uploading, then done, and keeps a file that's too large (`maxSize`) or of a type it doesn't accept as a chip that says why, instead of dropping it. `upload` uploads each file as it's attached, and Send waits until every one is done.
+- 6a5f6c4: AI Assistant's `ChatConversation` lets people edit a question in place and keeps the earlier version when they edit or regenerate, with buttons to step between versions under each question and reply. `useChatStream` keeps the versions, and `AIChat` takes `versions` and `selectVersion` for a chat that stores its own. `sendMessage` takes the `messageId` of the question an edit replaces, as the AI SDK's does.
+- fbc253c: Kanban: a column can show an icon before its title, `onMove` can return `false` to refuse a move (the card stays where it was), and with `onOpen` a click, a tap or Enter opens a card while Space picks it up.
+- 31910ff: AI Assistant's `AIMarkdown` shows text wrapped with `markChange` as added or removed, and `markdownBlocks` splits Markdown into its top-level blocks. `HighlightedCode` takes `lineChanges` to mark lines a change added or removed, and `copyButton={false}` to leave out its Copy button. Shortcut Button takes `variant='secondary'`, and App Shell exports `useDockedPanel`, which says whether the screen is wide enough for a panel beside the page.
+- ef3325a: `ShortcutButton` takes `variant='default'`, for the one filled action of a view.
+- 2110776: `ShortcutButton` with `listen` leaves a key alone while focus is inside an element marked `data-key-scope`, such as a list that handles its own keys.
+- 5dd8d10: Adds Text Change, the mark for text a change added or removed: added text tinted in the chart colour, removed text struck through in muted text, with “added” or “removed” for screen readers.
+- 0c8f9ad: Team has a `WorkloadLegend`, the key under a `WorkloadBar`: each part's swatch, amount and what it is. Shortcut Button works without a shortcut, as an icon button with its label in a tooltip.
+
 ## 1.20.1
 
 ### Patch Changes

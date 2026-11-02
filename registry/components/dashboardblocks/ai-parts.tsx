@@ -770,6 +770,7 @@ function AIMessageParts({
 
 export {
   AIMessageParts,
+  fileKind,
   groupParts,
   hasAnswer,
   isToolUnfinished,

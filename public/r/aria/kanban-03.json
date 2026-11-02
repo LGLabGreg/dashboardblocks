@@ -23,7 +23,7 @@
       "status-01"
     ],
     "component": "Kanban3",
-    "props": "{ columns: { color?: string; id: string; title: string; wipLimit?: number }[]; now: Date; onAdd?: (ticket: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }) => Promise<void>; onMove?: (id: string, column: string, index: number) => void; pausedColumns: string[]; slaHours: number; tickets?: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ columns: { color?: string; icon?: ReactNode; id: string; title: string; wipLimit?: number }[]; now: Date; onAdd?: (ticket: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }) => Promise<void>; onMove?: (id: string, column: string, index: number) => void; pausedColumns: string[]; slaHours: number; tickets?: { assignee?: string; channel: \"email\" | \"chat\"; customer?: string; number: number; priority: \"low\" | \"high\" | \"medium\" | \"urgent\"; slaDueAt: Date; column: string; id: string; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

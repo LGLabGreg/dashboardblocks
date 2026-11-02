@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-change",
+  "title": "Text Change",
+  "description": "Text a change added, tinted in the chart colour, or removed, struck through in muted text, with “added” or “removed” for screen readers.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/text-change.tsx",
+      "content": "import type { ComponentProps } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ninterface TextChangeProps extends ComponentProps<'ins'> {\n  change: 'added' | 'removed'\n}\n\n/** Text a change added, tinted in the chart colour, or removed, struck through in muted text. Screen readers hear “added” or “removed” before it. */\nfunction TextChange({ change, children, className, ...props }: TextChangeProps) {\n  const Mark = change === 'added' ? 'ins' : 'del'\n  return (\n    <Mark\n      data-slot='text-change'\n      data-change={change}\n      className={cn(\n        '[box-decoration-break:clone]',\n        change === 'added'\n          ? 'bg-chart-2/20 text-foreground rounded-sm no-underline'\n          : 'text-muted-foreground decoration-muted-foreground/70',\n        className,\n      )}\n      {...props}\n    >\n      <span className='sr-only'>{change === 'added' ? 'added ' : 'removed '}</span>\n      {children}\n    </Mark>\n  )\n}\n\nexport { TextChange }\nexport type { TextChangeProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/text-change.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

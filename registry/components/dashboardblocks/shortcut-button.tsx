@@ -1,6 +1,6 @@
 'use client'
 
-import { type ComponentProps, useEffect, useRef } from 'react'
+import { type ComponentProps, type ReactNode, useEffect, useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Kbd } from '@/components/ui/kbd'
@@ -16,7 +16,30 @@ import { cn } from '@/lib/utils'
 const KEY_NAMES: Record<string, string> = { Escape: 'Esc' }
 
 const OWNS_ITS_KEYS =
-  'input, textarea, select, [contenteditable], [role=dialog], [role=alertdialog], [role=menu], [role=listbox]'
+  'input, textarea, select, [contenteditable], [role=dialog], [role=alertdialog], [role=menu], [role=listbox], [data-key-scope]'
+
+/** Whether the key press goes to a field, menu or dialog that uses keys itself, so a page-wide shortcut leaves it. */
+function ownsItsKeys(event: KeyboardEvent) {
+  return event.target instanceof Element && event.target.closest(OWNS_ITS_KEYS) !== null
+}
+
+/** A shortcut as its key cap shows it: `Shift+P` as ⇧P, `Escape` as Esc. */
+function keyName(shortcut: string) {
+  return shortcut
+    .split('+')
+    .map((part) => (part === 'Shift' ? '⇧' : (KEY_NAMES[part] ?? part)))
+    .join('')
+}
+
+/** A tooltip's text with the shortcut that presses its button, such as Project ⇧P. */
+function ShortcutHint({ label, shortcut }: { label: ReactNode; shortcut?: string }) {
+  return (
+    <>
+      {label}
+      {shortcut && <Kbd>{keyName(shortcut)}</Kbd>}
+    </>
+  )
+}
 
 /**
  * Clicks the button when `key` is pressed alone, unless someone is typing, a menu or dialog has
@@ -35,7 +58,7 @@ function usePressOnKey(
       if (event.defaultPrevented || event.repeat || event.key?.toLowerCase() !== match)
         return
       if (event.metaKey || event.ctrlKey || event.altKey) return
-      if (event.target instanceof Element && event.target.closest(OWNS_ITS_KEYS)) return
+      if (ownsItsKeys(event)) return
       event.preventDefault()
       button.current?.click()
     }
@@ -59,19 +82,20 @@ interface ShortcutButtonProps extends Omit<ComponentProps<'button'>, 'ref'> {
    * panel already listens for the key, as a row's actions do.
    */
   listen?: boolean
-  /** The key, shown in the tooltip, such as `C` or `Escape` (shown as Esc). */
-  shortcut: string
+  /** The key, shown in the tooltip, such as `C` or `Escape` (shown as Esc). Leave out for a button with a tooltip and no key, such as a row's Delete. */
+  shortcut?: string
   /** @default 'icon-sm' */
-  size?: 'icon-sm' | 'sm'
-  /** @default 'ghost' */
-  variant?: 'ghost' | 'outline'
+  size?: 'icon-xs' | 'icon-sm' | 'sm'
+  /** `default` for the one filled action of a view, such as Accept, `secondary` for a toggle that's on. @default 'ghost' */
+  variant?: 'default' | 'ghost' | 'outline' | 'secondary'
 }
 
-/** A button whose tooltip shows its label and its keyboard shortcut. */
+/** A button whose tooltip shows its label and, when it has one, its keyboard shortcut. */
 function ShortcutButton({
   children,
   className,
   collapseBelow,
+  disabled,
   label,
   listen = false,
   shortcut,
@@ -80,7 +104,7 @@ function ShortcutButton({
   ...props
 }: ShortcutButtonProps) {
   const button = useRef<HTMLButtonElement>(null)
-  usePressOnKey(shortcut, button, listen)
+  usePressOnKey(shortcut ?? '', button, listen && shortcut !== undefined)
 
   return (
     <TooltipProvider>
@@ -90,6 +114,7 @@ function ShortcutButton({
             <Button
               variant={variant}
               size={size}
+              disabled={disabled}
               className={cn(collapseBelow && collapsed[collapseBelow], className)}
             />
           }
@@ -100,14 +125,13 @@ function ShortcutButton({
           {children}
         </TooltipTrigger>
         <TooltipContent>
-          {label}
-          <Kbd>{KEY_NAMES[shortcut] ?? shortcut}</Kbd>
+          <ShortcutHint label={label} shortcut={shortcut} />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   )
 }
 
-export { ShortcutButton }
+export { ownsItsKeys, ShortcutButton, ShortcutHint }
 
 export type { ShortcutButtonProps }

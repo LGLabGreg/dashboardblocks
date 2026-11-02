@@ -1025,6 +1025,34 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'resizable-split',
+    type: 'registry:component',
+    title: 'Resizable Split',
+    description:
+      'Two panes side by side, such as a chat and the document it writes, with a line between them that people drag, or move with the arrow keys, to share the width.',
+    registryDependencies: ['resizable'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/resizable-split.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'tooltip-link',
+    type: 'registry:component',
+    title: 'Tooltip Link',
+    description:
+      'An icon that links somewhere, drawn as a ghost icon button, with its label in a tooltip, such as Open as a page in a panel’s bar.',
+    registryDependencies: ['button', 'tooltip', registryUrl('link')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/tooltip-link.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'agent-ring',
     type: 'registry:component',
     title: 'Agent Ring',
@@ -1104,7 +1132,7 @@ export const components: Registry['items'] = [
     title: 'Team',
     description:
       'Primitives for people: avatars with initials and a colour picked from the name, presence as a dot on the avatar and a coloured word, an avatar stack with a "+N" overflow, and a workload bar of what someone has against what they can take.',
-    registryDependencies: ['avatar', registryUrl('status-label')],
+    registryDependencies: ['avatar', registryUrl('format'), registryUrl('status-label')],
     files: [
       {
         path: 'registry/components/dashboardblocks/team.tsx',
@@ -1251,6 +1279,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'text-change',
+    type: 'registry:component',
+    title: 'Text Change',
+    description:
+      'Text a change added, tinted in the chart colour, or removed, struck through in muted text, with “added” or “removed” for screen readers.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/text-change.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'disclosure',
     type: 'registry:component',
     title: 'Disclosure',
@@ -1295,6 +1336,7 @@ export const components: Registry['items'] = [
       registryUrl('link'),
       registryUrl('rolling-text'),
       registryUrl('table'),
+      registryUrl('text-change'),
     ],
     files: [
       {
@@ -1320,7 +1362,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'AI Assistant',
     description:
-      'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
+      'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files, shows each one uploading, too large or of a type it can’t send, and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
     registryDependencies: [
       'attachment',
       'bubble',
@@ -1330,6 +1372,7 @@ export const components: Registry['items'] = [
       'message-scroller',
       registryUrl('ai-chat'),
       registryUrl('block-state'),
+      registryUrl('files'),
       registryUrl('format'),
     ],
     files: [

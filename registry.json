@@ -580,6 +580,24 @@
       ]
     },
     {
+      "name": "resizable-split",
+      "type": "registry:component",
+      "title": "Resizable Split",
+      "description": "Two panes side by side, such as a chat and the document it writes, with a line between them that people drag, or move with the arrow keys, to share the width.",
+      "registryDependencies": [
+        "@dashboardblocks/resizable-split"
+      ]
+    },
+    {
+      "name": "tooltip-link",
+      "type": "registry:component",
+      "title": "Tooltip Link",
+      "description": "An icon that links somewhere, drawn as a ghost icon button, with its label in a tooltip, such as Open as a page in a panel’s bar.",
+      "registryDependencies": [
+        "@dashboardblocks/tooltip-link"
+      ]
+    },
+    {
       "name": "agent-ring",
       "type": "registry:component",
       "title": "Agent Ring",
@@ -697,6 +715,15 @@
       ]
     },
     {
+      "name": "text-change",
+      "type": "registry:component",
+      "title": "Text Change",
+      "description": "Text a change added, tinted in the chart colour, or removed, struck through in muted text, with “added” or “removed” for screen readers.",
+      "registryDependencies": [
+        "@dashboardblocks/text-change"
+      ]
+    },
+    {
       "name": "disclosure",
       "type": "registry:component",
       "title": "Disclosure",
@@ -727,7 +754,7 @@
       "name": "ai-assistant",
       "type": "registry:component",
       "title": "AI Assistant",
-      "description": "Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.",
+      "description": "Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files, shows each one uploading, too large or of a type it can’t send, and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.",
       "registryDependencies": [
         "@dashboardblocks/ai-assistant"
       ]

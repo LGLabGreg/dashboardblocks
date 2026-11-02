@@ -24,7 +24,7 @@
       "funnel-01"
     ],
     "component": "Kanban2",
-    "props": "{ closedColumns: { lost: string; won: string }; columns: { color?: string; id: string; title: string; wipLimit?: number }[]; deals?: { description: string; nextStep: string; nextStepAt: Date; owner: string; value: number; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ closedColumns: { lost: string; won: string }; columns: { color?: string; icon?: ReactNode; id: string; title: string; wipLimit?: number }[]; deals?: { description: string; nextStep: string; nextStepAt: Date; owner: string; value: number; column: string; id: string; title: string }[]; now: Date; onMove?: (id: string, column: string, index: number) => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }
