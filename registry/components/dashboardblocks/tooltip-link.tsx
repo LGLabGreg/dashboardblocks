@@ -26,6 +26,17 @@ function IconButtonLink({ className, ...props }: LinkProps) {
   )
 }
 
+/** A link that leads somewhere, drawn as a button with its label, such as View activity. @default size 'sm', variant 'outline' */
+function ButtonLink({
+  className,
+  size = 'sm',
+  variant = 'outline',
+  ...props
+}: LinkProps &
+  Pick<NonNullable<Parameters<typeof buttonVariants>[0]>, 'size' | 'variant'>) {
+  return <Link className={cn(buttonVariants({ size, variant }), className)} {...props} />
+}
+
 /** An icon that links somewhere, drawn as a ghost icon button, with its label in a tooltip. */
 function TooltipLink({ children, label, ...props }: TooltipLinkProps) {
   return (
@@ -40,5 +51,5 @@ function TooltipLink({ children, label, ...props }: TooltipLinkProps) {
   )
 }
 
-export { TooltipLink }
+export { ButtonLink, TooltipLink }
 export type { TooltipLinkProps }

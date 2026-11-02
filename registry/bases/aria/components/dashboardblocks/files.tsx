@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/files.tsx for React Aria
-// source-hash: 336666a94e30
+// source-hash: 7c9271e64c74
 
 'use client'
 
@@ -817,7 +817,7 @@ function FileUploadItem({
             </Details>
           )}
           {status === 'error' && (
-            <StatusLabel variant='text' tone='bad' className='min-w-0 truncate'>
+            <StatusLabel variant='text' tone='bad' className='min-w-0 whitespace-normal'>
               {error ?? 'Upload failed'}
             </StatusLabel>
           )}

@@ -38,6 +38,8 @@ interface Team6Props extends BlockStateProps {
   description?: string
   /** @default 'restricted' */
   linkAccess?: LinkAccess
+  /** Who the link can be opened by, in the order offered. Leave out `anyone` for something only people in the workspace may open. @default ['restricted', 'workspace', 'anyone'] */
+  linkAccessOptions?: LinkAccess[]
   onAccessChange?: (id: string, access: Exclude<ShareAccess, 'owner'> | null) => void
   onInvite?: (email: string, access: Exclude<ShareAccess, 'owner'>) => void
   onLinkAccessChange?: (access: LinkAccess) => void
@@ -137,6 +139,7 @@ function ShareSettings(props: Team6Props) {
   const {
     currentPersonId,
     description,
+    linkAccessOptions = ['restricted', 'workspace', 'anyone'],
     onAccessChange,
     onInvite,
     onLinkAccessChange,
@@ -331,12 +334,10 @@ function ShareSettings(props: Team6Props) {
                   aria-label='Who can open the link'
                   aria-describedby={`${id}-link-description`}
                   value={linkAccess}
-                  options={(Object.keys(linkAccessConfig) as LinkAccess[]).map(
-                    (value) => ({
-                      label: linkAccessConfig[value].label(workspace),
-                      value,
-                    }),
-                  )}
+                  options={linkAccessOptions.map((value) => ({
+                    label: linkAccessConfig[value].label(workspace),
+                    value,
+                  }))}
                   onValueChange={(next) => {
                     setLinkAccess(next)
                     onLinkAccessChange?.(next)

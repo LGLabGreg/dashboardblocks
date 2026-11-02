@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/tooltip-link.tsx for React Aria
-// source-hash: e7962aa48d56
+// source-hash: 7dc6b03c0bfc
 
 'use client'
 
@@ -13,6 +13,17 @@ import { cn } from '@/lib/utils'
 interface TooltipLinkProps extends Omit<LinkProps, 'aria-label'> {
   /** The link's name, shown in its tooltip, such as `Open as a page`. */
   label: string
+}
+
+/** A link that leads somewhere, drawn as a button with its label, such as View activity. @default size 'sm', variant 'outline' */
+function ButtonLink({
+  className,
+  size = 'sm',
+  variant = 'outline',
+  ...props
+}: LinkProps &
+  Pick<NonNullable<Parameters<typeof buttonVariants>[0]>, 'size' | 'variant'>) {
+  return <Link className={cn(buttonVariants({ size, variant }), className)} {...props} />
 }
 
 /** An icon that links somewhere, drawn as a ghost icon button, with its label in a tooltip. */
@@ -29,5 +40,5 @@ function TooltipLink({ className, label, ...props }: TooltipLinkProps) {
   )
 }
 
-export { TooltipLink }
+export { ButtonLink, TooltipLink }
 export type { TooltipLinkProps }

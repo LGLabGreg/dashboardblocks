@@ -815,7 +815,7 @@ function FileUploadItem({
             </Details>
           )}
           {status === 'error' && (
-            <StatusLabel variant='text' tone='bad' className='min-w-0 truncate'>
+            <StatusLabel variant='text' tone='bad' className='min-w-0 whitespace-normal'>
               {error ?? 'Upload failed'}
             </StatusLabel>
           )}

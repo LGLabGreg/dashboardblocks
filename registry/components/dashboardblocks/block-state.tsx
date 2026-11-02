@@ -96,7 +96,7 @@ const blockStateMessages = {
 interface BlockStateTextProps {
   className?: string
   /** Says what belongs here when there's nothing yet, in place of "No data". */
-  emptyMessage?: string
+  emptyMessage?: ReactNode
   /** Shows this state instead of the block's own. */
   state?: BlockState
   /** `short` sizes the loading placeholder to fit beside a title. @default 'sentence' */
@@ -168,7 +168,7 @@ function BlockReady({ children, className }: BlockReadyProps) {
 interface BlockStateRowsProps {
   className?: string
   /** Says what belongs here when there's nothing yet, in place of "No data". */
-  emptyMessage?: string
+  emptyMessage?: ReactNode
   /** How many rows to sketch while loading. @default 4 */
   rows?: number
   /** Drawn while loading in place of the default rows: the block's own rows and headings in outline, which lay themselves out, so the list keeps its shape when they arrive. `className` then styles only the message. */

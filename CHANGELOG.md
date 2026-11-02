@@ -1,5 +1,12 @@
 # dashboardblocks
 
+## 1.20.3
+
+### Patch Changes
+
+- 74c17ef: Tooltip Link (`tooltip-link`) adds `ButtonLink`, a link drawn as a button with its label, such as View activity.
+- 6f4b935: Team's share settings (`team-06`) take `linkAccessOptions`, the link settings to offer, so something only people in the workspace may open can leave out Anyone with the link. Files' upload rows wrap a failed upload's reason instead of cutting it off.
+
 ## 1.20.2
 
 ### Patch Changes
