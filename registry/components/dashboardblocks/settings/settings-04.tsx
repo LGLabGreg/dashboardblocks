@@ -12,6 +12,7 @@ import {
 } from '@/registry/components/dashboardblocks/settings'
 import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { getAvatarColor } from '@/registry/components/dashboardblocks/team'
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useState } from 'react'
 
@@ -120,8 +121,18 @@ const Settings4 = (props: Settings4Props) => {
     )
 
   const connected = integrations.filter((item) => item.status !== 'disconnected')
-  const views: { empty: string; items: Integration[]; label: string; value: Filter }[] = [
-    { empty: 'No integrations.', items: integrations, label: 'All', value: 'all' },
+  const views: {
+    empty: string
+    items: Integration[]
+    label: string
+    value: Filter
+  }[] = [
+    {
+      empty: 'No integrations.',
+      items: integrations,
+      label: 'All',
+      value: 'all',
+    },
     {
       empty: 'Nothing connected yet.',
       items: connected,
@@ -212,6 +223,14 @@ const Settings4 = (props: Settings4Props) => {
                                 onConnect?.(item.id)
                               }}
                             >
+                              <IconPlaceholder
+                                lucide='PlugIcon'
+                                tabler='IconPlugConnected'
+                                hugeicons='Plug01Icon'
+                                phosphor='PlugsConnectedIcon'
+                                remixicon='RiPlugLine'
+                                data-icon='inline-start'
+                              />
                               Connect
                             </Button>
                           ) : (
@@ -225,6 +244,14 @@ const Settings4 = (props: Settings4Props) => {
                                   onDisconnect?.(item.id)
                                 }}
                               >
+                                <IconPlaceholder
+                                  lucide='UnplugIcon'
+                                  tabler='IconPlugConnectedX'
+                                  hugeicons='UnplugIcon'
+                                  phosphor='PlugsIcon'
+                                  remixicon='RiLinkUnlink'
+                                  data-icon='inline-start'
+                                />
                                 Disconnect
                               </Button>
                               <Button
@@ -237,7 +264,21 @@ const Settings4 = (props: Settings4Props) => {
                                   onConfigure?.(item.id)
                                 }}
                               >
-                                {needsAttention(item) ? 'Reconnect' : 'Configure'}
+                                {needsAttention(item) ? (
+                                  <>
+                                    <IconPlaceholder
+                                      lucide='RefreshCwIcon'
+                                      tabler='IconRefresh'
+                                      hugeicons='RefreshIcon'
+                                      phosphor='ArrowClockwiseIcon'
+                                      remixicon='RiRefreshLine'
+                                      data-icon='inline-start'
+                                    />
+                                    Reconnect
+                                  </>
+                                ) : (
+                                  'Configure'
+                                )}
                               </Button>
                             </>
                           )

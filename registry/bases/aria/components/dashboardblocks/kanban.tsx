@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kanban.tsx for React Aria
-// source-hash: 12999e39f2be
+// source-hash: 35e8e55f47b0
 
 'use client'
 
@@ -29,6 +29,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react'
@@ -81,7 +82,17 @@ interface KanbanDrag {
   id: string
   mode: 'keyboard' | 'pointer'
   origin: KanbanTarget
+  /** The lifted card's height, which its landing slot takes. */
+  size: number
   target: KanbanTarget | null
+}
+
+function getSlot(drag: KanbanDrag | null): KanbanTarget | null {
+  if (!drag) return null
+  const { mode, origin, target } = drag
+  const open = target && !target.blocked ? target : null
+  if (mode === 'pointer') return open ?? origin
+  return open && !isSameTarget(open, origin) ? open : null
 }
 
 function getColumnItems<T extends KanbanItem>(
@@ -210,6 +221,8 @@ const MOUSE_DRAG_DISTANCE_PX = 4
 const TOUCH_HOLD_MS = 250
 const TOUCH_SCROLL_TOLERANCE_PX = 8
 const SCROLL_EDGE_PX = 56
+const MOVE_MS = 300
+const MOVE_EASING = 'cubic-bezier(0.2, 0, 0, 1)'
 
 const INTERACTIVE =
   'a, button, input, select, textarea, [contenteditable], [role="button"], [role="menuitem"]'
@@ -250,10 +263,69 @@ function KanbanBoard({
   const session = useRef<PointerSession | null>(null)
   const pendingFocus = useRef<{ id: string; onlyIfLost: boolean } | null>(null)
   const latest = useRef<KanbanState>({ columns, items, onMove, onOpen, wipLimitMode })
+  const wasDragging = useRef(false)
+  const places = useRef(new Map<string, { x: number; y: number }>())
+  const landing = useRef<{ id: string; x: number; y: number } | null>(null)
+  const moves = useRef(new Map<string, Animation>())
 
   useEffect(() => {
     latest.current = { columns, items, onMove, onOpen, wipLimitMode }
   })
+
+  useLayoutEffect(() => {
+    const root = scrollerRef.current
+    const dragged = wasDragging.current
+    wasDragging.current = drag !== null
+    placeSurface()
+    if (!root) return
+    const before = places.current
+    const after = measurePlaces()
+    places.current = after
+    const from = landing.current
+    landing.current = null
+    if (
+      (!drag && !dragged) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+      return
+    for (const card of root.querySelectorAll<HTMLElement>('[data-kanban-card]')) {
+      const cardId = card.dataset.kanbanCard ?? ''
+      const surface = card.firstElementChild
+      if (!(surface instanceof HTMLElement)) continue
+      if (drag?.mode === 'pointer' && drag.id === cardId) continue
+      const running = moves.current.get(cardId)
+      let offsetX = 0
+      let offsetY = 0
+      if (running) {
+        const shown = surface.getBoundingClientRect()
+        const place = card.getBoundingClientRect()
+        offsetX = shown.left - place.left
+        offsetY = shown.top - place.top
+        running.cancel()
+        moves.current.delete(cardId)
+      }
+      const start =
+        from?.id === cardId
+          ? from
+          : (() => {
+              const place = before.get(cardId)
+              return place && { x: place.x + offsetX, y: place.y + offsetY }
+            })()
+      const end = after.get(cardId)
+      if (!start || !end) continue
+      const x = start.x - end.x
+      const y = start.y - end.y
+      if (Math.abs(x) < 1 && Math.abs(y) < 1) continue
+      const animation = surface.animate(
+        [{ transform: `translate(${x}px, ${y}px)` }, { transform: 'none' }],
+        { duration: MOVE_MS, easing: MOVE_EASING },
+      )
+      moves.current.set(cardId, animation)
+      animation.onfinish = () => {
+        if (moves.current.get(cardId) === animation) moves.current.delete(cardId)
+      }
+    }
+  }, [drag, items])
 
   useEffect(() => {
     const pending = pendingFocus.current
@@ -301,6 +373,31 @@ function KanbanBoard({
     [],
   )
 
+  function toPlace(rect: DOMRect) {
+    const root = scrollerRef.current
+    const bounds = root?.getBoundingClientRect()
+    return {
+      x: rect.left - (bounds?.left ?? 0) + (root?.scrollLeft ?? 0),
+      y: rect.top - (bounds?.top ?? 0),
+    }
+  }
+
+  function measurePlaces() {
+    const next = new Map<string, { x: number; y: number }>()
+    const root = scrollerRef.current
+    if (!root) return next
+    for (const card of root.querySelectorAll<HTMLElement>('[data-kanban-card]'))
+      next.set(card.dataset.kanbanCard ?? '', toPlace(card.getBoundingClientRect()))
+    return next
+  }
+
+  function measureSize(cardId: string) {
+    const surface = scrollerRef.current?.querySelector(
+      `[data-kanban-card="${CSS.escape(cardId)}"] > *`,
+    )
+    return surface instanceof HTMLElement ? surface.offsetHeight : 0
+  }
+
   function setDrag(next: KanbanDrag | null) {
     dragRef.current = next
     setDragState(next)
@@ -329,7 +426,14 @@ function KanbanBoard({
       column: item.column,
       index: getColumnItems(state.items, item.column).indexOf(item),
     }
-    setDrag({ id: cardId, mode: 'keyboard', origin, target: origin })
+    places.current = measurePlaces()
+    setDrag({
+      id: cardId,
+      mode: 'keyboard',
+      origin,
+      size: measureSize(cardId),
+      target: origin,
+    })
     announce(
       `Picked up ${item.title}. ${describePosition(state, cardId, origin)}. Use the arrow keys to move it, Space or Enter to drop it, Escape to cancel.`,
     )
@@ -498,6 +602,11 @@ function KanbanBoard({
     cancelAnimationFrame(current.frame)
     clearTimeout(current.timer)
     current.removeListeners()
+    if (current.active)
+      landing.current = {
+        id: current.id,
+        ...toPlace(current.surface.getBoundingClientRect()),
+      }
     current.surface.style.transform = ''
     if (!current.active) {
       if (released) latest.current.onOpen?.(current.id)
@@ -522,24 +631,38 @@ function KanbanBoard({
     else if (y > window.innerHeight - SCROLL_EDGE_PX)
       window.scrollBy(0, speed(y - window.innerHeight + SCROLL_EDGE_PX))
 
-    const slot = (
-      current.surface.parentElement ?? current.surface
-    ).getBoundingClientRect()
-    const inset = 6
-    const left = Math.max(
-      bounds.left + inset,
-      Math.min(bounds.left + root.clientWidth - slot.width - inset, x - current.offsetX),
-    )
-    const top = Math.max(
-      bounds.top + inset,
-      Math.min(bounds.top + root.clientHeight - slot.height - inset, y - current.offsetY),
-    )
-    current.surface.style.transform = `translate(${left - slot.left}px, ${top - slot.top}px)`
+    placeSurface()
 
     const target = findTarget(current.id, x, y)
     const drag = dragRef.current
     if (drag && !isSameTarget(drag.target, target)) setDrag({ ...drag, target })
     current.frame = requestAnimationFrame(tick)
+  }
+
+  function placeSurface() {
+    const current = session.current
+    const root = scrollerRef.current
+    if (!current?.active || !root) return
+    const bounds = root.getBoundingClientRect()
+    const anchor = (
+      current.surface.parentElement ?? current.surface
+    ).getBoundingClientRect()
+    const inset = 6
+    const left = Math.max(
+      bounds.left + inset,
+      Math.min(
+        bounds.left + root.clientWidth - current.surface.offsetWidth - inset,
+        current.x - current.offsetX,
+      ),
+    )
+    const top = Math.max(
+      bounds.top + inset,
+      Math.min(
+        bounds.top + root.clientHeight - current.surface.offsetHeight - inset,
+        current.y - current.offsetY,
+      ),
+    )
+    current.surface.style.transform = `translate(${left - anchor.left}px, ${top - anchor.top}px)`
   }
 
   function activate() {
@@ -555,7 +678,9 @@ function KanbanBoard({
       column: item.column,
       index: getColumnItems(state.items, item.column).indexOf(item),
     }
-    setDrag({ id: item.id, mode: 'pointer', origin, target: origin })
+    const height = measureSize(item.id)
+    places.current = measurePlaces()
+    setDrag({ id: item.id, mode: 'pointer', origin, size: height, target: origin })
     announce(`Picked up ${item.title}.`)
     current.frame = requestAnimationFrame(tick)
   }
@@ -782,10 +907,15 @@ function KanbanColumn({
   summary,
 }: KanbanColumnProps) {
   const headingId = useId()
-  const { drag, items, itemName } = useKanban()
+  const { drag, exceedsLimit: exceeds, items, itemName } = useKanban()
   const loading = useBlockState() === 'loading'
   const count = getColumnItems(items, column.id).length
   const target = drag?.target?.column === column.id ? drag.target : null
+  const slot = getSlot(drag)
+  const slotAtEnd =
+    drag !== null &&
+    slot?.column === column.id &&
+    slot.index >= getColumnItems(items, column.id, drag.id).length
   const isOver =
     target !== null && !target.blocked && !isSameTarget(target, drag?.origin ?? null)
   const dot = column.color && (
@@ -909,13 +1039,21 @@ function KanbanColumn({
       ) : count > 0 ? (
         <ul aria-labelledby={headingId} className='flex flex-col gap-2'>
           {children}
+          {slotAtEnd && (
+            <DropSlot height={drag.size} over={exceeds(drag.id, column.id)} />
+          )}
         </ul>
       ) : (
         <div
           data-kanban-indicator={isOver ? '' : undefined}
+          style={isOver && drag ? { minHeight: drag.size } : undefined}
           className={cn(
             'text-muted-foreground flex min-h-20 items-center justify-center rounded-xl border border-dashed px-3 py-6 text-center text-xs transition-colors',
-            isOver && 'border-sidebar-accent bg-sidebar-accent/40',
+            isOver &&
+              drag &&
+              (exceeds(drag.id, column.id)
+                ? 'border-red-500/60 bg-red-500/5'
+                : 'border-foreground/25 bg-muted/60'),
           )}
         >
           {empty ?? `No ${itemName.other}`}
@@ -926,15 +1064,15 @@ function KanbanColumn({
   )
 }
 
-function DropIndicator({ edge, over }: { edge: 'after' | 'before'; over: boolean }) {
+function DropSlot({ height, over }: { height: number; over: boolean }) {
   return (
-    <span
+    <li
       aria-hidden
       data-kanban-indicator=''
+      style={{ height }}
       className={cn(
-        'pointer-events-none absolute inset-x-0 z-10 h-1 rounded-full',
-        edge === 'before' ? '-top-1.5' : '-bottom-1.5',
-        over ? 'bg-red-500' : 'bg-sidebar-accent',
+        'animate-in fade-in rounded-xl border border-dashed duration-200 motion-reduce:animate-none',
+        over ? 'border-red-500/60 bg-red-500/5' : 'border-foreground/25 bg-muted/60',
       )}
     />
   )
@@ -949,52 +1087,44 @@ interface KanbanCardProps {
 function KanbanCard({ children, className, item }: KanbanCardProps) {
   const { drag, exceedsLimit: exceeds, items, onPointerDown, opens } = useKanban()
   const lifted = drag?.id === item.id ? drag.mode : undefined
-  const target = drag?.target
-  let edge: 'after' | 'before' | undefined
-  let over = false
-  if (
-    drag &&
-    target &&
-    !target.blocked &&
+  const slot = getSlot(drag)
+  const slotBefore =
+    drag !== null &&
     !lifted &&
-    target.column === item.column &&
-    !isSameTarget(target, drag.origin)
-  ) {
-    const siblings = getColumnItems(items, item.column, drag.id)
-    const index = siblings.findIndex((sibling) => sibling.id === item.id)
-    if (target.index === index) edge = 'before'
-    else if (target.index === siblings.length && index === siblings.length - 1)
-      edge = 'after'
-    over = exceeds(drag.id, item.column)
-  }
+    slot?.column === item.column &&
+    getColumnItems(items, item.column, drag.id).findIndex(
+      (sibling) => sibling.id === item.id,
+    ) === slot.index
 
   return (
-    <li data-kanban-card={item.id} data-lifted={lifted} className='relative'>
-      {edge === 'before' && <DropIndicator edge='before' over={over} />}
-      <KanbanCardContext.Provider value={item}>
-        <div
-          onPointerDown={(event) => onPointerDown(event, item.id)}
-          className={cn(
-            'bg-muted/50 relative flex cursor-grab flex-col gap-2.5 rounded-xl p-3 text-sm transition-[box-shadow,translate,scale] select-none [--kanban-card-surface:color-mix(in_oklab,var(--color-muted)_50%,var(--color-background))] [-webkit-touch-callout:none]',
-            lifted === 'pointer' &&
-              'bg-muted pointer-events-none [--kanban-card-surface:var(--color-muted)] z-30 scale-[1.02] shadow-lg ring-1 ring-foreground/10 transition-none',
-            lifted === 'keyboard' && '-translate-y-0.5 ring-2 ring-primary',
-            !lifted &&
-              'has-[[data-kanban-handle]:focus-visible]:ring-3 has-[[data-kanban-handle]:focus-visible]:ring-ring/50',
-            opens &&
+    <>
+      {slotBefore && <DropSlot height={drag.size} over={exceeds(drag.id, item.column)} />}
+      <li
+        data-kanban-card={item.id}
+        data-lifted={lifted}
+        className={cn('relative', lifted === 'pointer' && '-mb-2 h-0')}
+      >
+        <KanbanCardContext.Provider value={item}>
+          <div
+            onPointerDown={(event) => onPointerDown(event, item.id)}
+            className={cn(
+              'bg-muted/50 relative flex cursor-grab flex-col gap-2.5 rounded-xl p-3 text-sm transition-[box-shadow,translate,scale] select-none [--kanban-card-surface:color-mix(in_oklab,var(--color-muted)_50%,var(--color-background))] [-webkit-touch-callout:none]',
+              lifted === 'pointer' &&
+                'bg-muted pointer-events-none [--kanban-card-surface:var(--color-muted)] z-30 scale-[1.02] shadow-lg ring-1 ring-foreground/10 transition-none',
+              lifted === 'keyboard' && '-translate-y-0.5 ring-2 ring-primary',
               !lifted &&
-              'hover:bg-muted cursor-pointer hover:[--kanban-card-surface:var(--color-muted)]',
-            className,
-          )}
-        >
-          {children}
-        </div>
-      </KanbanCardContext.Provider>
-      {lifted === 'pointer' && (
-        <span aria-hidden className='absolute inset-0 rounded-xl border border-dashed' />
-      )}
-      {edge === 'after' && <DropIndicator edge='after' over={over} />}
-    </li>
+                'has-[[data-kanban-handle]:focus-visible]:ring-3 has-[[data-kanban-handle]:focus-visible]:ring-ring/50',
+              opens &&
+                !lifted &&
+                'hover:bg-muted cursor-pointer hover:[--kanban-card-surface:var(--color-muted)]',
+              className,
+            )}
+          >
+            {children}
+          </div>
+        </KanbanCardContext.Provider>
+      </li>
+    </>
   )
 }
 

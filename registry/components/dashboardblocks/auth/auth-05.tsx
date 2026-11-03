@@ -8,13 +8,15 @@ import {
   AuthProviderButtons,
   AuthReveal,
   AuthSwitch,
-  GitHubLogo,
-  GoogleLogo,
   PasswordInput,
   PasswordStrength,
-  XLogo,
   getMissingPasswordRules,
 } from '@/registry/components/dashboardblocks/auth'
+import {
+  GitHubLogo,
+  GoogleLogo,
+  XLogo,
+} from '@/registry/components/dashboardblocks/brand-logos'
 import {
   type FormErrors,
   useSimpleForm,

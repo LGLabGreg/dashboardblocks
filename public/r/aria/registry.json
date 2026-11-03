@@ -141,7 +141,7 @@
       "name": "auth",
       "type": "registry:component",
       "title": "Auth",
-      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, Google, X and GitHub logos, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
+      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
       "registryDependencies": [
         "button",
         "input",
@@ -503,6 +503,7 @@
       "registryDependencies": [
         "button",
         "input",
+        "input-group",
         "sheet",
         "https://www.dashboardblocks.com/r/aria/checklist.json"
       ],
@@ -1125,6 +1126,19 @@
           "path": "registry/components/dashboardblocks/number-field.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/number-field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "brand-logos",
+      "type": "registry:component",
+      "title": "Brand Logos",
+      "description": "Logos of the services people sign in with or connect: GitHub, Google, Sentry, Slack, Stripe and X, sized like an icon.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/brand-logos.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/brand-logos.tsx"
         }
       ]
     },
@@ -8889,6 +8903,7 @@
         "field",
         "input",
         "https://www.dashboardblocks.com/r/aria/auth.json",
+        "https://www.dashboardblocks.com/r/aria/brand-logos.json",
         "https://www.dashboardblocks.com/r/aria/forms.json",
         "https://www.dashboardblocks.com/r/aria/rolling-text.json"
       ],

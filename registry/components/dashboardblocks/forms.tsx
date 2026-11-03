@@ -20,6 +20,12 @@ import { flushSync } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '@/components/ui/input-group'
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -459,7 +465,10 @@ interface InlineEditFieldProps {
   className?: string
   emptyLabel?: string
   label: string
-  onSave: (value: string) => string | void | Promise<string | void>
+  /** Leave out to show the value only, with no Edit, for someone who may read it but not change it. */
+  onSave?: (value: string) => string | void | Promise<string | void>
+  /** Text the value always follows, such as `tandem.app/` before a workspace's address: shown before it, and not part of what's edited. */
+  prefix?: string
   type?: 'email' | 'tel' | 'text' | 'url'
   validate?: (value: string) => string | undefined
   value: string
@@ -470,6 +479,7 @@ function InlineEditField({
   emptyLabel = 'Not set',
   label,
   onSave,
+  prefix,
   type = 'text',
   validate,
   value,
@@ -492,7 +502,7 @@ function InlineEditField({
     if (invalid) return setError(invalid)
     setIsSaving(true)
     try {
-      const failed = await onSave(draft)
+      const failed = await onSave?.(draft)
       startTransition(() => {
         if (failed) setError(failed)
         else cancel()
@@ -512,6 +522,25 @@ function InlineEditField({
     }
   }
 
+  const FieldInput = prefix ? InputGroupInput : Input
+  const field = (
+    <FieldInput
+      // oxlint-disable-next-line jsx-a11y/no-autofocus -- the field replaces the Edit button the person just pressed
+      autoFocus
+      type={type}
+      aria-labelledby={`${id}-label`}
+      value={draft ?? ''}
+      aria-invalid={error ? true : undefined}
+      aria-describedby={error ? `${id}-error` : undefined}
+      disabled={isSaving}
+      onChange={(event) => {
+        setDraft(event.target.value)
+        setError(undefined)
+      }}
+      onKeyDown={onKeyDown}
+    />
+  )
+
   return (
     <div className={cn('@container py-2.5', className)}>
       <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-4'>
@@ -521,21 +550,16 @@ function InlineEditField({
         {editing ? (
           <div className='flex flex-col gap-1.5'>
             <div className='flex gap-2'>
-              <Input
-                // oxlint-disable-next-line jsx-a11y/no-autofocus -- the field replaces the Edit button the person just pressed
-                autoFocus
-                type={type}
-                aria-labelledby={`${id}-label`}
-                value={draft}
-                aria-invalid={error ? true : undefined}
-                aria-describedby={error ? `${id}-error` : undefined}
-                disabled={isSaving}
-                onChange={(event) => {
-                  setDraft(event.target.value)
-                  setError(undefined)
-                }}
-                onKeyDown={onKeyDown}
-              />
+              {prefix ? (
+                <InputGroup>
+                  <InputGroupAddon>
+                    <InputGroupText>{prefix}</InputGroupText>
+                  </InputGroupAddon>
+                  {field}
+                </InputGroup>
+              ) : (
+                field
+              )}
               <Button type='button' disabled={isSaving} onClick={() => void save()}>
                 {isSaving ? 'Saving…' : 'Save'}
               </Button>
@@ -552,24 +576,29 @@ function InlineEditField({
         ) : (
           <div className='flex min-h-9 items-center justify-between gap-2'>
             <span className={cn('truncate text-sm', !value && 'text-muted-foreground')}>
+              {value && prefix ? (
+                <span className='text-muted-foreground'>{prefix}</span>
+              ) : null}
               {value || emptyLabel}
             </span>
-            <Button
-              type='button'
-              variant='ghost'
-              size='sm'
-              aria-label={`Edit ${label.toLowerCase()}`}
-              onClick={() => setDraft(value)}
-            >
-              <IconPlaceholder
-                lucide='PencilIcon'
-                tabler='IconPencil'
-                hugeicons='PencilEdit02Icon'
-                phosphor='PencilSimpleIcon'
-                remixicon='RiPencilLine'
-              />
-              Edit
-            </Button>
+            {onSave ? (
+              <Button
+                type='button'
+                variant='ghost'
+                size='sm'
+                aria-label={`Edit ${label.toLowerCase()}`}
+                onClick={() => setDraft(value)}
+              >
+                <IconPlaceholder
+                  lucide='PencilIcon'
+                  tabler='IconPencil'
+                  hugeicons='PencilEdit02Icon'
+                  phosphor='PencilSimpleIcon'
+                  remixicon='RiPencilLine'
+                />
+                Edit
+              </Button>
+            ) : null}
           </div>
         )}
       </div>

@@ -19,7 +19,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
-type ChartPanelKeyShape = 'dashed' | 'hatched' | 'line' | 'rect'
+type ChartPanelKeyShape = 'dashed' | 'hatched' | 'line' | 'outline' | 'rect'
 
 interface ChartPanelKeyProps {
   className?: string
@@ -37,11 +37,13 @@ function ChartPanelKey({ className, color, shape = 'rect' }: ChartPanelKeyProps)
           ? 'w-3 border-t-2 border-dashed'
           : shape === 'line'
             ? 'h-0.5 w-3 rounded-full'
-            : 'size-2.5 rounded-[3px]',
+            : shape === 'outline'
+              ? 'size-2.5 rounded-[3px] border border-dashed'
+              : 'size-2.5 rounded-[3px]',
         className,
       )}
       style={
-        shape === 'dashed'
+        shape === 'dashed' || shape === 'outline'
           ? { borderColor: color }
           : shape === 'hatched'
             ? { backgroundImage: chartHatchFill(color) }
@@ -105,7 +107,7 @@ function ChartPanelTable<T extends object>({
 
   return (
     <div className='sr-only'>
-      <DataTable caption={caption}>
+      <DataTable caption={caption} scroll={false}>
         <DataTableHeader>
           <DataTableRow>
             {columns.map((column) => (

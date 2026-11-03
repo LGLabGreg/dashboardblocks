@@ -1,5 +1,18 @@
 # dashboardblocks
 
+## 1.20.4
+
+### Patch Changes
+
+- 1785b3b: Chart Panel's table for screen readers no longer counts as a scrolling region that keyboard users can't reach.
+  
+  Chart Panel's legend can draw a dashed box (`shape: 'outline'`), for a part of a bar drawn as one.
+- 2991830: Integrations and Connect a Source show a plug on Connect, an unplugged plug on Disconnect and a refresh arrow on Reconnect.
+  
+  A new Brand Logos part holds the GitHub, Google, Sentry, Slack, Stripe and X logos. Auth's Google, X and GitHub logos moved into it, so import them from `brand-logos`.
+- 929c64d: Forms (`forms`): `InlineEditField` takes a `prefix`, text the value always follows, such as `tandem.app/` before a workspace's address. It shows before the value, and beside the field while it's edited.
+- a0d94f3: Kanban shows a dashed slot where a dragged card will land, and the other cards slide apart to make room. The place the card left closes up.
+
 ## 1.20.3
 
 ### Patch Changes

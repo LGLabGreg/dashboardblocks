@@ -396,6 +396,14 @@ const Onboarding3 = (props: Onboarding3Props) => {
                     <div className='flex flex-wrap justify-center gap-2'>
                       <Button onClick={() => onContinue?.(status.id)}>Continue</Button>
                       <Button variant='outline' onClick={backToSources}>
+                        <IconPlaceholder
+                          lucide='PlugIcon'
+                          tabler='IconPlugConnected'
+                          hugeicons='Plug01Icon'
+                          phosphor='PlugsConnectedIcon'
+                          remixicon='RiPlugLine'
+                          data-icon='inline-start'
+                        />
                         Connect another
                       </Button>
                     </div>

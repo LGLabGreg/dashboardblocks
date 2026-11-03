@@ -96,6 +96,7 @@ export const examples: Registry['items'] = [
       'field',
       'input',
       registryUrl('auth'),
+      registryUrl('brand-logos'),
       registryUrl('forms'),
       registryUrl('rolling-text'),
     ],

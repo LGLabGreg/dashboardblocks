@@ -123,7 +123,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Auth',
     description:
-      "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, Google, X and GitHub logos, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
+      "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
     registryDependencies: [
       'button',
       'input',
@@ -437,7 +437,13 @@ export const components: Registry['items'] = [
     title: 'Forms',
     description:
       'Primitives for forms without a form library: a form state hook with validation on blur and submit, server errors, dirty and submitting flags, a titled form section, a sticky save bar, wizard steps, a form in a side sheet, an inline edit field and an email check.',
-    registryDependencies: ['button', 'input', 'sheet', registryUrl('checklist')],
+    registryDependencies: [
+      'button',
+      'input',
+      'input-group',
+      'sheet',
+      registryUrl('checklist'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/forms.tsx',
@@ -993,6 +999,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/number-field.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'brand-logos',
+    type: 'registry:component',
+    title: 'Brand Logos',
+    description:
+      'Logos of the services people sign in with or connect: GitHub, Google, Sentry, Slack, Stripe and X, sized like an icon.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/brand-logos.tsx',
         type: 'registry:component',
       },
     ],
