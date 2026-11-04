@@ -21,6 +21,7 @@ import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/form
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -130,125 +131,131 @@ const Leaderboard5 = (props: Leaderboard5Props) => {
   const { description = summarize(ranked) } = props
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            aria-label={ascending ? 'Sort by most visitors' : 'Sort by fewest visitors'}
-            disabled={state !== undefined}
-            onClick={() => {
-              setSkipBarAnimation(true)
-              setAscending((value) => !value)
-            }}
-            className={pressScale}
-          >
-            <IconSwap
-              active={ascending}
-              activeIcon={
-                <IconPlaceholder
-                  lucide='ArrowUpNarrowWideIcon'
-                  tabler='IconSortAscending'
-                  hugeicons='SortByUp01Icon'
-                  phosphor='SortAscendingIcon'
-                  remixicon='RiSortAsc'
-                />
-              }
-              inactiveIcon={
-                <IconPlaceholder
-                  lucide='ArrowDownWideNarrowIcon'
-                  tabler='IconSortDescending'
-                  hugeicons='SortByDown01Icon'
-                  phosphor='SortDescendingIcon'
-                  remixicon='RiSortDesc'
-                />
-              }
-            />
-          </Button>
-        </header>
-        <div className='flex flex-col gap-2 border-t pt-4'>
-          <BlockStateRows rows={initialCount} />
-          {!state && (
-            <Leaderboard>
-              {visible.map((country, index) => {
-                const share = country.visitors / total
-                return (
-                  <LeaderboardItem key={country.code}>
-                    <LeaderboardBar
-                      animated={!skipBarAnimation}
-                      className={
-                        country === ranked[0]
-                          ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
-                          : undefined
-                      }
-                      delay={index * 100}
-                      value={(country.visitors / max) * 100}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                aria-label={
+                  ascending ? 'Sort by most visitors' : 'Sort by fewest visitors'
+                }
+                disabled={state !== undefined}
+                onClick={() => {
+                  setSkipBarAnimation(true)
+                  setAscending((value) => !value)
+                }}
+                className={pressScale}
+              >
+                <IconSwap
+                  active={ascending}
+                  activeIcon={
+                    <IconPlaceholder
+                      lucide='ArrowUpNarrowWideIcon'
+                      tabler='IconSortAscending'
+                      hugeicons='SortByUp01Icon'
+                      phosphor='SortAscendingIcon'
+                      remixicon='RiSortAsc'
                     />
-                    <LeaderboardRank rank={ranked.indexOf(country) + 1} />
-                    <CountryFlag code={country.code} />
-                    <LeaderboardLabel className='truncate'>
-                      {country.name}
-                    </LeaderboardLabel>
-                    <span className='shrink-0 text-xs text-muted-foreground tabular-nums'>
-                      {formatPercent(share, {
-                        maximumFractionDigits: 1,
-                        minimumFractionDigits: 1,
-                      })}
-                    </span>
-                    <LeaderboardValue className='w-14'>
-                      {formatNumber(country.visitors)}
-                    </LeaderboardValue>
-                  </LeaderboardItem>
-                )
-              })}
-            </Leaderboard>
-          )}
-          {canExpand && (
-            <Button
-              variant='ghost'
-              size='sm'
-              aria-expanded={expanded}
-              onClick={() => {
-                setSkipBarAnimation(true)
-                setExpanded((value) => !value)
-              }}
-              className={cn('self-start', pressScale)}
-            >
-              {expanded ? 'Show less' : `Show all ${countries.length}`}
-              <IconSwap
-                active={expanded}
-                activeIcon={
-                  <IconPlaceholder
-                    lucide='ChevronUpIcon'
-                    tabler='IconChevronUp'
-                    hugeicons='ArrowUp01Icon'
-                    phosphor='CaretUpIcon'
-                    remixicon='RiArrowUpSLine'
+                  }
+                  inactiveIcon={
+                    <IconPlaceholder
+                      lucide='ArrowDownWideNarrowIcon'
+                      tabler='IconSortDescending'
+                      hugeicons='SortByDown01Icon'
+                      phosphor='SortDescendingIcon'
+                      remixicon='RiSortDesc'
+                    />
+                  }
+                />
+              </Button>
+            </header>
+            <div className='flex flex-col gap-2 border-t pt-4'>
+              <BlockStateRows rows={initialCount} />
+              {!state && (
+                <Leaderboard>
+                  {visible.map((country, index) => {
+                    const share = country.visitors / total
+                    return (
+                      <LeaderboardItem key={country.code}>
+                        <LeaderboardBar
+                          animated={!skipBarAnimation}
+                          className={
+                            country === ranked[0]
+                              ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                              : undefined
+                          }
+                          delay={index * 100}
+                          value={(country.visitors / max) * 100}
+                        />
+                        <LeaderboardRank rank={ranked.indexOf(country) + 1} />
+                        <CountryFlag code={country.code} />
+                        <LeaderboardLabel className='truncate'>
+                          {country.name}
+                        </LeaderboardLabel>
+                        <span className='shrink-0 text-xs text-muted-foreground tabular-nums'>
+                          {formatPercent(share, {
+                            maximumFractionDigits: 1,
+                            minimumFractionDigits: 1,
+                          })}
+                        </span>
+                        <LeaderboardValue className='w-14'>
+                          {formatNumber(country.visitors)}
+                        </LeaderboardValue>
+                      </LeaderboardItem>
+                    )
+                  })}
+                </Leaderboard>
+              )}
+              {canExpand && (
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  aria-expanded={expanded}
+                  onClick={() => {
+                    setSkipBarAnimation(true)
+                    setExpanded((value) => !value)
+                  }}
+                  className={cn('self-start', pressScale)}
+                >
+                  {expanded ? 'Show less' : `Show all ${countries.length}`}
+                  <IconSwap
+                    active={expanded}
+                    activeIcon={
+                      <IconPlaceholder
+                        lucide='ChevronUpIcon'
+                        tabler='IconChevronUp'
+                        hugeicons='ArrowUp01Icon'
+                        phosphor='CaretUpIcon'
+                        remixicon='RiArrowUpSLine'
+                      />
+                    }
+                    data-icon='inline-end'
+                    inactiveIcon={
+                      <IconPlaceholder
+                        lucide='ChevronDownIcon'
+                        tabler='IconChevronDown'
+                        hugeicons='ArrowDownIcon'
+                        phosphor='CaretDownIcon'
+                        remixicon='RiArrowDownSLine'
+                      />
+                    }
                   />
-                }
-                data-icon='inline-end'
-                inactiveIcon={
-                  <IconPlaceholder
-                    lucide='ChevronDownIcon'
-                    tabler='IconChevronDown'
-                    hugeicons='ArrowDownIcon'
-                    phosphor='CaretDownIcon'
-                    remixicon='RiArrowDownSLine'
-                  />
-                }
-              />
-            </Button>
-          )}
-        </div>
-      </section>
-    </BlockStateProvider>
+                </Button>
+              )}
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

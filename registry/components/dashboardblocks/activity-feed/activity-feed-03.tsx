@@ -20,6 +20,7 @@ import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { cn } from '@/lib/utils'
@@ -140,113 +141,119 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{describe(unread)}</p>
-            </BlockReady>
-          </div>
-          <Button
-            disabled={Boolean(state) || unread.length === 0}
-            onClick={() => markRead(unread.map((item) => item.id))}
-            size='sm'
-            variant='ghost'
-          >
-            <IconPlaceholder
-              lucide='CheckCheckIcon'
-              tabler='IconChecks'
-              hugeicons='TickDouble02Icon'
-              phosphor='ChecksIcon'
-              remixicon='RiCheckDoubleLine'
-              data-icon='inline-start'
-            />
-            Mark all as read
-          </Button>
-        </header>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList>
-            {filters.map((item) => (
-              <TabsTrigger key={item.value} value={item.value}>
-                {item.label}
-                {!state && item.value !== 'all' && item.items.length > 0 && (
-                  <Tag>{formatNumber(item.items.length)}</Tag>
-                )}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          {filters.map((item) => (
-            <TabsContent key={item.value} value={item.value} className='mt-2'>
-              {state ? (
-                <div className='border-t'>
-                  <BlockStateRows rows={5} />
-                </div>
-              ) : item.items.length === 0 ? (
-                <p className='text-muted-foreground border-t py-8 text-center text-sm'>
-                  {item.value === 'unread'
-                    ? "You're all caught up."
-                    : 'Nothing here yet.'}
-                </p>
-              ) : (
-                <ActivityFeed className='border-t'>
-                  {item.items.map((notification) => {
-                    const isUnread = !isRead(notification)
-                    return (
-                      <ActivityFeedItem
-                        key={notification.id}
-                        className='border-b last:border-b-0'
-                      >
-                        <button
-                          type='button'
-                          onClick={() => markRead([notification.id])}
-                          className='hover:bg-muted/50 focus-visible:ring-ring/50 flex w-full items-start gap-3 px-2 py-3 text-left outline-none focus-visible:ring-[3px]'
-                        >
-                          <PersonAvatar person={notification.actor} />
-                          <span className='flex min-w-0 flex-1 flex-col gap-1'>
-                            <span className='flex items-baseline justify-between gap-3'>
-                              <span
-                                className={cn(
-                                  'text-sm',
-                                  !isUnread && 'text-muted-foreground',
-                                )}
-                              >
-                                <span className='font-medium'>
-                                  {notification.actor.name}
-                                </span>{' '}
-                                <span className='text-muted-foreground'>
-                                  {notification.action}
-                                </span>{' '}
-                                <span className='font-medium'>{notification.target}</span>
-                              </span>
-                              <ActivityTime
-                                className='tabular-nums'
-                                date={notification.at}
-                                now={now}
-                                timeZone={timeZone}
-                              />
-                            </span>
-                            {notification.preview && (
-                              <span className='text-muted-foreground border-l-2 pl-2 text-sm'>
-                                <span className='line-clamp-2'>
-                                  {notification.preview}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{describe(unread)}</p>
+                </BlockReady>
+              </div>
+              <Button
+                disabled={Boolean(state) || unread.length === 0}
+                onClick={() => markRead(unread.map((item) => item.id))}
+                size='sm'
+                variant='ghost'
+              >
+                <IconPlaceholder
+                  lucide='CheckCheckIcon'
+                  tabler='IconChecks'
+                  hugeicons='TickDouble02Icon'
+                  phosphor='ChecksIcon'
+                  remixicon='RiCheckDoubleLine'
+                  data-icon='inline-start'
+                />
+                Mark all as read
+              </Button>
+            </header>
+            <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
+              <TabsList>
+                {filters.map((item) => (
+                  <TabsTrigger key={item.value} value={item.value}>
+                    {item.label}
+                    {!state && item.value !== 'all' && item.items.length > 0 && (
+                      <Tag>{formatNumber(item.items.length)}</Tag>
+                    )}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {filters.map((item) => (
+                <TabsContent key={item.value} value={item.value} className='mt-2'>
+                  {state ? (
+                    <div className='border-t'>
+                      <BlockStateRows rows={5} />
+                    </div>
+                  ) : item.items.length === 0 ? (
+                    <p className='text-muted-foreground border-t py-8 text-center text-sm'>
+                      {item.value === 'unread'
+                        ? "You're all caught up."
+                        : 'Nothing here yet.'}
+                    </p>
+                  ) : (
+                    <ActivityFeed className='border-t'>
+                      {item.items.map((notification) => {
+                        const isUnread = !isRead(notification)
+                        return (
+                          <ActivityFeedItem
+                            key={notification.id}
+                            className='border-b last:border-b-0'
+                          >
+                            <button
+                              type='button'
+                              onClick={() => markRead([notification.id])}
+                              className='hover:bg-muted/50 focus-visible:ring-ring/50 flex w-full items-start gap-3 px-2 py-3 text-left outline-none focus-visible:ring-[3px]'
+                            >
+                              <PersonAvatar person={notification.actor} />
+                              <span className='flex min-w-0 flex-1 flex-col gap-1'>
+                                <span className='flex items-baseline justify-between gap-3'>
+                                  <span
+                                    className={cn(
+                                      'text-sm',
+                                      !isUnread && 'text-muted-foreground',
+                                    )}
+                                  >
+                                    <span className='font-medium'>
+                                      {notification.actor.name}
+                                    </span>{' '}
+                                    <span className='text-muted-foreground'>
+                                      {notification.action}
+                                    </span>{' '}
+                                    <span className='font-medium'>
+                                      {notification.target}
+                                    </span>
+                                  </span>
+                                  <ActivityTime
+                                    className='tabular-nums'
+                                    date={notification.at}
+                                    now={now}
+                                    timeZone={timeZone}
+                                  />
                                 </span>
+                                {notification.preview && (
+                                  <span className='text-muted-foreground border-l-2 pl-2 text-sm'>
+                                    <span className='line-clamp-2'>
+                                      {notification.preview}
+                                    </span>
+                                  </span>
+                                )}
                               </span>
-                            )}
-                          </span>
-                          <span className='flex h-5 w-2 items-center'>
-                            {isUnread && <UnreadDot />}
-                          </span>
-                        </button>
-                      </ActivityFeedItem>
-                    )
-                  })}
-                </ActivityFeed>
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </section>
+                              <span className='flex h-5 w-2 items-center'>
+                                {isUnread && <UnreadDot />}
+                              </span>
+                            </button>
+                          </ActivityFeedItem>
+                        )
+                      })}
+                    </ActivityFeed>
+                  )}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

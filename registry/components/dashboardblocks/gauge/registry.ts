@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'gauge-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('gauge'),
@@ -29,6 +30,7 @@ export const examples: Registry['items'] = [
     name: 'gauge-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('gauge'),
@@ -50,6 +52,7 @@ export const examples: Registry['items'] = [
     name: 'gauge-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('gauge'),
@@ -71,6 +74,7 @@ export const examples: Registry['items'] = [
     name: 'gauge-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('gauge'),

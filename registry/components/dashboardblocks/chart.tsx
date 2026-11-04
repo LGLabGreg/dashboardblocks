@@ -2,7 +2,14 @@
 
 import { useBlockState } from '@/registry/components/dashboardblocks/block-state'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
-import { type ComponentProps, type ReactNode, useEffect, useId } from 'react'
+import {
+  type ComponentProps,
+  type ReactNode,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+} from 'react'
 import {
   Area,
   AreaChart,
@@ -400,6 +407,23 @@ interface ChartFloatingTooltipProps {
   y: number
 }
 
+const TOOLTIP_OFFSET = 10
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max))
+}
+
+/** The box of the nearest ancestor that clips what overflows it, such as a Card. */
+function clippingBox(node: HTMLElement) {
+  for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+    const { overflowX, overflowY } = getComputedStyle(parent)
+    if (overflowX !== 'visible' || overflowY !== 'visible') {
+      return parent.getBoundingClientRect()
+    }
+  }
+  return new DOMRect(0, 0, window.innerWidth, window.innerHeight)
+}
+
 function ChartFloatingTooltip({
   active,
   children,
@@ -407,15 +431,41 @@ function ChartFloatingTooltip({
   x,
   y,
 }: ChartFloatingTooltipProps) {
-  const offset = 10
+  const ref = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const node = ref.current
+    const parent = node?.offsetParent
+    if (!node || !parent) return
+    const origin = parent.getBoundingClientRect()
+    const bounds = clippingBox(node)
+    const width = node.offsetWidth
+    const height = node.offsetHeight
+    const right = origin.left + x + TOOLTIP_OFFSET
+    const left = origin.left + x - TOOLTIP_OFFSET - width
+    const fitsRight = right + width <= bounds.right
+    const fitsLeft = left >= bounds.left
+    const across = flip
+      ? fitsLeft || !fitsRight
+        ? left
+        : right
+      : fitsRight || !fitsLeft
+        ? right
+        : left
+    const below = origin.top + y + TOOLTIP_OFFSET
+    const down =
+      below + height <= bounds.bottom ? below : origin.top + y - TOOLTIP_OFFSET - height
+    const toX = clamp(across, bounds.left, bounds.right - width) - origin.left
+    const toY = clamp(down, bounds.top, bounds.bottom - height) - origin.top
+    node.style.transform = `translate(${toX}px, ${toY}px)`
+  })
+
   return (
     <div
+      ref={ref}
       aria-hidden
       className='pointer-events-none absolute top-0 left-0 z-10 transition-transform duration-400 ease-out motion-reduce:transition-none'
-      style={{
-        transform: `translate(${flip ? `calc(${x - offset}px - 100%)` : `${x + offset}px`}, ${y + offset}px)`,
-        visibility: active ? 'visible' : 'hidden',
-      }}
+      style={{ visibility: active ? 'visible' : 'hidden' }}
     >
       <ChartTooltipFrame>{children}</ChartTooltipFrame>
     </div>

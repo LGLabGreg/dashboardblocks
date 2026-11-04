@@ -22,6 +22,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Deployments3Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `the 30 days before`. */
   comparison?: string
@@ -131,60 +133,64 @@ const Deployments3 = (props: Deployments3Props) => {
   const levels = current ? getDoraLevels(current) : undefined
 
   return (
-    <BlockStateProvider
-      errorMessage={errorMessage}
-      state={getBlockState(status, current)}
-    >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <StatGroup className='grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'>
-          {METRICS.map((metric) => {
-            const stat: ReturnType<DoraMetric['toStat']> = current
-              ? metric.toStat(current[metric.key])
-              : { value: 0 }
-            const before = previous?.[metric.key]
-            return (
-              <Stat key={metric.key}>
-                <StatLabel>{metric.label}</StatLabel>
-                <StatValue className='text-3xl @2xl:text-4xl'>
-                  {stat.formatter?.(stat.value)}
-                </StatValue>
-                <StatChange
-                  comparison={comparison}
-                  metric={{
-                    ...stat,
-                    goodDirection: metric.goodDirection,
-                    key: metric.key,
-                    label: metric.label,
-                    previous:
-                      before === undefined ? undefined : metric.toStat(before).value,
-                  }}
-                />
-                <dd className='text-muted-foreground text-xs'>
-                  <BlockReady className='text-xs'>
-                    {levels && (
-                      <Details>
-                        <DoraLabel
-                          className='text-xs'
-                          level={levels[metric.key]}
-                          variant='text'
-                        />
-                        {metric.hint}
-                      </Details>
-                    )}
-                  </BlockReady>
-                </dd>
-              </Stat>
-            )
-          })}
-        </StatGroup>
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, current)}
+        >
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <StatGroup className='grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'>
+              {METRICS.map((metric) => {
+                const stat: ReturnType<DoraMetric['toStat']> = current
+                  ? metric.toStat(current[metric.key])
+                  : { value: 0 }
+                const before = previous?.[metric.key]
+                return (
+                  <Stat key={metric.key}>
+                    <StatLabel>{metric.label}</StatLabel>
+                    <StatValue className='text-3xl @2xl:text-4xl'>
+                      {stat.formatter?.(stat.value)}
+                    </StatValue>
+                    <StatChange
+                      comparison={comparison}
+                      metric={{
+                        ...stat,
+                        goodDirection: metric.goodDirection,
+                        key: metric.key,
+                        label: metric.label,
+                        previous:
+                          before === undefined ? undefined : metric.toStat(before).value,
+                      }}
+                    />
+                    <dd className='text-muted-foreground text-xs'>
+                      <BlockReady className='text-xs'>
+                        {levels && (
+                          <Details>
+                            <DoraLabel
+                              className='text-xs'
+                              level={levels[metric.key]}
+                              variant='text'
+                            />
+                            {metric.hint}
+                          </Details>
+                        )}
+                      </BlockReady>
+                    </dd>
+                  </Stat>
+                )
+              })}
+            </StatGroup>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

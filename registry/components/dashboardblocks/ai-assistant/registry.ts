@@ -31,6 +31,7 @@ export const examples: Registry['items'] = [
     name: 'ai-assistant-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('ai-assistant'),
       registryUrl('ai-chat'),
       registryUrl('block-state'),
@@ -52,6 +53,7 @@ export const examples: Registry['items'] = [
     name: 'ai-assistant-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('ai-assistant'),
       registryUrl('ai-chat'),
       registryUrl('ai-usage'),
@@ -77,6 +79,7 @@ export const examples: Registry['items'] = [
     name: 'ai-assistant-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('ai-assistant'),
       registryUrl('ai-chat'),
       registryUrl('block-state'),

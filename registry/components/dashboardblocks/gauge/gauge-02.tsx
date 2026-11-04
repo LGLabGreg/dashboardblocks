@@ -18,6 +18,8 @@ import {
 } from '@/registry/components/dashboardblocks/gauge'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface HealthFactor {
@@ -99,99 +101,106 @@ const Gauge2 = (props: Gauge2Props) => {
     .map((factor) => factor.label.toLowerCase())
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {!state && band && (
-            <GaugeToneLabel className='mt-0.5' label={band.label} tone={band.tone} />
-          )}
-        </header>
-        <div className='grid gap-6 border-t pt-5 @xl:grid-cols-[14rem_1fr] @xl:items-start'>
-          <div className='flex flex-col items-center gap-3'>
-            <Gauge
-              bands={bands}
-              className='w-full max-w-52'
-              indicator='marker'
-              label={title}
-              sweep={270}
-              value={score}
-              valueText={`${score} out of 100${band ? `, ${band.label.toLowerCase()}` : ''}`}
-            >
-              <GaugeValue className='text-4xl'>{score}</GaugeValue>
-              {!state && (
-                <span className='text-muted-foreground text-xs'>out of 100</span>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {!state && band && (
+                <GaugeToneLabel className='mt-0.5' label={band.label} tone={band.tone} />
               )}
-            </Gauge>
-            {!state && drags.length > 0 && (
-              <p className='text-muted-foreground text-center text-sm text-balance'>
-                {joinLabels(drags).replace(/^./, (first) => first.toUpperCase())}{' '}
-                {drags.length === 1 ? 'pulls' : 'pull'} the score down most.
-              </p>
-            )}
-            <GaugeLegend bands={bands} className='justify-center' />
-          </div>
-          {(state === undefined || state === 'loading') && (
-            <div className='flex min-w-0 flex-col gap-1'>
-              <h3 className='text-sm font-medium'>What makes up the score</h3>
-              <BlockStateRows rows={5} />
-              {!state && (
-                <ul className='flex flex-col divide-y'>
-                  {factors.map((factor) => {
-                    const factorBand = getGaugeBand(factor.score, bands)
-                    const config = factorBand
-                      ? gaugeToneConfig[factorBand.tone]
-                      : undefined
-                    return (
-                      <li key={factor.label} className='flex flex-col gap-1.5 py-2.5'>
-                        <div className='flex items-baseline justify-between gap-3'>
-                          <span className='truncate text-sm'>{factor.label}</span>
-                          <span className='flex shrink-0 items-baseline gap-1.5 text-sm'>
-                            <span className='font-medium tabular-nums'>
-                              {factor.score}
-                            </span>
-                            {factorBand && (
-                              <GaugeToneLabel
-                                className='text-xs'
-                                label={factorBand.label}
-                                tone={factorBand.tone}
+            </header>
+            <div className='grid gap-6 border-t pt-5 @xl:grid-cols-[14rem_1fr] @xl:items-start'>
+              <div className='flex flex-col items-center gap-3'>
+                <Gauge
+                  bands={bands}
+                  className='w-full max-w-52'
+                  indicator='marker'
+                  label={title}
+                  sweep={270}
+                  value={score}
+                  valueText={`${score} out of 100${band ? `, ${band.label.toLowerCase()}` : ''}`}
+                >
+                  <GaugeValue className='text-4xl'>{score}</GaugeValue>
+                  {!state && (
+                    <span className='text-muted-foreground text-xs'>out of 100</span>
+                  )}
+                </Gauge>
+                {!state && drags.length > 0 && (
+                  <p className='text-muted-foreground text-center text-sm text-balance'>
+                    {joinLabels(drags).replace(/^./, (first) => first.toUpperCase())}{' '}
+                    {drags.length === 1 ? 'pulls' : 'pull'} the score down most.
+                  </p>
+                )}
+                <GaugeLegend bands={bands} className='justify-center' />
+              </div>
+              {(state === undefined || state === 'loading') && (
+                <div className='flex min-w-0 flex-col gap-1'>
+                  <h3 className='text-sm font-medium'>What makes up the score</h3>
+                  <BlockStateRows rows={5} />
+                  {!state && (
+                    <ul className='flex flex-col divide-y'>
+                      {factors.map((factor) => {
+                        const factorBand = getGaugeBand(factor.score, bands)
+                        const config = factorBand
+                          ? gaugeToneConfig[factorBand.tone]
+                          : undefined
+                        return (
+                          <li key={factor.label} className='flex flex-col gap-1.5 py-2.5'>
+                            <div className='flex items-baseline justify-between gap-3'>
+                              <span className='truncate text-sm'>{factor.label}</span>
+                              <span className='flex shrink-0 items-baseline gap-1.5 text-sm'>
+                                <span className='font-medium tabular-nums'>
+                                  {factor.score}
+                                </span>
+                                {factorBand && (
+                                  <GaugeToneLabel
+                                    className='text-xs'
+                                    label={factorBand.label}
+                                    tone={factorBand.tone}
+                                  />
+                                )}
+                              </span>
+                            </div>
+                            <div
+                              aria-hidden
+                              className='bg-muted h-1.5 w-full rounded-full'
+                            >
+                              <div
+                                className={cn(
+                                  'h-full rounded-full',
+                                  config?.swatch ?? 'bg-primary',
+                                )}
+                                style={{
+                                  width: `${Math.min(100, Math.max(0, factor.score))}%`,
+                                }}
                               />
-                            )}
-                          </span>
-                        </div>
-                        <div aria-hidden className='bg-muted h-1.5 w-full rounded-full'>
-                          <div
-                            className={cn(
-                              'h-full rounded-full',
-                              config?.swatch ?? 'bg-primary',
-                            )}
-                            style={{
-                              width: `${Math.min(100, Math.max(0, factor.score))}%`,
-                            }}
-                          />
-                        </div>
-                        <span className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
-                          <span className='min-w-0'>{factor.detail}</span>
-                          <span className='shrink-0 tabular-nums'>
-                            Weighs{' '}
-                            {formatPercent(factor.weight / totalWeight, {
-                              maximumFractionDigits: 0,
-                            })}
-                          </span>
-                        </span>
-                      </li>
-                    )
-                  })}
-                </ul>
+                            </div>
+                            <span className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
+                              <span className='min-w-0'>{factor.detail}</span>
+                              <span className='shrink-0 tabular-nums'>
+                                Weighs{' '}
+                                {formatPercent(factor.weight / totalWeight, {
+                                  maximumFractionDigits: 0,
+                                })}
+                              </span>
+                            </span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+                </div>
               )}
             </div>
-          )}
-        </div>
-      </section>
-    </BlockStateProvider>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

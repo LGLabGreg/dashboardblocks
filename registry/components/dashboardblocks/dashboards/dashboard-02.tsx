@@ -33,6 +33,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Dashboard2Props extends BlockStateProps {
   empty?: boolean
   title: string
@@ -228,13 +230,13 @@ const Dashboard2 = (props: Dashboard2Props) => {
       state={status ?? (empty ? 'empty' : undefined)}
     >
       <div className='@container flex w-full flex-col gap-8'>
-        <header className='flex flex-col gap-3'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-wrap items-start justify-between gap-3'>
-              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
-            </div>
-            <p className='text-muted-foreground leading-relaxed'>
+        <header className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-start justify-between gap-3'>
+            <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+            <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <p className='text-muted-foreground min-w-0 leading-relaxed'>
               Showing{' '}
               <DateRangePicker
                 onValueChange={(preset) => update({ preset })}
@@ -248,39 +250,39 @@ const Dashboard2 = (props: Dashboard2Props) => {
                 {formatDateRange(getPreviousRange(range))}.
               </span>
             </p>
-          </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            {query.plan && (
-              <FilterChip
-                field='Plan'
+            <div className='flex flex-wrap items-center gap-2'>
+              {query.plan && (
+                <FilterChip
+                  field='Plan'
+                  value={query.plan}
+                  onRemove={() => update({ plan: null })}
+                />
+              )}
+              <FilterMenu
+                allLabel='All plans'
+                label='Plan'
+                onValueChange={(plan) => update({ plan })}
+                options={PLANS.map((item) => item.name)}
                 value={query.plan}
-                onRemove={() => update({ plan: null })}
-              />
-            )}
-            <FilterMenu
-              allLabel='All plans'
-              label='Plan'
-              onValueChange={(plan) => update({ plan })}
-              options={PLANS.map((item) => item.name)}
-              value={query.plan}
-            >
-              <IconPlaceholder
-                lucide='LayersIcon'
-                tabler='IconStack2'
-                hugeicons='Layers01Icon'
-                phosphor='StackIcon'
-                remixicon='RiStackLine'
-              />
-              {query.plan ? 'Change plan' : 'Filter by plan'}
-            </FilterMenu>
+              >
+                <IconPlaceholder
+                  lucide='LayersIcon'
+                  tabler='IconStack2'
+                  hugeicons='Layers01Icon'
+                  phosphor='StackIcon'
+                  remixicon='RiStackLine'
+                />
+                {query.plan ? 'Change plan' : 'Filter by plan'}
+              </FilterMenu>
+            </div>
           </div>
         </header>
         <BlockBusy
           busy={busy}
           label='Updating the dashboard'
-          className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
+          className='grid gap-4 @4xl:grid-cols-3'
         >
-          <div className='@4xl:col-span-3'>
+          <div className='grid @4xl:col-span-3'>
             <StatGroup3
               errorMessage={errorMessage}
               status={status}
@@ -290,7 +292,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
               title='Revenue and customers'
             />
           </div>
-          <div className='@4xl:col-span-2'>
+          <div className='grid @4xl:col-span-2'>
             <Billing1
               errorMessage={errorMessage}
               status={status}
@@ -307,7 +309,7 @@ const Dashboard2 = (props: Dashboard2Props) => {
             regions={empty ? [] : data.regions}
             title='MRR by region'
           />
-          <div className='@4xl:col-span-2'>
+          <div className='grid @4xl:col-span-2'>
             <Heatmap1
               errorMessage={errorMessage}
               status={status}
@@ -323,13 +325,17 @@ const Dashboard2 = (props: Dashboard2Props) => {
             milestones={empty ? [] : data.retention}
             title='Retention milestones'
           />
-          <div className='@4xl:col-span-3'>
-            <DataTable4
-              errorMessage={errorMessage}
-              status={status}
-              {...dataTable4ExampleProps}
-              rows={empty ? [] : dataTable4ExampleProps.rows}
-            />
+          <div className='grid @4xl:col-span-3'>
+            <Card>
+              <CardContent>
+                <DataTable4
+                  errorMessage={errorMessage}
+                  status={status}
+                  {...dataTable4ExampleProps}
+                  rows={empty ? [] : dataTable4ExampleProps.rows}
+                />
+              </CardContent>
+            </Card>
           </div>
         </BlockBusy>
       </div>

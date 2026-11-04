@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'funnel-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('format'),
@@ -33,6 +34,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('funnel'),
@@ -55,6 +57,7 @@ export const examples: Registry['items'] = [
     name: 'funnel-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('details'),
       registryUrl('format'),
@@ -81,6 +84,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('funnel'),

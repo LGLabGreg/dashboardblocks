@@ -19,6 +19,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatList, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 type Platform = 'slack' | 'github'
 
@@ -158,101 +159,109 @@ const ActivityFeed5 = (props: ActivityFeed5Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {onViewAll && (
-            <Button variant='outline' size='sm' onClick={onViewAll}>
-              View all
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </Button>
-          )}
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={5} />
-          </div>
-        )}
-        {!state && (
-          <ActivityFeed className='border-t pt-4'>
-            {events.map((event) => {
-              const platform = platformConfig[event.platform]
-              const PlatformIcon = platform.icon
-              const details = event.message ? describeMessage(event.message) : []
-              const tags = event.message?.tags ?? []
-              return (
-                <ActivityFeedItem key={event.id} className='pb-6 last:pb-0' connector>
-                  <span className='flex size-(--activity-marker) shrink-0 items-center justify-center'>
-                    <PersonAvatar
-                      className='ring-background ring-4'
-                      person={event.author}
-                    />
-                  </span>
-                  <div className='flex min-w-0 flex-1 flex-col gap-3 pt-1.5'>
-                    <div className='flex items-start justify-between gap-3'>
-                      <p className='text-sm'>
-                        <span className='font-medium'>{event.author.name}</span>{' '}
-                        <span className='text-muted-foreground'>{event.description}</span>{' '}
-                        <span className='font-medium break-words'>{event.channel}</span>
-                        <span className='sr-only'> on {platform.label}</span>
-                      </p>
-                      <span className='text-muted-foreground mt-0.5 flex shrink-0 items-center gap-1.5'>
-                        <PlatformIcon aria-hidden className='size-3.5' />
-                        <ActivityTime date={event.at} now={now} timeZone={timeZone} />
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {onViewAll && (
+                <Button variant='outline' size='sm' onClick={onViewAll}>
+                  View all
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
+                  />
+                </Button>
+              )}
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={5} />
+              </div>
+            )}
+            {!state && (
+              <ActivityFeed className='border-t pt-4'>
+                {events.map((event) => {
+                  const platform = platformConfig[event.platform]
+                  const PlatformIcon = platform.icon
+                  const details = event.message ? describeMessage(event.message) : []
+                  const tags = event.message?.tags ?? []
+                  return (
+                    <ActivityFeedItem key={event.id} className='pb-6 last:pb-0' connector>
+                      <span className='flex size-(--activity-marker) shrink-0 items-center justify-center'>
+                        <PersonAvatar
+                          className='ring-background ring-4'
+                          person={event.author}
+                        />
                       </span>
-                    </div>
-                    {event.message && (
-                      <div className='flex flex-col gap-2 border-l-2 pl-3'>
-                        <p className='text-sm'>{event.message.text}</p>
-                        {(tags.length > 0 || details.length > 0) && (
-                          <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
-                            {tags.length > 0 && (
-                              <ul aria-label='Tags' className='flex flex-wrap gap-1'>
-                                {tags.map((tag) => (
-                                  <li key={tag}>
-                                    <Tag>#{tag}</Tag>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                            {details.length > 0 && (
-                              <p className='text-muted-foreground text-xs tabular-nums'>
-                                {joinDetails(...details)}
-                              </p>
+                      <div className='flex min-w-0 flex-1 flex-col gap-3 pt-1.5'>
+                        <div className='flex items-start justify-between gap-3'>
+                          <p className='text-sm'>
+                            <span className='font-medium'>{event.author.name}</span>{' '}
+                            <span className='text-muted-foreground'>
+                              {event.description}
+                            </span>{' '}
+                            <span className='font-medium break-words'>
+                              {event.channel}
+                            </span>
+                            <span className='sr-only'> on {platform.label}</span>
+                          </p>
+                          <span className='text-muted-foreground mt-0.5 flex shrink-0 items-center gap-1.5'>
+                            <PlatformIcon aria-hidden className='size-3.5' />
+                            <ActivityTime date={event.at} now={now} timeZone={timeZone} />
+                          </span>
+                        </div>
+                        {event.message && (
+                          <div className='flex flex-col gap-2 border-l-2 pl-3'>
+                            <p className='text-sm'>{event.message.text}</p>
+                            {(tags.length > 0 || details.length > 0) && (
+                              <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
+                                {tags.length > 0 && (
+                                  <ul aria-label='Tags' className='flex flex-wrap gap-1'>
+                                    {tags.map((tag) => (
+                                      <li key={tag}>
+                                        <Tag>#{tag}</Tag>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                                {details.length > 0 && (
+                                  <p className='text-muted-foreground text-xs tabular-nums'>
+                                    {joinDetails(...details)}
+                                  </p>
+                                )}
+                              </div>
                             )}
                           </div>
                         )}
+                        {event.action && (
+                          <Button
+                            className='self-start'
+                            onClick={() => onAction?.(event)}
+                            size='sm'
+                            variant='outline'
+                          >
+                            {event.action}
+                          </Button>
+                        )}
                       </div>
-                    )}
-                    {event.action && (
-                      <Button
-                        className='self-start'
-                        onClick={() => onAction?.(event)}
-                        size='sm'
-                        variant='outline'
-                      >
-                        {event.action}
-                      </Button>
-                    )}
-                  </div>
-                </ActivityFeedItem>
-              )
-            })}
-          </ActivityFeed>
-        )}
-      </section>
+                    </ActivityFeedItem>
+                  )
+                })}
+              </ActivityFeed>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

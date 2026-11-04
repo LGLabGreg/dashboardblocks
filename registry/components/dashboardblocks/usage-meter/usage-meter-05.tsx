@@ -17,6 +17,8 @@ import {
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface StorageCategory {
   label: string
   value: number
@@ -72,62 +74,66 @@ const UsageMeter5 = (props: UsageMeter5Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-1 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
-        <header className='flex items-baseline justify-between gap-3'>
-          <p className='text-muted-foreground text-sm'>{title}</p>
-          {status !== 'ok' && <UsageStatusLabel status={status} />}
-        </header>
-        <div className='flex flex-wrap items-baseline gap-x-2'>
-          <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
-          <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
-        </div>
-        {state === 'loading' ? (
-          <BlockStateText className='text-sm' />
-        ) : (
-          !state &&
-          largest && (
-            <p className='text-muted-foreground text-sm'>
-              {largest.label} use the most space, and{' '}
-              <span className='tabular-nums'>{formatUsage(free, unit)}</span> is free.
-            </p>
-          )
-        )}
-        <div aria-hidden className='mt-3'>
-          <SegmentedProgressBar
-            className='h-2.5 gap-0.5 bg-transparent'
-            segments={rows.map((row) => ({
-              color: row.color,
-              label: row.label,
-              value: row.value,
-            }))}
-            total={Math.max(limit, used)}
-          />
-        </div>
-        {state === 'loading' && <BlockStateRows className='mt-2' rows={5} />}
-        {!state && (
-          <ul className='mt-2 flex flex-col text-sm'>
-            {rows.map((row) => (
-              <li
-                key={row.label}
-                className='flex items-center gap-2 border-b py-2 last:border-b-0'
-              >
-                <span
-                  aria-hidden
-                  className='ring-foreground/10 size-2.5 shrink-0 rounded-[3px] ring-1 ring-inset'
-                  style={{ backgroundColor: row.color }}
-                />
-                <span className='text-muted-foreground truncate'>{row.label}</span>
-                <span className='ml-auto font-medium tabular-nums'>
-                  {formatUsage(row.value, unit)}
-                </span>
-                <span className='text-muted-foreground w-10 text-right text-xs tabular-nums'>
-                  {share(row.value)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-1 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
+            <header className='flex items-baseline justify-between gap-3'>
+              <p className='text-muted-foreground text-sm'>{title}</p>
+              {status !== 'ok' && <UsageStatusLabel status={status} />}
+            </header>
+            <div className='flex flex-wrap items-baseline gap-x-2'>
+              <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
+              <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
+            </div>
+            {state === 'loading' ? (
+              <BlockStateText className='text-sm' />
+            ) : (
+              !state &&
+              largest && (
+                <p className='text-muted-foreground text-sm'>
+                  {largest.label} use the most space, and{' '}
+                  <span className='tabular-nums'>{formatUsage(free, unit)}</span> is free.
+                </p>
+              )
+            )}
+            <div aria-hidden className='mt-3'>
+              <SegmentedProgressBar
+                className='h-2.5 gap-0.5 bg-transparent'
+                segments={rows.map((row) => ({
+                  color: row.color,
+                  label: row.label,
+                  value: row.value,
+                }))}
+                total={Math.max(limit, used)}
+              />
+            </div>
+            {state === 'loading' && <BlockStateRows className='mt-2' rows={5} />}
+            {!state && (
+              <ul className='mt-2 flex flex-col text-sm'>
+                {rows.map((row) => (
+                  <li
+                    key={row.label}
+                    className='flex items-center gap-2 border-b py-2 last:border-b-0'
+                  >
+                    <span
+                      aria-hidden
+                      className='ring-foreground/10 size-2.5 shrink-0 rounded-[3px] ring-1 ring-inset'
+                      style={{ backgroundColor: row.color }}
+                    />
+                    <span className='text-muted-foreground truncate'>{row.label}</span>
+                    <span className='ml-auto font-medium tabular-nums'>
+                      {formatUsage(row.value, unit)}
+                    </span>
+                    <span className='text-muted-foreground w-10 text-right text-xs tabular-nums'>
+                      {share(row.value)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

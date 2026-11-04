@@ -26,6 +26,8 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Pipeline3Props extends BlockStateProps {
   /** Defaults to a sentence counting the stuck items and naming the one waiting longest. */
   description?: string
@@ -161,83 +163,87 @@ const Pipeline3 = (props: Pipeline3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container/data-table flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        {!state && stuck.length === 0 ? (
-          <p className='text-muted-foreground flex items-center gap-2 border-t pt-4 text-sm'>
-            <IconPlaceholder
-              lucide='CircleCheckIcon'
-              tabler='IconCircleCheck'
-              hugeicons='CheckmarkCircle02Icon'
-              phosphor='CheckCircleIcon'
-              remixicon='RiCheckboxCircleLine'
-              aria-hidden
-              className='size-4 text-emerald-700 dark:text-emerald-400'
-            />
-            Nothing is stuck.
-          </p>
-        ) : (
-          <DataTable caption={`${title}: ${description}`}>
-            <DataTableHeader>
-              <DataTableRow>
-                <DataTableHead>Name</DataTableHead>
-                <DataTableHead>Stage</DataTableHead>
-                <DataTableHead>In stage</DataTableHead>
-                <DataTableHead>Over by</DataTableHead>
-                <DataTableHead>Owner</DataTableHead>
-              </DataTableRow>
-            </DataTableHeader>
-            <DataTableBody>
-              <DataTableStateRows colSpan={5} rows={3} />
-              {!state &&
-                stuck.map(({ days, item, stage }) => {
-                  const expected = stage?.expectedDays ?? 0
-                  return (
-                    <DataTableRow key={item.id}>
-                      <DataTableCell primary truncate>
-                        <span className='block truncate'>{item.title}</span>
-                        {item.subtitle && (
-                          <span className='text-muted-foreground block truncate text-xs font-normal'>
-                            {item.subtitle}
-                          </span>
-                        )}
-                      </DataTableCell>
-                      <DataTableCell className='whitespace-nowrap'>
-                        {stage?.label}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <span className='inline-flex flex-wrap items-baseline gap-x-1.5'>
-                          <PipelineAge days={days} expectedDays={expected} />
-                          <span
-                            aria-hidden
-                            className='text-muted-foreground text-xs whitespace-nowrap'
-                          >
-                            of {expected}d
-                          </span>
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell className='whitespace-nowrap tabular-nums'>
-                        {formatAge(days - expected, 'long')}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <PipelineOwner
-                          avatar={item.ownerAvatar}
-                          name={item.owner ?? 'Unassigned'}
-                          showName
-                        />
-                      </DataTableCell>
-                    </DataTableRow>
-                  )
-                })}
-            </DataTableBody>
-          </DataTable>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container/data-table flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            {!state && stuck.length === 0 ? (
+              <p className='text-muted-foreground flex items-center gap-2 border-t pt-4 text-sm'>
+                <IconPlaceholder
+                  lucide='CircleCheckIcon'
+                  tabler='IconCircleCheck'
+                  hugeicons='CheckmarkCircle02Icon'
+                  phosphor='CheckCircleIcon'
+                  remixicon='RiCheckboxCircleLine'
+                  aria-hidden
+                  className='size-4 text-emerald-700 dark:text-emerald-400'
+                />
+                Nothing is stuck.
+              </p>
+            ) : (
+              <DataTable caption={`${title}: ${description}`}>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>Name</DataTableHead>
+                    <DataTableHead>Stage</DataTableHead>
+                    <DataTableHead>In stage</DataTableHead>
+                    <DataTableHead>Over by</DataTableHead>
+                    <DataTableHead>Owner</DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
+                  <DataTableStateRows colSpan={5} rows={3} />
+                  {!state &&
+                    stuck.map(({ days, item, stage }) => {
+                      const expected = stage?.expectedDays ?? 0
+                      return (
+                        <DataTableRow key={item.id}>
+                          <DataTableCell primary truncate>
+                            <span className='block truncate'>{item.title}</span>
+                            {item.subtitle && (
+                              <span className='text-muted-foreground block truncate text-xs font-normal'>
+                                {item.subtitle}
+                              </span>
+                            )}
+                          </DataTableCell>
+                          <DataTableCell className='whitespace-nowrap'>
+                            {stage?.label}
+                          </DataTableCell>
+                          <DataTableCell>
+                            <span className='inline-flex flex-wrap items-baseline gap-x-1.5'>
+                              <PipelineAge days={days} expectedDays={expected} />
+                              <span
+                                aria-hidden
+                                className='text-muted-foreground text-xs whitespace-nowrap'
+                              >
+                                of {expected}d
+                              </span>
+                            </span>
+                          </DataTableCell>
+                          <DataTableCell className='whitespace-nowrap tabular-nums'>
+                            {formatAge(days - expected, 'long')}
+                          </DataTableCell>
+                          <DataTableCell>
+                            <PipelineOwner
+                              avatar={item.ownerAvatar}
+                              name={item.owner ?? 'Unassigned'}
+                              showName
+                            />
+                          </DataTableCell>
+                        </DataTableRow>
+                      )
+                    })}
+                </DataTableBody>
+              </DataTable>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

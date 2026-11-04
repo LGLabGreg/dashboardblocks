@@ -29,6 +29,8 @@ import {
   Tooltip,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Segment {
   color: string
   label: string
@@ -84,85 +86,94 @@ const ChartPanel5 = (props: ChartPanel5Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col items-center gap-6 border-t pt-4 @lg:flex-row'>
-          {state ? (
-            <Ring className='size-44' percentage={0} radius={41} strokeWidth={12} />
-          ) : (
-            <div
-              className='relative size-44 shrink-0'
-              onPointerLeave={() => setActiveIndex(null)}
-            >
-              <ResponsiveContainer width='100%' height='100%'>
-                <PieChart
-                  aria-label={`${title} chart`}
-                  margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col items-center gap-6 border-t pt-4 @lg:flex-row'>
+              {state ? (
+                <Ring className='size-44' percentage={0} radius={41} strokeWidth={12} />
+              ) : (
+                <div
+                  className='relative size-44 shrink-0'
+                  onPointerLeave={() => setActiveIndex(null)}
                 >
-                  <Tooltip
-                    content={(tooltipProps) => (
-                      <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
-                    )}
-                  />
-                  <Pie
-                    activeShape={(sector: PieSectorDataItem) => (
-                      <Sector
-                        {...sector}
-                        outerRadius={Number(sector.outerRadius ?? 0) + ACTIVE_GROWTH_PX}
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <PieChart
+                      aria-label={`${title} chart`}
+                      margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                    >
+                      <Tooltip
+                        content={(tooltipProps) => (
+                          <ChartTooltipContent
+                            {...tooltipProps}
+                            valueFormatter={formatter}
+                          />
+                        )}
                       />
-                    )}
-                    cornerRadius={3}
-                    data={segments}
-                    dataKey='value'
-                    endAngle={-270}
-                    innerRadius='70%'
-                    nameKey='label'
-                    onMouseEnter={(_, index) => setActiveIndex(index)}
-                    outerRadius='94%'
-                    paddingAngle={1}
-                    startAngle={90}
-                    stroke='var(--color-background)'
-                    strokeWidth={2}
-                  >
-                    {segments.map((segment) => (
-                      <Cell key={segment.label} fill={segment.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className='pointer-events-none absolute inset-0 flex flex-col items-center justify-center'>
-                <span className='text-2xl font-light tracking-tight tabular-nums'>
-                  {formatCompact(total)}
-                </span>
-                <span className='text-muted-foreground text-xs'>{totalLabel}</span>
+                      <Pie
+                        activeShape={(sector: PieSectorDataItem) => (
+                          <Sector
+                            {...sector}
+                            outerRadius={
+                              Number(sector.outerRadius ?? 0) + ACTIVE_GROWTH_PX
+                            }
+                          />
+                        )}
+                        cornerRadius={3}
+                        data={segments}
+                        dataKey='value'
+                        endAngle={-270}
+                        innerRadius='70%'
+                        nameKey='label'
+                        onMouseEnter={(_, index) => setActiveIndex(index)}
+                        outerRadius='94%'
+                        paddingAngle={1}
+                        startAngle={90}
+                        stroke='var(--color-background)'
+                        strokeWidth={2}
+                      >
+                        {segments.map((segment) => (
+                          <Cell key={segment.label} fill={segment.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className='pointer-events-none absolute inset-0 flex flex-col items-center justify-center'>
+                    <span className='text-2xl font-light tracking-tight tabular-nums'>
+                      {formatCompact(total)}
+                    </span>
+                    <span className='text-muted-foreground text-xs'>{totalLabel}</span>
+                  </div>
+                </div>
+              )}
+              <div className='flex w-full min-w-0 flex-col gap-2'>
+                <BlockReady className='text-sm'>
+                  {top && (
+                    <p className='text-muted-foreground text-sm'>
+                      <span className='text-foreground font-medium'>{top.label}</span>{' '}
+                      brings {share(top.value)} of {totalLabel.toLowerCase()}.
+                    </p>
+                  )}
+                </BlockReady>
+                <BlockStateRows rows={4} />
+                {!state && (
+                  <BreakdownTable
+                    caption={`${title}: ${description}`}
+                    format={formatter}
+                    highlightIndex={activeIndex}
+                    labels={['Source', totalLabel, 'Share']}
+                    segments={segments}
+                  />
+                )}
               </div>
             </div>
-          )}
-          <div className='flex w-full min-w-0 flex-col gap-2'>
-            <BlockReady className='text-sm'>
-              {top && (
-                <p className='text-muted-foreground text-sm'>
-                  <span className='text-foreground font-medium'>{top.label}</span> brings{' '}
-                  {share(top.value)} of {totalLabel.toLowerCase()}.
-                </p>
-              )}
-            </BlockReady>
-            <BlockStateRows rows={4} />
-            {!state && (
-              <BreakdownTable
-                caption={`${title}: ${description}`}
-                format={formatter}
-                highlightIndex={activeIndex}
-                labels={['Source', totalLabel, 'Share']}
-                segments={segments}
-              />
-            )}
-          </div>
-        </div>
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

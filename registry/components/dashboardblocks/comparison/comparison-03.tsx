@@ -16,6 +16,8 @@ import {
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Segment {
@@ -77,68 +79,67 @@ const Comparison3 = (props: Comparison3Props) => {
   } = props
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <span className='text-muted-foreground text-sm'>Net change</span>
-          <KPIValue value={net} format={signed} />
-          {(state || before !== 0) && (
-            <KPIChange
-              comparison='before'
-              format={formatter}
-              previous={before}
-              value={before + net}
-            />
-          )}
-        </div>
-        {state === 'loading' && <BlockStateRows rows={5} />}
-        {!state && (
-          <ul className='flex flex-col'>
-            {rows.map((row) => (
-              <li
-                key={row.label}
-                className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 border-b py-2.5 last:border-b-0 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
-              >
-                <span className='truncate text-sm'>{row.label}</span>
-                <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
-                  <span
-                    className={cn(
-                      'font-medium',
-                      row.difference > 0
-                        ? 'text-emerald-700 dark:text-emerald-400'
-                        : row.difference < 0
-                          ? 'text-red-700 dark:text-red-400'
-                          : 'text-muted-foreground',
-                    )}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <span className='text-muted-foreground text-sm'>Net change</span>
+              <KPIValue value={net} format={signed} />
+              {(state || before !== 0) && (
+                <KPIChange comparison='before' previous={before} value={before + net} />
+              )}
+            </div>
+            {state === 'loading' && <BlockStateRows rows={5} />}
+            {!state && (
+              <ul className='flex flex-col'>
+                {rows.map((row) => (
+                  <li
+                    key={row.label}
+                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 border-b py-2.5 last:border-b-0 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
                   >
-                    {signed(row.difference)}
-                  </span>{' '}
-                  <span className='text-muted-foreground text-xs'>
-                    {formatSigned(row.percent, (value) => formatPercent(value / 100))}
-                  </span>
-                </span>
-                <DivergingBar
-                  className='col-span-2 @md:col-span-1'
-                  color={
-                    row.difference < 0
-                      ? 'color-mix(in oklab, var(--color-chart-2) 30%, transparent)'
-                      : 'var(--color-chart-2)'
-                  }
-                  max={max}
-                  value={row.difference}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+                    <span className='truncate text-sm'>{row.label}</span>
+                    <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
+                      <span
+                        className={cn(
+                          'font-medium',
+                          row.difference > 0
+                            ? 'text-emerald-700 dark:text-emerald-400'
+                            : row.difference < 0
+                              ? 'text-red-700 dark:text-red-400'
+                              : 'text-muted-foreground',
+                        )}
+                      >
+                        {signed(row.difference)}
+                      </span>{' '}
+                      <span className='text-muted-foreground text-xs'>
+                        {formatSigned(row.percent, (value) => formatPercent(value / 100))}
+                      </span>
+                    </span>
+                    <DivergingBar
+                      className='col-span-2 @md:col-span-1'
+                      color={
+                        row.difference < 0
+                          ? 'color-mix(in oklab, var(--color-chart-2) 30%, transparent)'
+                          : 'var(--color-chart-2)'
+                      }
+                      max={max}
+                      value={row.difference}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

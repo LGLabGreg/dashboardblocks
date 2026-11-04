@@ -19,6 +19,8 @@ import {
   formatPoints,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Gauge4Props extends BlockStateProps {
   /** Follows the previous value in the change, such as `in August`. */
   comparison: string
@@ -69,65 +71,68 @@ const Gauge4 = (props: Gauge4Props) => {
   const met = value >= target
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {!state && (
-            <GaugeToneLabel
-              className='mt-0.5'
-              label={met ? 'Target met' : 'Below target'}
-              tone={met ? 'positive' : 'caution'}
-            />
-          )}
-        </header>
-        <div className='flex flex-col items-center gap-6 border-t pt-5 @md:flex-row @md:items-end'>
-          <Gauge
-            className='w-full max-w-56 @md:w-52'
-            formatScale={scaleFormatter}
-            label={title}
-            max={max}
-            min={min}
-            target={target}
-            value={value}
-            valueText={`${formatter(value)}, target ${formatter(target)}`}
-          >
-            <GaugeValue className='text-4xl'>{formatter(value)}</GaugeValue>
-          </Gauge>
-          <div className='flex w-full min-w-0 flex-col gap-3 @md:pb-6'>
-            <KPIChange
-              changeType='points'
-              comparison={comparison}
-              format={formatter}
-              previous={previous}
-              value={value}
-            />
-            <BlockReady className='text-sm'>
-              <p className='text-sm'>
-                <span className='font-medium tabular-nums'>
-                  {formatPoints(gap, { minimumFractionDigits: 1 })}
-                </span>{' '}
-                <span className='text-muted-foreground'>
-                  {met ? 'above' : 'to go to'} the{' '}
-                  <span className='tabular-nums'>{formatter(target)}</span> target.
-                </span>
-              </p>
-            </BlockReady>
-            <GaugeTargetKey />
-          </div>
-        </div>
-        {footnote && (!state || state === 'loading') && (
-          <div className='border-t pt-3'>
-            <BlockReady className='text-xs'>
-              <p className='text-muted-foreground text-xs'>{footnote}</p>
-            </BlockReady>
-          </div>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {!state && (
+                <GaugeToneLabel
+                  className='mt-0.5'
+                  label={met ? 'Target met' : 'Below target'}
+                  tone={met ? 'positive' : 'caution'}
+                />
+              )}
+            </header>
+            <div className='flex flex-col items-center gap-6 border-t pt-5 @md:flex-row @md:items-end'>
+              <Gauge
+                className='w-full max-w-56 @md:w-52'
+                formatScale={scaleFormatter}
+                label={title}
+                max={max}
+                min={min}
+                target={target}
+                value={value}
+                valueText={`${formatter(value)}, target ${formatter(target)}`}
+              >
+                <GaugeValue className='text-4xl'>{formatter(value)}</GaugeValue>
+              </Gauge>
+              <div className='flex w-full min-w-0 flex-col gap-3 @md:pb-6'>
+                <KPIChange
+                  changeType='points'
+                  comparison={comparison}
+                  previous={previous}
+                  value={value}
+                />
+                <BlockReady className='text-sm'>
+                  <p className='text-sm'>
+                    <span className='font-medium tabular-nums'>
+                      {formatPoints(gap, { minimumFractionDigits: 1 })}
+                    </span>{' '}
+                    <span className='text-muted-foreground'>
+                      {met ? 'above' : 'to go to'} the{' '}
+                      <span className='tabular-nums'>{formatter(target)}</span> target.
+                    </span>
+                  </p>
+                </BlockReady>
+                <GaugeTargetKey />
+              </div>
+            </div>
+            {footnote && (!state || state === 'loading') && (
+              <div className='border-t pt-3'>
+                <BlockReady className='text-xs'>
+                  <p className='text-muted-foreground text-xs'>{footnote}</p>
+                </BlockReady>
+              </div>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

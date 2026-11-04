@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/retention'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Retention1Props extends BlockStateProps {
   /** Oldest first. Leave out, or pass none, to show the empty state. */
   cohorts?: RetentionCohort[]
@@ -78,60 +80,66 @@ const Retention1 = (props: Retention1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {(state || (milestoneRate !== null && milestoneRate !== undefined)) && (
-          <dl className='flex flex-wrap items-end gap-x-10 gap-y-3 border-t pt-4'>
-            <div className='flex flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>
-                Still active in {unit} {milestone}, on average
-              </dt>
-              <dd>
-                <KPIValue
-                  value={milestoneRate ?? undefined}
-                  format={(value) => formatPercent(value, { maximumFractionDigits: 0 })}
-                />
-              </dd>
-            </div>
-            {state === 'loading' && (
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Best cohort</dt>
-                <dd>
-                  <KPIValue className='text-2xl' value={undefined} />
-                </dd>
-              </div>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {(state || (milestoneRate !== null && milestoneRate !== undefined)) && (
+              <dl className='flex flex-wrap items-start gap-x-10 gap-y-3 border-t pt-4'>
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>
+                    Still active in {unit} {milestone}, on average
+                  </dt>
+                  <dd>
+                    <KPIValue
+                      value={milestoneRate ?? undefined}
+                      format={(value) =>
+                        formatPercent(value, { maximumFractionDigits: 0 })
+                      }
+                    />
+                  </dd>
+                </div>
+                {state === 'loading' && (
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Best cohort</dt>
+                    <dd>
+                      <KPIValue className='text-2xl' value={undefined} />
+                    </dd>
+                  </div>
+                )}
+                {!state && best && (
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Best cohort</dt>
+                    <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                      {best.label}
+                      <span className='text-muted-foreground ml-2 text-sm'>
+                        {formatPercent(best.retained[milestone] / (best.size || 1), {
+                          maximumFractionDigits: 0,
+                        })}{' '}
+                        in {unit} {milestone}
+                      </span>
+                    </dd>
+                  </div>
+                )}
+              </dl>
             )}
-            {!state && best && (
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Best cohort</dt>
-                <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                  {best.label}
-                  <span className='text-muted-foreground ml-2 text-sm'>
-                    {formatPercent(best.retained[milestone] / (best.size || 1), {
-                      maximumFractionDigits: 0,
-                    })}{' '}
-                    in {unit} {milestone}
-                  </span>
-                </dd>
-              </div>
+            {state === 'loading' && <BlockStateRows className='border-t' rows={6} />}
+            {!state && (
+              <CohortTable
+                caption={`${title}: ${description} The last row is the average, weighted by cohort size.`}
+                cohorts={cohorts}
+                footer={<HeatmapLegend low='Fewer' high='More retained' />}
+                minWidth='36rem'
+                mode={mode}
+                periodName={periodName}
+              />
             )}
-          </dl>
-        )}
-        {state === 'loading' && <BlockStateRows className='border-t' rows={6} />}
-        {!state && (
-          <CohortTable
-            caption={`${title}: ${description} The last row is the average, weighted by cohort size.`}
-            cohorts={cohorts}
-            footer={<HeatmapLegend low='Fewer' high='More retained' />}
-            minWidth='36rem'
-            mode={mode}
-            periodName={periodName}
-          />
-        )}
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'timeline-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('timeline')],
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('timeline')],
     files: [
       {
         path: 'registry/components/dashboardblocks/timeline/timeline-01.tsx',
@@ -24,6 +24,7 @@ export const examples: Registry['items'] = [
     name: 'timeline-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('kpi'),
       registryUrl('status-label'),
@@ -47,6 +48,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart'),
       registryUrl('details'),
@@ -70,6 +72,7 @@ export const examples: Registry['items'] = [
     name: 'timeline-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart'),
       registryUrl('kpi'),

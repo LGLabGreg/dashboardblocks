@@ -35,6 +35,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface QuadrantItem {
   label: string
   x: number
@@ -113,134 +115,138 @@ const Scatter2 = (props: Scatter2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state ? (
-          <div className='border-t pt-4'>
-            <BlockStateText className='text-sm' />
-          </div>
-        ) : (
-          <p className='text-muted-foreground border-t pt-4 text-sm'>
-            {`Split at ${props.split ? '' : 'the medians, '}${x.format(split.x)} ${x.label.toLowerCase()} and ${y.format(split.y)} ${y.label.toLowerCase()}.`}
-          </p>
-        )}
-        <ChartPanelFigure className='h-80'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <ScatterChart
-              aria-label={`${title} chart`}
-              margin={{ top: 8, right: 16, bottom: 16, left: 0 }}
-            >
-              <CartesianGrid {...chartGridProps} />
-              <ReferenceArea
-                fill='var(--color-muted)'
-                fillOpacity={0.5}
-                label={label(quadrants[1], 'insideTopRight')}
-                x1={split.x}
-                x2={x.domain[1]}
-                y1={split.y}
-                y2={y.domain[1]}
-              />
-              <ReferenceArea
-                fillOpacity={0}
-                label={label(quadrants[0], 'insideTopLeft')}
-                x1={x.domain[0]}
-                x2={split.x}
-                y1={split.y}
-                y2={y.domain[1]}
-              />
-              <ReferenceArea
-                fillOpacity={0}
-                label={label(quadrants[2], 'insideBottomLeft')}
-                x1={x.domain[0]}
-                x2={split.x}
-                y1={y.domain[0]}
-                y2={split.y}
-              />
-              <ReferenceArea
-                fillOpacity={0}
-                label={label(quadrants[3], 'insideBottomRight')}
-                x1={split.x}
-                x2={x.domain[1]}
-                y1={y.domain[0]}
-                y2={split.y}
-              />
-              <ReferenceLine {...chartReferenceProps} x={split.x} />
-              <ReferenceLine {...chartReferenceProps} y={split.y} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='x'
-                domain={x.domain}
-                label={{
-                  fill: 'var(--color-muted-foreground)',
-                  fontSize: 11,
-                  offset: -12,
-                  position: 'insideBottom',
-                  value: `${x.label} →`,
-                }}
-                name={x.label}
-                tickFormatter={x.format}
-                ticks={x.ticks}
-                type='number'
-              />
-              <YAxis
-                {...chartAxisProps}
-                dataKey='y'
-                domain={y.domain}
-                name={y.label}
-                tickFormatter={y.format}
-                ticks={y.ticks}
-                type='number'
-                width={chartValueAxisWidth}
-              />
-              <Tooltip
-                content={({ active, payload }) => {
-                  const item = payload?.[0]?.payload as QuadrantItem | undefined
-                  if (!active || !item) return null
-                  return (
-                    <ScatterTooltipContent
-                      color='var(--color-chart-2)'
-                      rows={[
-                        { label: x.label, value: x.format(item.x) },
-                        { label: y.label, value: y.format(item.y) },
-                        { label: 'Quadrant', value: quadrantOf(item) },
-                      ]}
-                      title={item.label}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state ? (
+              <div className='border-t pt-4'>
+                <BlockStateText className='text-sm' />
+              </div>
+            ) : (
+              <p className='text-muted-foreground border-t pt-4 text-sm'>
+                {`Split at ${props.split ? '' : 'the medians, '}${x.format(split.x)} ${x.label.toLowerCase()} and ${y.format(split.y)} ${y.label.toLowerCase()}.`}
+              </p>
+            )}
+            <ChartPanelFigure className='h-80'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <ScatterChart
+                  aria-label={`${title} chart`}
+                  margin={{ top: 8, right: 16, bottom: 16, left: 0 }}
+                >
+                  <CartesianGrid {...chartGridProps} />
+                  <ReferenceArea
+                    fill='var(--color-muted)'
+                    fillOpacity={0.5}
+                    label={label(quadrants[1], 'insideTopRight')}
+                    x1={split.x}
+                    x2={x.domain[1]}
+                    y1={split.y}
+                    y2={y.domain[1]}
+                  />
+                  <ReferenceArea
+                    fillOpacity={0}
+                    label={label(quadrants[0], 'insideTopLeft')}
+                    x1={x.domain[0]}
+                    x2={split.x}
+                    y1={split.y}
+                    y2={y.domain[1]}
+                  />
+                  <ReferenceArea
+                    fillOpacity={0}
+                    label={label(quadrants[2], 'insideBottomLeft')}
+                    x1={x.domain[0]}
+                    x2={split.x}
+                    y1={y.domain[0]}
+                    y2={split.y}
+                  />
+                  <ReferenceArea
+                    fillOpacity={0}
+                    label={label(quadrants[3], 'insideBottomRight')}
+                    x1={split.x}
+                    x2={x.domain[1]}
+                    y1={y.domain[0]}
+                    y2={split.y}
+                  />
+                  <ReferenceLine {...chartReferenceProps} x={split.x} />
+                  <ReferenceLine {...chartReferenceProps} y={split.y} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='x'
+                    domain={x.domain}
+                    label={{
+                      fill: 'var(--color-muted-foreground)',
+                      fontSize: 11,
+                      offset: -12,
+                      position: 'insideBottom',
+                      value: `${x.label} →`,
+                    }}
+                    name={x.label}
+                    tickFormatter={x.format}
+                    ticks={x.ticks}
+                    type='number'
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    dataKey='y'
+                    domain={y.domain}
+                    name={y.label}
+                    tickFormatter={y.format}
+                    ticks={y.ticks}
+                    type='number'
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      const item = payload?.[0]?.payload as QuadrantItem | undefined
+                      if (!active || !item) return null
+                      return (
+                        <ScatterTooltipContent
+                          color='var(--color-chart-2)'
+                          rows={[
+                            { label: x.label, value: x.format(item.x) },
+                            { label: y.label, value: y.format(item.y) },
+                            { label: 'Quadrant', value: quadrantOf(item) },
+                          ]}
+                          title={item.label}
+                        />
+                      )
+                    }}
+                    cursor={false}
+                  />
+                  <Scatter
+                    data={items}
+                    fill='var(--color-chart-2)'
+                    stroke='var(--color-background)'
+                    strokeWidth={2}
+                  >
+                    <LabelList
+                      dataKey='label'
+                      fill='var(--color-foreground)'
+                      fontSize={11}
+                      offset={8}
+                      position='top'
                     />
-                  )
-                }}
-                cursor={false}
-              />
-              <Scatter
-                data={items}
-                fill='var(--color-chart-2)'
-                stroke='var(--color-background)'
-                strokeWidth={2}
-              >
-                <LabelList
-                  dataKey='label'
-                  fill='var(--color-foreground)'
-                  fontSize={11}
-                  offset={8}
-                  position='top'
-                />
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}.`}
-          columns={[
-            { key: 'label', label: 'Feature' },
-            { format: x.format, key: 'x', label: x.label },
-            { format: y.format, key: 'y', label: y.label },
-            { key: 'quadrant', label: 'Quadrant' },
-          ]}
-          rows={items.map((item) => ({ ...item, quadrant: quadrantOf(item) }))}
-        />
-      </section>
+                  </Scatter>
+                </ScatterChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}.`}
+              columns={[
+                { key: 'label', label: 'Feature' },
+                { format: x.format, key: 'x', label: x.label },
+                { format: y.format, key: 'y', label: y.label },
+                { key: 'quadrant', label: 'Quadrant' },
+              ]}
+              rows={items.map((item) => ({ ...item, quadrant: quadrantOf(item) }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

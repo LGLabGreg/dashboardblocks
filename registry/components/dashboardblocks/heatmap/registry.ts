@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'heatmap-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('heatmap'),
       registryUrl('stat-group'),
@@ -28,6 +29,7 @@ export const examples: Registry['items'] = [
     name: 'heatmap-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('heatmap'),
       registryUrl('retention'),
@@ -49,6 +51,7 @@ export const examples: Registry['items'] = [
     name: 'heatmap-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('heatmap'),
       registryUrl('stat-group'),
@@ -69,6 +72,7 @@ export const examples: Registry['items'] = [
     name: 'heatmap-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('heatmap'),
       registryUrl('stat-group'),

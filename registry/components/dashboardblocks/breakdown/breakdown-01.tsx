@@ -18,6 +18,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Breakdown1Props extends BlockStateProps {
   description: string
   formatter?: (value: number) => string
@@ -56,32 +58,36 @@ const Breakdown1 = (props: Breakdown1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <KPIValue value={total} format={formatter} />
-          <BlockReady className='text-sm'>
-            {largest && total > 0 && (
-              <p className='text-muted-foreground text-sm'>
-                <span className='text-foreground font-medium'>{largest.label}</span> is{' '}
-                {formatShare(largest.value, total)} of the total.
-              </p>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <KPIValue value={total} format={formatter} />
+              <BlockReady className='text-sm'>
+                {largest && total > 0 && (
+                  <p className='text-muted-foreground text-sm'>
+                    <span className='text-foreground font-medium'>{largest.label}</span>{' '}
+                    is {formatShare(largest.value, total)} of the total.
+                  </p>
+                )}
+              </BlockReady>
+            </div>
+            <BreakdownBar segments={segments} />
+            {state === 'loading' && <BlockStateRows rows={4} />}
+            {!state && (
+              <BreakdownTable
+                caption={`${title}: ${description}`}
+                format={formatter}
+                segments={segments}
+              />
             )}
-          </BlockReady>
-        </div>
-        <BreakdownBar segments={segments} />
-        {state === 'loading' && <BlockStateRows rows={4} />}
-        {!state && (
-          <BreakdownTable
-            caption={`${title}: ${description}`}
-            format={formatter}
-            segments={segments}
-          />
-        )}
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

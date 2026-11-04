@@ -19,6 +19,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface PaymentMethod {
   brand: string
@@ -83,123 +84,132 @@ const Billing2 = (props: Billing2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-1 basis-56 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <Details className='text-muted-foreground block text-sm'>
-                <StatusLabel
-                  variant='text'
-                  tone={cancelsAtPeriodEnd ? 'warning' : 'good'}
-                >
-                  {cancelsAtPeriodEnd ? 'Cancels' : 'Active'}
-                </StatusLabel>
-                <span>
-                  {cancelsAtPeriodEnd ? 'Ends' : 'Renews'} {formatDaysUntil(days)}
-                </span>
-              </Details>
-            </BlockReady>
-          </div>
-          <div className='flex shrink-0 gap-2'>
-            <Button
-              variant='ghost'
-              size='sm'
-              disabled={unavailable}
-              onClick={onUpdatePaymentMethod}
-            >
-              <IconPlaceholder
-                lucide='CreditCardIcon'
-                tabler='IconCreditCard'
-                hugeicons='CreditCardIcon'
-                phosphor='CreditCardIcon'
-                remixicon='RiBankCardLine'
-                data-icon='inline-start'
-              />
-              {paymentMethod ? 'Update card' : 'Add a card'}
-            </Button>
-            <Button variant='outline' size='sm' disabled={unavailable} onClick={onManage}>
-              Manage
-            </Button>
-          </div>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{plan}</p>
-          </BlockReady>
-          {state ? (
-            <KPIValue />
-          ) : (
-            <p className='text-4xl font-light tracking-tight tabular-nums'>
-              {formatCurrency(price, { currency })}
-              <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                / {interval}
-              </span>
-            </p>
-          )}
-          {summary && (
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{summary}</p>
-            </BlockReady>
-          )}
-        </div>
-        {state !== 'empty' && state !== 'error' && (
-          <dl className='grid gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-3'>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>
-                {cancelsAtPeriodEnd ? 'Ends on' : 'Renews on'}
-              </dt>
-              <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                {state ? (
-                  <SkeletonText className='w-[4em]' />
-                ) : (
-                  <time dateTime={renewsAt.toISOString()}>{renewal}</time>
-                )}
-              </dd>
-            </div>
-            {!cancelsAtPeriodEnd && (
-              <div className='flex flex-col gap-0.5'>
-                <dt className='text-muted-foreground text-sm'>Next invoice</dt>
-                <dd>
-                  <KPIValue
-                    className='text-2xl'
-                    value={nextInvoiceAmount ?? price}
-                    format={(value) =>
-                      formatCurrency(value, { currency, precision: 'exact' })
-                    }
-                  />
-                </dd>
-                <dd className='text-muted-foreground text-xs'>
-                  <BlockReady className='text-xs'>Before tax</BlockReady>
-                </dd>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-wrap items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-1 basis-56 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <Details className='text-muted-foreground block text-sm'>
+                    <StatusLabel
+                      variant='text'
+                      tone={cancelsAtPeriodEnd ? 'warning' : 'good'}
+                    >
+                      {cancelsAtPeriodEnd ? 'Cancels' : 'Active'}
+                    </StatusLabel>
+                    <span>
+                      {cancelsAtPeriodEnd ? 'Ends' : 'Renews'} {formatDaysUntil(days)}
+                    </span>
+                  </Details>
+                </BlockReady>
               </div>
-            )}
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Payment method</dt>
-              <dd className='text-2xl font-light tracking-tight whitespace-nowrap tabular-nums'>
-                {state ? (
-                  <SkeletonText className='w-[5em]' />
-                ) : paymentMethod ? (
-                  <>
-                    {paymentMethod.brand} <span aria-hidden>•••• </span>
-                    <span className='sr-only'>ending in </span>
-                    {paymentMethod.last4}
-                  </>
-                ) : (
-                  'None on file'
-                )}
-              </dd>
-              {paymentMethod && (
-                <dd className='text-muted-foreground text-xs tabular-nums'>
-                  <BlockReady className='text-xs'>
-                    Expires {paymentMethod.expires}
-                  </BlockReady>
-                </dd>
+              <div className='flex shrink-0 gap-2'>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={unavailable}
+                  onClick={onUpdatePaymentMethod}
+                >
+                  <IconPlaceholder
+                    lucide='CreditCardIcon'
+                    tabler='IconCreditCard'
+                    hugeicons='CreditCardIcon'
+                    phosphor='CreditCardIcon'
+                    remixicon='RiBankCardLine'
+                    data-icon='inline-start'
+                  />
+                  {paymentMethod ? 'Update card' : 'Add a card'}
+                </Button>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  disabled={unavailable}
+                  onClick={onManage}
+                >
+                  Manage
+                </Button>
+              </div>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{plan}</p>
+              </BlockReady>
+              {state ? (
+                <KPIValue />
+              ) : (
+                <p className='text-4xl font-light tracking-tight tabular-nums'>
+                  {formatCurrency(price, { currency })}
+                  <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                    / {interval}
+                  </span>
+                </p>
+              )}
+              {summary && (
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{summary}</p>
+                </BlockReady>
               )}
             </div>
-          </dl>
-        )}
-      </section>
+            {state !== 'empty' && state !== 'error' && (
+              <dl className='grid gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-3'>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>
+                    {cancelsAtPeriodEnd ? 'Ends on' : 'Renews on'}
+                  </dt>
+                  <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                    {state ? (
+                      <SkeletonText className='w-[4em]' />
+                    ) : (
+                      <time dateTime={renewsAt.toISOString()}>{renewal}</time>
+                    )}
+                  </dd>
+                </div>
+                {!cancelsAtPeriodEnd && (
+                  <div className='flex flex-col gap-0.5'>
+                    <dt className='text-muted-foreground text-sm'>Next invoice</dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        value={nextInvoiceAmount ?? price}
+                        format={(value) =>
+                          formatCurrency(value, { currency, precision: 'exact' })
+                        }
+                      />
+                    </dd>
+                    <dd className='text-muted-foreground text-xs'>
+                      <BlockReady className='text-xs'>Before tax</BlockReady>
+                    </dd>
+                  </div>
+                )}
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>Payment method</dt>
+                  <dd className='text-2xl font-light tracking-tight whitespace-nowrap tabular-nums'>
+                    {state ? (
+                      <SkeletonText className='w-[5em]' />
+                    ) : paymentMethod ? (
+                      <>
+                        {paymentMethod.brand} <span aria-hidden>•••• </span>
+                        <span className='sr-only'>ending in </span>
+                        {paymentMethod.last4}
+                      </>
+                    ) : (
+                      'None on file'
+                    )}
+                  </dd>
+                  {paymentMethod && (
+                    <dd className='text-muted-foreground text-xs tabular-nums'>
+                      <BlockReady className='text-xs'>
+                        Expires {paymentMethod.expires}
+                      </BlockReady>
+                    </dd>
+                  )}
+                </div>
+              </dl>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

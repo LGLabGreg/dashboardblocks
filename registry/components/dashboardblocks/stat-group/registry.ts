@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'stat-group-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('stat-group')],
+    registryDependencies: ['card', registryUrl('stat-group')],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-01.tsx',
@@ -22,7 +22,7 @@ export const examples: Registry['items'] = [
   {
     name: 'stat-group-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('kpi'), registryUrl('stat-group')],
+    registryDependencies: ['card', registryUrl('kpi'), registryUrl('stat-group')],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-02.tsx',
@@ -40,7 +40,12 @@ export const examples: Registry['items'] = [
     name: 'stat-group-03',
     type: 'registry:component',
     dependencies: ['recharts'],
-    registryDependencies: ['tabs', registryUrl('chart-panel'), registryUrl('stat-group')],
+    registryDependencies: [
+      'card',
+      'tabs',
+      registryUrl('chart-panel'),
+      registryUrl('stat-group'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-03.tsx',
@@ -57,7 +62,7 @@ export const examples: Registry['items'] = [
   {
     name: 'stat-group-04',
     type: 'registry:component',
-    registryDependencies: [registryUrl('stat-group')],
+    registryDependencies: ['card', registryUrl('stat-group')],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-04.tsx',
@@ -74,7 +79,7 @@ export const examples: Registry['items'] = [
   {
     name: 'stat-group-05',
     type: 'registry:component',
-    registryDependencies: [registryUrl('stat-group')],
+    registryDependencies: ['card', registryUrl('stat-group')],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-05.tsx',

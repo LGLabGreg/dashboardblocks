@@ -20,6 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/inventory'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Inventory3Props extends BlockStateProps {
   annualCogs?: number
   /** Leave out, with `value`, to show the empty state. */
@@ -72,55 +74,59 @@ const Inventory3 = (props: Inventory3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <p className='text-4xl font-light tracking-tight tabular-nums'>
-            {state || value === undefined ? (
-              <BlockStateText variant='short' />
-            ) : (
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <p className='text-4xl font-light tracking-tight tabular-nums'>
+                {state || value === undefined ? (
+                  <BlockStateText variant='short' />
+                ) : (
+                  <>
+                    {formatCurrency(value, { compact: true, currency })}
+                    <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                      in stock
+                    </span>
+                  </>
+                )}
+              </p>
+              <BlockReady className='text-sm'>
+                {turnover !== null && (
+                  <p className='text-muted-foreground text-sm'>
+                    Turns over{' '}
+                    <span className='text-foreground font-medium tabular-nums'>
+                      {formatNumber(turnover)}
+                    </span>{' '}
+                    times a year, about {Math.round(365 / turnover)} days of stock.
+                  </p>
+                )}
+              </BlockReady>
+            </div>
+            {state === 'loading' && (
               <>
-                {formatCurrency(value, { compact: true, currency })}
-                <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                  in stock
-                </span>
+                <ChartPlaceholder className='rounded-full' height={12} />
+                <BlockStateRows rows={4} />
               </>
             )}
-          </p>
-          <BlockReady className='text-sm'>
-            {turnover !== null && (
-              <p className='text-muted-foreground text-sm'>
-                Turns over{' '}
-                <span className='text-foreground font-medium tabular-nums'>
-                  {formatNumber(turnover)}
-                </span>{' '}
-                times a year, about {Math.round(365 / turnover)} days of stock.
-              </p>
+            {!state && (
+              <>
+                <BreakdownBar segments={segments} />
+                <BreakdownTable
+                  caption={`${title}: ${description}`}
+                  labels={['Status', 'SKUs', 'Share']}
+                  segments={segments}
+                />
+              </>
             )}
-          </BlockReady>
-        </div>
-        {state === 'loading' && (
-          <>
-            <ChartPlaceholder className='rounded-full' height={12} />
-            <BlockStateRows rows={4} />
-          </>
-        )}
-        {!state && (
-          <>
-            <BreakdownBar segments={segments} />
-            <BreakdownTable
-              caption={`${title}: ${description}`}
-              labels={['Status', 'SKUs', 'Share']}
-              segments={segments}
-            />
-          </>
-        )}
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -25,6 +25,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Invoice {
   amount: number
@@ -127,89 +128,93 @@ const Billing3 = (props: Billing3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container/data-table flex flex-col gap-3'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {onViewAll && (
-            <Button variant='outline' size='sm' onClick={onViewAll}>
-              View all
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </Button>
-          )}
-        </header>
-        <DataTable caption={state ? title : `${title}: ${description}`}>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Invoice</DataTableHead>
-              <DataTableHead>Date</DataTableHead>
-              <DataTableHead align='end'>Amount</DataTableHead>
-              <DataTableHead>Status</DataTableHead>
-              {onDownload && (
-                <DataTableHead align='end'>
-                  <span className='sr-only'>Download</span>
-                </DataTableHead>
+      <Card>
+        <CardContent>
+          <section className='@container/data-table flex flex-col gap-3'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {onViewAll && (
+                <Button variant='outline' size='sm' onClick={onViewAll}>
+                  View all
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
+                  />
+                </Button>
               )}
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            <DataTableStateRows colSpan={onDownload ? 5 : 4} />
-            {!state &&
-              invoices.map((invoice) => (
-                <DataTableRow key={invoice.id}>
-                  <DataTableCell primary truncate>
-                    <span className='block truncate'>{invoice.description}</span>
-                    <Details className='text-muted-foreground block truncate text-xs font-normal tabular-nums'>
-                      {invoice.number}
-                      {invoice.detail}
-                    </Details>
-                  </DataTableCell>
-                  <DataTableCell className='text-muted-foreground whitespace-nowrap'>
-                    <time dateTime={invoice.date.toISOString()}>
-                      {formatBillingDate(invoice.date)}
-                    </time>
-                  </DataTableCell>
-                  <DataTableCell align='end'>{money(invoice.amount)}</DataTableCell>
-                  <DataTableCell>
-                    <InvoiceStatusLabel status={invoice.status} />
-                  </DataTableCell>
+            </header>
+            <DataTable caption={state ? title : `${title}: ${description}`}>
+              <DataTableHeader>
+                <DataTableRow>
+                  <DataTableHead>Invoice</DataTableHead>
+                  <DataTableHead>Date</DataTableHead>
+                  <DataTableHead align='end'>Amount</DataTableHead>
+                  <DataTableHead>Status</DataTableHead>
                   {onDownload && (
-                    <DataTableCell align='end'>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        onClick={() => onDownload(invoice.id)}
-                      >
-                        <IconPlaceholder
-                          lucide='DownloadIcon'
-                          tabler='IconDownload'
-                          hugeicons='Download01Icon'
-                          phosphor='DownloadIcon'
-                          remixicon='RiDownloadLine'
-                          aria-hidden
-                        />
-                        <span className='sr-only'>Download </span>
-                        PDF
-                        <span className='sr-only'> for {invoice.number}</span>
-                      </Button>
-                    </DataTableCell>
+                    <DataTableHead align='end'>
+                      <span className='sr-only'>Download</span>
+                    </DataTableHead>
                   )}
                 </DataTableRow>
-              ))}
-          </DataTableBody>
-        </DataTable>
-      </section>
+              </DataTableHeader>
+              <DataTableBody>
+                <DataTableStateRows colSpan={onDownload ? 5 : 4} />
+                {!state &&
+                  invoices.map((invoice) => (
+                    <DataTableRow key={invoice.id}>
+                      <DataTableCell primary truncate>
+                        <span className='block truncate'>{invoice.description}</span>
+                        <Details className='text-muted-foreground block truncate text-xs font-normal tabular-nums'>
+                          {invoice.number}
+                          {invoice.detail}
+                        </Details>
+                      </DataTableCell>
+                      <DataTableCell className='text-muted-foreground whitespace-nowrap'>
+                        <time dateTime={invoice.date.toISOString()}>
+                          {formatBillingDate(invoice.date)}
+                        </time>
+                      </DataTableCell>
+                      <DataTableCell align='end'>{money(invoice.amount)}</DataTableCell>
+                      <DataTableCell>
+                        <InvoiceStatusLabel status={invoice.status} />
+                      </DataTableCell>
+                      {onDownload && (
+                        <DataTableCell align='end'>
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => onDownload(invoice.id)}
+                          >
+                            <IconPlaceholder
+                              lucide='DownloadIcon'
+                              tabler='IconDownload'
+                              hugeicons='Download01Icon'
+                              phosphor='DownloadIcon'
+                              remixicon='RiDownloadLine'
+                              aria-hidden
+                            />
+                            <span className='sr-only'>Download </span>
+                            PDF
+                            <span className='sr-only'> for {invoice.number}</span>
+                          </Button>
+                        </DataTableCell>
+                      )}
+                    </DataTableRow>
+                  ))}
+              </DataTableBody>
+            </DataTable>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

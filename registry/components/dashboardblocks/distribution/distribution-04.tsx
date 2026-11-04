@@ -16,6 +16,8 @@ import {
 import { KPIChange, KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Distribution4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   current?: number[]
@@ -80,83 +82,86 @@ const Distribution4 = (props: Distribution4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-1 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-2'>
-          {stats.map(
-            (stat, index) =>
-              (index === 0 || (state !== 'empty' && state !== 'error')) && (
-                <div key={stat.label} className='flex flex-col gap-1'>
-                  <dt className='text-muted-foreground text-sm'>
-                    {stat.label}, {currentLabel.toLowerCase()}
-                  </dt>
-                  <dd>
-                    <KPIValue
-                      className={index === 0 ? undefined : 'text-2xl'}
-                      value={stat.now}
-                      format={formatter}
-                    />
-                  </dd>
-                  <dd>
-                    <KPIChange
-                      comparison={previousLabel.toLowerCase()}
-                      format={formatter}
-                      goodDirection={lowerIsBetter ? 'down' : 'up'}
-                      previous={stat.before}
-                      value={stat.now}
-                    />
-                  </dd>
-                </div>
-              ),
-          )}
-        </dl>
-        {state !== 'empty' && state !== 'error' && (
-          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-            <li className='flex items-center gap-1.5'>
-              <DistributionKey shape='bar' />
-              {currentLabel}
-            </li>
-            <li className='flex items-center gap-1.5'>
-              <DistributionKey color='var(--color-muted-foreground)' shape='line' />
-              {previousLabel}
-            </li>
-            <li className='flex items-center gap-1.5'>
-              <DistributionKey shape='median' />
-              Medians
-            </li>
-          </ul>
-        )}
-        <Histogram
-          aria-label={`${title} chart`}
-          bins={bins}
-          className='h-60'
-          compare={previous}
-          compareLabel={previousLabel}
-          formatEdge={formatter}
-          label={currentLabel}
-          markers={[
-            { label: currentLabel, value: median.now },
-            { label: previousLabel, value: median.before },
-          ]}
-          tickEvery={2}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description} Median ${formatter(median.now)} ${currentLabel.toLowerCase()}, ${formatter(median.before)} ${previousLabel.toLowerCase()}.`}
-          columns={[
-            { key: 'label', label: 'Range' },
-            { key: 'current', label: currentLabel },
-            { key: 'previous', label: previousLabel },
-          ]}
-          rows={current.map((count, index) => ({
-            current: formatDistributionShare(count / currentTotal),
-            label: `${formatter(edges[index])}–${formatter(edges[index + 1])}`,
-            previous: formatDistributionShare((previous[index] ?? 0) / previousTotal),
-          }))}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-1 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-2'>
+              {stats.map(
+                (stat, index) =>
+                  (index === 0 || (state !== 'empty' && state !== 'error')) && (
+                    <div key={stat.label} className='flex flex-col gap-1'>
+                      <dt className='text-muted-foreground text-sm'>
+                        {stat.label}, {currentLabel.toLowerCase()}
+                      </dt>
+                      <dd>
+                        <KPIValue
+                          className={index === 0 ? undefined : 'text-2xl'}
+                          value={stat.now}
+                          format={formatter}
+                        />
+                      </dd>
+                      <dd>
+                        <KPIChange
+                          comparison={previousLabel.toLowerCase()}
+                          goodDirection={lowerIsBetter ? 'down' : 'up'}
+                          previous={stat.before}
+                          value={stat.now}
+                        />
+                      </dd>
+                    </div>
+                  ),
+              )}
+            </dl>
+            {state !== 'empty' && state !== 'error' && (
+              <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+                <li className='flex items-center gap-1.5'>
+                  <DistributionKey shape='bar' />
+                  {currentLabel}
+                </li>
+                <li className='flex items-center gap-1.5'>
+                  <DistributionKey color='var(--color-muted-foreground)' shape='line' />
+                  {previousLabel}
+                </li>
+                <li className='flex items-center gap-1.5'>
+                  <DistributionKey shape='median' />
+                  Medians
+                </li>
+              </ul>
+            )}
+            <Histogram
+              aria-label={`${title} chart`}
+              bins={bins}
+              className='h-60'
+              compare={previous}
+              compareLabel={previousLabel}
+              formatEdge={formatter}
+              label={currentLabel}
+              markers={[
+                { label: currentLabel, value: median.now },
+                { label: previousLabel, value: median.before },
+              ]}
+              tickEvery={2}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description} Median ${formatter(median.now)} ${currentLabel.toLowerCase()}, ${formatter(median.before)} ${previousLabel.toLowerCase()}.`}
+              columns={[
+                { key: 'label', label: 'Range' },
+                { key: 'current', label: currentLabel },
+                { key: 'previous', label: previousLabel },
+              ]}
+              rows={current.map((count, index) => ({
+                current: formatDistributionShare(count / currentTotal),
+                label: `${formatter(edges[index])}–${formatter(edges[index + 1])}`,
+                previous: formatDistributionShare((previous[index] ?? 0) / previousTotal),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -18,6 +18,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface StatGroup1Props extends BlockStateProps {
   /** Follows each previous value, such as `last month`. */
   comparison: string
@@ -59,19 +61,23 @@ const StatGroup1 = (props: StatGroup1Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, metrics)}
     >
-      <section className='@container flex flex-col gap-4'>
-        <StatGroup className={getStatColumns(shown.length)}>
-          {shown.map((metric) => (
-            <Stat key={metric.key}>
-              <StatLabel>{metric.label}</StatLabel>
-              <StatValue className='text-3xl @2xl:text-4xl'>
-                {formatStatValue(metric)}
-              </StatValue>
-              <StatChange comparison={comparison} metric={metric} />
-            </Stat>
-          ))}
-        </StatGroup>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <StatGroup className={getStatColumns(shown.length)}>
+              {shown.map((metric) => (
+                <Stat key={metric.key}>
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue className='text-3xl @2xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </StatValue>
+                  <StatChange comparison={comparison} metric={metric} />
+                </Stat>
+              ))}
+            </StatGroup>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

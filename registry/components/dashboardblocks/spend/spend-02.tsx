@@ -17,6 +17,8 @@ import {
 } from '@/registry/components/dashboardblocks/spend'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface SpendLine {
   budget: number
   label: string
@@ -83,90 +85,97 @@ const Spend2 = (props: Spend2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <KPIValue
-            value={totals.spent}
-            format={(value) => formatCurrency(value, { currency })}
-          />
-          {state === 'loading' ? (
-            <BlockStateText className='text-sm' />
-          ) : state ? null : (
-            <p className='text-muted-foreground text-sm'>
-              Spent of <span className='tabular-nums'>{format(totals.budget)}</span>, on
-              pace for{' '}
-              <span className='text-foreground font-medium tabular-nums'>
-                {format(total.projected)}
-              </span>{' '}
-              by the end of the month.
-            </p>
-          )}
-        </div>
-        {state === 'loading' && <BlockStateRows className='border-t' rows={5} />}
-        {!state && (
-          <>
-            <ul className='flex flex-col border-t'>
-              {lines.map((line) => {
-                const pace = getBudgetPace({
-                  budget: line.budget,
-                  elapsed,
-                  spent: line.spent,
-                })
-                return (
-                  <li key={line.label} className='flex flex-col gap-2 border-b py-3'>
-                    <div className='flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1'>
-                      <span className='flex items-baseline gap-2 text-sm'>
-                        <span className='font-medium'>{line.label}</span>
-                        {pace.status !== 'on-track' && pace.status !== 'under' && (
-                          <BudgetStatusLabel className='text-xs' status={pace.status} />
-                        )}
-                      </span>
-                      <span className='text-muted-foreground text-sm tabular-nums'>
-                        <span className='text-foreground font-medium'>
-                          {format(line.spent)}
-                        </span>{' '}
-                        of {format(line.budget)}
-                      </span>
-                    </div>
-                    <BudgetBar
-                      budget={line.budget}
-                      projected={pace.projected}
-                      size='sm'
-                      spent={line.spent}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-          </>
-        )}
-        {state !== 'empty' && state !== 'error' && (
-          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-            <li className='flex items-center gap-1.5'>
-              <SpendKey shape='spent' />
-              Spent
-            </li>
-            <li className='flex items-center gap-1.5'>
-              <SpendKey shape='over' />
-              Over budget
-            </li>
-            <li className='flex items-center gap-1.5'>
-              <SpendKey shape='projected' />
-              Projected
-            </li>
-            <li className='flex items-center gap-1.5'>
-              <SpendKey shape='budget' />
-              Budget
-            </li>
-          </ul>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <KPIValue
+                value={totals.spent}
+                format={(value) => formatCurrency(value, { currency })}
+              />
+              {state === 'loading' ? (
+                <BlockStateText className='text-sm' />
+              ) : state ? null : (
+                <p className='text-muted-foreground text-sm'>
+                  Spent of <span className='tabular-nums'>{format(totals.budget)}</span>,
+                  on pace for{' '}
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {format(total.projected)}
+                  </span>{' '}
+                  by the end of the month.
+                </p>
+              )}
+            </div>
+            {state === 'loading' && <BlockStateRows className='border-t' rows={5} />}
+            {!state && (
+              <>
+                <ul className='flex flex-col border-t'>
+                  {lines.map((line) => {
+                    const pace = getBudgetPace({
+                      budget: line.budget,
+                      elapsed,
+                      spent: line.spent,
+                    })
+                    return (
+                      <li key={line.label} className='flex flex-col gap-2 border-b py-3'>
+                        <div className='flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1'>
+                          <span className='flex items-baseline gap-2 text-sm'>
+                            <span className='font-medium'>{line.label}</span>
+                            {pace.status !== 'on-track' && pace.status !== 'under' && (
+                              <BudgetStatusLabel
+                                className='text-xs'
+                                status={pace.status}
+                              />
+                            )}
+                          </span>
+                          <span className='text-muted-foreground text-sm tabular-nums'>
+                            <span className='text-foreground font-medium'>
+                              {format(line.spent)}
+                            </span>{' '}
+                            of {format(line.budget)}
+                          </span>
+                        </div>
+                        <BudgetBar
+                          budget={line.budget}
+                          projected={pace.projected}
+                          size='sm'
+                          spent={line.spent}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </>
+            )}
+            {state !== 'empty' && state !== 'error' && (
+              <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+                <li className='flex items-center gap-1.5'>
+                  <SpendKey shape='spent' />
+                  Spent
+                </li>
+                <li className='flex items-center gap-1.5'>
+                  <SpendKey shape='over' />
+                  Over budget
+                </li>
+                <li className='flex items-center gap-1.5'>
+                  <SpendKey shape='projected' />
+                  Projected
+                </li>
+                <li className='flex items-center gap-1.5'>
+                  <SpendKey shape='budget' />
+                  Budget
+                </li>
+              </ul>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

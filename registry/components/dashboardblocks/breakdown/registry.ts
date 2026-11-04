@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'breakdown-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('kpi'),
@@ -28,6 +29,7 @@ export const examples: Registry['items'] = [
     name: 'breakdown-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('table'),
@@ -50,6 +52,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('chart'),
@@ -73,6 +76,8 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      registryUrl('change-amount'),
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('chart'),

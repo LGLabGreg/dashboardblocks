@@ -20,6 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface UsageMeter2Props extends BlockStateProps {
   limit: number
   title: string
@@ -46,38 +48,42 @@ const UsageMeter2 = (props: UsageMeter2Props) => {
       errorMessage={errorMessage}
       state={getBlockState(blockStatus, props.used)}
     >
-      <section className='@container flex items-center gap-6 border-t pt-4 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
-        <Ring
-          ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}
-          className='size-24'
-          percentage={Math.min(100, share)}
-          ringColor={usageStatusConfig[status].color}
-          strokeWidth={8}
-        >
-          <AnimatedNumber
-            className='text-2xl font-light tracking-tight tabular-nums'
-            value={Math.round(share)}
-            formatter={(value) =>
-              formatPercent(value / 100, { maximumFractionDigits: 0 })
-            }
-          />
-        </Ring>
-        <div className='flex min-w-0 flex-col gap-1'>
-          <p className='text-muted-foreground text-sm'>{title}</p>
-          <div className='flex flex-wrap items-baseline gap-x-1.5'>
-            <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
-            <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
-          </div>
-          <BlockReady className='text-sm'>
-            <Details className='text-muted-foreground block text-sm'>
-              <span>
-                <span className='tabular-nums'>{formatUsage(free, unit)}</span> free
-              </span>
-              {status !== 'ok' && <UsageStatusLabel variant='text' status={status} />}
-            </Details>
-          </BlockReady>
-        </div>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex items-center gap-6 border-t pt-4 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
+            <Ring
+              ariaLabel={`${formatPercent(share / 100, { maximumFractionDigits: 0 })} of ${title.toLowerCase()} used`}
+              className='size-24'
+              percentage={Math.min(100, share)}
+              ringColor={usageStatusConfig[status].color}
+              strokeWidth={8}
+            >
+              <AnimatedNumber
+                className='text-2xl font-light tracking-tight tabular-nums'
+                value={Math.round(share)}
+                formatter={(value) =>
+                  formatPercent(value / 100, { maximumFractionDigits: 0 })
+                }
+              />
+            </Ring>
+            <div className='flex min-w-0 flex-col gap-1'>
+              <p className='text-muted-foreground text-sm'>{title}</p>
+              <div className='flex flex-wrap items-baseline gap-x-1.5'>
+                <UsageMeterValue>{formatUsage(used, unit)}</UsageMeterValue>
+                <UsageMeterLimit>of {formatUsage(limit, unit)}</UsageMeterLimit>
+              </div>
+              <BlockReady className='text-sm'>
+                <Details className='text-muted-foreground block text-sm'>
+                  <span>
+                    <span className='tabular-nums'>{formatUsage(free, unit)}</span> free
+                  </span>
+                  {status !== 'ok' && <UsageStatusLabel variant='text' status={status} />}
+                </Details>
+              </BlockReady>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

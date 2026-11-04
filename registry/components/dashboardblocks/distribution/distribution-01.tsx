@@ -19,6 +19,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Distribution1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   bins?: DistributionBin[]
@@ -73,91 +75,104 @@ const Distribution1 = (props: Distribution1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-3 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-4'>
-          {limit && (
-            <div className='col-span-3 flex flex-col gap-1 @md:col-span-1'>
-              <dt className='text-muted-foreground text-sm'>Over the {limit.label}</dt>
-              <dd>
-                <KPIValue
-                  value={over}
-                  format={(value) => formatPercent(value, { minimumFractionDigits: 1 })}
-                />
-              </dd>
-              <BlockReady className='text-xs'>
-                <dd className='text-muted-foreground text-xs'>
-                  of {formatNumber(total)} {unit} took over {formatter(limit.value)}
-                </dd>
-              </BlockReady>
-            </div>
-          )}
-          {percentiles.map(
-            (percentile, index) =>
-              (!blank || (!limit && index === 0)) && (
-                <div key={percentile.label} className='flex flex-col gap-1'>
-                  <dt className='text-muted-foreground text-sm'>{percentile.label}</dt>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-3 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-4'>
+              {limit && (
+                <div className='col-span-3 flex flex-col gap-1 @md:col-span-1'>
+                  <dt className='text-muted-foreground text-sm'>
+                    Over the {limit.label}
+                  </dt>
                   <dd>
                     <KPIValue
-                      className={limit || index > 0 ? 'text-2xl' : undefined}
-                      value={percentile.value}
-                      format={formatter}
+                      value={over}
+                      format={(value) =>
+                        formatPercent(value, { minimumFractionDigits: 1 })
+                      }
                     />
                   </dd>
+                  <BlockReady className='text-xs'>
+                    <dd className='text-muted-foreground text-xs'>
+                      of {formatNumber(total)} {unit} took over {formatter(limit.value)}
+                    </dd>
+                  </BlockReady>
                 </div>
-              ),
-          )}
-        </dl>
-        {!blank && (
-          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-            <li className='flex items-center gap-1.5'>
-              <DistributionKey shape='bar' />
-              {unit.charAt(0).toUpperCase()}
-              {unit.slice(1)}
-            </li>
-            {limit && (
-              <li className='flex items-center gap-1.5'>
-                <DistributionKey color={DISTRIBUTION_THRESHOLD_COLOR} shape='bar' />
-                Over the {limit.label}
-              </li>
+              )}
+              {percentiles.map(
+                (percentile, index) =>
+                  (!blank || (!limit && index === 0)) && (
+                    <div key={percentile.label} className='flex flex-col gap-1'>
+                      <dt className='text-muted-foreground text-sm'>
+                        {percentile.label}
+                      </dt>
+                      <dd>
+                        <KPIValue
+                          className={limit || index > 0 ? 'text-2xl' : undefined}
+                          value={percentile.value}
+                          format={formatter}
+                        />
+                      </dd>
+                    </div>
+                  ),
+              )}
+            </dl>
+            {!blank && (
+              <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+                <li className='flex items-center gap-1.5'>
+                  <DistributionKey shape='bar' />
+                  {unit.charAt(0).toUpperCase()}
+                  {unit.slice(1)}
+                </li>
+                {limit && (
+                  <li className='flex items-center gap-1.5'>
+                    <DistributionKey color={DISTRIBUTION_THRESHOLD_COLOR} shape='bar' />
+                    Over the {limit.label}
+                  </li>
+                )}
+                <li className='flex items-center gap-1.5'>
+                  <DistributionKey shape='median' />
+                  Percentiles
+                </li>
+              </ul>
             )}
-            <li className='flex items-center gap-1.5'>
-              <DistributionKey shape='median' />
-              Percentiles
-            </li>
-          </ul>
-        )}
-        <Histogram
-          aria-label={`${title} chart`}
-          bins={bins}
-          className='h-64'
-          formatEdge={formatter}
-          markers={percentiles}
-          threshold={
-            limit
-              ? { label: `${limit.label} ${formatter(limit.value)}`, value: limit.value }
-              : undefined
-          }
-          tickEvery={2}
-          unit={unit}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description} p50 ${formatter(percentiles[0].value)}, p95 ${formatter(percentiles[1].value)}, p99 ${formatter(percentiles[2].value)}.`}
-          columns={[
-            { key: 'label', label: 'Response time' },
-            { key: 'count', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
-            { key: 'share', label: 'Share' },
-          ]}
-          rows={bins.map((bin) => ({
-            count: formatNumber(bin.count),
-            label: range(bin),
-            share: formatDistributionShare(bin.count / (total || 1)),
-          }))}
-        />
-      </section>
+            <Histogram
+              aria-label={`${title} chart`}
+              bins={bins}
+              className='h-64'
+              formatEdge={formatter}
+              markers={percentiles}
+              threshold={
+                limit
+                  ? {
+                      label: `${limit.label} ${formatter(limit.value)}`,
+                      value: limit.value,
+                    }
+                  : undefined
+              }
+              tickEvery={2}
+              unit={unit}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description} p50 ${formatter(percentiles[0].value)}, p95 ${formatter(percentiles[1].value)}, p99 ${formatter(percentiles[2].value)}.`}
+              columns={[
+                { key: 'label', label: 'Response time' },
+                { key: 'count', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
+                { key: 'share', label: 'Share' },
+              ]}
+              rows={bins.map((bin) => ({
+                count: formatNumber(bin.count),
+                label: range(bin),
+                share: formatDistributionShare(bin.count / (total || 1)),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

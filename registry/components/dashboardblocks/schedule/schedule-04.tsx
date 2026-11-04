@@ -24,6 +24,8 @@ import {
 import { dayIn, formatDate, zonedParts } from '@/registry/lib/dashboardblocks/format'
 import { useRef, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Schedule4Props extends BlockStateProps {
@@ -57,7 +59,13 @@ const exampleProps: Schedule4Props = {
     name: calendar,
   })),
   events: [
-    { ...CALENDARS.team, end: at(0, 9, 15), id: 'w1', start: at(0, 9), title: 'Standup' },
+    {
+      ...CALENDARS.team,
+      end: at(0, 9, 15),
+      id: 'w1',
+      start: at(0, 9),
+      title: 'Standup',
+    },
     {
       ...CALENDARS.product,
       end: at(0, 10, 30),
@@ -79,7 +87,13 @@ const exampleProps: Schedule4Props = {
       start: at(0, 15),
       title: 'Focus time',
     },
-    { ...CALENDARS.team, end: at(1, 9, 15), id: 'w5', start: at(1, 9), title: 'Standup' },
+    {
+      ...CALENDARS.team,
+      end: at(1, 9, 15),
+      id: 'w5',
+      start: at(1, 9),
+      title: 'Standup',
+    },
     {
       ...CALENDARS.team,
       end: at(1, 13),
@@ -94,7 +108,13 @@ const exampleProps: Schedule4Props = {
       start: at(1, 15, 30),
       title: 'Acme QBR',
     },
-    { ...CALENDARS.team, end: at(2, 9, 15), id: 'w8', start: at(2, 9), title: 'Standup' },
+    {
+      ...CALENDARS.team,
+      end: at(2, 9, 15),
+      id: 'w8',
+      start: at(2, 9),
+      title: 'Standup',
+    },
     {
       ...CALENDARS.product,
       end: at(2, 11),
@@ -252,195 +272,218 @@ const Schedule4 = (props: Schedule4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {totalEvents} {totalEvents === 1 ? 'event' : 'events'} in the next 7 days,{' '}
-              {totalBooked === 0 ? 'nothing' : booked(totalBooked)} booked.
-              {busiest.booked > 0 && (
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {totalEvents} {totalEvents === 1 ? 'event' : 'events'} in the next 7
+                  days, {totalBooked === 0 ? 'nothing' : booked(totalBooked)} booked.
+                  {busiest.booked > 0 && (
+                    <>
+                      {' '}
+                      The busiest day is {dayName(busiest.day, days.indexOf(busiest))},
+                      with {booked(busiest.booked)} of meetings.
+                    </>
+                  )}
+                </p>
+              </BlockReady>
+            </header>
+            <div ref={frame} className='relative flex flex-col gap-2 border-t pt-3'>
+              <div
+                aria-hidden
+                className='text-muted-foreground grid grid-cols-1 text-xs tabular-nums @lg:grid-cols-[5rem_minmax(0,1fr)_11rem] @lg:gap-x-3'
+              >
+                <div className='relative h-4 @lg:col-start-2'>
+                  {ticks.map((hour) => (
+                    <span
+                      key={hour}
+                      className={cn(
+                        'absolute -translate-x-1/2',
+                        hour === startHour && 'translate-x-0',
+                        hour === endHour && '-translate-x-full',
+                      )}
+                      style={{
+                        left: `${(((hour - startHour) * 60) / range) * 100}%`,
+                      }}
+                    >
+                      {formatHour(hour)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              {state === 'loading' && (
                 <>
-                  {' '}
-                  The busiest day is {dayName(busiest.day, days.indexOf(busiest))}, with{' '}
-                  {booked(busiest.booked)} of meetings.
+                  <span className='sr-only'>Loading</span>
+                  <ChartPlaceholder height={272} />
                 </>
               )}
-            </p>
-          </BlockReady>
-        </header>
-        <div ref={frame} className='relative flex flex-col gap-2 border-t pt-3'>
-          <div
-            aria-hidden
-            className='text-muted-foreground grid grid-cols-1 text-xs tabular-nums @lg:grid-cols-[5rem_minmax(0,1fr)_11rem] @lg:gap-x-3'
-          >
-            <div className='relative h-4 @lg:col-start-2'>
-              {ticks.map((hour) => (
-                <span
-                  key={hour}
-                  className={cn(
-                    'absolute -translate-x-1/2',
-                    hour === startHour && 'translate-x-0',
-                    hour === endHour && '-translate-x-full',
-                  )}
-                  style={{ left: `${(((hour - startHour) * 60) / range) * 100}%` }}
-                >
-                  {formatHour(hour)}
-                </span>
-              ))}
-            </div>
-          </div>
-          {state === 'loading' && (
-            <>
-              <span className='sr-only'>Loading</span>
-              <ChartPlaceholder height={272} />
-            </>
-          )}
-          {state && state !== 'loading' && <BlockStateText className='py-2.5 text-sm' />}
-          {!state && (
-            <ol className='flex flex-col gap-3 @lg:gap-2'>
-              {days.map(({ allDay, booked: minutes, day, key, lanes }, index) => {
-                const laneCount = Math.max(1, ...lanes.map(({ lane }) => lane + 1))
-                const count = lanes.length + allDay.length
-                return (
-                  <li
-                    key={key}
-                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 @lg:grid-cols-[5rem_minmax(0,1fr)_11rem]'
-                  >
-                    <h3 className='min-w-0 text-sm'>
-                      <span aria-hidden className='font-medium'>
-                        {index === 0
-                          ? 'Today'
-                          : `${formatDate(day, 'weekday')} ${day.getUTCDate()}`}
-                      </span>
-                      <span className='sr-only'>
-                        {index === 0 && 'Today, '}
-                        {formatDate(day, 'weekday-long-day')}
-                      </span>
-                      {allDay.map((event) => (
-                        <span
-                          key={event.id}
-                          className='text-muted-foreground block truncate text-xs'
-                        >
-                          {event.title} (all day)
-                        </span>
-                      ))}
-                    </h3>
-                    <p className='text-muted-foreground flex justify-end gap-3 text-sm whitespace-nowrap tabular-nums @lg:order-last'>
-                      {count === 0
-                        ? 'No events'
-                        : `${count} ${count === 1 ? 'event' : 'events'}`}
-                      {count > 0 && (
-                        <span className='hidden w-20 text-right @lg:inline'>
-                          <span className='sr-only'>, </span>
-                          {booked(minutes)}
-                        </span>
-                      )}
-                    </p>
-                    <div
-                      className='bg-muted/30 relative col-span-2 rounded-md @lg:col-span-1'
-                      style={{ height: `calc(${laneCount} * 1.5rem + 0.5rem)` }}
-                    >
-                      {ticks.slice(1, -1).map((hour) => (
-                        <span
-                          key={hour}
-                          aria-hidden
-                          className='bg-border absolute inset-y-0 w-px'
-                          style={{
-                            left: `${(((hour - startHour) * 60) / range) * 100}%`,
-                          }}
-                        />
-                      ))}
-                      <ul>
-                        {lanes.map(({ event, lane }) => {
-                          const left = Math.min(98, position(event.start))
-                          const width = Math.max(
-                            2,
-                            position(event.end ?? event.start) - left,
-                          )
-                          const ended = (event.end ?? event.start) <= now
-                          const minutes =
-                            ((event.end ?? event.start).getTime() -
-                              event.start.getTime()) /
-                            60_000
-                          return (
-                            <li
+              {state && state !== 'loading' && (
+                <BlockStateText className='py-2.5 text-sm' />
+              )}
+              {!state && (
+                <ol className='flex flex-col gap-3 @lg:gap-2'>
+                  {days.map(({ allDay, booked: minutes, day, key, lanes }, index) => {
+                    const laneCount = Math.max(1, ...lanes.map(({ lane }) => lane + 1))
+                    const count = lanes.length + allDay.length
+                    return (
+                      <li
+                        key={key}
+                        className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 @lg:grid-cols-[5rem_minmax(0,1fr)_11rem]'
+                      >
+                        <h3 className='min-w-0 text-sm'>
+                          <span aria-hidden className='font-medium'>
+                            {index === 0
+                              ? 'Today'
+                              : `${formatDate(day, 'weekday')} ${day.getUTCDate()}`}
+                          </span>
+                          <span className='sr-only'>
+                            {index === 0 && 'Today, '}
+                            {formatDate(day, 'weekday-long-day')}
+                          </span>
+                          {allDay.map((event) => (
+                            <span
                               key={event.id}
-                              onPointerEnter={(pointer) =>
-                                show(event, pointer.currentTarget)
-                              }
-                              onPointerDown={(pointer) =>
-                                show(event, pointer.currentTarget)
-                              }
-                              onPointerLeave={() => setHovered(null)}
-                              className={cn(
-                                'absolute flex h-5 items-center overflow-hidden rounded-sm border-s-2 px-1 text-xs leading-none font-medium',
-                                ended && 'text-muted-foreground',
-                              )}
-                              style={{
-                                ...getEventStyle(event, ended, 'var(--color-background)'),
-                                left: `${left}%`,
-                                top: `calc(${lane} * 1.5rem + 0.25rem)`,
-                                width: `${width}%`,
-                              }}
+                              className='text-muted-foreground block truncate text-xs'
                             >
-                              <span className='sr-only'>
-                                {formatTimeRange(event.start, event.end, timeZone)}
-                                {event.calendar && `, ${event.calendar}`}
-                                {ended && ', ended'}:{' '}
-                              </span>
-                              <span
-                                className={cn(
-                                  'truncate',
-                                  minutes < 60 && 'sr-only',
-                                  minutes < 120 && '@max-md:sr-only',
-                                )}
-                              >
-                                {event.title}
-                              </span>
-                            </li>
-                          )
-                        })}
-                      </ul>
-                      {index === 0 && nowPosition > 0 && nowPosition < 100 && (
-                        <span
-                          aria-hidden
-                          className='bg-foreground ring-background absolute -inset-y-1 w-0.5 -translate-x-1/2 rounded-full ring-2'
-                          style={{ left: `${nowPosition}%` }}
-                        />
-                      )}
-                    </div>
+                              {event.title} (all day)
+                            </span>
+                          ))}
+                        </h3>
+                        <p className='text-muted-foreground flex justify-end gap-3 text-sm whitespace-nowrap tabular-nums @lg:order-last'>
+                          {count === 0
+                            ? 'No events'
+                            : `${count} ${count === 1 ? 'event' : 'events'}`}
+                          {count > 0 && (
+                            <span className='hidden w-20 text-right @lg:inline'>
+                              <span className='sr-only'>, </span>
+                              {booked(minutes)}
+                            </span>
+                          )}
+                        </p>
+                        <div
+                          className='bg-muted/30 relative col-span-2 rounded-md @lg:col-span-1'
+                          style={{
+                            height: `calc(${laneCount} * 1.5rem + 0.5rem)`,
+                          }}
+                        >
+                          {ticks.slice(1, -1).map((hour) => (
+                            <span
+                              key={hour}
+                              aria-hidden
+                              className='bg-border absolute inset-y-0 w-px'
+                              style={{
+                                left: `${(((hour - startHour) * 60) / range) * 100}%`,
+                              }}
+                            />
+                          ))}
+                          <ul>
+                            {lanes.map(({ event, lane }) => {
+                              const left = Math.min(98, position(event.start))
+                              const width = Math.max(
+                                2,
+                                position(event.end ?? event.start) - left,
+                              )
+                              const ended = (event.end ?? event.start) <= now
+                              const minutes =
+                                ((event.end ?? event.start).getTime() -
+                                  event.start.getTime()) /
+                                60_000
+                              return (
+                                <li
+                                  key={event.id}
+                                  onPointerEnter={(pointer) =>
+                                    show(event, pointer.currentTarget)
+                                  }
+                                  onPointerDown={(pointer) =>
+                                    show(event, pointer.currentTarget)
+                                  }
+                                  onPointerLeave={() => setHovered(null)}
+                                  className={cn(
+                                    'absolute flex h-5 items-center overflow-hidden rounded-sm border-s-2 px-1 text-xs leading-none font-medium',
+                                    ended && 'text-muted-foreground',
+                                  )}
+                                  style={{
+                                    ...getEventStyle(
+                                      event,
+                                      ended,
+                                      'var(--color-background)',
+                                    ),
+                                    left: `${left}%`,
+                                    top: `calc(${lane} * 1.5rem + 0.25rem)`,
+                                    width: `${width}%`,
+                                  }}
+                                >
+                                  <span className='sr-only'>
+                                    {formatTimeRange(event.start, event.end, timeZone)}
+                                    {event.calendar && `, ${event.calendar}`}
+                                    {ended && ', ended'}:{' '}
+                                  </span>
+                                  <span
+                                    className={cn(
+                                      'truncate',
+                                      minutes < 60 && 'sr-only',
+                                      minutes < 120 && '@max-md:sr-only',
+                                    )}
+                                  >
+                                    {event.title}
+                                  </span>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                          {index === 0 && nowPosition > 0 && nowPosition < 100 && (
+                            <span
+                              aria-hidden
+                              className='bg-foreground ring-background absolute -inset-y-1 w-0.5 -translate-x-1/2 rounded-full ring-2'
+                              style={{ left: `${nowPosition}%` }}
+                            />
+                          )}
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ol>
+              )}
+              {!state && hovered && (
+                <ChartFloatingTooltip
+                  active
+                  flip={hovered.flip}
+                  x={hovered.x}
+                  y={hovered.y}
+                >
+                  <span className='font-medium'>{hovered.event.title}</span>
+                  <ChartTooltipItem
+                    color={hovered.event.color ?? 'var(--color-chart-2)'}
+                    name={hovered.event.calendar}
+                    value={formatTimeRange(
+                      hovered.event.start,
+                      hovered.event.end,
+                      timeZone,
+                    )}
+                  />
+                </ChartFloatingTooltip>
+              )}
+            </div>
+            {!state && (
+              <ul className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs'>
+                {calendars.map((calendar) => (
+                  <li key={calendar.name} className='flex items-center gap-1.5'>
+                    <EventSwatch color={calendar.color} />
+                    {calendar.name}
                   </li>
-                )
-              })}
-            </ol>
-          )}
-          {!state && hovered && (
-            <ChartFloatingTooltip active flip={hovered.flip} x={hovered.x} y={hovered.y}>
-              <span className='font-medium'>{hovered.event.title}</span>
-              <ChartTooltipItem
-                color={hovered.event.color ?? 'var(--color-chart-2)'}
-                name={hovered.event.calendar}
-                value={formatTimeRange(hovered.event.start, hovered.event.end, timeZone)}
-              />
-            </ChartFloatingTooltip>
-          )}
-        </div>
-        {!state && (
-          <ul className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs'>
-            {calendars.map((calendar) => (
-              <li key={calendar.name} className='flex items-center gap-1.5'>
-                <EventSwatch color={calendar.color} />
-                {calendar.name}
-              </li>
-            ))}
-            <li aria-hidden className='flex items-center gap-1.5'>
-              <span className='bg-foreground h-3 w-0.5 rounded-full' />
-              Now
-            </li>
-          </ul>
-        )}
-      </section>
+                ))}
+                <li aria-hidden className='flex items-center gap-1.5'>
+                  <span className='bg-foreground h-3 w-0.5 rounded-full' />
+                  Now
+                </li>
+              </ul>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -45,6 +45,7 @@ import {
 } from 'recharts'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Reading {
   label: string
@@ -112,197 +113,212 @@ const Alerts2 = (props: Alerts2Props) => {
   const gap = formatter(Math.abs(current - threshold))
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <div className='flex flex-wrap items-baseline gap-x-2'>
-              <h2 className='font-semibold tracking-tight'>{title}</h2>
-              {!state && (
-                <SeverityLabel severity={acknowledged ? 'resolved' : severity}>
-                  {acknowledged ? 'Acknowledged' : undefined}
-                </SeverityLabel>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-wrap items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <div className='flex flex-wrap items-baseline gap-x-2'>
+                  <h2 className='font-semibold tracking-tight'>{title}</h2>
+                  {!state && (
+                    <SeverityLabel severity={acknowledged ? 'resolved' : severity}>
+                      {acknowledged ? 'Acknowledged' : undefined}
+                    </SeverityLabel>
+                  )}
+                </div>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              <div className='flex flex-wrap gap-2'>
+                {runbookHref && (
+                  <a
+                    href={runbookHref}
+                    className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+                  >
+                    <IconPlaceholder
+                      lucide='BookOpenIcon'
+                      tabler='IconBook'
+                      hugeicons='BookOpen02Icon'
+                      phosphor='BookOpenIcon'
+                      remixicon='RiBookOpenLine'
+                    />
+                    Runbook
+                  </a>
+                )}
+                <Button
+                  variant='outline'
+                  size='sm'
+                  disabled={Boolean(state) || acknowledged}
+                  onClick={() => setAcknowledged(true)}
+                >
+                  {acknowledged ? 'Acknowledged' : 'Acknowledge'}
+                </Button>
+              </div>
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-[1fr_auto_auto]'>
+              <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
+                <dt className='text-muted-foreground text-sm'>{metric} now</dt>
+                <dd>
+                  <KPIValue format={formatter} value={current} />
+                </dd>
+                {state === 'loading' && (
+                  <dd className='text-sm'>
+                    <SkeletonText className='w-48' />
+                  </dd>
+                )}
+                {!state && (
+                  <dd className='text-muted-foreground text-sm'>
+                    <span
+                      className={
+                        breached
+                          ? 'font-medium text-red-700 dark:text-red-400'
+                          : 'font-medium text-emerald-700 dark:text-emerald-400'
+                      }
+                    >
+                      {gap} {breached ? 'above' : 'below'}
+                    </span>{' '}
+                    the {formatter(threshold)} threshold
+                  </dd>
+                )}
+              </div>
+              {state !== 'error' && state !== 'empty' && (
+                <>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Peak</dt>
+                    <dd>
+                      <KPIValue className='text-2xl' format={formatter} value={highest} />
+                    </dd>
+                  </div>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Threshold</dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        format={formatter}
+                        value={threshold}
+                      />
+                    </dd>
+                  </div>
+                </>
               )}
-            </div>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          <div className='flex flex-wrap gap-2'>
-            {runbookHref && (
-              <a
-                href={runbookHref}
-                className={buttonVariants({ size: 'sm', variant: 'ghost' })}
-              >
-                <IconPlaceholder
-                  lucide='BookOpenIcon'
-                  tabler='IconBook'
-                  hugeicons='BookOpen02Icon'
-                  phosphor='BookOpenIcon'
-                  remixicon='RiBookOpenLine'
-                />
-                Runbook
-              </a>
-            )}
-            <Button
-              variant='outline'
-              size='sm'
-              disabled={Boolean(state) || acknowledged}
-              onClick={() => setAcknowledged(true)}
-            >
-              {acknowledged ? 'Acknowledged' : 'Acknowledge'}
-            </Button>
-          </div>
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @md:grid-cols-[1fr_auto_auto]'>
-          <div className='col-span-2 flex flex-col gap-1 @md:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>{metric} now</dt>
-            <dd>
-              <KPIValue format={formatter} value={current} />
-            </dd>
-            {state === 'loading' && (
-              <dd className='text-sm'>
-                <SkeletonText className='w-48' />
-              </dd>
+            </dl>
+            {state && <ChartPlaceholder height={208} />}
+            {!state && (
+              <ChartPanelFigure className='h-52'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <ComposedChart
+                    aria-label={`${metric} over the last hour`}
+                    data={readings}
+                    margin={{ top: 8, right: 16, bottom: 0, left: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id={`${id}-stroke`} x1='0' x2='0' y1='0' y2='1'>
+                        <stop offset={clamp(strokeSplit)} stopColor={BREACH_COLOR} />
+                        <stop
+                          offset={clamp(strokeSplit)}
+                          stopColor={BREACH_COLOR}
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient id={`${id}-fill`} x1='0' x2='0' y1='0' y2='1'>
+                        <stop offset={0} stopColor={BREACH_COLOR} stopOpacity={0.3} />
+                        <stop
+                          offset={clamp(fillSplit)}
+                          stopColor={BREACH_COLOR}
+                          stopOpacity={0.15}
+                        />
+                        <stop
+                          offset={clamp(fillSplit)}
+                          stopColor='var(--color-chart-2)'
+                          stopOpacity={0.2}
+                        />
+                        <stop
+                          offset={1}
+                          stopColor='var(--color-chart-2)'
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid {...chartGridProps} />
+                    <XAxis
+                      {...chartAxisProps}
+                      dataKey='label'
+                      interval='preserveStartEnd'
+                      minTickGap={40}
+                    />
+                    <YAxis
+                      {...chartAxisProps}
+                      domain={[0, yMax]}
+                      tickFormatter={(value: number) => formatter(value)}
+                      width={chartValueAxisWidth}
+                    />
+                    <ReferenceArea
+                      y1={threshold}
+                      y2={yMax}
+                      fill={BREACH_COLOR}
+                      fillOpacity={0.05}
+                      ifOverflow='hidden'
+                    />
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={threshold}
+                      stroke={BREACH_COLOR}
+                      strokeOpacity={1}
+                      label={{
+                        ...chartReferenceLabel,
+                        position: 'insideTopLeft',
+                        value: `Threshold ${formatter(threshold)}`,
+                      }}
+                    />
+                    <Tooltip
+                      content={(tooltipProps) => (
+                        <ChartTooltipContent
+                          {...tooltipProps}
+                          valueFormatter={formatter}
+                        />
+                      )}
+                      cursor={chartLineCursor}
+                    />
+                    <Area
+                      activeDot={chartActiveDot}
+                      dataKey='value'
+                      dot={chartLastDot(
+                        readings.length,
+                        breached ? BREACH_COLOR : 'var(--color-chart-2)',
+                      )}
+                      fill={`url(#${id}-fill)`}
+                      name={metric}
+                      stroke='var(--color-chart-2)'
+                      strokeWidth={2}
+                      type='monotone'
+                    />
+                    <Line
+                      activeDot={false}
+                      dataKey='value'
+                      dot={false}
+                      stroke={`url(#${id}-stroke)`}
+                      strokeWidth={2}
+                      tooltipType='none'
+                      type='monotone'
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </ChartPanelFigure>
             )}
             {!state && (
-              <dd className='text-muted-foreground text-sm'>
-                <span
-                  className={
-                    breached
-                      ? 'font-medium text-red-700 dark:text-red-400'
-                      : 'font-medium text-emerald-700 dark:text-emerald-400'
-                  }
-                >
-                  {gap} {breached ? 'above' : 'below'}
-                </span>{' '}
-                the {formatter(threshold)} threshold
-              </dd>
+              <ChartPanelTable
+                caption={`${metric} over the last hour. Threshold ${formatter(threshold)}.`}
+                columns={[
+                  { key: 'label', label: 'Time' },
+                  { format: formatter, key: 'value', label: metric },
+                ]}
+                rows={readings}
+              />
             )}
-          </div>
-          {state !== 'error' && state !== 'empty' && (
-            <>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Peak</dt>
-                <dd>
-                  <KPIValue className='text-2xl' format={formatter} value={highest} />
-                </dd>
-              </div>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Threshold</dt>
-                <dd>
-                  <KPIValue className='text-2xl' format={formatter} value={threshold} />
-                </dd>
-              </div>
-            </>
-          )}
-        </dl>
-        {state && <ChartPlaceholder height={208} />}
-        {!state && (
-          <ChartPanelFigure className='h-52'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <ComposedChart
-                aria-label={`${metric} over the last hour`}
-                data={readings}
-                margin={{ top: 8, right: 16, bottom: 0, left: 0 }}
-              >
-                <defs>
-                  <linearGradient id={`${id}-stroke`} x1='0' x2='0' y1='0' y2='1'>
-                    <stop offset={clamp(strokeSplit)} stopColor={BREACH_COLOR} />
-                    <stop
-                      offset={clamp(strokeSplit)}
-                      stopColor={BREACH_COLOR}
-                      stopOpacity={0}
-                    />
-                  </linearGradient>
-                  <linearGradient id={`${id}-fill`} x1='0' x2='0' y1='0' y2='1'>
-                    <stop offset={0} stopColor={BREACH_COLOR} stopOpacity={0.3} />
-                    <stop
-                      offset={clamp(fillSplit)}
-                      stopColor={BREACH_COLOR}
-                      stopOpacity={0.15}
-                    />
-                    <stop
-                      offset={clamp(fillSplit)}
-                      stopColor='var(--color-chart-2)'
-                      stopOpacity={0.2}
-                    />
-                    <stop offset={1} stopColor='var(--color-chart-2)' stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid {...chartGridProps} />
-                <XAxis
-                  {...chartAxisProps}
-                  dataKey='label'
-                  interval='preserveStartEnd'
-                  minTickGap={40}
-                />
-                <YAxis
-                  {...chartAxisProps}
-                  domain={[0, yMax]}
-                  tickFormatter={(value: number) => formatter(value)}
-                  width={chartValueAxisWidth}
-                />
-                <ReferenceArea
-                  y1={threshold}
-                  y2={yMax}
-                  fill={BREACH_COLOR}
-                  fillOpacity={0.05}
-                  ifOverflow='hidden'
-                />
-                <ReferenceLine
-                  {...chartReferenceProps}
-                  y={threshold}
-                  stroke={BREACH_COLOR}
-                  strokeOpacity={1}
-                  label={{
-                    ...chartReferenceLabel,
-                    position: 'insideTopLeft',
-                    value: `Threshold ${formatter(threshold)}`,
-                  }}
-                />
-                <Tooltip
-                  content={(tooltipProps) => (
-                    <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
-                  )}
-                  cursor={chartLineCursor}
-                />
-                <Area
-                  activeDot={chartActiveDot}
-                  dataKey='value'
-                  dot={chartLastDot(
-                    readings.length,
-                    breached ? BREACH_COLOR : 'var(--color-chart-2)',
-                  )}
-                  fill={`url(#${id}-fill)`}
-                  name={metric}
-                  stroke='var(--color-chart-2)'
-                  strokeWidth={2}
-                  type='monotone'
-                />
-                <Line
-                  activeDot={false}
-                  dataKey='value'
-                  dot={false}
-                  stroke={`url(#${id}-stroke)`}
-                  strokeWidth={2}
-                  tooltipType='none'
-                  type='monotone'
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-        )}
-        {!state && (
-          <ChartPanelTable
-            caption={`${metric} over the last hour. Threshold ${formatter(threshold)}.`}
-            columns={[
-              { key: 'label', label: 'Time' },
-              { format: formatter, key: 'value', label: metric },
-            ]}
-            rows={readings}
-          />
-        )}
-      </section>
-    </BlockStateProvider>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -21,6 +21,8 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Goals1Props extends BlockStateProps {
@@ -75,109 +77,117 @@ const Goals1 = (props: Goals1Props) => {
   const shortfall = target - pace.projected
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>
-              {formatDateRange({ end, start })}, with {daysLeft}{' '}
-              {daysLeft === 1 ? 'day' : 'days'} to go.
-            </p>
-          </div>
-          {!state && <PaceLabel className='mt-0.5' status={pace.status} />}
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <div className='flex flex-wrap items-baseline gap-x-2'>
-            <KPIValue value={props.current} format={formatter} />
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>
+                  {formatDateRange({ end, start })}, with {daysLeft}{' '}
+                  {daysLeft === 1 ? 'day' : 'days'} to go.
+                </p>
+              </div>
+              {!state && <PaceLabel className='mt-0.5' status={pace.status} />}
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <div className='flex flex-wrap items-baseline gap-x-2'>
+                <KPIValue value={props.current} format={formatter} />
+                {(!state || state === 'loading') && (
+                  <span className='text-muted-foreground text-sm tabular-nums'>
+                    of {formatter(target)}
+                  </span>
+                )}
+              </div>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {formatPercent(share, { maximumFractionDigits: 0 })}
+                  </span>{' '}
+                  of the target,{' '}
+                  <span
+                    className={cn(
+                      'font-medium tabular-nums',
+                      gap >= 0
+                        ? 'text-emerald-700 dark:text-emerald-400'
+                        : 'text-orange-700 dark:text-orange-400',
+                    )}
+                  >
+                    {formatter(Math.abs(gap))} {gap >= 0 ? 'ahead of' : 'behind'}
+                  </span>{' '}
+                  where a steady pace would be today.
+                </p>
+              </BlockReady>
+            </div>
+            <div className='flex flex-col gap-2.5'>
+              <GoalProgress
+                current={current}
+                expected={pace.status === 'met' ? undefined : pace.expected}
+                projected={pace.projected}
+                target={target}
+              />
+              <div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
+                <GoalProgressKey label='So far' shape='progress' />
+                <GoalProgressKey label='At this pace' shape='projected' />
+                {pace.status !== 'met' && <GoalProgressKey />}
+              </div>
+            </div>
             {(!state || state === 'loading') && (
-              <span className='text-muted-foreground text-sm tabular-nums'>
-                of {formatter(target)}
-              </span>
+              <dl className='grid grid-cols-2 gap-4 border-t pt-4'>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>
+                    Projected at this pace
+                  </dt>
+                  <dd>
+                    <KPIValue
+                      className='text-2xl'
+                      value={pace.projected}
+                      format={formatter}
+                    />
+                  </dd>
+                  <dd
+                    className={cn(
+                      'text-xs tabular-nums',
+                      shortfall > 0
+                        ? 'font-medium text-orange-700 dark:text-orange-400'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    <BlockReady>
+                      {shortfall > 0
+                        ? `${formatter(shortfall)} short of the target`
+                        : `${formatter(-shortfall)} over the target`}
+                    </BlockReady>
+                  </dd>
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>
+                    Left to reach the target
+                  </dt>
+                  <dd>
+                    <KPIValue
+                      className='text-2xl'
+                      value={Math.max(0, target - current)}
+                      format={formatter}
+                    />
+                  </dd>
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    <BlockReady>
+                      {current >= target
+                        ? 'Target reached'
+                        : daysLeft > 0
+                          ? `${formatter((target - current) / daysLeft)} a day to get there`
+                          : 'No days left'}
+                    </BlockReady>
+                  </dd>
+                </div>
+              </dl>
             )}
-          </div>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              <span className='text-foreground font-medium tabular-nums'>
-                {formatPercent(share, { maximumFractionDigits: 0 })}
-              </span>{' '}
-              of the target,{' '}
-              <span
-                className={cn(
-                  'font-medium tabular-nums',
-                  gap >= 0
-                    ? 'text-emerald-700 dark:text-emerald-400'
-                    : 'text-orange-700 dark:text-orange-400',
-                )}
-              >
-                {formatter(Math.abs(gap))} {gap >= 0 ? 'ahead of' : 'behind'}
-              </span>{' '}
-              where a steady pace would be today.
-            </p>
-          </BlockReady>
-        </div>
-        <div className='flex flex-col gap-2.5'>
-          <GoalProgress
-            current={current}
-            expected={pace.status === 'met' ? undefined : pace.expected}
-            projected={pace.projected}
-            target={target}
-          />
-          <div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
-            <GoalProgressKey label='So far' shape='progress' />
-            <GoalProgressKey label='At this pace' shape='projected' />
-            {pace.status !== 'met' && <GoalProgressKey />}
-          </div>
-        </div>
-        {(!state || state === 'loading') && (
-          <dl className='grid grid-cols-2 gap-4 border-t pt-4'>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Projected at this pace</dt>
-              <dd>
-                <KPIValue
-                  className='text-2xl'
-                  value={pace.projected}
-                  format={formatter}
-                />
-              </dd>
-              <dd
-                className={cn(
-                  'text-xs tabular-nums',
-                  shortfall > 0
-                    ? 'font-medium text-orange-700 dark:text-orange-400'
-                    : 'text-muted-foreground',
-                )}
-              >
-                <BlockReady>
-                  {shortfall > 0
-                    ? `${formatter(shortfall)} short of the target`
-                    : `${formatter(-shortfall)} over the target`}
-                </BlockReady>
-              </dd>
-            </div>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Left to reach the target</dt>
-              <dd>
-                <KPIValue
-                  className='text-2xl'
-                  value={Math.max(0, target - current)}
-                  format={formatter}
-                />
-              </dd>
-              <dd className='text-muted-foreground text-xs tabular-nums'>
-                <BlockReady>
-                  {current >= target
-                    ? 'Target reached'
-                    : daysLeft > 0
-                      ? `${formatter((target - current) / daysLeft)} a day to get there`
-                      : 'No days left'}
-                </BlockReady>
-              </dd>
-            </div>
-          </dl>
-        )}
-      </section>
-    </BlockStateProvider>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

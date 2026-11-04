@@ -19,6 +19,8 @@ import {
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface DailyValue {
   label: string
   value: number
@@ -74,41 +76,40 @@ const BarChartKPI1 = (props: BarChartKPI1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <KPI>
-        <KPIContent className='gap-3'>
-          <div className='flex flex-col gap-1'>
-            <KPITitle>{title}</KPITitle>
-            <KPIValue value={total} format={format} animated />
-            <KPIChange
-              comparison={comparison}
-              format={format}
-              previous={previous}
-              value={total}
-            />
-          </div>
-          <KPIChart label={describeSeries(`${title} by day`, data, format)}>
-            <TinyBarChart
-              accessibilityLayer={false}
-              bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
-              data={data}
-              formatter={getKPIFormatter(compactFormat(format))}
-              height={height}
-              highlightIndex={best}
-              reference={{
-                label: `avg ${formatter(Math.round(total / data.length))}`,
-                value: total / data.length,
-              }}
-              xAxisKey='label'
-            />
-          </KPIChart>
-          <BlockReady className='text-xs'>
-            <p className='text-muted-foreground text-xs'>
-              {data[best]?.label} was the best day, at {formatter(data[best]?.value ?? 0)}
-              .
-            </p>
-          </BlockReady>
-        </KPIContent>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-3'>
+              <div className='flex flex-col gap-1'>
+                <KPITitle>{title}</KPITitle>
+                <KPIValue value={total} format={format} animated />
+                <KPIChange comparison={comparison} previous={previous} value={total} />
+              </div>
+              <KPIChart label={describeSeries(`${title} by day`, data, format)}>
+                <TinyBarChart
+                  accessibilityLayer={false}
+                  bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
+                  data={data}
+                  formatter={getKPIFormatter(compactFormat(format))}
+                  height={height}
+                  highlightIndex={best}
+                  reference={{
+                    label: `avg ${formatter(Math.round(total / data.length))}`,
+                    value: total / data.length,
+                  }}
+                  xAxisKey='label'
+                />
+              </KPIChart>
+              <BlockReady className='text-xs'>
+                <p className='text-muted-foreground text-xs'>
+                  {data[best]?.label} was the best day, at{' '}
+                  {formatter(data[best]?.value ?? 0)}.
+                </p>
+              </BlockReady>
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -30,7 +30,7 @@ interface UseAnimatedNumberOptions {
   easing?: keyof typeof easings | EasingFunction
   /** @default 0 */
   from?: number
-  /** From 0 to 1, 0.1 by default. */
+  /** From 0 to 1, 0.5 by default. */
   threshold?: number
   /** @default '0px' */
   rootMargin?: string
@@ -47,7 +47,7 @@ export function useAnimatedNumber(to: number, options: UseAnimatedNumberOptions 
     from = 0,
     reanimateOnView = false,
     rootMargin = '0px',
-    threshold = 1.0,
+    threshold = 0.5,
   } = options
 
   const [value, setValue] = useState(from)

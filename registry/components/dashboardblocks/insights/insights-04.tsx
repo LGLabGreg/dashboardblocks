@@ -16,6 +16,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -99,75 +100,79 @@ const Insights4 = (props: Insights4Props) => {
   }
 
   return (
-    <BlockStateProvider
-      errorMessage={errorMessage}
-      state={getBlockState(status, takeaways)}
-    >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{headline}</h2>
-          <p className='text-muted-foreground text-sm'>{period}</p>
-        </header>
-        <BlockStateRows className='border-y' rows={3} />
-        {!unavailable && (
-          <ol className='flex flex-col divide-y border-y'>
-            {takeaways.map((takeaway, index) => (
-              <li key={index} className='flex flex-col gap-1 py-3'>
-                <InsightLabel className='text-xs' kind={takeaway.kind} />
-                <InsightText segments={takeaway.segments} />
-              </li>
-            ))}
-          </ol>
-        )}
-        <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
-          <p id={promptId} className='text-muted-foreground text-sm'>
-            Was this digest helpful?
-          </p>
-          <div role='group' aria-labelledby={promptId} className='flex gap-2'>
-            {feedbackOptions.map((option) => {
-              const pressed = feedback === option.value
-              return (
-                <Button
-                  key={option.value}
-                  variant='outline'
-                  size='sm'
-                  aria-pressed={pressed}
-                  disabled={unavailable}
-                  onClick={() => choose(option.value)}
-                  className='aria-pressed:border-foreground/30 aria-pressed:bg-muted'
-                >
-                  {option.value === 'helpful' ? (
-                    <IconPlaceholder
-                      lucide='ThumbsUpIcon'
-                      tabler='IconThumbUp'
-                      hugeicons='ThumbsUpIcon'
-                      phosphor='ThumbsUpIcon'
-                      remixicon='RiThumbUpLine'
-                      data-icon='inline-start'
-                      className={cn(pressed && 'fill-current')}
-                    />
-                  ) : (
-                    <IconPlaceholder
-                      lucide='ThumbsDownIcon'
-                      tabler='IconThumbDown'
-                      hugeicons='ThumbsDownIcon'
-                      phosphor='ThumbsDownIcon'
-                      remixicon='RiThumbDownLine'
-                      data-icon='inline-start'
-                      className={cn(pressed && 'fill-current')}
-                    />
-                  )}
-                  {option.label}
-                </Button>
-              )
-            })}
-          </div>
-          <p role='status' className='sr-only'>
-            {announcement}
-          </p>
-        </div>
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, takeaways)}
+        >
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{headline}</h2>
+              <p className='text-muted-foreground text-sm'>{period}</p>
+            </header>
+            <BlockStateRows className='border-y' rows={3} />
+            {!unavailable && (
+              <ol className='flex flex-col divide-y border-y'>
+                {takeaways.map((takeaway, index) => (
+                  <li key={index} className='flex flex-col gap-1 py-3'>
+                    <InsightLabel className='text-xs' kind={takeaway.kind} />
+                    <InsightText segments={takeaway.segments} />
+                  </li>
+                ))}
+              </ol>
+            )}
+            <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+              <p id={promptId} className='text-muted-foreground text-sm'>
+                Was this digest helpful?
+              </p>
+              <div role='group' aria-labelledby={promptId} className='flex gap-2'>
+                {feedbackOptions.map((option) => {
+                  const pressed = feedback === option.value
+                  return (
+                    <Button
+                      key={option.value}
+                      variant='outline'
+                      size='sm'
+                      aria-pressed={pressed}
+                      disabled={unavailable}
+                      onClick={() => choose(option.value)}
+                      className='aria-pressed:border-foreground/30 aria-pressed:bg-muted'
+                    >
+                      {option.value === 'helpful' ? (
+                        <IconPlaceholder
+                          lucide='ThumbsUpIcon'
+                          tabler='IconThumbUp'
+                          hugeicons='ThumbsUpIcon'
+                          phosphor='ThumbsUpIcon'
+                          remixicon='RiThumbUpLine'
+                          data-icon='inline-start'
+                          className={cn(pressed && 'fill-current')}
+                        />
+                      ) : (
+                        <IconPlaceholder
+                          lucide='ThumbsDownIcon'
+                          tabler='IconThumbDown'
+                          hugeicons='ThumbsDownIcon'
+                          phosphor='ThumbsDownIcon'
+                          remixicon='RiThumbDownLine'
+                          data-icon='inline-start'
+                          className={cn(pressed && 'fill-current')}
+                        />
+                      )}
+                      {option.label}
+                    </Button>
+                  )
+                })}
+              </div>
+              <p role='status' className='sr-only'>
+                {announcement}
+              </p>
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

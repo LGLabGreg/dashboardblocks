@@ -7,8 +7,6 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { KPI1, type KPI1Props } from '@/registry/components/dashboardblocks/kpi/kpi-01'
 
-import { Card, CardContent } from '@/components/ui/card'
-
 interface KPI5Props extends BlockStateProps {
   /** One card each, in order. A metric without a `value` shows its card's empty state. */
   metrics: (Omit<KPI1Props, keyof BlockStateProps> & { key: string })[]
@@ -54,11 +52,7 @@ const KPI5 = ({ errorMessage, metrics, status }: KPI5Props) => (
     <section className='@container'>
       <div className='grid gap-4 @xl:grid-cols-2 @5xl:grid-cols-4'>
         {metrics.map(({ key, ...metric }) => (
-          <Card key={key}>
-            <CardContent>
-              <KPI1 {...metric} errorMessage={errorMessage} status={status} />
-            </CardContent>
-          </Card>
+          <KPI1 key={key} {...metric} errorMessage={errorMessage} status={status} />
         ))}
       </div>
     </section>

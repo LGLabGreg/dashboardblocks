@@ -21,6 +21,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface States1Props {
   /** Follows the change, such as `the previous 30 days`. */
@@ -79,38 +80,42 @@ const States1 = (props: States1Props) => {
 
   return (
     <BlockStateProvider state={getBlockState(status, data)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          <Button
-            variant='outline'
-            size='sm'
-            disabled={loading}
-            onClick={() => void reload({ clear: true })}
-          >
-            <IconPlaceholder
-              lucide='RefreshCwIcon'
-              tabler='IconRefresh'
-              hugeicons='RefreshIcon'
-              phosphor='ArrowClockwiseIcon'
-              remixicon='RiRefreshLine'
-            />
-            Reload
-          </Button>
-        </header>
-        <StatGroup className='@xl:grid-cols-3'>
-          {shown.map((metric) => (
-            <Stat key={metric.key}>
-              <StatLabel>{metric.label}</StatLabel>
-              <StatValue>{formatStatValue(metric)}</StatValue>
-              <StatChange comparison={comparison} metric={metric} variant='short' />
-            </Stat>
-          ))}
-        </StatGroup>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={loading}
+                onClick={() => void reload({ clear: true })}
+              >
+                <IconPlaceholder
+                  lucide='RefreshCwIcon'
+                  tabler='IconRefresh'
+                  hugeicons='RefreshIcon'
+                  phosphor='ArrowClockwiseIcon'
+                  remixicon='RiRefreshLine'
+                />
+                Reload
+              </Button>
+            </header>
+            <StatGroup className='@xl:grid-cols-3'>
+              {shown.map((metric) => (
+                <Stat key={metric.key}>
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue>{formatStatValue(metric)}</StatValue>
+                  <StatChange comparison={comparison} metric={metric} variant='short' />
+                </Stat>
+              ))}
+            </StatGroup>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

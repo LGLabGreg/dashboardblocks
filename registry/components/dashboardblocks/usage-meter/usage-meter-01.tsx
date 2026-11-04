@@ -21,6 +21,8 @@ import {
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface UsageMeter1Props extends BlockStateProps {
@@ -75,68 +77,72 @@ const UsageMeter1 = (props: UsageMeter1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
-        <header className='flex items-baseline justify-between gap-3'>
-          <p className='text-muted-foreground text-sm'>{title}</p>
-          <UsageStatusLabel status={status} />
-        </header>
-        <div className='flex flex-wrap items-baseline gap-x-2'>
-          <UsageMeterValue>{formatUsage(used)}</UsageMeterValue>
-          <UsageMeterLimit>
-            of {formatUsage(limit)} {unit}
-          </UsageMeterLimit>
-        </div>
-        <UsageBar limit={limit} projected={projected} used={used} />
-        <BlockReady className='text-xs'>
-          <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs'>
-            <span className='tabular-nums'>
-              {formatUsage(Math.max(0, limit - used))} left
-            </span>
-            <span>
-              Resets{' '}
-              <time dateTime={periodEnd.toISOString()}>
-                {formatDate(periodEnd, 'day', timeZone)}
-              </time>
-              , in {daysToReset} {daysToReset === 1 ? 'day' : 'days'}
-            </span>
-          </p>
-        </BlockReady>
-        {state !== 'empty' && state !== 'error' && (
-          <div className='border-t pt-3'>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>
-                <UsageKey
-                  className='mr-2'
-                  color={usageStatusConfig[hitsLimit ? 'over' : status].color}
-                  shape='projected'
-                />
-                On pace for{' '}
-                <span
-                  className={cn(
-                    'font-medium tabular-nums',
-                    hitsLimit
-                      ? statusToneClasses[usageStatusConfig.over.tone]
-                      : 'text-foreground',
-                  )}
-                >
-                  {formatUsage(Math.round(projected))} {unit}
-                </span>{' '}
-                by the reset.
-                {hitsLimit && (
-                  <>
-                    {' '}
-                    At this rate you reach the limit around{' '}
-                    <time dateTime={limitDate.toISOString()}>
-                      {formatDate(limitDate, 'day', timeZone)}
-                    </time>
-                    .
-                  </>
-                )}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
+            <header className='flex items-baseline justify-between gap-3'>
+              <p className='text-muted-foreground text-sm'>{title}</p>
+              <UsageStatusLabel status={status} />
+            </header>
+            <div className='flex flex-wrap items-baseline gap-x-2'>
+              <UsageMeterValue>{formatUsage(used)}</UsageMeterValue>
+              <UsageMeterLimit>
+                of {formatUsage(limit)} {unit}
+              </UsageMeterLimit>
+            </div>
+            <UsageBar limit={limit} projected={projected} used={used} />
+            <BlockReady className='text-xs'>
+              <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs'>
+                <span className='tabular-nums'>
+                  {formatUsage(Math.max(0, limit - used))} left
+                </span>
+                <span>
+                  Resets{' '}
+                  <time dateTime={periodEnd.toISOString()}>
+                    {formatDate(periodEnd, 'day', timeZone)}
+                  </time>
+                  , in {daysToReset} {daysToReset === 1 ? 'day' : 'days'}
+                </span>
               </p>
             </BlockReady>
-          </div>
-        )}
-      </section>
+            {state !== 'empty' && state !== 'error' && (
+              <div className='border-t pt-3'>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>
+                    <UsageKey
+                      className='mr-2'
+                      color={usageStatusConfig[hitsLimit ? 'over' : status].color}
+                      shape='projected'
+                    />
+                    On pace for{' '}
+                    <span
+                      className={cn(
+                        'font-medium tabular-nums',
+                        hitsLimit
+                          ? statusToneClasses[usageStatusConfig.over.tone]
+                          : 'text-foreground',
+                      )}
+                    >
+                      {formatUsage(Math.round(projected))} {unit}
+                    </span>{' '}
+                    by the reset.
+                    {hitsLimit && (
+                      <>
+                        {' '}
+                        At this rate you reach the limit around{' '}
+                        <time dateTime={limitDate.toISOString()}>
+                          {formatDate(limitDate, 'day', timeZone)}
+                        </time>
+                        .
+                      </>
+                    )}
+                  </p>
+                </BlockReady>
+              </div>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

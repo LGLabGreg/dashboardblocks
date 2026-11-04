@@ -19,6 +19,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatDate, formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Heatmap3Props extends BlockStateProps {
   /** One value per day, oldest first, ending on `endDate`. Leave out, or pass none, to show the empty state. */
   daily?: number[]
@@ -99,57 +101,61 @@ const Heatmap3 = (props: Heatmap3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, daily)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <StatGroup className='grid-cols-2 @xl:grid-cols-3'>
-          <Stat className='col-span-2 @xl:col-span-1'>
-            <StatLabel>Total {unit}</StatLabel>
-            <StatValue>{formatNumber(total)}</StatValue>
-          </Stat>
-          <Stat className='justify-end'>
-            <StatLabel>Busiest day</StatLabel>
-            <StatValue className='text-2xl'>
-              {formatNumber(daily[busiest] ?? 0)}
-              <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
-                on {formatDate(busiestDate, 'day')}
-              </span>
-            </StatValue>
-          </Stat>
-          <Stat className='justify-end'>
-            <StatLabel>Longest run</StatLabel>
-            <StatValue className='text-2xl'>
-              {formatNumber(getLongestRun(daily))}
-              <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
-                days in a row
-              </span>
-            </StatValue>
-          </Stat>
-        </StatGroup>
-        <HeatmapGrid
-          minWidth='40rem'
-          cellClassName='aspect-square min-h-0'
-          cellName={({ column, row }) =>
-            `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}`
-          }
-          columns={columns}
-          describe={({ column, row }, value) =>
-            `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}: ${value === null ? 'no data' : `${formatNumber(value)} ${unit}`}`
-          }
-          footer={<HeatmapLegend />}
-          label={`${title}: ${unit} per day over the last ${WEEKS} weeks`}
-          rowHeader='Day'
-          rowLabelClassName='h-0 min-h-full leading-none'
-          rowNames={DAY_NAMES}
-          rows={ROW_LABELS}
-          valueName={unitName}
-          values={values}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <StatGroup className='grid-cols-2 @xl:grid-cols-3'>
+              <Stat className='col-span-2 @xl:col-span-1'>
+                <StatLabel>Total {unit}</StatLabel>
+                <StatValue>{formatNumber(total)}</StatValue>
+              </Stat>
+              <Stat className='justify-end'>
+                <StatLabel>Busiest day</StatLabel>
+                <StatValue className='text-2xl'>
+                  {formatNumber(daily[busiest] ?? 0)}
+                  <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
+                    on {formatDate(busiestDate, 'day')}
+                  </span>
+                </StatValue>
+              </Stat>
+              <Stat className='justify-end'>
+                <StatLabel>Longest run</StatLabel>
+                <StatValue className='text-2xl'>
+                  {formatNumber(getLongestRun(daily))}
+                  <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
+                    days in a row
+                  </span>
+                </StatValue>
+              </Stat>
+            </StatGroup>
+            <HeatmapGrid
+              minWidth='40rem'
+              cellClassName='aspect-square min-h-0'
+              cellName={({ column, row }) =>
+                `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}`
+              }
+              columns={columns}
+              describe={({ column, row }, value) =>
+                `${DAY_NAMES[row]}, ${formatDate(dateAt(row, column), 'date')}: ${value === null ? 'no data' : `${formatNumber(value)} ${unit}`}`
+              }
+              footer={<HeatmapLegend />}
+              label={`${title}: ${unit} per day over the last ${WEEKS} weeks`}
+              rowHeader='Day'
+              rowLabelClassName='h-0 min-h-full leading-none'
+              rowNames={DAY_NAMES}
+              rows={ROW_LABELS}
+              valueName={unitName}
+              values={values}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

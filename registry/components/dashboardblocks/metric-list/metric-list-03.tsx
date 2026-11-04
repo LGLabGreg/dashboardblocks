@@ -17,6 +17,8 @@ import {
   getTargetStatus,
 } from '@/registry/components/dashboardblocks/metric-list'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface TargetMetric extends Omit<Metric, 'history' | 'previous'> {
   domain?: [number, number]
   /** A floor when `goodDirection` is `up` (the default), a ceiling when it is `down`. */
@@ -92,70 +94,76 @@ const MetricList3 = (props: MetricList3Props) => {
   const missed = statuses.filter((status) => status === 'missed').length
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {description}{' '}
-              <span className='tabular-nums'>
-                {met} of {metrics.length}
-              </span>{' '}
-              on target
-              {missed > 0 && (
-                <>
-                  , <span className='tabular-nums'>{missed}</span> off it
-                </>
-              )}
-              .
-            </p>
-          </BlockReady>
-        </header>
-        <BlockStateRows
-          className='border-t data-[slot=block-state-rows]:border-b'
-          rows={5}
-        />
-        {!state && (
-          <MetricList className='border-y'>
-            {metrics.map((metric, index) => {
-              const floor = (metric.goodDirection ?? 'up') === 'up'
-              return (
-                <li
-                  key={metric.key}
-                  className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-2.5 @xl:grid-cols-[minmax(0,1fr)_minmax(5rem,8rem)_6.5rem_6.5rem] @xl:gap-x-4'
-                >
-                  <span className='col-start-1 row-start-1 text-sm'>{metric.label}</span>
-                  <MetricTargetBar
-                    className='col-span-2 row-start-2 @xl:col-span-1 @xl:col-start-2 @xl:row-start-1'
-                    domain={metric.domain}
-                    target={metric.target}
-                    value={metric.value}
-                  />
-                  <p className='col-span-2 row-start-3 flex items-baseline gap-1.5 text-xs whitespace-nowrap tabular-nums @xl:col-span-1 @xl:col-start-3 @xl:row-start-1 @xl:flex-col @xl:items-end @xl:gap-0'>
-                    <span className='text-sm font-medium'>
-                      {formatMetricValue(metric, metric.value)}
-                    </span>
-                    <span className='text-muted-foreground'>
-                      Target <span aria-hidden>{floor ? '≥' : '≤'}</span>
-                      <span className='sr-only'>
-                        {floor ? 'at least' : 'at most'}
-                      </span>{' '}
-                      {formatMetricValue(metric, metric.target)}
-                    </span>
-                  </p>
-                  <TargetStatusLabel
-                    className='col-start-2 row-start-1 justify-self-end text-xs @xl:col-start-4'
-                    status={statuses[index]}
-                  />
-                </li>
-              )
-            })}
-          </MetricList>
-        )}
-        {state !== 'empty' && state !== 'error' && <MetricTargetKey />}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {description}{' '}
+                  <span className='tabular-nums'>
+                    {met} of {metrics.length}
+                  </span>{' '}
+                  on target
+                  {missed > 0 && (
+                    <>
+                      , <span className='tabular-nums'>{missed}</span> off it
+                    </>
+                  )}
+                  .
+                </p>
+              </BlockReady>
+            </header>
+            <BlockStateRows
+              className='border-t data-[slot=block-state-rows]:border-b'
+              rows={5}
+            />
+            {!state && (
+              <MetricList className='border-y'>
+                {metrics.map((metric, index) => {
+                  const floor = (metric.goodDirection ?? 'up') === 'up'
+                  return (
+                    <li
+                      key={metric.key}
+                      className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-2.5 @xl:grid-cols-[minmax(0,1fr)_minmax(5rem,8rem)_6.5rem_6.5rem] @xl:gap-x-4'
+                    >
+                      <span className='col-start-1 row-start-1 text-sm'>
+                        {metric.label}
+                      </span>
+                      <MetricTargetBar
+                        className='col-span-2 row-start-2 @xl:col-span-1 @xl:col-start-2 @xl:row-start-1'
+                        domain={metric.domain}
+                        target={metric.target}
+                        value={metric.value}
+                      />
+                      <p className='col-span-2 row-start-3 flex items-baseline gap-1.5 text-xs whitespace-nowrap tabular-nums @xl:col-span-1 @xl:col-start-3 @xl:row-start-1 @xl:flex-col @xl:items-end @xl:gap-0'>
+                        <span className='text-sm font-medium'>
+                          {formatMetricValue(metric, metric.value)}
+                        </span>
+                        <span className='text-muted-foreground'>
+                          Target <span aria-hidden>{floor ? '≥' : '≤'}</span>
+                          <span className='sr-only'>
+                            {floor ? 'at least' : 'at most'}
+                          </span>{' '}
+                          {formatMetricValue(metric, metric.target)}
+                        </span>
+                      </p>
+                      <TargetStatusLabel
+                        className='col-start-2 row-start-1 justify-self-end text-xs @xl:col-start-4'
+                        status={statuses[index]}
+                      />
+                    </li>
+                  )
+                })}
+              </MetricList>
+            )}
+            {state !== 'empty' && state !== 'error' && <MetricTargetKey />}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

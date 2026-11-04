@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/metric-list'
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface MetricList1Props extends BlockStateProps {
   /** Follows the previous value in each change, such as `the 14 days before`. */
   comparison: string
@@ -111,35 +113,39 @@ const MetricList1 = (props: MetricList1Props) => {
   }).length
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              <span className='tabular-nums'>
-                {improved} of {metrics.length}
-              </span>{' '}
-              improved in the {period}, against {comparison}.
-            </p>
-          </BlockReady>
-        </header>
-        <BlockStateRows className='border-t' rows={6} />
-        {!state && (
-          <MetricList className='border-t'>
-            {metrics.map((metric) => (
-              <MetricRow
-                key={metric.key}
-                comparison={comparison}
-                labels={labels}
-                metric={metric}
-                period={period}
-              />
-            ))}
-          </MetricList>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  <span className='tabular-nums'>
+                    {improved} of {metrics.length}
+                  </span>{' '}
+                  improved in the {period}, against {comparison}.
+                </p>
+              </BlockReady>
+            </header>
+            <BlockStateRows className='border-t' rows={6} />
+            {!state && (
+              <MetricList className='border-t'>
+                {metrics.map((metric) => (
+                  <MetricRow
+                    key={metric.key}
+                    comparison={comparison}
+                    labels={labels}
+                    metric={metric}
+                    period={period}
+                  />
+                ))}
+              </MetricList>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

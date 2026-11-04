@@ -14,6 +14,8 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface KPI3Props extends BlockStateProps {
   /** Use `points` for rates, so the change reads in percentage points; 'percent' by default. */
   changeType?: 'percent' | 'points'
@@ -55,33 +57,36 @@ const KPI3 = (props: KPI3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <KPI>
-        <KPIContent className='gap-1'>
-          <KPITitle>{title}</KPITitle>
-          <div className='flex flex-wrap items-end gap-x-6 gap-y-1'>
-            <div className='flex flex-col'>
-              <KPIValue value={value} format={format} animated />
-              <span className='text-muted-foreground text-xs'>{currentLabel}</span>
-            </div>
-            {(state === undefined || state === 'loading') && (
-              <div className='text-muted-foreground flex flex-col pb-px'>
-                <KPIValue className='text-2xl' value={previous} format={format} />
-                <span className='text-xs first-letter:uppercase'>{comparison}</span>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-1'>
+              <KPITitle>{title}</KPITitle>
+              <div className='flex flex-wrap items-end gap-x-6 gap-y-1'>
+                <div className='flex flex-col'>
+                  <KPIValue value={value} format={format} animated />
+                  <span className='text-muted-foreground text-xs'>{currentLabel}</span>
+                </div>
+                {(state === undefined || state === 'loading') && (
+                  <div className='text-muted-foreground flex flex-col pb-px'>
+                    <KPIValue className='text-2xl' value={previous} format={format} />
+                    <span className='text-xs first-letter:uppercase'>{comparison}</span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <KPIChange
-            className='mt-2'
-            changeType={changeType}
-            comparison={comparison}
-            format={format}
-            goodDirection={goodDirection}
-            previous={previous}
-            value={value}
-            variant='short'
-          />
-        </KPIContent>
-      </KPI>
+              <KPIChange
+                className='mt-2'
+                changeType={changeType}
+                comparison={comparison}
+                goodDirection={goodDirection}
+                previous={previous}
+                value={value}
+                variant='short'
+              />
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -10,6 +10,7 @@ export const examples: Registry['items'] = [
     description:
       'A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown-01'),
       registryUrl('chart-panel-01'),
@@ -40,6 +41,7 @@ export const examples: Registry['items'] = [
     description:
       'A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.',
     registryDependencies: [
+      'card',
       registryUrl('billing-01'),
       registryUrl('block-state'),
       registryUrl('dashboard-header'),
@@ -98,7 +100,6 @@ export const examples: Registry['items'] = [
     description:
       'A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.',
     registryDependencies: [
-      'card',
       registryUrl('activity-feed-01'),
       registryUrl('block-state'),
       registryUrl('chart-panel-04'),

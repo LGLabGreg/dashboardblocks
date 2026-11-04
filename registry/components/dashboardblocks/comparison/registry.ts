@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'comparison-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('format'),
       registryUrl('kpi'),
       registryUrl('table'),
@@ -28,6 +29,7 @@ export const examples: Registry['items'] = [
     name: 'comparison-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('comparison'),
       registryUrl('details'),
       registryUrl('format'),
@@ -50,6 +52,7 @@ export const examples: Registry['items'] = [
     name: 'comparison-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('comparison'),
       registryUrl('format'),
       registryUrl('kpi'),
@@ -71,6 +74,7 @@ export const examples: Registry['items'] = [
     name: 'comparison-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('comparison'),
       registryUrl('format'),
       registryUrl('kpi'),

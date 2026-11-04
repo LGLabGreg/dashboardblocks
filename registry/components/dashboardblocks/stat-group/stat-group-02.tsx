@@ -24,6 +24,8 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface SparklineMetric extends StatMetric {
   /** One value per day, oldest first. */
   history: number[]
@@ -134,36 +136,40 @@ const StatGroup2 = (props: StatGroup2Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, metrics)}
     >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <StatGroup className='grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-4'>
-          {shown.map((metric) => (
-            <Stat
-              key={metric.key}
-              className='grid grid-cols-[minmax(0,1fr)_6rem] content-start gap-x-4 gap-y-1 @md:grid-cols-1'
-            >
-              <StatLabel>{metric.label}</StatLabel>
-              <StatValue className='text-3xl @4xl:text-4xl'>
-                {formatStatValue(metric)}
-              </StatValue>
-              <StatChange comparison={comparison} metric={metric} variant='short' />
-              <dd className='col-start-2 row-span-3 row-start-1 self-center @md:col-start-1 @md:row-span-1 @md:row-start-4 @md:mt-3'>
-                <StatSparkline
-                  data={metric.history}
-                  formatter={metric.formatter}
-                  label={describeHistory(metric)}
-                  labels={daysAgo(metric.history.length)}
-                />
-              </dd>
-            </Stat>
-          ))}
-        </StatGroup>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <StatGroup className='grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-4'>
+              {shown.map((metric) => (
+                <Stat
+                  key={metric.key}
+                  className='grid grid-cols-[minmax(0,1fr)_6rem] content-start gap-x-4 gap-y-1 @md:grid-cols-1'
+                >
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue className='text-3xl @4xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </StatValue>
+                  <StatChange comparison={comparison} metric={metric} variant='short' />
+                  <dd className='col-start-2 row-span-3 row-start-1 self-center @md:col-start-1 @md:row-span-1 @md:row-start-4 @md:mt-3'>
+                    <StatSparkline
+                      data={metric.history}
+                      formatter={metric.formatter}
+                      label={describeHistory(metric)}
+                      labels={daysAgo(metric.history.length)}
+                    />
+                  </dd>
+                </Stat>
+              ))}
+            </StatGroup>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

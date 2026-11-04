@@ -19,6 +19,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Notifications1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
@@ -136,62 +137,66 @@ const Notifications1 = (props: Notifications1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex items-center justify-between gap-3'>
-        <h2 className='font-semibold tracking-tight'>{title}</h2>
-        <NotificationBell unreadCount={unread}>
-          <NotificationsHeader
-            description={
-              <BlockReady>
-                {unread > 0 ? `${unread} unread.` : 'You’re all caught up.'}
-              </BlockReady>
-            }
-            action={
-              unread > 0 && (
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() =>
-                    markRead(notifications.map((notification) => notification.id))
-                  }
-                >
-                  <IconPlaceholder
-                    lucide='CheckCheckIcon'
-                    tabler='IconChecks'
-                    hugeicons='TickDouble02Icon'
-                    phosphor='ChecksIcon'
-                    remixicon='RiCheckDoubleLine'
-                    data-icon='inline-start'
-                  />
-                  Mark all as read
-                </Button>
-              )
-            }
-          />
-          {state && (
-            <div className='border-y px-4'>
-              <BlockStateRows rows={4} />
-            </div>
-          )}
-          {!state && (
-            <NotificationList className='max-h-96 overflow-y-auto border-y'>
-              {notifications.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  notification={notification}
-                  now={now}
-                  onOpen={() => markRead([notification.id])}
-                />
-              ))}
-            </NotificationList>
-          )}
-          <Link
-            href={viewAllHref}
-            className='hover:bg-muted/50 focus-visible:bg-muted/50 rounded-b-[inherit] px-4 py-2.5 text-center text-sm font-medium outline-none'
-          >
-            View all notifications
-          </Link>
-        </NotificationBell>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex items-center justify-between gap-3'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <NotificationBell unreadCount={unread}>
+              <NotificationsHeader
+                description={
+                  <BlockReady>
+                    {unread > 0 ? `${unread} unread.` : 'You’re all caught up.'}
+                  </BlockReady>
+                }
+                action={
+                  unread > 0 && (
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() =>
+                        markRead(notifications.map((notification) => notification.id))
+                      }
+                    >
+                      <IconPlaceholder
+                        lucide='CheckCheckIcon'
+                        tabler='IconChecks'
+                        hugeicons='TickDouble02Icon'
+                        phosphor='ChecksIcon'
+                        remixicon='RiCheckDoubleLine'
+                        data-icon='inline-start'
+                      />
+                      Mark all as read
+                    </Button>
+                  )
+                }
+              />
+              {state && (
+                <div className='border-y px-4'>
+                  <BlockStateRows rows={4} />
+                </div>
+              )}
+              {!state && (
+                <NotificationList className='max-h-96 overflow-y-auto border-y'>
+                  {notifications.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                      now={now}
+                      onOpen={() => markRead([notification.id])}
+                    />
+                  ))}
+                </NotificationList>
+              )}
+              <Link
+                href={viewAllHref}
+                className='hover:bg-muted/50 focus-visible:bg-muted/50 rounded-b-[inherit] px-4 py-2.5 text-center text-sm font-medium outline-none'
+              >
+                View all notifications
+              </Link>
+            </NotificationBell>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

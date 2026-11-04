@@ -25,6 +25,8 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Region {
   code: string
   /** Share of requests that failed, as a percentage. */
@@ -112,63 +114,69 @@ const Status4 = (props: Status4Props) => {
   const slowest = Math.max(...regions.map((region) => region.latency), 0)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container/data-table flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <DataTable caption={title} className='border-t'>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Region</DataTableHead>
-              <DataTableHead>Status</DataTableHead>
-              <DataTableHead>p95 latency</DataTableHead>
-              <DataTableHead align='end'>Errors</DataTableHead>
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            <DataTableStateRows colSpan={4} rows={5} />
-            {!state &&
-              regions.map((region) => (
-                <DataTableRow key={region.code}>
-                  <DataTableRowHead primary>
-                    <span className='block'>{region.name}</span>
-                    <span className='text-muted-foreground block font-mono text-xs font-normal'>
-                      {region.code}
-                    </span>
-                  </DataTableRowHead>
-                  <DataTableCell>
-                    <StatusIndicator status={region.status} />
-                  </DataTableCell>
-                  <DataTableCell className='w-2/5'>
-                    <span className='flex w-full items-center gap-3'>
-                      <DataTableBar
-                        className='flex-1'
-                        color={
-                          region.status === 'operational'
-                            ? undefined
-                            : statusConfig[region.status].color
-                        }
-                        max={slowest}
-                        value={region.latency}
-                      />
-                      <span className='w-14 shrink-0 text-end tabular-nums'>
-                        {region.latency > 0 ? `${formatNumber(region.latency)} ms` : '—'}
-                      </span>
-                    </span>
-                  </DataTableCell>
-                  <DataTableCell align='end'>
-                    {formatErrors(region.errorRate)}
-                  </DataTableCell>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container/data-table flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <DataTable caption={title} className='border-t'>
+              <DataTableHeader>
+                <DataTableRow>
+                  <DataTableHead>Region</DataTableHead>
+                  <DataTableHead>Status</DataTableHead>
+                  <DataTableHead>p95 latency</DataTableHead>
+                  <DataTableHead align='end'>Errors</DataTableHead>
                 </DataTableRow>
-              ))}
-          </DataTableBody>
-        </DataTable>
-      </section>
-    </BlockStateProvider>
+              </DataTableHeader>
+              <DataTableBody>
+                <DataTableStateRows colSpan={4} rows={5} />
+                {!state &&
+                  regions.map((region) => (
+                    <DataTableRow key={region.code}>
+                      <DataTableRowHead primary>
+                        <span className='block'>{region.name}</span>
+                        <span className='text-muted-foreground block font-mono text-xs font-normal'>
+                          {region.code}
+                        </span>
+                      </DataTableRowHead>
+                      <DataTableCell>
+                        <StatusIndicator status={region.status} />
+                      </DataTableCell>
+                      <DataTableCell className='w-2/5'>
+                        <span className='flex w-full items-center gap-3'>
+                          <DataTableBar
+                            className='flex-1'
+                            color={
+                              region.status === 'operational'
+                                ? undefined
+                                : statusConfig[region.status].color
+                            }
+                            max={slowest}
+                            value={region.latency}
+                          />
+                          <span className='w-14 shrink-0 text-end tabular-nums'>
+                            {region.latency > 0
+                              ? `${formatNumber(region.latency)} ms`
+                              : '—'}
+                          </span>
+                        </span>
+                      </DataTableCell>
+                      <DataTableCell align='end'>
+                        {formatErrors(region.errorRate)}
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
+              </DataTableBody>
+            </DataTable>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

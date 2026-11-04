@@ -1,5 +1,6 @@
 'use client'
 
+import { ChangeAmount } from '@/registry/components/dashboardblocks/change-amount'
 import { useReveal } from '@/registry/hooks/use-reveal'
 import { type VariantProps, cva } from 'class-variance-authority'
 import type { ReactNode } from 'react'
@@ -148,7 +149,7 @@ function LeaderboardRankChange({ change, className }: LeaderboardRankChangeProps
   if (change === 'new') {
     return (
       <span
-        className={cn('text-xs font-medium text-sky-700 dark:text-sky-400', className)}
+        className={cn('text-sm font-medium text-sky-700 dark:text-sky-400', className)}
       >
         New
       </span>
@@ -159,7 +160,7 @@ function LeaderboardRankChange({ change, className }: LeaderboardRankChangeProps
     return (
       <span
         className={cn(
-          'text-xs font-medium whitespace-nowrap text-muted-foreground',
+          'text-sm font-medium whitespace-nowrap text-muted-foreground',
           className,
         )}
       >
@@ -171,18 +172,19 @@ function LeaderboardRankChange({ change, className }: LeaderboardRankChangeProps
   const isUp = change > 0
 
   return (
-    <span
+    <ChangeAmount
+      change={change}
       className={cn(
-        'text-xs font-medium whitespace-nowrap tabular-nums',
+        'text-sm font-medium whitespace-nowrap tabular-nums',
         isUp
           ? 'text-emerald-700 dark:text-emerald-400'
           : 'text-red-700 dark:text-red-400',
         className,
       )}
     >
-      {isUp ? 'Up' : 'Down'} {Math.abs(change)}
+      {Math.abs(change)}
       <span className='sr-only'> {Math.abs(change) === 1 ? 'place' : 'places'}</span>
-    </span>
+    </ChangeAmount>
   )
 }
 

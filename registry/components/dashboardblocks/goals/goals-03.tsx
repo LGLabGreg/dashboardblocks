@@ -44,6 +44,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Goals3Props extends BlockStateProps {
@@ -110,214 +112,228 @@ const Goals3 = (props: Goals3Props) => {
   const shortfall = target - projected
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {!state && <PaceLabel className='mt-0.5' status={pace.status} />}
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
-          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>So far</dt>
-            <dd>
-              <KPIValue value={current} format={formatter} />
-            </dd>
-            {(!state || state === 'loading') && (
-              <dd className='text-muted-foreground text-xs tabular-nums'>
-                <BlockReady>{formatter(rate)} a day on average</BlockReady>
-              </dd>
-            )}
-          </div>
-          {(!state || state === 'loading') && (
-            <>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Projected</dt>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {!state && <PaceLabel className='mt-0.5' status={pace.status} />}
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
+              <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                <dt className='text-muted-foreground text-sm'>So far</dt>
                 <dd>
-                  <KPIValue className='text-2xl' value={projected} format={formatter} />
+                  <KPIValue value={current} format={formatter} />
                 </dd>
-                <dd
-                  className={cn(
-                    'text-xs font-medium tabular-nums',
-                    shortfall > 0
-                      ? 'text-orange-700 dark:text-orange-400'
-                      : 'text-emerald-700 dark:text-emerald-400',
-                  )}
-                >
-                  <BlockReady>
-                    {shortfall > 0
-                      ? `${formatter(shortfall)} short`
-                      : `${formatter(-shortfall)} over`}
-                  </BlockReady>
-                </dd>
+                {(!state || state === 'loading') && (
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    <BlockReady>{formatter(rate)} a day on average</BlockReady>
+                  </dd>
+                )}
               </div>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Target</dt>
-                <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                  {formatter(target)}
-                </dd>
-                <dd className='text-muted-foreground text-xs tabular-nums'>
-                  <BlockReady>
-                    {current >= target
-                      ? 'Reached'
-                      : daysLeft > 0
-                        ? `Needs ${formatter(needed)} a day from here`
-                        : 'Not reached'}
-                  </BlockReady>
-                </dd>
-              </div>
-            </>
-          )}
-        </dl>
-        {(!state || state === 'loading') && (
-          <ChartPanelLegend
-            items={[
-              { color: ACTUAL_COLOR, label: 'Revenue so far', shape: 'line' },
-              { color: PROJECTED_COLOR, label: 'At the daily rate', shape: 'line' },
-            ]}
-          />
-        )}
-        {state ? (
-          <ChartPlaceholder height={240} />
-        ) : (
-          <>
-            <ChartPanelFigure className='h-60'>
-              <ResponsiveContainer width='100%' height='100%'>
-                <ComposedChart
-                  aria-label={`${title} by day, with the target and the daily rate projected to the end`}
-                  data={rows}
-                  margin={{ top: 20, right: 16, bottom: 0, left: 0 }}
-                >
-                  <defs>
-                    <linearGradient id={gradient} x1='0' x2='0' y1='0' y2='1'>
-                      <stop offset='0%' stopColor={ACTUAL_COLOR} stopOpacity={0.3} />
-                      <stop offset='100%' stopColor={ACTUAL_COLOR} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid {...chartGridProps} />
-                  <XAxis
-                    {...chartAxisProps}
-                    dataKey='label'
-                    interval='preserveStartEnd'
-                    minTickGap={40}
-                  />
-                  <YAxis
-                    {...chartAxisProps}
-                    domain={[0, yMax]}
-                    tickFormatter={(value: number) => formatCompact(value)}
-                    width={chartValueAxisWidth}
-                  />
-                  <Tooltip
-                    content={(tooltipProps) => (
-                      <ChartTooltipContent
-                        {...tooltipProps}
-                        payload={tooltipProps.payload
-                          ?.filter(
-                            (item) => item.value !== null && item.value !== undefined,
-                          )
-                          .slice(0, 1)}
-                        valueFormatter={formatter}
+              {(!state || state === 'loading') && (
+                <>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Projected</dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        value={projected}
+                        format={formatter}
                       />
-                    )}
-                    cursor={chartLineCursor}
-                  />
-                  <ReferenceLine
-                    {...chartReferenceProps}
-                    y={target}
-                    label={{
-                      ...chartReferenceLabel,
-                      position: 'insideTopLeft',
-                      value: `Target ${formatCompact(target)}`,
-                    }}
-                  />
-                  {rows[today] && (
-                    <ReferenceLine
-                      x={rows[today].label}
-                      stroke='var(--color-border)'
-                      label={{ ...chartReferenceLabel, position: 'top', value: 'Today' }}
-                    />
-                  )}
-                  <Area
-                    activeDot={chartActiveDot}
-                    dataKey='actual'
-                    dot={chartLastDot(today + 1, ACTUAL_COLOR)}
-                    fill={`url(#${gradient})`}
-                    name='Revenue so far'
-                    stroke={ACTUAL_COLOR}
-                    strokeWidth={2}
-                    type='monotone'
-                  />
-                  <Line
-                    activeDot={chartActiveDot}
-                    dataKey='projected'
-                    dot={false}
-                    name='At the daily rate'
-                    stroke={PROJECTED_COLOR}
-                    strokeDasharray='5 4'
-                    strokeWidth={2}
-                    type='linear'
-                  />
-                  {crossing ? (
-                    <ReferenceDot
-                      x={crossing.label}
-                      y={target}
-                      r={4}
-                      fill='var(--color-emerald-600)'
-                      stroke='var(--color-background)'
-                      strokeWidth={2}
-                      label={{
-                        fill: 'var(--color-foreground)',
-                        fontSize: 11,
-                        fontWeight: 500,
-                        position:
-                          rows.indexOf(crossing) > rows.length * 0.75 ? 'left' : 'top',
-                        value: `Hits it ${crossing.label}`,
-                      }}
-                    />
-                  ) : (
-                    rows.length > today + 1 && (
-                      <ReferenceDot
-                        x={rows[rows.length - 1].label}
-                        y={projected}
-                        r={4}
-                        fill={PROJECTED_COLOR}
-                        stroke='var(--color-background)'
-                        strokeWidth={2}
+                    </dd>
+                    <dd
+                      className={cn(
+                        'text-xs font-medium tabular-nums',
+                        shortfall > 0
+                          ? 'text-orange-700 dark:text-orange-400'
+                          : 'text-emerald-700 dark:text-emerald-400',
+                      )}
+                    >
+                      <BlockReady>
+                        {shortfall > 0
+                          ? `${formatter(shortfall)} short`
+                          : `${formatter(-shortfall)} over`}
+                      </BlockReady>
+                    </dd>
+                  </div>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Target</dt>
+                    <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                      {formatter(target)}
+                    </dd>
+                    <dd className='text-muted-foreground text-xs tabular-nums'>
+                      <BlockReady>
+                        {current >= target
+                          ? 'Reached'
+                          : daysLeft > 0
+                            ? `Needs ${formatter(needed)} a day from here`
+                            : 'Not reached'}
+                      </BlockReady>
+                    </dd>
+                  </div>
+                </>
+              )}
+            </dl>
+            {(!state || state === 'loading') && (
+              <ChartPanelLegend
+                items={[
+                  { color: ACTUAL_COLOR, label: 'Revenue so far', shape: 'line' },
+                  { color: PROJECTED_COLOR, label: 'At the daily rate', shape: 'line' },
+                ]}
+              />
+            )}
+            {state ? (
+              <ChartPlaceholder height={240} />
+            ) : (
+              <>
+                <ChartPanelFigure className='h-60'>
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <ComposedChart
+                      aria-label={`${title} by day, with the target and the daily rate projected to the end`}
+                      data={rows}
+                      margin={{ top: 20, right: 16, bottom: 0, left: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id={gradient} x1='0' x2='0' y1='0' y2='1'>
+                          <stop offset='0%' stopColor={ACTUAL_COLOR} stopOpacity={0.3} />
+                          <stop offset='100%' stopColor={ACTUAL_COLOR} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid {...chartGridProps} />
+                      <XAxis
+                        {...chartAxisProps}
+                        dataKey='label'
+                        interval='preserveStartEnd'
+                        minTickGap={40}
+                      />
+                      <YAxis
+                        {...chartAxisProps}
+                        domain={[0, yMax]}
+                        tickFormatter={(value: number) => formatCompact(value)}
+                        width={chartValueAxisWidth}
+                      />
+                      <Tooltip
+                        content={(tooltipProps) => (
+                          <ChartTooltipContent
+                            {...tooltipProps}
+                            payload={tooltipProps.payload
+                              ?.filter(
+                                (item) => item.value !== null && item.value !== undefined,
+                              )
+                              .slice(0, 1)}
+                            valueFormatter={formatter}
+                          />
+                        )}
+                        cursor={chartLineCursor}
+                      />
+                      <ReferenceLine
+                        {...chartReferenceProps}
+                        y={target}
                         label={{
-                          fill: 'var(--color-foreground)',
-                          fontSize: 11,
-                          fontWeight: 500,
-                          position: 'left',
-                          value: `${formatter(shortfall)} short`,
+                          ...chartReferenceLabel,
+                          position: 'insideTopLeft',
+                          value: `Target ${formatCompact(target)}`,
                         }}
                       />
-                    )
-                  )}
-                </ComposedChart>
-              </ResponsiveContainer>
-            </ChartPanelFigure>
-            <ChartPanelTable
-              caption={`${title}: ${description} Target ${formatter(target)}.`}
-              columns={[
-                { key: 'label', label: 'Day' },
-                { key: 'actual', label: 'Revenue so far' },
-                { key: 'projected', label: 'At the daily rate' },
-              ]}
-              rows={rows.map((row, index) => ({
-                actual: row.actual === null ? '—' : formatter(row.actual),
-                label: row.label,
-                projected:
-                  row.projected === null || index === today
-                    ? '—'
-                    : formatter(row.projected),
-              }))}
-            />
-          </>
-        )}
-      </section>
-    </BlockStateProvider>
+                      {rows[today] && (
+                        <ReferenceLine
+                          x={rows[today].label}
+                          stroke='var(--color-border)'
+                          label={{
+                            ...chartReferenceLabel,
+                            position: 'top',
+                            value: 'Today',
+                          }}
+                        />
+                      )}
+                      <Area
+                        activeDot={chartActiveDot}
+                        dataKey='actual'
+                        dot={chartLastDot(today + 1, ACTUAL_COLOR)}
+                        fill={`url(#${gradient})`}
+                        name='Revenue so far'
+                        stroke={ACTUAL_COLOR}
+                        strokeWidth={2}
+                        type='monotone'
+                      />
+                      <Line
+                        activeDot={chartActiveDot}
+                        dataKey='projected'
+                        dot={false}
+                        name='At the daily rate'
+                        stroke={PROJECTED_COLOR}
+                        strokeDasharray='5 4'
+                        strokeWidth={2}
+                        type='linear'
+                      />
+                      {crossing ? (
+                        <ReferenceDot
+                          x={crossing.label}
+                          y={target}
+                          r={4}
+                          fill='var(--color-emerald-600)'
+                          stroke='var(--color-background)'
+                          strokeWidth={2}
+                          label={{
+                            fill: 'var(--color-foreground)',
+                            fontSize: 11,
+                            fontWeight: 500,
+                            position:
+                              rows.indexOf(crossing) > rows.length * 0.75
+                                ? 'left'
+                                : 'top',
+                            value: `Hits it ${crossing.label}`,
+                          }}
+                        />
+                      ) : (
+                        rows.length > today + 1 && (
+                          <ReferenceDot
+                            x={rows[rows.length - 1].label}
+                            y={projected}
+                            r={4}
+                            fill={PROJECTED_COLOR}
+                            stroke='var(--color-background)'
+                            strokeWidth={2}
+                            label={{
+                              fill: 'var(--color-foreground)',
+                              fontSize: 11,
+                              fontWeight: 500,
+                              position: 'left',
+                              value: `${formatter(shortfall)} short`,
+                            }}
+                          />
+                        )
+                      )}
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </ChartPanelFigure>
+                <ChartPanelTable
+                  caption={`${title}: ${description} Target ${formatter(target)}.`}
+                  columns={[
+                    { key: 'label', label: 'Day' },
+                    { key: 'actual', label: 'Revenue so far' },
+                    { key: 'projected', label: 'At the daily rate' },
+                  ]}
+                  rows={rows.map((row, index) => ({
+                    actual: row.actual === null ? '—' : formatter(row.actual),
+                    label: row.label,
+                    projected:
+                      row.projected === null || index === today
+                        ? '—'
+                        : formatter(row.projected),
+                  }))}
+                />
+              </>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

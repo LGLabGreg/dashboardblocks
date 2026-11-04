@@ -21,6 +21,7 @@ import { formatList } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type Tab = 'write' | 'preview'
@@ -163,91 +164,104 @@ const Comments2 = (props: Comments2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {project}. Everyone on the project sees it, and anyone you mention is
-            notified.
-          </p>
-        </header>
-        <Tabs value={tab} onValueChange={(value) => setTab(value as Tab)}>
-          <TabsList>
-            <TabsTrigger value='write'>Write</TabsTrigger>
-            <TabsTrigger value='preview'>Preview</TabsTrigger>
-          </TabsList>
-          <TabsContent value='write'>
-            <CommentComposer
-              label='Update'
-              placeholder='What changed, and who needs to know?'
-              submitLabel='Post update'
-              people={people}
-              value={draft}
-              footer={<span className='text-muted-foreground'>{notifies}</span>}
-              onValueChange={setDraft}
-              onSubmit={post}
-            />
-          </TabsContent>
-          <TabsContent value='preview' className='flex flex-col gap-3'>
-            <div className='min-h-24 rounded-md border p-3'>
-              {draft.trim() ? (
-                <CommentItem
-                  comment={{ at: now, author: currentUser, body: draft, id: 'preview' }}
-                  now={now}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {project}. Everyone on the project sees it, and anyone you mention is
+                notified.
+              </p>
+            </header>
+            <Tabs value={tab} onValueChange={(value) => setTab(value as Tab)}>
+              <TabsList>
+                <TabsTrigger value='write'>Write</TabsTrigger>
+                <TabsTrigger value='preview'>Preview</TabsTrigger>
+              </TabsList>
+              <TabsContent value='write'>
+                <CommentComposer
+                  label='Update'
+                  placeholder='What changed, and who needs to know?'
+                  submitLabel='Post update'
                   people={people}
+                  value={draft}
+                  footer={<span className='text-muted-foreground'>{notifies}</span>}
+                  onValueChange={setDraft}
+                  onSubmit={post}
                 />
-              ) : (
-                <p className='text-muted-foreground text-sm'>Nothing to preview yet.</p>
-              )}
-            </div>
-            <div className='flex items-center justify-between gap-3'>
-              <span className='text-muted-foreground min-w-0 text-xs'>{notifies}</span>
-              <Button
-                size='sm'
-                disabled={isPosting || !draft.trim()}
-                onClick={() => void postFromPreview()}
-              >
-                {isPosting ? 'Posting…' : 'Post update'}
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-        <section
-          aria-labelledby={headingId}
-          className='flex flex-col gap-1 border-t pt-4'
-        >
-          <h3 id={headingId} className='text-sm font-medium'>
-            Recent updates
-          </h3>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {describeUpdates(updates, now)}
-            </p>
-          </BlockReady>
-          <div className='mt-2 flex flex-col divide-y'>
-            <BlockStateRows rows={3} />
-            {!state &&
-              updates.map((update) => (
-                <CommentItem
-                  key={update.id}
-                  className='py-4 first:pt-0 last:pb-0'
-                  comment={update}
-                  now={now}
-                  people={people}
-                  onReact={(emoji) => {
-                    onReact(update.id, emoji)
-                    setUpdates((current) =>
-                      updateComment(current, update.id, (item) => ({
-                        ...item,
-                        reactions: toggleReaction(item.reactions, emoji),
-                      })),
-                    )
-                  }}
-                />
-              ))}
-          </div>
-        </section>
-      </section>
+              </TabsContent>
+              <TabsContent value='preview' className='flex flex-col gap-3'>
+                <div className='min-h-24 rounded-md border p-3'>
+                  {draft.trim() ? (
+                    <CommentItem
+                      comment={{
+                        at: now,
+                        author: currentUser,
+                        body: draft,
+                        id: 'preview',
+                      }}
+                      now={now}
+                      people={people}
+                    />
+                  ) : (
+                    <p className='text-muted-foreground text-sm'>
+                      Nothing to preview yet.
+                    </p>
+                  )}
+                </div>
+                <div className='flex items-center justify-between gap-3'>
+                  <span className='text-muted-foreground min-w-0 text-xs'>
+                    {notifies}
+                  </span>
+                  <Button
+                    size='sm'
+                    disabled={isPosting || !draft.trim()}
+                    onClick={() => void postFromPreview()}
+                  >
+                    {isPosting ? 'Posting…' : 'Post update'}
+                  </Button>
+                </div>
+              </TabsContent>
+            </Tabs>
+            <section
+              aria-labelledby={headingId}
+              className='flex flex-col gap-1 border-t pt-4'
+            >
+              <h3 id={headingId} className='text-sm font-medium'>
+                Recent updates
+              </h3>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {describeUpdates(updates, now)}
+                </p>
+              </BlockReady>
+              <div className='mt-2 flex flex-col divide-y'>
+                <BlockStateRows rows={3} />
+                {!state &&
+                  updates.map((update) => (
+                    <CommentItem
+                      key={update.id}
+                      className='py-4 first:pt-0 last:pb-0'
+                      comment={update}
+                      now={now}
+                      people={people}
+                      onReact={(emoji) => {
+                        onReact(update.id, emoji)
+                        setUpdates((current) =>
+                          updateComment(current, update.id, (item) => ({
+                            ...item,
+                            reactions: toggleReaction(item.reactions, emoji),
+                          })),
+                        )
+                      }}
+                    />
+                  ))}
+              </div>
+            </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

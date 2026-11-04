@@ -20,6 +20,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -75,71 +76,75 @@ const UsageMeter7 = (props: UsageMeter7Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
-        <header className='flex min-h-8 items-center justify-between gap-3'>
-          <p className='text-muted-foreground flex min-w-0 items-center gap-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0'>
-            {icon}
-            <span className='truncate'>{title}</span>
-          </p>
-          {onUpgrade && (
-            <Button variant='outline' size='sm' onClick={onUpgrade}>
-              Upgrade
-            </Button>
-          )}
-        </header>
-        <div
-          {...(state
-            ? {}
-            : {
-                role: 'meter',
-                'aria-label': title,
-                'aria-valuemax': limit,
-                'aria-valuemin': 0,
-                'aria-valuenow': Math.min(used, limit),
-                'aria-valuetext': `${formatUsage(used, unit)} of ${formatUsage(limit, unit)} used`,
-              })}
-          className={cn(
-            'bg-muted/50 relative h-40 overflow-hidden rounded-lg',
-            state === 'loading' && 'animate-pulse motion-reduce:animate-none',
-          )}
-        >
-          {!state && (
-            <AnimatedWave
-              percentage={100 - Math.min(100, share)}
-              className={waveColors[status]}
-            />
-          )}
-          {state ? (
-            <div className='absolute inset-0 flex items-center justify-center'>
-              <UsageMeterValue className='leading-none' />
-            </div>
-          ) : (
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
+            <header className='flex min-h-8 items-center justify-between gap-3'>
+              <p className='text-muted-foreground flex min-w-0 items-center gap-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0'>
+                {icon}
+                <span className='truncate'>{title}</span>
+              </p>
+              {onUpgrade && (
+                <Button variant='outline' size='sm' onClick={onUpgrade}>
+                  Upgrade
+                </Button>
+              )}
+            </header>
             <div
-              aria-hidden
-              className='text-foreground absolute inset-0 flex flex-col items-center justify-center gap-1 text-center'
+              {...(state
+                ? {}
+                : {
+                    role: 'meter',
+                    'aria-label': title,
+                    'aria-valuemax': limit,
+                    'aria-valuemin': 0,
+                    'aria-valuenow': Math.min(used, limit),
+                    'aria-valuetext': `${formatUsage(used, unit)} of ${formatUsage(limit, unit)} used`,
+                  })}
+              className={cn(
+                'bg-muted/50 relative h-40 overflow-hidden rounded-lg',
+                state === 'loading' && 'animate-pulse motion-reduce:animate-none',
+              )}
             >
-              <span className='text-4xl leading-none font-light tracking-tight tabular-nums'>
-                <AnimatedNumber
-                  value={remaining}
-                  formatter={(value) => formatUsage(Math.round(value))}
+              {!state && (
+                <AnimatedWave
+                  percentage={100 - Math.min(100, share)}
+                  className={waveColors[status]}
                 />
-                <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                  {unit}
-                </span>
-              </span>
-              <span className='text-muted-foreground text-sm'>left</span>
+              )}
+              {state ? (
+                <div className='absolute inset-0 flex items-center justify-center'>
+                  <UsageMeterValue className='leading-none' />
+                </div>
+              ) : (
+                <div
+                  aria-hidden
+                  className='text-foreground absolute inset-0 flex flex-col items-center justify-center gap-1 text-center'
+                >
+                  <span className='text-4xl leading-none font-light tracking-tight tabular-nums'>
+                    <AnimatedNumber
+                      value={remaining}
+                      formatter={(value) => formatUsage(Math.round(value))}
+                    />
+                    <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                      {unit}
+                    </span>
+                  </span>
+                  <span className='text-muted-foreground text-sm'>left</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <BlockReady className='text-sm'>
-          <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm'>
-            <span className='tabular-nums'>
-              {formatUsage(used, unit)} of {formatUsage(limit, unit)} used
-            </span>
-            {status !== 'ok' && <UsageStatusLabel status={status} />}
-          </p>
-        </BlockReady>
-      </section>
+            <BlockReady className='text-sm'>
+              <p className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm'>
+                <span className='tabular-nums'>
+                  {formatUsage(used, unit)} of {formatUsage(limit, unit)} used
+                </span>
+                {status !== 'ok' && <UsageStatusLabel status={status} />}
+              </p>
+            </BlockReady>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

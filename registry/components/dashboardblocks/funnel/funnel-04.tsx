@@ -34,6 +34,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface FunnelSegment {
   color: string
   key: string
@@ -102,136 +104,140 @@ const Funnel4 = (props: Funnel4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state === 'empty' || state === 'error' ? (
-          <div className='border-t pt-4'>
-            <KPIValue />
-          </div>
-        ) : (
-          <dl className='flex flex-wrap items-end gap-x-10 gap-y-3 border-t pt-4'>
-            {segments.map((segment) => (
-              <div key={segment.key} className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>{segment.label}</dt>
-                <dd>
-                  <KPIValue
-                    value={lastStage ? rate(lastStage, segment.key) : undefined}
-                    format={(value) => formatRate(value)}
-                  />
-                </dd>
-                <BlockReady className='text-xs'>
-                  <dd className='text-muted-foreground text-xs tabular-nums'>
-                    {formatNumber(lastStage?.values[segment.key] ?? 0)} of{' '}
-                    {formatNumber(first?.values[segment.key] ?? 0)}
-                  </dd>
-                </BlockReady>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state === 'empty' || state === 'error' ? (
+              <div className='border-t pt-4'>
+                <KPIValue />
               </div>
-            ))}
-          </dl>
-        )}
-        <ChartPanelLegend
-          items={[
-            ...segments.map((segment) => ({
-              color: segment.color,
-              label: segment.label,
-              shape: 'line' as const,
-            })),
-            ...(segments.length > 1 ? [{ color: GAP_COLOR, label: 'Gap' }] : []),
-          ]}
-        />
-        <ChartPanelFigure className='h-56'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <ComposedChart
-              aria-label={`${title} chart`}
-              data={rows}
-              margin={{ top: 8, right: 96, bottom: 8, left: 0 }}
-            >
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='label'
-                interval='preserveStartEnd'
-                minTickGap={12}
-              />
-              <YAxis
-                {...chartAxisProps}
-                domain={[0, 1]}
-                tickFormatter={(value: number) => formatRate(value, 0)}
-                ticks={[0, 0.25, 0.5, 0.75, 1]}
-                width={chartValueAxisWidth}
-              />
-              <Tooltip
-                content={(tooltipProps) => (
-                  <ChartTooltipContent
-                    {...tooltipProps}
-                    payload={tooltipProps.payload?.filter(
-                      (item) => item.dataKey !== 'gap',
-                    )}
-                    valueFormatter={(value) => formatRate(value)}
-                  />
-                )}
-                cursor={chartLineCursor}
-              />
-              {segments.length > 1 && (
-                <Area
-                  activeDot={false}
-                  dataKey='gap'
-                  fill={GAP_COLOR}
-                  fillOpacity={1}
-                  name='Gap'
-                  stroke='none'
-                  type='linear'
-                />
-              )}
-              {segments.map((segment) => (
-                <Line
-                  key={segment.key}
-                  activeDot={chartActiveDot}
-                  dataKey={segment.key}
-                  dot={{ fill: segment.color, r: 3, strokeWidth: 0 }}
-                  name={segment.label}
-                  stroke={segment.color}
-                  strokeWidth={2}
-                  type='linear'
+            ) : (
+              <dl className='flex flex-wrap items-start gap-x-10 gap-y-3 border-t pt-4'>
+                {segments.map((segment) => (
+                  <div key={segment.key} className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>{segment.label}</dt>
+                    <dd>
+                      <KPIValue
+                        value={lastStage ? rate(lastStage, segment.key) : undefined}
+                        format={(value) => formatRate(value)}
+                      />
+                    </dd>
+                    <BlockReady className='text-xs'>
+                      <dd className='text-muted-foreground text-xs tabular-nums'>
+                        {formatNumber(lastStage?.values[segment.key] ?? 0)} of{' '}
+                        {formatNumber(first?.values[segment.key] ?? 0)}
+                      </dd>
+                    </BlockReady>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <ChartPanelLegend
+              items={[
+                ...segments.map((segment) => ({
+                  color: segment.color,
+                  label: segment.label,
+                  shape: 'line' as const,
+                })),
+                ...(segments.length > 1 ? [{ color: GAP_COLOR, label: 'Gap' }] : []),
+              ]}
+            />
+            <ChartPanelFigure className='h-56'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <ComposedChart
+                  aria-label={`${title} chart`}
+                  data={rows}
+                  margin={{ top: 8, right: 96, bottom: 8, left: 0 }}
                 >
-                  <LabelList
-                    dataKey={segment.key}
-                    content={({ index, value, x, y }) =>
-                      index === lastIndex ? (
-                        <text
-                          x={Number(x) + 8}
-                          y={Number(y) + (segment.key === topKey ? -7 : 7)}
-                          dominantBaseline='middle'
-                          fill='var(--color-foreground)'
-                          fontSize={11}
-                          fontWeight={500}
-                        >
-                          {segment.label} {formatRate(Number(value))}
-                        </text>
-                      ) : null
-                    }
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='label'
+                    interval='preserveStartEnd'
+                    minTickGap={12}
                   />
-                </Line>
-              ))}
-            </ComposedChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'label', label: 'Stage' },
-            ...segments.map((segment) => ({
-              format: (value: number) => formatRate(value),
-              key: segment.key,
-              label: segment.label,
-            })),
-          ]}
-          rows={rows}
-        />
-      </section>
+                  <YAxis
+                    {...chartAxisProps}
+                    domain={[0, 1]}
+                    tickFormatter={(value: number) => formatRate(value, 0)}
+                    ticks={[0, 0.25, 0.5, 0.75, 1]}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => (
+                      <ChartTooltipContent
+                        {...tooltipProps}
+                        payload={tooltipProps.payload?.filter(
+                          (item) => item.dataKey !== 'gap',
+                        )}
+                        valueFormatter={(value) => formatRate(value)}
+                      />
+                    )}
+                    cursor={chartLineCursor}
+                  />
+                  {segments.length > 1 && (
+                    <Area
+                      activeDot={false}
+                      dataKey='gap'
+                      fill={GAP_COLOR}
+                      fillOpacity={1}
+                      name='Gap'
+                      stroke='none'
+                      type='linear'
+                    />
+                  )}
+                  {segments.map((segment) => (
+                    <Line
+                      key={segment.key}
+                      activeDot={chartActiveDot}
+                      dataKey={segment.key}
+                      dot={{ fill: segment.color, r: 3, strokeWidth: 0 }}
+                      name={segment.label}
+                      stroke={segment.color}
+                      strokeWidth={2}
+                      type='linear'
+                    >
+                      <LabelList
+                        dataKey={segment.key}
+                        content={({ index, value, x, y }) =>
+                          index === lastIndex ? (
+                            <text
+                              x={Number(x) + 8}
+                              y={Number(y) + (segment.key === topKey ? -7 : 7)}
+                              dominantBaseline='middle'
+                              fill='var(--color-foreground)'
+                              fontSize={11}
+                              fontWeight={500}
+                            >
+                              {segment.label} {formatRate(Number(value))}
+                            </text>
+                          ) : null
+                        }
+                      />
+                    </Line>
+                  ))}
+                </ComposedChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Stage' },
+                ...segments.map((segment) => ({
+                  format: (value: number) => formatRate(value),
+                  key: segment.key,
+                  label: segment.label,
+                })),
+              ]}
+              rows={rows}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

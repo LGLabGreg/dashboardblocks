@@ -20,6 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/kpi'
 import { formatList } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface DailyComparison {
   label: string
   previous: number
@@ -81,62 +83,61 @@ const LineChartKPI1 = (props: LineChartKPI1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <KPI>
-        <KPIContent className='gap-3'>
-          <div className='flex flex-col gap-1'>
-            <KPITitle>{title}</KPITitle>
-            <KPIValue value={total} format={format} animated />
-            <KPIChange
-              comparison={comparison}
-              format={format}
-              previous={previous}
-              value={total}
-            />
-          </div>
-          <KPIChart label={describeSeries(`${title} by day`, data, format)}>
-            <TinyAreaChart
-              accessibilityLayer={false}
-              areas={[
-                {
-                  dataKey: 'previous',
-                  fill: 'none',
-                  name: comparison.charAt(0).toUpperCase() + comparison.slice(1),
-                  stroke: 'var(--color-muted-foreground)',
-                  strokeDasharray: '3 3',
-                  strokeWidth: 1.5,
-                },
-                {
-                  dataKey: 'value',
-                  fill: 'var(--color-chart-2)',
-                  fillOpacity: 0.3,
-                  name: currentLabel,
-                  stroke: 'var(--color-chart-2)',
-                },
-              ]}
-              data={data}
-              formatter={getKPIFormatter(format)}
-              height={height}
-              markLast='value'
-              scale='data'
-              xAxisKey='label'
-            />
-          </KPIChart>
-          <BlockReady className='text-xs'>
-            <p className='text-muted-foreground text-xs'>
-              <span
-                aria-hidden
-                className='bg-chart-2 mr-1.5 inline-block h-0.5 w-3 align-middle'
-              />
-              {currentLabel} was {lead}
-              <span
-                aria-hidden
-                className='border-muted-foreground mx-1.5 inline-block w-3 border-t-[1.5px] border-dashed align-middle'
-              />
-              {comparison} {rest}
-            </p>
-          </BlockReady>
-        </KPIContent>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-3'>
+              <div className='flex flex-col gap-1'>
+                <KPITitle>{title}</KPITitle>
+                <KPIValue value={total} format={format} animated />
+                <KPIChange comparison={comparison} previous={previous} value={total} />
+              </div>
+              <KPIChart label={describeSeries(`${title} by day`, data, format)}>
+                <TinyAreaChart
+                  accessibilityLayer={false}
+                  areas={[
+                    {
+                      dataKey: 'previous',
+                      fill: 'none',
+                      name: comparison.charAt(0).toUpperCase() + comparison.slice(1),
+                      stroke: 'var(--color-muted-foreground)',
+                      strokeDasharray: '3 3',
+                      strokeWidth: 1.5,
+                    },
+                    {
+                      dataKey: 'value',
+                      fill: 'var(--color-chart-2)',
+                      fillOpacity: 0.3,
+                      name: currentLabel,
+                      stroke: 'var(--color-chart-2)',
+                    },
+                  ]}
+                  data={data}
+                  formatter={getKPIFormatter(format)}
+                  height={height}
+                  markLast='value'
+                  scale='data'
+                  xAxisKey='label'
+                />
+              </KPIChart>
+              <BlockReady className='text-xs'>
+                <p className='text-muted-foreground text-xs'>
+                  <span
+                    aria-hidden
+                    className='bg-chart-2 mr-1.5 inline-block h-0.5 w-3 align-middle'
+                  />
+                  {currentLabel} was {lead}
+                  <span
+                    aria-hidden
+                    className='border-muted-foreground mx-1.5 inline-block w-3 border-t-[1.5px] border-dashed align-middle'
+                  />
+                  {comparison} {rest}
+                </p>
+              </BlockReady>
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

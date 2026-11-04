@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'comments-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('comments')],
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('comments')],
     files: [
       {
         path: 'registry/components/dashboardblocks/comments/comments-01.tsx',
@@ -24,6 +24,7 @@ export const examples: Registry['items'] = [
     name: 'comments-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       'tabs',
       registryUrl('block-state'),
@@ -47,6 +48,7 @@ export const examples: Registry['items'] = [
     name: 'comments-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'tabs',
       registryUrl('block-state'),
       registryUrl('comments'),
@@ -71,6 +73,7 @@ export const examples: Registry['items'] = [
     name: 'comments-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'tabs',
       registryUrl('block-state'),
       registryUrl('comments'),

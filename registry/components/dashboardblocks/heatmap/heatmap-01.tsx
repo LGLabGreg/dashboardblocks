@@ -20,6 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Heatmap1Props extends BlockStateProps {
   /** Defaults to a sentence about the busiest time. */
   description?: string
@@ -80,54 +82,60 @@ const Heatmap1 = (props: Heatmap1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, peak)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            {description && (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            )}
-          </BlockReady>
-        </header>
-        <StatGroup className='grid-cols-2 @xl:grid-cols-3'>
-          <Stat className='col-span-2 @xl:col-span-1'>
-            <StatLabel>{unitName} in an average week</StatLabel>
-            <StatValue>{formatNumber(week)}</StatValue>
-          </Stat>
-          <Stat className='justify-end'>
-            <StatLabel>Busiest hour of the day</StatLabel>
-            <StatValue className='text-2xl'>{HOURS[peakHour]}:00</StatValue>
-          </Stat>
-          <Stat className='justify-end'>
-            <StatLabel>On weekends</StatLabel>
-            <StatValue className='text-2xl'>
-              {formatPercent(week > 0 ? weekend / week : 0, { maximumFractionDigits: 0 })}
-            </StatValue>
-          </Stat>
-        </StatGroup>
-        <HeatmapGrid
-          cellClassName='h-5'
-          cellName={({ column, row }) => `${DAYS[row]}, ${hourRange(column)}`}
-          columnLabelEvery={3}
-          columnSummary={{
-            highlightIndex: peakHour,
-            label: `${unitName} by hour of the day, all week: most at ${HOURS[peakHour]}:00, with ${formatNumber(byHour[peakHour])}`,
-            labels: HOURS.map((_, hour) => `${hourRange(hour)}, all week`),
-            values: byHour,
-          }}
-          columns={HOURS}
-          describe={({ column, row }, value) =>
-            `${DAY_NAMES[row]}, ${hourRange(column)}: ${value === null ? 'no data' : formatNumber(value)} ${unit}`
-          }
-          footer={<HeatmapLegend />}
-          label={`${title}: average ${unit} by weekday and hour`}
-          rowHeader='Day'
-          rowNames={DAY_NAMES}
-          rows={DAYS}
-          valueName={unitName}
-          values={values}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                {description && (
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                )}
+              </BlockReady>
+            </header>
+            <StatGroup className='grid-cols-2 @xl:grid-cols-3'>
+              <Stat className='col-span-2 @xl:col-span-1'>
+                <StatLabel>{unitName} in an average week</StatLabel>
+                <StatValue>{formatNumber(week)}</StatValue>
+              </Stat>
+              <Stat className='justify-end'>
+                <StatLabel>Busiest hour of the day</StatLabel>
+                <StatValue className='text-2xl'>{HOURS[peakHour]}:00</StatValue>
+              </Stat>
+              <Stat className='justify-end'>
+                <StatLabel>On weekends</StatLabel>
+                <StatValue className='text-2xl'>
+                  {formatPercent(week > 0 ? weekend / week : 0, {
+                    maximumFractionDigits: 0,
+                  })}
+                </StatValue>
+              </Stat>
+            </StatGroup>
+            <HeatmapGrid
+              cellClassName='h-5'
+              cellName={({ column, row }) => `${DAYS[row]}, ${hourRange(column)}`}
+              columnLabelEvery={3}
+              columnSummary={{
+                highlightIndex: peakHour,
+                label: `${unitName} by hour of the day, all week: most at ${HOURS[peakHour]}:00, with ${formatNumber(byHour[peakHour])}`,
+                labels: HOURS.map((_, hour) => `${hourRange(hour)}, all week`),
+                values: byHour,
+              }}
+              columns={HOURS}
+              describe={({ column, row }, value) =>
+                `${DAY_NAMES[row]}, ${hourRange(column)}: ${value === null ? 'no data' : formatNumber(value)} ${unit}`
+              }
+              footer={<HeatmapLegend />}
+              label={`${title}: average ${unit} by weekday and hour`}
+              rowHeader='Day'
+              rowNames={DAY_NAMES}
+              rows={DAYS}
+              valueName={unitName}
+              values={values}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

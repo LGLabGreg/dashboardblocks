@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'geo-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('geo'),
       registryUrl('heatmap'),
@@ -30,6 +31,7 @@ export const examples: Registry['items'] = [
     name: 'geo-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('country-flag'),
       registryUrl('format'),
@@ -52,6 +54,7 @@ export const examples: Registry['items'] = [
     name: 'geo-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('geo'),
       registryUrl('kpi'),
@@ -73,6 +76,7 @@ export const examples: Registry['items'] = [
     name: 'geo-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('kpi'),

@@ -22,6 +22,7 @@ import {
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface UsageMeter4Props extends BlockStateProps {
   /** Leave out to show the empty state. */
@@ -93,89 +94,93 @@ const UsageMeter4 = (props: UsageMeter4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
-        <header className='flex min-h-8 items-center justify-between gap-3'>
-          <p className='text-muted-foreground text-sm'>{title}</p>
-          {onTopUp && (
-            <Button variant='outline' size='sm' onClick={onTopUp}>
-              Buy credits
-            </Button>
-          )}
-        </header>
-        <div className='flex flex-col gap-1'>
-          <div className='flex flex-wrap items-baseline gap-x-2'>
-            <UsageMeterValue>
-              <span aria-hidden>
-                <AnimatedNumber
-                  value={balance}
-                  formatter={(value) => formatUsage(Math.round(value))}
-                />
-              </span>
-              <span className='sr-only'>{formatUsage(balance)}</span>
-            </UsageMeterValue>
-            <UsageMeterLimit>of {formatUsage(purchased)} left</UsageMeterLimit>
-          </div>
-          {state === 'loading' ? (
-            <BlockStateText className='text-sm' />
-          ) : state ? null : (
-            <p className='text-muted-foreground text-sm'>
-              {runsOut ? (
-                <>
-                  <UsageStatusLabel
-                    variant='text'
-                    label={`${Math.floor(daysLeft)} ${Math.floor(daysLeft) === 1 ? 'day' : 'days'} left`}
-                    status={status}
-                  />
-                  , running out around{' '}
-                  <time dateTime={runsOut.toISOString()}>
-                    {formatDate(runsOut, 'day', timeZone)}
-                  </time>
-                </>
-              ) : (
-                'No recent use, so they won’t run out at this rate'
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0'>
+            <header className='flex min-h-8 items-center justify-between gap-3'>
+              <p className='text-muted-foreground text-sm'>{title}</p>
+              {onTopUp && (
+                <Button variant='outline' size='sm' onClick={onTopUp}>
+                  Buy credits
+                </Button>
               )}
-            </p>
-          )}
-        </div>
-        <UsageBar
-          color='var(--color-chart-2)'
-          limit={purchased}
-          size='sm'
-          used={balance}
-        />
-        {(state || latest) && (
-          <KPIChart
-            className='mt-2'
-            label={
-              latest
-                ? `Credits used per day, last ${days.length} days: from ${formatUsage(days[0].value)} on ${days[0].label} to ${formatUsage(latest.value)} on ${latest.label}, ${formatUsage(Math.round(burn))} a day on average`
-                : 'Credits used per day'
-            }
-          >
-            <TinyBarChart
-              accessibilityLayer={false}
-              bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
-              data={days}
-              formatter={(value) => formatUsage(value, undefined, { compact: true })}
-              height={88}
-              highlightIndex={days.length - 1}
-              reference={{
-                label: `avg ${formatUsage(Math.round(burn))}`,
-                value: burn,
-              }}
+            </header>
+            <div className='flex flex-col gap-1'>
+              <div className='flex flex-wrap items-baseline gap-x-2'>
+                <UsageMeterValue>
+                  <span aria-hidden>
+                    <AnimatedNumber
+                      value={balance}
+                      formatter={(value) => formatUsage(Math.round(value))}
+                    />
+                  </span>
+                  <span className='sr-only'>{formatUsage(balance)}</span>
+                </UsageMeterValue>
+                <UsageMeterLimit>of {formatUsage(purchased)} left</UsageMeterLimit>
+              </div>
+              {state === 'loading' ? (
+                <BlockStateText className='text-sm' />
+              ) : state ? null : (
+                <p className='text-muted-foreground text-sm'>
+                  {runsOut ? (
+                    <>
+                      <UsageStatusLabel
+                        variant='text'
+                        label={`${Math.floor(daysLeft)} ${Math.floor(daysLeft) === 1 ? 'day' : 'days'} left`}
+                        status={status}
+                      />
+                      , running out around{' '}
+                      <time dateTime={runsOut.toISOString()}>
+                        {formatDate(runsOut, 'day', timeZone)}
+                      </time>
+                    </>
+                  ) : (
+                    'No recent use, so they won’t run out at this rate'
+                  )}
+                </p>
+              )}
+            </div>
+            <UsageBar
+              color='var(--color-chart-2)'
+              limit={purchased}
+              size='sm'
+              used={balance}
             />
-          </KPIChart>
-        )}
-        {latest && (
-          <BlockReady className='text-xs'>
-            <p className='text-muted-foreground text-xs'>
-              Today used {formatUsage(latest.value)},{' '}
-              {latest.value > burn ? 'above' : 'below'} the {days.length}-day average of{' '}
-              {formatUsage(Math.round(burn))}.
-            </p>
-          </BlockReady>
-        )}
-      </section>
+            {(state || latest) && (
+              <KPIChart
+                className='mt-2'
+                label={
+                  latest
+                    ? `Credits used per day, last ${days.length} days: from ${formatUsage(days[0].value)} on ${days[0].label} to ${formatUsage(latest.value)} on ${latest.label}, ${formatUsage(Math.round(burn))} a day on average`
+                    : 'Credits used per day'
+                }
+              >
+                <TinyBarChart
+                  accessibilityLayer={false}
+                  bars={[{ dataKey: 'value', fill: 'var(--color-chart-2)' }]}
+                  data={days}
+                  formatter={(value) => formatUsage(value, undefined, { compact: true })}
+                  height={88}
+                  highlightIndex={days.length - 1}
+                  reference={{
+                    label: `avg ${formatUsage(Math.round(burn))}`,
+                    value: burn,
+                  }}
+                />
+              </KPIChart>
+            )}
+            {latest && (
+              <BlockReady className='text-xs'>
+                <p className='text-muted-foreground text-xs'>
+                  Today used {formatUsage(latest.value)},{' '}
+                  {latest.value > burn ? 'above' : 'below'} the {days.length}-day average
+                  of {formatUsage(Math.round(burn))}.
+                </p>
+              </BlockReady>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

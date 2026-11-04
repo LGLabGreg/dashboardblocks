@@ -19,6 +19,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatList } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -78,72 +79,76 @@ const Status3 = (props: Status3Props) => {
   const state = getBlockState(status, updates)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-1'>
-            <BlockReady className='w-32 text-sm'>
-              <StatusIndicator status={severity} />
-            </BlockReady>
-            <h2 className='font-semibold tracking-tight text-balance'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>
-                {[started, affected.length > 0 && `Affects ${formatList(affected)}`]
-                  .filter(Boolean)
-                  .map((sentence) => `${sentence}.`)
-                  .join(' ')}
-              </p>
-            </BlockReady>
-          </div>
-          <Button variant='outline' size='sm' onClick={onSubscribe}>
-            <IconPlaceholder
-              lucide='BellIcon'
-              tabler='IconBell'
-              hugeicons='NotificationIcon'
-              phosphor='BellIcon'
-              remixicon='RiNotificationLine'
-              data-icon='inline-start'
-            />
-            Subscribe
-          </Button>
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={3} />
-          </div>
-        )}
-        {!state && (
-          <ActivityFeed className='border-t pt-4 [--activity-marker:0.75rem]'>
-            {updates.map((update, index) => (
-              <ActivityFeedItem
-                key={`${update.stage}-${update.time}`}
-                connector
-                className='pb-5 last:pb-0'
-              >
-                <span
-                  aria-hidden
-                  className={cn(
-                    'ring-background relative mt-1 size-(--activity-marker) shrink-0 rounded-full ring-4',
-                    index === 0 ? 'bg-foreground' : 'bg-muted-foreground/40',
-                  )}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-wrap items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-1'>
+                <BlockReady className='w-32 text-sm'>
+                  <StatusIndicator status={severity} />
+                </BlockReady>
+                <h2 className='font-semibold tracking-tight text-balance'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>
+                    {[started, affected.length > 0 && `Affects ${formatList(affected)}`]
+                      .filter(Boolean)
+                      .map((sentence) => `${sentence}.`)
+                      .join(' ')}
+                  </p>
+                </BlockReady>
+              </div>
+              <Button variant='outline' size='sm' onClick={onSubscribe}>
+                <IconPlaceholder
+                  lucide='BellIcon'
+                  tabler='IconBell'
+                  hugeicons='NotificationIcon'
+                  phosphor='BellIcon'
+                  remixicon='RiNotificationLine'
+                  data-icon='inline-start'
                 />
-                <div className='flex min-w-0 flex-col gap-1'>
-                  <p className='flex flex-wrap items-baseline gap-x-2 text-sm'>
-                    <span className='font-medium'>{update.stage}</span>
-                    <span className='text-muted-foreground text-xs tabular-nums'>
-                      {update.time}
-                    </span>
-                  </p>
-                  <p className='text-muted-foreground text-sm text-pretty'>
-                    {update.message}
-                  </p>
-                </div>
-              </ActivityFeedItem>
-            ))}
-          </ActivityFeed>
-        )}
-      </section>
-    </BlockStateProvider>
+                Subscribe
+              </Button>
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={3} />
+              </div>
+            )}
+            {!state && (
+              <ActivityFeed className='border-t pt-4 [--activity-marker:0.75rem]'>
+                {updates.map((update, index) => (
+                  <ActivityFeedItem
+                    key={`${update.stage}-${update.time}`}
+                    connector
+                    className='pb-5 last:pb-0'
+                  >
+                    <span
+                      aria-hidden
+                      className={cn(
+                        'ring-background relative mt-1 size-(--activity-marker) shrink-0 rounded-full ring-4',
+                        index === 0 ? 'bg-foreground' : 'bg-muted-foreground/40',
+                      )}
+                    />
+                    <div className='flex min-w-0 flex-col gap-1'>
+                      <p className='flex flex-wrap items-baseline gap-x-2 text-sm'>
+                        <span className='font-medium'>{update.stage}</span>
+                        <span className='text-muted-foreground text-xs tabular-nums'>
+                          {update.time}
+                        </span>
+                      </p>
+                      <p className='text-muted-foreground text-sm text-pretty'>
+                        {update.message}
+                      </p>
+                    </div>
+                  </ActivityFeedItem>
+                ))}
+              </ActivityFeed>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

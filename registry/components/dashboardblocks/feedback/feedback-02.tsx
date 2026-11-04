@@ -14,6 +14,8 @@ import {
 } from '@/registry/components/dashboardblocks/feedback'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Feedback2Props extends BlockStateProps {
   description: string
   title: string
@@ -46,53 +48,59 @@ const Feedback2 = (props: Feedback2Props) => {
   const worst = negative.at(-1)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state && (
-          <div className='border-t pt-4'>
-            <BlockStateText className='text-sm' />
-          </div>
-        )}
-        {!state && best && (
-          <p className='border-t pt-4 text-sm text-pretty'>
-            People like <span className='font-medium'>{best.label.toLowerCase()}</span>{' '}
-            most, at{' '}
-            <span className='tabular-nums'>
-              {formatNetSentiment(getNetSentiment(best))}
-            </span>
-            {worst &&
-              (negative.length === 1 ? (
-                <>
-                  , and <span className='font-medium'>{worst.label.toLowerCase()}</span>{' '}
-                  is the one topic with more complaints than praise
-                </>
-              ) : (
-                <>
-                  , and <span className='tabular-nums'>{negative.length}</span> topics get
-                  more complaints than praise,{' '}
-                  <span className='font-medium'>{worst.label.toLowerCase()}</span> most
-                </>
-              ))}
-            .{' '}
-            <span className='text-muted-foreground'>
-              From <span className='tabular-nums'>{formatNumber(mentions)}</span>{' '}
-              mentions.
-            </span>
-          </p>
-        )}
-        <SentimentChart label={`${title}: ${description}`} topics={sorted} />
-        {state !== 'error' && state !== 'empty' && (
-          <p className='text-muted-foreground text-xs'>
-            Net is positive minus negative mentions, as a share of all mentions, from −100
-            to +100.
-          </p>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state && (
+              <div className='border-t pt-4'>
+                <BlockStateText className='text-sm' />
+              </div>
+            )}
+            {!state && best && (
+              <p className='border-t pt-4 text-sm text-pretty'>
+                People like{' '}
+                <span className='font-medium'>{best.label.toLowerCase()}</span> most, at{' '}
+                <span className='tabular-nums'>
+                  {formatNetSentiment(getNetSentiment(best))}
+                </span>
+                {worst &&
+                  (negative.length === 1 ? (
+                    <>
+                      , and{' '}
+                      <span className='font-medium'>{worst.label.toLowerCase()}</span> is
+                      the one topic with more complaints than praise
+                    </>
+                  ) : (
+                    <>
+                      , and <span className='tabular-nums'>{negative.length}</span> topics
+                      get more complaints than praise,{' '}
+                      <span className='font-medium'>{worst.label.toLowerCase()}</span>{' '}
+                      most
+                    </>
+                  ))}
+                .{' '}
+                <span className='text-muted-foreground'>
+                  From <span className='tabular-nums'>{formatNumber(mentions)}</span>{' '}
+                  mentions.
+                </span>
+              </p>
+            )}
+            <SentimentChart label={`${title}: ${description}`} topics={sorted} />
+            {state !== 'error' && state !== 'empty' && (
+              <p className='text-muted-foreground text-xs'>
+                Net is positive minus negative mentions, as a share of all mentions, from
+                −100 to +100.
+              </p>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

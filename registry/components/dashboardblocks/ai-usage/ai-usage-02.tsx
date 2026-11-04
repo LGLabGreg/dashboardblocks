@@ -22,6 +22,8 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { formatPercent, joinDetails } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface FeatureUsage {
   cost: number
   /** The feature's calls or usage page: the whole row opens it. */
@@ -91,94 +93,98 @@ const AiUsage2 = (props: AiUsage2Props) => {
   const { description = describe(sorted, total) } = props
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <KPIValue value={total} format={formatUsd} />
-          {state === 'loading' ? (
-            <BlockStateText className='text-sm' />
-          ) : state ? null : (
-            <p className='text-muted-foreground text-sm'>
-              Spent on models across {features.length}{' '}
-              {features.length === 1 ? 'feature' : 'features'} {period}.
-            </p>
-          )}
-        </div>
-        {state !== 'empty' && state !== 'error' && (
-          <ul
-            aria-hidden
-            className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs'
-          >
-            {tokenParts.map((part) => (
-              <li key={part.label} className='flex items-center gap-1.5'>
-                <span
-                  className='size-2.5 rounded-[3px]'
-                  style={{ backgroundColor: part.color }}
-                />
-                {part.label}
-              </li>
-            ))}
-          </ul>
-        )}
-        {state === 'loading' && <BlockStateRows className='border-t' rows={4} />}
-        {!state && (
-          <ul className='flex flex-col border-t'>
-            {sorted.map((feature) => {
-              const all =
-                feature.tokens.input +
-                (feature.tokens.cached ?? 0) +
-                feature.tokens.output
-              return (
-                <DataTableListItem
-                  key={feature.label}
-                  className='flex flex-col gap-2 border-b py-3 last:border-b-0'
-                >
-                  <div className='flex items-baseline justify-between gap-3'>
-                    {feature.href ? (
-                      <DataTableRowLink href={feature.href} className='text-sm'>
-                        {feature.label}
-                      </DataTableRowLink>
-                    ) : (
-                      <span className='text-sm font-medium'>{feature.label}</span>
-                    )}
-                    <span className='text-sm tabular-nums'>
-                      <span className='font-medium'>{formatUsd(feature.cost)}</span>
-                      <span className='text-muted-foreground ml-1.5 inline-block w-8 text-right text-xs'>
-                        {formatPercent(total > 0 ? feature.cost / total : 0, {
-                          maximumFractionDigits: 0,
-                        })}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <KPIValue value={total} format={formatUsd} />
+              {state === 'loading' ? (
+                <BlockStateText className='text-sm' />
+              ) : state ? null : (
+                <p className='text-muted-foreground text-sm'>
+                  Spent on models across {features.length}{' '}
+                  {features.length === 1 ? 'feature' : 'features'} {period}.
+                </p>
+              )}
+            </div>
+            {state !== 'empty' && state !== 'error' && (
+              <ul
+                aria-hidden
+                className='text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs'
+              >
+                {tokenParts.map((part) => (
+                  <li key={part.label} className='flex items-center gap-1.5'>
+                    <span
+                      className='size-2.5 rounded-[3px]'
+                      style={{ backgroundColor: part.color }}
+                    />
+                    {part.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {state === 'loading' && <BlockStateRows className='border-t' rows={4} />}
+            {!state && (
+              <ul className='flex flex-col border-t'>
+                {sorted.map((feature) => {
+                  const all =
+                    feature.tokens.input +
+                    (feature.tokens.cached ?? 0) +
+                    feature.tokens.output
+                  return (
+                    <DataTableListItem
+                      key={feature.label}
+                      className='flex flex-col gap-2 border-b py-3 last:border-b-0'
+                    >
+                      <div className='flex items-baseline justify-between gap-3'>
+                        {feature.href ? (
+                          <DataTableRowLink href={feature.href} className='text-sm'>
+                            {feature.label}
+                          </DataTableRowLink>
+                        ) : (
+                          <span className='text-sm font-medium'>{feature.label}</span>
+                        )}
+                        <span className='text-sm tabular-nums'>
+                          <span className='font-medium'>{formatUsd(feature.cost)}</span>
+                          <span className='text-muted-foreground ml-1.5 inline-block w-8 text-right text-xs'>
+                            {formatPercent(total > 0 ? feature.cost / total : 0, {
+                              maximumFractionDigits: 0,
+                            })}
+                          </span>
+                        </span>
+                      </div>
+                      <TokenSplitBar tokens={feature.tokens} />
+                      <div className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-0.5 text-xs tabular-nums'>
+                        <span>
+                          {joinDetails(
+                            `${formatTokens(all)} tokens`,
+                            `${formatTokens(feature.requests)} requests`,
+                          )}
+                        </span>
+                        <span>
+                          {formatUsd((feature.cost / (feature.requests || 1)) * 1_000)}{' '}
+                          per 1K requests
+                        </span>
+                      </div>
+                      <span className='sr-only'>
+                        {`${formatTokens(feature.tokens.input)} input, ${formatTokens(feature.tokens.cached ?? 0)} cached input and ${formatTokens(feature.tokens.output)} output tokens.`}
                       </span>
-                    </span>
-                  </div>
-                  <TokenSplitBar tokens={feature.tokens} />
-                  <div className='text-muted-foreground flex flex-wrap justify-between gap-x-3 gap-y-0.5 text-xs tabular-nums'>
-                    <span>
-                      {joinDetails(
-                        `${formatTokens(all)} tokens`,
-                        `${formatTokens(feature.requests)} requests`,
-                      )}
-                    </span>
-                    <span>
-                      {formatUsd((feature.cost / (feature.requests || 1)) * 1_000)} per 1K
-                      requests
-                    </span>
-                  </div>
-                  <span className='sr-only'>
-                    {`${formatTokens(feature.tokens.input)} input, ${formatTokens(feature.tokens.cached ?? 0)} cached input and ${formatTokens(feature.tokens.output)} output tokens.`}
-                  </span>
-                </DataTableListItem>
-              )
-            })}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+                    </DataTableListItem>
+                  )
+                })}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

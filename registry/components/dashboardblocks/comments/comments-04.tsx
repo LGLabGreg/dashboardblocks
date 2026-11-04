@@ -20,6 +20,7 @@ import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { startTransition, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type MessageKind = 'customer' | 'reply' | 'note'
@@ -193,115 +194,123 @@ const Comments4 = (props: Comments4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {ticketId} with {customer.name}, {customer.company}.{' '}
-            <BlockReady>{waiting}</BlockReady>
-          </p>
-        </header>
-        <div>
-          {state && (
-            <div className='border-t'>
-              <BlockStateRows rows={3} />
-            </div>
-          )}
-          {!state && (
-            <ol
-              aria-label={`Conversation on ${ticketId}`}
-              className='flex flex-col gap-4 border-t pt-4'
-            >
-              {messages.map((message) => (
-                <li
-                  key={message.id}
-                  className={
-                    message.kind === 'note'
-                      ? 'border-l-2 border-orange-500/60 bg-orange-500/5 py-3 pr-3 pl-[calc(0.75rem-2px)]'
-                      : 'px-3'
-                  }
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {ticketId} with {customer.name}, {customer.company}.{' '}
+                <BlockReady>{waiting}</BlockReady>
+              </p>
+            </header>
+            <div>
+              {state && (
+                <div className='border-t'>
+                  <BlockStateRows rows={3} />
+                </div>
+              )}
+              {!state && (
+                <ol
+                  aria-label={`Conversation on ${ticketId}`}
+                  className='flex flex-col gap-4 border-t pt-4'
                 >
-                  <CommentItem
-                    comment={message}
-                    now={now}
-                    people={message.kind === 'note' ? people : undefined}
-                    badge={badge(message.kind)}
-                    onReact={
-                      message.kind === 'note'
-                        ? (emoji) => {
-                            onReact(message.id, emoji)
-                            setMessages((current) =>
-                              updateComment(current, message.id, (item) => ({
-                                ...item,
-                                reactions: toggleReaction(item.reactions, emoji),
-                              })),
-                            )
-                          }
-                        : undefined
+                  {messages.map((message) => (
+                    <li
+                      key={message.id}
+                      className={
+                        message.kind === 'note'
+                          ? 'border-l-2 border-orange-500/60 bg-orange-500/5 py-3 pr-3 pl-[calc(0.75rem-2px)]'
+                          : 'px-3'
+                      }
+                    >
+                      <CommentItem
+                        comment={message}
+                        now={now}
+                        people={message.kind === 'note' ? people : undefined}
+                        badge={badge(message.kind)}
+                        onReact={
+                          message.kind === 'note'
+                            ? (emoji) => {
+                                onReact(message.id, emoji)
+                                setMessages((current) =>
+                                  updateComment(current, message.id, (item) => ({
+                                    ...item,
+                                    reactions: toggleReaction(item.reactions, emoji),
+                                  })),
+                                )
+                              }
+                            : undefined
+                        }
+                      />
+                    </li>
+                  ))}
+                </ol>
+              )}
+              <p aria-live='polite' className='sr-only'>
+                {announcement}
+              </p>
+            </div>
+            <div className='border-t pt-4'>
+              <Tabs
+                value={mode}
+                onValueChange={(value) => setMode(value as Mode)}
+                className='w-full'
+              >
+                <TabsList>
+                  <TabsTrigger value='reply'>Reply</TabsTrigger>
+                  <TabsTrigger value='note'>Internal note</TabsTrigger>
+                </TabsList>
+                <TabsContent value='reply'>
+                  <CommentComposer
+                    label={`Reply to ${customer.name}`}
+                    placeholder={`Reply to ${customer.name.split(' ')[0]}`}
+                    submitLabel='Send reply'
+                    pendingLabel='Sending…'
+                    disabled={unavailable}
+                    value={drafts.reply}
+                    footer={
+                      <span className='text-muted-foreground block truncate'>
+                        Emailed to {customer.email}
+                      </span>
                     }
+                    onValueChange={(reply) =>
+                      setDrafts((current) => ({ ...current, reply }))
+                    }
+                    onSubmit={(body) => send(body, 'reply')}
                   />
-                </li>
-              ))}
-            </ol>
-          )}
-          <p aria-live='polite' className='sr-only'>
-            {announcement}
-          </p>
-        </div>
-        <div className='border-t pt-4'>
-          <Tabs
-            value={mode}
-            onValueChange={(value) => setMode(value as Mode)}
-            className='w-full'
-          >
-            <TabsList>
-              <TabsTrigger value='reply'>Reply</TabsTrigger>
-              <TabsTrigger value='note'>Internal note</TabsTrigger>
-            </TabsList>
-            <TabsContent value='reply'>
-              <CommentComposer
-                label={`Reply to ${customer.name}`}
-                placeholder={`Reply to ${customer.name.split(' ')[0]}`}
-                submitLabel='Send reply'
-                pendingLabel='Sending…'
-                disabled={unavailable}
-                value={drafts.reply}
-                footer={
-                  <span className='text-muted-foreground block truncate'>
-                    Emailed to {customer.email}
-                  </span>
-                }
-                onValueChange={(reply) => setDrafts((current) => ({ ...current, reply }))}
-                onSubmit={(body) => send(body, 'reply')}
-              />
-            </TabsContent>
-            <TabsContent value='note'>
-              <CommentComposer
-                className='*:data-[slot=input-group]:bg-orange-500/5'
-                label='Internal note'
-                placeholder='Add a note for your team. Type @ to mention someone.'
-                submitLabel='Add note'
-                pendingLabel='Adding…'
-                disabled={unavailable}
-                people={people}
-                value={drafts.note}
-                footer={
-                  <span className='flex min-w-0 items-center gap-1.5 text-orange-700 dark:text-orange-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
-                    {lockIcon}
-                    <span className='truncate'>
-                      {mentioned.length > 0
-                        ? `Only your team sees this. Notifies ${mentioned.join(', ')}.`
-                        : 'Only your team sees this'}
-                    </span>
-                  </span>
-                }
-                onValueChange={(note) => setDrafts((current) => ({ ...current, note }))}
-                onSubmit={(body) => send(body, 'note')}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
+                </TabsContent>
+                <TabsContent value='note'>
+                  <CommentComposer
+                    className='*:data-[slot=input-group]:bg-orange-500/5'
+                    label='Internal note'
+                    placeholder='Add a note for your team. Type @ to mention someone.'
+                    submitLabel='Add note'
+                    pendingLabel='Adding…'
+                    disabled={unavailable}
+                    people={people}
+                    value={drafts.note}
+                    footer={
+                      <span className='flex min-w-0 items-center gap-1.5 text-orange-700 dark:text-orange-400 [&_svg]:size-3.5 [&_svg]:shrink-0'>
+                        {lockIcon}
+                        <span className='truncate'>
+                          {mentioned.length > 0
+                            ? `Only your team sees this. Notifies ${mentioned.join(', ')}.`
+                            : 'Only your team sees this'}
+                        </span>
+                      </span>
+                    }
+                    onValueChange={(note) =>
+                      setDrafts((current) => ({ ...current, note }))
+                    }
+                    onSubmit={(body) => send(body, 'note')}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -18,11 +18,17 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Alerts4Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   counts?: Partial<Record<Exclude<AlertSeverity, 'resolved'>, number>>
-  latest?: { firedAt: Date; severity: AlertSeverity; source: string; title: string }
+  latest?: {
+    firedAt: Date
+    severity: AlertSeverity
+    source: string
+    title: string
+  }
   now: Date
   onViewAll?: () => void
 }
@@ -48,88 +54,92 @@ const Alerts4 = (props: Alerts4Props) => {
   const total = SEVERITIES.reduce((sum, severity) => sum + (counts?.[severity] ?? 0), 0)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
-        <div className='flex shrink-0 flex-col gap-0.5'>
-          {state === 'error' || state === 'empty' ? (
-            <p className='flex items-baseline gap-2'>
-              <span className='text-sm font-medium'>Open alerts</span>
-              <BlockStateText
-                className='text-2xl font-light tracking-tight'
-                variant='short'
-              />
-            </p>
-          ) : (
-            <p className='flex items-baseline gap-2'>
-              <span className='text-2xl font-light tracking-tight tabular-nums'>
-                {state === 'loading' ? <SkeletonText className='w-[1.5em]' /> : total}
-              </span>
-              <span className='text-sm font-medium'>
-                {total === 1 ? 'open alert' : 'open alerts'}
-              </span>
-            </p>
-          )}
-          <BlockReady className='w-40 text-sm'>
-            <Details className='text-sm'>
-              {SEVERITIES.map((severity) => {
-                const count = counts?.[severity] ?? 0
-                return count > 0 ? (
-                  <SeverityLabel variant='text' key={severity} severity={severity}>
-                    {count} {severityConfig[severity].label.toLowerCase()}
-                  </SeverityLabel>
-                ) : (
-                  <span key={severity} className='text-muted-foreground tabular-nums'>
-                    0 {severityConfig[severity].label.toLowerCase()}
-                  </span>
-                )
-              })}
-            </Details>
-          </BlockReady>
-        </div>
-        {state === 'loading' && (
-          <BlockReady className='min-w-0 flex-1 text-sm @2xl:border-l @2xl:pl-6'>
-            {null}
-          </BlockReady>
-        )}
-        {!state && (
-          <div className='flex min-w-0 flex-1 flex-col gap-0.5 text-sm @2xl:border-l @2xl:pl-6'>
-            {latest && total > 0 ? (
-              <>
-                <p>
-                  <span className='text-muted-foreground'>Latest </span>
-                  <SeverityLabel severity={latest.severity} />{' '}
-                  <span className='font-medium'>{latest.title}</span>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-3 border-t pt-3 in-data-[slot=card]:first:border-t-0 in-data-[slot=card]:first:pt-0 @2xl:flex-row @2xl:items-center @2xl:gap-6'>
+            <div className='flex shrink-0 flex-col gap-0.5'>
+              {state === 'error' || state === 'empty' ? (
+                <p className='flex items-baseline gap-2'>
+                  <span className='text-sm font-medium'>Open alerts</span>
+                  <BlockStateText
+                    className='text-2xl font-light tracking-tight'
+                    variant='short'
+                  />
                 </p>
-                <Details className='text-muted-foreground text-xs'>
-                  {latest.source}
-                  <time dateTime={latest.firedAt.toISOString()}>
-                    {formatRelativeTime(latest.firedAt, now)}
-                  </time>
+              ) : (
+                <p className='flex items-baseline gap-2'>
+                  <span className='text-2xl font-light tracking-tight tabular-nums'>
+                    {state === 'loading' ? <SkeletonText className='w-[1.5em]' /> : total}
+                  </span>
+                  <span className='text-sm font-medium'>
+                    {total === 1 ? 'open alert' : 'open alerts'}
+                  </span>
+                </p>
+              )}
+              <BlockReady className='w-40 text-sm'>
+                <Details className='text-sm'>
+                  {SEVERITIES.map((severity) => {
+                    const count = counts?.[severity] ?? 0
+                    return count > 0 ? (
+                      <SeverityLabel variant='text' key={severity} severity={severity}>
+                        {count} {severityConfig[severity].label.toLowerCase()}
+                      </SeverityLabel>
+                    ) : (
+                      <span key={severity} className='text-muted-foreground tabular-nums'>
+                        0 {severityConfig[severity].label.toLowerCase()}
+                      </span>
+                    )
+                  })}
                 </Details>
-              </>
-            ) : (
-              <p className='text-muted-foreground'>Nothing needs a response.</p>
+              </BlockReady>
+            </div>
+            {state === 'loading' && (
+              <BlockReady className='min-w-0 flex-1 text-sm @2xl:border-l @2xl:pl-6'>
+                {null}
+              </BlockReady>
             )}
-          </div>
-        )}
-        <Button
-          variant='outline'
-          size='sm'
-          className='self-start @2xl:self-center'
-          onClick={onViewAll}
-        >
-          View alerts
-          <IconPlaceholder
-            lucide='ArrowRightIcon'
-            tabler='IconArrowRight'
-            hugeicons='ArrowRight01Icon'
-            phosphor='ArrowRightIcon'
-            remixicon='RiArrowRightLine'
-            data-icon='inline-end'
-          />
-        </Button>
-      </section>
-    </BlockStateProvider>
+            {!state && (
+              <div className='flex min-w-0 flex-1 flex-col gap-0.5 text-sm @2xl:border-l @2xl:pl-6'>
+                {latest && total > 0 ? (
+                  <>
+                    <p>
+                      <span className='text-muted-foreground'>Latest </span>
+                      <SeverityLabel severity={latest.severity} />{' '}
+                      <span className='font-medium'>{latest.title}</span>
+                    </p>
+                    <Details className='text-muted-foreground text-xs'>
+                      {latest.source}
+                      <time dateTime={latest.firedAt.toISOString()}>
+                        {formatRelativeTime(latest.firedAt, now)}
+                      </time>
+                    </Details>
+                  </>
+                ) : (
+                  <p className='text-muted-foreground'>Nothing needs a response.</p>
+                )}
+              </div>
+            )}
+            <Button
+              variant='outline'
+              size='sm'
+              className='self-start @2xl:self-center'
+              onClick={onViewAll}
+            >
+              View alerts
+              <IconPlaceholder
+                lucide='ArrowRightIcon'
+                tabler='IconArrowRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='ArrowRightIcon'
+                remixicon='RiArrowRightLine'
+                data-icon='inline-end'
+              />
+            </Button>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

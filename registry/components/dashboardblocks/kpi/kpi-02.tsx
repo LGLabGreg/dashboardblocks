@@ -14,6 +14,8 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface KPI2Props extends BlockStateProps {
   comparison: string
   format?: KPIFormat
@@ -36,22 +38,25 @@ const KPI2 = (props: KPI2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
-      <KPI>
-        <KPIContent className='gap-1'>
-          <div className='flex items-baseline justify-between gap-3'>
-            <KPITitle className='truncate'>{title}</KPITitle>
-            <KPIChange
-              className='shrink-0'
-              comparison={comparison}
-              format={format}
-              previous={previous}
-              value={value}
-              variant='short'
-            />
-          </div>
-          <KPIValue value={value} format={format} animated />
-        </KPIContent>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-1'>
+              <div className='flex items-baseline justify-between gap-3'>
+                <KPITitle className='truncate'>{title}</KPITitle>
+                <KPIChange
+                  className='shrink-0'
+                  comparison={comparison}
+                  previous={previous}
+                  value={value}
+                  variant='short'
+                />
+              </div>
+              <KPIValue value={value} format={format} animated />
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

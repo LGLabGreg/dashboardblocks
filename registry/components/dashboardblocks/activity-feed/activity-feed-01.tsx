@@ -19,6 +19,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Activity {
   action: string
@@ -118,80 +119,88 @@ const ActivityFeed1 = (props: ActivityFeed1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {onViewAll && (
-            <Button variant='outline' size='sm' onClick={onViewAll}>
-              View all
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </Button>
-          )}
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={6} />
-          </div>
-        )}
-        {!state &&
-          days.map((day) => (
-            <section
-              key={day.key}
-              aria-labelledby={`${id}-${day.key}`}
-              className='flex flex-col gap-1 border-t pt-3'
-            >
-              <h3
-                id={`${id}-${day.key}`}
-                className='text-muted-foreground flex items-center justify-between text-xs font-medium'
-              >
-                {day.label}
-                <Tag>
-                  {day.items.length}
-                  <span className='sr-only'>
-                    {day.items.length === 1 ? ' update' : ' updates'}
-                  </span>
-                </Tag>
-              </h3>
-              <ActivityFeed>
-                {day.items.map((activity) => (
-                  <ActivityFeedItem key={activity.id} className='items-start py-2'>
-                    <PersonAvatar className='-my-0.5' person={activity.actor} size='sm' />
-                    <p className='min-w-0 flex-1 text-sm'>
-                      <span className='font-medium'>{activity.actor.name}</span>{' '}
-                      <span className='text-muted-foreground'>{activity.action}</span>
-                      {activity.target && (
-                        <>
-                          {' '}
-                          <span className='font-medium break-words'>
-                            {activity.target}
-                          </span>
-                        </>
-                      )}
-                    </p>
-                    <ActivityTime
-                      className='pt-0.5 tabular-nums'
-                      date={activity.at}
-                      now={now}
-                      timeZone={timeZone}
-                    />
-                  </ActivityFeedItem>
-                ))}
-              </ActivityFeed>
-            </section>
-          ))}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {onViewAll && (
+                <Button variant='outline' size='sm' onClick={onViewAll}>
+                  View all
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
+                  />
+                </Button>
+              )}
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={6} />
+              </div>
+            )}
+            {!state &&
+              days.map((day) => (
+                <section
+                  key={day.key}
+                  aria-labelledby={`${id}-${day.key}`}
+                  className='flex flex-col gap-1 border-t pt-3'
+                >
+                  <h3
+                    id={`${id}-${day.key}`}
+                    className='text-muted-foreground flex items-center justify-between text-xs font-medium'
+                  >
+                    {day.label}
+                    <Tag>
+                      {day.items.length}
+                      <span className='sr-only'>
+                        {day.items.length === 1 ? ' update' : ' updates'}
+                      </span>
+                    </Tag>
+                  </h3>
+                  <ActivityFeed>
+                    {day.items.map((activity) => (
+                      <ActivityFeedItem key={activity.id} className='items-start py-2'>
+                        <PersonAvatar
+                          className='-my-0.5'
+                          person={activity.actor}
+                          size='sm'
+                        />
+                        <p className='min-w-0 flex-1 text-sm'>
+                          <span className='font-medium'>{activity.actor.name}</span>{' '}
+                          <span className='text-muted-foreground'>{activity.action}</span>
+                          {activity.target && (
+                            <>
+                              {' '}
+                              <span className='font-medium break-words'>
+                                {activity.target}
+                              </span>
+                            </>
+                          )}
+                        </p>
+                        <ActivityTime
+                          className='pt-0.5 tabular-nums'
+                          date={activity.at}
+                          now={now}
+                          timeZone={timeZone}
+                        />
+                      </ActivityFeedItem>
+                    ))}
+                  </ActivityFeed>
+                </section>
+              ))}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

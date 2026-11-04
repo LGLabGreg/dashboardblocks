@@ -1,10 +1,11 @@
-import { Files1, files1ExampleProps } from './files-01'
+import { files1ExampleProps } from './files-01'
 import { Files2, files2ExampleProps } from './files-02'
 import { Files3, files3ExampleProps } from './files-03'
 import { Files4, files4ExampleProps } from './files-04'
+import { Files1Preview } from './preview'
 
 export const filesComponents = {
-  'files-01': Files1,
+  'files-01': Files1Preview,
   'files-02': Files2,
   'files-03': Files3,
   'files-04': Files4,

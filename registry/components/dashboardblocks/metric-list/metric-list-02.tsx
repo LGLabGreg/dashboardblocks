@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/metric-list'
 import { useId } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface MetricSection {
   key: string
   label: string
@@ -143,54 +145,58 @@ const MetricList2 = (props: MetricList2Props) => {
   )
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {description}{' '}
-              <span className='tabular-nums'>
-                {improving} of {total}
-              </span>{' '}
-              metrics improved.
-            </p>
-          </BlockReady>
-        </header>
-        <BlockStateRows className='border-t' rows={6} />
-        {!state &&
-          sections.map((section) => {
-            const headingId = `${id}-${section.key}`
-            const better = section.metrics.filter(isBetter).length
-            return (
-              <section
-                key={section.key}
-                aria-labelledby={headingId}
-                className='flex flex-col border-t pt-3'
-              >
-                <div className='flex items-baseline justify-between gap-3'>
-                  <h3 id={headingId} className='text-sm font-medium'>
-                    {section.label}
-                  </h3>
-                  <p className='text-muted-foreground text-xs tabular-nums'>
-                    {better} of {section.metrics.length} improved
-                  </p>
-                </div>
-                <MetricList>
-                  {section.metrics.map((metric) => (
-                    <MetricRow
-                      key={metric.key}
-                      comparison={comparison}
-                      metric={metric}
-                      showSparkline={false}
-                    />
-                  ))}
-                </MetricList>
-              </section>
-            )
-          })}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {description}{' '}
+                  <span className='tabular-nums'>
+                    {improving} of {total}
+                  </span>{' '}
+                  metrics improved.
+                </p>
+              </BlockReady>
+            </header>
+            <BlockStateRows className='border-t' rows={6} />
+            {!state &&
+              sections.map((section) => {
+                const headingId = `${id}-${section.key}`
+                const better = section.metrics.filter(isBetter).length
+                return (
+                  <section
+                    key={section.key}
+                    aria-labelledby={headingId}
+                    className='flex flex-col border-t pt-3'
+                  >
+                    <div className='flex items-baseline justify-between gap-3'>
+                      <h3 id={headingId} className='text-sm font-medium'>
+                        {section.label}
+                      </h3>
+                      <p className='text-muted-foreground text-xs tabular-nums'>
+                        {better} of {section.metrics.length} improved
+                      </p>
+                    </div>
+                    <MetricList>
+                      {section.metrics.map((metric) => (
+                        <MetricRow
+                          key={metric.key}
+                          comparison={comparison}
+                          metric={metric}
+                          showSparkline={false}
+                        />
+                      ))}
+                    </MetricList>
+                  </section>
+                )
+              })}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

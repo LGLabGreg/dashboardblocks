@@ -21,6 +21,8 @@ import {
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Contribution {
   label: string
   value: number
@@ -107,73 +109,80 @@ const Insights3 = (props: Insights3Props) => {
   summary.push('.')
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-5 border-t pt-4'>
-          <div className='flex flex-col gap-1'>
-            <div className='flex flex-wrap items-baseline gap-x-2'>
-              <KPIValue value={net} format={(value) => formatSigned(value, formatter)} />
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-5 border-t pt-4'>
+              <div className='flex flex-col gap-1'>
+                <div className='flex flex-wrap items-baseline gap-x-2'>
+                  <KPIValue
+                    value={net}
+                    format={(value) => formatSigned(value, formatter)}
+                  />
+                  {!state && (
+                    <span className='text-muted-foreground text-sm tabular-nums'>
+                      {formatter(previous)} <span aria-hidden>→</span>
+                      <span className='sr-only'>to</span> {formatter(previous + net)}
+                    </span>
+                  )}
+                </div>
+                <BlockReady className='text-sm'>
+                  <InsightText segments={summary} />
+                </BlockReady>
+              </div>
+              {state === 'loading' && <BlockStateRows rows={6} />}
               {!state && (
-                <span className='text-muted-foreground text-sm tabular-nums'>
-                  {formatter(previous)} <span aria-hidden>→</span>
-                  <span className='sr-only'>to</span> {formatter(previous + net)}
-                </span>
+                <>
+                  <ul className='flex flex-col gap-3'>
+                    {rows.map((row) => (
+                      <li
+                        key={row.label}
+                        className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
+                      >
+                        <span className='truncate text-sm'>{row.label}</span>
+                        <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
+                          <span className='font-medium'>
+                            {formatSigned(row.value, formatter)}
+                          </span>{' '}
+                          <span className='text-muted-foreground text-xs'>
+                            ({formatSigned(points(row.value), formatPoints)})
+                          </span>
+                        </span>
+                        <DivergingBar
+                          className='col-span-2 @md:col-span-1'
+                          color={toneColors[getChangeTone(row.value, goodDirection)]}
+                          max={max}
+                          value={row.value}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div
+                    aria-hidden
+                    className='text-muted-foreground grid grid-cols-[minmax(0,1fr)] gap-x-4 text-xs @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
+                  >
+                    <span className='hidden @md:block' />
+                    <span className='flex justify-between'>
+                      <span>Pulled down</span>
+                      <span>Pushed up</span>
+                    </span>
+                  </div>
+                  <p className='text-muted-foreground border-t pt-4 text-xs'>
+                    Points are each segment's share of the change, as a percentage of last
+                    period's {metric.toLowerCase()}. They add up to the total change.
+                  </p>
+                </>
               )}
             </div>
-            <BlockReady className='text-sm'>
-              <InsightText segments={summary} />
-            </BlockReady>
-          </div>
-          {state === 'loading' && <BlockStateRows rows={6} />}
-          {!state && (
-            <>
-              <ul className='flex flex-col gap-3'>
-                {rows.map((row) => (
-                  <li
-                    key={row.label}
-                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
-                  >
-                    <span className='truncate text-sm'>{row.label}</span>
-                    <span className='text-right text-sm whitespace-nowrap tabular-nums @md:order-last'>
-                      <span className='font-medium'>
-                        {formatSigned(row.value, formatter)}
-                      </span>{' '}
-                      <span className='text-muted-foreground text-xs'>
-                        ({formatSigned(points(row.value), formatPoints)})
-                      </span>
-                    </span>
-                    <DivergingBar
-                      className='col-span-2 @md:col-span-1'
-                      color={toneColors[getChangeTone(row.value, goodDirection)]}
-                      max={max}
-                      value={row.value}
-                    />
-                  </li>
-                ))}
-              </ul>
-              <div
-                aria-hidden
-                className='text-muted-foreground grid grid-cols-[minmax(0,1fr)] gap-x-4 text-xs @md:grid-cols-[8rem_minmax(0,1fr)_9rem]'
-              >
-                <span className='hidden @md:block' />
-                <span className='flex justify-between'>
-                  <span>Pulled down</span>
-                  <span>Pushed up</span>
-                </span>
-              </div>
-              <p className='text-muted-foreground border-t pt-4 text-xs'>
-                Points are each segment's share of the change, as a percentage of last
-                period's {metric.toLowerCase()}. They add up to the total change.
-              </p>
-            </>
-          )}
-        </div>
-      </section>
-    </BlockStateProvider>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

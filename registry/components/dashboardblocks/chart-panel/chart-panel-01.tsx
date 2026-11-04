@@ -38,6 +38,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface PeriodPoint {
   current: number
   label: string
@@ -99,103 +101,120 @@ const ChartPanel1 = (props: ChartPanel1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
-          <div className='flex flex-col gap-1'>
-            <KPIValue value={currentTotal} format={formatter} />
-            {showPrevious && (
-              <KPIChange
-                comparison={comparison}
-                format={formatter}
-                previous={previousTotal}
-                value={currentTotal}
-              />
-            )}
-          </div>
-          {showPrevious && (
-            <ChartPanelLegend
-              items={[
-                { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
-                { color: PREVIOUS_COLOR, label: previousLabel, shape: 'line' },
-              ]}
-            />
-          )}
-        </div>
-        <ChartPanelFigure className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <ComposedChart
-              aria-label={`${title} chart`}
-              data={data}
-              margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-            >
-              <defs>
-                <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
-                  <stop offset='0%' stopColor={CURRENT_COLOR} stopOpacity={0.3} />
-                  <stop offset='100%' stopColor={CURRENT_COLOR} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='label'
-                interval='preserveStartEnd'
-                minTickGap={40}
-              />
-              <YAxis
-                {...chartAxisProps}
-                tickFormatter={(value: number) => formatCompact(value)}
-                width={chartValueAxisWidth}
-              />
-              <Tooltip
-                content={(tooltipProps) => (
-                  <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
+              <div className='flex flex-col gap-1'>
+                <KPIValue value={currentTotal} format={formatter} />
+                {showPrevious && (
+                  <KPIChange
+                    comparison={comparison}
+                    previous={previousTotal}
+                    value={currentTotal}
+                  />
                 )}
-                cursor={chartLineCursor}
-                itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
-              />
+              </div>
               {showPrevious && (
-                <Line
-                  activeDot={chartActiveDot}
-                  dataKey='previous'
-                  dot={false}
-                  name={previousLabel}
-                  stroke={PREVIOUS_COLOR}
-                  strokeDasharray='3 3'
-                  strokeWidth={1.5}
-                  type='monotone'
+                <ChartPanelLegend
+                  items={[
+                    {
+                      color: CURRENT_COLOR,
+                      label: currentLabel,
+                      shape: 'line',
+                    },
+                    {
+                      color: PREVIOUS_COLOR,
+                      label: previousLabel,
+                      shape: 'line',
+                    },
+                  ]}
                 />
               )}
-              <Area
-                activeDot={chartActiveDot}
-                dataKey='current'
-                dot={chartLastDot(data.length, CURRENT_COLOR)}
-                fill={`url(#${gradient})`}
-                name={currentLabel}
-                stroke={CURRENT_COLOR}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                type='monotone'
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'label', label: 'Day' },
-            { format: formatter, key: 'current', label: currentLabel },
-            ...(showPrevious
-              ? [{ format: formatter, key: 'previous', label: previousLabel }]
-              : []),
-          ]}
-          rows={data}
-        />
-      </section>
+            </div>
+            <ChartPanelFigure className='h-64'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <ComposedChart
+                  aria-label={`${title} chart`}
+                  data={data}
+                  margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+                >
+                  <defs>
+                    <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='0%' stopColor={CURRENT_COLOR} stopOpacity={0.3} />
+                      <stop offset='100%' stopColor={CURRENT_COLOR} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='label'
+                    interval='preserveStartEnd'
+                    minTickGap={40}
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => (
+                      <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
+                    )}
+                    cursor={chartLineCursor}
+                    itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
+                  />
+                  {showPrevious && (
+                    <Line
+                      activeDot={chartActiveDot}
+                      dataKey='previous'
+                      dot={false}
+                      name={previousLabel}
+                      stroke={PREVIOUS_COLOR}
+                      strokeDasharray='3 3'
+                      strokeWidth={1.5}
+                      type='monotone'
+                    />
+                  )}
+                  <Area
+                    activeDot={chartActiveDot}
+                    dataKey='current'
+                    dot={chartLastDot(data.length, CURRENT_COLOR)}
+                    fill={`url(#${gradient})`}
+                    name={currentLabel}
+                    stroke={CURRENT_COLOR}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    type='monotone'
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Day' },
+                { format: formatter, key: 'current', label: currentLabel },
+                ...(showPrevious
+                  ? [
+                      {
+                        format: formatter,
+                        key: 'previous',
+                        label: previousLabel,
+                      },
+                    ]
+                  : []),
+              ]}
+              rows={data}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

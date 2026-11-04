@@ -14,6 +14,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Geo3Props extends BlockStateProps {
   /** Defaults to a sentence about the most active city. */
   description?: string
@@ -146,35 +148,41 @@ const Geo3 = (props: Geo3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            {description && (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            )}
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <span className='text-muted-foreground text-sm'>
-            {state ? unitName : `${unitName} in ${formatNumber(locations.length)} cities`}
-          </span>
-          <KPIValue value={total} format={(value) => formatNumber(value)} />
-        </div>
-        <DotMap
-          describe={(location) =>
-            `${location.name}: ${formatNumber(location.value)} ${unit}, ${share(location.value)}`
-          }
-          footer={<DotMapLegend max={max} />}
-          label={`${title}, by city`}
-          labelLargest
-          markers={locations}
-          max={max}
-          nameHeader='City'
-          showShare
-          valueHeader={unitName}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                {description && (
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                )}
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <span className='text-muted-foreground text-sm'>
+                {state
+                  ? unitName
+                  : `${unitName} in ${formatNumber(locations.length)} cities`}
+              </span>
+              <KPIValue value={total} format={(value) => formatNumber(value)} />
+            </div>
+            <DotMap
+              describe={(location) =>
+                `${location.name}: ${formatNumber(location.value)} ${unit}, ${share(location.value)}`
+              }
+              footer={<DotMapLegend max={max} />}
+              label={`${title}, by city`}
+              labelLargest
+              markers={locations}
+              max={max}
+              nameHeader='City'
+              showShare
+              valueHeader={unitName}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

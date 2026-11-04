@@ -384,7 +384,7 @@ function DocumentHeader({
       {brand}
       <div className='flex flex-col gap-1 @xl/document:items-end @xl/document:text-right print:items-end print:text-right'>
         <div className='flex flex-wrap items-center gap-x-3 gap-y-1 @xl/document:flex-row-reverse print:flex-row-reverse'>
-          <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
+          <h1 className='text-2xl/6 font-semibold tracking-tight'>{title}</h1>
           {status && !state && <span className='print:*:text-black!'>{status}</span>}
         </div>
         {state === 'loading' ? (

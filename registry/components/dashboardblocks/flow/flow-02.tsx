@@ -17,6 +17,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Flow2Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
@@ -89,61 +91,65 @@ const Flow2 = (props: Flow2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state === 'empty' || state === 'error' ? (
-          <div className='border-t pt-4'>
-            <KPIValue />
-          </div>
-        ) : (
-          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
-            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-              <dt className='text-muted-foreground text-sm'>
-                Landed on {state ? <SkeletonText className='w-12' /> : start?.label}
-              </dt>
-              <dd>
-                <KPIValue value={entered} format={(value) => formatNumber(value)} />
-              </dd>
-            </div>
-            {(state ? [0, 0] : leftAt).map((value, index) => (
-              <div key={index} className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>
-                  Left after page {index + 1}
-                </dt>
-                <dd>
-                  <KPIValue className='text-2xl' value={value} format={percent} />
-                </dd>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state === 'empty' || state === 'error' ? (
+              <div className='border-t pt-4'>
+                <KPIValue />
               </div>
-            ))}
-          </dl>
-        )}
-        <FlowChart
-          colorBy='target'
-          height={300}
-          label={title}
-          links={links}
-          minWidth='34rem'
-          nodes={nodes}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'step', label: 'Step' },
-            { key: 'source', label: 'From' },
-            { key: 'target', label: 'To' },
-            { key: 'value', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
-          ]}
-          rows={links.map((link) => ({
-            source: labels.get(link.source) ?? link.source,
-            step: `Page ${(columnOf.get(link.source) ?? 0) + 1}`,
-            target: labels.get(link.target) ?? link.target,
-            value: formatNumber(link.value),
-          }))}
-        />
-      </section>
+            ) : (
+              <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+                <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                  <dt className='text-muted-foreground text-sm'>
+                    Landed on {state ? <SkeletonText className='w-12' /> : start?.label}
+                  </dt>
+                  <dd>
+                    <KPIValue value={entered} format={(value) => formatNumber(value)} />
+                  </dd>
+                </div>
+                {(state ? [0, 0] : leftAt).map((value, index) => (
+                  <div key={index} className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>
+                      Left after page {index + 1}
+                    </dt>
+                    <dd>
+                      <KPIValue className='text-2xl' value={value} format={percent} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <FlowChart
+              colorBy='target'
+              height={300}
+              label={title}
+              links={links}
+              minWidth='34rem'
+              nodes={nodes}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'step', label: 'Step' },
+                { key: 'source', label: 'From' },
+                { key: 'target', label: 'To' },
+                { key: 'value', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
+              ]}
+              rows={links.map((link) => ({
+                source: labels.get(link.source) ?? link.source,
+                step: `Page ${(columnOf.get(link.source) ?? 0) + 1}`,
+                target: labels.get(link.target) ?? link.target,
+                value: formatNumber(link.value),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

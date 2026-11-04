@@ -18,6 +18,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface PageStat {
   path: string
@@ -75,57 +76,63 @@ const Leaderboard1 = (props: Leaderboard1Props) => {
   const max = Math.max(...pages.map((page) => page.visitors), 1)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {viewAllLabel !== null && (
-            <Button variant='outline' size='sm' onClick={onViewAll}>
-              {viewAllLabel}
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </Button>
-          )}
-        </header>
-        <div className='flex flex-col gap-1.5 border-t pt-4'>
-          <div className='text-muted-foreground flex justify-between px-2 text-xs'>
-            <span>{labelHeader}</span>
-            <span>{valueHeader}</span>
-          </div>
-          <BlockStateRows rows={6} />
-          {!state && (
-            <Leaderboard>
-              {pages.map((page, index) => (
-                <LeaderboardItem key={page.path}>
-                  <LeaderboardBar
-                    className={
-                      index === 0
-                        ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
-                        : undefined
-                    }
-                    delay={index * 100}
-                    value={(page.visitors / max) * 100}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {viewAllLabel !== null && (
+                <Button variant='outline' size='sm' onClick={onViewAll}>
+                  {viewAllLabel}
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
                   />
-                  <LeaderboardLabel className='truncate'>{page.path}</LeaderboardLabel>
-                  <LeaderboardValue>{formatNumber(page.visitors)}</LeaderboardValue>
-                </LeaderboardItem>
-              ))}
-            </Leaderboard>
-          )}
-        </div>
-      </section>
-    </BlockStateProvider>
+                </Button>
+              )}
+            </header>
+            <div className='flex flex-col gap-1.5 border-t pt-4'>
+              <div className='text-muted-foreground flex justify-between px-2 text-xs'>
+                <span>{labelHeader}</span>
+                <span>{valueHeader}</span>
+              </div>
+              <BlockStateRows rows={6} />
+              {!state && (
+                <Leaderboard>
+                  {pages.map((page, index) => (
+                    <LeaderboardItem key={page.path}>
+                      <LeaderboardBar
+                        className={
+                          index === 0
+                            ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                            : undefined
+                        }
+                        delay={index * 100}
+                        value={(page.visitors / max) * 100}
+                      />
+                      <LeaderboardLabel className='truncate'>
+                        {page.path}
+                      </LeaderboardLabel>
+                      <LeaderboardValue>{formatNumber(page.visitors)}</LeaderboardValue>
+                    </LeaderboardItem>
+                  ))}
+                </Leaderboard>
+              )}
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -27,6 +27,7 @@ import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useId, useMemo, useRef, useState } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -244,128 +245,140 @@ const Files3 = (props: Files3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>
-                {largest ? (
-                  <>
-                    {labelOf(largest)} use the most space, and{' '}
-                    <span className='tabular-nums'>{formatFileSize(free)}</span> of the{' '}
-                    {plan} is free.
-                  </>
-                ) : (
-                  `Nothing stored on the ${plan} yet.`
-                )}
-              </p>
-            </BlockReady>
-          </div>
-          <UsageStatusLabel className='mt-0.5' status={usage} />
-        </header>
-        <div className='flex flex-col gap-3 border-t pt-4'>
-          <div className='flex flex-wrap items-baseline gap-x-2'>
-            <UsageMeterValue>{formatFileSize(used)}</UsageMeterValue>
-            <UsageMeterLimit>of {formatFileSize(limit)}</UsageMeterLimit>
-          </div>
-          <div aria-hidden>
-            <SegmentedProgressBar
-              className='h-2.5 gap-0.5'
-              segments={breakdown.map((item, index) => ({
-                color: kindColors[index],
-                label: item.kind,
-                value: item.size,
-              }))}
-              total={Math.max(limit, used)}
-            />
-          </div>
-          {state === 'loading' && <BlockStateRows rows={4} />}
-          {!state && (
-            <ul className='grid gap-x-6 text-sm @sm:grid-cols-2'>
-              {breakdown.map((item, index) => (
-                <li
-                  key={item.kind}
-                  className='flex min-w-0 items-center gap-2 border-b py-2'
-                >
-                  <span
-                    aria-hidden
-                    className='size-2.5 shrink-0 rounded-[3px]'
-                    style={{ backgroundColor: kindColors[index] }}
-                  />
-                  <span className='text-muted-foreground truncate'>{labelOf(item)}</span>
-                  <span className='ml-auto font-medium tabular-nums'>
-                    {formatFileSize(item.size)}
-                  </span>
-                  <span className='text-muted-foreground w-9 text-right text-xs tabular-nums'>
-                    {formatPercent(limit > 0 ? item.size / limit : 0, {
-                      maximumFractionDigits: 0,
-                    })}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        {(state === undefined || state === 'loading') && (
-          <section aria-labelledby={headingId} className='flex flex-col gap-1'>
-            <div className='flex flex-col gap-0.5'>
-              <h3 id={headingId} className='text-sm font-medium'>
-                Largest files
-              </h3>
-              {!state && files.length > 0 && (
-                <p className='text-muted-foreground text-sm'>
-                  Deleting these {files.length === 1 ? 'file' : `${files.length} files`}{' '}
-                  would free{' '}
-                  <span className='tabular-nums'>{formatFileSize(reclaimable)}</span>.
-                </p>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>
+                    {largest ? (
+                      <>
+                        {labelOf(largest)} use the most space, and{' '}
+                        <span className='tabular-nums'>{formatFileSize(free)}</span> of
+                        the {plan} is free.
+                      </>
+                    ) : (
+                      `Nothing stored on the ${plan} yet.`
+                    )}
+                  </p>
+                </BlockReady>
+              </div>
+              <UsageStatusLabel className='mt-0.5' status={usage} />
+            </header>
+            <div className='flex flex-col gap-3 border-t pt-4'>
+              <div className='flex flex-wrap items-baseline gap-x-2'>
+                <UsageMeterValue>{formatFileSize(used)}</UsageMeterValue>
+                <UsageMeterLimit>of {formatFileSize(limit)}</UsageMeterLimit>
+              </div>
+              <div aria-hidden>
+                <SegmentedProgressBar
+                  className='h-2.5 gap-0.5'
+                  segments={breakdown.map((item, index) => ({
+                    color: kindColors[index],
+                    label: item.kind,
+                    value: item.size,
+                  }))}
+                  total={Math.max(limit, used)}
+                />
+              </div>
+              {state === 'loading' && <BlockStateRows rows={4} />}
+              {!state && (
+                <ul className='grid gap-x-6 text-sm @sm:grid-cols-2'>
+                  {breakdown.map((item, index) => (
+                    <li
+                      key={item.kind}
+                      className='flex min-w-0 items-center gap-2 border-b py-2'
+                    >
+                      <span
+                        aria-hidden
+                        className='size-2.5 shrink-0 rounded-[3px]'
+                        style={{ backgroundColor: kindColors[index] }}
+                      />
+                      <span className='text-muted-foreground truncate'>
+                        {labelOf(item)}
+                      </span>
+                      <span className='ml-auto font-medium tabular-nums'>
+                        {formatFileSize(item.size)}
+                      </span>
+                      <span className='text-muted-foreground w-9 text-right text-xs tabular-nums'>
+                        {formatPercent(limit > 0 ? item.size / limit : 0, {
+                          maximumFractionDigits: 0,
+                        })}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
-            {state === 'loading' ? (
-              <BlockStateRows className='mt-1 border-t' rows={4} />
-            ) : files.length > 0 ? (
-              <ul className='mt-1 flex flex-col border-t'>
-                {files.map((file) => (
-                  <li key={file.id} className='flex items-center gap-3 border-b py-2.5'>
-                    <FileKindIcon kind={file.kind} size='sm' />
-                    <div className='flex min-w-0 flex-1 flex-col'>
-                      <a
-                        href={file.href}
-                        className='truncate text-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:underline'
+            {(state === undefined || state === 'loading') && (
+              <section aria-labelledby={headingId} className='flex flex-col gap-1'>
+                <div className='flex flex-col gap-0.5'>
+                  <h3 id={headingId} className='text-sm font-medium'>
+                    Largest files
+                  </h3>
+                  {!state && files.length > 0 && (
+                    <p className='text-muted-foreground text-sm'>
+                      Deleting these{' '}
+                      {files.length === 1 ? 'file' : `${files.length} files`} would free{' '}
+                      <span className='tabular-nums'>{formatFileSize(reclaimable)}</span>.
+                    </p>
+                  )}
+                </div>
+                {state === 'loading' ? (
+                  <BlockStateRows className='mt-1 border-t' rows={4} />
+                ) : files.length > 0 ? (
+                  <ul className='mt-1 flex flex-col border-t'>
+                    {files.map((file) => (
+                      <li
+                        key={file.id}
+                        className='flex items-center gap-3 border-b py-2.5'
                       >
-                        {file.name}
-                      </a>
-                      <span className='text-muted-foreground truncate text-sm'>
-                        {file.location}
-                      </span>
-                    </div>
-                    <span className='text-sm tabular-nums'>
-                      {formatFileSize(file.size)}
-                    </span>
-                    <FileActionsMenu
-                      actions={actionsFor(file)}
-                      label={`Actions for ${file.name}`}
-                      className='-mr-2'
-                    />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className='text-muted-foreground border-t py-2.5 text-sm'>
-                No large files left to review.
-              </p>
+                        <FileKindIcon kind={file.kind} size='sm' />
+                        <div className='flex min-w-0 flex-1 flex-col'>
+                          <a
+                            href={file.href}
+                            className='truncate text-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:underline'
+                          >
+                            {file.name}
+                          </a>
+                          <span className='text-muted-foreground truncate text-sm'>
+                            {file.location}
+                          </span>
+                        </div>
+                        <span className='text-sm tabular-nums'>
+                          {formatFileSize(file.size)}
+                        </span>
+                        <FileActionsMenu
+                          actions={actionsFor(file)}
+                          label={`Actions for ${file.name}`}
+                          className='-mr-2'
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className='text-muted-foreground border-t py-2.5 text-sm'>
+                    No large files left to review.
+                  </p>
+                )}
+              </section>
             )}
+            <footer className='flex flex-wrap items-center justify-between gap-3'>
+              <p
+                aria-live='polite'
+                className='text-muted-foreground min-w-48 flex-1 text-sm'
+              >
+                {message || upgradeHint}
+              </p>
+              <a href={upgradeHref} className={cn(buttonVariants({ size: 'sm' }))}>
+                Upgrade storage
+              </a>
+            </footer>
           </section>
-        )}
-        <footer className='flex flex-wrap items-center justify-between gap-3'>
-          <p aria-live='polite' className='text-muted-foreground min-w-48 flex-1 text-sm'>
-            {message || upgradeHint}
-          </p>
-          <a href={upgradeHref} className={cn(buttonVariants({ size: 'sm' }))}>
-            Upgrade storage
-          </a>
-        </footer>
-      </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

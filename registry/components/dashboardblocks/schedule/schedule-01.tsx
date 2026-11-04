@@ -17,6 +17,8 @@ import {
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Schedule1Props extends BlockStateProps {
   days?: number
   /** Leave out, or pass none, to show the empty state. */
@@ -136,56 +138,66 @@ const Schedule1 = (props: Schedule1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, events)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {upcoming.length} {upcoming.length === 1 ? 'event' : 'events'} in the next{' '}
-              {days} days.
-              {next && (
-                <>
-                  {' '}
-                  Next up is {next.title}, {formatCountdown(next.start, now, timeZone)}.
-                </>
-              )}
-            </p>
-          </BlockReady>
-        </header>
-        {status || events.length === 0 ? (
-          <div className='border-t'>
-            <BlockStateRows rows={4} />
-          </div>
-        ) : groups.length === 0 ? (
-          <p className='text-muted-foreground border-t pt-3 text-sm'>
-            Nothing scheduled in the next {days} days.
-          </p>
-        ) : (
-          groups.map((group) => (
-            <section
-              key={group.key}
-              aria-labelledby={`${id}-${group.key}`}
-              className='flex flex-col gap-3 border-t pt-3'
-            >
-              <h3
-                id={`${id}-${group.key}`}
-                className='text-muted-foreground flex justify-between text-xs font-medium'
-              >
-                {group.label}
-                {/* Not a count: the day's date */}
-                <span className='font-normal tabular-nums'>
-                  {formatDate(group.day, 'day')}
-                </span>
-              </h3>
-              <ul className='flex flex-col gap-3'>
-                {group.events.map((event) => (
-                  <EventRow key={event.id} event={event} now={now} timeZone={timeZone} />
-                ))}
-              </ul>
-            </section>
-          ))
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {upcoming.length} {upcoming.length === 1 ? 'event' : 'events'} in the
+                  next {days} days.
+                  {next && (
+                    <>
+                      {' '}
+                      Next up is {next.title},{' '}
+                      {formatCountdown(next.start, now, timeZone)}.
+                    </>
+                  )}
+                </p>
+              </BlockReady>
+            </header>
+            {status || events.length === 0 ? (
+              <div className='border-t'>
+                <BlockStateRows rows={4} />
+              </div>
+            ) : groups.length === 0 ? (
+              <p className='text-muted-foreground border-t pt-3 text-sm'>
+                Nothing scheduled in the next {days} days.
+              </p>
+            ) : (
+              groups.map((group) => (
+                <section
+                  key={group.key}
+                  aria-labelledby={`${id}-${group.key}`}
+                  className='flex flex-col gap-3 border-t pt-3'
+                >
+                  <h3
+                    id={`${id}-${group.key}`}
+                    className='text-muted-foreground flex justify-between text-xs font-medium'
+                  >
+                    {group.label}
+                    {/* Not a count: the day's date */}
+                    <span className='font-normal tabular-nums'>
+                      {formatDate(group.day, 'day')}
+                    </span>
+                  </h3>
+                  <ul className='flex flex-col gap-3'>
+                    {group.events.map((event) => (
+                      <EventRow
+                        key={event.id}
+                        event={event}
+                        now={now}
+                        timeZone={timeZone}
+                      />
+                    ))}
+                  </ul>
+                </section>
+              ))
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

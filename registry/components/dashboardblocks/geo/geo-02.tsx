@@ -17,6 +17,8 @@ import {
 } from '@/registry/components/dashboardblocks/leaderboard'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface CountryRow {
@@ -105,58 +107,62 @@ const Geo2 = (props: Geo2Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, countries)}
     >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            {description && (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            )}
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1.5 border-t pt-4'>
-          <div className='text-muted-foreground flex justify-between px-2 text-xs'>
-            <span>Country</span>
-            <span className='capitalize'>{unit}</span>
-          </div>
-          <BlockStateRows rows={9} />
-          {!status && rows.length > 0 && (
-            <Leaderboard>
-              {rows.map((row, index) => (
-                <LeaderboardItem key={row.key}>
-                  <LeaderboardBar
-                    className={
-                      row.code === undefined
-                        ? 'bg-muted'
-                        : index === 0
-                          ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
-                          : undefined
-                    }
-                    delay={index * 100}
-                    value={largest > 0 ? (row.value / largest) * 100 : 0}
-                  />
-                  <CountryFlag code={row.code} />
-                  <LeaderboardLabel
-                    className={cn(
-                      'truncate',
-                      row.code === undefined && 'text-muted-foreground',
-                    )}
-                  >
-                    {row.name}
-                  </LeaderboardLabel>
-                  <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
-                    {share(row.value)}
-                    <span className='sr-only'> of total</span>
-                  </span>
-                  <LeaderboardValue className='w-14'>
-                    {formatter(row.value)}
-                  </LeaderboardValue>
-                </LeaderboardItem>
-              ))}
-            </Leaderboard>
-          )}
-        </div>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                {description && (
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                )}
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1.5 border-t pt-4'>
+              <div className='text-muted-foreground flex justify-between px-2 text-xs'>
+                <span>Country</span>
+                <span className='capitalize'>{unit}</span>
+              </div>
+              <BlockStateRows rows={9} />
+              {!status && rows.length > 0 && (
+                <Leaderboard>
+                  {rows.map((row, index) => (
+                    <LeaderboardItem key={row.key}>
+                      <LeaderboardBar
+                        className={
+                          row.code === undefined
+                            ? 'bg-muted'
+                            : index === 0
+                              ? 'bg-[color-mix(in_oklab,var(--color-chart-2)_32%,transparent)]'
+                              : undefined
+                        }
+                        delay={index * 100}
+                        value={largest > 0 ? (row.value / largest) * 100 : 0}
+                      />
+                      <CountryFlag code={row.code} />
+                      <LeaderboardLabel
+                        className={cn(
+                          'truncate',
+                          row.code === undefined && 'text-muted-foreground',
+                        )}
+                      >
+                        {row.name}
+                      </LeaderboardLabel>
+                      <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
+                        {share(row.value)}
+                        <span className='sr-only'> of total</span>
+                      </span>
+                      <LeaderboardValue className='w-14'>
+                        {formatter(row.value)}
+                      </LeaderboardValue>
+                    </LeaderboardItem>
+                  ))}
+                </Leaderboard>
+              )}
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

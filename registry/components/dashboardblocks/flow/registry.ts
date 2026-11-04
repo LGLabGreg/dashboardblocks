@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'flow-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('flow'),
@@ -29,6 +30,7 @@ export const examples: Registry['items'] = [
     name: 'flow-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('flow'),
@@ -51,6 +53,7 @@ export const examples: Registry['items'] = [
     name: 'flow-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('flow'),
@@ -73,6 +76,7 @@ export const examples: Registry['items'] = [
     name: 'flow-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('flow'),
       registryUrl('format'),

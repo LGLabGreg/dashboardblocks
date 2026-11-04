@@ -17,6 +17,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface StatGroup4Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   metrics?: StatMetric[]
@@ -69,22 +71,26 @@ const StatGroup4 = (props: StatGroup4Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, metrics)}
     >
-      <section className='@container flex flex-col gap-4'>
-        <StatGroup className='grid-cols-2 gap-x-4 gap-y-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
-          {shown.map((metric) => (
-            <Stat
-              key={metric.key}
-              className='flex-row flex-wrap items-baseline gap-x-2 gap-y-0.5 pt-2'
-            >
-              <StatLabel className='basis-full truncate text-xs'>
-                {metric.label}
-              </StatLabel>
-              <StatValue className='text-2xl'>{formatStatValue(metric)}</StatValue>
-              <StatChange className='text-xs' metric={metric} variant='short' />
-            </Stat>
-          ))}
-        </StatGroup>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <StatGroup className='grid-cols-2 gap-x-4 gap-y-3 @2xl:auto-cols-fr @2xl:grid-flow-col @2xl:grid-cols-none'>
+              {shown.map((metric) => (
+                <Stat
+                  key={metric.key}
+                  className='flex-row flex-wrap items-baseline gap-x-2 gap-y-0.5 pt-2'
+                >
+                  <StatLabel className='basis-full truncate text-xs'>
+                    {metric.label}
+                  </StatLabel>
+                  <StatValue className='text-2xl'>{formatStatValue(metric)}</StatValue>
+                  <StatChange className='text-xs' metric={metric} variant='short' />
+                </Stat>
+              ))}
+            </StatGroup>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

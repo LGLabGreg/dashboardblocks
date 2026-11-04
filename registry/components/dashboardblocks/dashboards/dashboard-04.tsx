@@ -38,8 +38,6 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
-
 interface Dashboard4Props extends BlockStateProps {
   empty?: boolean
   title: string
@@ -466,13 +464,13 @@ const Dashboard4 = (props: Dashboard4Props) => {
       state={status ?? (empty ? 'empty' : undefined)}
     >
       <div className='@container flex w-full flex-col gap-8'>
-        <header className='flex flex-col gap-3'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-wrap items-start justify-between gap-3'>
-              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
-            </div>
-            <p className='text-muted-foreground leading-relaxed'>
+        <header className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-start justify-between gap-3'>
+            <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+            <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <p className='text-muted-foreground min-w-0 leading-relaxed'>
               Showing{' '}
               <DateRangePicker
                 onValueChange={(preset) => update({ preset })}
@@ -486,31 +484,31 @@ const Dashboard4 = (props: Dashboard4Props) => {
                 {formatDateRange(getPreviousRange(range))}.
               </span>
             </p>
-          </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            {query.segment && (
-              <FilterChip
-                field='Segment'
+            <div className='flex flex-wrap items-center gap-2'>
+              {query.segment && (
+                <FilterChip
+                  field='Segment'
+                  value={query.segment}
+                  onRemove={() => update({ segment: null })}
+                />
+              )}
+              <FilterMenu
+                allLabel='All segments'
+                label='Segment'
+                onValueChange={(segment) => update({ segment })}
+                options={SEGMENTS.map((item) => item.name)}
                 value={query.segment}
-                onRemove={() => update({ segment: null })}
-              />
-            )}
-            <FilterMenu
-              allLabel='All segments'
-              label='Segment'
-              onValueChange={(segment) => update({ segment })}
-              options={SEGMENTS.map((item) => item.name)}
-              value={query.segment}
-            >
-              <IconPlaceholder
-                lucide='BuildingIcon'
-                tabler='IconBuilding'
-                hugeicons='Building03Icon'
-                phosphor='BuildingIcon'
-                remixicon='RiBuildingLine'
-              />
-              {query.segment ? 'Change segment' : 'Filter by segment'}
-            </FilterMenu>
+              >
+                <IconPlaceholder
+                  lucide='BuildingIcon'
+                  tabler='IconBuilding'
+                  hugeicons='Building03Icon'
+                  phosphor='BuildingIcon'
+                  remixicon='RiBuildingLine'
+                />
+                {query.segment ? 'Change segment' : 'Filter by segment'}
+              </FilterMenu>
+            </div>
           </div>
         </header>
         <BlockBusy
@@ -518,86 +516,72 @@ const Dashboard4 = (props: Dashboard4Props) => {
           label='Updating the dashboard'
           className='grid gap-4 @4xl:grid-cols-3'
         >
-          <Card className='@4xl:col-span-3'>
-            <CardContent>
-              <StatGroup2
-                errorMessage={errorMessage}
-                status={status}
-                comparison={data.previousLabel}
-                metrics={empty ? [] : data.stats}
-                title='Sales performance'
-              />
-            </CardContent>
-          </Card>
-          <Card className='@4xl:col-span-3'>
-            <CardContent>
-              <Pipeline2
-                errorMessage={errorMessage}
-                status={status}
-                noun='deals'
-                stages={empty ? [] : data.stages}
-                title='Open pipeline'
-              />
-            </CardContent>
-          </Card>
-          <Card className='@4xl:col-span-2'>
-            <CardContent>
-              <ChartPanel4
-                errorMessage={errorMessage}
-                status={status}
-                data={empty ? [] : data.months}
-                description={status || empty ? '' : data.bookingsSummary}
-                formatter={currency}
-                title='Bookings'
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <Funnel3
-                errorMessage={errorMessage}
-                status={status}
-                description='How far new leads got, step by step.'
-                stages={empty ? [] : data.funnel}
-                title='Lead conversion'
-              />
-            </CardContent>
-          </Card>
-          <Card className='@4xl:col-span-2'>
-            <CardContent>
-              <Pipeline4
-                errorMessage={errorMessage}
-                status={status}
-                owners={empty ? [] : data.owners}
-                stages={STAGES}
-                title={`${data.quarter.label} forecast`}
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <ActivityFeed1
-                errorMessage={errorMessage}
-                status={status}
-                activities={empty ? [] : data.activity}
-                now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
-                title='Deal activity'
-              />
-            </CardContent>
-          </Card>
-          <Card className='@4xl:col-span-3'>
-            <CardContent>
-              <Pipeline3
-                errorMessage={errorMessage}
-                status={status}
-                items={empty ? [] : data.deals}
-                noun='open deals'
-                now={today}
-                stages={STAGES}
-                title='Stuck deals'
-              />
-            </CardContent>
-          </Card>
+          <div className='grid @4xl:col-span-3'>
+            <StatGroup2
+              errorMessage={errorMessage}
+              status={status}
+              comparison={data.previousLabel}
+              metrics={empty ? [] : data.stats}
+              title='Sales performance'
+            />
+          </div>
+          <div className='grid @4xl:col-span-3'>
+            <Pipeline2
+              errorMessage={errorMessage}
+              status={status}
+              noun='deals'
+              stages={empty ? [] : data.stages}
+              title='Open pipeline'
+            />
+          </div>
+          <div className='grid @4xl:col-span-2'>
+            <ChartPanel4
+              errorMessage={errorMessage}
+              status={status}
+              data={empty ? [] : data.months}
+              description={status || empty ? '' : data.bookingsSummary}
+              formatter={currency}
+              title='Bookings'
+            />
+          </div>
+          <div className='grid'>
+            <Funnel3
+              errorMessage={errorMessage}
+              status={status}
+              description='How far new leads got, step by step.'
+              stages={empty ? [] : data.funnel}
+              title='Lead conversion'
+            />
+          </div>
+          <div className='grid @4xl:col-span-2'>
+            <Pipeline4
+              errorMessage={errorMessage}
+              status={status}
+              owners={empty ? [] : data.owners}
+              stages={STAGES}
+              title={`${data.quarter.label} forecast`}
+            />
+          </div>
+          <div className='grid'>
+            <ActivityFeed1
+              errorMessage={errorMessage}
+              status={status}
+              activities={empty ? [] : data.activity}
+              now={new Date(today.getTime() + NOW_HOURS * 3_600_000)}
+              title='Deal activity'
+            />
+          </div>
+          <div className='grid @4xl:col-span-3'>
+            <Pipeline3
+              errorMessage={errorMessage}
+              status={status}
+              items={empty ? [] : data.deals}
+              noun='open deals'
+              now={today}
+              stages={STAGES}
+              title='Stuck deals'
+            />
+          </div>
         </BlockBusy>
       </div>
     </BlockStateProvider>

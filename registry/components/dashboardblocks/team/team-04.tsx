@@ -18,6 +18,7 @@ import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Shift {
   end: Date
@@ -140,112 +141,119 @@ const Team4 = (props: Team4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {description}. <BlockReady className='text-sm'>{summary}</BlockReady>
-          </p>
-        </header>
-        <section
-          aria-labelledby={`${id}-now`}
-          className='flex flex-col gap-3 border-t pt-4'
-        >
-          <h3 id={`${id}-now`} className='text-sm font-medium'>
-            On call now
-          </h3>
-          {state ? (
-            <BlockStateRows rows={1} />
-          ) : current ? (
-            <>
-              <div className='flex flex-wrap items-center gap-3'>
-                <PersonAvatar person={current.person} showPresence size='lg' />
-                <div className='flex min-w-0 flex-1 flex-col'>
-                  <span className='truncate text-2xl font-light tracking-tight'>
-                    {current.person.name}
-                  </span>
-                  {current.person.presence && (
-                    <PresenceLabel
-                      presence={current.person.presence}
-                      className='text-xs'
-                    />
-                  )}
-                </div>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => onPage?.(current.person)}
-                >
-                  <IconPlaceholder
-                    lucide='BellRingIcon'
-                    tabler='IconBellRinging'
-                    hugeicons='NotificationSquareIcon'
-                    phosphor='BellRingingIcon'
-                    remixicon='RiNotification3Line'
-                    data-icon='inline-start'
-                  />
-                  Page<span className='sr-only'> {current.person.name}</span>
-                </Button>
-              </div>
-              <div aria-hidden>
-                <ProgressBar
-                  className='h-1.5'
-                  fillClassName='motion-reduce:transition-none'
-                  percentage={elapsed * 100}
-                />
-              </div>
-              <p className='text-muted-foreground flex flex-wrap justify-between gap-x-4 gap-y-0.5 text-xs'>
-                <span>
-                  Hands over{' '}
-                  <time
-                    className='text-foreground font-medium'
-                    dateTime={current.end.toISOString()}
-                  >
-                    {formatDate(current.end, 'weekday-day-time-zone', timeZone)}
-                  </time>
-                </span>
-                <span className='tabular-nums'>
-                  in {formatDuration(current.end.getTime() - now.getTime())}
-                </span>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {description}. <BlockReady className='text-sm'>{summary}</BlockReady>
               </p>
-            </>
-          ) : (
-            <p className='text-muted-foreground text-sm'>Nobody is on call right now.</p>
-          )}
-        </section>
-        {!state && next && (
-          <section
-            aria-labelledby={`${id}-next`}
-            className='flex flex-col gap-1 border-t pt-4'
-          >
-            <h3 id={`${id}-next`} className='text-sm font-medium'>
-              Coming up
-            </h3>
-            <ol className='flex flex-col divide-y'>
-              {comingUp.map((shift) => (
-                <li
-                  key={`${shift.person.id}-${shift.start.toISOString()}`}
-                  className='flex items-center gap-3 py-2.5'
-                >
-                  <PersonAvatar person={shift.person} size='sm' />
-                  <span className='min-w-0 flex-1 truncate text-sm'>
-                    {shift.person.name}
-                  </span>
-                  <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
-                    <time dateTime={shift.start.toISOString()}>
-                      {formatDate(shift.start, 'day', timeZone)}
-                    </time>
-                    {' – '}
-                    <time dateTime={shift.end.toISOString()}>
-                      {formatDate(shift.end, 'day', timeZone)}
-                    </time>
-                  </span>
-                </li>
-              ))}
-            </ol>
+            </header>
+            <section
+              aria-labelledby={`${id}-now`}
+              className='flex flex-col gap-3 border-t pt-4'
+            >
+              <h3 id={`${id}-now`} className='text-sm font-medium'>
+                On call now
+              </h3>
+              {state ? (
+                <BlockStateRows rows={1} />
+              ) : current ? (
+                <>
+                  <div className='flex flex-wrap items-center gap-3'>
+                    <PersonAvatar person={current.person} showPresence size='lg' />
+                    <div className='flex min-w-0 flex-1 flex-col'>
+                      <span className='truncate text-2xl font-light tracking-tight'>
+                        {current.person.name}
+                      </span>
+                      {current.person.presence && (
+                        <PresenceLabel
+                          presence={current.person.presence}
+                          className='text-xs'
+                        />
+                      )}
+                    </div>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => onPage?.(current.person)}
+                    >
+                      <IconPlaceholder
+                        lucide='BellRingIcon'
+                        tabler='IconBellRinging'
+                        hugeicons='NotificationSquareIcon'
+                        phosphor='BellRingingIcon'
+                        remixicon='RiNotification3Line'
+                        data-icon='inline-start'
+                      />
+                      Page
+                      <span className='sr-only'> {current.person.name}</span>
+                    </Button>
+                  </div>
+                  <div aria-hidden>
+                    <ProgressBar
+                      className='h-1.5'
+                      fillClassName='motion-reduce:transition-none'
+                      percentage={elapsed * 100}
+                    />
+                  </div>
+                  <p className='text-muted-foreground flex flex-wrap justify-between gap-x-4 gap-y-0.5 text-xs'>
+                    <span>
+                      Hands over{' '}
+                      <time
+                        className='text-foreground font-medium'
+                        dateTime={current.end.toISOString()}
+                      >
+                        {formatDate(current.end, 'weekday-day-time-zone', timeZone)}
+                      </time>
+                    </span>
+                    <span className='tabular-nums'>
+                      in {formatDuration(current.end.getTime() - now.getTime())}
+                    </span>
+                  </p>
+                </>
+              ) : (
+                <p className='text-muted-foreground text-sm'>
+                  Nobody is on call right now.
+                </p>
+              )}
+            </section>
+            {!state && next && (
+              <section
+                aria-labelledby={`${id}-next`}
+                className='flex flex-col gap-1 border-t pt-4'
+              >
+                <h3 id={`${id}-next`} className='text-sm font-medium'>
+                  Coming up
+                </h3>
+                <ol className='flex flex-col divide-y'>
+                  {comingUp.map((shift) => (
+                    <li
+                      key={`${shift.person.id}-${shift.start.toISOString()}`}
+                      className='flex items-center gap-3 py-2.5'
+                    >
+                      <PersonAvatar person={shift.person} size='sm' />
+                      <span className='min-w-0 flex-1 truncate text-sm'>
+                        {shift.person.name}
+                      </span>
+                      <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
+                        <time dateTime={shift.start.toISOString()}>
+                          {formatDate(shift.start, 'day', timeZone)}
+                        </time>
+                        {' – '}
+                        <time dateTime={shift.end.toISOString()}>
+                          {formatDate(shift.end, 'day', timeZone)}
+                        </time>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
           </section>
-        )}
-      </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

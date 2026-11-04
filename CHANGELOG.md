@@ -1,5 +1,16 @@
 # dashboardblocks
 
+## 1.21.0
+
+### Minor Changes
+
+- 9cb8e9a: Chart Panel 02 to 06 and every Breakdown, Distribution, Scatter and Forecast block now draw themselves in a shadcn Card, so they follow your style's card.
+- e41f5a1: The Flow, Funnel, Geo, Heatmap and Retention blocks, and Realtime 02 to 04, now draw themselves in a shadcn Card, so they follow your style's card.
+- 47e6d75: The other KPI blocks, Stat Group 02 to 05 and Realtime 01 now draw themselves in a shadcn Card, so they follow your style's card. Stat groups show a line between each number.
+- a87482d: KPI 01, Bar Chart KPI 01, Stat Group 01, Chart Panel 01 and Activity Feed 01 now draw themselves in a shadcn Card, so they follow your style's card. Stat Group 01 shows its numbers side by side with a line between each. KPI 05 keeps one card per number.
+- 6972aee: The Activity Feed, Checklist, Comments, Schedule, Timeline and States blocks, Team 01 to 04, Notifications 01 and 02, and Files 01 and 03 now draw themselves in a shadcn Card, so they follow your style's card.
+- ad527fd: Realtime 01 to 04, AI Assistant 01 to 04, Files 01 and Dashboards 03 and 05 no longer ship the docs preview's made-up updates and canned replies. The Realtime blocks show the data you pass, AI Assistant 01 to 04 need a `chat` (`useChat()` or `useChatStream`), and Files 01 needs an `upload` function. Chart tooltips near the edge of a card open inside it.
+
 ## 1.20.4
 
 ### Patch Changes

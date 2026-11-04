@@ -4,18 +4,8 @@ import {
   ChatContextChip,
   ChatPanel,
   type SuggestedPrompt,
-  useChatStream,
 } from '@/registry/components/dashboardblocks/ai-assistant'
-import {
-  type AIChat,
-  type AIMessage,
-  type AIMessagePart,
-  type AIReasoningPart,
-  type AIReply,
-  type AITextPart,
-  getMessageText,
-  isToolPart,
-} from '@/registry/components/dashboardblocks/ai-message'
+import type { AIChat } from '@/registry/components/dashboardblocks/ai-message'
 import type { AIToolLabel } from '@/registry/components/dashboardblocks/ai-parts'
 import {
   BlockReady,
@@ -55,10 +45,10 @@ interface Account {
 interface AiAssistant1Props extends BlockStateProps {
   accounts?: Account[]
   /**
-   * The chat the panel runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream. Leave out to run canned replies.
+   * The chat the panel runs: `useChat()` from `@ai-sdk/react`, or `useChatStream` for any other stream.
    * While the page shows in the message box, each question carries `metadata: { context }`, so the server knows to add the page's data.
    */
-  chat?: AIChat
+  chat: AIChat
   /** Follows each previous value, such as `last month`. */
   comparison: string
   context: string
@@ -66,8 +56,6 @@ interface AiAssistant1Props extends BlockStateProps {
   description: string
   /** Names each point of a metric's history, oldest first. */
   historyLabels: string[]
-  /** The conversation the canned replies start from. With `chat`, pass it to the chat instead. */
-  messages?: AIMessage[]
   /** Leave out, or pass none, to show the empty state. */
   metrics?: Metric[]
   suggestions: SuggestedPrompt[]
@@ -79,7 +67,7 @@ interface AiAssistant1Props extends BlockStateProps {
 const asCurrency = (value: number) => formatCurrency(value)
 const asPercent = (value: number) => formatPercent(value / 100)
 
-const exampleProps: AiAssistant1Props = {
+const exampleProps: Omit<AiAssistant1Props, 'chat'> = {
   accounts: [
     { mrr: 12_400, name: 'Northwind Logistics', plan: 'Enterprise' },
     { mrr: 8_950, name: 'Helio Health', plan: 'Enterprise' },
@@ -92,7 +80,6 @@ const exampleProps: AiAssistant1Props = {
   defaultOpen: true,
   description: 'Recurring revenue and customers over the last 30 days.',
   historyLabels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-  messages: [],
   metrics: [
     {
       formatter: asCurrency,
@@ -176,147 +163,6 @@ const exampleProps: AiAssistant1Props = {
   },
 }
 
-const cannedReplies: Record<string, AIMessagePart[]> = {
-  'Why did churn go up this month?': [
-    {
-      text: 'Churn moved from 1.4% to 1.8%. Check which plans the 31 cancellations came from and whether they line up with the Sep 1 price change.',
-      type: 'reasoning',
-    },
-    {
-      text: `Churn rose from **1.4%** to **1.8%**, and most of it comes from one place:
-
-- **Starter plans.** 23 of the 31 cancellations were Starter customers in their first 90 days.
-- **Price change.** 14 of them cancelled within a week of the Sep 1 price increase.
-- **Enterprise held steady.** No Enterprise account cancelled, and two expanded.
-
-Offering Starter customers the old price for three more months would likely win back about half of those accounts.`,
-      type: 'text',
-    },
-  ],
-  'Draft a revenue update for the team': [
-    {
-      text: `Here's a draft you can post:
-
-**Revenue update, September**
-MRR reached **$184,320**, up 4.2% on August, with 312 new customers. Net retention is 112%, helped by two Enterprise expansions.
-
-Churn rose to 1.8%, mostly Starter customers after the price change. Next week we'll test a win-back offer for them.`,
-      type: 'text',
-    },
-  ],
-  'Which accounts are at risk?': [
-    {
-      text: 'Look for falling seat use, failed payments and a run of support tickets among the top accounts, then sort by renewal date.',
-      type: 'reasoning',
-    },
-    {
-      input: { limit: 3, signals: ['seat use', 'failed payments', 'support tickets'] },
-      output: [
-        {
-          account: 'Brightline Studio',
-          mrr: 4_200,
-          renews: '2026-10-14',
-          signal: '19 of 42 seats used',
-        },
-        {
-          account: 'Kestrel Analytics',
-          mrr: 3_780,
-          renews: '2026-11-02',
-          signal: 'Two failed payments',
-        },
-        {
-          account: 'Oakridge Dental Group',
-          mrr: 2_640,
-          renews: '2026-12-09',
-          signal: '4 export tickets',
-        },
-      ],
-      state: 'output-available',
-      toolCallId: 'call-at-risk',
-      type: 'tool-find_at_risk_accounts',
-    },
-    {
-      text: `Three accounts show the usual warning signs:
-
-| Account | Signal | MRR | Renews |
-| :-- | :-- | --: | :-- |
-| Brightline Studio | 19 of 42 seats used | $4,200 | Oct 14 |
-| Kestrel Analytics | Two failed payments | $3,780 | Nov 2 |
-| Oakridge Dental Group | 4 export tickets | $2,640 | Dec 9 |
-
-Together they're **$10,620** of MRR. Brightline renews first, so start there.`,
-      type: 'text',
-    },
-  ],
-}
-
-const fallbackReply: AIMessagePart[] = [
-  {
-    text: 'This is a demo reply. Pass `chat` to stream answers from your own model, with the page’s data as context.',
-    type: 'text',
-  },
-]
-
-const noContextReply: AIMessagePart[] = [
-  {
-    text: 'I can’t see this page without its context. Add it back to the message box to ask about these numbers.',
-    type: 'text',
-  },
-]
-
-function hasContext(metadata: unknown) {
-  return typeof metadata === 'object' && metadata !== null && 'context' in metadata
-}
-
-function wait(ms: number, signal: AbortSignal) {
-  return new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => {
-      signal.removeEventListener('abort', abort)
-      resolve()
-    }, ms)
-    function abort() {
-      clearTimeout(timer)
-      reject(signal.reason)
-    }
-    signal.addEventListener('abort', abort, { once: true })
-  })
-}
-
-async function* simulateReply(
-  reply: AIMessagePart[],
-  signal: AbortSignal,
-): AsyncGenerator<AIReply> {
-  const parts: AIMessagePart[] = [{ type: 'step-start' }]
-  await wait(400, signal)
-  yield { parts }
-  for (const step of reply) {
-    if (isToolPart(step)) {
-      const part = { ...step, output: undefined, state: 'input-available' as const }
-      parts.push(part)
-      yield { parts }
-      await wait(900, signal)
-      Object.assign(part, { output: step.output, state: step.state })
-      yield { parts }
-      continue
-    }
-    if (step.type !== 'text' && step.type !== 'reasoning') continue
-    const part: AITextPart | AIReasoningPart = {
-      ...step,
-      state: 'streaming',
-      text: '',
-    }
-    parts.push(part)
-    await wait(step.type === 'reasoning' ? 900 : 200, signal)
-    for (const word of step.text.split(/(?<=\s)/)) {
-      await wait(step.type === 'reasoning' ? 8 : 25, signal)
-      part.text += word
-      yield { parts }
-    }
-    part.state = 'done'
-  }
-  yield { parts }
-}
-
 const AiAssistant1 = (props: AiAssistant1Props) => {
   const {
     accounts = [],
@@ -325,7 +171,6 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
     defaultOpen = true,
     description,
     historyLabels,
-    messages: initialMessages = [],
     metrics = [],
     errorMessage,
     status: blockStatus,
@@ -340,18 +185,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
   const panelId = useId()
   const [open, setOpen] = useState(defaultOpen)
   const [withContext, setWithContext] = useState(true)
-  const demo = useChatStream({
-    initialMessages,
-    onSend: (conversation, signal) => {
-      const last = conversation.at(-1)
-      const question = getMessageText(last ?? { parts: [] })
-      const reply = hasContext(last?.metadata)
-        ? (cannedReplies[question] ?? fallbackReply)
-        : noContextReply
-      return simulateReply(reply, signal)
-    },
-  })
-  const baseChat = props.chat ?? demo
+  const baseChat = props.chat
   const chat: AIChat = {
     ...baseChat,
     sendMessage: (message) =>

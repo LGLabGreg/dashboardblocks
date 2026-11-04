@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'metric-list-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('metric-list')],
+    registryDependencies: [
+      'card',
+      registryUrl('block-state'),
+      registryUrl('metric-list'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/metric-list/metric-list-01.tsx',
@@ -22,7 +26,11 @@ export const examples: Registry['items'] = [
   {
     name: 'metric-list-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('metric-list')],
+    registryDependencies: [
+      'card',
+      registryUrl('block-state'),
+      registryUrl('metric-list'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/metric-list/metric-list-02.tsx',
@@ -39,7 +47,11 @@ export const examples: Registry['items'] = [
   {
     name: 'metric-list-03',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('metric-list')],
+    registryDependencies: [
+      'card',
+      registryUrl('block-state'),
+      registryUrl('metric-list'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/metric-list/metric-list-03.tsx',
@@ -58,6 +70,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('kpi'),

@@ -35,6 +35,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface SpendPeriod {
@@ -87,143 +89,156 @@ const Spend3 = (props: Spend3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
-          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>Spent, year to date</dt>
-            <dd>
-              <KPIValue className='whitespace-nowrap' value={spent} format={format} />
-            </dd>
-          </div>
-          {state !== 'empty' && state !== 'error' && (
-            <>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Budget</dt>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+              <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                <dt className='text-muted-foreground text-sm'>Spent, year to date</dt>
                 <dd>
-                  <KPIValue className='text-2xl' value={budget} format={format} />
+                  <KPIValue className='whitespace-nowrap' value={spent} format={format} />
                 </dd>
               </div>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>
-                  {variance > 0 ? 'Over budget' : 'Under budget'}
-                </dt>
-                <dd>
-                  <KPIValue
-                    className={cn(
-                      'text-2xl',
-                      variance > 0 && 'text-red-700 dark:text-red-400',
-                    )}
-                    value={Math.abs(variance)}
-                    format={format}
-                  />
-                </dd>
-                <dd className='text-muted-foreground text-xs'>
-                  <BlockReady className='text-xs'>
-                    {overMonths} of {periods.length} months over
-                  </BlockReady>
-                </dd>
-              </div>
-            </>
-          )}
-        </dl>
-        {state !== 'empty' && state !== 'error' && (
-          <ChartPanelLegend
-            items={[
-              { color: spendColors.spent, label: 'Within budget' },
-              { color: spendColors.over, label: 'Over budget' },
-              { color: 'var(--color-muted-foreground)', label: 'Budget', shape: 'line' },
-            ]}
-          />
-        )}
-        {state ? (
-          <ChartPlaceholder height={256} />
-        ) : (
-          <ChartPanelFigure className='h-64'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <ComposedChart
-                aria-label={`${title} chart`}
-                data={periods}
-                margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
-              >
-                <CartesianGrid {...chartGridProps} />
-                <XAxis {...chartAxisProps} dataKey='label' />
-                <YAxis
-                  {...chartAxisProps}
-                  tickFormatter={compact}
-                  width={chartValueAxisWidth}
-                />
-                <Tooltip
-                  content={(tooltipProps) => (
-                    <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
-                  )}
-                  cursor={chartBarCursor}
-                />
-                <Bar dataKey='spent' maxBarSize={36} name='Spent' radius={[4, 4, 0, 0]}>
-                  {periods.map((period) => (
-                    <Cell
-                      key={period.label}
-                      fill={
-                        period.spent > period.budget
-                          ? spendColors.over
-                          : spendColors.spent
-                      }
+              {state !== 'empty' && state !== 'error' && (
+                <>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Budget</dt>
+                    <dd>
+                      <KPIValue className='text-2xl' value={budget} format={format} />
+                    </dd>
+                  </div>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>
+                      {variance > 0 ? 'Over budget' : 'Under budget'}
+                    </dt>
+                    <dd>
+                      <KPIValue
+                        className={cn(
+                          'text-2xl',
+                          variance > 0 && 'text-red-700 dark:text-red-400',
+                        )}
+                        value={Math.abs(variance)}
+                        format={format}
+                      />
+                    </dd>
+                    <dd className='text-muted-foreground text-xs'>
+                      <BlockReady className='text-xs'>
+                        {overMonths} of {periods.length} months over
+                      </BlockReady>
+                    </dd>
+                  </div>
+                </>
+              )}
+            </dl>
+            {state !== 'empty' && state !== 'error' && (
+              <ChartPanelLegend
+                items={[
+                  { color: spendColors.spent, label: 'Within budget' },
+                  { color: spendColors.over, label: 'Over budget' },
+                  {
+                    color: 'var(--color-muted-foreground)',
+                    label: 'Budget',
+                    shape: 'line',
+                  },
+                ]}
+              />
+            )}
+            {state ? (
+              <ChartPlaceholder height={256} />
+            ) : (
+              <ChartPanelFigure className='h-64'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <ComposedChart
+                    aria-label={`${title} chart`}
+                    data={periods}
+                    margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
+                  >
+                    <CartesianGrid {...chartGridProps} />
+                    <XAxis {...chartAxisProps} dataKey='label' />
+                    <YAxis
+                      {...chartAxisProps}
+                      tickFormatter={compact}
+                      width={chartValueAxisWidth}
                     />
-                  ))}
-                  <LabelList
-                    dataKey='spent'
-                    content={({ x, y, width, index }) => {
-                      const period = index === undefined ? undefined : periods[index]
-                      if (!period || period.spent <= period.budget) return null
-                      if (Number(width) < MIN_LABELLED_BAR_WIDTH) return null
-                      return (
-                        <text
-                          x={Number(x) + Number(width) / 2}
-                          y={Number(y) - 6}
-                          textAnchor='middle'
-                          fontSize={11}
-                          fontWeight={500}
-                          fill='var(--color-foreground)'
-                        >
-                          {formatSigned(period.spent - period.budget, compact)}
-                        </text>
-                      )
-                    }}
-                  />
-                </Bar>
-                <Line
-                  activeDot={false}
-                  dataKey='budget'
-                  dot={false}
-                  name='Budget'
-                  stroke='var(--color-muted-foreground)'
-                  strokeDasharray='5 4'
-                  strokeWidth={1.5}
-                  type='step'
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-        )}
-        {!state && (
-          <ChartPanelTable
-            caption={`${title}: ${description}`}
-            columns={[
-              { key: 'label', label: 'Month' },
-              { format, key: 'spent', label: 'Spent' },
-              { format, key: 'budget', label: 'Budget' },
-              { key: 'status', label: 'Status' },
-            ]}
-            rows={periods.map((period) => ({
-              ...period,
-              status: period.spent > period.budget ? 'Over budget' : 'Within budget',
-            }))}
-          />
-        )}
-      </section>
+                    <Tooltip
+                      content={(tooltipProps) => (
+                        <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
+                      )}
+                      cursor={chartBarCursor}
+                    />
+                    <Bar
+                      dataKey='spent'
+                      maxBarSize={36}
+                      name='Spent'
+                      radius={[4, 4, 0, 0]}
+                    >
+                      {periods.map((period) => (
+                        <Cell
+                          key={period.label}
+                          fill={
+                            period.spent > period.budget
+                              ? spendColors.over
+                              : spendColors.spent
+                          }
+                        />
+                      ))}
+                      <LabelList
+                        dataKey='spent'
+                        content={({ x, y, width, index }) => {
+                          const period = index === undefined ? undefined : periods[index]
+                          if (!period || period.spent <= period.budget) return null
+                          if (Number(width) < MIN_LABELLED_BAR_WIDTH) return null
+                          return (
+                            <text
+                              x={Number(x) + Number(width) / 2}
+                              y={Number(y) - 6}
+                              textAnchor='middle'
+                              fontSize={11}
+                              fontWeight={500}
+                              fill='var(--color-foreground)'
+                            >
+                              {formatSigned(period.spent - period.budget, compact)}
+                            </text>
+                          )
+                        }}
+                      />
+                    </Bar>
+                    <Line
+                      activeDot={false}
+                      dataKey='budget'
+                      dot={false}
+                      name='Budget'
+                      stroke='var(--color-muted-foreground)'
+                      strokeDasharray='5 4'
+                      strokeWidth={1.5}
+                      type='step'
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </ChartPanelFigure>
+            )}
+            {!state && (
+              <ChartPanelTable
+                caption={`${title}: ${description}`}
+                columns={[
+                  { key: 'label', label: 'Month' },
+                  { format, key: 'spent', label: 'Spent' },
+                  { format, key: 'budget', label: 'Budget' },
+                  { key: 'status', label: 'Status' },
+                ]}
+                rows={periods.map((period) => ({
+                  ...period,
+                  status: period.spent > period.budget ? 'Over budget' : 'Within budget',
+                }))}
+              />
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

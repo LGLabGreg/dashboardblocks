@@ -16,6 +16,8 @@ import {
 import { Ring } from '@/registry/components/dashboardblocks/ring'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface ProgressKPI3Props extends BlockStateProps {
   /** Leave out to show the empty state. */
   current?: number
@@ -49,55 +51,59 @@ const ProgressKPI3 = (props: ProgressKPI3Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, current)}
     >
-      <KPI>
-        <KPIContent className='flex-row items-center justify-between gap-4'>
-          <div className='flex min-w-0 flex-col gap-1'>
-            <KPITitle>{title}</KPITitle>
-            <KPIValue value={current} animated />
-            <p className='text-muted-foreground text-sm'>
-              of <span className='tabular-nums'>{count(goal)}</span> {unit}
-            </p>
-            <BlockReady className='mt-3 text-xs'>
-              <p className='text-muted-foreground mt-3 text-xs'>
-                {remaining === 0 ? (
-                  'Goal reached.'
-                ) : (
-                  <>
-                    <span className='text-foreground font-medium tabular-nums'>
-                      {count(remaining)}
-                    </span>{' '}
-                    to go
-                    {daysLeft !== undefined && daysLeft > 0 && (
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='flex-row items-center justify-between gap-4'>
+              <div className='flex min-w-0 flex-col gap-1'>
+                <KPITitle>{title}</KPITitle>
+                <KPIValue value={current} animated />
+                <p className='text-muted-foreground text-sm'>
+                  of <span className='tabular-nums'>{count(goal)}</span> {unit}
+                </p>
+                <BlockReady className='mt-3 text-xs'>
+                  <p className='text-muted-foreground mt-3 text-xs'>
+                    {remaining === 0 ? (
+                      'Goal reached.'
+                    ) : (
                       <>
-                        {' '}
-                        in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}, about{' '}
                         <span className='text-foreground font-medium tabular-nums'>
-                          {count(remaining / daysLeft)}
+                          {count(remaining)}
                         </span>{' '}
-                        a day
+                        to go
+                        {daysLeft !== undefined && daysLeft > 0 && (
+                          <>
+                            {' '}
+                            in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}, about{' '}
+                            <span className='text-foreground font-medium tabular-nums'>
+                              {count(remaining / daysLeft)}
+                            </span>{' '}
+                            a day
+                          </>
+                        )}
+                        .
                       </>
                     )}
-                    .
-                  </>
-                )}
-              </p>
-            </BlockReady>
-          </div>
-          <Ring
-            ariaLabel={`${wholePercent(percentage)} of goal`}
-            className='size-28 sm:size-32'
-            percentage={percentage}
-            ringColor='var(--color-chart-2)'
-            strokeWidth={6}
-          >
-            <AnimatedNumber
-              className='text-2xl font-light tracking-tight tabular-nums'
-              value={Math.round(percentage)}
-              formatter={wholePercent}
-            />
-          </Ring>
-        </KPIContent>
-      </KPI>
+                  </p>
+                </BlockReady>
+              </div>
+              <Ring
+                ariaLabel={`${wholePercent(percentage)} of goal`}
+                className='size-28 sm:size-32'
+                percentage={percentage}
+                ringColor='var(--color-chart-2)'
+                strokeWidth={6}
+              >
+                <AnimatedNumber
+                  className='text-2xl font-light tracking-tight tabular-nums'
+                  value={Math.round(percentage)}
+                  formatter={wholePercent}
+                />
+              </Ring>
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

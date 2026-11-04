@@ -16,6 +16,7 @@ import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -118,83 +119,87 @@ const Alerts1 = (props: Alerts1Props) => {
   }
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          <Button
-            variant='outline'
-            size='sm'
-            disabled={Boolean(state) || open.length === 0}
-            onClick={acknowledgeAll}
-          >
-            Acknowledge all
-          </Button>
-        </header>
-        <p role='status' className='sr-only'>
-          {announcement}
-        </p>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={5} />
-          </div>
-        )}
-        {!state && (
-          <ul className='border-t'>
-            {alerts.map((alert) => {
-              const acknowledgedAlert = isAcknowledged(alert)
-              return (
-                <li
-                  key={alert.id}
-                  className='flex items-center justify-between gap-3 border-b py-2.5 last:border-b-0'
-                >
-                  <div className='flex min-w-0 flex-col gap-0.5'>
-                    <p className='text-sm'>
-                      <SeverityLabel className='mr-1.5' severity={alert.severity} />
-                      <span
-                        className={cn(
-                          'font-medium break-words',
-                          acknowledgedAlert && 'text-muted-foreground font-normal',
-                        )}
-                      >
-                        {alert.title}
-                      </span>
-                    </p>
-                    <Details className='text-muted-foreground text-xs'>
-                      {alert.service}
-                      {alert.region}
-                      <time dateTime={alert.firedAt.toISOString()}>
-                        {formatRelativeTime(alert.firedAt, now)}
-                      </time>
-                    </Details>
-                  </div>
-                  {acknowledgedAlert ? (
-                    <span className='text-muted-foreground shrink-0 px-2.5 text-sm'>
-                      Acknowledged
-                    </span>
-                  ) : (
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      className='shrink-0'
-                      onClick={() => acknowledge(alert)}
-                      aria-label={`Acknowledge: ${alert.title}`}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={Boolean(state) || open.length === 0}
+                onClick={acknowledgeAll}
+              >
+                Acknowledge all
+              </Button>
+            </header>
+            <p role='status' className='sr-only'>
+              {announcement}
+            </p>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={5} />
+              </div>
+            )}
+            {!state && (
+              <ul className='border-t'>
+                {alerts.map((alert) => {
+                  const acknowledgedAlert = isAcknowledged(alert)
+                  return (
+                    <li
+                      key={alert.id}
+                      className='flex items-center justify-between gap-3 border-b py-2.5 last:border-b-0'
                     >
-                      Acknowledge
-                    </Button>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+                      <div className='flex min-w-0 flex-col gap-0.5'>
+                        <p className='text-sm'>
+                          <SeverityLabel className='mr-1.5' severity={alert.severity} />
+                          <span
+                            className={cn(
+                              'font-medium break-words',
+                              acknowledgedAlert && 'text-muted-foreground font-normal',
+                            )}
+                          >
+                            {alert.title}
+                          </span>
+                        </p>
+                        <Details className='text-muted-foreground text-xs'>
+                          {alert.service}
+                          {alert.region}
+                          <time dateTime={alert.firedAt.toISOString()}>
+                            {formatRelativeTime(alert.firedAt, now)}
+                          </time>
+                        </Details>
+                      </div>
+                      {acknowledgedAlert ? (
+                        <span className='text-muted-foreground shrink-0 px-2.5 text-sm'>
+                          Acknowledged
+                        </span>
+                      ) : (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          className='shrink-0'
+                          onClick={() => acknowledge(alert)}
+                          aria-label={`Acknowledge: ${alert.title}`}
+                        >
+                          Acknowledge
+                        </Button>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

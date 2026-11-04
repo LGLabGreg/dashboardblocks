@@ -13,6 +13,8 @@ import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Review {
   author: string
   avatar?: string
@@ -88,59 +90,63 @@ const Feedback3 = (props: Feedback3Props) => {
   ).length
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {description}{' '}
-            <BlockReady>
-              {needsReply === 0
-                ? 'Every low rating has a reply.'
-                : `${needsReply} low ${needsReply === 1 ? 'rating is' : 'ratings are'} waiting for a reply.`}
-            </BlockReady>
-          </p>
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={4} />
-          </div>
-        )}
-        {!state && (
-          <ul className='flex flex-col divide-y border-t'>
-            {reviews.map((review) => (
-              <li key={review.id} className='flex gap-3 py-3 last:pb-0'>
-                <PersonAvatar
-                  person={{ avatar: review.avatar, name: review.author }}
-                  size='sm'
-                />
-                <div className='flex min-w-0 flex-1 flex-col gap-1'>
-                  <div className='flex flex-wrap items-center gap-x-2 gap-y-0.5'>
-                    <span className='text-sm font-medium'>{review.author}</span>
-                    <StarRating className='[&_svg]:size-3.5' value={review.rating} />
-                    {review.rating <= 2 && (
-                      <StatusLabel
-                        className='text-xs'
-                        tone={review.replied ? 'neutral' : 'warning'}
-                      >
-                        {review.replied ? 'Replied' : 'Needs a reply'}
-                      </StatusLabel>
-                    )}
-                  </div>
-                  <p className='text-sm text-pretty'>{review.text}</p>
-                  <Details className='text-muted-foreground text-xs'>
-                    {review.source}
-                    <time dateTime={review.date.toISOString()}>
-                      {formatRelativeTime(review.date, now, { style: 'long' })}
-                    </time>
-                  </Details>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {description}{' '}
+                <BlockReady>
+                  {needsReply === 0
+                    ? 'Every low rating has a reply.'
+                    : `${needsReply} low ${needsReply === 1 ? 'rating is' : 'ratings are'} waiting for a reply.`}
+                </BlockReady>
+              </p>
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={4} />
+              </div>
+            )}
+            {!state && (
+              <ul className='flex flex-col divide-y border-t'>
+                {reviews.map((review) => (
+                  <li key={review.id} className='flex gap-3 py-3 last:pb-0'>
+                    <PersonAvatar
+                      person={{ avatar: review.avatar, name: review.author }}
+                      size='sm'
+                    />
+                    <div className='flex min-w-0 flex-1 flex-col gap-1'>
+                      <div className='flex flex-wrap items-center gap-x-2 gap-y-0.5'>
+                        <span className='text-sm font-medium'>{review.author}</span>
+                        <StarRating className='[&_svg]:size-3.5' value={review.rating} />
+                        {review.rating <= 2 && (
+                          <StatusLabel
+                            className='text-xs'
+                            tone={review.replied ? 'neutral' : 'warning'}
+                          >
+                            {review.replied ? 'Replied' : 'Needs a reply'}
+                          </StatusLabel>
+                        )}
+                      </div>
+                      <p className='text-sm text-pretty'>{review.text}</p>
+                      <Details className='text-muted-foreground text-xs'>
+                        {review.source}
+                        <time dateTime={review.date.toISOString()}>
+                          {formatRelativeTime(review.date, now, { style: 'long' })}
+                        </time>
+                      </Details>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

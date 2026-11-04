@@ -8,6 +8,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart'),
       registryUrl('chart-panel'),
@@ -78,6 +79,7 @@ export const examples: Registry['items'] = [
     name: 'security-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('gauge'),
       registryUrl('security'),

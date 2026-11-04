@@ -35,6 +35,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface StackSeries {
   color: string
   key: string
@@ -87,92 +89,95 @@ const ChartPanel3 = (props: ChartPanel3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
-          <div className='flex flex-col gap-1'>
-            <BlockReady className='w-16 text-sm'>
-              <p className='text-muted-foreground text-sm'>{latest?.label}</p>
-            </BlockReady>
-            <KPIValue value={totals[lastIndex]} format={format} />
-            <KPIChange
-              comparison={`in ${prior?.label}`}
-              format={format}
-              previous={totals[lastIndex - 1]}
-              value={totals[lastIndex]}
-            />
-          </div>
-          <ChartPanelLegend
-            items={series.map((item) => ({ color: item.color, label: item.label }))}
-          />
-        </div>
-        <ChartPanelFigure className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart
-              aria-label={`${title} chart`}
-              data={data}
-              margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
-            >
-              <CartesianGrid {...chartGridProps} />
-              <XAxis {...chartAxisProps} dataKey='label' />
-              <YAxis
-                {...chartAxisProps}
-                tickFormatter={(value: number) => formatCompact(value)}
-                width={chartValueAxisWidth}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
+              <div className='flex flex-col gap-1'>
+                <BlockReady className='w-16 text-sm'>
+                  <p className='text-muted-foreground text-sm'>{latest?.label}</p>
+                </BlockReady>
+                <KPIValue value={totals[lastIndex]} format={format} />
+                <KPIChange
+                  comparison={`in ${prior?.label}`}
+                  previous={totals[lastIndex - 1]}
+                  value={totals[lastIndex]}
+                />
+              </div>
+              <ChartPanelLegend
+                items={series.map((item) => ({ color: item.color, label: item.label }))}
               />
-              <Tooltip
-                content={(tooltipProps) => <ChartTooltipContent {...tooltipProps} />}
-                cursor={chartBarCursor}
-              />
-              {series.map((item, index) => (
-                <Bar
-                  key={item.key}
-                  dataKey={item.key}
-                  fill={item.color}
-                  maxBarSize={28}
-                  name={item.label}
-                  radius={index === series.length - 1 ? [4, 4, 0, 0] : 0}
-                  stackId='stack'
-                  stroke='var(--color-background)'
-                  strokeWidth={1}
+            </div>
+            <ChartPanelFigure className='h-64'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <BarChart
+                  aria-label={`${title} chart`}
+                  data={data}
+                  margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
                 >
-                  {index === series.length - 1 && (
-                    <LabelList
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis {...chartAxisProps} dataKey='label' />
+                  <YAxis
+                    {...chartAxisProps}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => <ChartTooltipContent {...tooltipProps} />}
+                    cursor={chartBarCursor}
+                  />
+                  {series.map((item, index) => (
+                    <Bar
+                      key={item.key}
                       dataKey={item.key}
-                      content={chartBarValueLabel(lastIndex, () =>
-                        format(totals[lastIndex] ?? 0),
+                      fill={item.color}
+                      maxBarSize={28}
+                      name={item.label}
+                      radius={index === series.length - 1 ? [4, 4, 0, 0] : 0}
+                      stackId='stack'
+                      stroke='var(--color-background)'
+                      strokeWidth={1}
+                    >
+                      {index === series.length - 1 && (
+                        <LabelList
+                          dataKey={item.key}
+                          content={chartBarValueLabel(lastIndex, () =>
+                            format(totals[lastIndex] ?? 0),
+                          )}
+                        />
                       )}
+                    </Bar>
+                  ))}
+                  {average > 0 && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={average}
+                      label={{
+                        ...chartReferenceLabel,
+                        value: `avg ${format(average)}`,
+                        position: 'insideBottomLeft',
+                        dy: -4,
+                      }}
                     />
                   )}
-                </Bar>
-              ))}
-              {average > 0 && (
-                <ReferenceLine
-                  {...chartReferenceProps}
-                  y={average}
-                  label={{
-                    ...chartReferenceLabel,
-                    value: `avg ${format(average)}`,
-                    position: 'insideBottomLeft',
-                    dy: -4,
-                  }}
-                />
-              )}
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'label', label: 'Month' },
-            ...series.map((item) => ({ key: item.key, label: item.label })),
-          ]}
-          rows={data}
-        />
-      </section>
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Month' },
+                ...series.map((item) => ({ key: item.key, label: item.label })),
+              ]}
+              rows={data}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

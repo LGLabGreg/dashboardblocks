@@ -551,13 +551,13 @@ const Dashboard5 = (props: Dashboard5Props) => {
       state={status ?? (empty ? 'empty' : undefined)}
     >
       <div className='@container flex w-full flex-col gap-8'>
-        <header className='flex flex-col gap-3'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-wrap items-start justify-between gap-3'>
-              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
-            </div>
-            <p className='text-muted-foreground leading-relaxed'>
+        <header className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-start justify-between gap-3'>
+            <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+            <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <p className='text-muted-foreground min-w-0 leading-relaxed'>
               Showing{' '}
               <DateRangePicker
                 onValueChange={(preset) => update({ preset })}
@@ -570,115 +570,116 @@ const Dashboard5 = (props: Dashboard5Props) => {
                 {formatDateRange(getPreviousRange(range))}.
               </span>
             </p>
-          </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            {query.service && (
-              <FilterChip
-                field='Service'
+            <div className='flex flex-wrap items-center gap-2'>
+              {query.service && (
+                <FilterChip
+                  field='Service'
+                  value={query.service}
+                  onRemove={() => update({ service: null })}
+                />
+              )}
+              <FilterMenu
+                allLabel='All services'
+                label='Service'
+                onValueChange={(service) => update({ service })}
+                options={SERVICES.map((item) => item.name)}
                 value={query.service}
-                onRemove={() => update({ service: null })}
-              />
-            )}
-            <FilterMenu
-              allLabel='All services'
-              label='Service'
-              onValueChange={(service) => update({ service })}
-              options={SERVICES.map((item) => item.name)}
-              value={query.service}
-            >
-              <IconPlaceholder
-                lucide='ServerIcon'
-                tabler='IconServer'
-                hugeicons='ServerStack01Icon'
-                phosphor='HardDrivesIcon'
-                remixicon='RiServerLine'
-              />
-              {query.service ? 'Change service' : 'Filter by service'}
-            </FilterMenu>
+              >
+                <IconPlaceholder
+                  lucide='ServerIcon'
+                  tabler='IconServer'
+                  hugeicons='ServerStack01Icon'
+                  phosphor='HardDrivesIcon'
+                  remixicon='RiServerLine'
+                />
+                {query.service ? 'Change service' : 'Filter by service'}
+              </FilterMenu>
+            </div>
           </div>
         </header>
-        <Realtime2
-          errorMessage={errorMessage}
-          status={status}
-          description='Requests per second across every service, over the last 5 minutes.'
-          samples={empty ? [] : THROUGHPUT}
-          simulate
-          title='Throughput'
-        />
-        <BlockBusy
-          busy={busy}
-          label='Updating the dashboard'
-          className='mt-4 grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
-        >
-          <div className='@4xl:col-span-3'>
-            <Deployments3
-              errorMessage={errorMessage}
-              status={status}
-              comparison={
-                displayedQuery.preset === 'today'
-                  ? 'yesterday'
-                  : `in the ${getPreset(displayedQuery.preset).days} days before`
-              }
-              current={empty ? undefined : data.dora.current}
-              previous={empty ? undefined : data.dora.previous}
-              title='Delivery performance'
-            />
-          </div>
-          <div className='@4xl:col-span-2'>
-            <ChartPanel6
-              errorMessage={errorMessage}
-              status={status}
-              comparison={
-                displayedQuery.preset === 'today'
-                  ? 'this time yesterday'
-                  : 'the day before'
-              }
-              data={empty ? [] : data.latency}
-              description='Half of all requests finish within p50, and all but the slowest 1% within p99.'
-              formatter={ms}
-              headline='p95'
-              labelHeading={displayedQuery.preset === 'today' ? 'Hour' : 'Day'}
-              limit={{ label: 'SLO', value: LATENCY_SLO_MS }}
-              percentiles={[
-                { key: 'p50', label: 'p50' },
-                { key: 'p95', label: 'p95' },
-                { key: 'p99', label: 'p99' },
-              ]}
-              previous={empty ? undefined : data.latencyPrevious}
-              title='Response time'
-            />
-          </div>
-          <Alerts1
+        <div className='flex flex-col gap-4'>
+          <Realtime2
             errorMessage={errorMessage}
             status={status}
-            alerts={empty ? [] : data.alerts}
-            now={data.now}
-            title='Open alerts'
+            description='Requests per second across every service, over the last 5 minutes.'
+            samples={empty ? [] : THROUGHPUT}
+            title='Throughput'
           />
-          <div className='@4xl:col-span-2'>
-            <Status2
+          <BlockBusy
+            busy={busy}
+            label='Updating the dashboard'
+            className='grid gap-4 @4xl:grid-cols-3'
+          >
+            <div className='grid @4xl:col-span-3'>
+              <Deployments3
+                errorMessage={errorMessage}
+                status={status}
+                comparison={
+                  displayedQuery.preset === 'today'
+                    ? 'yesterday'
+                    : `in the ${getPreset(displayedQuery.preset).days} days before`
+                }
+                current={empty ? undefined : data.dora.current}
+                previous={empty ? undefined : data.dora.previous}
+                title='Delivery performance'
+              />
+            </div>
+            <div className='grid @4xl:col-span-2'>
+              <ChartPanel6
+                errorMessage={errorMessage}
+                status={status}
+                comparison={
+                  displayedQuery.preset === 'today'
+                    ? 'this time yesterday'
+                    : 'the day before'
+                }
+                data={empty ? [] : data.latency}
+                description='Half of all requests finish within p50, and all but the slowest 1% within p99.'
+                formatter={ms}
+                headline='p95'
+                labelHeading={displayedQuery.preset === 'today' ? 'Hour' : 'Day'}
+                limit={{ label: 'SLO', value: LATENCY_SLO_MS }}
+                percentiles={[
+                  { key: 'p50', label: 'p50' },
+                  { key: 'p95', label: 'p95' },
+                  { key: 'p99', label: 'p99' },
+                ]}
+                previous={empty ? undefined : data.latencyPrevious}
+                title='Response time'
+              />
+            </div>
+            <Alerts1
               errorMessage={errorMessage}
               status={status}
-              services={empty ? [] : data.uptime}
-              title='Uptime, last 90 days'
-            />
-          </div>
-          <Deployments4
-            errorMessage={errorMessage}
-            status={status}
-            pipelines={empty ? [] : data.pipelines}
-            title='Build health'
-          />
-          <div className='@4xl:col-span-3'>
-            <Deployments1
-              errorMessage={errorMessage}
-              status={status}
-              deployments={empty ? [] : data.deployments}
+              alerts={empty ? [] : data.alerts}
               now={data.now}
-              title='Recent deployments'
+              title='Open alerts'
             />
-          </div>
-        </BlockBusy>
+            <div className='grid @4xl:col-span-2'>
+              <Status2
+                errorMessage={errorMessage}
+                status={status}
+                services={empty ? [] : data.uptime}
+                title='Uptime, last 90 days'
+              />
+            </div>
+            <Deployments4
+              errorMessage={errorMessage}
+              status={status}
+              pipelines={empty ? [] : data.pipelines}
+              title='Build health'
+            />
+            <div className='grid @4xl:col-span-3'>
+              <Deployments1
+                errorMessage={errorMessage}
+                status={status}
+                deployments={empty ? [] : data.deployments}
+                now={data.now}
+                title='Recent deployments'
+              />
+            </div>
+          </BlockBusy>
+        </div>
       </div>
     </BlockStateProvider>
   )

@@ -16,6 +16,8 @@ import {
 } from '@/registry/components/dashboardblocks/usage-meter'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface MeteredItem {
   included: number
   name: string
@@ -88,91 +90,95 @@ const UsageMeter3 = (props: UsageMeter3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <UsageMeterValue>{formatMoney(total)}</UsageMeterValue>
-          {state === 'loading' ? (
-            <BlockStateText className='text-sm' />
-          ) : state ? null : (
-            <p className='text-muted-foreground text-sm'>
-              Estimated overage, billed {billedOn}
-            </p>
-          )}
-        </div>
-        {state === 'loading' && <BlockStateRows className='border-t' rows={3} />}
-        {!state && (
-          <>
-            <ul className='flex flex-col border-t'>
-              {items.map((item) => {
-                const over = Math.max(0, item.used - item.included)
-                const cost = getOverageCost(item)
-                return (
-                  <li key={item.name} className='flex flex-col gap-2 border-b py-3'>
-                    <div className='flex items-baseline justify-between gap-3 text-sm'>
-                      <span className='font-medium'>{item.name}</span>
-                      <span className='text-muted-foreground tabular-nums'>
-                        <span className='text-foreground font-medium'>
-                          {formatUsage(item.used, undefined, { compact: true })}
-                        </span>{' '}
-                        of {formatUsage(item.included, item.unit, { compact: true })}
-                      </span>
-                    </div>
-                    <UsageBar
-                      color='var(--color-chart-2)'
-                      limit={item.included}
-                      overColor={OVERAGE_COLOR}
-                      size='sm'
-                      used={item.used}
-                    />
-                    <div className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
-                      <span>{formatPrice(item)}</span>
-                      {over > 0 ? (
-                        <span className='flex items-baseline gap-3 tabular-nums'>
-                          <span className='font-medium text-orange-700 dark:text-orange-400'>
-                            {formatUsage(over, item.unit, { compact: true })} over
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <UsageMeterValue>{formatMoney(total)}</UsageMeterValue>
+              {state === 'loading' ? (
+                <BlockStateText className='text-sm' />
+              ) : state ? null : (
+                <p className='text-muted-foreground text-sm'>
+                  Estimated overage, billed {billedOn}
+                </p>
+              )}
+            </div>
+            {state === 'loading' && <BlockStateRows className='border-t' rows={3} />}
+            {!state && (
+              <>
+                <ul className='flex flex-col border-t'>
+                  {items.map((item) => {
+                    const over = Math.max(0, item.used - item.included)
+                    const cost = getOverageCost(item)
+                    return (
+                      <li key={item.name} className='flex flex-col gap-2 border-b py-3'>
+                        <div className='flex items-baseline justify-between gap-3 text-sm'>
+                          <span className='font-medium'>{item.name}</span>
+                          <span className='text-muted-foreground tabular-nums'>
+                            <span className='text-foreground font-medium'>
+                              {formatUsage(item.used, undefined, { compact: true })}
+                            </span>{' '}
+                            of {formatUsage(item.included, item.unit, { compact: true })}
                           </span>
-                          <span className='text-foreground min-w-16 text-right font-medium'>
-                            {formatMoney(cost)}
-                          </span>
-                        </span>
-                      ) : (
-                        <span className='tabular-nums'>
-                          {formatUsage(item.included - item.used, item.unit, {
-                            compact: true,
-                          })}{' '}
-                          left
-                        </span>
-                      )}
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </>
-        )}
-        {state !== 'empty' && state !== 'error' && (
-          <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-            <li className='inline-flex items-center gap-1.5'>
-              <UsageKey shape='used' />
-              Included
-            </li>
-            <li className='inline-flex items-center gap-1.5'>
-              <UsageKey color={OVERAGE_COLOR} shape='over' />
-              Overage
-            </li>
-            <li className='inline-flex items-center gap-1.5'>
-              <UsageKey shape='limit' />
-              Plan limit
-            </li>
-          </ul>
-        )}
-      </section>
+                        </div>
+                        <UsageBar
+                          color='var(--color-chart-2)'
+                          limit={item.included}
+                          overColor={OVERAGE_COLOR}
+                          size='sm'
+                          used={item.used}
+                        />
+                        <div className='text-muted-foreground flex items-baseline justify-between gap-3 text-xs'>
+                          <span>{formatPrice(item)}</span>
+                          {over > 0 ? (
+                            <span className='flex items-baseline gap-3 tabular-nums'>
+                              <span className='font-medium text-orange-700 dark:text-orange-400'>
+                                {formatUsage(over, item.unit, { compact: true })} over
+                              </span>
+                              <span className='text-foreground min-w-16 text-right font-medium'>
+                                {formatMoney(cost)}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className='tabular-nums'>
+                              {formatUsage(item.included - item.used, item.unit, {
+                                compact: true,
+                              })}{' '}
+                              left
+                            </span>
+                          )}
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </>
+            )}
+            {state !== 'empty' && state !== 'error' && (
+              <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+                <li className='inline-flex items-center gap-1.5'>
+                  <UsageKey shape='used' />
+                  Included
+                </li>
+                <li className='inline-flex items-center gap-1.5'>
+                  <UsageKey color={OVERAGE_COLOR} shape='over' />
+                  Overage
+                </li>
+                <li className='inline-flex items-center gap-1.5'>
+                  <UsageKey shape='limit' />
+                  Plan limit
+                </li>
+              </ul>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

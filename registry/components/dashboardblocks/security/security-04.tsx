@@ -20,6 +20,8 @@ import {
   getSecurityScore,
 } from '@/registry/components/dashboardblocks/security'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface SecurityCheck {
   detail: string
   id: string
@@ -101,66 +103,74 @@ const Security4 = (props: Security4Props) => {
   const passing = checks.length - failing - warnings
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4 [--gauge-surface:var(--color-background)]'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {!state && band && (
-            <GaugeToneLabel className='mt-0.5' label={band.label} tone={band.tone} />
-          )}
-        </header>
-        <div className='flex items-center gap-5 border-t pt-4'>
-          <Gauge
-            bands={BANDS}
-            className='w-full max-w-32 shrink-0'
-            colorByBand
-            label={title}
-            sweep={270}
-            thickness={11}
-            value={score}
-            valueText={`${score} out of 100${band ? `, ${band.label.toLowerCase()}` : ''}`}
-          >
-            <GaugeValue className='text-3xl'>{score}</GaugeValue>
-            {!state && <span className='text-muted-foreground text-xs'>out of 100</span>}
-          </Gauge>
-          <BlockReady className='w-full text-sm'>
-            <p className='text-sm text-pretty'>
-              {failing > 0 ? (
-                <span className='font-medium text-red-700 dark:text-red-400'>
-                  {countChecks(failing)} failing
-                </span>
-              ) : (
-                <span className='font-medium'>Nothing failing</span>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {!state && band && (
+                <GaugeToneLabel className='mt-0.5' label={band.label} tone={band.tone} />
               )}
-              {warnings > 0 && <>, {countChecks(warnings)} to look at</>}.{' '}
-              <span className='text-muted-foreground'>
-                {passing} of {checks.length} pass.
-              </span>
-            </p>
-          </BlockReady>
-        </div>
-        {state === 'loading' && <BlockStateRows className='border-t' rows={6} />}
-        {!state && (
-          <ul className='flex flex-col border-t'>
-            {sorted.map((check) => (
-              <li
-                key={check.id}
-                className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+            </header>
+            <div className='flex items-center gap-5 border-t pt-4'>
+              <Gauge
+                bands={BANDS}
+                className='w-full max-w-32 shrink-0'
+                colorByBand
+                label={title}
+                sweep={270}
+                thickness={11}
+                value={score}
+                valueText={`${score} out of 100${band ? `, ${band.label.toLowerCase()}` : ''}`}
               >
-                <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                  <span className='text-sm font-medium'>{check.label}</span>
-                  <span className='text-muted-foreground text-xs'>{check.detail}</span>
-                </div>
-                <CheckResultLabel result={check.result} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+                <GaugeValue className='text-3xl'>{score}</GaugeValue>
+                {!state && (
+                  <span className='text-muted-foreground text-xs'>out of 100</span>
+                )}
+              </Gauge>
+              <BlockReady className='w-full text-sm'>
+                <p className='text-sm text-pretty'>
+                  {failing > 0 ? (
+                    <span className='font-medium text-red-700 dark:text-red-400'>
+                      {countChecks(failing)} failing
+                    </span>
+                  ) : (
+                    <span className='font-medium'>Nothing failing</span>
+                  )}
+                  {warnings > 0 && <>, {countChecks(warnings)} to look at</>}.{' '}
+                  <span className='text-muted-foreground'>
+                    {passing} of {checks.length} pass.
+                  </span>
+                </p>
+              </BlockReady>
+            </div>
+            {state === 'loading' && <BlockStateRows className='border-t' rows={6} />}
+            {!state && (
+              <ul className='flex flex-col border-t'>
+                {sorted.map((check) => (
+                  <li
+                    key={check.id}
+                    className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+                  >
+                    <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                      <span className='text-sm font-medium'>{check.label}</span>
+                      <span className='text-muted-foreground text-xs'>
+                        {check.detail}
+                      </span>
+                    </div>
+                    <CheckResultLabel result={check.result} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

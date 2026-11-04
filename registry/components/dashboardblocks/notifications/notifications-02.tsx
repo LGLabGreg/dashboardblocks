@@ -21,6 +21,7 @@ import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { startTransition, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type Decision = 'approved' | 'declined'
@@ -217,38 +218,42 @@ const Notifications2 = (props: Notifications2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex items-center justify-between gap-3'>
-        <h2 className='font-semibold tracking-tight'>{title}</h2>
-        <NotificationBell unreadCount={unread}>
-          <NotificationsHeader
-            description={
-              <BlockReady>
-                {requests.length > 0
-                  ? `${requests.length} ${requests.length === 1 ? 'request is' : 'requests are'} waiting on you.`
-                  : 'No requests waiting on you.'}
-              </BlockReady>
-            }
-          />
-          <Tabs
-            value={tab}
-            onValueChange={(value) => setTab(value as 'all' | 'requests')}
-          >
-            <TabsList className='mx-4 mb-2'>
-              <TabsTrigger value='all'>All</TabsTrigger>
-              <TabsTrigger value='requests'>
-                Requests
-                {requests.length > 0 && <Tag>{formatNumber(requests.length)}</Tag>}
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value='all' className='border-t'>
-              {renderList(notifications, 'You’re all caught up.')}
-            </TabsContent>
-            <TabsContent value='requests' className='border-t'>
-              {renderList(requests, 'No requests waiting for you.')}
-            </TabsContent>
-          </Tabs>
-        </NotificationBell>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex items-center justify-between gap-3'>
+            <h2 className='font-semibold tracking-tight'>{title}</h2>
+            <NotificationBell unreadCount={unread}>
+              <NotificationsHeader
+                description={
+                  <BlockReady>
+                    {requests.length > 0
+                      ? `${requests.length} ${requests.length === 1 ? 'request is' : 'requests are'} waiting on you.`
+                      : 'No requests waiting on you.'}
+                  </BlockReady>
+                }
+              />
+              <Tabs
+                value={tab}
+                onValueChange={(value) => setTab(value as 'all' | 'requests')}
+              >
+                <TabsList className='mx-4 mb-2'>
+                  <TabsTrigger value='all'>All</TabsTrigger>
+                  <TabsTrigger value='requests'>
+                    Requests
+                    {requests.length > 0 && <Tag>{formatNumber(requests.length)}</Tag>}
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value='all' className='border-t'>
+                  {renderList(notifications, 'You’re all caught up.')}
+                </TabsContent>
+                <TabsContent value='requests' className='border-t'>
+                  {renderList(requests, 'No requests waiting for you.')}
+                </TabsContent>
+              </Tabs>
+            </NotificationBell>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

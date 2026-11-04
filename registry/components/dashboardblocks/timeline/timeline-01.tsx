@@ -13,6 +13,8 @@ import {
   type TimelineStatus,
 } from '@/registry/components/dashboardblocks/timeline'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Timeline1Props extends BlockStateProps {
   /** Defaults to a sentence about how many projects are running and at risk. */
   description?: string
@@ -129,40 +131,44 @@ const Timeline1 = (props: Timeline1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-wrap items-end justify-between gap-x-6 gap-y-2'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {!state && (
-            <ul className='flex flex-wrap gap-x-4 gap-y-1'>
-              {counts.map((entry) => (
-                <li key={entry.status} className='flex items-center gap-1.5 text-sm'>
-                  <TimelineStatusLabel showLabel status={entry.status} />
-                  <span className='text-muted-foreground tabular-nums'>
-                    {entry.count}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </header>
-        <Timeline
-          className='border-t pt-4'
-          end={end}
-          items={items}
-          label={title}
-          minWidth='40rem'
-          now={now}
-          placeholderRows={8}
-          start={start}
-        >
-          Bars fill to each project&apos;s progress. Hover one for its dates.
-        </Timeline>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-wrap items-end justify-between gap-x-6 gap-y-2'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {!state && (
+                <ul className='flex flex-wrap gap-x-4 gap-y-1'>
+                  {counts.map((entry) => (
+                    <li key={entry.status} className='flex items-center gap-1.5 text-sm'>
+                      <TimelineStatusLabel showLabel status={entry.status} />
+                      <span className='text-muted-foreground tabular-nums'>
+                        {entry.count}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </header>
+            <Timeline
+              className='border-t pt-4'
+              end={end}
+              items={items}
+              label={title}
+              minWidth='40rem'
+              now={now}
+              placeholderRows={8}
+              start={start}
+            >
+              Bars fill to each project&apos;s progress. Hover one for its dates.
+            </Timeline>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

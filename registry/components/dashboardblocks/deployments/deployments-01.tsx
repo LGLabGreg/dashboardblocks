@@ -18,6 +18,8 @@ import { Details } from '@/registry/components/dashboardblocks/details'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Deployment {
   author: string
   authorAvatar?: string
@@ -135,68 +137,79 @@ const Deployments1 = (props: Deployments1Props) => {
   const { description = summarize(deployments, now) } = props
 
   return (
-    <BlockStateProvider
-      errorMessage={errorMessage}
-      state={getBlockState(status, deployments)}
-    >
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <div className='border-t'>
-          <BlockStateRows rows={5} />
-          <ul className='flex flex-col empty:hidden'>
-            {!status &&
-              deployments.map((deployment) => (
-                <li
-                  key={deployment.id}
-                  className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
-                >
-                  <PersonAvatar
-                    className='mt-0.5'
-                    person={{ avatar: deployment.authorAvatar, name: deployment.author }}
-                    size='sm'
-                  />
-                  <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                    <div className='flex items-baseline justify-between gap-3'>
-                      <span className='truncate text-sm font-medium'>
-                        {deployment.message}
-                      </span>
-                      <DeployStatusLabel
-                        className='shrink-0'
-                        status={deployment.status}
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, deployments)}
+        >
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <div className='border-t'>
+              <BlockStateRows rows={5} />
+              <ul className='flex flex-col empty:hidden'>
+                {!status &&
+                  deployments.map((deployment) => (
+                    <li
+                      key={deployment.id}
+                      className='flex items-start gap-3 border-b py-2.5 last:border-b-0'
+                    >
+                      <PersonAvatar
+                        className='mt-0.5'
+                        person={{
+                          avatar: deployment.authorAvatar,
+                          name: deployment.author,
+                        }}
+                        size='sm'
                       />
-                    </div>
-                    <div className='flex items-baseline justify-between gap-3 text-xs'>
-                      <p className='text-muted-foreground min-w-0'>
-                        <span className='text-foreground me-2'>
-                          {deployment.environment}
-                        </span>
-                        <Details>
-                          <span className='font-mono'>{shortSha(deployment.sha)}</span>
-                          {deployment.author}
-                          <time dateTime={deployment.startedAt.toISOString()}>
-                            {formatRelativeTime(deployment.startedAt, now)}
-                          </time>
-                        </Details>
-                      </p>
-                      <span className='text-muted-foreground shrink-0 tabular-nums'>
-                        <span className='sr-only'>
-                          {deployment.status === 'running' ? 'Building for ' : 'Took '}
-                        </span>
-                        {formatDuration(deployment.duration)}
-                      </span>
-                    </div>
-                  </div>
-                </li>
-              ))}
-          </ul>
-        </div>
-      </section>
-    </BlockStateProvider>
+                      <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                        <div className='flex items-baseline justify-between gap-3'>
+                          <span className='truncate text-sm font-medium'>
+                            {deployment.message}
+                          </span>
+                          <DeployStatusLabel
+                            className='shrink-0'
+                            status={deployment.status}
+                          />
+                        </div>
+                        <div className='flex items-baseline justify-between gap-3 text-xs'>
+                          <p className='text-muted-foreground min-w-0'>
+                            <span className='text-foreground me-2'>
+                              {deployment.environment}
+                            </span>
+                            <Details>
+                              <span className='font-mono'>
+                                {shortSha(deployment.sha)}
+                              </span>
+                              {deployment.author}
+                              <time dateTime={deployment.startedAt.toISOString()}>
+                                {formatRelativeTime(deployment.startedAt, now)}
+                              </time>
+                            </Details>
+                          </p>
+                          <span className='text-muted-foreground shrink-0 tabular-nums'>
+                            <span className='sr-only'>
+                              {deployment.status === 'running'
+                                ? 'Building for '
+                                : 'Took '}
+                            </span>
+                            {formatDuration(deployment.duration)}
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

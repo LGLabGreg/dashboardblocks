@@ -12,16 +12,12 @@ import {
   type BlockStateProps,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
-import {
-  LiveBadge,
-  createRandom,
-  formatAgo,
-  useInterval,
-} from '@/registry/components/dashboardblocks/realtime'
+import { LiveBadge, formatAgo } from '@/registry/components/dashboardblocks/realtime'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { type ReactNode, useRef, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -42,7 +38,6 @@ interface Realtime3Props extends BlockStateProps {
   limit?: number
   /** Pass a fixed date, so the block renders the same on the server and in the browser. */
   now: Date
-  simulate?: boolean
   title: string
 }
 
@@ -153,138 +148,110 @@ const exampleProps: Realtime3Props = {
     },
   ],
   now: NOW,
-  simulate: true,
   title: 'Live activity',
 }
-
-const DEMO: Omit<LiveEvent, 'at' | 'id'>[] = [
-  { detail: '$56.00, 1 item', kind: 'order', label: 'Order' },
-  { detail: 'Starter plan, from search', kind: 'signup', label: 'New sign-up' },
-  { detail: '$129.00, 3 items', kind: 'order', label: 'Order' },
-  { detail: '"Do you support SSO?"', kind: 'message', label: 'Support chat' },
-  { detail: '$18.00, wrong size', kind: 'refund', label: 'Refund' },
-]
 
 const Realtime3 = (props: Realtime3Props) => {
   const {
     description,
     events: loadedEvents = noEvents,
     limit = 6,
-    simulate = false,
     errorMessage,
     status,
     title,
   } = props
-  const [events, setEvents] = useState(() => loadedEvents.slice(0, limit))
-  const [loaded, setLoaded] = useState(loadedEvents)
-  if (loadedEvents !== loaded) {
-    setLoaded(loadedEvents)
-    setEvents(loadedEvents.slice(0, limit))
-  }
-  const [now, setNow] = useState(props.now)
-  const [paused, setPaused] = useState(false)
+  const [held, setHeld] = useState<{ events: LiveEvent[]; now: Date } | null>(null)
+  const [firstIds] = useState(() => new Set(loadedEvents.map((event) => event.id)))
+  const paused = held !== null
+  const events = held?.events ?? loadedEvents.slice(0, limit)
+  const now = held?.now ?? props.now
   const state = getBlockState(status, events)
-  const random = useRef(createRandom(5))
-  const count = useRef(0)
-
-  useInterval(
-    () => {
-      const next = new Date(now.getTime() + 2_500)
-      setNow(next)
-      if (random.current() < 0.6) return
-      count.current += 1
-      const template = DEMO[count.current % DEMO.length]
-      const label =
-        template.kind === 'order' ? `Order #${10_482 + count.current}` : template.label
-      setEvents((list) =>
-        [{ ...template, at: next, id: `live-${count.current}`, label }, ...list].slice(
-          0,
-          limit,
-        ),
-      )
-    },
-    simulate && !paused && !state ? 2_500 : null,
-  )
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          <div className='flex shrink-0 items-center gap-3'>
-            {!state && <LiveBadge paused={paused} />}
-            <Button
-              disabled={Boolean(state)}
-              size='sm'
-              variant='outline'
-              onClick={() => setPaused((value) => !value)}
-            >
-              {paused ? (
-                <IconPlaceholder
-                  lucide='PlayIcon'
-                  tabler='IconPlayerPlayFilled'
-                  hugeicons='PlayIcon'
-                  phosphor='PlayIcon'
-                  remixicon='RiPlayFill'
-                  className='fill-current'
-                  data-icon='inline-start'
-                />
-              ) : (
-                <IconPlaceholder
-                  lucide='PauseIcon'
-                  tabler='IconPlayerPauseFilled'
-                  hugeicons='PauseIcon'
-                  phosphor='PauseIcon'
-                  remixicon='RiPauseFill'
-                  className='fill-current'
-                  data-icon='inline-start'
-                />
-              )}
-              {paused ? 'Resume' : 'Pause'}
-            </Button>
-          </div>
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={limit} />
-          </div>
-        )}
-        {!state && (
-          <ActivityFeed className='border-t pt-1'>
-            {events.map((event, index) => {
-              const config = kindConfig[event.kind]
-              return (
-                <ActivityFeedItem
-                  key={event.id}
-                  className={cn(
-                    'items-center border-b py-2.5 last:border-b-0',
-                    index === 0 &&
-                      event.id.startsWith('live-') &&
-                      'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1',
-                  )}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              <div className='flex shrink-0 items-center gap-3'>
+                {!state && <LiveBadge paused={paused} />}
+                <Button
+                  disabled={Boolean(state)}
+                  size='sm'
+                  variant='outline'
+                  onClick={() => setHeld(paused ? null : { events, now })}
                 >
-                  <ActivityIcon icon={config.icon} tone={config.tone} />
-                  <div className='flex min-w-0 flex-1 flex-col'>
-                    <span className='truncate text-sm font-medium'>{event.label}</span>
-                    <span className='text-muted-foreground truncate text-sm'>
-                      {event.detail}
-                    </span>
-                  </div>
-                  <time
-                    className='text-muted-foreground shrink-0 text-xs tabular-nums'
-                    dateTime={event.at.toISOString()}
-                  >
-                    {formatAgo(event.at, now)}
-                  </time>
-                </ActivityFeedItem>
-              )
-            })}
-          </ActivityFeed>
-        )}
-      </section>
+                  {paused ? (
+                    <IconPlaceholder
+                      lucide='PlayIcon'
+                      tabler='IconPlayerPlayFilled'
+                      hugeicons='PlayIcon'
+                      phosphor='PlayIcon'
+                      remixicon='RiPlayFill'
+                      className='fill-current'
+                      data-icon='inline-start'
+                    />
+                  ) : (
+                    <IconPlaceholder
+                      lucide='PauseIcon'
+                      tabler='IconPlayerPauseFilled'
+                      hugeicons='PauseIcon'
+                      phosphor='PauseIcon'
+                      remixicon='RiPauseFill'
+                      className='fill-current'
+                      data-icon='inline-start'
+                    />
+                  )}
+                  {paused ? 'Resume' : 'Pause'}
+                </Button>
+              </div>
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={limit} />
+              </div>
+            )}
+            {!state && (
+              <ActivityFeed className='border-t pt-1'>
+                {events.map((event, index) => {
+                  const config = kindConfig[event.kind]
+                  return (
+                    <ActivityFeedItem
+                      key={event.id}
+                      className={cn(
+                        'items-center border-b py-2.5 last:border-b-0',
+                        index === 0 &&
+                          !firstIds.has(event.id) &&
+                          'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1',
+                      )}
+                    >
+                      <ActivityIcon icon={config.icon} tone={config.tone} />
+                      <div className='flex min-w-0 flex-1 flex-col'>
+                        <span className='truncate text-sm font-medium'>
+                          {event.label}
+                        </span>
+                        <span className='text-muted-foreground truncate text-sm'>
+                          {event.detail}
+                        </span>
+                      </div>
+                      <time
+                        className='text-muted-foreground shrink-0 text-xs tabular-nums'
+                        dateTime={event.at.toISOString()}
+                      >
+                        {formatAgo(event.at, now)}
+                      </time>
+                    </ActivityFeedItem>
+                  )
+                })}
+              </ActivityFeed>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

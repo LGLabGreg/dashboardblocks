@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/retention'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Heatmap2Props extends BlockStateProps {
   /** Oldest first, one per signup week. Leave out, or pass none, to show the empty state. */
   cohorts?: RetentionCohort[]
@@ -58,29 +60,33 @@ const Heatmap2 = (props: Heatmap2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        {state ? (
-          <div className='border-t pt-4'>
-            <BlockStateRows rows={7} />
-          </div>
-        ) : (
-          <CohortTable
-            caption={`${title}: the share of each weekly signup cohort still active, by week since signup. The last row is the average, weighted by cohort size.`}
-            className='border-t pt-4'
-            cohorts={cohorts}
-            footer={<HeatmapLegend low='Fewer' high='More retained' />}
-            minWidth='32rem'
-            periodName='Week'
-            sizeHeader='Signups'
-          />
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            {state ? (
+              <div className='border-t pt-4'>
+                <BlockStateRows rows={7} />
+              </div>
+            ) : (
+              <CohortTable
+                caption={`${title}: the share of each weekly signup cohort still active, by week since signup. The last row is the average, weighted by cohort size.`}
+                className='border-t pt-4'
+                cohorts={cohorts}
+                footer={<HeatmapLegend low='Fewer' high='More retained' />}
+                minWidth='32rem'
+                periodName='Week'
+                sizeHeader='Signups'
+              />
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

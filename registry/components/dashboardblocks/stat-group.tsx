@@ -80,7 +80,7 @@ function StatGroup({ className, ...props }: ComponentProps<'dl'>) {
     <dl
       data-slot='stat-group'
       className={cn(
-        'grid gap-x-6 gap-y-5 in-data-[slot=card]:first:*:border-t-0 in-data-[slot=card]:first:*:pt-0',
+        'grid gap-x-6 gap-y-5 in-data-[slot=card]:-ml-[calc(1.5rem+1px)] in-data-[slot=card]:[clip-path:inset(-100vh_-100vw_-100vh_calc(1.5rem+1px))] in-data-[slot=card]:first:*:border-t-0 in-data-[slot=card]:first:*:pt-0',
         className,
       )}
       {...props}
@@ -91,7 +91,10 @@ function StatGroup({ className, ...props }: ComponentProps<'dl'>) {
 function Stat({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn('flex min-w-0 flex-col gap-1 border-t pt-3', className)}
+      className={cn(
+        'flex min-w-0 flex-col gap-1 border-t pt-3 in-data-[slot=card]:border-t-0 in-data-[slot=card]:border-l in-data-[slot=card]:pt-0 in-data-[slot=card]:pl-6',
+        className,
+      )}
       {...props}
     />
   )
@@ -192,7 +195,6 @@ function StatChangeContent({
       changeType={metric.changeType}
       className={className}
       comparison={comparison}
-      format={metric.formatter ?? defaultFormatter}
       goodDirection={metric.goodDirection}
       previous={metric.previous}
       value={metric.value}

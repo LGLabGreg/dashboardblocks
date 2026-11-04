@@ -202,7 +202,8 @@ function HeatmapGrid({
     if (element) element.scrollLeft = element.scrollWidth
   }, [state])
 
-  const stickyLabel = minWidth && 'bg-background sticky left-0 z-10'
+  const stickyLabel =
+    minWidth && 'bg-background in-data-[slot=card]:bg-card sticky left-0 z-10'
   const dot = shape === 'dot'
 
   if (state) {
@@ -230,7 +231,10 @@ function HeatmapGrid({
             {columns.map((column, index) => (
               <span
                 key={index}
-                className='text-muted-foreground overflow-visible text-xs leading-4 whitespace-nowrap tabular-nums'
+                className={cn(
+                  'text-muted-foreground overflow-visible text-xs leading-4 whitespace-nowrap tabular-nums',
+                  index === columns.length - 1 && 'flex justify-end',
+                )}
               >
                 {index % columnLabelEvery === 0 && column}
               </span>
@@ -410,7 +414,10 @@ function HeatmapGrid({
                   <span
                     key={index}
                     role='columnheader'
-                    className='text-muted-foreground overflow-visible text-xs leading-4 font-normal whitespace-nowrap tabular-nums'
+                    className={cn(
+                      'text-muted-foreground overflow-visible text-xs leading-4 font-normal whitespace-nowrap tabular-nums',
+                      index === columns.length - 1 && 'flex justify-end',
+                    )}
                   >
                     {index % columnLabelEvery === 0 ? (
                       column

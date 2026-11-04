@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/status'
 import { formatList } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Service {
   description?: string
   name: string
@@ -33,15 +35,31 @@ interface Status1Props extends BlockStateProps {
 
 const exampleProps: Status1Props = {
   services: [
-    { description: 'Dashboard and settings', name: 'Web app', status: 'operational' },
-    { description: 'REST and GraphQL endpoints', name: 'API', status: 'degraded' },
+    {
+      description: 'Dashboard and settings',
+      name: 'Web app',
+      status: 'operational',
+    },
+    {
+      description: 'REST and GraphQL endpoints',
+      name: 'API',
+      status: 'degraded',
+    },
     {
       description: 'Event ingestion and delivery',
       name: 'Webhooks',
       status: 'operational',
     },
-    { description: 'Scheduled exports', name: 'Background jobs', status: 'maintenance' },
-    { description: 'Email and SMS', name: 'Notifications', status: 'operational' },
+    {
+      description: 'Scheduled exports',
+      name: 'Background jobs',
+      status: 'maintenance',
+    },
+    {
+      description: 'Email and SMS',
+      name: 'Notifications',
+      status: 'operational',
+    },
   ],
   title: 'System status',
   updated: 'Updated 2 minutes ago.',
@@ -74,49 +92,53 @@ const Status1 = (props: Status1Props) => {
   const overall = getWorstStatus(services.map((service) => service.status))
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex flex-col gap-1'>
-          <BlockReady className='w-40 text-sm'>
-            <StatusIndicator label={summaryLabel[overall]} status={overall} />
-          </BlockReady>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>
-                {description}
-                {updated && ` ${updated}`}
-              </p>
-            </BlockReady>
-          </div>
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={5} />
-          </div>
-        )}
-        {!state && (
-          <ul className='flex flex-col border-t'>
-            {services.map((service) => (
-              <li
-                key={service.name}
-                className='flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0'
-              >
-                <div className='flex min-w-0 flex-col'>
-                  <span className='text-sm font-medium'>{service.name}</span>
-                  {service.description && (
-                    <span className='text-muted-foreground text-xs'>
-                      {service.description}
-                    </span>
-                  )}
-                </div>
-                <StatusIndicator className='shrink-0' status={service.status} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex flex-col gap-1'>
+              <BlockReady className='w-40 text-sm'>
+                <StatusIndicator label={summaryLabel[overall]} status={overall} />
+              </BlockReady>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>
+                    {description}
+                    {updated && ` ${updated}`}
+                  </p>
+                </BlockReady>
+              </div>
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={5} />
+              </div>
+            )}
+            {!state && (
+              <ul className='flex flex-col border-t'>
+                {services.map((service) => (
+                  <li
+                    key={service.name}
+                    className='flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0'
+                  >
+                    <div className='flex min-w-0 flex-col'>
+                      <span className='text-sm font-medium'>{service.name}</span>
+                      {service.description && (
+                        <span className='text-muted-foreground text-xs'>
+                          {service.description}
+                        </span>
+                      )}
+                    </div>
+                    <StatusIndicator className='shrink-0' status={service.status} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

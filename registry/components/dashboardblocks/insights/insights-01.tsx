@@ -19,6 +19,7 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface InsightItem {
   /** @default 'Explore' */
@@ -106,62 +107,66 @@ const Insights1 = (props: Insights1Props) => {
   const { description, insights = [], errorMessage, status, title } = props
 
   return (
-    <BlockStateProvider
-      errorMessage={errorMessage}
-      state={getBlockState(status, insights)}
-    >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <BlockStateRows className='border-t' />
-        {!status && insights.length > 0 && (
-          <ul className='divide-y border-t'>
-            {insights.map((insight) => (
-              <li
-                key={insight.id}
-                className='flex flex-col gap-3 py-4 @lg:flex-row @lg:items-start @lg:gap-6'
-              >
-                <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
-                  <Details className='text-muted-foreground text-xs'>
-                    <InsightLabel
-                      className='text-xs'
-                      kind={insight.kind}
-                      variant='text'
-                    />
-                    {insight.topic}
-                  </Details>
-                  <InsightText segments={insight.segments} />
-                  {insight.drivers && <InsightDrivers drivers={insight.drivers} />}
-                </div>
-                {insight.href && (
-                  <a
-                    href={insight.href}
-                    aria-label={`${insight.actionLabel ?? 'Explore'}: ${insightToString(insight.segments)}`}
-                    className={buttonVariants({
-                      className: 'self-start',
-                      size: 'sm',
-                      variant: 'outline',
-                    })}
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, insights)}
+        >
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <BlockStateRows className='border-t' />
+            {!status && insights.length > 0 && (
+              <ul className='divide-y border-t'>
+                {insights.map((insight) => (
+                  <li
+                    key={insight.id}
+                    className='flex flex-col gap-3 py-4 @lg:flex-row @lg:items-start @lg:gap-6'
                   >
-                    {insight.actionLabel ?? 'Explore'}
-                    <IconPlaceholder
-                      lucide='ArrowRightIcon'
-                      tabler='IconArrowRight'
-                      hugeicons='ArrowRight01Icon'
-                      phosphor='ArrowRightIcon'
-                      remixicon='RiArrowRightLine'
-                      data-icon='inline-end'
-                    />
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </BlockStateProvider>
+                    <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
+                      <Details className='text-muted-foreground text-xs'>
+                        <InsightLabel
+                          className='text-xs'
+                          kind={insight.kind}
+                          variant='text'
+                        />
+                        {insight.topic}
+                      </Details>
+                      <InsightText segments={insight.segments} />
+                      {insight.drivers && <InsightDrivers drivers={insight.drivers} />}
+                    </div>
+                    {insight.href && (
+                      <a
+                        href={insight.href}
+                        aria-label={`${insight.actionLabel ?? 'Explore'}: ${insightToString(insight.segments)}`}
+                        className={buttonVariants({
+                          className: 'self-start',
+                          size: 'sm',
+                          variant: 'outline',
+                        })}
+                      >
+                        {insight.actionLabel ?? 'Explore'}
+                        <IconPlaceholder
+                          lucide='ArrowRightIcon'
+                          tabler='IconArrowRight'
+                          hugeicons='ArrowRight01Icon'
+                          phosphor='ArrowRightIcon'
+                          remixicon='RiArrowRightLine'
+                          data-icon='inline-end'
+                        />
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

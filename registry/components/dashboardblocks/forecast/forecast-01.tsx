@@ -50,6 +50,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Forecast1Props extends BlockStateProps {
   /** Values so far, oldest first, one step apart. Leave out, or pass none, to show the empty state. */
   actuals?: number[]
@@ -112,207 +114,211 @@ const Forecast1 = (props: Forecast1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
-          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>
-              {current && !state
-                ? `Latest, ${formatDate(current.date, 'day')}`
-                : 'Latest'}
-            </dt>
-            <dd>
-              <KPIValue
-                className='whitespace-nowrap'
-                value={current?.actual ?? undefined}
-                format={formatter}
-              />
-            </dd>
-          </div>
-          {state !== 'empty' && state !== 'error' && (
-            <>
-              <div className='flex flex-col gap-1'>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+              <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
                 <dt className='text-muted-foreground text-sm'>
-                  {end && !state
-                    ? `Forecast, ${formatDate(end.date, 'day')}`
-                    : 'Forecast'}
+                  {current && !state
+                    ? `Latest, ${formatDate(current.date, 'day')}`
+                    : 'Latest'}
                 </dt>
                 <dd>
                   <KPIValue
-                    className='text-2xl'
-                    value={end?.forecast ?? 0}
+                    className='whitespace-nowrap'
+                    value={current?.actual ?? undefined}
                     format={formatter}
                   />
                 </dd>
-                <dd className='text-muted-foreground text-xs tabular-nums'>
-                  <BlockReady className='text-xs'>
-                    {percent} range {formatter(end?.low ?? 0)} to{' '}
-                    {formatter(end?.high ?? 0)}
-                  </BlockReady>
-                </dd>
               </div>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Trend</dt>
-                <dd>
-                  <KPIValue
-                    className='text-2xl'
-                    value={fit.slope}
-                    format={(value) => formatSigned(value, formatter)}
-                  />
-                </dd>
-                <dd className='text-muted-foreground text-xs'>
-                  <BlockReady className='text-xs'>a {unit}</BlockReady>
-                </dd>
-              </div>
-            </>
-          )}
-        </dl>
-        <ForecastLegend
-          items={[
-            { label: 'Actual', shape: 'line' },
-            { label: 'Forecast', shape: 'dashed' },
-            { label: `${percent} range`, shape: 'band' },
-            { label: 'Today', shape: 'marker' },
-          ]}
-        />
-        {!current || !end || state ? (
-          <ChartPlaceholder height={240} />
-        ) : (
-          <ChartPanelFigure className='h-60'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <ComposedChart
-                aria-label={title}
-                data={rows}
-                margin={{ top: 20, right: 20, bottom: 0, left: 0 }}
-              >
-                <defs>
-                  <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
-                    <stop
-                      offset='0%'
-                      stopColor={forecastColors.actual}
-                      stopOpacity={0.3}
+              {state !== 'empty' && state !== 'error' && (
+                <>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>
+                      {end && !state
+                        ? `Forecast, ${formatDate(end.date, 'day')}`
+                        : 'Forecast'}
+                    </dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        value={end?.forecast ?? 0}
+                        format={formatter}
+                      />
+                    </dd>
+                    <dd className='text-muted-foreground text-xs tabular-nums'>
+                      <BlockReady className='text-xs'>
+                        {percent} range {formatter(end?.low ?? 0)} to{' '}
+                        {formatter(end?.high ?? 0)}
+                      </BlockReady>
+                    </dd>
+                  </div>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Trend</dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        value={fit.slope}
+                        format={(value) => formatSigned(value, formatter)}
+                      />
+                    </dd>
+                    <dd className='text-muted-foreground text-xs'>
+                      <BlockReady className='text-xs'>a {unit}</BlockReady>
+                    </dd>
+                  </div>
+                </>
+              )}
+            </dl>
+            <ForecastLegend
+              items={[
+                { label: 'Actual', shape: 'line' },
+                { label: 'Forecast', shape: 'dashed' },
+                { label: `${percent} range`, shape: 'band' },
+                { label: 'Today', shape: 'marker' },
+              ]}
+            />
+            {!current || !end || state ? (
+              <ChartPlaceholder height={240} />
+            ) : (
+              <ChartPanelFigure className='h-60'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <ComposedChart
+                    aria-label={title}
+                    data={rows}
+                    margin={{ top: 20, right: 20, bottom: 0, left: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
+                        <stop
+                          offset='0%'
+                          stopColor={forecastColors.actual}
+                          stopOpacity={0.3}
+                        />
+                        <stop
+                          offset='100%'
+                          stopColor={forecastColors.actual}
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid {...chartGridProps} />
+                    <XAxis
+                      {...chartAxisProps}
+                      dataKey='date'
+                      domain={['dataMin', 'dataMax']}
+                      interval='preserveStartEnd'
+                      minTickGap={24}
+                      scale='time'
+                      tickFormatter={(value: number) => formatDate(value, 'day')}
+                      ticks={ticks.map((row) => row.date)}
+                      type='number'
                     />
-                    <stop
-                      offset='100%'
-                      stopColor={forecastColors.actual}
-                      stopOpacity={0}
+                    <YAxis
+                      {...chartAxisProps}
+                      domain={yAxis.domain}
+                      tickFormatter={(value: number) => formatCompact(value)}
+                      ticks={yAxis.ticks}
+                      width={chartValueAxisWidth}
                     />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid {...chartGridProps} />
-                <XAxis
-                  {...chartAxisProps}
-                  dataKey='date'
-                  domain={['dataMin', 'dataMax']}
-                  interval='preserveStartEnd'
-                  minTickGap={24}
-                  scale='time'
-                  tickFormatter={(value: number) => formatDate(value, 'day')}
-                  ticks={ticks.map((row) => row.date)}
-                  type='number'
-                />
-                <YAxis
-                  {...chartAxisProps}
-                  domain={yAxis.domain}
-                  tickFormatter={(value: number) => formatCompact(value)}
-                  ticks={yAxis.ticks}
-                  width={chartValueAxisWidth}
-                />
-                <ReferenceArea
-                  x1={current.date}
-                  x2={end.date}
-                  fill='var(--color-muted)'
-                  fillOpacity={0.5}
-                  ifOverflow='hidden'
-                  label={{
-                    ...chartReferenceLabel,
-                    position: 'insideBottomRight',
-                    value: 'Forecast',
-                  }}
-                />
-                <ReferenceLine
-                  x={now.getTime()}
-                  stroke={forecastColors.marker}
-                  strokeWidth={1}
-                  label={{
-                    fill: 'var(--color-foreground)',
-                    fontSize: 11,
-                    position: 'top',
-                    value: 'Today',
-                  }}
-                />
-                <Tooltip
-                  content={(tooltipProps) => (
-                    <ForecastTooltip
-                      {...tooltipProps}
-                      formatLabel={(label) => formatDate(Number(label), 'day')}
-                      level={level}
-                      valueFormatter={formatter}
+                    <ReferenceArea
+                      x1={current.date}
+                      x2={end.date}
+                      fill='var(--color-muted)'
+                      fillOpacity={0.5}
+                      ifOverflow='hidden'
+                      label={{
+                        ...chartReferenceLabel,
+                        position: 'insideBottomRight',
+                        value: 'Forecast',
+                      }}
                     />
-                  )}
-                  cursor={chartLineCursor}
-                />
-                <Area
-                  activeDot={false}
-                  dataKey='band'
-                  fill={forecastColors.band}
-                  fillOpacity={1}
-                  name={`${percent} range`}
-                  stroke='none'
-                  type='linear'
-                />
-                <Line
-                  activeDot={chartActiveDot}
-                  dataKey='forecast'
-                  dot={false}
-                  name='Forecast'
-                  stroke={forecastColors.forecast}
-                  strokeDasharray={forecastDash.forecast}
-                  strokeWidth={2}
-                  type='linear'
-                />
-                <Area
-                  activeDot={chartActiveDot}
-                  dataKey='actual'
-                  dot={chartLastDot(actuals.length, forecastColors.actual)}
-                  fill={`url(#${gradientId})`}
-                  fillOpacity={1}
-                  name='Actual'
-                  stroke={forecastColors.actual}
-                  strokeLinecap='round'
-                  strokeWidth={2}
-                  type='monotone'
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-        )}
-        {!state && (
-          <ChartPanelTable
-            caption={`${title}: ${description} The forecast is a straight-line fit with a ${percent} range.`}
-            columns={[
-              { key: 'label', label: 'Week ending' },
-              { format: formatter, key: 'actual', label: 'Actual' },
-              { format: formatter, key: 'forecast', label: 'Forecast' },
-              { format: formatter, key: 'low', label: `Low (${percent})` },
-              { format: formatter, key: 'high', label: `High (${percent})` },
-            ]}
-            rows={rows.map((row, index) => {
-              const isForecast = index > last
-              return {
-                actual: row.actual ?? '—',
-                forecast: isForecast ? (row.forecast ?? '—') : '—',
-                high: isForecast ? (row.high ?? '—') : '—',
-                label: formatDate(row.date, 'day'),
-                low: isForecast ? (row.low ?? '—') : '—',
-              }
-            })}
-          />
-        )}
-      </section>
+                    <ReferenceLine
+                      x={now.getTime()}
+                      stroke={forecastColors.marker}
+                      strokeWidth={1}
+                      label={{
+                        fill: 'var(--color-foreground)',
+                        fontSize: 11,
+                        position: 'top',
+                        value: 'Today',
+                      }}
+                    />
+                    <Tooltip
+                      content={(tooltipProps) => (
+                        <ForecastTooltip
+                          {...tooltipProps}
+                          formatLabel={(label) => formatDate(Number(label), 'day')}
+                          level={level}
+                          valueFormatter={formatter}
+                        />
+                      )}
+                      cursor={chartLineCursor}
+                    />
+                    <Area
+                      activeDot={false}
+                      dataKey='band'
+                      fill={forecastColors.band}
+                      fillOpacity={1}
+                      name={`${percent} range`}
+                      stroke='none'
+                      type='linear'
+                    />
+                    <Line
+                      activeDot={chartActiveDot}
+                      dataKey='forecast'
+                      dot={false}
+                      name='Forecast'
+                      stroke={forecastColors.forecast}
+                      strokeDasharray={forecastDash.forecast}
+                      strokeWidth={2}
+                      type='linear'
+                    />
+                    <Area
+                      activeDot={chartActiveDot}
+                      dataKey='actual'
+                      dot={chartLastDot(actuals.length, forecastColors.actual)}
+                      fill={`url(#${gradientId})`}
+                      fillOpacity={1}
+                      name='Actual'
+                      stroke={forecastColors.actual}
+                      strokeLinecap='round'
+                      strokeWidth={2}
+                      type='monotone'
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </ChartPanelFigure>
+            )}
+            {!state && (
+              <ChartPanelTable
+                caption={`${title}: ${description} The forecast is a straight-line fit with a ${percent} range.`}
+                columns={[
+                  { key: 'label', label: 'Week ending' },
+                  { format: formatter, key: 'actual', label: 'Actual' },
+                  { format: formatter, key: 'forecast', label: 'Forecast' },
+                  { format: formatter, key: 'low', label: `Low (${percent})` },
+                  { format: formatter, key: 'high', label: `High (${percent})` },
+                ]}
+                rows={rows.map((row, index) => {
+                  const isForecast = index > last
+                  return {
+                    actual: row.actual ?? '—',
+                    forecast: isForecast ? (row.forecast ?? '—') : '—',
+                    high: isForecast ? (row.high ?? '—') : '—',
+                    label: formatDate(row.date, 'day'),
+                    low: isForecast ? (row.low ?? '—') : '—',
+                  }
+                })}
+              />
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

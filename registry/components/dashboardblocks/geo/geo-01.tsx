@@ -19,6 +19,8 @@ import {
 } from '@/registry/components/dashboardblocks/leaderboard'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Geo1Props extends BlockStateProps {
   /** Defaults to a sentence about the leading states' share. */
   description?: string
@@ -123,78 +125,84 @@ const Geo1 = (props: Geo1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            {description && (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            )}
-          </BlockReady>
-        </header>
-        <div className='flex flex-col gap-6 border-t pt-4 @2xl:flex-row @2xl:items-start'>
-          <TileMap
-            className='w-full max-w-xl @2xl:flex-1'
-            describe={(tile, value) =>
-              value === null
-                ? `${tile.name}: no data`
-                : `${tile.name}: ${formatter(value)}, ${share(value)} of total`
-            }
-            footer={
-              rankedValues.length > 0 && (
-                <HeatmapLegend
-                  high={formatter(Math.max(...rankedValues))}
-                  low={formatter(Math.min(...rankedValues))}
-                />
-              )
-            }
-            format={formatter}
-            label={title}
-            nameHeader='State'
-            scale='sqrt'
-            showShare
-            tiles={US_STATE_TILES}
-            valueHeader={valueLabel}
-            values={values}
-          />
-          <div className='flex flex-col gap-4 @2xl:w-60'>
-            <div className='flex flex-col gap-1'>
-              <span className='text-muted-foreground text-sm'>
-                Total {valueLabel.toLowerCase()}
-              </span>
-              <KPIValue value={total} format={formatter} />
-            </div>
-            {state === 'loading' && <BlockStateRows rows={5} />}
-            {!state && (
-              <div className='flex flex-col gap-1.5'>
-                <p className='text-muted-foreground text-xs'>
-                  Top {top.length}, {share(topShare)} of the total
-                </p>
-                <Leaderboard>
-                  {top.map((tile, index) => (
-                    <LeaderboardItem key={tile.id}>
-                      <LeaderboardBar
-                        delay={index * 100}
-                        value={(values[tile.id] / max) * 100}
-                      />
-                      <span
-                        aria-hidden
-                        className='text-muted-foreground w-6 shrink-0 font-mono text-xs'
-                      >
-                        {tile.code}
-                      </span>
-                      <LeaderboardLabel className='truncate'>
-                        {tile.name}
-                      </LeaderboardLabel>
-                      <LeaderboardValue>{formatter(values[tile.id])}</LeaderboardValue>
-                    </LeaderboardItem>
-                  ))}
-                </Leaderboard>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                {description && (
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                )}
+              </BlockReady>
+            </header>
+            <div className='flex flex-col gap-6 border-t pt-4 @2xl:flex-row @2xl:items-start'>
+              <TileMap
+                className='w-full max-w-xl @2xl:flex-1'
+                describe={(tile, value) =>
+                  value === null
+                    ? `${tile.name}: no data`
+                    : `${tile.name}: ${formatter(value)}, ${share(value)} of total`
+                }
+                footer={
+                  rankedValues.length > 0 && (
+                    <HeatmapLegend
+                      high={formatter(Math.max(...rankedValues))}
+                      low={formatter(Math.min(...rankedValues))}
+                    />
+                  )
+                }
+                format={formatter}
+                label={title}
+                nameHeader='State'
+                scale='sqrt'
+                showShare
+                tiles={US_STATE_TILES}
+                valueHeader={valueLabel}
+                values={values}
+              />
+              <div className='flex flex-col gap-4 @2xl:w-60'>
+                <div className='flex flex-col gap-1'>
+                  <span className='text-muted-foreground text-sm'>
+                    Total {valueLabel.toLowerCase()}
+                  </span>
+                  <KPIValue value={total} format={formatter} />
+                </div>
+                {state === 'loading' && <BlockStateRows rows={5} />}
+                {!state && (
+                  <div className='flex flex-col gap-1.5'>
+                    <p className='text-muted-foreground text-xs'>
+                      Top {top.length}, {share(topShare)} of the total
+                    </p>
+                    <Leaderboard>
+                      {top.map((tile, index) => (
+                        <LeaderboardItem key={tile.id}>
+                          <LeaderboardBar
+                            delay={index * 100}
+                            value={(values[tile.id] / max) * 100}
+                          />
+                          <span
+                            aria-hidden
+                            className='text-muted-foreground w-6 shrink-0 font-mono text-xs'
+                          >
+                            {tile.code}
+                          </span>
+                          <LeaderboardLabel className='truncate'>
+                            {tile.name}
+                          </LeaderboardLabel>
+                          <LeaderboardValue>
+                            {formatter(values[tile.id])}
+                          </LeaderboardValue>
+                        </LeaderboardItem>
+                      ))}
+                    </Leaderboard>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

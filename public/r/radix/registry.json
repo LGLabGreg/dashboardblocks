@@ -141,9 +141,10 @@
       "name": "auth",
       "type": "registry:component",
       "title": "Auth",
-      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
+      "description": "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred card, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
       "registryDependencies": [
         "button",
+        "card",
         "input",
         "input-group",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -724,6 +725,7 @@
       "title": "KPI",
       "description": "Primitives for KPIs: a block with a top rule, a value that counts up with the final value read out, the change vs the previous period written as a sentence, in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/change-amount.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/format.json"
@@ -769,6 +771,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/change-amount.json",
         "https://www.dashboardblocks.com/r/radix/use-reveal.json"
       ],
       "files": [
@@ -945,6 +948,7 @@
       "title": "Retention",
       "description": "Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table with a hover tooltip, a bar and a change in percentage points.",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/change-amount.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/use-reveal.json"
@@ -1139,6 +1143,19 @@
           "path": "registry/components/dashboardblocks/brand-logos.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/brand-logos.tsx"
+        }
+      ]
+    },
+    {
+      "name": "change-amount",
+      "type": "registry:component",
+      "title": "Change Amount",
+      "description": "A change written as an up or down arrow and its amount, with the direction read out to screen readers.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/change-amount.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/change-amount.tsx"
         }
       ]
     },
@@ -1612,6 +1629,7 @@
       "name": "kpi-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
       "files": [
@@ -1638,6 +1656,7 @@
       "name": "kpi-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
       "files": [
@@ -1664,6 +1683,7 @@
       "name": "kpi-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
       "files": [
@@ -1690,6 +1710,7 @@
       "name": "kpi-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/kpi-provenance.json"
@@ -1718,7 +1739,6 @@
       "name": "kpi-05",
       "type": "registry:component",
       "registryDependencies": [
-        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi-01.json"
       ],
@@ -1746,6 +1766,7 @@
       "name": "progress-kpi-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1773,6 +1794,7 @@
       "name": "progress-kpi-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/progress-bar.json"
@@ -1801,6 +1823,7 @@
       "name": "progress-kpi-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -1833,6 +1856,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1863,6 +1887,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1893,6 +1918,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1923,6 +1949,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1953,6 +1980,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
       ],
@@ -1981,6 +2009,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
+        "card",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/tag.json",
@@ -2009,6 +2038,7 @@
       "name": "activity-feed-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json"
@@ -2036,6 +2066,7 @@
       "name": "activity-feed-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
@@ -2066,6 +2097,8 @@
       "name": "activity-feed-04",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/change-amount.json",
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -2095,6 +2128,7 @@
       "name": "activity-feed-05",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -2126,6 +2160,7 @@
       "name": "usage-meter-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json",
         "https://www.dashboardblocks.com/r/radix/usage-meter.json"
@@ -2154,6 +2189,7 @@
       "name": "usage-meter-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -2185,6 +2221,7 @@
       "name": "usage-meter-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/usage-meter.json"
@@ -2216,6 +2253,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -2247,6 +2285,7 @@
       "name": "usage-meter-05",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/progress-bar.json",
@@ -2276,6 +2315,7 @@
       "name": "usage-meter-06",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/usage-meter.json"
@@ -2304,6 +2344,7 @@
       "name": "usage-meter-07",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/animated-wave.json",
@@ -2334,6 +2375,7 @@
       "name": "usage-meter-08",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/animated-number.json",
         "https://www.dashboardblocks.com/r/radix/animated-wave.json",
@@ -2365,6 +2407,7 @@
       "name": "leaderboard-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -2394,6 +2437,7 @@
       "name": "leaderboard-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "avatar",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -2424,6 +2468,7 @@
       "name": "leaderboard-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "avatar",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -2454,6 +2499,7 @@
       "name": "leaderboard-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/leaderboard.json",
@@ -2483,6 +2529,7 @@
       "name": "leaderboard-05",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/country-flag.json",
@@ -2516,6 +2563,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -2547,6 +2595,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -2580,6 +2629,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -2611,6 +2661,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -2642,6 +2693,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -2673,6 +2725,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -2701,6 +2754,7 @@
       "name": "breakdown-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -2728,6 +2782,7 @@
       "name": "breakdown-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/table.json"
@@ -2758,6 +2813,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -2789,6 +2845,8 @@
         "recharts"
       ],
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/radix/change-amount.json",
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -2817,6 +2875,7 @@
       "name": "funnel-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -2852,6 +2911,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/funnel.json",
@@ -2880,6 +2940,7 @@
       "name": "funnel-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -2914,6 +2975,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/funnel.json",
@@ -2942,6 +3004,7 @@
       "name": "status-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/status.json"
       ],
@@ -2969,6 +3032,7 @@
       "name": "status-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/status.json"
       ],
@@ -2996,6 +3060,7 @@
       "name": "status-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -3025,6 +3090,7 @@
       "name": "status-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/status.json",
@@ -3054,6 +3120,7 @@
       "name": "status-05",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/status.json"
@@ -3082,6 +3149,7 @@
       "name": "stat-group-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
       ],
       "files": [
@@ -3108,6 +3176,7 @@
       "name": "stat-group-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
       ],
@@ -3138,6 +3207,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
@@ -3166,6 +3236,7 @@
       "name": "stat-group-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
       ],
       "files": [
@@ -3192,6 +3263,7 @@
       "name": "stat-group-05",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
       ],
       "files": [
@@ -3499,6 +3571,7 @@
       "name": "heatmap-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
@@ -3527,6 +3600,7 @@
       "name": "heatmap-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/retention.json"
@@ -3554,6 +3628,7 @@
       "name": "heatmap-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
@@ -3581,6 +3656,7 @@
       "name": "heatmap-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
@@ -3608,6 +3684,7 @@
       "name": "states-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/stat-group.json"
@@ -3638,6 +3715,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -3666,6 +3744,7 @@
       "name": "states-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/dashboard-header.json",
@@ -3698,6 +3777,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -3727,6 +3807,7 @@
       "title": "Store dashboard",
       "description": "A store dashboard: header filters scope stats, revenue, channels, products, a checkout funnel and month-to-date revenue, with low stock alongside.",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown-01.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel-01.json",
@@ -3758,6 +3839,7 @@
       "title": "SaaS dashboard",
       "description": "A SaaS dashboard: metric tabs, an activity heatmap, MRR by region, MRR movement, retention milestones and service status, filtered by plan.",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/billing-01.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/dashboard-header.json",
@@ -3818,7 +3900,6 @@
       "title": "CRM dashboard",
       "description": "A CRM dashboard: sales stats, open pipeline by stage, monthly bookings, lead conversion, a quarter forecast by rep, deal activity and stuck deals, filtered by segment.",
       "registryDependencies": [
-        "card",
         "https://www.dashboardblocks.com/r/radix/activity-feed-01.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel-04.json",
@@ -3882,6 +3963,7 @@
       "name": "goals-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/goals.json",
@@ -3911,6 +3993,7 @@
       "name": "goals-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/goals.json"
@@ -3942,6 +4025,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/goals.json",
@@ -3971,6 +4055,7 @@
       "name": "goals-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/ring.json",
@@ -4000,6 +4085,7 @@
       "name": "comparison-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/table.json"
@@ -4028,6 +4114,7 @@
       "name": "comparison-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/comparison.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -4057,6 +4144,7 @@
       "name": "comparison-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/comparison.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -4085,6 +4173,7 @@
       "name": "comparison-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/comparison.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -4113,6 +4202,7 @@
       "name": "alerts-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/alerts.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4146,6 +4236,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/alerts.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4207,6 +4298,7 @@
       "name": "alerts-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/alerts.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4237,6 +4329,7 @@
       "name": "geo-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/geo.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
@@ -4266,6 +4359,7 @@
       "name": "geo-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/country-flag.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -4295,6 +4389,7 @@
       "name": "geo-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/geo.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -4322,6 +4417,7 @@
       "name": "geo-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -4350,6 +4446,7 @@
       "name": "billing-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/billing.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -4381,6 +4478,7 @@
       "name": "billing-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/billing.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4413,6 +4511,7 @@
       "name": "billing-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/billing.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4443,6 +4542,7 @@
       "name": "billing-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/billing.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -4502,6 +4602,7 @@
       "name": "insights-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -4534,6 +4635,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -4565,6 +4667,7 @@
       "name": "insights-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/comparison.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -4595,6 +4698,7 @@
       "name": "insights-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/insights.json"
@@ -4652,6 +4756,7 @@
       "name": "pipeline-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "button-group",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -4684,6 +4789,7 @@
       "name": "pipeline-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/pipeline.json",
         "https://www.dashboardblocks.com/r/radix/table.json"
@@ -4711,6 +4817,7 @@
       "name": "pipeline-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/goals.json",
@@ -4741,6 +4848,7 @@
       "name": "schedule-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/schedule.json"
       ],
@@ -4796,6 +4904,7 @@
       "name": "schedule-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/schedule.json"
@@ -4824,6 +4933,7 @@
       "name": "schedule-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/schedule.json"
@@ -4851,6 +4961,7 @@
       "name": "team-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/team.json",
@@ -4880,6 +4991,7 @@
       "name": "team-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -4911,6 +5023,7 @@
       "name": "team-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/team.json"
@@ -4938,6 +5051,7 @@
       "name": "team-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/progress-bar.json",
@@ -5027,6 +5141,7 @@
       "name": "checklist-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/checklist.json",
@@ -5055,6 +5170,7 @@
       "name": "checklist-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/checklist.json"
@@ -5082,6 +5198,7 @@
       "name": "checklist-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/checklist.json",
@@ -5112,6 +5229,7 @@
       "name": "checklist-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/checklist.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -5142,6 +5260,7 @@
       "name": "gauge-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/gauge.json",
@@ -5171,6 +5290,7 @@
       "name": "gauge-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/gauge.json"
@@ -5199,6 +5319,7 @@
       "name": "gauge-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/gauge.json"
@@ -5227,6 +5348,7 @@
       "name": "gauge-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/gauge.json",
@@ -5256,6 +5378,7 @@
       "name": "metric-list-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/metric-list.json"
       ],
@@ -5283,6 +5406,7 @@
       "name": "metric-list-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/metric-list.json"
       ],
@@ -5310,6 +5434,7 @@
       "name": "metric-list-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/metric-list.json"
       ],
@@ -5340,6 +5465,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -5372,6 +5498,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5405,6 +5532,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5435,6 +5563,7 @@
       "name": "forecast-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/forecast.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -5467,6 +5596,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5497,6 +5627,7 @@
       "name": "retention-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/heatmap.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -5528,6 +5659,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5558,6 +5690,7 @@
       "name": "retention-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/retention.json"
@@ -5589,6 +5722,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -5617,6 +5751,7 @@
       "name": "distribution-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/distribution.json",
@@ -5645,6 +5780,7 @@
       "name": "distribution-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/distribution.json"
@@ -5672,6 +5808,7 @@
       "name": "distribution-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/distribution.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -5699,6 +5836,7 @@
       "name": "distribution-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/distribution.json",
@@ -5727,6 +5865,7 @@
       "name": "spend-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -5755,6 +5894,7 @@
       "name": "spend-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -5786,6 +5926,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5818,6 +5959,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -5847,6 +5989,7 @@
       "name": "flow-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/flow.json",
@@ -5876,6 +6019,7 @@
       "name": "flow-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/flow.json",
@@ -5904,6 +6048,7 @@
       "name": "flow-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/flow.json",
@@ -5932,6 +6077,7 @@
       "name": "flow-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/flow.json",
         "https://www.dashboardblocks.com/r/radix/format.json"
@@ -5959,6 +6105,7 @@
       "name": "timeline-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/timeline.json"
       ],
@@ -5986,6 +6133,7 @@
       "name": "timeline-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json",
@@ -6017,6 +6165,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -6046,6 +6195,7 @@
       "name": "timeline-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -6075,6 +6225,7 @@
       "name": "realtime-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
         "https://www.dashboardblocks.com/r/radix/leaderboard.json",
@@ -6095,7 +6246,7 @@
           "geo-03"
         ],
         "component": "Realtime1",
-        "props": "{ activeUsers?: number; description: string; pageViews?: number[]; pages?: { path: string; users: number }[]; simulate?: boolean; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ activeUsers?: number; description: string; pageViews?: number[]; pages?: { path: string; users: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Active users now, page views per second over the last minute and the pages with the most people on them."
     },
@@ -6106,6 +6257,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/realtime.json",
@@ -6127,7 +6279,7 @@
           "deployments-03"
         ],
         "component": "Realtime2",
-        "props": "{ description: string; samples?: { errors: number; requests: number }[]; interval?: number; simulate?: boolean; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description: string; samples?: { errors: number; requests: number }[]; interval?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Requests per second over the last five minutes, with the peak, the error rate and errors on their own scale."
     },
@@ -6135,6 +6287,7 @@
       "name": "realtime-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/activity-feed.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -6155,7 +6308,7 @@
           "activity-feed-01"
         ],
         "component": "Realtime3",
-        "props": "{ description: string; events?: { at: Date; detail: string; id: string; kind: \"order\" | \"signup\" | \"refund\" | \"message\"; label: string }[]; limit?: number; now: Date; simulate?: boolean; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description: string; events?: { at: Date; detail: string; id: string; kind: \"order\" | \"signup\" | \"refund\" | \"message\"; label: string }[]; limit?: number; now: Date; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Orders, sign-ups, refunds and messages as they arrive, newest first, with a pause button."
     },
@@ -6166,6 +6319,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/realtime.json",
@@ -6186,7 +6340,7 @@
           "chart-panel-01"
         ],
         "component": "Realtime4",
-        "props": "{ description?: string; hourly?: number[]; hourlyLabel?: string; metrics?: { format?: (value: number) => string; id: string; label: string; today: number; yesterday: number }[]; simulate?: boolean; title: string; yesterdayHourly?: number[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description?: string; hourly?: number[]; hourlyLabel?: string; metrics?: { format?: (value: number) => string; id: string; label: string; today: number; yesterday: number }[]; title: string; yesterdayHourly?: number[]; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Running totals since midnight against yesterday at the same time, with orders per hour beside yesterday as a dashed line."
     },
@@ -6194,6 +6348,7 @@
       "name": "feedback-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/feedback.json",
@@ -6227,6 +6382,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/feedback.json",
         "https://www.dashboardblocks.com/r/radix/format.json"
@@ -6254,6 +6410,7 @@
       "name": "feedback-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
         "https://www.dashboardblocks.com/r/radix/feedback.json",
@@ -6286,6 +6443,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -6315,6 +6473,7 @@
       "name": "deployments-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/deployments.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -6345,6 +6504,7 @@
       "name": "deployments-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/deployments.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -6374,6 +6534,7 @@
       "name": "deployments-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/deployments.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
@@ -6404,6 +6565,7 @@
       "name": "deployments-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/deployments.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -6435,6 +6597,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json",
@@ -6466,6 +6629,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/scatter.json"
@@ -6496,6 +6660,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
         "https://www.dashboardblocks.com/r/radix/scatter.json"
@@ -6523,6 +6688,7 @@
       "name": "scatter-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/scatter.json"
       ],
@@ -6552,6 +6718,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -6642,6 +6809,7 @@
       "name": "security-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/gauge.json",
         "https://www.dashboardblocks.com/r/radix/security.json"
@@ -6732,6 +6900,7 @@
       "name": "inventory-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/details.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -6761,6 +6930,7 @@
       "name": "inventory-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/goals.json",
@@ -6789,6 +6959,7 @@
       "name": "inventory-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/breakdown.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -6822,6 +6993,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
         "https://www.dashboardblocks.com/r/radix/chart-panel.json",
@@ -6854,6 +7026,7 @@
         "recharts"
       ],
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/chart.json",
@@ -6884,6 +7057,7 @@
       "name": "ai-usage-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -6914,6 +7088,7 @@
       "name": "ai-usage-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/format.json",
@@ -6942,6 +7117,7 @@
       "name": "ai-usage-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/kpi.json"
@@ -7743,6 +7919,7 @@
       "name": "notifications-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/link.json",
@@ -7771,6 +7948,7 @@
       "name": "notifications-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -7964,6 +8142,7 @@
       "name": "comments-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/comments.json"
       ],
@@ -7990,6 +8169,7 @@
       "name": "comments-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
@@ -8019,6 +8199,7 @@
       "name": "comments-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/comments.json",
@@ -8049,6 +8230,7 @@
       "name": "comments-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "tabs",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/comments.json",
@@ -8187,6 +8369,7 @@
       "name": "files-01",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/files.json",
         "https://www.dashboardblocks.com/r/radix/format.json"
@@ -8206,7 +8389,7 @@
           "files-03"
         ],
         "component": "Files1",
-        "props": "{ accept: string; acceptHint: string; description: string; initialUploads?: { error?: string; file?: File; id: string; name: string; progress: number; rejected?: boolean; size: number; status: \"error\" | \"done\" | \"queued\" | \"canceled\" | \"uploading\"; type: string; url?: string }[]; maxFiles: number; maxSize: number; title: string; upload?: (file: File, options: { onProgress: (progress: number) => void; signal: AbortSignal }) => Promise<void | { url?: string }> }"
+        "props": "{ accept: string; acceptHint: string; description: string; initialUploads?: { error?: string; file?: File; id: string; name: string; progress: number; rejected?: boolean; size: number; status: \"error\" | \"done\" | \"queued\" | \"canceled\" | \"uploading\"; type: string; url?: string }[]; maxFiles: number; maxSize: number; title: string; upload: (file: File, options: { onProgress: (progress: number) => void; signal: AbortSignal }) => Promise<void | { url?: string }> }"
       },
       "description": "A dropzone showing the accepted types and size limit, with each upload's progress and cancel, retry and remove actions."
     },
@@ -8245,6 +8428,7 @@
       "name": "files-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "button",
         "https://www.dashboardblocks.com/r/radix/block-state.json",
         "https://www.dashboardblocks.com/r/radix/files.json",
@@ -8325,7 +8509,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant1",
-        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat?: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; messages?: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons."
     },
@@ -8333,6 +8517,7 @@
       "name": "ai-assistant-02",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-assistant.json",
         "https://www.dashboardblocks.com/r/radix/ai-chat.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json"
@@ -8352,7 +8537,7 @@
           "ai-assistant-04"
         ],
         "component": "AiAssistant2",
-        "props": "{ chat?: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; messages?: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A chat with an assistant whose replies include a table and a SQL query, with attachments, copy, rating, regenerate and follow-up questions."
     },
@@ -8360,6 +8545,7 @@
       "name": "ai-assistant-03",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-assistant.json",
         "https://www.dashboardblocks.com/r/radix/ai-chat.json",
         "https://www.dashboardblocks.com/r/radix/ai-usage.json",
@@ -8383,7 +8569,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant3",
-        "props": "{ chat?: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; messages?: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; tokens?: { cached?: number; input: number; output: number }; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; tokens?: { cached?: number; input: number; output: number }; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Questions about token usage numbers, with the tokens and cost shown for each answer and a change that waits for approval."
     },
@@ -8391,6 +8577,7 @@
       "name": "ai-assistant-04",
       "type": "registry:component",
       "registryDependencies": [
+        "card",
         "https://www.dashboardblocks.com/r/radix/ai-assistant.json",
         "https://www.dashboardblocks.com/r/radix/ai-chat.json",
         "https://www.dashboardblocks.com/r/radix/block-state.json"
@@ -8410,7 +8597,7 @@
           "states-01"
         ],
         "component": "AiAssistant4",
-        "props": "{ chat?: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; error?: string; messages?: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A failed assistant reply kept in the conversation with a button to try again."
     },

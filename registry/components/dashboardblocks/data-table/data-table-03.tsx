@@ -169,7 +169,6 @@ const DataTable3 = (props: DataTable3Props) => {
                       <KPIChange
                         className='text-xs'
                         comparison={comparison}
-                        format={money}
                         goodDirection='down'
                         inline
                         previous={row.previousCost}

@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'notifications-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('link'),
@@ -29,6 +30,7 @@ export const examples: Registry['items'] = [
     name: 'notifications-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       'tabs',
       registryUrl('block-state'),

@@ -23,6 +23,8 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface RevenueSnapshot {
   customers: number
   mrr: number
@@ -119,26 +121,30 @@ const Billing4 = (props: Billing4Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, metrics)}
     >
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <StatGroup className='grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'>
-          {shown.map((metric) => (
-            <Stat key={metric.key}>
-              <StatLabel>{metric.label}</StatLabel>
-              <StatValue className='text-3xl @2xl:text-4xl'>
-                {formatStatValue(metric)}
-              </StatValue>
-              <StatChange comparison={comparison} metric={metric} />
-              <dd className='text-muted-foreground text-xs'>
-                <BlockReady className='text-xs'>{metric.hint}</BlockReady>
-              </dd>
-            </Stat>
-          ))}
-        </StatGroup>
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <StatGroup className='grid-cols-1 @md:grid-cols-2 @3xl:grid-cols-4'>
+              {shown.map((metric) => (
+                <Stat key={metric.key}>
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue className='text-3xl @2xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </StatValue>
+                  <StatChange comparison={comparison} metric={metric} />
+                  <dd className='text-muted-foreground text-xs'>
+                    <BlockReady className='text-xs'>{metric.hint}</BlockReady>
+                  </dd>
+                </Stat>
+              ))}
+            </StatGroup>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

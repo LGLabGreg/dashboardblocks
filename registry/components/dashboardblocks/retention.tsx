@@ -4,6 +4,7 @@ import {
   BlockStateText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { ChangeAmount } from '@/registry/components/dashboardblocks/change-amount'
 import {
   ChartFloatingTooltip,
   chartHatchFill,
@@ -120,17 +121,16 @@ function RetentionChange({ className, difference, versus }: RetentionChangeProps
 
   return (
     <span className={cn('text-muted-foreground text-sm', className)}>
-      <span
+      <ChangeAmount
+        change={points}
         className={cn(
           'font-medium tabular-nums',
           points > 0 && 'text-emerald-700 dark:text-emerald-400',
           points < 0 && 'text-red-700 dark:text-red-400',
         )}
       >
-        {points === 0
-          ? 'No change'
-          : `${points > 0 ? 'Up' : 'Down'} ${formatPoints(Math.abs(points))}`}
-      </span>
+        {formatPoints(Math.abs(points))}
+      </ChangeAmount>
       {versus && <> {versus}</>}
     </span>
   )
@@ -373,7 +373,7 @@ function CohortTable({
 
   const labelCell = cn(
     'pr-2 text-left whitespace-nowrap',
-    minWidth && 'bg-background sticky left-0 z-10',
+    minWidth && 'bg-background in-data-[slot=card]:bg-card sticky left-0 z-10',
   )
 
   return (

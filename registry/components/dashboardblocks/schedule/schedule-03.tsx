@@ -16,6 +16,8 @@ import {
 } from '@/registry/components/dashboardblocks/schedule'
 import { formatCurrency, formatDate } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Deadline {
   /** What is owed or renewed, in dollars. */
   amount?: number
@@ -118,69 +120,77 @@ const Schedule3 = (props: Schedule3Props) => {
       errorMessage={errorMessage}
       state={getBlockState(status, deadlines)}
     >
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {overdue === 0 ? 'Nothing overdue' : `${overdue} overdue`}, and {soon} due
-              in the next {soonDays} days.
-            </p>
-          </BlockReady>
-        </header>
-        <div className='border-t'>
-          <BlockStateRows rows={5} />
-          <ul className='empty:hidden'>
-            {!status &&
-              rows.map((row) => {
-                const countdown =
-                  row.urgency === 'overdue'
-                    ? `${-row.offset} ${row.offset === -1 ? 'day' : 'days'} overdue`
-                    : row.urgency === 'today'
-                      ? 'Due today'
-                      : `Due ${formatCountdown(row.due, now, timeZone)}`
-                return (
-                  <li
-                    key={row.id}
-                    className='flex items-start gap-4 border-b py-2.5 last:border-b-0'
-                  >
-                    <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                      <span className='text-sm font-medium break-words'>{row.title}</span>
-                      {row.detail && (
-                        <span className='text-muted-foreground truncate text-sm'>
-                          {row.detail}
-                        </span>
-                      )}
-                    </div>
-                    {hasAmounts && (
-                      <p className='flex w-20 shrink-0 flex-col items-end gap-0.5 text-right text-sm tabular-nums'>
-                        {row.amount !== undefined && (
-                          <>
-                            <span>{formatCurrency(row.amount)}</span>
-                            {row.billed && (
-                              <span className='text-muted-foreground'>
-                                a {row.billed}
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </p>
-                    )}
-                    <p className='flex shrink-0 flex-col items-end gap-0.5 text-right'>
-                      <UrgencyLabel urgency={row.urgency} label={countdown} />
-                      <time
-                        dateTime={getDay(row.due, timeZone).toISOString().slice(0, 10)}
-                        className='text-muted-foreground text-sm whitespace-nowrap tabular-nums'
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {overdue === 0 ? 'Nothing overdue' : `${overdue} overdue`}, and {soon}{' '}
+                  due in the next {soonDays} days.
+                </p>
+              </BlockReady>
+            </header>
+            <div className='border-t'>
+              <BlockStateRows rows={5} />
+              <ul className='empty:hidden'>
+                {!status &&
+                  rows.map((row) => {
+                    const countdown =
+                      row.urgency === 'overdue'
+                        ? `${-row.offset} ${row.offset === -1 ? 'day' : 'days'} overdue`
+                        : row.urgency === 'today'
+                          ? 'Due today'
+                          : `Due ${formatCountdown(row.due, now, timeZone)}`
+                    return (
+                      <li
+                        key={row.id}
+                        className='flex items-start gap-4 border-b py-2.5 last:border-b-0'
                       >
-                        {formatDate(getDay(row.due, timeZone), 'weekday-day')}
-                      </time>
-                    </p>
-                  </li>
-                )
-              })}
-          </ul>
-        </div>
-      </section>
+                        <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
+                          <span className='text-sm font-medium break-words'>
+                            {row.title}
+                          </span>
+                          {row.detail && (
+                            <span className='text-muted-foreground truncate text-sm'>
+                              {row.detail}
+                            </span>
+                          )}
+                        </div>
+                        {hasAmounts && (
+                          <p className='flex w-20 shrink-0 flex-col items-end gap-0.5 text-right text-sm tabular-nums'>
+                            {row.amount !== undefined && (
+                              <>
+                                <span>{formatCurrency(row.amount)}</span>
+                                {row.billed && (
+                                  <span className='text-muted-foreground'>
+                                    a {row.billed}
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </p>
+                        )}
+                        <p className='flex shrink-0 flex-col items-end gap-0.5 text-right'>
+                          <UrgencyLabel urgency={row.urgency} label={countdown} />
+                          <time
+                            dateTime={getDay(row.due, timeZone)
+                              .toISOString()
+                              .slice(0, 10)}
+                            className='text-muted-foreground text-sm whitespace-nowrap tabular-nums'
+                          >
+                            {formatDate(getDay(row.due, timeZone), 'weekday-day')}
+                          </time>
+                        </p>
+                      </li>
+                    )
+                  })}
+              </ul>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

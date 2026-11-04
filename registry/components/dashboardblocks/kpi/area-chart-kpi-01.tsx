@@ -19,6 +19,8 @@ import {
 } from '@/registry/components/dashboardblocks/kpi'
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface DailyProfit {
   label: string
   profit: number
@@ -75,69 +77,69 @@ const AreaChartKPI1 = (props: AreaChartKPI1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <KPI>
-        <KPIContent className='gap-3'>
-          <div className='flex flex-col gap-1'>
-            <KPITitle>{title}</KPITitle>
-            <KPIValue value={profit} format={format} animated />
-            <KPIChange
-              comparison={comparison}
-              format={format}
-              previous={previous}
-              value={profit}
-            />
-          </div>
-          <KPIChart
-            label={`Revenue and profit by day: ${data
-              .map(
-                (point) =>
-                  `${point.label} ${formatter(point.revenue)} revenue, ${formatter(point.profit)} profit`,
-              )
-              .join('; ')}`}
-          >
-            <TinyAreaChart
-              accessibilityLayer={false}
-              areas={[
-                {
-                  dataKey: 'revenue',
-                  fill: 'var(--color-chart-2)',
-                  fillOpacity: 0.12,
-                  name: 'Revenue',
-                  stroke: 'color-mix(in oklab, var(--color-chart-2) 40%, transparent)',
-                  strokeWidth: 1.5,
-                },
-                {
-                  dataKey: 'profit',
-                  fill: 'var(--color-chart-2)',
-                  fillOpacity: 0.45,
-                  name: 'Profit',
-                  stroke: 'var(--color-chart-2)',
-                },
-              ]}
-              data={data}
-              formatter={formatter}
-              height={height}
-              markLast='profit'
-              xAxisKey='label'
-            />
-          </KPIChart>
-          <BlockReady className='text-xs'>
-            <p className='text-muted-foreground text-xs'>
-              <span className='text-foreground font-medium tabular-nums'>
-                {formatPercent(margin({ profit, revenue }))}
-              </span>{' '}
-              margin on {formatter(revenue)} revenue
-              {best && (
-                <>
-                  , best on {best.label} at{' '}
-                  <span className='tabular-nums'>{formatPercent(margin(best))}</span>
-                </>
-              )}
-              . The light area is revenue, the dark one profit.
-            </p>
-          </BlockReady>
-        </KPIContent>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-3'>
+              <div className='flex flex-col gap-1'>
+                <KPITitle>{title}</KPITitle>
+                <KPIValue value={profit} format={format} animated />
+                <KPIChange comparison={comparison} previous={previous} value={profit} />
+              </div>
+              <KPIChart
+                label={`Revenue and profit by day: ${data
+                  .map(
+                    (point) =>
+                      `${point.label} ${formatter(point.revenue)} revenue, ${formatter(point.profit)} profit`,
+                  )
+                  .join('; ')}`}
+              >
+                <TinyAreaChart
+                  accessibilityLayer={false}
+                  areas={[
+                    {
+                      dataKey: 'revenue',
+                      fill: 'var(--color-chart-2)',
+                      fillOpacity: 0.12,
+                      name: 'Revenue',
+                      stroke:
+                        'color-mix(in oklab, var(--color-chart-2) 40%, transparent)',
+                      strokeWidth: 1.5,
+                    },
+                    {
+                      dataKey: 'profit',
+                      fill: 'var(--color-chart-2)',
+                      fillOpacity: 0.45,
+                      name: 'Profit',
+                      stroke: 'var(--color-chart-2)',
+                    },
+                  ]}
+                  data={data}
+                  formatter={formatter}
+                  height={height}
+                  markLast='profit'
+                  xAxisKey='label'
+                />
+              </KPIChart>
+              <BlockReady className='text-xs'>
+                <p className='text-muted-foreground text-xs'>
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {formatPercent(margin({ profit, revenue }))}
+                  </span>{' '}
+                  margin on {formatter(revenue)} revenue
+                  {best && (
+                    <>
+                      , best on {best.label} at{' '}
+                      <span className='tabular-nums'>{formatPercent(margin(best))}</span>
+                    </>
+                  )}
+                  . The light area is revenue, the dark one profit.
+                </p>
+              </BlockReady>
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

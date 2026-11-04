@@ -16,6 +16,7 @@ import {
 } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
   InputGroup,
@@ -37,24 +38,24 @@ interface AuthLayoutProps {
 
 function AuthLayout({ children, className, description, media, title }: AuthLayoutProps) {
   return (
-    <div
-      className={cn('bg-background @container/page flex min-h-svh flex-col', className)}
-    >
+    <div className={cn('@container/page flex min-h-svh flex-col', className)}>
       <main className='flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6'>
-        <div className='flex w-full max-w-sm flex-col gap-6'>
-          <div className='flex flex-col items-start gap-4'>
-            {media}
-            <div className='flex flex-col gap-2'>
-              <h1 className='text-2xl font-semibold tracking-tight text-balance'>
-                {title}
-              </h1>
-              {description && (
-                <p className='text-muted-foreground text-pretty'>{description}</p>
-              )}
+        <Card className='w-full max-w-sm'>
+          <CardContent className='flex flex-col gap-6'>
+            <div className='flex flex-col items-start gap-4'>
+              {media}
+              <div className='flex flex-col gap-2'>
+                <h1 className='text-2xl font-semibold tracking-tight text-balance'>
+                  {title}
+                </h1>
+                {description && (
+                  <p className='text-muted-foreground text-pretty'>{description}</p>
+                )}
+              </div>
             </div>
-          </div>
-          {children}
-        </div>
+            {children}
+          </CardContent>
+        </Card>
       </main>
     </div>
   )
@@ -266,7 +267,7 @@ function OtpInput({
           onKeyDown={(event) => keyDown(index, event)}
           onPaste={paste}
           onFocus={(event) => event.target.select()}
-          className='h-11 w-11 min-w-0 p-0 text-center font-mono text-base tabular-nums'
+          className='h-11 w-11 min-w-0 shrink p-0 text-center font-mono text-base tabular-nums'
         />
       ))}
     </div>
@@ -295,7 +296,7 @@ function AuthReveal({
       data-open={open || undefined}
       inert={!open}
       className={cn(
-        '-mx-4 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
+        '-mx-4 grid grid-cols-[minmax(0,1fr)] transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
         open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
       )}
     >

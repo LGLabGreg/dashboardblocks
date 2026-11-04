@@ -17,6 +17,7 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -65,59 +66,65 @@ const Checklist2 = (props: Checklist2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>
-              {description}{' '}
-              <BlockReady className='text-sm'>
-                {progress.remaining === 0
-                  ? 'Every stage is done.'
-                  : `Stage ${position} of ${stages.length}.`}
-              </BlockReady>
-            </p>
-          </div>
-          {(state || progress.remaining > 0) && (
-            <Button size='sm' disabled={state !== undefined} onClick={onContinue}>
-              {continueLabel}
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </Button>
-          )}
-        </header>
-        <BlockStateRows className='border-t' rows={stages.length || 5} />
-        {!state && (
-          <ol aria-label='Setup stages' className='flex flex-col gap-3 @xl:flex-row'>
-            {stages.map((stage, index) => (
-              <li
-                key={stage.id}
-                aria-current={stage.state === 'current' ? 'step' : undefined}
-                data-state={stage.state}
-                className='border-border data-[state=current]:border-foreground data-[state=done]:border-chart-2 flex min-w-0 items-start gap-2 border-l-2 pl-3 text-sm data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-3 @xl:pl-0'
-              >
-                <StepIndicator index={index + 1} state={stage.state} />
-                <span
-                  className={cn(
-                    'min-w-0 font-medium break-words',
-                    (stage.state === 'todo' || stage.state === 'skipped') &&
-                      'text-muted-foreground',
-                  )}
-                >
-                  {stage.title}
-                  <span className='sr-only'>, {stepStateConfig[stage.state].label}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-wrap items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>
+                  {description}{' '}
+                  <BlockReady className='text-sm'>
+                    {progress.remaining === 0
+                      ? 'Every stage is done.'
+                      : `Stage ${position} of ${stages.length}.`}
+                  </BlockReady>
+                </p>
+              </div>
+              {(state || progress.remaining > 0) && (
+                <Button size='sm' disabled={state !== undefined} onClick={onContinue}>
+                  {continueLabel}
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
+                  />
+                </Button>
+              )}
+            </header>
+            <BlockStateRows className='border-t' rows={stages.length || 5} />
+            {!state && (
+              <ol aria-label='Setup stages' className='flex flex-col gap-3 @xl:flex-row'>
+                {stages.map((stage, index) => (
+                  <li
+                    key={stage.id}
+                    aria-current={stage.state === 'current' ? 'step' : undefined}
+                    data-state={stage.state}
+                    className='border-border data-[state=current]:border-foreground data-[state=done]:border-chart-2 flex min-w-0 items-start gap-2 border-l-2 pl-3 text-sm data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-3 @xl:pl-0'
+                  >
+                    <StepIndicator index={index + 1} state={stage.state} />
+                    <span
+                      className={cn(
+                        'min-w-0 font-medium break-words',
+                        (stage.state === 'todo' || stage.state === 'skipped') &&
+                          'text-muted-foreground',
+                      )}
+                    >
+                      {stage.title}
+                      <span className='sr-only'>
+                        , {stepStateConfig[stage.state].label}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

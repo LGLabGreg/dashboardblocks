@@ -23,6 +23,7 @@ import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment, type ReactNode, startTransition, useId, useRef, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ReviewComment extends ThreadComment {
@@ -218,136 +219,145 @@ const Comments3 = (props: Comments3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container'>
-        <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem] @3xl:gap-8'>
-          <article className='flex flex-col gap-4 self-start'>
-            <header className='flex flex-col gap-0.5'>
-              <h2 className='font-semibold tracking-tight'>{document.title}</h2>
-              <Details className='text-muted-foreground text-sm'>
-                <StatusLabel
-                  variant='text'
-                  tone={statusTones[document.statusTone ?? 'warning']}
+      <Card>
+        <CardContent>
+          <section className='@container'>
+            <div className='grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_22rem] @3xl:gap-8'>
+              <article className='flex flex-col gap-4 self-start'>
+                <header className='flex flex-col gap-0.5'>
+                  <h2 className='font-semibold tracking-tight'>{document.title}</h2>
+                  <Details className='text-muted-foreground text-sm'>
+                    <StatusLabel
+                      variant='text'
+                      tone={statusTones[document.statusTone ?? 'warning']}
+                    >
+                      {document.status}
+                    </StatusLabel>
+                    {document.updated}
+                  </Details>
+                </header>
+                <div className='flex flex-col gap-4 border-t pt-4 text-sm leading-relaxed'>
+                  {document.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>
+                      {state ? paragraph : highlight(paragraph, open, activeId)}
+                    </p>
+                  ))}
+                </div>
+              </article>
+              <section
+                aria-labelledby={headingId}
+                className='flex flex-col gap-3 self-start border-t pt-4 @3xl:border-t-0 @3xl:border-l @3xl:pt-0 @3xl:pl-6'
+              >
+                <header className='flex flex-col gap-0.5'>
+                  <h3 id={headingId} className='text-sm font-medium'>
+                    Comments
+                  </h3>
+                  <BlockReady className='text-sm'>
+                    <p className='text-muted-foreground text-sm'>
+                      {open.length === 0
+                        ? 'Everything is resolved.'
+                        : `${open.length} open, ${resolved.length} resolved.`}
+                    </p>
+                  </BlockReady>
+                </header>
+                <Tabs
+                  value={filter}
+                  onValueChange={(value) => setFilter(value as Filter)}
                 >
-                  {document.status}
-                </StatusLabel>
-                {document.updated}
-              </Details>
-            </header>
-            <div className='flex flex-col gap-4 border-t pt-4 text-sm leading-relaxed'>
-              {document.paragraphs.map((paragraph) => (
-                <p key={paragraph}>
-                  {state ? paragraph : highlight(paragraph, open, activeId)}
+                  <TabsList className='w-full'>
+                    {filters.map((item) => (
+                      <TabsTrigger key={item.value} value={item.value}>
+                        {item.label}
+                        {!state && <Tag>{formatNumber(item.items.length)}</Tag>}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                  {filters.map((item) => (
+                    <TabsContent key={item.value} value={item.value}>
+                      <div
+                        ref={item.value === filter ? listRef : undefined}
+                        tabIndex={-1}
+                        aria-label={`${item.label} comments`}
+                        className='flex flex-col divide-y outline-none'
+                      >
+                        {state ? (
+                          <BlockStateRows rows={3} />
+                        ) : item.items.length === 0 ? (
+                          <p className='text-muted-foreground py-10 text-center text-sm'>
+                            {item.value === 'open'
+                              ? 'All comments are resolved.'
+                              : 'No resolved comments yet.'}
+                          </p>
+                        ) : (
+                          item.items.map((comment) => (
+                            <div
+                              key={comment.id}
+                              className='py-4 first:pt-2 last:pb-0'
+                              onMouseEnter={() => setActiveId(comment.id)}
+                              onMouseLeave={() => setActiveId(undefined)}
+                              onFocus={() => setActiveId(comment.id)}
+                              onBlur={(event) => {
+                                if (
+                                  !event.currentTarget.contains(
+                                    event.relatedTarget as Node | null,
+                                  )
+                                )
+                                  setActiveId(undefined)
+                              }}
+                            >
+                              <CommentThread
+                                comment={comment}
+                                currentUser={currentUser}
+                                now={now}
+                                people={people}
+                                header={
+                                  <blockquote className='text-muted-foreground border-l-2 border-amber-500/60 pl-3 text-xs'>
+                                    <span className='line-clamp-2'>{comment.quote}</span>
+                                  </blockquote>
+                                }
+                                onReply={async (body) => {
+                                  await onSubmit(body, {
+                                    parentId: comment.id,
+                                  })
+                                  startTransition(() => {
+                                    update(comment.id, (parent) => ({
+                                      ...parent,
+                                      replies: [
+                                        ...(parent.replies ?? []),
+                                        {
+                                          at: now,
+                                          author: currentUser,
+                                          body,
+                                          id: `${Date.now()}`,
+                                        },
+                                      ],
+                                    }))
+                                  })
+                                }}
+                                onReact={(commentId, emoji) => {
+                                  onReact(commentId, emoji)
+                                  update(commentId, (target) => ({
+                                    ...target,
+                                    reactions: toggleReaction(target.reactions, emoji),
+                                  }))
+                                }}
+                                onResolve={(next) => resolve(comment, next)}
+                              />
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </TabsContent>
+                  ))}
+                </Tabs>
+                <p aria-live='polite' className='sr-only'>
+                  {announcement}
                 </p>
-              ))}
+              </section>
             </div>
-          </article>
-          <section
-            aria-labelledby={headingId}
-            className='flex flex-col gap-3 self-start border-t pt-4 @3xl:border-t-0 @3xl:border-l @3xl:pt-0 @3xl:pl-6'
-          >
-            <header className='flex flex-col gap-0.5'>
-              <h3 id={headingId} className='text-sm font-medium'>
-                Comments
-              </h3>
-              <BlockReady className='text-sm'>
-                <p className='text-muted-foreground text-sm'>
-                  {open.length === 0
-                    ? 'Everything is resolved.'
-                    : `${open.length} open, ${resolved.length} resolved.`}
-                </p>
-              </BlockReady>
-            </header>
-            <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-              <TabsList className='w-full'>
-                {filters.map((item) => (
-                  <TabsTrigger key={item.value} value={item.value}>
-                    {item.label}
-                    {!state && <Tag>{formatNumber(item.items.length)}</Tag>}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {filters.map((item) => (
-                <TabsContent key={item.value} value={item.value}>
-                  <div
-                    ref={item.value === filter ? listRef : undefined}
-                    tabIndex={-1}
-                    aria-label={`${item.label} comments`}
-                    className='flex flex-col divide-y outline-none'
-                  >
-                    {state ? (
-                      <BlockStateRows rows={3} />
-                    ) : item.items.length === 0 ? (
-                      <p className='text-muted-foreground py-10 text-center text-sm'>
-                        {item.value === 'open'
-                          ? 'All comments are resolved.'
-                          : 'No resolved comments yet.'}
-                      </p>
-                    ) : (
-                      item.items.map((comment) => (
-                        <div
-                          key={comment.id}
-                          className='py-4 first:pt-2 last:pb-0'
-                          onMouseEnter={() => setActiveId(comment.id)}
-                          onMouseLeave={() => setActiveId(undefined)}
-                          onFocus={() => setActiveId(comment.id)}
-                          onBlur={(event) => {
-                            if (
-                              !event.currentTarget.contains(
-                                event.relatedTarget as Node | null,
-                              )
-                            )
-                              setActiveId(undefined)
-                          }}
-                        >
-                          <CommentThread
-                            comment={comment}
-                            currentUser={currentUser}
-                            now={now}
-                            people={people}
-                            header={
-                              <blockquote className='text-muted-foreground border-l-2 border-amber-500/60 pl-3 text-xs'>
-                                <span className='line-clamp-2'>{comment.quote}</span>
-                              </blockquote>
-                            }
-                            onReply={async (body) => {
-                              await onSubmit(body, { parentId: comment.id })
-                              startTransition(() => {
-                                update(comment.id, (parent) => ({
-                                  ...parent,
-                                  replies: [
-                                    ...(parent.replies ?? []),
-                                    {
-                                      at: now,
-                                      author: currentUser,
-                                      body,
-                                      id: `${Date.now()}`,
-                                    },
-                                  ],
-                                }))
-                              })
-                            }}
-                            onReact={(commentId, emoji) => {
-                              onReact(commentId, emoji)
-                              update(commentId, (target) => ({
-                                ...target,
-                                reactions: toggleReaction(target.reactions, emoji),
-                              }))
-                            }}
-                            onResolve={(next) => resolve(comment, next)}
-                          />
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </TabsContent>
-              ))}
-            </Tabs>
-            <p aria-live='polite' className='sr-only'>
-              {announcement}
-            </p>
           </section>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

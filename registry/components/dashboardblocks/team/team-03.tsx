@@ -15,6 +15,8 @@ import {
   presenceOrder,
 } from '@/registry/components/dashboardblocks/team'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Team3Props extends BlockStateProps {
@@ -82,78 +84,83 @@ const Team3 = (props: Team3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          {state ? (
-            <p className='text-muted-foreground text-sm'>{description}.</p>
-          ) : (
-            <p className='text-muted-foreground text-sm'>
-              {description}, {people.length} {people.length === 1 ? 'person' : 'people'}.
-            </p>
-          )}
-        </header>
-        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
-          <div className='flex items-baseline gap-2'>
-            <KPIValue value={online} format={(value) => String(value)} />
-            {!state && (
-              <span className='text-muted-foreground text-sm'>
-                of {people.length} online now
-              </span>
-            )}
-          </div>
-          {!state && online > 0 && (
-            <AvatarStack label='Online now' max={5} people={byPresence.online} />
-          )}
-        </div>
-        {state === 'loading' && (
-          <>
-            <Skeleton className='h-2 w-full rounded-full' />
-            <dl className='grid grid-cols-3 gap-4'>
-              {presenceOrder.map((presence) => (
-                <div key={presence} className='flex flex-col gap-0.5'>
-                  <dt>
-                    <PresenceLabel presence={presence} />
-                  </dt>
-                  <dd>
-                    <KPIValue className='text-2xl' value={undefined} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </>
-        )}
-        {!state && (
-          <>
-            <div
-              aria-hidden
-              className='bg-muted flex h-2 w-full gap-0.5 overflow-hidden rounded-full'
-            >
-              {presenceOrder.map((presence) =>
-                byPresence[presence].length > 0 ? (
-                  <div
-                    key={presence}
-                    className={cn('h-full', barFill[presence])}
-                    style={{ flexGrow: byPresence[presence].length }}
-                  />
-                ) : null,
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              {state ? (
+                <p className='text-muted-foreground text-sm'>{description}.</p>
+              ) : (
+                <p className='text-muted-foreground text-sm'>
+                  {description}, {people.length}{' '}
+                  {people.length === 1 ? 'person' : 'people'}.
+                </p>
+              )}
+            </header>
+            <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
+              <div className='flex items-baseline gap-2'>
+                <KPIValue value={online} format={(value) => String(value)} />
+                {!state && (
+                  <span className='text-muted-foreground text-sm'>
+                    of {people.length} online now
+                  </span>
+                )}
+              </div>
+              {!state && online > 0 && (
+                <AvatarStack label='Online now' max={5} people={byPresence.online} />
               )}
             </div>
-            <dl className='grid grid-cols-3 gap-4'>
-              {presenceOrder.map((presence) => (
-                <div key={presence} className='flex flex-col gap-0.5'>
-                  <dt>
-                    <PresenceLabel presence={presence} />
-                  </dt>
-                  <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                    {byPresence[presence].length}
-                  </dd>
+            {state === 'loading' && (
+              <>
+                <Skeleton className='h-2 w-full rounded-full' />
+                <dl className='grid grid-cols-3 gap-4'>
+                  {presenceOrder.map((presence) => (
+                    <div key={presence} className='flex flex-col gap-0.5'>
+                      <dt>
+                        <PresenceLabel presence={presence} />
+                      </dt>
+                      <dd>
+                        <KPIValue className='text-2xl' value={undefined} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            )}
+            {!state && (
+              <>
+                <div
+                  aria-hidden
+                  className='bg-muted flex h-2 w-full gap-0.5 overflow-hidden rounded-full'
+                >
+                  {presenceOrder.map((presence) =>
+                    byPresence[presence].length > 0 ? (
+                      <div
+                        key={presence}
+                        className={cn('h-full', barFill[presence])}
+                        style={{ flexGrow: byPresence[presence].length }}
+                      />
+                    ) : null,
+                  )}
                 </div>
-              ))}
-            </dl>
-          </>
-        )}
-      </section>
+                <dl className='grid grid-cols-3 gap-4'>
+                  {presenceOrder.map((presence) => (
+                    <div key={presence} className='flex flex-col gap-0.5'>
+                      <dt>
+                        <PresenceLabel presence={presence} />
+                      </dt>
+                      <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                        {byPresence[presence].length}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

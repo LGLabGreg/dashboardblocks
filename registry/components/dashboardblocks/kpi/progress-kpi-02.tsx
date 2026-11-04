@@ -16,6 +16,8 @@ import {
 import { SegmentedProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 type TaskStatus = 'done' | 'in-progress' | 'todo'
 
 interface TaskCount {
@@ -63,74 +65,79 @@ const ProgressKPI2 = (props: ProgressKPI2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <KPI>
-        <KPIContent className='gap-1'>
-          <KPITitle>{title}</KPITitle>
-          <KPIValue value={Math.round(share(done) * 100)} format='percent' animated />
-          {state === 'loading' ? (
-            <BlockStateText className='text-sm' />
-          ) : state ? null : (
-            <p className='text-muted-foreground text-sm'>
-              <span className='text-foreground font-medium tabular-nums'>
-                {formatNumber(done)}
-              </span>{' '}
-              of <span className='tabular-nums'>{formatNumber(total)}</span> {unit} done
-            </p>
-          )}
-          <SegmentedProgressBar
-            className='mt-4 gap-0.5 bg-transparent'
-            segments={sorted.map((item) => ({
-              color: statusConfig[item.status].color,
-              label: item.status,
-              value: item.count,
-            }))}
-            total={total}
-          />
-          {state === 'loading' && (
-            <ul aria-hidden className='mt-3 flex flex-col text-sm'>
-              {statusOrder.map((taskStatus) => (
-                <li
-                  key={taskStatus}
-                  className='flex items-center gap-2 border-b py-2 last:border-b-0'
-                >
-                  <span className='text-muted-foreground'>
-                    {statusConfig[taskStatus].label}
-                  </span>
-                  <SkeletonText className='ml-auto w-12' />
-                </li>
-              ))}
-            </ul>
-          )}
-          {!state && (
-            <ul className='mt-3 flex flex-col text-sm'>
-              {sorted.map((item) => {
-                const config = statusConfig[item.status]
-                return (
-                  <li
-                    key={item.status}
-                    className='flex items-center gap-2 border-b py-2 last:border-b-0'
-                  >
-                    <span
-                      aria-hidden
-                      className='size-2.5 shrink-0 rounded-[3px] ring-1 ring-foreground/10 ring-inset'
-                      style={{ backgroundColor: config.color }}
-                    />
-                    <span className='text-muted-foreground'>{config.label}</span>
-                    <span className='ml-auto font-medium tabular-nums'>
-                      {formatNumber(item.count)}
-                    </span>
-                    <span className='text-muted-foreground w-10 text-right text-xs tabular-nums'>
-                      {formatPercent(share(item.count), {
-                        maximumFractionDigits: 0,
-                      })}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </KPIContent>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-1'>
+              <KPITitle>{title}</KPITitle>
+              <KPIValue value={Math.round(share(done) * 100)} format='percent' animated />
+              {state === 'loading' ? (
+                <BlockStateText className='text-sm' />
+              ) : state ? null : (
+                <p className='text-muted-foreground text-sm'>
+                  <span className='text-foreground font-medium tabular-nums'>
+                    {formatNumber(done)}
+                  </span>{' '}
+                  of <span className='tabular-nums'>{formatNumber(total)}</span> {unit}{' '}
+                  done
+                </p>
+              )}
+              <SegmentedProgressBar
+                className='mt-4 gap-0.5 bg-transparent'
+                segments={sorted.map((item) => ({
+                  color: statusConfig[item.status].color,
+                  label: item.status,
+                  value: item.count,
+                }))}
+                total={total}
+              />
+              {state === 'loading' && (
+                <ul aria-hidden className='mt-3 flex flex-col text-sm'>
+                  {statusOrder.map((taskStatus) => (
+                    <li
+                      key={taskStatus}
+                      className='flex items-center gap-2 border-b py-2 last:border-b-0'
+                    >
+                      <span className='text-muted-foreground'>
+                        {statusConfig[taskStatus].label}
+                      </span>
+                      <SkeletonText className='ml-auto w-12' />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!state && (
+                <ul className='mt-3 flex flex-col text-sm'>
+                  {sorted.map((item) => {
+                    const config = statusConfig[item.status]
+                    return (
+                      <li
+                        key={item.status}
+                        className='flex items-center gap-2 border-b py-2 last:border-b-0'
+                      >
+                        <span
+                          aria-hidden
+                          className='size-2.5 shrink-0 rounded-[3px] ring-1 ring-foreground/10 ring-inset'
+                          style={{ backgroundColor: config.color }}
+                        />
+                        <span className='text-muted-foreground'>{config.label}</span>
+                        <span className='ml-auto font-medium tabular-nums'>
+                          {formatNumber(item.count)}
+                        </span>
+                        <span className='text-muted-foreground w-10 text-right text-xs tabular-nums'>
+                          {formatPercent(share(item.count), {
+                            maximumFractionDigits: 0,
+                          })}
+                        </span>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

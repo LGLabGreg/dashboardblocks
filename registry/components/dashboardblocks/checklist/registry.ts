@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'checklist-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('checklist'),
@@ -29,6 +30,7 @@ export const examples: Registry['items'] = [
     name: 'checklist-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('checklist'),
@@ -50,6 +52,7 @@ export const examples: Registry['items'] = [
     name: 'checklist-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('checklist'),
@@ -74,6 +77,7 @@ export const examples: Registry['items'] = [
     name: 'checklist-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('checklist'),
       registryUrl('details'),

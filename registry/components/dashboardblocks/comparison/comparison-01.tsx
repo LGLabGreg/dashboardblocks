@@ -24,6 +24,8 @@ import {
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface ComparedMetric {
   current: number
   differenceFormatter?: (value: number) => string
@@ -103,64 +105,67 @@ const Comparison1 = (props: Comparison1Props) => {
   const { description = summarize(metrics, previousLabel) } = props
 
   return (
-    <BlockStateProvider
-      errorMessage={errorMessage}
-      state={getBlockState(status, metrics)}
-    >
-      <section className='@container/data-table flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <DataTable caption={`${title}: ${description}`} className='border-t'>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Metric</DataTableHead>
-              <DataTableHead align='end'>{currentLabel}</DataTableHead>
-              <DataTableHead align='end'>{previousLabel}</DataTableHead>
-              <DataTableHead align='end'>Difference</DataTableHead>
-              <DataTableHead align='end'>Change</DataTableHead>
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            <DataTableStateRows colSpan={5} rows={6} />
-            {!status &&
-              metrics.map((metric) => {
-                const format =
-                  metric.formatter ?? ((value: number) => formatNumber(value))
-                const difference = metric.current - metric.previous
-                return (
-                  <DataTableRow key={metric.label}>
-                    <DataTableCell primary>{metric.label}</DataTableCell>
-                    <DataTableCell align='end' className='font-medium'>
-                      {format(metric.current)}
-                    </DataTableCell>
-                    <DataTableCell align='end' className='text-muted-foreground'>
-                      {format(metric.previous)}
-                    </DataTableCell>
-                    <DataTableCell align='end'>
-                      {formatSigned(difference, metric.differenceFormatter ?? format)}
-                    </DataTableCell>
-                    <DataTableCell align='end'>
-                      <KPIChange
-                        comparison={`in ${previousLabel}`}
-                        format={format}
-                        goodDirection={metric.goodDirection}
-                        inline
-                        previous={metric.previous}
-                        value={metric.current}
-                        variant='short'
-                      />
-                    </DataTableCell>
-                  </DataTableRow>
-                )
-              })}
-          </DataTableBody>
-        </DataTable>
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, metrics)}
+        >
+          <section className='@container/data-table flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <DataTable caption={`${title}: ${description}`} className='border-t'>
+              <DataTableHeader>
+                <DataTableRow>
+                  <DataTableHead>Metric</DataTableHead>
+                  <DataTableHead align='end'>{currentLabel}</DataTableHead>
+                  <DataTableHead align='end'>{previousLabel}</DataTableHead>
+                  <DataTableHead align='end'>Difference</DataTableHead>
+                  <DataTableHead align='end'>Change</DataTableHead>
+                </DataTableRow>
+              </DataTableHeader>
+              <DataTableBody>
+                <DataTableStateRows colSpan={5} rows={6} />
+                {!status &&
+                  metrics.map((metric) => {
+                    const format =
+                      metric.formatter ?? ((value: number) => formatNumber(value))
+                    const difference = metric.current - metric.previous
+                    return (
+                      <DataTableRow key={metric.label}>
+                        <DataTableCell primary>{metric.label}</DataTableCell>
+                        <DataTableCell align='end' className='font-medium'>
+                          {format(metric.current)}
+                        </DataTableCell>
+                        <DataTableCell align='end' className='text-muted-foreground'>
+                          {format(metric.previous)}
+                        </DataTableCell>
+                        <DataTableCell align='end'>
+                          {formatSigned(difference, metric.differenceFormatter ?? format)}
+                        </DataTableCell>
+                        <DataTableCell align='end'>
+                          <KPIChange
+                            comparison={`in ${previousLabel}`}
+                            goodDirection={metric.goodDirection}
+                            inline
+                            previous={metric.previous}
+                            value={metric.current}
+                            variant='short'
+                          />
+                        </DataTableCell>
+                      </DataTableRow>
+                    )
+                  })}
+              </DataTableBody>
+            </DataTable>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

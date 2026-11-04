@@ -19,6 +19,8 @@ import {
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Heatmap4Props extends BlockStateProps {
   /** Defaults to a sentence about the windows over the target. */
   description?: string
@@ -82,69 +84,73 @@ const Heatmap4 = (props: Heatmap4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, peak)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <StatGroup className='grid-cols-1 @md:grid-cols-[2fr_1fr]'>
-          <Stat>
-            <StatLabel>Slowest window</StatLabel>
-            <StatValue>
-              {formatNumber(peak?.value ?? 0)}
-              <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                ms
-              </span>
-            </StatValue>
-            <BlockReady className='text-sm'>
-              {peak && (
-                <dd className='text-muted-foreground truncate text-sm'>
-                  <span className='font-mono'>{endpoints[peak.row]}</span>,{' '}
-                  {windowRange(peak.column)}
-                </dd>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <StatGroup className='grid-cols-1 @md:grid-cols-[2fr_1fr]'>
+              <Stat>
+                <StatLabel>Slowest window</StatLabel>
+                <StatValue>
+                  {formatNumber(peak?.value ?? 0)}
+                  <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                    ms
+                  </span>
+                </StatValue>
+                <BlockReady className='text-sm'>
+                  {peak && (
+                    <dd className='text-muted-foreground truncate text-sm'>
+                      <span className='font-mono'>{endpoints[peak.row]}</span>,{' '}
+                      {windowRange(peak.column)}
+                    </dd>
+                  )}
+                </BlockReady>
+              </Stat>
+              {target !== undefined && (
+                <Stat>
+                  <StatLabel>Over the target</StatLabel>
+                  <StatValue className='text-2xl'>
+                    {formatNumber(over.length)}
+                    <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
+                      of {formatNumber(windows.length)} windows
+                    </span>
+                  </StatValue>
+                </Stat>
               )}
-            </BlockReady>
-          </Stat>
-          {target !== undefined && (
-            <Stat>
-              <StatLabel>Over the target</StatLabel>
-              <StatValue className='text-2xl'>
-                {formatNumber(over.length)}
-                <span className='text-muted-foreground ml-1 text-sm font-normal tracking-normal'>
-                  of {formatNumber(windows.length)} windows
-                </span>
-              </StatValue>
-            </Stat>
-          )}
-        </StatGroup>
-        <HeatmapGrid
-          cellClassName='h-7'
-          cellName={({ column, row }) => `${endpoints[row]}, ${windowRange(column)}`}
-          columnLabelEvery={2}
-          columns={WINDOWS.map((window) => `${window}:00`)}
-          describe={({ column, row }, value) =>
-            `${endpoints[row]}, ${windowRange(column)}: ${value === null ? 'no data' : `${formatMs(value)} p95`}${value !== null && target !== undefined && value > target ? ', over target' : ''}`
-          }
-          flagged={target === undefined ? undefined : (_, value) => value > target}
-          footer={
-            <HeatmapLegend
-              flag={target === undefined ? undefined : `Over ${formatMs(target)}`}
-              high='Slower'
-              low='Faster'
+            </StatGroup>
+            <HeatmapGrid
+              cellClassName='h-7'
+              cellName={({ column, row }) => `${endpoints[row]}, ${windowRange(column)}`}
+              columnLabelEvery={2}
+              columns={WINDOWS.map((window) => `${window}:00`)}
+              describe={({ column, row }, value) =>
+                `${endpoints[row]}, ${windowRange(column)}: ${value === null ? 'no data' : `${formatMs(value)} p95`}${value !== null && target !== undefined && value > target ? ', over target' : ''}`
+              }
+              flagged={target === undefined ? undefined : (_, value) => value > target}
+              footer={
+                <HeatmapLegend
+                  flag={target === undefined ? undefined : `Over ${formatMs(target)}`}
+                  high='Slower'
+                  low='Faster'
+                />
+              }
+              format={formatMs}
+              label={`${title}: p95 latency by endpoint, in two-hour windows over the last 24 hours`}
+              minWidth='32rem'
+              rowHeader='Endpoint'
+              rowLabelClassName='font-mono'
+              rows={endpoints}
+              valueName='p95'
+              values={values}
             />
-          }
-          format={formatMs}
-          label={`${title}: p95 latency by endpoint, in two-hour windows over the last 24 hours`}
-          minWidth='32rem'
-          rowHeader='Endpoint'
-          rowLabelClassName='font-mono'
-          rows={endpoints}
-          valueName='p95'
-          values={values}
-        />
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

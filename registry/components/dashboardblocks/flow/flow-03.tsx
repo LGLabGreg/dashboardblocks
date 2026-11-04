@@ -17,6 +17,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Flow3Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
@@ -83,73 +85,77 @@ const Flow3 = (props: Flow3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state === 'empty' || state === 'error' ? (
-          <div className='border-t pt-4'>
-            <KPIValue />
-          </div>
-        ) : (
-          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
-            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-              <dt className='text-muted-foreground text-sm'>
-                {state ? <SkeletonText className='w-16' /> : labels.get(ids.revenue)}
-              </dt>
-              <dd>
-                <KPIValue value={revenue} format={format} />
-              </dd>
-            </div>
-            {(state ? ids.grossProfit : gross !== undefined) && (
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Gross margin</dt>
-                <dd>
-                  <KPIValue className='text-2xl' value={gross} format={margin} />
-                </dd>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state === 'empty' || state === 'error' ? (
+              <div className='border-t pt-4'>
+                <KPIValue />
               </div>
+            ) : (
+              <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+                <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                  <dt className='text-muted-foreground text-sm'>
+                    {state ? <SkeletonText className='w-16' /> : labels.get(ids.revenue)}
+                  </dt>
+                  <dd>
+                    <KPIValue value={revenue} format={format} />
+                  </dd>
+                </div>
+                {(state ? ids.grossProfit : gross !== undefined) && (
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Gross margin</dt>
+                    <dd>
+                      <KPIValue className='text-2xl' value={gross} format={margin} />
+                    </dd>
+                  </div>
+                )}
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Operating margin</dt>
+                  <dd>
+                    <KPIValue className='text-2xl' value={profit} format={margin} />
+                  </dd>
+                  <BlockReady className='text-xs'>
+                    <dd className='text-muted-foreground text-xs tabular-nums'>
+                      {format(profit)} kept
+                    </dd>
+                  </BlockReady>
+                </div>
+              </dl>
             )}
-            <div className='flex flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Operating margin</dt>
-              <dd>
-                <KPIValue className='text-2xl' value={profit} format={margin} />
-              </dd>
-              <BlockReady className='text-xs'>
-                <dd className='text-muted-foreground text-xs tabular-nums'>
-                  {format(profit)} kept
-                </dd>
-              </BlockReady>
-            </div>
-          </dl>
-        )}
-        <FlowChart
-          colorBy='target'
-          describeLink={(link) => `${margin(link.value)} of revenue`}
-          describeNode={(node) => `${margin(node.value)} of revenue`}
-          format={format}
-          height={300}
-          label={title}
-          links={links}
-          minWidth='36rem'
-          nodes={nodes}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'source', label: 'From' },
-            { key: 'target', label: 'To' },
-            { key: 'value', label: 'Amount' },
-            { key: 'share', label: 'Share of revenue' },
-          ]}
-          rows={links.map((link) => ({
-            share: margin(link.value),
-            source: labels.get(link.source) ?? link.source,
-            target: labels.get(link.target) ?? link.target,
-            value: format(link.value),
-          }))}
-        />
-      </section>
+            <FlowChart
+              colorBy='target'
+              describeLink={(link) => `${margin(link.value)} of revenue`}
+              describeNode={(node) => `${margin(node.value)} of revenue`}
+              format={format}
+              height={300}
+              label={title}
+              links={links}
+              minWidth='36rem'
+              nodes={nodes}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'source', label: 'From' },
+                { key: 'target', label: 'To' },
+                { key: 'value', label: 'Amount' },
+                { key: 'share', label: 'Share of revenue' },
+              ]}
+              rows={links.map((link) => ({
+                share: margin(link.value),
+                source: labels.get(link.source) ?? link.source,
+                target: labels.get(link.target) ?? link.target,
+                value: format(link.value),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -7,6 +7,7 @@ import {
   SkeletonText,
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { ChangeAmount } from '@/registry/components/dashboardblocks/change-amount'
 import {
   chartFadedColor,
   TinyBarChart,
@@ -16,6 +17,8 @@ import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { type ReactNode, useId } from 'react'
+
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -137,17 +140,16 @@ function CountChange({ previous, value }: { previous: number; value: number }) {
   const difference = value - previous
   return (
     <span className='text-muted-foreground'>
-      <span
+      <ChangeAmount
+        change={difference}
         className={cn(
           'font-medium tabular-nums',
           difference > 0 && 'text-emerald-700 dark:text-emerald-400',
           difference < 0 && 'text-red-700 dark:text-red-400',
         )}
       >
-        {difference === 0
-          ? 'No change'
-          : `${difference > 0 ? 'Up' : 'Down'} ${formatCount(Math.abs(difference))}`}
-      </span>{' '}
+        {formatCount(Math.abs(difference))}
+      </ChangeAmount>{' '}
       from <span className='tabular-nums'>{formatCount(previous)}</span> {COMPARISON}
     </span>
   )
@@ -181,118 +183,120 @@ const ActivityFeed4 = (props: ActivityFeed4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {range}
-            {!state && days[busiest] ? `, busiest on ${days[busiest].day}.` : '.'}
-          </p>
-        </header>
-        <div className='flex flex-col gap-1'>
-          {state ? (
-            <KPIValue />
-          ) : (
-            <p className='text-4xl font-light tracking-tight tabular-nums'>
-              {formatCount(total)}
-              <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                actions
-              </span>
-            </p>
-          )}
-          <KPIChange
-            comparison={COMPARISON}
-            format={formatCount}
-            previous={previousTotal}
-            value={total}
-          />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <div aria-hidden>
-            <TinyBarChart
-              accessibilityLayer={false}
-              bars={[{ dataKey: 'value', fill: CHART_COLOR }]}
-              data={days.map((day) => ({ label: day.day, value: day.value }))}
-              formatter={(value) =>
-                `${formatCount(value)} ${value === 1 ? 'action' : 'actions'}`
-              }
-              height={128}
-              highlightIndex={busiest}
-              xAxisKey='label'
-            />
-          </div>
-          <ul className='sr-only'>
-            {!state &&
-              days.map((day) => (
-                <li key={day.day}>
-                  {day.day}: {formatCount(day.value)}{' '}
-                  {day.value === 1 ? 'action' : 'actions'}, {compare(day)}.
-                </li>
-              ))}
-          </ul>
-        </div>
-        {state === 'loading' && (
-          <div aria-hidden className='grid grid-cols-2 gap-x-4 gap-y-4 border-t pt-4'>
-            {Array.from({ length: 4 }, (_, index) => (
-              <div key={index} className='flex flex-col gap-1.5'>
-                <SkeletonText className='w-20 text-sm' />
-                <SkeletonText className='w-12 text-2xl' />
-                <SkeletonText className='w-32 text-xs' />
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {range}
+                {!state && days[busiest] ? `, busiest on ${days[busiest].day}.` : '.'}
+              </p>
+            </header>
+            <div className='flex flex-col gap-1'>
+              {state ? (
+                <KPIValue />
+              ) : (
+                <p className='text-4xl font-light tracking-tight tabular-nums'>
+                  {formatCount(total)}
+                  <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                    actions
+                  </span>
+                </p>
+              )}
+              <KPIChange comparison={COMPARISON} previous={previousTotal} value={total} />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <div aria-hidden>
+                <TinyBarChart
+                  accessibilityLayer={false}
+                  bars={[{ dataKey: 'value', fill: CHART_COLOR }]}
+                  data={days.map((day) => ({
+                    label: day.day,
+                    value: day.value,
+                  }))}
+                  formatter={(value) =>
+                    `${formatCount(value)} ${value === 1 ? 'action' : 'actions'}`
+                  }
+                  height={128}
+                  highlightIndex={busiest}
+                  xAxisKey='label'
+                />
               </div>
-            ))}
-          </div>
-        )}
-        {!state && (
-          <dl className='grid grid-cols-2 gap-x-4 gap-y-4 border-t pt-4'>
-            {counts.map((count) => (
-              <div key={count.label} className='flex min-w-0 flex-col gap-0.5'>
-                <dt className='text-muted-foreground flex items-center gap-1.5 text-sm [&_svg]:size-3.5 [&_svg]:shrink-0'>
-                  {count.icon}
-                  <span className='truncate'>{count.label}</span>
-                </dt>
-                <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                  {formatCount(count.value)}
-                </dd>
-                <dd className='text-xs'>
-                  <CountChange previous={count.previous} value={count.value} />
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
-        {state !== 'error' && state !== 'empty' && (
-          <section aria-labelledby={id} className='flex flex-col gap-3 border-t pt-4'>
-            <h3 id={id} className='text-sm font-medium'>
-              Most active
-            </h3>
-            {state === 'loading' && <BlockStateRows rows={5} />}
-            {!state && (
-              <ol className='flex flex-col gap-2.5'>
-                {top.map((person, index) => (
-                  <li key={person.name} className='flex items-center gap-3 text-sm'>
-                    <PersonAvatar person={person} size='sm' />
-                    <span className='w-28 truncate'>{person.name}</span>
-                    <span aria-hidden className='h-1.5 flex-1'>
-                      <span
-                        className='block h-full rounded-full'
-                        style={{
-                          backgroundColor:
-                            index === 0 ? CHART_COLOR : chartFadedColor(CHART_COLOR),
-                          width: `${(person.count / max) * 100}%`,
-                        }}
-                      />
-                    </span>
-                    <span className='w-8 text-right tabular-nums'>
-                      {formatCount(person.count)}
-                      <span className='sr-only'> actions</span>
-                    </span>
-                  </li>
+              <ul className='sr-only'>
+                {!state &&
+                  days.map((day) => (
+                    <li key={day.day}>
+                      {day.day}: {formatCount(day.value)}{' '}
+                      {day.value === 1 ? 'action' : 'actions'}, {compare(day)}.
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            {state === 'loading' && (
+              <div aria-hidden className='grid grid-cols-2 gap-x-4 gap-y-4 border-t pt-4'>
+                {Array.from({ length: 4 }, (_, index) => (
+                  <div key={index} className='flex flex-col gap-1.5'>
+                    <SkeletonText className='w-20 text-sm' />
+                    <SkeletonText className='w-12 text-2xl' />
+                    <SkeletonText className='w-32 text-xs' />
+                  </div>
                 ))}
-              </ol>
+              </div>
+            )}
+            {!state && (
+              <dl className='grid grid-cols-2 gap-x-4 gap-y-4 border-t pt-4'>
+                {counts.map((count) => (
+                  <div key={count.label} className='flex min-w-0 flex-col gap-0.5'>
+                    <dt className='text-muted-foreground flex items-center gap-1.5 text-sm [&_svg]:size-3.5 [&_svg]:shrink-0'>
+                      {count.icon}
+                      <span className='truncate'>{count.label}</span>
+                    </dt>
+                    <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                      {formatCount(count.value)}
+                    </dd>
+                    <dd className='text-xs'>
+                      <CountChange previous={count.previous} value={count.value} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {state !== 'error' && state !== 'empty' && (
+              <section aria-labelledby={id} className='flex flex-col gap-3 border-t pt-4'>
+                <h3 id={id} className='text-sm font-medium'>
+                  Most active
+                </h3>
+                {state === 'loading' && <BlockStateRows rows={5} />}
+                {!state && (
+                  <ol className='flex flex-col gap-2.5'>
+                    {top.map((person, index) => (
+                      <li key={person.name} className='flex items-center gap-3 text-sm'>
+                        <PersonAvatar person={person} size='sm' />
+                        <span className='w-28 truncate'>{person.name}</span>
+                        <span aria-hidden className='h-1.5 flex-1'>
+                          <span
+                            className='block h-full rounded-full'
+                            style={{
+                              backgroundColor:
+                                index === 0 ? CHART_COLOR : chartFadedColor(CHART_COLOR),
+                              width: `${(person.count / max) * 100}%`,
+                            }}
+                          />
+                        </span>
+                        <span className='w-8 text-right tabular-nums'>
+                          {formatCount(person.count)}
+                          <span className='sr-only'> actions</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
             )}
           </section>
-        )}
-      </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

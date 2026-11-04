@@ -7,6 +7,7 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import { BreakdownLegend } from '@/registry/components/dashboardblocks/breakdown'
+import { ChangeAmount } from '@/registry/components/dashboardblocks/change-amount'
 import {
   chartBarCursor,
   ChartPlaceholder,
@@ -29,6 +30,8 @@ import {
   YAxis,
   type YAxisTickContentProps,
 } from 'recharts'
+
+import { Card, CardContent } from '@/components/ui/card'
 
 interface ShareShift {
   current: number
@@ -160,147 +163,158 @@ const Breakdown4 = (props: Breakdown4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-3 border-t pt-4'>
-          {state ? (
-            <BlockStateText className='text-sm' />
-          ) : (
-            gainer &&
-            gainer.delta > 0 && (
-              <p className='text-muted-foreground text-sm'>
-                <span className='text-foreground font-medium'>{gainer.label}</span> gained
-                the most, up {formatPoints(gainer.delta)} to {formatShare(gainer.current)}
-                .
-              </p>
-            )
-          )}
-          <BreakdownLegend
-            items={[
-              { color: PREVIOUS_COLOR, label: previousLabel },
-              { color: CURRENT_COLOR, label: currentLabel },
-            ]}
-          />
-        </div>
-        {state ? (
-          <ChartPlaceholder height={5 * ROW_HEIGHT_PX} />
-        ) : (
-          <div
-            role='img'
-            aria-label={`${title} chart`}
-            className='w-full'
-            style={{ height: rows.length * ROW_HEIGHT_PX }}
-          >
-            <ResponsiveContainer width='100%' height='100%'>
-              <BarChart
-                accessibilityLayer={false}
-                barCategoryGap={0}
-                data={rows}
-                layout='vertical'
-                margin={{ bottom: 0, left: 0, right: 0, top: 0 }}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-3 border-t pt-4'>
+              {state ? (
+                <BlockStateText className='text-sm' />
+              ) : (
+                gainer &&
+                gainer.delta > 0 && (
+                  <p className='text-muted-foreground text-sm'>
+                    <span className='text-foreground font-medium'>{gainer.label}</span>{' '}
+                    gained the most, up {formatPoints(gainer.delta)} to{' '}
+                    {formatShare(gainer.current)}.
+                  </p>
+                )
+              )}
+              <BreakdownLegend
+                items={[
+                  { color: PREVIOUS_COLOR, label: previousLabel },
+                  { color: CURRENT_COLOR, label: currentLabel },
+                ]}
+              />
+            </div>
+            {state ? (
+              <ChartPlaceholder height={5 * ROW_HEIGHT_PX} />
+            ) : (
+              <div
+                role='img'
+                aria-label={`${title} chart`}
+                className='w-full'
+                style={{ height: rows.length * ROW_HEIGHT_PX }}
               >
-                <XAxis
-                  allowDataOverflow
-                  dataKey='current'
-                  domain={domain}
-                  hide
-                  type='number'
-                />
-                <YAxis
-                  axisLine={false}
-                  dataKey='label'
-                  tick={{
-                    dx: -LABEL_AXIS_PX + 8,
-                    fill: 'var(--color-foreground)',
-                    fontSize: 14,
-                    textAnchor: 'start',
-                  }}
-                  tickLine={false}
-                  type='category'
-                  width={LABEL_AXIS_PX}
-                />
-                <YAxis
-                  axisLine={false}
-                  dataKey='label'
-                  orientation='right'
-                  tick={({ payload, x, y }: YAxisTickContentProps) => {
-                    const row = rows.find((item) => item.label === payload?.value)
-                    if (!row) return <g />
-                    return (
-                      <text
-                        x={Number(x) + 8}
-                        y={Number(y)}
-                        textAnchor='start'
-                        dominantBaseline='middle'
-                      >
-                        <tspan fill='var(--color-foreground)' fontSize={14}>
-                          {formatShare(row.current)}
-                        </tspan>
-                        <tspan dx={6} fill='var(--color-muted-foreground)' fontSize={11}>
-                          {formatSigned(row.delta, (value) =>
-                            formatNumber(value, { minimumFractionDigits: 1 }),
-                          )}
-                        </tspan>
-                      </text>
-                    )
-                  }}
-                  tickLine={false}
-                  type='category'
-                  width={84}
-                  yAxisId='values'
-                />
-                <Tooltip
-                  content={({ active, payload }) => {
-                    const row = payload?.[0]?.payload as ShiftRow | undefined
-                    if (!active || !row) return null
-                    return (
-                      <ChartTooltipFrame>
-                        <span className='font-medium'>{row.label}</span>
-                        <ChartTooltipItem
-                          color={CURRENT_COLOR}
-                          name={currentLabel}
-                          value={formatShare(row.current)}
-                        />
-                        <ChartTooltipItem
-                          color={PREVIOUS_COLOR}
-                          name={previousLabel}
-                          value={formatShare(row.previous)}
-                        />
-                        <span className='text-muted-foreground'>
-                          {describeShift(row.delta)}
-                        </span>
-                      </ChartTooltipFrame>
-                    )
-                  }}
-                  cursor={chartBarCursor}
-                />
-                <Bar
-                  dataKey='range'
-                  shape={(shape: ShiftShapeProps) => <ShiftShape {...shape} />}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'label', label: 'Channel' },
-            { key: 'previous', label: previousLabel },
-            { key: 'current', label: currentLabel },
-            { key: 'change', label: 'Change' },
-          ]}
-          rows={rows.map((row) => ({
-            change: describeShift(row.delta),
-            current: formatShare(row.current),
-            label: row.label,
-            previous: formatShare(row.previous),
-          }))}
-        />
-      </section>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart
+                    accessibilityLayer={false}
+                    barCategoryGap={0}
+                    data={rows}
+                    layout='vertical'
+                    margin={{ bottom: 0, left: 0, right: 0, top: 0 }}
+                  >
+                    <XAxis
+                      allowDataOverflow
+                      dataKey='current'
+                      domain={domain}
+                      hide
+                      type='number'
+                    />
+                    <YAxis
+                      axisLine={false}
+                      dataKey='label'
+                      tick={{
+                        dx: -LABEL_AXIS_PX + 8,
+                        fill: 'var(--color-foreground)',
+                        fontSize: 14,
+                        textAnchor: 'start',
+                      }}
+                      tickLine={false}
+                      type='category'
+                      width={LABEL_AXIS_PX}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      dataKey='label'
+                      orientation='right'
+                      tick={({ payload, x, y }: YAxisTickContentProps) => {
+                        const row = rows.find((item) => item.label === payload?.value)
+                        if (!row) return <g />
+                        return (
+                          <text
+                            x={Number(x) + 8}
+                            y={Number(y)}
+                            textAnchor='start'
+                            dominantBaseline='middle'
+                          >
+                            <tspan fill='var(--color-foreground)' fontSize={14}>
+                              {formatShare(row.current)}
+                            </tspan>
+                            <tspan
+                              dx={6}
+                              fill='var(--color-muted-foreground)'
+                              fontSize={11}
+                            >
+                              {formatSigned(row.delta, (value) =>
+                                formatNumber(value, { minimumFractionDigits: 1 }),
+                              )}
+                            </tspan>
+                          </text>
+                        )
+                      }}
+                      tickLine={false}
+                      type='category'
+                      width={84}
+                      yAxisId='values'
+                    />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        const row = payload?.[0]?.payload as ShiftRow | undefined
+                        if (!active || !row) return null
+                        return (
+                          <ChartTooltipFrame>
+                            <span className='font-medium'>{row.label}</span>
+                            <ChartTooltipItem
+                              color={CURRENT_COLOR}
+                              name={currentLabel}
+                              value={formatShare(row.current)}
+                            />
+                            <ChartTooltipItem
+                              color={PREVIOUS_COLOR}
+                              name={previousLabel}
+                              value={formatShare(row.previous)}
+                            />
+                            <ChangeAmount
+                              change={row.delta}
+                              className='text-muted-foreground'
+                            >
+                              {formatPoints(Math.abs(row.delta))}
+                            </ChangeAmount>
+                          </ChartTooltipFrame>
+                        )
+                      }}
+                      cursor={chartBarCursor}
+                    />
+                    <Bar
+                      dataKey='range'
+                      shape={(shape: ShiftShapeProps) => <ShiftShape {...shape} />}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Channel' },
+                { key: 'previous', label: previousLabel },
+                { key: 'current', label: currentLabel },
+                { key: 'change', label: 'Change' },
+              ]}
+              rows={rows.map((row) => ({
+                change: describeShift(row.delta),
+                current: formatShare(row.current),
+                label: row.label,
+                previous: formatShare(row.previous),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -6,6 +6,7 @@ import {
   SkeletonText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { ChangeAmount } from '@/registry/components/dashboardblocks/change-amount'
 import {
   formatCompact,
   formatCurrency,
@@ -34,7 +35,7 @@ function getKPIFormatter(format: KPIFormat | KPIFormatter = 'number'): KPIFormat
 }
 
 interface KPIChangeInput {
-  /** `points` for a rate's change (`Up 2.3 pts`), `count` for a plain difference (`Up 6`). @default 'percent' */
+  /** `points` for a rate's change (`2.3 pts`), `count` for a plain difference (`6`). @default 'percent' */
   changeType?: 'percent' | 'points' | 'count'
   previous?: number
   value?: number
@@ -122,20 +123,17 @@ interface KPIChangeProps extends KPIChangeInput {
   className?: string
   /** Renders a `span` instead of a `p`, for inside a button or another line of text. */
   inline?: boolean
-  /** Follows the previous value in the sentence, such as `last month`. */
+  /** What the change is measured against, after `vs`, such as `last month`. A leading `in`, `on`, `at` or `by` is dropped. */
   comparison: string
-  /** Formats the previous value in the sentence; match the value's own format. */
-  format?: KPIFormat | KPIFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
   goodDirection?: 'up' | 'down'
-  /** `short` shows only the change, such as `Up 12.5%`, and gives screen readers the rest. @default 'sentence' */
+  /** `short` shows only the change, such as an up arrow and `12.5%`, and gives screen readers the rest. @default 'sentence' */
   variant?: 'sentence' | 'short'
 }
 
 function KPIChange({
   className,
   comparison,
-  format,
   goodDirection,
   inline = false,
   variant = 'sentence',
@@ -155,16 +153,8 @@ function KPIChange({
   if (state || change === undefined) return null
 
   const good = goodDirection === 'down' ? change < 0 : change > 0
-  const rest = (
-    <>
-      {' '}
-      from{' '}
-      <span className='tabular-nums'>
-        {getKPIFormatter(format)(input.previous ?? 0)}
-      </span>{' '}
-      {comparison}
-    </>
-  )
+  const against = comparison.replace(/^(in|on|at|by) /, '')
+  const rest = against ? ` vs ${against}` : null
 
   const Element = inline ? 'span' : 'p'
   const amount =
@@ -179,7 +169,8 @@ function KPIChange({
       data-slot='kpi-change'
       className={cn('text-muted-foreground text-sm', inline && 'block', className)}
     >
-      <span
+      <ChangeAmount
+        change={change}
         className={cn(
           'font-medium tabular-nums',
           change !== 0 &&
@@ -188,8 +179,8 @@ function KPIChange({
               : 'text-red-700 dark:text-red-400'),
         )}
       >
-        {change === 0 ? 'No change' : `${change > 0 ? 'Up' : 'Down'} ${amount}`}
-      </span>
+        {amount}
+      </ChangeAmount>
       {variant === 'short' ? <span className='sr-only'>{rest}</span> : rest}
     </Element>
   )

@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('status-label'),
       registryUrl('usage-meter'),
@@ -28,6 +29,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('animated-number'),
       registryUrl('block-state'),
       registryUrl('details'),
@@ -51,6 +53,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('usage-meter'),
@@ -73,6 +76,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       'button',
       registryUrl('animated-number'),
       registryUrl('block-state'),
@@ -97,6 +101,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-05',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('progress-bar'),
@@ -119,6 +124,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-06',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('usage-meter'),
@@ -140,6 +146,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-07',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('animated-number'),
       registryUrl('animated-wave'),
@@ -163,6 +170,7 @@ export const examples: Registry['items'] = [
     name: 'usage-meter-08',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('animated-number'),
       registryUrl('animated-wave'),

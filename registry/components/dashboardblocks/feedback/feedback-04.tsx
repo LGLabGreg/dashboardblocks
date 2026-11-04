@@ -37,6 +37,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface CsatPeriod {
   label: string
   responses: number
@@ -110,158 +112,164 @@ const Feedback4 = (props: Feedback4Props) => {
   )
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
-          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>
-              {state ? 'Latest week' : `Week of ${latest?.label}`}
-            </dt>
-            {state ? (
-              <dd>
-                <KPIValue />
-              </dd>
-            ) : (
-              <dd className='text-4xl font-light tracking-tight tabular-nums'>
-                {exactPercent(latest?.csat ?? 0)}
-              </dd>
-            )}
-            {latest && previous && (
-              <dd>
-                <KPIChange
-                  changeType='points'
-                  comparison='the week before'
-                  format={(value) => exactPercent(value / 100)}
-                  previous={previous.csat * 100}
-                  value={latest.csat * 100}
-                />
-              </dd>
-            )}
-          </div>
-          {state !== 'error' && state !== 'empty' && target !== undefined && (
-            <div className='flex flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Target</dt>
-              <dd>
-                <KPIValue className='text-2xl' format={percent} value={target} />
-              </dd>
-              <dd className='text-muted-foreground text-xs tabular-nums'>
-                <BlockReady className='text-xs'>
-                  Met in {weeksMet} of {rows.length} weeks
-                </BlockReady>
-              </dd>
-            </div>
-          )}
-          {state !== 'error' && state !== 'empty' && (
-            <div className='flex flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Responses</dt>
-              <dd>
-                <KPIValue className='text-2xl' value={responses} />
-              </dd>
-              <dd className='text-muted-foreground text-xs tabular-nums'>
-                <BlockReady className='text-xs'>
-                  {formatNumber(Math.round(responses / Math.max(1, rows.length)))} a week
-                </BlockReady>
-              </dd>
-            </div>
-          )}
-        </dl>
-        {state && <ChartPlaceholder height={CHART_HEIGHT} />}
-        {!state && (
-          <ChartPanelFigure className='h-56'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <AreaChart
-                aria-label={`${title} by week${target !== undefined ? `, against a target of ${percent(target)}` : ''}`}
-                data={rows}
-                margin={{ top: 16, right: 12, bottom: 0, left: 0 }}
-              >
-                <defs>
-                  <linearGradient id={gradient} x1='0' x2='0' y1='0' y2='1'>
-                    <stop offset='0%' stopColor={CSAT_COLOR} stopOpacity={0.3} />
-                    <stop offset='100%' stopColor={CSAT_COLOR} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid {...chartGridProps} />
-                <XAxis
-                  {...chartAxisProps}
-                  dataKey='label'
-                  interval='preserveStartEnd'
-                  minTickGap={20}
-                />
-                <YAxis
-                  {...chartAxisProps}
-                  domain={[floor, 1]}
-                  tickFormatter={percent}
-                  ticks={ticks}
-                  width={chartValueAxisWidth}
-                />
-                <Tooltip
-                  content={({ active, payload }) => {
-                    const row = payload?.[0]?.payload as (typeof rows)[number] | undefined
-                    if (!active || !row) return null
-                    return (
-                      <ChartTooltipFrame>
-                        <span className='font-medium'>Week of {row.label}</span>
-                        <ChartTooltipItem
-                          color={CSAT_COLOR}
-                          name='CSAT'
-                          value={exactPercent(row.csat)}
-                        />
-                        <ChartTooltipItem
-                          name='Responses'
-                          value={formatNumber(row.responses)}
-                        />
-                      </ChartTooltipFrame>
-                    )
-                  }}
-                  cursor={chartLineCursor}
-                />
-                {target !== undefined && (
-                  <ReferenceLine
-                    {...chartReferenceProps}
-                    y={target}
-                    label={{
-                      ...chartReferenceLabel,
-                      position: 'insideTopLeft',
-                      value: `Target ${percent(target)}`,
-                    }}
-                  />
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
+              <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                <dt className='text-muted-foreground text-sm'>
+                  {state ? 'Latest week' : `Week of ${latest?.label}`}
+                </dt>
+                {state ? (
+                  <dd>
+                    <KPIValue />
+                  </dd>
+                ) : (
+                  <dd className='text-4xl font-light tracking-tight tabular-nums'>
+                    {exactPercent(latest?.csat ?? 0)}
+                  </dd>
                 )}
-                <Area
-                  activeDot={chartActiveDot}
-                  baseValue={floor}
-                  dataKey='csat'
-                  dot={chartLastDot(rows.length, CSAT_COLOR)}
-                  fill={`url(#${gradient})`}
-                  name='CSAT'
-                  stroke={CSAT_COLOR}
-                  strokeWidth={2}
-                  type='monotone'
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-        )}
-        {!state && (
-          <ChartPanelTable
-            caption={`${title}: ${description}${target !== undefined ? ` Target ${percent(target)}.` : ''}`}
-            columns={[
-              { key: 'label', label: 'Week of' },
-              { key: 'csat', label: 'CSAT' },
-              { key: 'responses', label: 'Responses' },
-            ]}
-            rows={rows.map((row) => ({
-              csat: exactPercent(row.csat),
-              label: row.label,
-              responses: formatNumber(row.responses),
-            }))}
-          />
-        )}
-      </section>
-    </BlockStateProvider>
+                {latest && previous && (
+                  <dd>
+                    <KPIChange
+                      changeType='points'
+                      comparison='the week before'
+                      previous={previous.csat * 100}
+                      value={latest.csat * 100}
+                    />
+                  </dd>
+                )}
+              </div>
+              {state !== 'error' && state !== 'empty' && target !== undefined && (
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Target</dt>
+                  <dd>
+                    <KPIValue className='text-2xl' format={percent} value={target} />
+                  </dd>
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    <BlockReady className='text-xs'>
+                      Met in {weeksMet} of {rows.length} weeks
+                    </BlockReady>
+                  </dd>
+                </div>
+              )}
+              {state !== 'error' && state !== 'empty' && (
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Responses</dt>
+                  <dd>
+                    <KPIValue className='text-2xl' value={responses} />
+                  </dd>
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    <BlockReady className='text-xs'>
+                      {formatNumber(Math.round(responses / Math.max(1, rows.length)))} a
+                      week
+                    </BlockReady>
+                  </dd>
+                </div>
+              )}
+            </dl>
+            {state && <ChartPlaceholder height={CHART_HEIGHT} />}
+            {!state && (
+              <ChartPanelFigure className='h-56'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <AreaChart
+                    aria-label={`${title} by week${target !== undefined ? `, against a target of ${percent(target)}` : ''}`}
+                    data={rows}
+                    margin={{ top: 16, right: 12, bottom: 0, left: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id={gradient} x1='0' x2='0' y1='0' y2='1'>
+                        <stop offset='0%' stopColor={CSAT_COLOR} stopOpacity={0.3} />
+                        <stop offset='100%' stopColor={CSAT_COLOR} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid {...chartGridProps} />
+                    <XAxis
+                      {...chartAxisProps}
+                      dataKey='label'
+                      interval='preserveStartEnd'
+                      minTickGap={20}
+                    />
+                    <YAxis
+                      {...chartAxisProps}
+                      domain={[floor, 1]}
+                      tickFormatter={percent}
+                      ticks={ticks}
+                      width={chartValueAxisWidth}
+                    />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        const row = payload?.[0]?.payload as
+                          | (typeof rows)[number]
+                          | undefined
+                        if (!active || !row) return null
+                        return (
+                          <ChartTooltipFrame>
+                            <span className='font-medium'>Week of {row.label}</span>
+                            <ChartTooltipItem
+                              color={CSAT_COLOR}
+                              name='CSAT'
+                              value={exactPercent(row.csat)}
+                            />
+                            <ChartTooltipItem
+                              name='Responses'
+                              value={formatNumber(row.responses)}
+                            />
+                          </ChartTooltipFrame>
+                        )
+                      }}
+                      cursor={chartLineCursor}
+                    />
+                    {target !== undefined && (
+                      <ReferenceLine
+                        {...chartReferenceProps}
+                        y={target}
+                        label={{
+                          ...chartReferenceLabel,
+                          position: 'insideTopLeft',
+                          value: `Target ${percent(target)}`,
+                        }}
+                      />
+                    )}
+                    <Area
+                      activeDot={chartActiveDot}
+                      baseValue={floor}
+                      dataKey='csat'
+                      dot={chartLastDot(rows.length, CSAT_COLOR)}
+                      fill={`url(#${gradient})`}
+                      name='CSAT'
+                      stroke={CSAT_COLOR}
+                      strokeWidth={2}
+                      type='monotone'
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </ChartPanelFigure>
+            )}
+            {!state && (
+              <ChartPanelTable
+                caption={`${title}: ${description}${target !== undefined ? ` Target ${percent(target)}.` : ''}`}
+                columns={[
+                  { key: 'label', label: 'Week of' },
+                  { key: 'csat', label: 'CSAT' },
+                  { key: 'responses', label: 'Responses' },
+                ]}
+                rows={rows.map((row) => ({
+                  csat: exactPercent(row.csat),
+                  label: row.label,
+                  responses: formatNumber(row.responses),
+                }))}
+              />
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -8,6 +8,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('kpi'),
@@ -31,6 +32,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('scatter'),
@@ -53,6 +55,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('chart-panel'),
       registryUrl('scatter'),
@@ -73,7 +76,7 @@ export const examples: Registry['items'] = [
   {
     name: 'scatter-04',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('scatter')],
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('scatter')],
     files: [
       {
         path: 'registry/components/dashboardblocks/scatter/scatter-04.tsx',

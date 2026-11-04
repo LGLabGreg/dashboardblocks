@@ -18,6 +18,7 @@ import { useReveal } from '@/registry/hooks/use-reveal'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -131,7 +132,7 @@ function Podium({ top, unit }: PodiumProps) {
               </Avatar>
               <div className='flex w-full min-w-0 flex-col'>
                 <p className='truncate text-sm font-medium'>{contributor.name}</p>
-                <p>
+                <p className='flex flex-wrap items-baseline justify-center gap-x-1'>
                   <span
                     className={cn(
                       'font-light tracking-tight tabular-nums',
@@ -140,7 +141,7 @@ function Podium({ top, unit }: PodiumProps) {
                   >
                     {formatNumber(contributor.value)}
                   </span>
-                  <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                  <span className='text-muted-foreground text-base font-normal tracking-normal'>
                     {unit}
                   </span>
                 </p>
@@ -177,49 +178,53 @@ const Leaderboard3 = (props: Leaderboard3Props) => {
   const rest = contributors.slice(3)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <BlockStateRows className='border-t' rows={6} />
-        {!state && <Podium top={top} unit={unit} />}
-        {!state && rest.length > 0 && (
-          <Leaderboard className='gap-0'>
-            {rest.map((contributor, index) => (
-              <LeaderboardItem
-                key={contributor.id}
-                className='border-b px-0 py-2.5 last:border-b-0'
-              >
-                <LeaderboardRank rank={index + 4} />
-                <Avatar
-                  // Not the primitive's colour: the style sets no outline, so this one is the block's own
-                  className='size-7 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'
-                >
-                  <AvatarImage src={contributor.avatar} alt='' />
-                  <AvatarFallback className='text-xs'>
-                    {getInitials(contributor.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <LeaderboardLabel className='truncate'>
-                  {contributor.name}
-                </LeaderboardLabel>
-                <LeaderboardValue>
-                  {formatNumber(contributor.value)}
-                  <span className='text-muted-foreground text-xs font-normal'>
-                    {' '}
-                    {unit}
-                  </span>
-                </LeaderboardValue>
-              </LeaderboardItem>
-            ))}
-          </Leaderboard>
-        )}
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <BlockStateRows className='border-t' rows={6} />
+            {!state && <Podium top={top} unit={unit} />}
+            {!state && rest.length > 0 && (
+              <Leaderboard className='gap-0'>
+                {rest.map((contributor, index) => (
+                  <LeaderboardItem
+                    key={contributor.id}
+                    className='border-b px-0 py-2.5 last:border-b-0'
+                  >
+                    <LeaderboardRank rank={index + 4} />
+                    <Avatar
+                      // Not the primitive's colour: the style sets no outline, so this one is the block's own
+                      className='size-7 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10'
+                    >
+                      <AvatarImage src={contributor.avatar} alt='' />
+                      <AvatarFallback className='text-xs'>
+                        {getInitials(contributor.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <LeaderboardLabel className='truncate'>
+                      {contributor.name}
+                    </LeaderboardLabel>
+                    <LeaderboardValue>
+                      {formatNumber(contributor.value)}
+                      <span className='text-muted-foreground text-xs font-normal'>
+                        {' '}
+                        {unit}
+                      </span>
+                    </LeaderboardValue>
+                  </LeaderboardItem>
+                ))}
+              </Leaderboard>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -6,7 +6,7 @@ export const examples: Registry['items'] = [
   {
     name: 'status-01',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('status')],
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('status')],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-01.tsx',
@@ -23,7 +23,7 @@ export const examples: Registry['items'] = [
   {
     name: 'status-02',
     type: 'registry:component',
-    registryDependencies: [registryUrl('block-state'), registryUrl('status')],
+    registryDependencies: ['card', registryUrl('block-state'), registryUrl('status')],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-02.tsx',
@@ -41,6 +41,7 @@ export const examples: Registry['items'] = [
     name: 'status-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('activity-feed'),
       registryUrl('block-state'),
@@ -63,6 +64,7 @@ export const examples: Registry['items'] = [
     name: 'status-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('status'),
@@ -84,6 +86,7 @@ export const examples: Registry['items'] = [
     name: 'status-05',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('kpi'),
       registryUrl('status'),

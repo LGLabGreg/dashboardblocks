@@ -21,6 +21,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -252,22 +253,26 @@ const Checklist1 = (props: Checklist1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      {state ? (
-        <section className='@container flex flex-col gap-3'>
-          <header className='flex flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            {state === 'loading' && (
-              <span className='text-sm'>
-                <SkeletonText className='w-2/3' />
-              </span>
-            )}
-          </header>
-          {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
-          <BlockStateRows className='border-t' rows={6} />
-        </section>
-      ) : (
-        <ChecklistSteps {...props} steps={steps} />
-      )}
+      <Card>
+        <CardContent>
+          {state ? (
+            <section className='@container flex flex-col gap-3'>
+              <header className='flex flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                {state === 'loading' && (
+                  <span className='text-sm'>
+                    <SkeletonText className='w-2/3' />
+                  </span>
+                )}
+              </header>
+              {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
+              <BlockStateRows className='border-t' rows={6} />
+            </section>
+          ) : (
+            <ChecklistSteps {...props} steps={steps} />
+          )}
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

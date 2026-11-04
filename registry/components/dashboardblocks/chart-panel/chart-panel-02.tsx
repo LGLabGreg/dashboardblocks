@@ -49,6 +49,7 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ChartPanel2Props extends BlockStateProps {
@@ -125,140 +126,161 @@ const ChartPanel2 = (props: ChartPanel2Props) => {
   if (state) {
     return (
       <BlockStateProvider errorMessage={errorMessage} state={state}>
-        <section className='@container flex flex-col gap-4'>
-          {header}
-          <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-3'>
-            {getStatPlaceholders(placeholders).map((metric) => (
-              <Stat key={metric.key}>
-                <StatLabel />
-                <StatValue className='text-3xl @2xl:text-4xl' />
-                <StatChange className='text-xs' metric={metric} variant='short' />
-              </Stat>
-            ))}
-          </StatGroup>
-          <ChartPlaceholder className='mt-1' height={240} />
-        </section>
+        <Card>
+          <CardContent>
+            <section className='@container flex flex-col gap-4'>
+              {header}
+              <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-3'>
+                {getStatPlaceholders(placeholders).map((metric) => (
+                  <Stat key={metric.key}>
+                    <StatLabel />
+                    <StatValue className='text-3xl @2xl:text-4xl' />
+                    <StatChange className='text-xs' metric={metric} variant='short' />
+                  </Stat>
+                ))}
+              </StatGroup>
+              <ChartPlaceholder className='mt-1' height={240} />
+            </section>
+          </CardContent>
+        </Card>
       </BlockStateProvider>
     )
   }
 
   return (
-    <section className='@container flex flex-col gap-4'>
-      {header}
-      <Tabs
-        value={active ?? metrics[0]?.key}
-        onValueChange={(value) => setActive(String(value))}
-        className='gap-0'
-      >
-        <TabsList
-          aria-label={`${title} metrics`}
-          variant='line'
-          className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @xl:grid-cols-3'
-        >
-          {metrics.map((metric) => (
-            <TabsTrigger
-              key={metric.key}
-              value={metric.key}
-              className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
+    <Card>
+      <CardContent>
+        <section className='@container flex flex-col gap-4'>
+          {header}
+          <Tabs
+            value={active ?? metrics[0]?.key}
+            onValueChange={(value) => setActive(String(value))}
+            className='gap-0'
+          >
+            <TabsList
+              aria-label={`${title} metrics`}
+              variant='line'
+              className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @xl:grid-cols-3'
             >
-              <span className='text-muted-foreground text-sm'>{metric.label}</span>
-              <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @2xl:text-4xl'>
-                {formatStatValue(metric)}
-              </span>
-              <StatChangeContent
-                className='text-xs'
-                comparison={comparison}
-                metric={metric}
-                variant='short'
-              />
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {metrics.map((metric) => {
-          const format = metric.formatter ?? ((value: number) => formatNumber(value))
-          const values = data.map((point) => Number(point[metric.key] ?? 0))
-          const average =
-            values.length > 0
-              ? values.reduce((sum, value) => sum + value, 0) / values.length
-              : 0
-          return (
-            <TabsContent
-              key={metric.key}
-              value={metric.key}
-              className='mt-1 flex flex-col gap-3 border-t pt-4'
-            >
-              <ChartPanelFigure className='h-56'>
-                <ResponsiveContainer width='100%' height='100%'>
-                  <AreaChart
-                    aria-label={`${title}: ${metric.label} chart`}
-                    data={data}
-                    margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
-                        <stop offset='0%' stopColor={SERIES_COLOR} stopOpacity={0.3} />
-                        <stop offset='100%' stopColor={SERIES_COLOR} stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid {...chartGridProps} />
-                    <XAxis
-                      {...chartAxisProps}
-                      dataKey='label'
-                      interval='preserveStartEnd'
-                      minTickGap={40}
-                    />
-                    <YAxis
-                      {...chartAxisProps}
-                      domain={['auto', 'auto']}
-                      tickFormatter={(value: number) =>
-                        metric.formatter ? metric.formatter(value) : formatCompact(value)
-                      }
-                      width={chartValueAxisWidth}
-                    />
-                    <Tooltip
-                      content={(tooltipProps) => (
-                        <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
-                      )}
-                      cursor={chartLineCursor}
-                    />
-                    <ReferenceLine
-                      {...chartReferenceProps}
-                      y={average}
-                      label={{
-                        ...chartReferenceLabel,
-                        value: `avg ${format(Math.round(average))}`,
-                        position: 'insideBottomLeft',
-                        dy: -4,
-                      }}
-                    />
-                    <Area
-                      activeDot={chartActiveDot}
-                      dataKey={metric.key}
-                      dot={chartLastDot(data.length, SERIES_COLOR)}
-                      fill={`url(#${gradient})`}
-                      name={metric.label}
-                      stroke={SERIES_COLOR}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      type='monotone'
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </ChartPanelFigure>
-              <ChartPanelTable
-                caption={`${title}: ${metric.label} by day`}
-                columns={[
-                  { key: 'label', label: 'Day' },
-                  { format, key: metric.key, label: metric.label },
-                ]}
-                rows={data}
-              />
-            </TabsContent>
-          )
-        })}
-      </Tabs>
-    </section>
+              {metrics.map((metric) => (
+                <TabsTrigger
+                  key={metric.key}
+                  value={metric.key}
+                  className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
+                >
+                  <span className='text-muted-foreground text-sm'>{metric.label}</span>
+                  <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @2xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </span>
+                  <StatChangeContent
+                    className='text-xs'
+                    comparison={comparison}
+                    metric={metric}
+                    variant='short'
+                  />
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {metrics.map((metric) => {
+              const format = metric.formatter ?? ((value: number) => formatNumber(value))
+              const values = data.map((point) => Number(point[metric.key] ?? 0))
+              const average =
+                values.length > 0
+                  ? values.reduce((sum, value) => sum + value, 0) / values.length
+                  : 0
+              return (
+                <TabsContent
+                  key={metric.key}
+                  value={metric.key}
+                  className='mt-1 flex flex-col gap-3 border-t pt-4'
+                >
+                  <ChartPanelFigure className='h-56'>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <AreaChart
+                        aria-label={`${title}: ${metric.label} chart`}
+                        data={data}
+                        margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+                      >
+                        <defs>
+                          <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
+                            <stop
+                              offset='0%'
+                              stopColor={SERIES_COLOR}
+                              stopOpacity={0.3}
+                            />
+                            <stop
+                              offset='100%'
+                              stopColor={SERIES_COLOR}
+                              stopOpacity={0}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid {...chartGridProps} />
+                        <XAxis
+                          {...chartAxisProps}
+                          dataKey='label'
+                          interval='preserveStartEnd'
+                          minTickGap={40}
+                        />
+                        <YAxis
+                          {...chartAxisProps}
+                          domain={['auto', 'auto']}
+                          tickFormatter={(value: number) =>
+                            metric.formatter
+                              ? metric.formatter(value)
+                              : formatCompact(value)
+                          }
+                          width={chartValueAxisWidth}
+                        />
+                        <Tooltip
+                          content={(tooltipProps) => (
+                            <ChartTooltipContent
+                              {...tooltipProps}
+                              valueFormatter={format}
+                            />
+                          )}
+                          cursor={chartLineCursor}
+                        />
+                        <ReferenceLine
+                          {...chartReferenceProps}
+                          y={average}
+                          label={{
+                            ...chartReferenceLabel,
+                            value: `avg ${format(Math.round(average))}`,
+                            position: 'insideBottomLeft',
+                            dy: -4,
+                          }}
+                        />
+                        <Area
+                          activeDot={chartActiveDot}
+                          dataKey={metric.key}
+                          dot={chartLastDot(data.length, SERIES_COLOR)}
+                          fill={`url(#${gradient})`}
+                          name={metric.label}
+                          stroke={SERIES_COLOR}
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          type='monotone'
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </ChartPanelFigure>
+                  <ChartPanelTable
+                    caption={`${title}: ${metric.label} by day`}
+                    columns={[
+                      { key: 'label', label: 'Day' },
+                      { format, key: metric.key, label: metric.label },
+                    ]}
+                    rows={data}
+                  />
+                </TabsContent>
+              )
+            })}
+          </Tabs>
+        </section>
+      </CardContent>
+    </Card>
   )
 }
 

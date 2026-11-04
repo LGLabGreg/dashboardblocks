@@ -30,6 +30,7 @@ export const examples: Registry['items'] = [
     name: 'pipeline-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       'button-group',
       registryUrl('block-state'),
@@ -55,6 +56,7 @@ export const examples: Registry['items'] = [
     name: 'pipeline-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('pipeline'),
       registryUrl('table'),
@@ -76,6 +78,7 @@ export const examples: Registry['items'] = [
     name: 'pipeline-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('goals'),

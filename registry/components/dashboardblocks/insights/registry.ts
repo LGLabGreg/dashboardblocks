@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'insights-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('details'),
@@ -30,6 +31,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     dependencies: ['recharts'],
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('chart'),
@@ -54,6 +56,7 @@ export const examples: Registry['items'] = [
     name: 'insights-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('comparison'),
       registryUrl('format'),
@@ -76,7 +79,12 @@ export const examples: Registry['items'] = [
   {
     name: 'insights-04',
     type: 'registry:component',
-    registryDependencies: ['button', registryUrl('block-state'), registryUrl('insights')],
+    registryDependencies: [
+      'card',
+      'button',
+      registryUrl('block-state'),
+      registryUrl('insights'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/insights/insights-04.tsx',

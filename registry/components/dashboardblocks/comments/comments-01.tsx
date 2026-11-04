@@ -18,6 +18,8 @@ import {
 } from '@/registry/components/dashboardblocks/comments'
 import { startTransition, useRef, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Comments1Props extends BlockStateProps {
   /** Leave out, or pass none, to show the empty state. */
   comments?: ThreadComment[]
@@ -154,78 +156,87 @@ const Comments1 = (props: Comments1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>
-              {open} open {open === 1 ? 'thread' : 'threads'} in the discussion
-              {resolved > 0 && `, ${resolved} resolved`}.
-            </p>
-          </BlockReady>
-        </header>
-        <div className='flex flex-col divide-y border-t'>
-          <BlockStateRows className='pb-4' rows={4} />
-          {!state &&
-            comments.map((comment) => (
-              <CommentThread
-                key={comment.id}
-                className='py-4'
-                comment={comment}
-                currentUser={currentUser}
-                now={now}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>
+                  {open} open {open === 1 ? 'thread' : 'threads'} in the discussion
+                  {resolved > 0 && `, ${resolved} resolved`}.
+                </p>
+              </BlockReady>
+            </header>
+            <div className='flex flex-col divide-y border-t'>
+              <BlockStateRows className='pb-4' rows={4} />
+              {!state &&
+                comments.map((comment) => (
+                  <CommentThread
+                    key={comment.id}
+                    className='py-4'
+                    comment={comment}
+                    currentUser={currentUser}
+                    now={now}
+                    people={people}
+                    onReply={(body) => post(body, comment.id)}
+                    onReact={(commentId, emoji) => {
+                      onReact(commentId, emoji)
+                      setComments((current) =>
+                        updateComment(current, commentId, (item) => ({
+                          ...item,
+                          reactions: toggleReaction(item.reactions, emoji),
+                        })),
+                      )
+                    }}
+                    onResolve={(resolved) => {
+                      onResolve(comment.id, resolved)
+                      setComments((current) =>
+                        updateComment(current, comment.id, (item) => ({
+                          ...item,
+                          resolved,
+                        })),
+                      )
+                    }}
+                    onEdit={async (commentId, body) => {
+                      await onEdit(commentId, body)
+                      startTransition(() =>
+                        setComments((current) =>
+                          updateComment(current, commentId, (item) => ({
+                            ...item,
+                            body,
+                            edited: true,
+                          })),
+                        ),
+                      )
+                    }}
+                    onDelete={(commentId) => {
+                      onDelete(commentId)
+                      setComments((current) =>
+                        updateComment(current, commentId, () => null),
+                      )
+                      if (commentId === comment.id) {
+                        requestAnimationFrame(() =>
+                          composerRef.current?.querySelector('textarea')?.focus(),
+                        )
+                      }
+                    }}
+                  />
+                ))}
+            </div>
+            <div ref={composerRef} className='-mt-4 flex gap-3 border-t pt-4'>
+              <CommentAvatar author={currentUser} className='self-start' />
+              <CommentComposer
+                className='min-w-0 flex-1'
+                disabled={state === 'loading' || state === 'error'}
                 people={people}
-                onReply={(body) => post(body, comment.id)}
-                onReact={(commentId, emoji) => {
-                  onReact(commentId, emoji)
-                  setComments((current) =>
-                    updateComment(current, commentId, (item) => ({
-                      ...item,
-                      reactions: toggleReaction(item.reactions, emoji),
-                    })),
-                  )
-                }}
-                onResolve={(resolved) => {
-                  onResolve(comment.id, resolved)
-                  setComments((current) =>
-                    updateComment(current, comment.id, (item) => ({ ...item, resolved })),
-                  )
-                }}
-                onEdit={async (commentId, body) => {
-                  await onEdit(commentId, body)
-                  startTransition(() =>
-                    setComments((current) =>
-                      updateComment(current, commentId, (item) => ({
-                        ...item,
-                        body,
-                        edited: true,
-                      })),
-                    ),
-                  )
-                }}
-                onDelete={(commentId) => {
-                  onDelete(commentId)
-                  setComments((current) => updateComment(current, commentId, () => null))
-                  if (commentId === comment.id) {
-                    requestAnimationFrame(() =>
-                      composerRef.current?.querySelector('textarea')?.focus(),
-                    )
-                  }
-                }}
+                placeholder='Add to the discussion'
+                onSubmit={(body) => post(body)}
               />
-            ))}
-        </div>
-        <div ref={composerRef} className='-mt-4 flex gap-3 border-t pt-4'>
-          <CommentAvatar author={currentUser} className='self-start' />
-          <CommentComposer
-            className='min-w-0 flex-1'
-            disabled={state === 'loading' || state === 'error'}
-            people={people}
-            placeholder='Add to the discussion'
-            onSubmit={(body) => post(body)}
-          />
-        </div>
-      </section>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

@@ -36,6 +36,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Percentile {
   key: string
   label: string
@@ -112,132 +114,137 @@ const ChartPanel6 = (props: ChartPanel6Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
-          <div className='flex flex-col gap-1'>
-            <p className='text-muted-foreground text-sm'>{headline} now</p>
-            <KPIValue value={headlineValue} format={formatter} />
-            <KPIChange
-              comparison={comparison}
-              format={formatter}
-              goodDirection='down'
-              previous={previous}
-              value={headlineValue}
-            />
-            {limit && (
-              <BlockReady className='text-sm'>
-                <p className='text-muted-foreground text-sm'>
-                  {over === 0
-                    ? `Under the ${formatter(limit.value)} ${limit.label} all ${data.length} ${labelHeading.toLowerCase()}s.`
-                    : `Over the ${formatter(limit.value)} ${limit.label} in ${over} of ${data.length} ${labelHeading.toLowerCase()}s.`}
-                </p>
-              </BlockReady>
-            )}
-          </div>
-          <ChartPanelLegend
-            items={percentiles.map((item, index) => ({
-              color: rampColor(index, percentiles.length),
-              label: item.label,
-              shape: 'line',
-            }))}
-          />
-        </div>
-        <ChartPanelFigure className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <LineChart
-              aria-label={`${title} chart`}
-              data={data}
-              margin={{ top: 8, right: 40, bottom: 0, left: 0 }}
-            >
-              <CartesianGrid {...chartGridProps} />
-              <XAxis
-                {...chartAxisProps}
-                dataKey='label'
-                interval='preserveStartEnd'
-                minTickGap={40}
-              />
-              <YAxis
-                {...chartAxisProps}
-                tickFormatter={(value: number) => formatCompact(value)}
-                width={chartValueAxisWidth}
-              />
-              <Tooltip
-                content={(tooltipProps) => (
-                  <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
-                )}
-                cursor={chartLineCursor}
-                itemSorter={(item) =>
-                  -percentiles.findIndex((percentile) => percentile.key === item.dataKey)
-                }
-              />
-              {limit && (
-                <ReferenceLine
-                  {...chartReferenceProps}
-                  y={limit.value}
-                  label={{
-                    ...chartReferenceLabel,
-                    value: `${limit.label} ${formatter(limit.value)}`,
-                    position: 'insideBottomLeft',
-                    dy: -4,
-                  }}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-t pt-4'>
+              <div className='flex flex-col gap-1'>
+                <p className='text-muted-foreground text-sm'>{headline} now</p>
+                <KPIValue value={headlineValue} format={formatter} />
+                <KPIChange
+                  comparison={comparison}
+                  goodDirection='down'
+                  previous={previous}
+                  value={headlineValue}
                 />
-              )}
-              {percentiles.map((item, index) => (
-                <Line
-                  key={item.key}
-                  activeDot={chartActiveDot}
-                  dataKey={item.key}
-                  dot={false}
-                  name={item.label}
-                  stroke={rampColor(index, percentiles.length)}
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={item.key === headline ? 2.5 : 1.5}
-                  type='monotone'
+                {limit && (
+                  <BlockReady className='text-sm'>
+                    <p className='text-muted-foreground text-sm'>
+                      {over === 0
+                        ? `Under the ${formatter(limit.value)} ${limit.label} all ${data.length} ${labelHeading.toLowerCase()}s.`
+                        : `Over the ${formatter(limit.value)} ${limit.label} in ${over} of ${data.length} ${labelHeading.toLowerCase()}s.`}
+                    </p>
+                  </BlockReady>
+                )}
+              </div>
+              <ChartPanelLegend
+                items={percentiles.map((item, index) => ({
+                  color: rampColor(index, percentiles.length),
+                  label: item.label,
+                  shape: 'line',
+                }))}
+              />
+            </div>
+            <ChartPanelFigure className='h-64'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <LineChart
+                  aria-label={`${title} chart`}
+                  data={data}
+                  margin={{ top: 8, right: 40, bottom: 0, left: 0 }}
                 >
-                  <LabelList
-                    dataKey={item.key}
-                    content={({ index: pointIndex, x, y }) =>
-                      pointIndex === lastIndex ? (
-                        <text
-                          x={Number(x) + 8}
-                          y={Number(y)}
-                          dominantBaseline='middle'
-                          fontSize={11}
-                          fontWeight={item.key === headline ? 500 : 400}
-                          fill={
-                            item.key === headline
-                              ? 'var(--color-foreground)'
-                              : 'var(--color-muted-foreground)'
-                          }
-                        >
-                          {item.label}
-                        </text>
-                      ) : null
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis
+                    {...chartAxisProps}
+                    dataKey='label'
+                    interval='preserveStartEnd'
+                    minTickGap={40}
+                  />
+                  <YAxis
+                    {...chartAxisProps}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => (
+                      <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
+                    )}
+                    cursor={chartLineCursor}
+                    itemSorter={(item) =>
+                      -percentiles.findIndex(
+                        (percentile) => percentile.key === item.dataKey,
+                      )
                     }
                   />
-                </Line>
-              ))}
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}${limit ? ` ${limit.label}: ${formatter(limit.value)}.` : ''}`}
-          columns={[
-            { key: 'label', label: labelHeading },
-            ...percentiles.map((item) => ({
-              format: formatter,
-              key: item.key,
-              label: item.label,
-            })),
-          ]}
-          rows={data}
-        />
-      </section>
+                  {limit && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      y={limit.value}
+                      label={{
+                        ...chartReferenceLabel,
+                        value: `${limit.label} ${formatter(limit.value)}`,
+                        position: 'insideBottomLeft',
+                        dy: -4,
+                      }}
+                    />
+                  )}
+                  {percentiles.map((item, index) => (
+                    <Line
+                      key={item.key}
+                      activeDot={chartActiveDot}
+                      dataKey={item.key}
+                      dot={false}
+                      name={item.label}
+                      stroke={rampColor(index, percentiles.length)}
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={item.key === headline ? 2.5 : 1.5}
+                      type='monotone'
+                    >
+                      <LabelList
+                        dataKey={item.key}
+                        content={({ index: pointIndex, x, y }) =>
+                          pointIndex === lastIndex ? (
+                            <text
+                              x={Number(x) + 8}
+                              y={Number(y)}
+                              dominantBaseline='middle'
+                              fontSize={11}
+                              fontWeight={item.key === headline ? 500 : 400}
+                              fill={
+                                item.key === headline
+                                  ? 'var(--color-foreground)'
+                                  : 'var(--color-muted-foreground)'
+                              }
+                            >
+                              {item.label}
+                            </text>
+                          ) : null
+                        }
+                      />
+                    </Line>
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}${limit ? ` ${limit.label}: ${formatter(limit.value)}.` : ''}`}
+              columns={[
+                { key: 'label', label: labelHeading },
+                ...percentiles.map((item) => ({
+                  format: formatter,
+                  key: item.key,
+                  label: item.label,
+                })),
+              ]}
+              rows={data}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

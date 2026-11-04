@@ -17,6 +17,8 @@ import {
 import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Flow1Props extends BlockStateProps {
   description: string
   /** Leave out, or pass none, to show the empty state. */
@@ -105,74 +107,78 @@ const Flow1 = (props: Flow1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        {state === 'empty' || state === 'error' ? (
-          <div className='border-t pt-4'>
-            <KPIValue />
-          </div>
-        ) : (
-          <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
-            <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-              <dt className='text-muted-foreground text-sm'>
-                {state ? <SkeletonText className='w-20' /> : labels.get(goal)}
-              </dt>
-              <dd>
-                <KPIValue value={converted} format={percent} />
-              </dd>
-              <BlockReady className='text-xs'>
-                <dd className='text-muted-foreground text-xs tabular-nums'>
-                  {formatNumber(converted)} of {formatNumber(sessions)} {unit}
-                </dd>
-              </BlockReady>
-            </div>
-            <div className='flex flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Dropped off</dt>
-              <dd>
-                <KPIValue className='text-2xl' value={bounced} format={percent} />
-              </dd>
-            </div>
-            {(state || best) && (
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Converts best</dt>
-                <dd className='text-2xl font-light tracking-tight'>
-                  {state ? <SkeletonText className='w-[4em]' /> : best?.label}
-                </dd>
-                <BlockReady className='text-xs'>
-                  <dd className='text-muted-foreground text-xs tabular-nums'>
-                    {formatPercent(best?.rate ?? 0, { maximumFractionDigits: 0 })} of its{' '}
-                    {unit}
-                  </dd>
-                </BlockReady>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            {state === 'empty' || state === 'error' ? (
+              <div className='border-t pt-4'>
+                <KPIValue />
               </div>
+            ) : (
+              <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3 @lg:items-start'>
+                <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                  <dt className='text-muted-foreground text-sm'>
+                    {state ? <SkeletonText className='w-20' /> : labels.get(goal)}
+                  </dt>
+                  <dd>
+                    <KPIValue value={converted} format={percent} />
+                  </dd>
+                  <BlockReady className='text-xs'>
+                    <dd className='text-muted-foreground text-xs tabular-nums'>
+                      {formatNumber(converted)} of {formatNumber(sessions)} {unit}
+                    </dd>
+                  </BlockReady>
+                </div>
+                <div className='flex flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Dropped off</dt>
+                  <dd>
+                    <KPIValue className='text-2xl' value={bounced} format={percent} />
+                  </dd>
+                </div>
+                {(state || best) && (
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Converts best</dt>
+                    <dd className='text-2xl font-light tracking-tight'>
+                      {state ? <SkeletonText className='w-[4em]' /> : best?.label}
+                    </dd>
+                    <BlockReady className='text-xs'>
+                      <dd className='text-muted-foreground text-xs tabular-nums'>
+                        {formatPercent(best?.rate ?? 0, { maximumFractionDigits: 0 })} of
+                        its {unit}
+                      </dd>
+                    </BlockReady>
+                  </div>
+                )}
+              </dl>
             )}
-          </dl>
-        )}
-        <FlowChart
-          emphasis={goal}
-          height={300}
-          label={title}
-          links={links}
-          minWidth='36rem'
-          nodes={nodes}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'source', label: 'From' },
-            { key: 'target', label: 'To' },
-            { key: 'value', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
-          ]}
-          rows={links.map((link) => ({
-            source: labels.get(link.source) ?? link.source,
-            target: labels.get(link.target) ?? link.target,
-            value: formatNumber(link.value),
-          }))}
-        />
-      </section>
+            <FlowChart
+              emphasis={goal}
+              height={300}
+              label={title}
+              links={links}
+              minWidth='36rem'
+              nodes={nodes}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'source', label: 'From' },
+                { key: 'target', label: 'To' },
+                { key: 'value', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
+              ]}
+              rows={links.map((link) => ({
+                source: labels.get(link.source) ?? link.source,
+                target: labels.get(link.target) ?? link.target,
+                value: formatNumber(link.value),
+              }))}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

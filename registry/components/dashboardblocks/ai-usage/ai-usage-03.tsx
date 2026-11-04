@@ -20,6 +20,8 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface ModelPerformance {
@@ -83,7 +85,10 @@ const ms = (value: number) =>
     : `${formatNumber(value, { maximumFractionDigits: 0 })} ms`
 
 const percent = (value: number, digits = 0) =>
-  formatPercent(value, { maximumFractionDigits: digits, minimumFractionDigits: digits })
+  formatPercent(value, {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
+  })
 
 const describe = (models: ModelPerformance[], errorThreshold: number) => {
   const requests = models.reduce((sum, model) => sum + model.requests, 0)
@@ -128,101 +133,108 @@ const AiUsage3 = (props: AiUsage3Props) => {
   const slowest = Math.max(0, ...models.map((model) => model.ttftP95))
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        <DataTable caption={title} className='min-w-[34rem] border-t tabular-nums'>
-          <DataTableHeader>
-            <DataTableRow>
-              <DataTableHead>Model</DataTableHead>
-              <DataTableHead align='end'>Requests</DataTableHead>
-              <DataTableHead align='end'>
-                <abbr
-                  title='Time to first token, median and 95th percentile'
-                  className='no-underline'
-                >
-                  TTFT, median to p95
-                </abbr>
-              </DataTableHead>
-              <DataTableHead align='end'>Tokens/s</DataTableHead>
-              <DataTableHead align='end'>Errors</DataTableHead>
-            </DataTableRow>
-          </DataTableHeader>
-          <DataTableBody>
-            <DataTableStateRows colSpan={5} rows={3} />
-            {!state &&
-              models.map((model, index) => {
-                const flagged = model.errorRate > errorThreshold
-                return (
-                  <DataTableRow key={model.label}>
-                    <DataTableRowHead primary>
-                      <span className='flex items-center gap-2'>
-                        <span
-                          aria-hidden
-                          className='size-2.5 rounded-[3px]'
-                          style={{
-                            backgroundColor: modelPalette[index % modelPalette.length],
-                          }}
-                        />
-                        {model.href ? (
-                          <DataTableRowLink href={model.href}>
-                            {model.label}
-                          </DataTableRowLink>
-                        ) : (
-                          model.label
-                        )}
-                      </span>
-                    </DataTableRowHead>
-                    <DataTableCell align='end' className='text-muted-foreground'>
-                      {formatNumber(model.requests)}
-                    </DataTableCell>
-                    <DataTableCell align='end'>
-                      <span className='flex items-center justify-end gap-2.5'>
-                        <span>{ms(model.ttftP50)}</span>
-                        <LatencyRange
-                          max={slowest}
-                          p50={model.ttftP50}
-                          p95={model.ttftP95}
-                        />
-                        <span className='text-muted-foreground w-14 text-end'>
-                          {ms(model.ttftP95)}
-                        </span>
-                      </span>
-                    </DataTableCell>
-                    <DataTableCell align='end'>
-                      {formatNumber(model.outputSpeed, { maximumFractionDigits: 0 })}
-                    </DataTableCell>
-                    <DataTableCell
-                      align='end'
-                      className={cn(
-                        flagged && 'font-medium text-red-700 dark:text-red-400',
-                      )}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            <DataTable caption={title} className='min-w-[34rem] border-t tabular-nums'>
+              <DataTableHeader>
+                <DataTableRow>
+                  <DataTableHead>Model</DataTableHead>
+                  <DataTableHead align='end'>Requests</DataTableHead>
+                  <DataTableHead align='end'>
+                    <abbr
+                      title='Time to first token, median and 95th percentile'
+                      className='no-underline'
                     >
-                      {percent(model.errorRate, 2)}
-                      {flagged && (
-                        <span className='sr-only'>
-                          , above the {percent(errorThreshold)} threshold
-                        </span>
-                      )}
-                    </DataTableCell>
-                  </DataTableRow>
-                )
-              })}
-          </DataTableBody>
-        </DataTable>
-        <BlockReady className='text-xs'>
-          <p className='text-muted-foreground text-xs'>
-            TTFT is time to first token. The dot is the median and the bar runs to the
-            95th percentile. Error rates over {percent(errorThreshold)} are red.
-          </p>
-        </BlockReady>
-      </section>
-    </BlockStateProvider>
+                      TTFT, median to p95
+                    </abbr>
+                  </DataTableHead>
+                  <DataTableHead align='end'>Tokens/s</DataTableHead>
+                  <DataTableHead align='end'>Errors</DataTableHead>
+                </DataTableRow>
+              </DataTableHeader>
+              <DataTableBody>
+                <DataTableStateRows colSpan={5} rows={3} />
+                {!state &&
+                  models.map((model, index) => {
+                    const flagged = model.errorRate > errorThreshold
+                    return (
+                      <DataTableRow key={model.label}>
+                        <DataTableRowHead primary>
+                          <span className='flex items-center gap-2'>
+                            <span
+                              aria-hidden
+                              className='size-2.5 rounded-[3px]'
+                              style={{
+                                backgroundColor:
+                                  modelPalette[index % modelPalette.length],
+                              }}
+                            />
+                            {model.href ? (
+                              <DataTableRowLink href={model.href}>
+                                {model.label}
+                              </DataTableRowLink>
+                            ) : (
+                              model.label
+                            )}
+                          </span>
+                        </DataTableRowHead>
+                        <DataTableCell align='end' className='text-muted-foreground'>
+                          {formatNumber(model.requests)}
+                        </DataTableCell>
+                        <DataTableCell align='end'>
+                          <span className='flex items-center justify-end gap-2.5'>
+                            <span>{ms(model.ttftP50)}</span>
+                            <LatencyRange
+                              max={slowest}
+                              p50={model.ttftP50}
+                              p95={model.ttftP95}
+                            />
+                            <span className='text-muted-foreground w-14 text-end'>
+                              {ms(model.ttftP95)}
+                            </span>
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell align='end'>
+                          {formatNumber(model.outputSpeed, {
+                            maximumFractionDigits: 0,
+                          })}
+                        </DataTableCell>
+                        <DataTableCell
+                          align='end'
+                          className={cn(
+                            flagged && 'font-medium text-red-700 dark:text-red-400',
+                          )}
+                        >
+                          {percent(model.errorRate, 2)}
+                          {flagged && (
+                            <span className='sr-only'>
+                              , above the {percent(errorThreshold)} threshold
+                            </span>
+                          )}
+                        </DataTableCell>
+                      </DataTableRow>
+                    )
+                  })}
+              </DataTableBody>
+            </DataTable>
+            <BlockReady className='text-xs'>
+              <p className='text-muted-foreground text-xs'>
+                TTFT is time to first token. The dot is the median and the bar runs to the
+                95th percentile. Error rates over {percent(errorThreshold)} are red.
+              </p>
+            </BlockReady>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

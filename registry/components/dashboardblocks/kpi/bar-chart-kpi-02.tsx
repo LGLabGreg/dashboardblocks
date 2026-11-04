@@ -26,6 +26,8 @@ import {
 import { formatPercent } from '@/registry/lib/dashboardblocks/format'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface DailyGoal {
@@ -107,103 +109,107 @@ const BarChartKPI2 = (props: BarChartKPI2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <KPI>
-        <KPIContent className='gap-3'>
-          <div className='flex flex-col gap-1'>
-            <KPITitle>{title}</KPITitle>
-            <KPIValue value={total} format={format} animated />
-            {state === 'loading' ? (
-              <BlockStateText className='text-sm' />
-            ) : state ? null : (
-              <p className='text-muted-foreground text-sm'>
-                <span
-                  className={cn(
-                    'font-medium tabular-nums',
-                    share >= 1
-                      ? 'text-emerald-700 dark:text-emerald-400'
-                      : 'text-orange-700 dark:text-orange-400',
-                  )}
-                >
-                  {formatPercent(share, { maximumFractionDigits: 0 })} of goal
-                </span>{' '}
-                of <span className='tabular-nums'>{formatter(goal)}</span>
-              </p>
-            )}
-          </div>
-          <KPIChart
-            label={`${title} by day: ${data
-              .map(
-                (point) =>
-                  `${point.label} ${formatter(point.value)} of ${formatter(point.goal)}`,
-              )
-              .join(', ')}`}
-          >
-            {state ? (
-              <ChartPlaceholder height={height} />
-            ) : (
-              <div className='w-full' style={{ height }}>
-                <ResponsiveContainer width='100%' height='100%'>
-                  <BarChart
-                    accessibilityLayer={false}
-                    data={data}
-                    barCategoryGap='28%'
-                    margin={{ top: 4, right: 4, bottom: 0, left: 4 }}
-                  >
-                    <XAxis
-                      {...chartAxisProps}
-                      dataKey='label'
-                      tickFormatter={(value: string) => String(value).charAt(0)}
-                      interval={0}
-                    />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        const point = payload?.[0]?.payload as DailyGoal | undefined
-                        if (!active || !point) return null
-                        return (
-                          <ChartTooltipFrame>
-                            <span className='font-medium'>{point.label}</span>
-                            <ChartTooltipItem
-                              color={
-                                point.value >= point.goal
-                                  ? 'var(--color-chart-2)'
-                                  : MISSED_COLOR
-                              }
-                              name='Actual'
-                              value={formatter(point.value)}
-                            />
-                            <ChartTooltipItem
-                              color='var(--color-foreground)'
-                              name='Goal'
-                              value={formatter(point.goal)}
-                            />
-                          </ChartTooltipFrame>
-                        )
-                      }}
-                      cursor={chartBarCursor}
-                    />
-                    <YAxis
-                      hide
-                      domain={[
-                        0,
-                        Math.max(
-                          ...data.map((point) => Math.max(point.value, point.goal)),
-                        ),
-                      ]}
-                    />
-                    <Bar dataKey='value' name='Actual' shape={BarWithGoal} />
-                  </BarChart>
-                </ResponsiveContainer>
+      <Card>
+        <CardContent>
+          <KPI>
+            <KPIContent className='gap-3'>
+              <div className='flex flex-col gap-1'>
+                <KPITitle>{title}</KPITitle>
+                <KPIValue value={total} format={format} animated />
+                {state === 'loading' ? (
+                  <BlockStateText className='text-sm' />
+                ) : state ? null : (
+                  <p className='text-muted-foreground text-sm'>
+                    <span
+                      className={cn(
+                        'font-medium tabular-nums',
+                        share >= 1
+                          ? 'text-emerald-700 dark:text-emerald-400'
+                          : 'text-orange-700 dark:text-orange-400',
+                      )}
+                    >
+                      {formatPercent(share, { maximumFractionDigits: 0 })} of goal
+                    </span>{' '}
+                    of <span className='tabular-nums'>{formatter(goal)}</span>
+                  </p>
+                )}
               </div>
-            )}
-          </KPIChart>
-          <BlockReady className='text-xs'>
-            <p className='text-muted-foreground text-xs'>
-              Met the goal on {daysMet} of {data.length} days. Solid bars met it; the line
-              on each bar is that day&apos;s goal.
-            </p>
-          </BlockReady>
-        </KPIContent>
-      </KPI>
+              <KPIChart
+                label={`${title} by day: ${data
+                  .map(
+                    (point) =>
+                      `${point.label} ${formatter(point.value)} of ${formatter(point.goal)}`,
+                  )
+                  .join(', ')}`}
+              >
+                {state ? (
+                  <ChartPlaceholder height={height} />
+                ) : (
+                  <div className='w-full' style={{ height }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <BarChart
+                        accessibilityLayer={false}
+                        data={data}
+                        barCategoryGap='28%'
+                        margin={{ top: 4, right: 4, bottom: 0, left: 4 }}
+                      >
+                        <XAxis
+                          {...chartAxisProps}
+                          dataKey='label'
+                          tickFormatter={(value: string) => String(value).charAt(0)}
+                          interval={0}
+                        />
+                        <Tooltip
+                          content={({ active, payload }) => {
+                            const point = payload?.[0]?.payload as DailyGoal | undefined
+                            if (!active || !point) return null
+                            return (
+                              <ChartTooltipFrame>
+                                <span className='font-medium'>{point.label}</span>
+                                <ChartTooltipItem
+                                  color={
+                                    point.value >= point.goal
+                                      ? 'var(--color-chart-2)'
+                                      : MISSED_COLOR
+                                  }
+                                  name='Actual'
+                                  value={formatter(point.value)}
+                                />
+                                <ChartTooltipItem
+                                  color='var(--color-foreground)'
+                                  name='Goal'
+                                  value={formatter(point.goal)}
+                                />
+                              </ChartTooltipFrame>
+                            )
+                          }}
+                          cursor={chartBarCursor}
+                        />
+                        <YAxis
+                          hide
+                          domain={[
+                            0,
+                            Math.max(
+                              ...data.map((point) => Math.max(point.value, point.goal)),
+                            ),
+                          ]}
+                        />
+                        <Bar dataKey='value' name='Actual' shape={BarWithGoal} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </KPIChart>
+              <BlockReady className='text-xs'>
+                <p className='text-muted-foreground text-xs'>
+                  Met the goal on {daysMet} of {data.length} days. Solid bars met it; the
+                  line on each bar is that day&apos;s goal.
+                </p>
+              </BlockReady>
+            </KPIContent>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

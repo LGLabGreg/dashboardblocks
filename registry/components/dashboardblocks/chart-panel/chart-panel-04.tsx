@@ -41,6 +41,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface MonthValue {
   label: string
   value: number
@@ -97,92 +99,95 @@ const ChartPanel4 = (props: ChartPanel4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-1 border-t pt-4'>
-          <BlockReady className='w-16 text-sm'>
-            <p className='text-muted-foreground text-sm'>{latest?.label}</p>
-          </BlockReady>
-          <KPIValue value={latest?.value} format={formatter} />
-          <KPIChange
-            comparison={`in ${prior?.label}`}
-            format={formatter}
-            previous={prior?.value}
-            value={latest?.value}
-          />
-          {goal && (
-            <BlockReady className='text-sm'>
-              {latest && (
-                <p className='text-muted-foreground text-sm'>
-                  {gap > 0
-                    ? `${formatter(gap)} short of the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`
-                    : `${formatter(-gap)} past the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`}
-                </p>
-              )}
-            </BlockReady>
-          )}
-        </div>
-        <ChartPanelFigure className='h-64'>
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart
-              aria-label={`${title} chart`}
-              data={data}
-              margin={{ top: 24, right: 8, bottom: 0, left: 0 }}
-            >
-              <CartesianGrid {...chartGridProps} />
-              <XAxis {...chartAxisProps} dataKey='label' />
-              <YAxis
-                {...chartAxisProps}
-                domain={[0, 'auto']}
-                tickFormatter={(value: number) => formatCompact(value)}
-                width={chartValueAxisWidth}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-1 border-t pt-4'>
+              <BlockReady className='w-16 text-sm'>
+                <p className='text-muted-foreground text-sm'>{latest?.label}</p>
+              </BlockReady>
+              <KPIValue value={latest?.value} format={formatter} />
+              <KPIChange
+                comparison={`in ${prior?.label}`}
+                previous={prior?.value}
+                value={latest?.value}
               />
-              <Tooltip
-                content={(tooltipProps) => (
-                  <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
-                )}
-                cursor={chartBarCursor}
-              />
-              <Bar dataKey='value' maxBarSize={28} name={title} radius={[4, 4, 0, 0]}>
-                {data.map((point, index) => (
-                  <Cell
-                    key={point.label}
-                    fill={index === lastIndex ? HIGHLIGHT_COLOR : MUTED_COLOR}
-                  />
-                ))}
-                <LabelList
-                  dataKey='value'
-                  content={chartBarValueLabel(lastIndex, formatCompact)}
-                />
-              </Bar>
               {goal && (
-                <ReferenceLine
-                  {...chartReferenceProps}
-                  ifOverflow='extendDomain'
-                  y={goal.value}
-                  label={{
-                    ...chartReferenceLabel,
-                    value: `${goal.label} ${formatCompact(goal.value)}`,
-                    position: 'insideBottomLeft',
-                    dy: -4,
-                  }}
-                />
+                <BlockReady className='text-sm'>
+                  {latest && (
+                    <p className='text-muted-foreground text-sm'>
+                      {gap > 0
+                        ? `${formatter(gap)} short of the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`
+                        : `${formatter(-gap)} past the ${formatter(goal.value)} ${goal.label.toLowerCase()}.`}
+                    </p>
+                  )}
+                </BlockReady>
               )}
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanelFigure>
-        <ChartPanelTable
-          caption={`${title}: ${description}${goal ? ` ${goal.label}: ${formatter(goal.value)}.` : ''}`}
-          columns={[
-            { key: 'label', label: 'Month' },
-            { format: formatter, key: 'value', label: title },
-          ]}
-          rows={data}
-        />
-      </section>
+            </div>
+            <ChartPanelFigure className='h-64'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <BarChart
+                  aria-label={`${title} chart`}
+                  data={data}
+                  margin={{ top: 24, right: 8, bottom: 0, left: 0 }}
+                >
+                  <CartesianGrid {...chartGridProps} />
+                  <XAxis {...chartAxisProps} dataKey='label' />
+                  <YAxis
+                    {...chartAxisProps}
+                    domain={[0, 'auto']}
+                    tickFormatter={(value: number) => formatCompact(value)}
+                    width={chartValueAxisWidth}
+                  />
+                  <Tooltip
+                    content={(tooltipProps) => (
+                      <ChartTooltipContent {...tooltipProps} valueFormatter={formatter} />
+                    )}
+                    cursor={chartBarCursor}
+                  />
+                  <Bar dataKey='value' maxBarSize={28} name={title} radius={[4, 4, 0, 0]}>
+                    {data.map((point, index) => (
+                      <Cell
+                        key={point.label}
+                        fill={index === lastIndex ? HIGHLIGHT_COLOR : MUTED_COLOR}
+                      />
+                    ))}
+                    <LabelList
+                      dataKey='value'
+                      content={chartBarValueLabel(lastIndex, formatCompact)}
+                    />
+                  </Bar>
+                  {goal && (
+                    <ReferenceLine
+                      {...chartReferenceProps}
+                      ifOverflow='extendDomain'
+                      y={goal.value}
+                      label={{
+                        ...chartReferenceLabel,
+                        value: `${goal.label} ${formatCompact(goal.value)}`,
+                        position: 'insideBottomLeft',
+                        dy: -4,
+                      }}
+                    />
+                  )}
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartPanelFigure>
+            <ChartPanelTable
+              caption={`${title}: ${description}${goal ? ` ${goal.label}: ${formatter(goal.value)}.` : ''}`}
+              columns={[
+                { key: 'label', label: 'Month' },
+                { format: formatter, key: 'value', label: title },
+              ]}
+              rows={data}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

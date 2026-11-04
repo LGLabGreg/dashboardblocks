@@ -36,6 +36,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface ModelUsage {
   cost: number
   id: string
@@ -107,136 +109,142 @@ const AiUsage1 = (props: AiUsage1Props) => {
   const average = days.length > 0 ? tokens / days.length : 0
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
-          <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
-            <dt className='text-muted-foreground text-sm'>Tokens</dt>
-            <dd>
-              <KPIValue
-                className='whitespace-nowrap'
-                value={tokens}
-                format={formatTokens}
-              />
-            </dd>
-          </div>
-          {state !== 'empty' && state !== 'error' && (
-            <>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Cost</dt>
-                <dd>
-                  <KPIValue className='text-2xl' value={cost} format={formatUsd} />
-                </dd>
-              </div>
-              <div className='flex flex-col gap-1'>
-                <dt className='text-muted-foreground text-sm'>Per million tokens</dt>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <dl className='grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 @lg:grid-cols-3'>
+              <div className='col-span-2 flex flex-col gap-1 @lg:col-span-1'>
+                <dt className='text-muted-foreground text-sm'>Tokens</dt>
                 <dd>
                   <KPIValue
-                    className='text-2xl'
-                    value={tokens > 0 ? (cost / tokens) * 1_000_000 : 0}
-                    format={formatUsd}
+                    className='whitespace-nowrap'
+                    value={tokens}
+                    format={formatTokens}
                   />
                 </dd>
               </div>
-            </>
-          )}
-        </dl>
-        <BlockReady className='text-sm'>
-          <div className='flex flex-col gap-1.5'>
-            <p
-              aria-hidden
-              className='text-muted-foreground flex items-center gap-1.5 text-xs'
-            >
-              All {days.length} days, averaging
-              <span className='tabular-nums'>{formatTokens(average)}</span> a day
-              <span className='border-foreground/50 w-3 border-t border-dashed' />
-            </p>
-            <ul className='flex flex-wrap gap-x-6 gap-y-2 text-sm'>
-              {models.map((model, index) => (
-                <li key={model.id} className='flex items-baseline gap-1.5'>
-                  <span
-                    aria-hidden
-                    className='size-2.5 shrink-0 self-center rounded-[3px]'
-                    style={{ backgroundColor: colorOf(index) }}
-                  />
-                  <span className='text-muted-foreground'>{model.label}</span>
-                  <span className='font-medium tabular-nums'>
-                    {formatTokens(totals[index])}
-                  </span>
-                  <span className='text-muted-foreground text-xs tabular-nums'>
-                    {formatUsd(model.cost)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </BlockReady>
-        {state ? (
-          <ChartPlaceholder height={240} />
-        ) : (
-          <ChartPanelFigure className='h-60'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <BarChart
-                aria-label={`${title} chart`}
-                data={rows}
-                margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-              >
-                <CartesianGrid {...chartGridProps} />
-                <XAxis
-                  {...chartAxisProps}
-                  dataKey='label'
-                  interval='preserveStartEnd'
-                  minTickGap={20}
-                />
-                <YAxis
-                  {...chartAxisProps}
-                  tickFormatter={formatTokens}
-                  width={chartValueAxisWidth}
-                />
-                <Tooltip
-                  content={(tooltipProps) => (
-                    <ChartTooltipContent
-                      {...tooltipProps}
-                      valueFormatter={formatTokens}
+              {state !== 'empty' && state !== 'error' && (
+                <>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Cost</dt>
+                    <dd>
+                      <KPIValue className='text-2xl' value={cost} format={formatUsd} />
+                    </dd>
+                  </div>
+                  <div className='flex flex-col gap-1'>
+                    <dt className='text-muted-foreground text-sm'>Per million tokens</dt>
+                    <dd>
+                      <KPIValue
+                        className='text-2xl'
+                        value={tokens > 0 ? (cost / tokens) * 1_000_000 : 0}
+                        format={formatUsd}
+                      />
+                    </dd>
+                  </div>
+                </>
+              )}
+            </dl>
+            <BlockReady className='text-sm'>
+              <div className='flex flex-col gap-1.5'>
+                <p
+                  aria-hidden
+                  className='text-muted-foreground flex items-center gap-1.5 text-xs'
+                >
+                  All {days.length} days, averaging
+                  <span className='tabular-nums'>{formatTokens(average)}</span> a day
+                  <span className='border-foreground/50 w-3 border-t border-dashed' />
+                </p>
+                <ul className='flex flex-wrap gap-x-6 gap-y-2 text-sm'>
+                  {models.map((model, index) => (
+                    <li key={model.id} className='flex items-baseline gap-1.5'>
+                      <span
+                        aria-hidden
+                        className='size-2.5 shrink-0 self-center rounded-[3px]'
+                        style={{ backgroundColor: colorOf(index) }}
+                      />
+                      <span className='text-muted-foreground'>{model.label}</span>
+                      <span className='font-medium tabular-nums'>
+                        {formatTokens(totals[index])}
+                      </span>
+                      <span className='text-muted-foreground text-xs tabular-nums'>
+                        {formatUsd(model.cost)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </BlockReady>
+            {state ? (
+              <ChartPlaceholder height={240} />
+            ) : (
+              <ChartPanelFigure className='h-60'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart
+                    aria-label={`${title} chart`}
+                    data={rows}
+                    margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+                  >
+                    <CartesianGrid {...chartGridProps} />
+                    <XAxis
+                      {...chartAxisProps}
+                      dataKey='label'
+                      interval='preserveStartEnd'
+                      minTickGap={20}
                     />
-                  )}
-                  cursor={chartBarCursor}
-                />
-                {models.map((model, index) => (
-                  <Bar
-                    key={model.id}
-                    dataKey={model.id}
-                    fill={colorOf(index)}
-                    name={model.label}
-                    radius={index === models.length - 1 ? [4, 4, 0, 0] : 0}
-                    stackId='tokens'
-                  />
-                ))}
-                {average > 0 && <ReferenceLine {...chartReferenceProps} y={average} />}
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartPanelFigure>
-        )}
-        {!state && (
-          <ChartPanelTable
-            caption={`${title}: ${description}`}
-            columns={[
-              { key: 'label', label: 'Day' },
-              ...models.map((model) => ({
-                format: formatTokens,
-                key: model.id,
-                label: model.label,
-              })),
-            ]}
-            rows={rows}
-          />
-        )}
-      </section>
-    </BlockStateProvider>
+                    <YAxis
+                      {...chartAxisProps}
+                      tickFormatter={formatTokens}
+                      width={chartValueAxisWidth}
+                    />
+                    <Tooltip
+                      content={(tooltipProps) => (
+                        <ChartTooltipContent
+                          {...tooltipProps}
+                          valueFormatter={formatTokens}
+                        />
+                      )}
+                      cursor={chartBarCursor}
+                    />
+                    {models.map((model, index) => (
+                      <Bar
+                        key={model.id}
+                        dataKey={model.id}
+                        fill={colorOf(index)}
+                        name={model.label}
+                        radius={index === models.length - 1 ? [4, 4, 0, 0] : 0}
+                        stackId='tokens'
+                      />
+                    ))}
+                    {average > 0 && (
+                      <ReferenceLine {...chartReferenceProps} y={average} />
+                    )}
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartPanelFigure>
+            )}
+            {!state && (
+              <ChartPanelTable
+                caption={`${title}: ${description}`}
+                columns={[
+                  { key: 'label', label: 'Day' },
+                  ...models.map((model) => ({
+                    format: formatTokens,
+                    key: model.id,
+                    label: model.label,
+                  })),
+                ]}
+                rows={rows}
+              />
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

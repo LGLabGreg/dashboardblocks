@@ -7,6 +7,7 @@ export const examples: Registry['items'] = [
     name: 'leaderboard-01',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('format'),
@@ -28,6 +29,7 @@ export const examples: Registry['items'] = [
     name: 'leaderboard-02',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'avatar',
       registryUrl('block-state'),
       registryUrl('format'),
@@ -51,6 +53,7 @@ export const examples: Registry['items'] = [
     name: 'leaderboard-03',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'avatar',
       registryUrl('block-state'),
       registryUrl('format'),
@@ -74,6 +77,7 @@ export const examples: Registry['items'] = [
     name: 'leaderboard-04',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('leaderboard'),
@@ -96,6 +100,7 @@ export const examples: Registry['items'] = [
     name: 'leaderboard-05',
     type: 'registry:component',
     registryDependencies: [
+      'card',
       'button',
       registryUrl('block-state'),
       registryUrl('country-flag'),

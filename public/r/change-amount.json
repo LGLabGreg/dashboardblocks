@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "change-amount",
+  "title": "Change Amount",
+  "description": "A change written as an up or down arrow and its amount, with the direction read out to screen readers.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/change-amount.tsx",
+      "content": "'use client'\n\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport type { ComponentProps } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ninterface ChangeAmountProps extends ComponentProps<'span'> {\n  /** Positive for a rise, negative for a fall. Zero shows `No change`. */\n  change: number\n}\n\nfunction ChangeAmount({ change, children, className, ...props }: ChangeAmountProps) {\n  if (change === 0) {\n    return (\n      <span data-slot='change-amount' className={className} {...props}>\n        No change\n      </span>\n    )\n  }\n\n  return (\n    <span\n      data-slot='change-amount'\n      className={cn(\n        'inline-flex items-baseline gap-0.5 [&_svg]:size-3.5 [&_svg]:self-center',\n        className,\n      )}\n      {...props}\n    >\n      {change > 0 ? (\n        <IconPlaceholder\n          aria-hidden\n          lucide='ArrowUpIcon'\n          tabler='IconArrowUp'\n          hugeicons='ArrowUpIcon'\n          phosphor='ArrowUpIcon'\n          remixicon='RiArrowUpLine'\n        />\n      ) : (\n        <IconPlaceholder\n          aria-hidden\n          lucide='ArrowDownIcon'\n          tabler='IconArrowDown'\n          hugeicons='ArrowDownIcon'\n          phosphor='ArrowDownIcon'\n          remixicon='RiArrowDownLine'\n        />\n      )}\n      <span className='sr-only'>{change > 0 ? 'Up' : 'Down'} </span>\n      {children}\n    </span>\n  )\n}\n\nexport { ChangeAmount }\nexport type { ChangeAmountProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/change-amount.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

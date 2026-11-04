@@ -26,6 +26,7 @@ import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 type OrderStatus = 'Paid' | 'Pending' | 'Refunded'
 
@@ -122,84 +123,90 @@ const States3 = (props: States3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container/data-table flex flex-col gap-3'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p aria-live='polite' className='text-muted-foreground text-sm'>
-              {describe(rows.length, orders.length, filters)}
-            </p>
-          </BlockReady>
-        </header>
-        {filters.length > 0 && (
-          <ul aria-label='Active filters' className='flex flex-wrap gap-2'>
-            {filters.map((filter) => (
-              <li key={filter.field} className='flex'>
-                <FilterChip
-                  field={filter.label}
-                  value={filter.value}
-                  onRemove={() =>
-                    setFilters((current) => current.filter((item) => item !== filter))
-                  }
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-        {!state && rows.length === 0 ? (
-          <BlockMessage
-            icon={
-              <IconPlaceholder
-                lucide='SearchXIcon'
-                tabler='IconZoomCancel'
-                hugeicons='SearchRemoveIcon'
-                phosphor='MagnifyingGlassMinusIcon'
-                remixicon='RiSearchLine'
-              />
-            }
-            className='border-t'
-            title='No orders match these filters'
-            description='Remove a filter, or clear them all to see every order.'
-            action={
-              <Button variant='outline' size='sm' onClick={() => setFilters([])}>
-                Clear filters
-              </Button>
-            }
-          />
-        ) : (
-          <DataTable caption={title}>
-            <DataTableHeader>
-              <DataTableRow>
-                <DataTableHead>Customer</DataTableHead>
-                <DataTableHead>Region</DataTableHead>
-                <DataTableHead>Status</DataTableHead>
-                <DataTableHead align='end'>Amount</DataTableHead>
-              </DataTableRow>
-            </DataTableHeader>
-            <DataTableBody>
-              <DataTableStateRows colSpan={4} rows={5} />
-              {!state &&
-                rows.map((order) => (
-                  <DataTableRow key={order.id}>
-                    <DataTableCell primary truncate>
-                      <span className='block truncate'>{order.customer}</span>
-                      <span className='text-muted-foreground block text-xs font-normal tabular-nums'>
-                        {order.id}
-                      </span>
-                    </DataTableCell>
-                    <DataTableCell>{order.region}</DataTableCell>
-                    <DataTableCell>
-                      <StatusLabel tone={STATUS_TONES[order.status]}>
-                        {order.status}
-                      </StatusLabel>
-                    </DataTableCell>
-                    <DataTableCell align='end'>{currency(order.amount)}</DataTableCell>
-                  </DataTableRow>
+      <Card>
+        <CardContent>
+          <section className='@container/data-table flex flex-col gap-3'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p aria-live='polite' className='text-muted-foreground text-sm'>
+                  {describe(rows.length, orders.length, filters)}
+                </p>
+              </BlockReady>
+            </header>
+            {filters.length > 0 && (
+              <ul aria-label='Active filters' className='flex flex-wrap gap-2'>
+                {filters.map((filter) => (
+                  <li key={filter.field} className='flex'>
+                    <FilterChip
+                      field={filter.label}
+                      value={filter.value}
+                      onRemove={() =>
+                        setFilters((current) => current.filter((item) => item !== filter))
+                      }
+                    />
+                  </li>
                 ))}
-            </DataTableBody>
-          </DataTable>
-        )}
-      </section>
+              </ul>
+            )}
+            {!state && rows.length === 0 ? (
+              <BlockMessage
+                icon={
+                  <IconPlaceholder
+                    lucide='SearchXIcon'
+                    tabler='IconZoomCancel'
+                    hugeicons='SearchRemoveIcon'
+                    phosphor='MagnifyingGlassMinusIcon'
+                    remixicon='RiSearchLine'
+                  />
+                }
+                className='border-t'
+                title='No orders match these filters'
+                description='Remove a filter, or clear them all to see every order.'
+                action={
+                  <Button variant='outline' size='sm' onClick={() => setFilters([])}>
+                    Clear filters
+                  </Button>
+                }
+              />
+            ) : (
+              <DataTable caption={title}>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>Customer</DataTableHead>
+                    <DataTableHead>Region</DataTableHead>
+                    <DataTableHead>Status</DataTableHead>
+                    <DataTableHead align='end'>Amount</DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
+                  <DataTableStateRows colSpan={4} rows={5} />
+                  {!state &&
+                    rows.map((order) => (
+                      <DataTableRow key={order.id}>
+                        <DataTableCell primary truncate>
+                          <span className='block truncate'>{order.customer}</span>
+                          <span className='text-muted-foreground block text-xs font-normal tabular-nums'>
+                            {order.id}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>{order.region}</DataTableCell>
+                        <DataTableCell>
+                          <StatusLabel tone={STATUS_TONES[order.status]}>
+                            {order.status}
+                          </StatusLabel>
+                        </DataTableCell>
+                        <DataTableCell align='end'>
+                          {currency(order.amount)}
+                        </DataTableCell>
+                      </DataTableRow>
+                    ))}
+                </DataTableBody>
+              </DataTable>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

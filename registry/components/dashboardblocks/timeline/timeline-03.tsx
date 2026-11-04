@@ -34,6 +34,8 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 type ReleaseKind = 'major' | 'minor' | 'patch'
@@ -120,7 +122,11 @@ const markerClass: Record<ReleaseKind, string> = {
 const DAY = 86_400_000
 const PLOT_HEIGHT = 60
 const BASELINE = 0.5
-const MARKER_RADIUS: Record<ReleaseKind, number> = { major: 8, minor: 6, patch: 4 }
+const MARKER_RADIUS: Record<ReleaseKind, number> = {
+  major: 8,
+  minor: 6,
+  patch: 4,
+}
 
 interface Point {
   release?: Release
@@ -172,7 +178,11 @@ const Timeline3 = (props: Timeline3Props) => {
     `${release.version}, ${formatTimelineDate(release.date)}, ${release.kind}${release.summary ? `: ${release.summary}` : ''}`
 
   const points: Point[] = [
-    ...releases.map((release) => ({ release, x: release.date.getTime(), y: BASELINE })),
+    ...releases.map((release) => ({
+      release,
+      x: release.date.getTime(),
+      y: BASELINE,
+    })),
     ...(nextDue && nextDue <= end ? [{ x: nextDue.getTime(), y: BASELINE }] : []),
   ]
   const nextDueNearEnd =
@@ -243,167 +253,177 @@ const Timeline3 = (props: Timeline3Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        {(state === 'error' || state === 'empty') && (
-          <div className='border-t pt-4'>
-            <KPIValue className='text-2xl' />
-          </div>
-        )}
-        {state !== 'error' && state !== 'empty' && (
-          <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Releases</dt>
-              <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                {state === 'loading' ? (
-                  <SkeletonText className='w-[2em]' />
-                ) : (
-                  releases.length
-                )}
-              </dd>
-            </div>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Median gap</dt>
-              <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                {state === 'loading' ? (
-                  <SkeletonText className='w-[3em]' />
-                ) : (
-                  <>
-                    {median}
-                    <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                      days
-                    </span>
-                  </>
-                )}
-              </dd>
-            </div>
-            <div className='flex flex-col gap-0.5'>
-              <dt className='text-muted-foreground text-sm'>Since last</dt>
-              <dd className='text-2xl font-light tracking-tight tabular-nums'>
-                {state === 'loading' ? (
-                  <SkeletonText className='w-[3em]' />
-                ) : (
-                  <>
-                    {sinceLast}
-                    <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
-                      days
-                    </span>
-                  </>
-                )}
-              </dd>
-            </div>
-          </dl>
-        )}
-        {state && <ChartPlaceholder height={TIMELINE_AXIS_HEIGHT + PLOT_HEIGHT} />}
-        {!state && (
-          <div aria-hidden style={{ height: TIMELINE_AXIS_HEIGHT + PLOT_HEIGHT }}>
-            <ResponsiveContainer height='100%' width='100%'>
-              <ScatterChart
-                accessibilityLayer={false}
-                margin={{ bottom: 0, left: 8, right: 8, top: 0 }}
-              >
-                <CartesianGrid {...chartTimeGridProps} />
-                <XAxis
-                  allowDataOverflow
-                  axisLine={false}
-                  dataKey='x'
-                  domain={[start.getTime(), end.getTime()]}
-                  height={TIMELINE_AXIS_HEIGHT}
-                  interval={0}
-                  orientation='top'
-                  tick={<TimelineAxisTick />}
-                  tickLine={false}
-                  ticks={ticks.map((tick) => tick.getTime())}
-                  type='number'
-                />
-                <YAxis dataKey='y' domain={[0, 1]} hide type='number' />
-                <ReferenceLine stroke='var(--color-border)' y={BASELINE} />
-                {last && nextDue && nextDue <= end && (
-                  <ReferenceLine
-                    segment={[
-                      { x: last.date.getTime(), y: BASELINE },
-                      { x: nextDue.getTime(), y: BASELINE },
-                    ]}
-                    stroke='var(--color-muted-foreground)'
-                    strokeDasharray='3 3'
-                  />
-                )}
-                {now >= start && now <= end && (
-                  <ReferenceLine
-                    label={<TimelineNowLabel label='Now' />}
-                    stroke='var(--color-foreground)'
-                    x={now.getTime()}
-                    zIndex={TIMELINE_NOW_Z_INDEX}
-                  />
-                )}
-                <Tooltip
-                  content={({ active, payload }) => {
-                    const point = payload?.[0]?.payload as Point | undefined
-                    if (!active || !point) return null
-                    if (!point.release)
-                      return (
-                        <ChartTooltipFrame>
-                          <span className='font-medium'>Next due</span>
-                          <span className='text-muted-foreground tabular-nums'>
-                            {formatTimelineDate(new Date(point.x))}, if the {median}-day
-                            gap holds
-                          </span>
-                        </ChartTooltipFrame>
-                      )
-                    const { release } = point
-                    return (
-                      <ChartTooltipFrame>
-                        <span className='font-medium tabular-nums'>
-                          {release.version}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            {(state === 'error' || state === 'empty') && (
+              <div className='border-t pt-4'>
+                <KPIValue className='text-2xl' />
+              </div>
+            )}
+            {state !== 'error' && state !== 'empty' && (
+              <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>Releases</dt>
+                  <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                    {state === 'loading' ? (
+                      <SkeletonText className='w-[2em]' />
+                    ) : (
+                      releases.length
+                    )}
+                  </dd>
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>Median gap</dt>
+                  <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                    {state === 'loading' ? (
+                      <SkeletonText className='w-[3em]' />
+                    ) : (
+                      <>
+                        {median}
+                        <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                          days
                         </span>
-                        <Details className='text-muted-foreground'>
-                          {formatTimelineDate(release.date)}
-                          {KINDS.find((entry) => entry.kind === release.kind)?.label}
-                        </Details>
-                        {release.summary && <span>{release.summary}</span>}
-                      </ChartTooltipFrame>
-                    )
-                  }}
-                  cursor={false}
-                />
-                <Scatter
-                  activeShape={(props: MarkerProps) => marker({ ...props, active: true })}
-                  data={points}
-                  isAnimationActive={false}
-                  shape={(props: MarkerProps) => marker(props)}
-                />
-              </ScatterChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-        {state !== 'error' && state !== 'empty' && (
-          <ul
-            aria-hidden
-            className='text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs'
-          >
-            {KINDS.map((entry) => (
-              <li key={entry.kind} className='flex items-center gap-1.5'>
-                <span
-                  className={cn('block rounded-full', markerClass[entry.kind], 'ring-0')}
-                />
-                {entry.label}
-              </li>
-            ))}
-          </ul>
-        )}
-        {!state && (
-          <ul className='sr-only'>
-            {releases.map((release) => (
-              <li key={release.version}>{describe(release)}</li>
-            ))}
-          </ul>
-        )}
-      </section>
+                      </>
+                    )}
+                  </dd>
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                  <dt className='text-muted-foreground text-sm'>Since last</dt>
+                  <dd className='text-2xl font-light tracking-tight tabular-nums'>
+                    {state === 'loading' ? (
+                      <SkeletonText className='w-[3em]' />
+                    ) : (
+                      <>
+                        {sinceLast}
+                        <span className='text-muted-foreground ml-1 text-base font-normal tracking-normal'>
+                          days
+                        </span>
+                      </>
+                    )}
+                  </dd>
+                </div>
+              </dl>
+            )}
+            {state && <ChartPlaceholder height={TIMELINE_AXIS_HEIGHT + PLOT_HEIGHT} />}
+            {!state && (
+              <div aria-hidden style={{ height: TIMELINE_AXIS_HEIGHT + PLOT_HEIGHT }}>
+                <ResponsiveContainer height='100%' width='100%'>
+                  <ScatterChart
+                    accessibilityLayer={false}
+                    margin={{ bottom: 0, left: 8, right: 8, top: 0 }}
+                  >
+                    <CartesianGrid {...chartTimeGridProps} />
+                    <XAxis
+                      allowDataOverflow
+                      axisLine={false}
+                      dataKey='x'
+                      domain={[start.getTime(), end.getTime()]}
+                      height={TIMELINE_AXIS_HEIGHT}
+                      interval={0}
+                      orientation='top'
+                      tick={<TimelineAxisTick />}
+                      tickLine={false}
+                      ticks={ticks.map((tick) => tick.getTime())}
+                      type='number'
+                    />
+                    <YAxis dataKey='y' domain={[0, 1]} hide type='number' />
+                    <ReferenceLine stroke='var(--color-border)' y={BASELINE} />
+                    {last && nextDue && nextDue <= end && (
+                      <ReferenceLine
+                        segment={[
+                          { x: last.date.getTime(), y: BASELINE },
+                          { x: nextDue.getTime(), y: BASELINE },
+                        ]}
+                        stroke='var(--color-muted-foreground)'
+                        strokeDasharray='3 3'
+                      />
+                    )}
+                    {now >= start && now <= end && (
+                      <ReferenceLine
+                        label={<TimelineNowLabel label='Now' />}
+                        stroke='var(--color-foreground)'
+                        x={now.getTime()}
+                        zIndex={TIMELINE_NOW_Z_INDEX}
+                      />
+                    )}
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        const point = payload?.[0]?.payload as Point | undefined
+                        if (!active || !point) return null
+                        if (!point.release)
+                          return (
+                            <ChartTooltipFrame>
+                              <span className='font-medium'>Next due</span>
+                              <span className='text-muted-foreground tabular-nums'>
+                                {formatTimelineDate(new Date(point.x))}, if the {median}
+                                -day gap holds
+                              </span>
+                            </ChartTooltipFrame>
+                          )
+                        const { release } = point
+                        return (
+                          <ChartTooltipFrame>
+                            <span className='font-medium tabular-nums'>
+                              {release.version}
+                            </span>
+                            <Details className='text-muted-foreground'>
+                              {formatTimelineDate(release.date)}
+                              {KINDS.find((entry) => entry.kind === release.kind)?.label}
+                            </Details>
+                            {release.summary && <span>{release.summary}</span>}
+                          </ChartTooltipFrame>
+                        )
+                      }}
+                      cursor={false}
+                    />
+                    <Scatter
+                      activeShape={(props: MarkerProps) =>
+                        marker({ ...props, active: true })
+                      }
+                      data={points}
+                      isAnimationActive={false}
+                      shape={(props: MarkerProps) => marker(props)}
+                    />
+                  </ScatterChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+            {state !== 'error' && state !== 'empty' && (
+              <ul
+                aria-hidden
+                className='text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs'
+              >
+                {KINDS.map((entry) => (
+                  <li key={entry.kind} className='flex items-center gap-1.5'>
+                    <span
+                      className={cn(
+                        'block rounded-full',
+                        markerClass[entry.kind],
+                        'ring-0',
+                      )}
+                    />
+                    {entry.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {!state && (
+              <ul className='sr-only'>
+                {releases.map((release) => (
+                  <li key={release.version}>{describe(release)}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

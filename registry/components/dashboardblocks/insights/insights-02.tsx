@@ -52,6 +52,7 @@ import {
 } from 'recharts'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -180,249 +181,253 @@ const Insights2 = (props: Insights2Props) => {
     .map((point) => point.index)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {!state && (
-            <InsightLabel
-              className='mt-0.5'
-              kind={markedExpected ? 'neutral' : 'anomaly'}
-              label={markedExpected ? 'Expected' : undefined}
-            />
-          )}
-        </header>
-        {state && (
-          <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
-            <div className='col-span-3 flex min-w-0 flex-col gap-1 @md:col-span-1'>
-              <dt className='text-muted-foreground text-sm'>{metric}</dt>
-              <dd>
-                <KPIValue className='text-3xl @2xl:text-4xl' value={undefined} />
-              </dd>
-            </div>
-            {state === 'loading' && (
-              <>
-                <div className='hidden min-w-0 flex-col gap-1 @md:flex'>
-                  <dt className='text-muted-foreground text-sm'>Expected</dt>
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {!state && (
+                <InsightLabel
+                  className='mt-0.5'
+                  kind={markedExpected ? 'neutral' : 'anomaly'}
+                  label={markedExpected ? 'Expected' : undefined}
+                />
+              )}
+            </header>
+            {state && (
+              <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
+                <div className='col-span-3 flex min-w-0 flex-col gap-1 @md:col-span-1'>
+                  <dt className='text-muted-foreground text-sm'>{metric}</dt>
                   <dd>
-                    <KPIValue className='text-2xl' value={undefined} />
+                    <KPIValue className='text-3xl @2xl:text-4xl' value={undefined} />
                   </dd>
                 </div>
-                <div className='hidden min-w-0 flex-col gap-1 @md:flex'>
-                  <dt className='text-muted-foreground text-sm'>Difference</dt>
-                  <dd>
-                    <KPIValue className='text-2xl' value={undefined} />
-                  </dd>
-                </div>
-              </>
-            )}
-          </dl>
-        )}
-        {!state && worst && (
-          <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
-            <div className='flex min-w-0 flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>{worst.label}</dt>
-              <dd className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @2xl:text-4xl'>
-                {formatter(worst.value)}
-              </dd>
-            </div>
-            <div className='flex min-w-0 flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Expected</dt>
-              <dd className='text-2xl font-light tracking-tight whitespace-nowrap tabular-nums'>
-                {formatter(worst.low)}–{formatter(worst.high)}
-              </dd>
-            </div>
-            <div className='flex min-w-0 flex-col gap-1'>
-              <dt className='text-muted-foreground text-sm'>Difference</dt>
-              <dd
-                className={cn(
-                  'text-2xl font-light tracking-tight whitespace-nowrap tabular-nums',
-                  worstChange < 0 && 'text-red-700 dark:text-red-400',
+                {state === 'loading' && (
+                  <>
+                    <div className='hidden min-w-0 flex-col gap-1 @md:flex'>
+                      <dt className='text-muted-foreground text-sm'>Expected</dt>
+                      <dd>
+                        <KPIValue className='text-2xl' value={undefined} />
+                      </dd>
+                    </div>
+                    <div className='hidden min-w-0 flex-col gap-1 @md:flex'>
+                      <dt className='text-muted-foreground text-sm'>Difference</dt>
+                      <dd>
+                        <KPIValue className='text-2xl' value={undefined} />
+                      </dd>
+                    </div>
+                  </>
                 )}
-              >
-                {formatChange(worstChange)}
-              </dd>
-            </div>
-          </dl>
-        )}
-        <div className='flex flex-col gap-3'>
-          {(!state || state === 'loading') && (
-            <ChartPanelLegend
-              items={[
-                { color: SERIES_COLOR, label: metric, shape: 'line' },
-                {
-                  color:
-                    'color-mix(in oklab, var(--color-muted-foreground) 30%, transparent)',
-                  label: 'Expected range',
-                },
-                { color: ANOMALY_COLOR, label: 'Anomaly' },
-              ]}
-            />
-          )}
-          {state ? (
-            <ChartPlaceholder height={208} />
-          ) : (
-            <>
-              <ChartPanelFigure className='h-52'>
-                <ResponsiveContainer width='100%' height='100%'>
-                  <ComposedChart
-                    aria-label={`${title} chart`}
-                    data={data}
-                    margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
-                  >
-                    <CartesianGrid {...chartGridProps} />
-                    <XAxis
-                      {...chartAxisProps}
-                      dataKey='index'
-                      domain={[0, last]}
-                      tickFormatter={(index: number) => data[index]?.label ?? ''}
-                      ticks={ticks}
-                      type='number'
-                    />
-                    <YAxis
-                      {...chartAxisProps}
-                      domain={[0, yMax]}
-                      tickFormatter={(value: number) => formatter(value)}
-                      width={chartValueAxisWidth}
-                    />
-                    {ranges.map((range) => (
-                      <ReferenceArea
-                        key={range.start}
-                        fill={ANOMALY_COLOR}
-                        fillOpacity={0.14}
-                        ifOverflow='hidden'
-                        x1={range.start - 0.5}
-                        x2={range.end + 0.5}
-                      />
-                    ))}
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        const point = payload?.[0]?.payload as
-                          | (typeof data)[number]
-                          | undefined
-                        if (!active || !point) return null
-                        return (
-                          <ChartTooltipFrame>
-                            <span className='font-medium'>{point.label}</span>
-                            <ChartTooltipItem
-                              color={SERIES_COLOR}
-                              name={metric}
-                              value={formatter(point.value)}
-                            />
-                            <span className='text-muted-foreground tabular-nums'>
-                              Expected {formatter(point.low)}–{formatter(point.high)}
-                            </span>
-                            {point.anomalous && (
-                              <InsightLabel className='text-xs' kind='anomaly' />
-                            )}
-                          </ChartTooltipFrame>
-                        )
-                      }}
-                      cursor={chartLineCursor}
-                    />
-                    <Area
-                      activeDot={false}
-                      dataKey='band'
-                      fill={BAND_COLOR}
-                      fillOpacity={0.14}
-                      name='Expected range'
-                      stroke='none'
-                      type='monotone'
-                    />
-                    <Line
-                      activeDot={chartActiveDot}
-                      dataKey='value'
-                      dot={({ cx, cy, index, payload }) =>
-                        (payload as (typeof data)[number]).anomalous ? (
-                          <circle
-                            key={index}
-                            cx={cx}
-                            cy={cy}
-                            fill={ANOMALY_COLOR}
-                            r={4.5}
-                            stroke='var(--color-background)'
-                            strokeWidth={2}
-                          />
-                        ) : (
-                          <g key={index} />
-                        )
-                      }
-                      name={metric}
-                      stroke={SERIES_COLOR}
-                      strokeLinecap='round'
-                      strokeWidth={2}
-                      type='monotone'
-                    />
-                    {worst && (
-                      <ReferenceDot
-                        x={worst.index}
-                        y={worst.value}
-                        r={0}
-                        label={{
-                          fill: 'var(--color-foreground)',
-                          fontSize: 11,
-                          fontWeight: 500,
-                          position: worst.index > last * 0.75 ? 'left' : 'right',
-                          value: `${formatChange(worstChange)} vs expected`,
-                        }}
-                      />
+              </dl>
+            )}
+            {!state && worst && (
+              <dl className='grid grid-cols-3 gap-4 border-t pt-4'>
+                <div className='flex min-w-0 flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>{worst.label}</dt>
+                  <dd className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @2xl:text-4xl'>
+                    {formatter(worst.value)}
+                  </dd>
+                </div>
+                <div className='flex min-w-0 flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Expected</dt>
+                  <dd className='text-2xl font-light tracking-tight whitespace-nowrap tabular-nums'>
+                    {formatter(worst.low)}–{formatter(worst.high)}
+                  </dd>
+                </div>
+                <div className='flex min-w-0 flex-col gap-1'>
+                  <dt className='text-muted-foreground text-sm'>Difference</dt>
+                  <dd
+                    className={cn(
+                      'text-2xl font-light tracking-tight whitespace-nowrap tabular-nums',
+                      worstChange < 0 && 'text-red-700 dark:text-red-400',
                     )}
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </ChartPanelFigure>
-              <ChartPanelTable
-                caption={`${metric} by day against the expected range. ${anomalies.length} ${anomalies.length === 1 ? 'day was' : 'days were'} outside it.`}
-                columns={[
-                  { key: 'label', label: 'Day' },
-                  { format: formatter, key: 'value', label: metric },
-                  { format: formatter, key: 'low', label: 'Expected low' },
-                  { format: formatter, key: 'high', label: 'Expected high' },
-                  { key: 'note', label: 'Note' },
-                ]}
-                rows={data}
-              />
-            </>
-          )}
-        </div>
-        {(!state || state === 'loading') && (
-          <div className='flex flex-col gap-3 border-t pt-4'>
-            <BlockReady className='text-sm'>
-              <InsightText segments={explanation} />
-              {drivers && <InsightDrivers drivers={drivers} label='Likely causes' />}
-            </BlockReady>
-          </div>
-        )}
-        <div className='flex flex-wrap gap-2'>
-          {href && !state && (
-            <a href={href} className={buttonVariants({ size: 'sm' })}>
-              Investigate
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                data-icon='inline-end'
-              />
-            </a>
-          )}
-          <Button
-            variant='outline'
-            size='sm'
-            disabled={markedExpected || state !== undefined}
-            onClick={() => {
-              setMarkedExpected(true)
-              onMarkExpected?.()
-            }}
-          >
-            {markedExpected ? 'Marked as expected' : 'Mark as expected'}
-          </Button>
-        </div>
-      </section>
-    </BlockStateProvider>
+                  >
+                    {formatChange(worstChange)}
+                  </dd>
+                </div>
+              </dl>
+            )}
+            <div className='flex flex-col gap-3'>
+              {(!state || state === 'loading') && (
+                <ChartPanelLegend
+                  items={[
+                    { color: SERIES_COLOR, label: metric, shape: 'line' },
+                    {
+                      color:
+                        'color-mix(in oklab, var(--color-muted-foreground) 30%, transparent)',
+                      label: 'Expected range',
+                    },
+                    { color: ANOMALY_COLOR, label: 'Anomaly' },
+                  ]}
+                />
+              )}
+              {state ? (
+                <ChartPlaceholder height={208} />
+              ) : (
+                <>
+                  <ChartPanelFigure className='h-52'>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <ComposedChart
+                        aria-label={`${title} chart`}
+                        data={data}
+                        margin={{ top: 20, right: 8, bottom: 0, left: 0 }}
+                      >
+                        <CartesianGrid {...chartGridProps} />
+                        <XAxis
+                          {...chartAxisProps}
+                          dataKey='index'
+                          domain={[0, last]}
+                          tickFormatter={(index: number) => data[index]?.label ?? ''}
+                          ticks={ticks}
+                          type='number'
+                        />
+                        <YAxis
+                          {...chartAxisProps}
+                          domain={[0, yMax]}
+                          tickFormatter={(value: number) => formatter(value)}
+                          width={chartValueAxisWidth}
+                        />
+                        {ranges.map((range) => (
+                          <ReferenceArea
+                            key={range.start}
+                            fill={ANOMALY_COLOR}
+                            fillOpacity={0.14}
+                            ifOverflow='hidden'
+                            x1={range.start - 0.5}
+                            x2={range.end + 0.5}
+                          />
+                        ))}
+                        <Tooltip
+                          content={({ active, payload }) => {
+                            const point = payload?.[0]?.payload as
+                              | (typeof data)[number]
+                              | undefined
+                            if (!active || !point) return null
+                            return (
+                              <ChartTooltipFrame>
+                                <span className='font-medium'>{point.label}</span>
+                                <ChartTooltipItem
+                                  color={SERIES_COLOR}
+                                  name={metric}
+                                  value={formatter(point.value)}
+                                />
+                                <span className='text-muted-foreground tabular-nums'>
+                                  Expected {formatter(point.low)}–{formatter(point.high)}
+                                </span>
+                                {point.anomalous && (
+                                  <InsightLabel className='text-xs' kind='anomaly' />
+                                )}
+                              </ChartTooltipFrame>
+                            )
+                          }}
+                          cursor={chartLineCursor}
+                        />
+                        <Area
+                          activeDot={false}
+                          dataKey='band'
+                          fill={BAND_COLOR}
+                          fillOpacity={0.14}
+                          name='Expected range'
+                          stroke='none'
+                          type='monotone'
+                        />
+                        <Line
+                          activeDot={chartActiveDot}
+                          dataKey='value'
+                          dot={({ cx, cy, index, payload }) =>
+                            (payload as (typeof data)[number]).anomalous ? (
+                              <circle
+                                key={index}
+                                cx={cx}
+                                cy={cy}
+                                fill={ANOMALY_COLOR}
+                                r={4.5}
+                                stroke='var(--color-background)'
+                                strokeWidth={2}
+                              />
+                            ) : (
+                              <g key={index} />
+                            )
+                          }
+                          name={metric}
+                          stroke={SERIES_COLOR}
+                          strokeLinecap='round'
+                          strokeWidth={2}
+                          type='monotone'
+                        />
+                        {worst && (
+                          <ReferenceDot
+                            x={worst.index}
+                            y={worst.value}
+                            r={0}
+                            label={{
+                              fill: 'var(--color-foreground)',
+                              fontSize: 11,
+                              fontWeight: 500,
+                              position: worst.index > last * 0.75 ? 'left' : 'right',
+                              value: `${formatChange(worstChange)} vs expected`,
+                            }}
+                          />
+                        )}
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </ChartPanelFigure>
+                  <ChartPanelTable
+                    caption={`${metric} by day against the expected range. ${anomalies.length} ${anomalies.length === 1 ? 'day was' : 'days were'} outside it.`}
+                    columns={[
+                      { key: 'label', label: 'Day' },
+                      { format: formatter, key: 'value', label: metric },
+                      { format: formatter, key: 'low', label: 'Expected low' },
+                      { format: formatter, key: 'high', label: 'Expected high' },
+                      { key: 'note', label: 'Note' },
+                    ]}
+                    rows={data}
+                  />
+                </>
+              )}
+            </div>
+            {(!state || state === 'loading') && (
+              <div className='flex flex-col gap-3 border-t pt-4'>
+                <BlockReady className='text-sm'>
+                  <InsightText segments={explanation} />
+                  {drivers && <InsightDrivers drivers={drivers} label='Likely causes' />}
+                </BlockReady>
+              </div>
+            )}
+            <div className='flex flex-wrap gap-2'>
+              {href && !state && (
+                <a href={href} className={buttonVariants({ size: 'sm' })}>
+                  Investigate
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    data-icon='inline-end'
+                  />
+                </a>
+              )}
+              <Button
+                variant='outline'
+                size='sm'
+                disabled={markedExpected || state !== undefined}
+                onClick={() => {
+                  setMarkedExpected(true)
+                  onMarkExpected?.()
+                }}
+              >
+                {markedExpected ? 'Marked as expected' : 'Mark as expected'}
+              </Button>
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

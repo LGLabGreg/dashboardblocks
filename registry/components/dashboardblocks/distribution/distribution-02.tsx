@@ -15,6 +15,8 @@ import {
 } from '@/registry/components/dashboardblocks/distribution'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface DistributionGroup {
   count: number
   high: number
@@ -100,66 +102,71 @@ const Distribution2 = (props: Distribution2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-3 border-t pt-4'>
-          {state ? (
-            <BlockStateText className='text-sm' />
-          ) : (
-            slowest &&
-            fastest &&
-            slowest !== fastest && (
-              <p className='text-muted-foreground text-sm'>
-                <span className='text-foreground font-medium'>{slowest.label}</span> is
-                slowest, with half its {unit} taking over {formatter(slowest.median)}.{' '}
-                {fastest.label} is quickest, at {formatter(fastest.median)}.
-              </p>
-            )
-          )}
-          {state !== 'empty' && state !== 'error' && (
-            <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
-              <li className='flex items-center gap-1.5'>
-                <DistributionKey shape='box' />
-                Middle half
-              </li>
-              <li className='flex items-center gap-1.5'>
-                <DistributionKey shape='median' />
-                Median
-              </li>
-              <li className='flex items-center gap-1.5'>
-                <DistributionKey shape='whisker' />
-                {whiskerLabel}
-              </li>
-            </ul>
-          )}
-        </div>
-        <BoxPlot
-          aria-label={`${title} chart`}
-          domain={domain}
-          format={formatter}
-          rows={groups}
-          tickFormat={tickFormatter}
-          ticks={ticks}
-          unit={unit}
-          whiskerLabel={whiskerLabel}
-        />
-        <ChartPanelTable
-          caption={`${title}: ${description}`}
-          columns={[
-            { key: 'label', label: 'Group' },
-            { format: formatter, key: 'low', label: 'Low' },
-            { format: formatter, key: 'q1', label: '25th percentile' },
-            { format: formatter, key: 'median', label: 'Median' },
-            { format: formatter, key: 'q3', label: '75th percentile' },
-            { format: formatter, key: 'high', label: 'High' },
-            { key: 'count', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
-          ]}
-          rows={groups}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-3 border-t pt-4'>
+              {state ? (
+                <BlockStateText className='text-sm' />
+              ) : (
+                slowest &&
+                fastest &&
+                slowest !== fastest && (
+                  <p className='text-muted-foreground text-sm'>
+                    <span className='text-foreground font-medium'>{slowest.label}</span>{' '}
+                    is slowest, with half its {unit} taking over{' '}
+                    {formatter(slowest.median)}. {fastest.label} is quickest, at{' '}
+                    {formatter(fastest.median)}.
+                  </p>
+                )
+              )}
+              {state !== 'empty' && state !== 'error' && (
+                <ul className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
+                  <li className='flex items-center gap-1.5'>
+                    <DistributionKey shape='box' />
+                    Middle half
+                  </li>
+                  <li className='flex items-center gap-1.5'>
+                    <DistributionKey shape='median' />
+                    Median
+                  </li>
+                  <li className='flex items-center gap-1.5'>
+                    <DistributionKey shape='whisker' />
+                    {whiskerLabel}
+                  </li>
+                </ul>
+              )}
+            </div>
+            <BoxPlot
+              aria-label={`${title} chart`}
+              domain={domain}
+              format={formatter}
+              rows={groups}
+              tickFormat={tickFormatter}
+              ticks={ticks}
+              unit={unit}
+              whiskerLabel={whiskerLabel}
+            />
+            <ChartPanelTable
+              caption={`${title}: ${description}`}
+              columns={[
+                { key: 'label', label: 'Group' },
+                { format: formatter, key: 'low', label: 'Low' },
+                { format: formatter, key: 'q1', label: '25th percentile' },
+                { format: formatter, key: 'median', label: 'Median' },
+                { format: formatter, key: 'q3', label: '75th percentile' },
+                { format: formatter, key: 'high', label: 'High' },
+                { key: 'count', label: unit.charAt(0).toUpperCase() + unit.slice(1) },
+              ]}
+              rows={groups}
+            />
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

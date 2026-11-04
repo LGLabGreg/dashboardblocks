@@ -18,7 +18,6 @@ import {
   LiveBadge,
   LiveNumber,
   createRandom,
-  useInterval,
 } from '@/registry/components/dashboardblocks/realtime'
 import {
   Stat,
@@ -29,7 +28,6 @@ import {
   getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
 import { formatCurrency, formatNumber } from '@/registry/lib/dashboardblocks/format'
-import { useRef, useState } from 'react'
 import {
   Bar,
   Cell,
@@ -40,6 +38,8 @@ import {
   Tooltip,
   XAxis,
 } from 'recharts'
+
+import { Card, CardContent } from '@/components/ui/card'
 
 interface TodayMetric {
   format?: (value: number) => string
@@ -57,7 +57,6 @@ interface Realtime4Props extends BlockStateProps {
   hourlyLabel?: string
   /** Leave out, or pass none, to show the empty state. */
   metrics?: TodayMetric[]
-  simulate?: boolean
   title: string
   /** The same count for each of yesterday's 24 hours, drawn as a dashed line. */
   yesterdayHourly?: number[]
@@ -89,7 +88,6 @@ const exampleProps: Realtime4Props = {
     },
     { id: 'signups', label: 'Sign-ups', today: 132, yesterday: 104 },
   ],
-  simulate: true,
   title: 'Today so far',
   yesterdayHourly: YESTERDAY.map((value) => Math.round(value * (0.9 + seed() * 0.2))),
 }
@@ -100,25 +98,15 @@ const noHours: number[] = []
 
 const Realtime4 = (props: Realtime4Props) => {
   const {
-    hourly: loadedHourly = noHours,
+    hourly = noHours,
     hourlyLabel = 'Orders',
-    metrics: loadedMetrics = noMetrics,
-    simulate = false,
+    metrics = noMetrics,
     errorMessage,
     status,
     title,
     yesterdayHourly,
   } = props
   const id = useChartId()
-  const [metrics, setMetrics] = useState(loadedMetrics)
-  const [hourly, setHourly] = useState(loadedHourly)
-  const [loaded, setLoaded] = useState({ hourly: loadedHourly, metrics: loadedMetrics })
-  if (loaded.hourly !== loadedHourly || loaded.metrics !== loadedMetrics) {
-    setLoaded({ hourly: loadedHourly, metrics: loadedMetrics })
-    setMetrics(loadedMetrics)
-    setHourly(loadedHourly)
-  }
-  const random = useRef(createRandom(21))
   const state = getBlockState(status, metrics)
   const shown: TodayMetric[] =
     status === 'loading'
@@ -129,37 +117,6 @@ const Realtime4 = (props: Realtime4Props) => {
           yesterday: 0,
         }))
       : metrics
-
-  useInterval(
-    () => {
-      const next = random.current
-      const orders = next() > 0.35 ? 1 + Math.floor(next() * 3) : 0
-      setMetrics((list) =>
-        list.map((metric) => {
-          const bump =
-            metric.id === 'orders'
-              ? orders
-              : metric.id === 'revenue'
-                ? orders * (40 + next() * 80)
-                : next() > 0.8
-                  ? 1
-                  : 0
-          return {
-            ...metric,
-            today: metric.today + bump,
-            yesterday: metric.yesterday + bump * (0.85 + next() * 0.2),
-          }
-        }),
-      )
-      if (orders) {
-        setHourly((values) => [
-          ...values.slice(0, -1),
-          (values[values.length - 1] ?? 0) + orders,
-        ])
-      }
-    },
-    simulate && !state ? 2_000 : null,
-  )
 
   const lead = metrics[0]
   const leadChange = lead && lead.yesterday > 0 ? lead.today / lead.yesterday - 1 : 0
@@ -179,141 +136,147 @@ const Realtime4 = (props: Realtime4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <BlockReady className='text-sm'>
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            </BlockReady>
-          </div>
-          {!state && <LiveBadge />}
-        </header>
-        <StatGroup className='grid-cols-3 gap-x-4'>
-          {shown.map((metric) => (
-            <Stat key={metric.id}>
-              <StatLabel className='truncate'>{metric.label}</StatLabel>
-              <StatValue className='text-2xl @md:text-3xl'>
-                <LiveNumber format={metric.format} value={metric.today} />
-              </StatValue>
-              <StatChange
-                comparison='yesterday at this time'
-                metric={{
-                  formatter: (value) =>
-                    metric.format
-                      ? metric.format(value)
-                      : formatNumber(Math.round(value)),
-                  key: metric.id,
-                  label: metric.label,
-                  previous: metric.yesterday,
-                  value: metric.today,
-                }}
-                variant='short'
-              />
-            </Stat>
-          ))}
-        </StatGroup>
-        <div className='flex flex-col gap-1.5'>
-          <span className='text-muted-foreground text-sm'>{hourlyLabel} per hour</span>
-          {state && <ChartPlaceholder height={CHART_HEIGHT} />}
-          {!state && (
-            <div
-              aria-hidden
-              className='w-full tabular-nums'
-              style={{ height: CHART_HEIGHT }}
-            >
-              <ResponsiveContainer width='100%' height='100%'>
-                <ComposedChart
-                  accessibilityLayer={false}
-                  data={data}
-                  margin={{ top: 8, right: 0, bottom: 0, left: 0 }}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <BlockReady className='text-sm'>
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                </BlockReady>
+              </div>
+              {!state && <LiveBadge />}
+            </header>
+            <StatGroup className='grid-cols-3 gap-x-4'>
+              {shown.map((metric) => (
+                <Stat key={metric.id}>
+                  <StatLabel className='truncate'>{metric.label}</StatLabel>
+                  <StatValue className='text-2xl @md:text-3xl'>
+                    <LiveNumber format={metric.format} value={metric.today} />
+                  </StatValue>
+                  <StatChange
+                    comparison='yesterday at this time'
+                    metric={{
+                      formatter: (value) =>
+                        metric.format
+                          ? metric.format(value)
+                          : formatNumber(Math.round(value)),
+                      key: metric.id,
+                      label: metric.label,
+                      previous: metric.yesterday,
+                      value: metric.today,
+                    }}
+                    variant='short'
+                  />
+                </Stat>
+              ))}
+            </StatGroup>
+            <div className='flex flex-col gap-1.5'>
+              <span className='text-muted-foreground text-sm'>
+                {hourlyLabel} per hour
+              </span>
+              {state && <ChartPlaceholder height={CHART_HEIGHT} />}
+              {!state && (
+                <div
+                  aria-hidden
+                  className='w-full tabular-nums'
+                  style={{ height: CHART_HEIGHT }}
                 >
-                  <defs>
-                    <ChartHatch color='var(--color-chart-2)' id={`${id}-counting`} />
-                  </defs>
-                  <XAxis
-                    {...chartAxisProps}
-                    dataKey='label'
-                    interval={0}
-                    tickFormatter={(value: string, index: number) =>
-                      HOUR_TICKS.includes(index) ? value : ''
-                    }
-                  />
-                  <Tooltip
-                    content={({ active, label, payload }) => (
-                      <ChartTooltipContent
-                        active={active}
-                        label={label === undefined ? undefined : String(label)}
-                        payload={payload}
-                        valueFormatter={formatCount}
-                      />
-                    )}
-                    cursor={chartBarCursor}
-                  />
-                  <Bar
-                    dataKey='today'
-                    fill='var(--color-chart-2)'
-                    isAnimationActive={false}
-                    name='Today'
-                    radius={[2, 2, 0, 0]}
-                  >
-                    {data.map((_, hour) => (
-                      <Cell
-                        key={hour}
-                        fill={
-                          hour === current
-                            ? `url(#${id}-counting)`
-                            : 'var(--color-chart-2)'
-                        }
-                      />
-                    ))}
-                  </Bar>
-                  {yesterdayHourly && (
-                    <Line
-                      dataKey='yesterday'
-                      dot={false}
-                      isAnimationActive={false}
-                      name='Yesterday'
-                      stroke='var(--color-muted-foreground)'
-                      strokeDasharray='4 3'
-                      strokeWidth={1.5}
-                      type='monotone'
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <ComposedChart
+                      accessibilityLayer={false}
+                      data={data}
+                      margin={{ top: 8, right: 0, bottom: 0, left: 0 }}
                     >
-                      <LabelList
-                        content={({ index, x, y }) =>
-                          index === data.length - 1 ? (
-                            <text
-                              x={Number(x)}
-                              y={Number(y) - 8}
-                              textAnchor='end'
-                              fontSize={12}
-                              fill='var(--color-muted-foreground)'
-                            >
-                              Yesterday
-                            </text>
-                          ) : null
+                      <defs>
+                        <ChartHatch color='var(--color-chart-2)' id={`${id}-counting`} />
+                      </defs>
+                      <XAxis
+                        {...chartAxisProps}
+                        dataKey='label'
+                        interval={0}
+                        tickFormatter={(value: string, index: number) =>
+                          HOUR_TICKS.includes(index) ? value : ''
                         }
-                        dataKey='yesterday'
                       />
-                    </Line>
-                  )}
-                </ComposedChart>
-              </ResponsiveContainer>
+                      <Tooltip
+                        content={({ active, label, payload }) => (
+                          <ChartTooltipContent
+                            active={active}
+                            label={label === undefined ? undefined : String(label)}
+                            payload={payload}
+                            valueFormatter={formatCount}
+                          />
+                        )}
+                        cursor={chartBarCursor}
+                      />
+                      <Bar
+                        dataKey='today'
+                        fill='var(--color-chart-2)'
+                        isAnimationActive={false}
+                        name='Today'
+                        radius={[2, 2, 0, 0]}
+                      >
+                        {data.map((_, hour) => (
+                          <Cell
+                            key={hour}
+                            fill={
+                              hour === current
+                                ? `url(#${id}-counting)`
+                                : 'var(--color-chart-2)'
+                            }
+                          />
+                        ))}
+                      </Bar>
+                      {yesterdayHourly && (
+                        <Line
+                          dataKey='yesterday'
+                          dot={false}
+                          isAnimationActive={false}
+                          name='Yesterday'
+                          stroke='var(--color-muted-foreground)'
+                          strokeDasharray='4 3'
+                          strokeWidth={1.5}
+                          type='monotone'
+                        >
+                          <LabelList
+                            content={({ index, x, y }) =>
+                              index === data.length - 1 ? (
+                                <text
+                                  x={Number(x)}
+                                  y={Number(y) - 8}
+                                  textAnchor='end'
+                                  fontSize={12}
+                                  fill='var(--color-muted-foreground)'
+                                >
+                                  Yesterday
+                                </text>
+                              ) : null
+                            }
+                            dataKey='yesterday'
+                          />
+                        </Line>
+                      )}
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+              {!state && (
+                <p className='sr-only'>
+                  {`${hourlyLabel} per hour today: ${hourly.join(', ')}. The current hour is still counting.`}
+                </p>
+              )}
+              {state !== 'error' && state !== 'empty' && (
+                <p className='text-muted-foreground text-xs'>
+                  The hatched bar is the hour still counting. Changes compare with
+                  yesterday up to the same time.
+                </p>
+              )}
             </div>
-          )}
-          {!state && (
-            <p className='sr-only'>
-              {`${hourlyLabel} per hour today: ${hourly.join(', ')}. The current hour is still counting.`}
-            </p>
-          )}
-          {state !== 'error' && state !== 'empty' && (
-            <p className='text-muted-foreground text-xs'>
-              The hatched bar is the hour still counting. Changes compare with yesterday
-              up to the same time.
-            </p>
-          )}
-        </div>
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

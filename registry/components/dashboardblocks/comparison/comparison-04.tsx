@@ -15,6 +15,8 @@ import {
 import { KPIChange } from '@/registry/components/dashboardblocks/kpi'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface BeforeAfterRow {
   after: number
   before: number
@@ -86,67 +88,76 @@ const Comparison4 = (props: Comparison4Props) => {
   } = props
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, rows)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>
-            {unitLabel && `${unitLabel.charAt(0).toUpperCase()}${unitLabel.slice(1)}. `}
-            <BlockReady>{description}</BlockReady>
-          </p>
-        </header>
-        <div className='flex flex-col border-t pt-3'>
-          <DumbbellLegend afterLabel={afterLabel} beforeLabel={beforeLabel} />
-          <BlockStateRows className='mt-1' rows={4} />
-          <ul className='mt-1 flex flex-col empty:hidden'>
-            {!status &&
-              rows.map((row) => {
-                const good = isGood(row)
-                return (
-                  <li
-                    key={row.label}
-                    className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b py-2.5 last:border-b-0 @md:grid-cols-[6rem_minmax(0,1fr)_12rem]'
-                  >
-                    <span className='truncate text-sm font-medium'>{row.label}</span>
-                    <span className='flex items-center justify-end gap-2 text-sm whitespace-nowrap tabular-nums @md:order-last'>
-                      <span className='text-muted-foreground'>
-                        <span className='sr-only'>{beforeLabel}: </span>
-                        {formatter(row.before)}
-                      </span>
-                      <span aria-hidden className='text-muted-foreground'>
-                        →
-                      </span>
-                      <span className='font-medium'>
-                        <span className='sr-only'>{afterLabel}: </span>
-                        {formatter(row.after)}
-                      </span>
-                      <KPIChange
-                        className='w-20 text-right text-xs'
-                        comparison={beforeLabel}
-                        format={formatter}
-                        goodDirection={goodDirection}
-                        inline
-                        previous={row.before}
-                        value={row.after}
-                        variant='short'
-                      />
-                    </span>
-                    <Dumbbell
-                      after={row.after}
-                      before={row.before}
-                      className='col-span-2 @md:col-span-1'
-                      color={
-                        good ? 'var(--color-chart-2)' : 'var(--color-muted-foreground)'
-                      }
-                      max={max}
-                    />
-                  </li>
-                )
-              })}
-          </ul>
-        </div>
-      </section>
-    </BlockStateProvider>
+    <Card>
+      <CardContent>
+        <BlockStateProvider
+          errorMessage={errorMessage}
+          state={getBlockState(status, rows)}
+        >
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>
+                {unitLabel &&
+                  `${unitLabel.charAt(0).toUpperCase()}${unitLabel.slice(1)}. `}
+                <BlockReady>{description}</BlockReady>
+              </p>
+            </header>
+            <div className='flex flex-col border-t pt-3'>
+              <DumbbellLegend afterLabel={afterLabel} beforeLabel={beforeLabel} />
+              <BlockStateRows className='mt-1' rows={4} />
+              <ul className='mt-1 flex flex-col empty:hidden'>
+                {!status &&
+                  rows.map((row) => {
+                    const good = isGood(row)
+                    return (
+                      <li
+                        key={row.label}
+                        className='grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b py-2.5 last:border-b-0 @md:grid-cols-[6rem_minmax(0,1fr)_12rem]'
+                      >
+                        <span className='truncate text-sm font-medium'>{row.label}</span>
+                        <span className='flex items-center justify-end gap-2 text-sm whitespace-nowrap tabular-nums @md:order-last'>
+                          <span className='text-muted-foreground'>
+                            <span className='sr-only'>{beforeLabel}: </span>
+                            {formatter(row.before)}
+                          </span>
+                          <span aria-hidden className='text-muted-foreground'>
+                            →
+                          </span>
+                          <span className='font-medium'>
+                            <span className='sr-only'>{afterLabel}: </span>
+                            {formatter(row.after)}
+                          </span>
+                          <KPIChange
+                            className='w-20 text-right text-xs'
+                            comparison={beforeLabel}
+                            goodDirection={goodDirection}
+                            inline
+                            previous={row.before}
+                            value={row.after}
+                            variant='short'
+                          />
+                        </span>
+                        <Dumbbell
+                          after={row.after}
+                          before={row.before}
+                          className='col-span-2 @md:col-span-1'
+                          color={
+                            good
+                              ? 'var(--color-chart-2)'
+                              : 'var(--color-muted-foreground)'
+                          }
+                          max={max}
+                        />
+                      </li>
+                    )
+                  })}
+              </ul>
+            </div>
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -18,6 +18,8 @@ import {
 } from '@/registry/components/dashboardblocks/kpi-provenance'
 import { joinDetails } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface KPI4Props extends BlockStateProps {
   comparison: string
   format?: KPIFormat
@@ -51,25 +53,24 @@ const KPI4 = (props: KPI4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
-      <KPI className='gap-1'>
-        <KPITitle>{title}</KPITitle>
-        <div className='flex min-w-0 items-center gap-1'>
-          <KPIValue className='truncate' value={value} format={format} animated />
-          <KPIProvenance
-            label={`How is ${title.toLowerCase()} computed?`}
-            provenance={provenance}
-          />
-        </div>
-        <KPIChange
-          comparison={comparison}
-          format={format}
-          previous={previous}
-          value={value}
-        />
-        {filters.length > 0 && (
-          <p className='text-muted-foreground text-sm'>{joinDetails(...filters)}</p>
-        )}
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI className='gap-1'>
+            <KPITitle>{title}</KPITitle>
+            <div className='flex min-w-0 items-center gap-1'>
+              <KPIValue className='truncate' value={value} format={format} animated />
+              <KPIProvenance
+                label={`How is ${title.toLowerCase()} computed?`}
+                provenance={provenance}
+              />
+            </div>
+            <KPIChange comparison={comparison} previous={previous} value={value} />
+            {filters.length > 0 && (
+              <p className='text-muted-foreground text-sm'>{joinDetails(...filters)}</p>
+            )}
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

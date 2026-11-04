@@ -29,6 +29,7 @@ import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { Fragment } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 
@@ -63,85 +64,94 @@ const Funnel1 = (props: Funnel1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </div>
-          {link && (
-            <Link
-              href={link.href}
-              className={cn(
-                buttonVariants({ size: 'xs', variant: 'outline' }),
-                'group/open shrink-0',
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </div>
+              {link && (
+                <Link
+                  href={link.href}
+                  className={cn(
+                    buttonVariants({ size: 'xs', variant: 'outline' }),
+                    'group/open shrink-0',
+                  )}
+                >
+                  {link.label}
+                  <IconPlaceholder
+                    lucide='ArrowRightIcon'
+                    tabler='IconArrowRight'
+                    hugeicons='ArrowRight01Icon'
+                    phosphor='ArrowRightIcon'
+                    remixicon='RiArrowRightLine'
+                    className='transition-transform group-hover/open:translate-x-0.5 motion-reduce:transition-none'
+                    data-icon='inline-end'
+                    aria-hidden
+                  />
+                </Link>
               )}
-            >
-              {link.label}
-              <IconPlaceholder
-                lucide='ArrowRightIcon'
-                tabler='IconArrowRight'
-                hugeicons='ArrowRight01Icon'
-                phosphor='ArrowRightIcon'
-                remixicon='RiArrowRightLine'
-                className='transition-transform group-hover/open:translate-x-0.5 motion-reduce:transition-none'
-                data-icon='inline-end'
-                aria-hidden
-              />
-            </Link>
-          )}
-        </header>
-        <dl className='flex flex-col gap-1 border-t pt-4'>
-          <dt className='text-muted-foreground text-sm'>Overall conversion</dt>
-          <dd>
-            <KPIValue value={last?.fromStart} format={(value) => formatRate(value, 2)} />
-          </dd>
-          <BlockReady className='text-xs'>
-            {first && last && (
-              <dd className='text-muted-foreground text-xs tabular-nums'>
-                {formatNumber(last.value)} of {formatNumber(first.value)}
+            </header>
+            <dl className='flex flex-col gap-1 border-t pt-4'>
+              <dt className='text-muted-foreground text-sm'>Overall conversion</dt>
+              <dd>
+                <KPIValue
+                  value={last?.fromStart}
+                  format={(value) => formatRate(value, 2)}
+                />
               </dd>
+              <BlockReady className='text-xs'>
+                {first && last && (
+                  <dd className='text-muted-foreground text-xs tabular-nums'>
+                    {formatNumber(last.value)} of {formatNumber(first.value)}
+                  </dd>
+                )}
+              </BlockReady>
+            </dl>
+            {state === 'loading' && <BlockStateRows rows={5} />}
+            {!state && (
+              <DataTable density='compact' caption={`${title}: ${description}`}>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>Stage</DataTableHead>
+                    <DataTableHead align='end'>Users</DataTableHead>
+                    <DataTableHead align='end'>
+                      Conversion<span className='sr-only'> from previous step</span>
+                    </DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
+                  {steps.map((step, index) => (
+                    <Fragment key={step.label}>
+                      <DataTableRow className='border-b-0'>
+                        <DataTableRowHead className='pb-1.5'>
+                          {step.label}
+                        </DataTableRowHead>
+                        <DataTableCell align='end' className='w-20 pb-1.5 font-medium'>
+                          {formatNumber(step.value)}
+                        </DataTableCell>
+                        <DataTableCell
+                          align='end'
+                          className='text-muted-foreground w-24 pb-1.5'
+                        >
+                          {index === 0 ? '—' : formatRate(step.fromPrevious)}
+                        </DataTableCell>
+                      </DataTableRow>
+                      <DataTableRow aria-hidden>
+                        <DataTableCell colSpan={3} className='pt-0'>
+                          <FunnelBar delay={index * 80} value={step.fromStart * 100} />
+                        </DataTableCell>
+                      </DataTableRow>
+                    </Fragment>
+                  ))}
+                </DataTableBody>
+              </DataTable>
             )}
-          </BlockReady>
-        </dl>
-        {state === 'loading' && <BlockStateRows rows={5} />}
-        {!state && (
-          <DataTable density='compact' caption={`${title}: ${description}`}>
-            <DataTableHeader>
-              <DataTableRow>
-                <DataTableHead>Stage</DataTableHead>
-                <DataTableHead align='end'>Users</DataTableHead>
-                <DataTableHead align='end'>
-                  Conversion<span className='sr-only'> from previous step</span>
-                </DataTableHead>
-              </DataTableRow>
-            </DataTableHeader>
-            <DataTableBody>
-              {steps.map((step, index) => (
-                <Fragment key={step.label}>
-                  <DataTableRow className='border-b-0'>
-                    <DataTableRowHead className='pb-1.5'>{step.label}</DataTableRowHead>
-                    <DataTableCell align='end' className='w-20 pb-1.5 font-medium'>
-                      {formatNumber(step.value)}
-                    </DataTableCell>
-                    <DataTableCell
-                      align='end'
-                      className='text-muted-foreground w-24 pb-1.5'
-                    >
-                      {index === 0 ? '—' : formatRate(step.fromPrevious)}
-                    </DataTableCell>
-                  </DataTableRow>
-                  <DataTableRow aria-hidden>
-                    <DataTableCell colSpan={3} className='pt-0'>
-                      <FunnelBar delay={index * 80} value={step.fromStart * 100} />
-                    </DataTableCell>
-                  </DataTableRow>
-                </Fragment>
-              ))}
-            </DataTableBody>
-          </DataTable>
-        )}
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

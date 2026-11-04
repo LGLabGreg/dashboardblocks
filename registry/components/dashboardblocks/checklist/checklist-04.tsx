@@ -23,6 +23,8 @@ import {
 import { formatDate } from '@/registry/lib/dashboardblocks/format'
 import { useId, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 interface Task {
@@ -72,7 +74,12 @@ const exampleProps: Checklist4Props = {
           owner: 'Leo',
           title: 'Ship plan picker to 100%',
         },
-        { due: day(-1), id: 't3', owner: 'Leo', title: 'Migrate legacy annual plans' },
+        {
+          due: day(-1),
+          id: 't3',
+          owner: 'Leo',
+          title: 'Migrate legacy annual plans',
+        },
       ],
     },
     {
@@ -86,14 +93,30 @@ const exampleProps: Checklist4Props = {
           title: 'Record launch demo video',
         },
         { due: day(0), id: 't5', owner: 'Ana', title: 'Schedule launch email' },
-        { due: day(3), id: 't6', owner: 'Sam', title: 'Publish launch blog post' },
+        {
+          due: day(3),
+          id: 't6',
+          owner: 'Sam',
+          title: 'Publish launch blog post',
+        },
       ],
     },
     {
       name: 'Support',
       tasks: [
-        { done: true, due: day(-4), id: 't7', owner: 'Kai', title: 'Update billing FAQ' },
-        { due: day(2), id: 't8', owner: 'Kai', title: 'Brief the support team' },
+        {
+          done: true,
+          due: day(-4),
+          id: 't7',
+          owner: 'Kai',
+          title: 'Update billing FAQ',
+        },
+        {
+          due: day(2),
+          id: 't8',
+          owner: 'Kai',
+          title: 'Brief the support team',
+        },
       ],
     },
   ],
@@ -253,22 +276,26 @@ const Checklist4 = (props: Checklist4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      {state ? (
-        <section className='@container flex flex-col gap-3'>
-          <header className='flex flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            {state === 'loading' && (
-              <span className='text-sm'>
-                <SkeletonText className='w-2/3' />
-              </span>
-            )}
-          </header>
-          {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
-          <BlockStateRows className='border-t' rows={6} />
-        </section>
-      ) : (
-        <TaskGroups {...props} groups={groups} />
-      )}
+      <Card>
+        <CardContent>
+          {state ? (
+            <section className='@container flex flex-col gap-3'>
+              <header className='flex flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                {state === 'loading' && (
+                  <span className='text-sm'>
+                    <SkeletonText className='w-2/3' />
+                  </span>
+                )}
+              </header>
+              {state === 'loading' && <ProgressBar className='h-1.5' percentage={0} />}
+              <BlockStateRows className='border-t' rows={6} />
+            </section>
+          ) : (
+            <TaskGroups {...props} groups={groups} />
+          )}
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

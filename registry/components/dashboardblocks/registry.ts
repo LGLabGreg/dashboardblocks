@@ -123,9 +123,10 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Auth',
     description:
-      "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred column, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
+      "Primitives for signing in and joining a workspace: a full-page frame with one narrow centred card, the icon over a page's title, a one-time code input with a box per digit that handles paste, autofill and Backspace, a password input you can show, a password strength meter with the rules it still needs, a row of sign-in providers, a send-again button that counts down, the row at the bottom that leads to another way in, a square workspace avatar with a logo, a mark or initials, and an email masking helper.",
     registryDependencies: [
       'button',
+      'card',
       'input',
       'input-group',
       registryUrl('format'),
@@ -648,6 +649,7 @@ export const components: Registry['items'] = [
     description:
       'Primitives for KPIs: a block with a top rule, a value that counts up with the final value read out, the change vs the previous period written as a sentence, in percent or percentage points with the good direction, a chart wrapper with a text alternative, and named en-US formats.',
     registryDependencies: [
+      registryUrl('change-amount'),
       registryUrl('block-state'),
       registryUrl('animated-number'),
       registryUrl('format'),
@@ -688,7 +690,7 @@ export const components: Registry['items'] = [
     title: 'Leaderboard',
     description: 'Primitives for composing ranked lists and leaderboards.',
     dependencies: ['class-variance-authority'],
-    registryDependencies: [registryUrl('use-reveal')],
+    registryDependencies: [registryUrl('change-amount'), registryUrl('use-reveal')],
     files: [
       {
         path: 'registry/components/dashboardblocks/leaderboard.tsx',
@@ -848,6 +850,7 @@ export const components: Registry['items'] = [
     description:
       'Primitives for retention: rates per cohort, a size-weighted average curve, where the curve levels off, the growth accounting quick ratio, a shaded cohort table with a hover tooltip, a bar and a change in percentage points.',
     registryDependencies: [
+      registryUrl('change-amount'),
       registryUrl('chart'),
       registryUrl('heatmap'),
       registryUrl('use-reveal'),
@@ -1012,6 +1015,19 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/brand-logos.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'change-amount',
+    type: 'registry:component',
+    title: 'Change Amount',
+    description:
+      'A change written as an up or down arrow and its amount, with the direction read out to screen readers.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/change-amount.tsx',
         type: 'registry:component',
       },
     ],

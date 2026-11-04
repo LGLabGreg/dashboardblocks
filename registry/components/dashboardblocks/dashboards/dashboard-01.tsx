@@ -33,6 +33,8 @@ import {
 } from '@/registry/lib/dashboardblocks/format'
 import { useEffect, useState } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Dashboard1Props extends BlockStateProps {
   empty?: boolean
   title: string
@@ -306,22 +308,19 @@ const Dashboard1 = (props: Dashboard1Props) => {
       state={status ?? (empty ? 'empty' : undefined)}
     >
       <div className='@container flex w-full flex-col gap-8'>
-        <header className='flex flex-col gap-3'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-wrap items-start justify-between gap-3'>
-              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <div className='flex items-center gap-3'>
-                <CompareToggle
-                  checked={query.compare}
-                  onCheckedChange={(compare) => update({ compare })}
-                />
-                <ExportMenu
-                  disabled={status !== undefined || empty}
-                  onExport={() => {}}
-                />
-              </div>
+        <header className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-start justify-between gap-3'>
+            <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+            <div className='flex items-center gap-3'>
+              <CompareToggle
+                checked={query.compare}
+                onCheckedChange={(compare) => update({ compare })}
+              />
+              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
             </div>
-            <p className='text-muted-foreground leading-relaxed'>
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <p className='text-muted-foreground min-w-0 leading-relaxed'>
               Showing{' '}
               <DateRangePicker
                 onValueChange={(preset) => update({ preset })}
@@ -336,39 +335,39 @@ const Dashboard1 = (props: Dashboard1Props) => {
                 .
               </span>
             </p>
-          </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            {query.region && (
-              <FilterChip
-                field='Region'
+            <div className='flex flex-wrap items-center gap-2'>
+              {query.region && (
+                <FilterChip
+                  field='Region'
+                  value={query.region}
+                  onRemove={() => update({ region: null })}
+                />
+              )}
+              <FilterMenu
+                allLabel='All regions'
+                label='Region'
+                onValueChange={(region) => update({ region })}
+                options={REGIONS.map((item) => item.name)}
                 value={query.region}
-                onRemove={() => update({ region: null })}
-              />
-            )}
-            <FilterMenu
-              allLabel='All regions'
-              label='Region'
-              onValueChange={(region) => update({ region })}
-              options={REGIONS.map((item) => item.name)}
-              value={query.region}
-            >
-              <IconPlaceholder
-                lucide='MapPinIcon'
-                tabler='IconMapPin'
-                hugeicons='Location01Icon'
-                phosphor='MapPinIcon'
-                remixicon='RiMapPinLine'
-              />
-              {query.region ? 'Change region' : 'Filter by region'}
-            </FilterMenu>
+              >
+                <IconPlaceholder
+                  lucide='MapPinIcon'
+                  tabler='IconMapPin'
+                  hugeicons='Location01Icon'
+                  phosphor='MapPinIcon'
+                  remixicon='RiMapPinLine'
+                />
+                {query.region ? 'Change region' : 'Filter by region'}
+              </FilterMenu>
+            </div>
           </div>
         </header>
         <BlockBusy
           busy={busy}
           label='Updating the dashboard'
-          className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'
+          className='grid gap-4 @4xl:grid-cols-3'
         >
-          <div className='@4xl:col-span-3'>
+          <div className='grid @4xl:col-span-3'>
             <StatGroup2
               errorMessage={errorMessage}
               status={status}
@@ -382,7 +381,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
               title='Shoppers and orders'
             />
           </div>
-          <div className='@4xl:col-span-2'>
+          <div className='grid @4xl:col-span-2'>
             <ChartPanel1
               errorMessage={errorMessage}
               status={status}
@@ -407,13 +406,17 @@ const Dashboard1 = (props: Dashboard1Props) => {
             title={`${data.month.name} revenue`}
             total={data.month.total}
           />
-          <div className='@4xl:col-span-2'>
-            <DataTable2
-              errorMessage={errorMessage}
-              status={status}
-              rows={empty ? [] : data.products}
-              title='Revenue by product'
-            />
+          <div className='grid @4xl:col-span-2'>
+            <Card>
+              <CardContent>
+                <DataTable2
+                  errorMessage={errorMessage}
+                  status={status}
+                  rows={empty ? [] : data.products}
+                  title='Revenue by product'
+                />
+              </CardContent>
+            </Card>
           </div>
           <Funnel1
             errorMessage={errorMessage}
@@ -422,7 +425,7 @@ const Dashboard1 = (props: Dashboard1Props) => {
             stages={empty ? [] : data.funnel}
             title='Checkout funnel'
           />
-          <div className='@4xl:col-span-2'>
+          <div className='grid @4xl:col-span-2'>
             <Inventory1
               errorMessage={errorMessage}
               status={status}

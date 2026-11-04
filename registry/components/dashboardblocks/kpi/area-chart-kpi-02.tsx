@@ -19,6 +19,8 @@ import {
   getKPIFormatter,
 } from '@/registry/components/dashboardblocks/kpi'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface DailyValue {
   label: string
   value: number
@@ -71,56 +73,59 @@ const AreaChartKPI2 = (props: AreaChartKPI2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, data)}>
-      <KPI className='relative overflow-hidden'>
-        <KPIContent className='gap-1 pb-20'>
-          <KPITitle className='relative z-10'>{title}</KPITitle>
-          <KPIValue
-            className='relative z-10 text-5xl'
-            value={total}
-            format={format}
-            animated
-          />
-          <KPIChange
-            className='relative z-10'
-            comparison={comparison}
-            format={format}
-            previous={previous}
-            value={total}
-          />
-          <BlockReady className='relative z-10 text-xs'>
-            {peak && (
-              <p className='text-muted-foreground relative z-10 text-xs'>
-                Busiest on {peak.label}, at{' '}
-                <span className='text-foreground font-medium tabular-nums'>
-                  {formatter(peak.value)}
-                </span>
-                .
-              </p>
-            )}
-          </BlockReady>
-        </KPIContent>
-        <KPIChart
-          className='pointer-events-none absolute inset-x-0 bottom-0'
-          label={describeSeries(`${title} by day`, data, format)}
-        >
-          <TinyAreaChart
-            accessibilityLayer={false}
-            areas={[
-              {
-                dataKey: 'value',
-                fill: 'var(--color-chart-2)',
-                stroke: 'color-mix(in oklab, var(--color-chart-2) 60%, transparent)',
-                strokeWidth: 1.5,
-              },
-            ]}
-            data={data}
-            formatter={formatter}
-            height={height}
-            markLast='value'
-            scale='data'
-          />
-        </KPIChart>
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI className='relative overflow-hidden'>
+            <KPIContent className='gap-1 pb-20'>
+              <KPITitle className='relative z-10'>{title}</KPITitle>
+              <KPIValue
+                className='relative z-10 text-5xl'
+                value={total}
+                format={format}
+                animated
+              />
+              <KPIChange
+                className='relative z-10'
+                comparison={comparison}
+                previous={previous}
+                value={total}
+              />
+              <BlockReady className='relative z-10 text-xs'>
+                {peak && (
+                  <p className='text-muted-foreground relative z-10 text-xs'>
+                    Busiest on {peak.label}, at{' '}
+                    <span className='text-foreground font-medium tabular-nums'>
+                      {formatter(peak.value)}
+                    </span>
+                    .
+                  </p>
+                )}
+              </BlockReady>
+            </KPIContent>
+            <KPIChart
+              className='pointer-events-none absolute inset-x-0 bottom-0'
+              label={describeSeries(`${title} by day`, data, format)}
+            >
+              <TinyAreaChart
+                accessibilityLayer={false}
+                areas={[
+                  {
+                    dataKey: 'value',
+                    fill: 'var(--color-chart-2)',
+                    stroke: 'color-mix(in oklab, var(--color-chart-2) 60%, transparent)',
+                    strokeWidth: 1.5,
+                  },
+                ]}
+                data={data}
+                formatter={formatter}
+                height={height}
+                markLast='value'
+                scale='data'
+              />
+            </KPIChart>
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

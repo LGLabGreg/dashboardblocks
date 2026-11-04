@@ -16,6 +16,7 @@ import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface Member extends Person {
   lastActive?: Date
@@ -108,61 +109,67 @@ const Team1 = (props: Team1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-3'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            {description ? (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            ) : (
-              <BlockReady className='text-sm'>
-                <p className='text-muted-foreground text-sm'>{summarize(members)}</p>
-              </BlockReady>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-3'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                {description ? (
+                  <p className='text-muted-foreground text-sm'>{description}</p>
+                ) : (
+                  <BlockReady className='text-sm'>
+                    <p className='text-muted-foreground text-sm'>{summarize(members)}</p>
+                  </BlockReady>
+                )}
+              </div>
+              <Button variant='outline' size='sm' onClick={onInvite}>
+                <IconPlaceholder
+                  lucide='UserPlusIcon'
+                  tabler='IconUserPlus'
+                  hugeicons='UserAdd01Icon'
+                  phosphor='UserPlusIcon'
+                  remixicon='RiUserAddLine'
+                  data-icon='inline-start'
+                />
+                Invite
+              </Button>
+            </header>
+            <BlockStateRows className='border-t' rows={members.length || 5} />
+            {!state && (
+              <ul className='flex flex-col divide-y border-t'>
+                {members.map((member) => {
+                  const presence = member.presence ?? 'offline'
+                  return (
+                    <li key={member.id} className='flex items-center gap-3 py-2.5'>
+                      <PersonAvatar person={member} showPresence />
+                      <div className='flex min-w-0 flex-1 flex-col'>
+                        <span className='truncate text-sm font-medium'>
+                          {member.name}
+                        </span>
+                        <span className='text-muted-foreground truncate text-xs'>
+                          {member.role}
+                        </span>
+                      </div>
+                      <span className='flex shrink-0 flex-col items-end text-xs'>
+                        <PresenceLabel presence={presence} className='text-xs' />
+                        {presence !== 'online' && member.lastActive && (
+                          <time
+                            className='text-muted-foreground tabular-nums'
+                            dateTime={member.lastActive.toISOString()}
+                          >
+                            {formatRelativeTime(member.lastActive, now)}
+                          </time>
+                        )}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
             )}
-          </div>
-          <Button variant='outline' size='sm' onClick={onInvite}>
-            <IconPlaceholder
-              lucide='UserPlusIcon'
-              tabler='IconUserPlus'
-              hugeicons='UserAdd01Icon'
-              phosphor='UserPlusIcon'
-              remixicon='RiUserAddLine'
-              data-icon='inline-start'
-            />
-            Invite
-          </Button>
-        </header>
-        <BlockStateRows className='border-t' rows={members.length || 5} />
-        {!state && (
-          <ul className='flex flex-col divide-y border-t'>
-            {members.map((member) => {
-              const presence = member.presence ?? 'offline'
-              return (
-                <li key={member.id} className='flex items-center gap-3 py-2.5'>
-                  <PersonAvatar person={member} showPresence />
-                  <div className='flex min-w-0 flex-1 flex-col'>
-                    <span className='truncate text-sm font-medium'>{member.name}</span>
-                    <span className='text-muted-foreground truncate text-xs'>
-                      {member.role}
-                    </span>
-                  </div>
-                  <span className='flex shrink-0 flex-col items-end text-xs'>
-                    <PresenceLabel presence={presence} className='text-xs' />
-                    {presence !== 'online' && member.lastActive && (
-                      <time
-                        className='text-muted-foreground tabular-nums'
-                        dateTime={member.lastActive.toISOString()}
-                      >
-                        {formatRelativeTime(member.lastActive, now)}
-                      </time>
-                    )}
-                  </span>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </section>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

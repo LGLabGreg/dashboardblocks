@@ -300,13 +300,13 @@ const Dashboard3 = (props: Dashboard3Props) => {
       state={status ?? (empty ? 'empty' : undefined)}
     >
       <div className='@container flex w-full flex-col gap-8'>
-        <header className='flex flex-col gap-3'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-wrap items-start justify-between gap-3'>
-              <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
-              <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
-            </div>
-            <p className='text-muted-foreground leading-relaxed'>
+        <header className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-start justify-between gap-3'>
+            <h1 className='min-w-0 text-2xl font-semibold tracking-tight'>{title}</h1>
+            <ExportMenu disabled={status !== undefined || empty} onExport={() => {}} />
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-x-4 gap-y-2'>
+            <p className='text-muted-foreground min-w-0 leading-relaxed'>
               Showing{' '}
               <DateRangePicker
                 onValueChange={(preset) => update({ preset })}
@@ -319,35 +319,39 @@ const Dashboard3 = (props: Dashboard3Props) => {
                 {formatDateRange(getPreviousRange(range))}.
               </span>
             </p>
-          </div>
-          <div className='flex flex-wrap items-center gap-2'>
-            {query.device && (
-              <FilterChip
-                field='Device'
+            <div className='flex flex-wrap items-center gap-2'>
+              {query.device && (
+                <FilterChip
+                  field='Device'
+                  value={query.device}
+                  onRemove={() => update({ device: null })}
+                />
+              )}
+              <FilterMenu
+                allLabel='All devices'
+                label='Device'
+                onValueChange={(device) => update({ device })}
+                options={DEVICES.map((item) => item.name)}
                 value={query.device}
-                onRemove={() => update({ device: null })}
-              />
-            )}
-            <FilterMenu
-              allLabel='All devices'
-              label='Device'
-              onValueChange={(device) => update({ device })}
-              options={DEVICES.map((item) => item.name)}
-              value={query.device}
-            >
-              <IconPlaceholder
-                lucide='SmartphoneIcon'
-                tabler='IconDeviceMobile'
-                hugeicons='SmartPhone01Icon'
-                phosphor='DeviceMobileIcon'
-                remixicon='RiSmartphoneLine'
-              />
-              {query.device ? 'Change device' : 'Filter by device'}
-            </FilterMenu>
+              >
+                <IconPlaceholder
+                  lucide='SmartphoneIcon'
+                  tabler='IconDeviceMobile'
+                  hugeicons='SmartPhone01Icon'
+                  phosphor='DeviceMobileIcon'
+                  remixicon='RiSmartphoneLine'
+                />
+                {query.device ? 'Change device' : 'Filter by device'}
+              </FilterMenu>
+            </div>
           </div>
         </header>
-        <div className='grid gap-x-8 gap-y-12 @4xl:grid-cols-3'>
-          <BlockBusy busy={busy} label='Updating traffic' className='@4xl:col-span-2'>
+        <div className='grid gap-4 @4xl:grid-cols-3'>
+          <BlockBusy
+            busy={busy}
+            label='Updating traffic'
+            className='grid @4xl:col-span-2'
+          >
             <ChartPanel2
               errorMessage={errorMessage}
               status={status}
@@ -382,15 +386,14 @@ const Dashboard3 = (props: Dashboard3Props) => {
                     { path: '/changelog', users: 18 },
                   ]
             }
-            simulate
             title='Right now'
           />
           <BlockBusy
             busy={busy}
             label='Updating sources, pages and locations'
-            className='grid gap-x-8 gap-y-12 @4xl:col-span-3 @4xl:grid-cols-3'
+            className='grid gap-4 @4xl:col-span-3 @4xl:grid-cols-3'
           >
-            <div className='@4xl:col-span-3'>
+            <div className='grid @4xl:col-span-3'>
               <Flow1
                 errorMessage={errorMessage}
                 status={status}

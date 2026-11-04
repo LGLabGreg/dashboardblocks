@@ -16,6 +16,8 @@ import {
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { formatRelativeTime } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface Environment {
   deployedAt: Date
   deployedBy: string
@@ -91,91 +93,97 @@ const Deployments2 = (props: Deployments2Props) => {
   const state = getBlockState(status, environments)
 
   return (
-    <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <BlockReady className='text-sm'>
-            <p className='text-muted-foreground text-sm'>{description}</p>
-          </BlockReady>
-        </header>
-        {state === 'loading' && (
-          <div className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
-            <span className='sr-only'>Loading</span>
-            {Array.from({ length: 3 }, (_, index) => (
-              <div
-                key={index}
-                aria-hidden
-                className='flex min-w-0 flex-col gap-1 border-t pt-3'
-              >
-                <span className='text-sm'>
-                  <SkeletonText className='w-24' />
-                </span>
-                <span className='text-2xl'>
-                  <SkeletonText className='w-28' />
-                </span>
-                <span className='text-xs'>
-                  <SkeletonText className='w-32' />
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-        {(state === 'empty' || state === 'error') && (
-          <div className='border-t pt-3'>
-            <BlockStateText
-              className='text-2xl font-light tracking-tight'
-              variant='short'
-            />
-          </div>
-        )}
-        {!state && (
-          <ol className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
-            {environments.map((environment, index) => {
-              const next = environments[index + 1]
-              const waiting = ahead[index] ?? 0
-              return (
-                <li
-                  key={environment.id}
-                  className='flex min-w-0 flex-col gap-1 border-t pt-3'
-                >
-                  <div className='flex items-baseline justify-between gap-2'>
-                    <span className='text-muted-foreground text-sm'>
-                      {environment.name}
+    <Card>
+      <CardContent>
+        <BlockStateProvider errorMessage={errorMessage} state={state}>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <BlockReady className='text-sm'>
+                <p className='text-muted-foreground text-sm'>{description}</p>
+              </BlockReady>
+            </header>
+            {state === 'loading' && (
+              <div className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
+                <span className='sr-only'>Loading</span>
+                {Array.from({ length: 3 }, (_, index) => (
+                  <div
+                    key={index}
+                    aria-hidden
+                    className='flex min-w-0 flex-col gap-1 border-t pt-3'
+                  >
+                    <span className='text-sm'>
+                      <SkeletonText className='w-24' />
                     </span>
-                    <DeployStatusLabel status={environment.status} />
+                    <span className='text-2xl'>
+                      <SkeletonText className='w-28' />
+                    </span>
+                    <span className='text-xs'>
+                      <SkeletonText className='w-32' />
+                    </span>
                   </div>
-                  <span className='truncate text-2xl font-light tracking-tight tabular-nums'>
-                    {environment.version}
-                  </span>
-                  <Details className='text-muted-foreground text-xs'>
-                    <span className='font-mono'>{shortSha(environment.sha)}</span>
-                    {environment.deployedBy}
-                    <time dateTime={environment.deployedAt.toISOString()}>
-                      {formatRelativeTime(environment.deployedAt, now, { style: 'long' })}
-                    </time>
-                  </Details>
-                  {next && (
-                    <p className='text-muted-foreground mt-2 text-sm'>
-                      <span
-                        className={
-                          waiting > 0
-                            ? 'text-foreground font-medium tabular-nums'
-                            : 'tabular-nums'
-                        }
-                      >
-                        {waiting} {waiting === 1 ? 'commit' : 'commits'}
-                      </span>{' '}
-                      ahead of {next.name}
-                    </p>
-                  )}
-                </li>
-              )
-            })}
-          </ol>
-        )}
-      </section>
-    </BlockStateProvider>
+                ))}
+              </div>
+            )}
+            {(state === 'empty' || state === 'error') && (
+              <div className='border-t pt-3'>
+                <BlockStateText
+                  className='text-2xl font-light tracking-tight'
+                  variant='short'
+                />
+              </div>
+            )}
+            {!state && (
+              <ol className='grid gap-x-6 gap-y-5 @xl:auto-cols-fr @xl:grid-flow-col'>
+                {environments.map((environment, index) => {
+                  const next = environments[index + 1]
+                  const waiting = ahead[index] ?? 0
+                  return (
+                    <li
+                      key={environment.id}
+                      className='flex min-w-0 flex-col gap-1 border-t pt-3'
+                    >
+                      <div className='flex items-baseline justify-between gap-2'>
+                        <span className='text-muted-foreground text-sm'>
+                          {environment.name}
+                        </span>
+                        <DeployStatusLabel status={environment.status} />
+                      </div>
+                      <span className='truncate text-2xl font-light tracking-tight tabular-nums'>
+                        {environment.version}
+                      </span>
+                      <Details className='text-muted-foreground text-xs'>
+                        <span className='font-mono'>{shortSha(environment.sha)}</span>
+                        {environment.deployedBy}
+                        <time dateTime={environment.deployedAt.toISOString()}>
+                          {formatRelativeTime(environment.deployedAt, now, {
+                            style: 'long',
+                          })}
+                        </time>
+                      </Details>
+                      {next && (
+                        <p className='text-muted-foreground mt-2 text-sm'>
+                          <span
+                            className={
+                              waiting > 0
+                                ? 'text-foreground font-medium tabular-nums'
+                                : 'tabular-nums'
+                            }
+                          >
+                            {waiting} {waiting === 1 ? 'commit' : 'commits'}
+                          </span>{' '}
+                          ahead of {next.name}
+                        </p>
+                      )}
+                    </li>
+                  )
+                })}
+              </ol>
+            )}
+          </section>
+        </BlockStateProvider>
+      </CardContent>
+    </Card>
   )
 }
 

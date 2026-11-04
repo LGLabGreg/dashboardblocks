@@ -10,6 +10,8 @@ import {
 import { FlowPathSteps } from '@/registry/components/dashboardblocks/flow'
 import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface FlowPath {
   converted: number
   count: number
@@ -68,62 +70,69 @@ const Flow4 = (props: Flow4Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, paths)}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col border-t'>
-          <div className='text-muted-foreground flex justify-between gap-4 pt-3 text-xs'>
-            <span>Path</span>
-            <span>{goal}</span>
-          </div>
-          <BlockStateRows rows={6} />
-          <ol className='flex flex-col divide-y empty:hidden'>
-            {!status &&
-              paths.map((path, index) => {
-                const rate = path.converted / (path.count || 1)
-                return (
-                  <li key={path.steps.join('>')} className='flex flex-col gap-2 py-2.5'>
-                    <div className='flex items-start justify-between gap-4'>
-                      <FlowPathSteps steps={path.steps.map((label) => ({ label }))} />
-                      <span className='text-sm font-medium tabular-nums'>
-                        {formatPercent(rate)}
-                        {index === bestIndex && (
-                          <span className='sr-only'>, the highest</span>
-                        )}
-                      </span>
-                    </div>
-                    <div className='flex items-center gap-3'>
-                      <span
-                        aria-hidden
-                        className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col border-t'>
+              <div className='text-muted-foreground flex justify-between gap-4 pt-3 text-xs'>
+                <span>Path</span>
+                <span>{goal}</span>
+              </div>
+              <BlockStateRows rows={6} />
+              <ol className='flex flex-col divide-y empty:hidden'>
+                {!status &&
+                  paths.map((path, index) => {
+                    const rate = path.converted / (path.count || 1)
+                    return (
+                      <li
+                        key={path.steps.join('>')}
+                        className='flex flex-col gap-2 py-2.5'
                       >
-                        <span
-                          className='bg-chart-2 block h-full rounded-full'
-                          style={{ width: `${(path.count / widest) * 100}%` }}
-                        />
-                      </span>
-                      <span className='text-muted-foreground w-28 shrink-0 text-right text-xs tabular-nums'>
-                        {formatNumber(path.count)} {unit}
-                      </span>
-                    </div>
-                  </li>
-                )
-              })}
-          </ol>
-        </div>
-        <BlockReady className='border-t pt-3 text-sm'>
-          <p className='text-muted-foreground border-t pt-3 text-sm'>
-            {`These ${paths.length} paths cover ${formatPercent(listed / (total || 1), { maximumFractionDigits: 0 })} of ${formatNumber(total)} ${unit}. `}
-            {paths[bestIndex] && (
-              <span className='text-foreground'>
-                {`${paths[bestIndex].steps.join(' → ')} converts best.`}
-              </span>
-            )}
-          </p>
-        </BlockReady>
-      </section>
+                        <div className='flex items-start justify-between gap-4'>
+                          <FlowPathSteps steps={path.steps.map((label) => ({ label }))} />
+                          <span className='text-sm font-medium tabular-nums'>
+                            {formatPercent(rate)}
+                            {index === bestIndex && (
+                              <span className='sr-only'>, the highest</span>
+                            )}
+                          </span>
+                        </div>
+                        <div className='flex items-center gap-3'>
+                          <span
+                            aria-hidden
+                            className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'
+                          >
+                            <span
+                              className='bg-chart-2 block h-full rounded-full'
+                              style={{ width: `${(path.count / widest) * 100}%` }}
+                            />
+                          </span>
+                          <span className='text-muted-foreground w-28 shrink-0 text-right text-xs tabular-nums'>
+                            {formatNumber(path.count)} {unit}
+                          </span>
+                        </div>
+                      </li>
+                    )
+                  })}
+              </ol>
+            </div>
+            <BlockReady className='border-t pt-3 text-sm'>
+              <p className='text-muted-foreground border-t pt-3 text-sm'>
+                {`These ${paths.length} paths cover ${formatPercent(listed / (total || 1), { maximumFractionDigits: 0 })} of ${formatNumber(total)} ${unit}. `}
+                {paths[bestIndex] && (
+                  <span className='text-foreground'>
+                    {`${paths[bestIndex].steps.join(' → ')} converts best.`}
+                  </span>
+                )}
+              </p>
+            </BlockReady>
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

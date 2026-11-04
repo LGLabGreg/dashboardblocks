@@ -21,6 +21,8 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 type HistoryKind =
   | 'created'
   | 'assigned'
@@ -226,76 +228,80 @@ const ActivityFeed2 = (props: ActivityFeed2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex items-start justify-between gap-3'>
-          <div className='flex min-w-0 flex-col gap-0.5'>
-            <h2 className='font-semibold tracking-tight'>{title}</h2>
-            <p className='text-muted-foreground text-sm'>
-              {description}. <BlockReady>{summarize(events)}</BlockReady>
-            </p>
-          </div>
-          <BlockReady className='w-20 text-sm'>
-            <StatusLabel tone={statusTones[recordStatus.tone ?? 'neutral']}>
-              {recordStatus.label}
-            </StatusLabel>
-          </BlockReady>
-        </header>
-        {state && (
-          <div className='border-t'>
-            <BlockStateRows rows={5} />
-          </div>
-        )}
-        {!state && (
-          <ActivityFeed aria-label={`History of ${title}`} className='border-t pt-4'>
-            {events.map((event) => {
-              const config = kindConfig[event.kind]
-              return (
-                <ActivityFeedItem key={event.id} className='pb-5 last:pb-0' connector>
-                  <ActivityIcon
-                    className='ring-background'
-                    icon={config.icon}
-                    tone={config.tone}
-                  />
-                  <div className='flex min-w-0 flex-1 flex-col gap-2 pt-1.5'>
-                    <div className='flex items-start justify-between gap-3'>
-                      <p className='text-sm'>
-                        <span className='font-medium'>{event.actor}</span>{' '}
-                        <span className='text-muted-foreground'>{event.action}</span>
-                        {event.change && (
-                          <>
-                            <span className='sr-only'> from</span>{' '}
-                            <span className='text-muted-foreground line-through decoration-1'>
-                              {event.change.from}
-                            </span>{' '}
-                            <span className='whitespace-nowrap'>
-                              <span aria-hidden className='text-muted-foreground'>
-                                →
-                              </span>
-                              <span className='sr-only'>to</span>{' '}
-                              <span className='font-medium'>{event.change.to}</span>
-                            </span>
-                          </>
-                        )}
-                      </p>
-                      <ActivityTime
-                        className='mt-0.5'
-                        date={event.at}
-                        now={now}
-                        timeZone={timeZone}
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex items-start justify-between gap-3'>
+              <div className='flex min-w-0 flex-col gap-0.5'>
+                <h2 className='font-semibold tracking-tight'>{title}</h2>
+                <p className='text-muted-foreground text-sm'>
+                  {description}. <BlockReady>{summarize(events)}</BlockReady>
+                </p>
+              </div>
+              <BlockReady className='w-20 text-sm'>
+                <StatusLabel tone={statusTones[recordStatus.tone ?? 'neutral']}>
+                  {recordStatus.label}
+                </StatusLabel>
+              </BlockReady>
+            </header>
+            {state && (
+              <div className='border-t'>
+                <BlockStateRows rows={5} />
+              </div>
+            )}
+            {!state && (
+              <ActivityFeed aria-label={`History of ${title}`} className='border-t pt-4'>
+                {events.map((event) => {
+                  const config = kindConfig[event.kind]
+                  return (
+                    <ActivityFeedItem key={event.id} className='pb-5 last:pb-0' connector>
+                      <ActivityIcon
+                        className='ring-background'
+                        icon={config.icon}
+                        tone={config.tone}
                       />
-                    </div>
-                    {event.comment && (
-                      <blockquote className='border-l-2 pl-3 text-sm'>
-                        {event.comment}
-                      </blockquote>
-                    )}
-                  </div>
-                </ActivityFeedItem>
-              )
-            })}
-          </ActivityFeed>
-        )}
-      </section>
+                      <div className='flex min-w-0 flex-1 flex-col gap-2 pt-1.5'>
+                        <div className='flex items-start justify-between gap-3'>
+                          <p className='text-sm'>
+                            <span className='font-medium'>{event.actor}</span>{' '}
+                            <span className='text-muted-foreground'>{event.action}</span>
+                            {event.change && (
+                              <>
+                                <span className='sr-only'> from</span>{' '}
+                                <span className='text-muted-foreground line-through decoration-1'>
+                                  {event.change.from}
+                                </span>{' '}
+                                <span className='whitespace-nowrap'>
+                                  <span aria-hidden className='text-muted-foreground'>
+                                    →
+                                  </span>
+                                  <span className='sr-only'>to</span>{' '}
+                                  <span className='font-medium'>{event.change.to}</span>
+                                </span>
+                              </>
+                            )}
+                          </p>
+                          <ActivityTime
+                            className='mt-0.5'
+                            date={event.at}
+                            now={now}
+                            timeZone={timeZone}
+                          />
+                        </div>
+                        {event.comment && (
+                          <blockquote className='border-l-2 pl-3 text-sm'>
+                            {event.comment}
+                          </blockquote>
+                        )}
+                      </div>
+                    </ActivityFeedItem>
+                  )
+                })}
+              </ActivityFeed>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

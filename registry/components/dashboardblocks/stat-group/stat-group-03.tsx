@@ -50,6 +50,7 @@ import {
   YAxis,
 } from 'recharts'
 
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface DailyValue {
@@ -162,149 +163,168 @@ const StatGroup3 = (props: StatGroup3Props) => {
   if (state) {
     return (
       <BlockStateProvider errorMessage={errorMessage} state={state}>
-        <section className='@container flex flex-col gap-4'>
-          {header}
-          <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @2xl:grid-cols-4'>
-            {getStatPlaceholders(placeholders).map((metric) => (
-              <Stat key={metric.key}>
-                <StatLabel />
-                <StatValue className='text-3xl @4xl:text-4xl' />
-                <StatChange className='text-xs' metric={metric} variant='short' />
-              </Stat>
-            ))}
-          </StatGroup>
-          {state === 'loading' && <ChartPlaceholder className='mt-1' height={224} />}
-        </section>
+        <Card>
+          <CardContent>
+            <section className='@container flex flex-col gap-4'>
+              {header}
+              <StatGroup className='grid-cols-2 gap-x-6 gap-y-3 @2xl:grid-cols-4'>
+                {getStatPlaceholders(placeholders).map((metric) => (
+                  <Stat key={metric.key}>
+                    <StatLabel />
+                    <StatValue className='text-3xl @4xl:text-4xl' />
+                    <StatChange className='text-xs' metric={metric} variant='short' />
+                  </Stat>
+                ))}
+              </StatGroup>
+              {state === 'loading' && <ChartPlaceholder className='mt-1' height={224} />}
+            </section>
+          </CardContent>
+        </Card>
       </BlockStateProvider>
     )
   }
 
   return (
-    <section className='@container flex flex-col gap-4'>
-      {header}
-      <Tabs
-        value={active ?? metrics[0]?.key}
-        onValueChange={(value) => setActive(String(value))}
-        className='gap-0'
-      >
-        <TabsList
-          aria-label={`${title} metrics`}
-          variant='line'
-          className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @2xl:grid-cols-4'
-        >
-          {metrics.map((metric) => (
-            <TabsTrigger
-              key={metric.key}
-              value={metric.key}
-              className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
+    <Card>
+      <CardContent>
+        <section className='@container flex flex-col gap-4'>
+          {header}
+          <Tabs
+            value={active ?? metrics[0]?.key}
+            onValueChange={(value) => setActive(String(value))}
+            className='gap-0'
+          >
+            <TabsList
+              aria-label={`${title} metrics`}
+              variant='line'
+              className='grid h-auto w-full grid-cols-2 items-stretch gap-x-6 gap-y-3 rounded-none border-t p-0 group-data-horizontal/tabs:h-auto @2xl:grid-cols-4'
             >
-              <span className='text-muted-foreground text-sm'>{metric.label}</span>
-              <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @4xl:text-4xl'>
-                {formatStatValue(metric)}
-              </span>
-              <StatChangeContent
-                className='text-xs'
-                comparison={previousLabel}
-                metric={metric}
-                variant='short'
-              />
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {metrics.map((metric) => {
-          const format = metric.formatter ?? ((value: number) => formatNumber(value))
-          return (
-            <TabsContent
-              key={metric.key}
-              value={metric.key}
-              className='mt-1 flex flex-col gap-3 border-t pt-4'
-            >
-              <ChartPanelLegend
-                items={[
-                  { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
-                  {
-                    color: PREVIOUS_COLOR,
-                    label: previousLabel,
-                    shape: 'line',
-                  },
-                ]}
-              />
-              <ChartPanelFigure className='h-56'>
-                <ResponsiveContainer width='100%' height='100%'>
-                  <ComposedChart
-                    aria-label={`${metric.label} by day, ${currentLabel} against ${previousLabel}`}
-                    data={metric.daily}
-                    margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
-                        <stop offset='0%' stopColor={CURRENT_COLOR} stopOpacity={0.3} />
-                        <stop offset='100%' stopColor={CURRENT_COLOR} stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid {...chartGridProps} />
-                    <XAxis
-                      {...chartAxisProps}
-                      dataKey='label'
-                      interval='preserveStartEnd'
-                      minTickGap={40}
-                    />
-                    <YAxis
-                      {...chartAxisProps}
-                      domain={['auto', 'auto']}
-                      tickFormatter={(value: number) =>
-                        metric.changeType === 'points'
-                          ? format(value)
-                          : formatCompact(value)
-                      }
-                      width={chartValueAxisWidth}
-                    />
-                    <Tooltip
-                      content={(tooltipProps) => (
-                        <ChartTooltipContent {...tooltipProps} valueFormatter={format} />
-                      )}
-                      cursor={chartLineCursor}
-                      itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
-                    />
-                    <Line
-                      activeDot={chartActiveDot}
-                      dataKey='previous'
-                      dot={false}
-                      name={previousLabel}
-                      stroke={PREVIOUS_COLOR}
-                      strokeDasharray='3 3'
-                      strokeWidth={1.5}
-                      type='monotone'
-                    />
-                    <Area
-                      activeDot={chartActiveDot}
-                      dataKey='current'
-                      dot={chartLastDot(metric.daily.length, CURRENT_COLOR)}
-                      fill={`url(#${gradient})`}
-                      name={currentLabel}
-                      stroke={CURRENT_COLOR}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      type='monotone'
-                    />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </ChartPanelFigure>
-              <ChartPanelTable
-                caption={`${metric.label} by day, ${currentLabel} vs ${previousLabel}`}
-                columns={[
-                  { key: 'label', label: 'Day' },
-                  { format, key: 'current', label: currentLabel },
-                  { format, key: 'previous', label: previousLabel },
-                ]}
-                rows={metric.daily}
-              />
-            </TabsContent>
-          )
-        })}
-      </Tabs>
-    </section>
+              {metrics.map((metric) => (
+                <TabsTrigger
+                  key={metric.key}
+                  value={metric.key}
+                  className='h-auto min-w-0 flex-col items-start justify-start gap-1 rounded-none px-0 pt-3 pb-3 text-left font-normal whitespace-normal'
+                >
+                  <span className='text-muted-foreground text-sm'>{metric.label}</span>
+                  <span className='text-3xl font-light tracking-tight whitespace-nowrap tabular-nums @4xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </span>
+                  <StatChangeContent
+                    className='text-xs'
+                    comparison={previousLabel}
+                    metric={metric}
+                    variant='short'
+                  />
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {metrics.map((metric) => {
+              const format = metric.formatter ?? ((value: number) => formatNumber(value))
+              return (
+                <TabsContent
+                  key={metric.key}
+                  value={metric.key}
+                  className='mt-1 flex flex-col gap-3 border-t pt-4'
+                >
+                  <ChartPanelLegend
+                    items={[
+                      { color: CURRENT_COLOR, label: currentLabel, shape: 'line' },
+                      {
+                        color: PREVIOUS_COLOR,
+                        label: previousLabel,
+                        shape: 'line',
+                      },
+                    ]}
+                  />
+                  <ChartPanelFigure className='h-56'>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <ComposedChart
+                        aria-label={`${metric.label} by day, ${currentLabel} against ${previousLabel}`}
+                        data={metric.daily}
+                        margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+                      >
+                        <defs>
+                          <linearGradient id={gradient} x1='0' y1='0' x2='0' y2='1'>
+                            <stop
+                              offset='0%'
+                              stopColor={CURRENT_COLOR}
+                              stopOpacity={0.3}
+                            />
+                            <stop
+                              offset='100%'
+                              stopColor={CURRENT_COLOR}
+                              stopOpacity={0}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid {...chartGridProps} />
+                        <XAxis
+                          {...chartAxisProps}
+                          dataKey='label'
+                          interval='preserveStartEnd'
+                          minTickGap={40}
+                        />
+                        <YAxis
+                          {...chartAxisProps}
+                          domain={['auto', 'auto']}
+                          tickFormatter={(value: number) =>
+                            metric.changeType === 'points'
+                              ? format(value)
+                              : formatCompact(value)
+                          }
+                          width={chartValueAxisWidth}
+                        />
+                        <Tooltip
+                          content={(tooltipProps) => (
+                            <ChartTooltipContent
+                              {...tooltipProps}
+                              valueFormatter={format}
+                            />
+                          )}
+                          cursor={chartLineCursor}
+                          itemSorter={(item) => (item.dataKey === 'current' ? 0 : 1)}
+                        />
+                        <Line
+                          activeDot={chartActiveDot}
+                          dataKey='previous'
+                          dot={false}
+                          name={previousLabel}
+                          stroke={PREVIOUS_COLOR}
+                          strokeDasharray='3 3'
+                          strokeWidth={1.5}
+                          type='monotone'
+                        />
+                        <Area
+                          activeDot={chartActiveDot}
+                          dataKey='current'
+                          dot={chartLastDot(metric.daily.length, CURRENT_COLOR)}
+                          fill={`url(#${gradient})`}
+                          name={currentLabel}
+                          stroke={CURRENT_COLOR}
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          type='monotone'
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </ChartPanelFigure>
+                  <ChartPanelTable
+                    caption={`${metric.label} by day, ${currentLabel} vs ${previousLabel}`}
+                    columns={[
+                      { key: 'label', label: 'Day' },
+                      { format, key: 'current', label: currentLabel },
+                      { format, key: 'previous', label: previousLabel },
+                    ]}
+                    rows={metric.daily}
+                  />
+                </TabsContent>
+              )
+            })}
+          </Tabs>
+        </section>
+      </CardContent>
+    </Card>
   )
 }
 

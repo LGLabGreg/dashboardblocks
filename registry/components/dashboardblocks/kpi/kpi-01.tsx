@@ -13,6 +13,8 @@ import {
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface KPI1Props extends BlockStateProps {
   comparison: string
   format?: KPIFormat
@@ -35,16 +37,15 @@ const KPI1 = (props: KPI1Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={getBlockState(status, value)}>
-      <KPI className='gap-1'>
-        <KPITitle>{title}</KPITitle>
-        <KPIValue value={value} format={format} animated />
-        <KPIChange
-          comparison={comparison}
-          format={format}
-          previous={previous}
-          value={value}
-        />
-      </KPI>
+      <Card>
+        <CardContent>
+          <KPI className='gap-1'>
+            <KPITitle>{title}</KPITitle>
+            <KPIValue value={value} format={format} animated />
+            <KPIChange comparison={comparison} previous={previous} value={value} />
+          </KPI>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

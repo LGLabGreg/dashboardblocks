@@ -117,7 +117,6 @@ function MetricChange({
       changeType={metric.changeType}
       className={cn(variant === 'short' && 'text-xs whitespace-nowrap', className)}
       comparison={comparison}
-      format={getMetricFormatter(metric.format)}
       goodDirection={metric.goodDirection}
       previous={metric.previous}
       value={metric.value}

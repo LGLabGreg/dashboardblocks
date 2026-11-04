@@ -22,6 +22,8 @@ import {
   DataTableRowHead,
 } from '@/registry/components/dashboardblocks/table'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface CompositionCategory {
   color: string
   key: string
@@ -104,76 +106,82 @@ const Breakdown2 = (props: Breakdown2Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <div className='flex flex-col gap-3 border-t pt-4'>
-          {state ? (
-            <BlockStateText className='text-sm' />
-          ) : (
-            highlighted && (
-              <p className='text-muted-foreground text-sm'>
-                <span className='text-foreground font-medium'>{highlighted.label}</span>{' '}
-                leads in {leads} of {rows.length} {groupsLabel}.
-              </p>
-            )
-          )}
-          <BreakdownLegend
-            items={categories.map((category) => ({
-              color: category.color,
-              label: category.label,
-            }))}
-          />
-        </div>
-        {state === 'loading' && <BlockStateRows rows={5} />}
-        {!state && (
-          <DataTable density='compact' caption={`${title}: ${description}`}>
-            <DataTableHeader>
-              <DataTableRow>
-                <DataTableHead>
-                  <span className='sr-only'>Group</span>
-                </DataTableHead>
-                <DataTableHead>
-                  <span className='sr-only'>Share by category</span>
-                </DataTableHead>
-                <DataTableHead align='end'>{highlighted?.label}</DataTableHead>
-              </DataTableRow>
-            </DataTableHeader>
-            <DataTableBody>
-              {rows.map(({ group, share, total }) => (
-                <DataTableRow key={group.label}>
-                  <DataTableRowHead className='w-32 whitespace-nowrap'>
-                    {group.label}
-                  </DataTableRowHead>
-                  <DataTableCell>
-                    <BreakdownBar
-                      className='h-2.5'
-                      segments={categories.map((category) => ({
-                        color: category.color,
-                        label: category.label,
-                        value: group.values[category.key] ?? 0,
-                      }))}
-                    />
-                    <span className='sr-only'>
-                      {categories
-                        .map(
-                          (category) =>
-                            `${category.label} ${formatShare(group.values[category.key] ?? 0, total)}`,
-                        )
-                        .join(', ')}
-                    </span>
-                  </DataTableCell>
-                  <DataTableCell align='end' className='w-16'>
-                    {formatShare(share, 1)}
-                  </DataTableCell>
-                </DataTableRow>
-              ))}
-            </DataTableBody>
-          </DataTable>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <div className='flex flex-col gap-3 border-t pt-4'>
+              {state ? (
+                <BlockStateText className='text-sm' />
+              ) : (
+                highlighted && (
+                  <p className='text-muted-foreground text-sm'>
+                    <span className='text-foreground font-medium'>
+                      {highlighted.label}
+                    </span>{' '}
+                    leads in {leads} of {rows.length} {groupsLabel}.
+                  </p>
+                )
+              )}
+              <BreakdownLegend
+                items={categories.map((category) => ({
+                  color: category.color,
+                  label: category.label,
+                }))}
+              />
+            </div>
+            {state === 'loading' && <BlockStateRows rows={5} />}
+            {!state && (
+              <DataTable density='compact' caption={`${title}: ${description}`}>
+                <DataTableHeader>
+                  <DataTableRow>
+                    <DataTableHead>
+                      <span className='sr-only'>Group</span>
+                    </DataTableHead>
+                    <DataTableHead>
+                      <span className='sr-only'>Share by category</span>
+                    </DataTableHead>
+                    <DataTableHead align='end'>{highlighted?.label}</DataTableHead>
+                  </DataTableRow>
+                </DataTableHeader>
+                <DataTableBody>
+                  {rows.map(({ group, share, total }) => (
+                    <DataTableRow key={group.label}>
+                      <DataTableRowHead className='w-32 whitespace-nowrap'>
+                        {group.label}
+                      </DataTableRowHead>
+                      <DataTableCell>
+                        <BreakdownBar
+                          className='h-2.5'
+                          segments={categories.map((category) => ({
+                            color: category.color,
+                            label: category.label,
+                            value: group.values[category.key] ?? 0,
+                          }))}
+                        />
+                        <span className='sr-only'>
+                          {categories
+                            .map(
+                              (category) =>
+                                `${category.label} ${formatShare(group.values[category.key] ?? 0, total)}`,
+                            )
+                            .join(', ')}
+                        </span>
+                      </DataTableCell>
+                      <DataTableCell align='end' className='w-16'>
+                        {formatShare(share, 1)}
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
+                </DataTableBody>
+              </DataTable>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }

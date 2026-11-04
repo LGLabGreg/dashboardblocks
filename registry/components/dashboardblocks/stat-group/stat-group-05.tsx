@@ -22,6 +22,8 @@ import {
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
 
+import { Card, CardContent } from '@/components/ui/card'
+
 interface StatGroup5Props extends BlockStateProps {
   /** Follows each previous value, such as `the previous 30 days`. */
   comparison: string
@@ -115,39 +117,43 @@ const StatGroup5 = (props: StatGroup5Props) => {
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
-      <section className='@container flex flex-col gap-4'>
-        <header className='flex flex-col gap-0.5'>
-          <h2 className='font-semibold tracking-tight'>{title}</h2>
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        </header>
-        <StatGroup className='grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-4'>
-          {shown.map((metric) => (
-            <Stat key={metric.key}>
-              <StatLabel>{metric.label}</StatLabel>
-              <StatValue className='text-3xl @4xl:text-4xl'>
-                {formatStatValue(metric)}
-              </StatValue>
-              <StatChange comparison={comparison} metric={metric} />
-              <PeriodBars metric={metric} />
-            </Stat>
-          ))}
-        </StatGroup>
-        {state !== 'error' && state !== 'empty' && (
-          <p
-            aria-hidden
-            className='text-muted-foreground flex items-center gap-4 text-xs'
-          >
-            <span className='flex items-center gap-1.5'>
-              <span className='bg-chart-2 h-1.5 w-3 rounded-full' />
-              {currentLabel}
-            </span>
-            <span className='flex items-center gap-1.5'>
-              <span className='bg-muted-foreground/30 h-1.5 w-3 rounded-full' />
-              <span className='first-letter:uppercase'>{comparison}</span>
-            </span>
-          </p>
-        )}
-      </section>
+      <Card>
+        <CardContent>
+          <section className='@container flex flex-col gap-4'>
+            <header className='flex flex-col gap-0.5'>
+              <h2 className='font-semibold tracking-tight'>{title}</h2>
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            </header>
+            <StatGroup className='grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-4'>
+              {shown.map((metric) => (
+                <Stat key={metric.key}>
+                  <StatLabel>{metric.label}</StatLabel>
+                  <StatValue className='text-3xl @4xl:text-4xl'>
+                    {formatStatValue(metric)}
+                  </StatValue>
+                  <StatChange comparison={comparison} metric={metric} />
+                  <PeriodBars metric={metric} />
+                </Stat>
+              ))}
+            </StatGroup>
+            {state !== 'error' && state !== 'empty' && (
+              <p
+                aria-hidden
+                className='text-muted-foreground flex items-center gap-4 text-xs'
+              >
+                <span className='flex items-center gap-1.5'>
+                  <span className='bg-chart-2 h-1.5 w-3 rounded-full' />
+                  {currentLabel}
+                </span>
+                <span className='flex items-center gap-1.5'>
+                  <span className='bg-muted-foreground/30 h-1.5 w-3 rounded-full' />
+                  <span className='first-letter:uppercase'>{comparison}</span>
+                </span>
+              </p>
+            )}
+          </section>
+        </CardContent>
+      </Card>
     </BlockStateProvider>
   )
 }
