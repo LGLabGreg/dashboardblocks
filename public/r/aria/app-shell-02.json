@@ -23,7 +23,7 @@
       "app-shell-01"
     ],
     "component": "AppShell2",
-    "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; defaultCollapsed?: boolean; onCreate?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; secondarySections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
+    "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; defaultCollapsed?: boolean; onCreate?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; secondarySections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
   },
   "type": "registry:component"
 }

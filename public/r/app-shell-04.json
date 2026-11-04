@@ -22,7 +22,7 @@
       "app-shell-01"
     ],
     "component": "AppShell4",
-    "props": "{ children?: ReactNode; description?: string; links: { badge?: ReactNode; href: string; title: string }[]; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; title: string; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
+    "props": "{ children?: ReactNode; description?: string; links: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; notificationCount: number; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; title: string; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[] }"
   },
   "type": "registry:component"
 }

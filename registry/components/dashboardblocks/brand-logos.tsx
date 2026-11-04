@@ -2,6 +2,53 @@ import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/utils'
 
+function BigQueryLogo({ className, ...props }: ComponentProps<'svg'>) {
+  return (
+    <svg viewBox='0 0 24 24' aria-hidden className={cn('size-5', className)} {...props}>
+      <path
+        fill='#669DF6'
+        d='M5.676 10.595h2.052v5.244a5.892 5.892 0 0 1-2.052-2.088v-3.156zm18.179 10.836a.504.504 0 0 1 0 .708l-1.716 1.716a.504.504 0 0 1-.708 0l-4.248-4.248a.206.206 0 0 1-.007-.007c-.02-.02-.028-.045-.043-.066a10.736 10.736 0 0 1-6.334 2.065C4.835 21.599 0 16.764 0 10.799S4.835 0 10.8 0s10.799 4.835 10.799 10.8c0 2.369-.772 4.553-2.066 6.333.025.017.052.028.074.05l4.248 4.248zm-5.028-10.632a8.015 8.015 0 1 0-8.028 8.028h.024a8.016 8.016 0 0 0 8.004-8.028zm-4.86 4.98a6.002 6.002 0 0 0 2.04-2.184v-1.764h-2.04v3.948zm-4.5.948c.442.057.887.08 1.332.072.4.025.8.025 1.2 0V7.692H9.468v9.035z'
+      />
+    </svg>
+  )
+}
+
+function MicrosoftTeamsLogo({ className, ...props }: ComponentProps<'svg'>) {
+  return (
+    <svg viewBox='0 0 256 239' aria-hidden className={cn('size-5', className)} {...props}>
+      <path
+        fill='#5059C9'
+        d='M178.563 89.302h66.125c6.248 0 11.312 5.065 11.312 11.312v60.231c0 22.96-18.613 41.574-41.573 41.574h-.197c-22.96.003-41.576-18.607-41.579-41.568V95.215a5.91 5.91 0 0 1 5.912-5.913'
+      />
+      <circle cx='223.256' cy='50.605' r='26.791' fill='#5059C9' />
+      <circle cx='139.907' cy='38.698' r='38.698' fill='#7B83EB' />
+      <path
+        fill='#7B83EB'
+        d='M191.506 89.302H82.355c-6.173.153-11.056 5.276-10.913 11.449v68.697c-.862 37.044 28.445 67.785 65.488 68.692 37.043-.907 66.35-31.648 65.489-68.692v-68.697c.143-6.173-4.74-11.296-10.913-11.449'
+      />
+      <path
+        fill='#4B53BC'
+        d='M10.913 53.581h109.15c6.028 0 10.914 4.886 10.914 10.913v109.151c0 6.027-4.886 10.913-10.913 10.913H10.913C4.886 184.558 0 179.672 0 173.645V64.495C0 58.466 4.886 53.58 10.913 53.58'
+      />
+      <path
+        fill='#FFF'
+        d='M94.208 95.125h-21.82v59.416H58.487V95.125H36.769V83.599h57.439z'
+      />
+    </svg>
+  )
+}
+
+function PagerDutyLogo({ className, ...props }: ComponentProps<'svg'>) {
+  return (
+    <svg viewBox='0 0 24 24' aria-hidden className={cn('size-5', className)} {...props}>
+      <path
+        fill='#06AC38'
+        d='M16.965 1.18C15.085.164 13.769 0 10.683 0H3.73v14.55h6.926c2.743 0 4.8-.164 6.61-1.37 1.975-1.303 3.004-3.484 3.004-6.007 0-2.716-1.262-4.896-3.305-5.994zm-5.5 10.326h-4.21V3.113l3.977-.027c3.62-.028 5.43 1.234 5.43 4.128 0 3.113-2.248 4.292-5.197 4.292zM3.73 17.61h3.525V24H3.73Z'
+      />
+    </svg>
+  )
+}
+
 function GoogleLogo({ className, ...props }: ComponentProps<'svg'>) {
   return (
     <svg viewBox='0 0 24 24' aria-hidden className={cn('size-5', className)} {...props}>
@@ -98,4 +145,14 @@ function StripeLogo({ className, ...props }: ComponentProps<'svg'>) {
   )
 }
 
-export { GitHubLogo, GoogleLogo, SentryLogo, SlackLogo, StripeLogo, XLogo }
+export {
+  BigQueryLogo,
+  GitHubLogo,
+  GoogleLogo,
+  MicrosoftTeamsLogo,
+  PagerDutyLogo,
+  SentryLogo,
+  SlackLogo,
+  StripeLogo,
+  XLogo,
+}

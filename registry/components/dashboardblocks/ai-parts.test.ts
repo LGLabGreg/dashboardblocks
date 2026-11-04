@@ -3,7 +3,7 @@ import { describe, it } from 'node:test'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-import type { AIMessage } from './ai-message'
+import { type AIMessage, getMessageSources, getMessageText } from './ai-message'
 import { AIMessageParts } from './ai-parts'
 
 function render(
@@ -25,6 +25,73 @@ const reply = (parts: AIMessage['parts']): AIMessage => ({
   parts,
   role: 'assistant',
 })
+
+// Claude's web search reply through the AI SDK, recorded 2026-11-04, with three of its nine sources.
+const searched = reply([
+  {
+    sourceId: 'SsFQjqH3mmMAl8pN',
+    title: "React 19: What's New for Developers [2026]",
+    type: 'source-url',
+    url: 'https://scrimba.com/articles/react-19-whats-new-for-developers/',
+  },
+  {
+    sourceId: 'LgCDfBZGWOHpuVYC',
+    title: 'React Latest Version - Support Lifecycle & EOL — VersionLog',
+    type: 'source-url',
+    url: 'https://versionlog.com/react/',
+  },
+  {
+    sourceId: 'Pz6XXaW4s74QhO1Z',
+    title: 'react - npm',
+    type: 'source-url',
+    url: 'https://www.npmjs.com/package/react?activeTab=versions',
+  },
+  {
+    state: 'done',
+    text: 'The most recent stable React release is 19.3.1, which npm currently tags as its default version ',
+    type: 'text',
+  },
+  {
+    citations: [
+      {
+        source: {
+          id: 'https://www.npmjs.com/package/react?activeTab=versions',
+          sourceType: 'url',
+          title: 'react - npm',
+          url: 'https://www.npmjs.com/package/react?activeTab=versions',
+        },
+      },
+    ],
+    state: 'done',
+    text: 'Latest version: 19.3.1, last published: 21 days ago.',
+    type: 'text',
+  },
+  {
+    state: 'done',
+    text: ' It shipped on October 14, 2026, according to ',
+    type: 'text',
+  },
+  {
+    citations: [
+      {
+        source: {
+          id: 'https://versionlog.com/react/',
+          sourceType: 'url',
+          title: 'React Latest Version - Support Lifecycle & EOL — VersionLog',
+          url: 'https://versionlog.com/react/',
+        },
+      },
+    ],
+    state: 'done',
+    text: "VersionLog's release history",
+    type: 'text',
+  },
+  {
+    state: 'done',
+    text: '.',
+    type: 'text',
+  },
+])
 
 describe('AIMessageParts', () => {
   it('names a tool the model made up, even one called __proto__ or toString', () => {
@@ -101,5 +168,32 @@ describe('AIMessageParts', () => {
     assert.match(render(cited), /Source 1: From the reply/)
     assert.match(render(cited), /data-slot="source-list"/)
     assert.doesNotMatch(render(cited, { showSources: false }), /data-slot="source-list"/)
+  })
+
+  it('reads a reply split around its citations as one text, citing what it cites', () => {
+    const text =
+      "The most recent stable React release is 19.3.1, which npm currently tags as its default version Latest version: 19.3.1, last published: 21 days ago.[1] It shipped on October 14, 2026, according to VersionLog's release history[2]."
+    assert.equal(getMessageText(searched), text)
+    assert.deepEqual(getMessageSources(searched), [
+      {
+        href: 'https://www.npmjs.com/package/react?activeTab=versions',
+        label: 'react - npm',
+      },
+      {
+        href: 'https://versionlog.com/react/',
+        label: 'React Latest Version - Support Lifecycle & EOL — VersionLog',
+      },
+    ])
+    const html = render(searched)
+    assert.equal(html.match(/<p[ >]/g)?.length, 1)
+    assert.match(
+      html,
+      /21 days ago\.<sup data-slot="citation"[^>]*><a href="https:\/\/www\.npmjs\.com[^"]*"[^>]*>.*Source 1: react - npm/,
+    )
+    assert.match(
+      html,
+      /release history<sup data-slot="citation"[^>]*><a href="https:\/\/versionlog\.com\/react\/"/,
+    )
+    assert.doesNotMatch(html, /scrimba/)
   })
 })

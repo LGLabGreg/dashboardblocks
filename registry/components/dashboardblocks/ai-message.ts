@@ -19,9 +19,19 @@ type AIMessagePart =
   | { type: 'step-start' | 'custom' | 'reasoning-file' }
 
 interface AITextPart {
+  /** What the text cites, as the AI SDK gives it: the page or document, and where in the text when the provider says. */
+  citations?: AICitation[]
   state?: 'streaming' | 'done'
   text: string
   type: 'text'
+}
+
+interface AICitation {
+  /** Where the cited passage ends in the part's text, when the provider says. */
+  endIndex?: number
+  source:
+    | { id: string; sourceType: 'url'; title?: string; url: string }
+    | { id: string; sourceType: 'document'; title: string }
 }
 
 /** Empty when the provider keeps its reasoning to itself and sends only that it thought. */
@@ -242,9 +252,74 @@ function getToolLabel(part: AIAnyToolPart) {
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
+const citationKey = ({ source }: AICitation) =>
+  source.sourceType === 'url' ? source.url : source.id
+
+/** What the reply cites, once each, in the order first cited. */
+function getCitations(parts: AIMessagePart[]) {
+  const cited = new Map<string, AICitation>()
+  for (const part of parts) {
+    if (part.type !== 'text') continue
+    for (const citation of byEnd(part)) {
+      const key = citationKey(citation)
+      if (!cited.has(key)) cited.set(key, citation)
+    }
+  }
+  return cited
+}
+
+function byEnd(part: AITextPart) {
+  const end = (citation: AICitation) => citation.endIndex ?? part.text.length
+  return [...(part.citations ?? [])].sort((a, b) => end(a) - end(b))
+}
+
+/** The text with `[n]` after each passage it cites, before the space that follows. */
+function markCitations(part: AITextPart, cited: string[]) {
+  let text = part.text
+  const marks = new Map<number, string>()
+  for (const citation of byEnd(part)) {
+    const end = Math.min(citation.endIndex ?? text.length, text.length)
+    const mark = `[${cited.indexOf(citationKey(citation)) + 1}]`
+    if (!marks.get(end)?.includes(mark)) marks.set(end, (marks.get(end) ?? '') + mark)
+  }
+  for (const [end, mark] of [...marks].sort(([a], [b]) => b - a)) {
+    const before = text.slice(0, end).trimEnd()
+    text = before + mark + text.slice(before.length)
+  }
+  return text
+}
+
+/**
+ * A reply's parts as they read: text parts in a row joined into one, since a provider can split
+ * its text wherever a citation starts or ends (Claude's web search does), and `[n]` after each
+ * passage the text cites, `n` being the source's place in `getMessageSources`.
+ */
+function getReadableParts(message: Pick<AIMessage, 'parts'>): AIMessagePart[] {
+  const cited = [...getCitations(message.parts).keys()]
+  const parts: AIMessagePart[] = []
+  message.parts.forEach((part, index) => {
+    if (part.type !== 'text') {
+      parts.push(part)
+      return
+    }
+    const text = part.citations?.length ? markCitations(part, cited) : part.text
+    const previous = parts.at(-1)
+    if (previous?.type === 'text' && message.parts[index - 1]?.type === 'text') {
+      parts[parts.length - 1] = {
+        state: part.state,
+        text: previous.text + text,
+        type: 'text',
+      }
+    } else {
+      parts.push({ state: part.state, text, type: 'text' })
+    }
+  })
+  return parts
+}
+
 /** The reply's text, as written, for copying. */
 function getMessageText(message: Pick<AIMessage, 'parts'>) {
-  return message.parts
+  return getReadableParts(message)
     .flatMap((part) =>
       part.type === 'text' && part.text.trim() ? [part.text.trim()] : [],
     )
@@ -268,7 +343,15 @@ function getSafeHref(href: string | undefined) {
   return undefined
 }
 
+/** What `[n]` in the reply links to: the sources its text cites, in the order first cited, or, when it cites none, every source it sent. */
 function getMessageSources(message: Pick<AIMessage, 'parts'>): AISource[] {
+  const cited = getCitations(message.parts)
+  if (cited.size > 0) {
+    return [...cited.values()].map(({ source }) => {
+      if (source.sourceType === 'document') return { label: source.title }
+      return { href: getSafeHref(source.url), label: source.title || source.url }
+    })
+  }
   return message.parts.flatMap((part) => {
     if (part.type === 'source-url') {
       return [{ href: getSafeHref(part.url), label: part.title || part.url }]
@@ -311,6 +394,7 @@ export {
   getStreamingMessageId,
   getToolLabel,
   getMessageVersion,
+  getReadableParts,
   getToolName,
   isToolPart,
   replyFromText,
@@ -321,6 +405,7 @@ export type {
   AIAnyToolPart,
   AIBranch,
   AIChat,
+  AICitation,
   AIChatStatus,
   AIDataPart,
   AIDynamicToolPart,

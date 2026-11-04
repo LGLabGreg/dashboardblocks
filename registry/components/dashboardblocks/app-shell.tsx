@@ -45,7 +45,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Kbd } from '@/components/ui/kbd'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import {
   Sidebar,
   SidebarContent,
@@ -72,6 +72,8 @@ import { cn } from '@/lib/utils'
 interface NavLink {
   badge?: ReactNode
   href: string
+  /** Shown before the title. */
+  icon?: ReactNode
   title: string
 }
 
@@ -770,6 +772,10 @@ interface SearchButtonProps {
   onOpen: () => void
   /** @default 'Search' */
   placeholder?: string
+  /** Below this width the field shrinks to its icon: `lg` for a bar that also holds tabs. @default 'sm' */
+  collapseBelow?: 'lg' | 'sm'
+  /** `secondary` fills the field instead of outlining it, for a bar on a tinted canvas where an outlined field stands out. @default 'outline' */
+  variant?: 'outline' | 'secondary'
 }
 
 /** Calls `onPress` on ⌘ or Ctrl with the letter `key`, unless the page already used the key. */
@@ -789,18 +795,36 @@ function useShortcut(key: string | undefined, onPress: () => void) {
   }, [key, onPress])
 }
 
-function SearchButton({ className, onOpen, placeholder = 'Search' }: SearchButtonProps) {
+const searchCollapsed = {
+  lg: {
+    button: 'max-lg:aspect-square max-lg:px-0 lg:w-56 lg:justify-start',
+    key: 'max-lg:hidden',
+    label: 'max-lg:sr-only',
+  },
+  sm: {
+    button: 'max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
+    key: 'max-sm:hidden',
+    label: 'max-sm:sr-only',
+  },
+}
+
+function SearchButton({
+  className,
+  collapseBelow = 'sm',
+  onOpen,
+  placeholder = 'Search',
+  variant = 'outline',
+}: SearchButtonProps) {
   useShortcut('k', onOpen)
+  const collapsed = searchCollapsed[collapseBelow]
 
   return (
     <Button
-      variant='outline'
+      variant={variant}
+      size='sm'
       onClick={onOpen}
       aria-keyshortcuts='Meta+K Control+K'
-      className={cn(
-        'max-sm:aspect-square max-sm:px-0 sm:w-56 sm:justify-start',
-        className,
-      )}
+      className={cn(collapsed.button, className)}
     >
       <IconPlaceholder
         lucide='SearchIcon'
@@ -809,8 +833,10 @@ function SearchButton({ className, onOpen, placeholder = 'Search' }: SearchButto
         phosphor='MagnifyingGlassIcon'
         remixicon='RiSearchLine'
       />
-      <span className='max-sm:sr-only'>{placeholder}</span>
-      <Kbd aria-hidden className='ml-auto max-sm:hidden'>
+      <span className={cn('text-muted-foreground font-normal', collapsed.label)}>
+        {placeholder}
+      </span>
+      <Kbd aria-hidden className={cn('ml-auto', collapsed.key)}>
         ⌘K
       </Kbd>
     </Button>
@@ -1152,17 +1178,98 @@ interface TopNavProps {
   className?: string
   items: NavLink[]
   pathname: string
+  /** `pill` fills the open link, for links that sit inside a bar. @default 'line' */
+  variant?: 'line' | 'pill'
 }
 
-function TopNav({ className, items, pathname }: TopNavProps) {
+function TopNav({ className, items, pathname, variant }: TopNavProps) {
   return (
-    <nav aria-label='Main' className={cn('min-w-0', className)}>
+    <nav aria-label='Main' className={cn('min-w-0 flex-1', className)}>
       <TabLinks
         items={items}
         pathname={pathname}
         isActive={(href) => isActiveHref(href, pathname)}
+        variant={variant}
       />
     </nav>
+  )
+}
+
+interface MobileNavProps {
+  className?: string
+  items: NavLink[]
+  pathname: string
+  /** The sheet's heading, such as the app's brand. */
+  title: ReactNode
+}
+
+/** A menu button that opens the app's pages in a sheet, for a phone, where `TopNav` has no room. */
+function MobileNav({ className, items, pathname, title }: MobileNavProps) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <Button
+        variant='secondary'
+        size='icon-sm'
+        aria-label='Open menu'
+        aria-expanded={open}
+        className={className}
+        onClick={() => setOpen(true)}
+      >
+        <IconPlaceholder
+          lucide='MenuIcon'
+          tabler='IconMenu2'
+          hugeicons='Menu01Icon'
+          phosphor='ListIcon'
+          remixicon='RiMenuLine'
+        />
+      </Button>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side='left'>
+          <SheetHeader>
+            <SheetTitle className='flex items-center gap-2'>{title}</SheetTitle>
+          </SheetHeader>
+          <nav aria-label='Main' className='min-h-0 flex-1 overflow-y-auto px-2 pb-4'>
+            <MobileNavLinks
+              items={items}
+              onNavigate={() => setOpen(false)}
+              pathname={pathname}
+            />
+          </nav>
+        </SheetContent>
+      </Sheet>
+    </>
+  )
+}
+
+function MobileNavLinks({
+  items,
+  onNavigate,
+  pathname,
+}: Pick<MobileNavProps, 'items' | 'pathname'> & { onNavigate: () => void }) {
+  return (
+    <ul className='flex flex-col gap-0.5'>
+      {items.map((item) => {
+        const active = isActiveHref(item.href, pathname)
+        return (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              aria-current={active ? 'page' : undefined}
+              data-active={active || undefined}
+              onClick={(event) => {
+                if (isPlainClick(event)) onNavigate()
+              }}
+              className='text-muted-foreground hover:bg-foreground/5 hover:text-foreground data-active:bg-foreground/10 data-active:text-foreground focus-visible:ring-ring/50 flex h-11 items-center gap-4 rounded-md px-4 text-sm font-medium outline-none focus-visible:ring-3 [&_svg]:size-4 [&_svg]:shrink-0'
+            >
+              {item.icon}
+              <span className='min-w-0 flex-1 truncate'>{item.title}</span>
+              {item.badge !== undefined && renderTag(item.badge)}
+            </Link>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
 
@@ -1175,6 +1282,7 @@ export {
   BrandMark,
   getInitials,
   isActiveHref,
+  MobileNav,
   NotificationsButton,
   PanelButton,
   PlanUsage,
@@ -1195,6 +1303,7 @@ export type {
   AppNavProps,
   AppUser,
   Crumb,
+  MobileNavProps,
   NavItem,
   NavLink,
   NavSection,

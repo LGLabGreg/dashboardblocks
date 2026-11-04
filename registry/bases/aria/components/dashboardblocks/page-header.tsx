@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/page-header.tsx for React Aria
-// source-hash: b5102101b460
+// source-hash: 58955b8415ce
 
 'use client'
 
@@ -7,6 +7,7 @@ import { Link } from '@/registry/components/dashboardblocks/link'
 import { renderTag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { Fragment, type ReactNode, useEffect, useRef, useState } from 'react'
+import { Button as AriaButton } from 'react-aria-components'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -173,6 +174,8 @@ function BackLink({
 interface PageTab {
   badge?: ReactNode
   href: string
+  /** Shown before the title. */
+  icon?: ReactNode
   /** The link's id, for a page that moves focus to the tab, such as after it saved a view. */
   id?: string
   /** Shown after the title, such as a dot for a view with changes that aren't saved yet. */
@@ -204,9 +207,31 @@ interface TabLinksProps {
   isActive?: (href: string) => boolean
   items: PageTab[]
   pathname: string
+  /** `pill` fills the open tab, for a row of tabs in a bar. @default 'line' */
+  variant?: 'line' | 'pill'
 }
 
-function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
+const tabBase =
+  'text-muted-foreground hover:text-foreground data-active:text-foreground aria-expanded:text-foreground focus-visible:ring-ring/50 flex shrink-0 items-center gap-1.5 text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-[3px] focus-visible:ring-inset [&_svg]:size-4 [&_svg]:shrink-0'
+
+const tabClasses = {
+  line: cn(
+    tabBase,
+    'data-active:border-foreground rounded-t-md border-b-2 border-transparent px-3 py-2.5',
+  ),
+  pill: cn(
+    tabBase,
+    'hover:bg-sidebar-accent/40 aria-expanded:bg-sidebar-accent/40 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground h-8 rounded-md px-3 transition-colors',
+  ),
+}
+
+function TabLinks({
+  className,
+  isActive,
+  items,
+  pathname,
+  variant = 'line',
+}: TabLinksProps) {
   const active = (href: string) => (isActive ? isActive(href) : href === pathname)
   const activeHref = items.find((item) => active(item.href))?.href
   const [rail, hiddenHrefs] = useHiddenRailItems<HTMLDivElement>(activeHref, items)
@@ -215,7 +240,11 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
   return (
     <div
       ref={rail}
-      className={cn('relative -mb-px flex min-w-0 gap-1 overflow-hidden', className)}
+      className={cn(
+        'relative flex min-w-0 gap-1 overflow-hidden',
+        variant === 'line' && '-mb-px',
+        className,
+      )}
     >
       {items.map((item) => (
         <Link
@@ -227,25 +256,32 @@ function TabLinks({ className, isActive, items, pathname }: TabLinksProps) {
           data-rail='item'
           data-rail-id={item.href}
           className={cn(
-            'text-muted-foreground hover:text-foreground data-active:border-foreground data-active:text-foreground focus-visible:ring-ring/50 flex shrink-0 items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-3 py-2.5 text-sm font-medium whitespace-nowrap outline-none focus-visible:ring-[3px]',
+            tabClasses[variant],
             hiddenHrefs.includes(item.href) && 'invisible absolute',
           )}
         >
+          {item.icon}
           {item.title}
           {item.indicator}
           {item.badge !== undefined && renderTag(item.badge)}
         </Link>
       ))}
       {hidden.length > 0 && (
-        <div data-rail='more' className='flex shrink-0 items-center'>
+        <div
+          data-rail='more'
+          className='text-muted-foreground flex shrink-0 items-center'
+        >
           <ActionsMenu
+            count={hidden.length}
             items={hidden.map((item) => ({
               badge: item.badge,
               href: item.href,
+              icon: item.icon,
               label: item.title,
             }))}
+            triggerClassName={tabClasses[variant]}
           >
-            More ({hidden.length})
+            More
           </ActionsMenu>
         </div>
       )}
@@ -323,18 +359,22 @@ interface ActionsMenuItem {
 function ActionsMenu({
   children,
   className,
+  count,
   disabled = false,
   icon,
   id,
   items,
   label = 'More actions',
   size = 'icon',
+  triggerClassName,
   variant = 'outline',
 }: {
-  /** A text trigger, such as "More (3)", in place of the icon button. */
+  /** A text trigger, such as "More", in place of the icon button. */
   children?: ReactNode
   /** Classes for the trigger, such as showing it only while its row is hovered. */
   className?: string
+  /** Shown as a tag after a text trigger, such as how many items the menu holds. */
+  count?: number
   disabled?: boolean
   /** The icon button's icon, such as a chevron for the menu half of a split button. @default an ellipsis */
   icon?: ReactNode
@@ -345,13 +385,33 @@ function ActionsMenu({
   label?: string
   /** The icon button's size. @default 'icon' */
   size?: 'icon' | 'icon-sm' | 'icon-xs'
+  /** Draws a text trigger as plain markup with these classes, such as a tab's, in place of a ghost button. */
+  triggerClassName?: string
   /** The icon button's variant: the one beside it when it is the menu half of a split button, `ghost` in a row. @default 'outline' */
   variant?: 'default' | 'ghost' | 'outline' | 'secondary'
 }) {
   const firstDestructive = items.findIndex((item) => item.variant === 'destructive')
+  const text = (
+    <>
+      {children}
+      {count !== undefined && <> {renderTag(count)}</>}
+      <IconPlaceholder
+        lucide='ChevronDownIcon'
+        tabler='IconChevronDown'
+        hugeicons='ArrowDown01Icon'
+        phosphor='CaretDownIcon'
+        remixicon='RiArrowDownSLine'
+        className='-ms-0.5 transition-transform duration-200 ease-out in-aria-expanded:rotate-180 motion-reduce:transition-none'
+      />
+    </>
+  )
   return (
     <DropdownMenuTrigger>
-      {children ? (
+      {children && triggerClassName ? (
+        <AriaButton id={id} className={triggerClassName} isDisabled={disabled}>
+          {text}
+        </AriaButton>
+      ) : children ? (
         <Button
           id={id}
           variant='ghost'
@@ -359,7 +419,7 @@ function ActionsMenu({
           isDisabled={disabled}
           className={className}
         >
-          {children}
+          {text}
         </Button>
       ) : (
         <Button

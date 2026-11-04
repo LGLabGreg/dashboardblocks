@@ -7,6 +7,14 @@ import {
   getBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
 import {
+  BigQueryLogo,
+  GitHubLogo,
+  MicrosoftTeamsLogo,
+  PagerDutyLogo,
+  SlackLogo,
+  StripeLogo,
+} from '@/registry/components/dashboardblocks/brand-logos'
+import {
   ConnectionRow,
   type ConnectionStatus,
 } from '@/registry/components/dashboardblocks/settings'
@@ -49,6 +57,7 @@ const exampleProps: Settings4Props = {
       description: 'Post alerts and weekly summaries to channels.',
       detail: 'Posting to #alerts',
       id: 'slack',
+      logo: <SlackLogo />,
       name: 'Slack',
       status: 'connected',
     },
@@ -57,6 +66,7 @@ const exampleProps: Settings4Props = {
       description: 'Sync tables on a schedule for dashboards.',
       detail: 'Credentials expired 2 days ago',
       id: 'bigquery',
+      logo: <BigQueryLogo />,
       name: 'BigQuery',
       status: 'error',
     },
@@ -65,6 +75,7 @@ const exampleProps: Settings4Props = {
       description: 'Mark deploys on charts and link incidents to commits.',
       detail: 'Paused by Liam Chen',
       id: 'github',
+      logo: <GitHubLogo />,
       name: 'GitHub',
       status: 'paused',
     },
@@ -72,6 +83,7 @@ const exampleProps: Settings4Props = {
       category: 'Incidents',
       description: 'Page the on-call engineer when a critical alert fires.',
       id: 'pagerduty',
+      logo: <PagerDutyLogo />,
       name: 'PagerDuty',
       status: 'disconnected',
     },
@@ -80,6 +92,7 @@ const exampleProps: Settings4Props = {
       description: 'Import revenue, refunds and subscriptions.',
       detail: 'Last sync 12 minutes ago',
       id: 'stripe',
+      logo: <StripeLogo />,
       name: 'Stripe',
       status: 'connected',
     },
@@ -87,6 +100,7 @@ const exampleProps: Settings4Props = {
       category: 'Messaging',
       description: 'Send alerts to a team channel.',
       id: 'teams',
+      logo: <MicrosoftTeamsLogo />,
       name: 'Microsoft Teams',
       status: 'disconnected',
     },

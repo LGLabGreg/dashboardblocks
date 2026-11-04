@@ -24,7 +24,7 @@
       "record-detail-01"
     ],
     "component": "PageHeader2",
-    "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; id?: string; indicator?: ReactNode; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ description?: string; onInvite?: () => void; pathname: string; projectStatus?: \"draft\" | \"paused\" | \"live\"; tabs: { badge?: ReactNode; href: string; icon?: ReactNode; id?: string; indicator?: ReactNode; title: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

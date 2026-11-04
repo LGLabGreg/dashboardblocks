@@ -1,5 +1,34 @@
 # dashboardblocks
 
+## 1.22.0
+
+### Minor Changes
+
+- 2d3fe87: New Forms block: Address, and the `address-fields` part it uses. Country comes first, then the fields that country's addresses use, named its way and in its order, with a list of states or provinces where it has one and a check of the postal code. `validateAddress` gives an error for each field. Also new: a `countries` list, a `country-flag` part that blocks with a flag now install in place of the whole `geo` part, an `icon` on each `OptionSelect` option, and a faint edge on every flag.
+
+### Patch Changes
+
+- 8663e70: Command Menu: results that arrive after you type put Enter on the first one.
+- 0e41127: Address Fields exports `getCountryOptions`, its country list with flags as options for a select.
+- 12dcac9: Chart Panel's legend draws a `hatched` key, for a part that is estimated or projected.
+- 629f636: Integrations shows each service's own logo in place of its first letter. Brand Logos adds the BigQuery, Microsoft Teams and PagerDuty logos.
+- 2d3fe87: The `kanban` part exports `KanbanLabel`, one label drawn as `KanbanLabels` draws each, and `getDueDateLabel`, the words `KanbanDueDate` shows for a due date.
+- 1fe73c1: AI Message Parts reads the citations the AI SDK puts on a reply's text: Claude's web search reply, which arrives in pieces split around what it cites, now shows as one text with `[n]` after each cited passage, and its sources list only the pages it cites, in the order cited.
+- 769b6d8: Number Field takes a `form` prop, so a field outside its form still submits it on Enter, and passes on a typed value rounded as the field shows it.
+- 0e41127: `SaveBar` and the onboarding footer mark themselves with `data-floating-bar`, so parts that float at the bottom of the window can keep clear of them. `DataTableListItem` shades a ticked row (`data-state='selected'`) as a table row does.
+- 9e78565: Team has a `WorkloadBar`: one person's load against what they can take, with what's past it hatched in orange and an optional part drawn as done. Team 02 draws its bars with it.
+- 20adb9e: Shortcut Button: the Escape key shows as Esc in its tooltip.
+- 8663e70: New Shortcut Button part: a button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.
+- 769b6d8: Page Header's `TabLinks` takes an `id` and an `indicator` on each tab, so a page can move focus to a tab it opened and mark one with unsaved changes. `ActionsMenu` takes an `id`, an `icon`, a `size` and a `variant`, so it can be the menu half of a split button.
+- 6b73bb7: `TabLinks` and `TopNav` take `variant='pill'`, which fills the open tab for tabs that sit in a bar, a tab's focus ring now shows inside the tab instead of being clipped by the row, and `SearchButton` is as tall as the bar's other controls, with a muted label, and takes `variant='secondary'` for a filled field on a tinted canvas.
+  
+  `MobileNav` in `app-shell.tsx`: a menu button that opens an app's pages in a sheet, for a phone, where `TopNav` has no room. `NavLink` takes an optional `icon` for it. `TopNav` now fills the room it has in a row, so it no longer shrinks to More and the open tab. `TabLinks` tabs (and `NavLink`) take an optional `icon`, shown before the title in the rail and under More. `SearchButton` takes `collapseBelow='lg'` to shrink to its icon below 1024px, for a bar that also holds tabs.
+  
+  `TabLinks`' More is drawn like the tabs beside it, with the number of hidden tabs as a `NavTag` and a chevron, in place of "More (3)". `ActionsMenu` takes `count` for that tag and `triggerClassName` to draw a text trigger as plain markup.
+  
+  `SearchButton`'s placeholder defaults to "Search", without an ellipsis.
+- 0e41127: `zonedParts` in `format.ts` reads a `YYYY-MM-DD` day as that day in every time zone, as the other date helpers do.
+
 ## 1.21.0
 
 ### Minor Changes

@@ -99,6 +99,56 @@ describe('ai-message', () => {
     ])
   })
 
+  it('marks each passage a provider cites where it ends, numbered in the order first cited', () => {
+    const message: Pick<AIMessage, 'parts'> = {
+      parts: [
+        { sourceId: 'x', type: 'source-url', url: 'https://example.com/not-cited' },
+        {
+          citations: [
+            {
+              endIndex: 31,
+              source: { id: 'b', sourceType: 'url', url: 'https://example.com/churn' },
+            },
+            {
+              endIndex: 16,
+              source: {
+                id: 'a',
+                sourceType: 'url',
+                title: 'Revenue',
+                url: 'https://example.com/revenue',
+              },
+            },
+            {
+              endIndex: 31,
+              source: { id: 'a2', sourceType: 'url', url: 'https://example.com/revenue' },
+            },
+          ],
+          state: 'done',
+          text: 'Spend rose 12%. Churn fell 2%.  Next steps follow.',
+          type: 'text',
+        },
+        { state: 'done', text: ' Ask about', type: 'text' },
+        {
+          citations: [
+            { source: { id: 'doc', sourceType: 'document', title: 'Q3 plan' } },
+          ],
+          state: 'done',
+          text: ' the Q3 plan',
+          type: 'text',
+        },
+      ],
+    }
+    assert.equal(
+      getMessageText(message),
+      'Spend rose 12%.[1] Churn fell 2%.[2][1]  Next steps follow. Ask about the Q3 plan[3]',
+    )
+    assert.deepEqual(getMessageSources(message), [
+      { href: 'https://example.com/revenue', label: 'Revenue' },
+      { href: 'https://example.com/churn', label: 'https://example.com/churn' },
+      { label: 'Q3 plan' },
+    ])
+  })
+
   it('opens only web, mail and in-app links from a model', () => {
     assert.equal(getSafeHref(' https://example.com/a?b=1 '), 'https://example.com/a?b=1')
     assert.equal(getSafeHref('mailto:support@example.com'), 'mailto:support@example.com')

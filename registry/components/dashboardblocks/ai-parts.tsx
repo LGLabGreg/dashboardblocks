@@ -16,6 +16,7 @@ import {
   type AIToolApprovalResponse,
   getMessageFiles,
   getMessageSources,
+  getReadableParts,
   getToolLabel,
   getToolName,
   isToolPart,
@@ -504,10 +505,10 @@ type AIMessageGroup =
   | { key: string; part: AIAnyToolPart; type: 'tool' }
   | { key: string; streaming: boolean; text: string; type: 'text' }
 
-/** A reply's parts as it shows them: reasoning in a row joined into one thinking group, text, and each tool call. */
+/** A reply's parts as it shows them: reasoning in a row joined into one thinking group, text with its citations, and each tool call. */
 function groupParts(message: AIMessage, streaming: boolean): AIMessageGroup[] {
   const groups: AIMessageGroup[] = []
-  const { parts } = message
+  const parts = getReadableParts(message)
   parts.forEach((part, index) => {
     const previous = groups.at(-1)
     // A stopped reply can leave a part marked streaming.
