@@ -1387,6 +1387,10 @@ export const components: Registry['items'] = [
         type: 'registry:component',
       },
       {
+        path: 'registry/lib/dashboardblocks/markdown-fences.ts',
+        type: 'registry:lib',
+      },
+      {
         path: 'registry/components/dashboardblocks/ai-parts.tsx',
         type: 'registry:component',
       },

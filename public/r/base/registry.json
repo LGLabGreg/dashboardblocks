@@ -1552,6 +1552,11 @@
           "target": "@components/dashboardblocks/ai-markdown.tsx"
         },
         {
+          "path": "registry/lib/dashboardblocks/markdown-fences.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboardblocks/markdown-fences.ts"
+        },
+        {
           "path": "registry/components/dashboardblocks/ai-parts.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/ai-parts.tsx"

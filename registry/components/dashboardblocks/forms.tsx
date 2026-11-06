@@ -449,7 +449,7 @@ function FormSheet({
             {description && <SheetDescription>{description}</SheetDescription>}
           </SheetHeader>
           <div
-            className='min-h-0 flex-1 overflow-y-auto px-4 py-2'
+            className='min-h-0 flex-1 overflow-y-auto px-4 py-2 [scrollbar-width:thin]'
             style={{ paddingInline: bodyInset }}
           >
             {children}

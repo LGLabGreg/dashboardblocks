@@ -188,7 +188,7 @@ const Timeline4 = (props: Timeline4Props) => {
                 aria-label={title}
                 // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
                 tabIndex={0}
-                className='focus-visible:ring-ring/50 overflow-x-auto rounded-sm border-t pt-4 pb-1 outline-none focus-visible:ring-3'
+                className='focus-visible:ring-ring/50 overflow-x-auto rounded-sm border-t pt-4 pb-1 outline-none [scrollbar-width:thin] focus-visible:ring-3'
               >
                 <div className='grid min-w-[34rem] grid-cols-[7rem_minmax(0,1fr)_4rem] gap-x-3'>
                   <ol className='bg-background sticky left-0 z-20 flex flex-col'>

@@ -612,7 +612,9 @@ interface AIMessagePartsProps {
   onToolApprovalResponse?: (response: AIToolApprovalResponse) => void
   /** Draws a tool's result as a block, such as a chart or a headline number, at the top of the answer. Return nothing to show only the step. */
   renderToolResult?: (part: AIAnyToolPart) => ReactNode
-  /** Lists the sources a reply cites, under its steps once it's done. Turn it off when the block lists them itself. @default true */
+  /** Draws a reply's work (its thinking, tool calls and sources) in place of the line that folds it, such as a research run. Return nothing to keep the line. */
+  renderWork?: (reply: AIMessage, streaming: boolean) => ReactNode
+  /** Lists the sources a reply cites, under its steps once it's done, unless `renderWork` draws the work. Turn it off when the block lists them itself. @default true */
   showSources?: boolean
   /** What `[n]` in the reply cites, when the block holds the sources rather than the reply's `source-url` parts. */
   sources?: AISource[]
@@ -639,6 +641,7 @@ function AIMessageParts({
   message,
   onToolApprovalResponse,
   renderToolResult,
+  renderWork,
   showSources = true,
   sources: sourcesProp,
   streaming = false,
@@ -672,6 +675,7 @@ function AIMessageParts({
           part.state === 'streaming',
       ))
   const work = groups.filter(isWork)
+  const drawnWork = renderWork?.(message, streaming)
 
   let status: AgentRingStatus = 'done'
   let line = describeWork({
@@ -698,31 +702,32 @@ function AIMessageParts({
       data-slot='ai-message-parts'
       className={cn('flex min-w-0 flex-col gap-4', className)}
     >
-      {(work.length > 0 || working || waiting) && (
-        <WorkLine line={line} status={status}>
-          {work.length > 0 && (
-            <>
-              {work.map((group) =>
-                group.type === 'thinking' ? (
-                  <Thinking
-                    key={group.key}
-                    streaming={group.streaming}
-                    text={group.text}
-                  />
-                ) : group.type === 'tool' ? (
-                  <ToolCall
-                    key={group.key}
-                    part={group.part}
-                    inProgress={streaming}
-                    label={resolveToolLabel(toolLabels, group.part).done}
-                  />
-                ) : null,
-              )}
-              {listedSources && <SourceList id={sourcesId} sources={sources} />}
-            </>
-          )}
-        </WorkLine>
-      )}
+      {drawnWork ??
+        ((work.length > 0 || working || waiting) && (
+          <WorkLine line={line} status={status}>
+            {work.length > 0 && (
+              <>
+                {work.map((group) =>
+                  group.type === 'thinking' ? (
+                    <Thinking
+                      key={group.key}
+                      streaming={group.streaming}
+                      text={group.text}
+                    />
+                  ) : group.type === 'tool' ? (
+                    <ToolCall
+                      key={group.key}
+                      part={group.part}
+                      inProgress={streaming}
+                      label={resolveToolLabel(toolLabels, group.part).done}
+                    />
+                  ) : null,
+                )}
+                {listedSources && <SourceList id={sourcesId} sources={sources} />}
+              </>
+            )}
+          </WorkLine>
+        ))}
       {groups.map((group) => {
         if (group.type === 'text') {
           return (
@@ -762,7 +767,7 @@ function AIMessageParts({
         )
       })}
       <MessageFiles files={files} />
-      {work.length === 0 && listedSources && (
+      {!drawnWork && work.length === 0 && listedSources && (
         <SourceList id={sourcesId} sources={sources} />
       )}
     </div>

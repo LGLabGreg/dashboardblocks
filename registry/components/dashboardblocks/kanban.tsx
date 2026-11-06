@@ -796,7 +796,7 @@ function KanbanBoard({
           // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
           tabIndex={0}
           className={cn(
-            'focus-visible:ring-ring/50 @container relative flex snap-x snap-proximity items-start gap-4 overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
+            'focus-visible:ring-ring/50 @container relative flex snap-x snap-proximity items-start gap-4 overflow-x-auto outline-none [scrollbar-width:thin] focus-visible:ring-3 focus-visible:ring-inset data-dragging:snap-none data-dragging:select-none data-[dragging=pointer]:**:cursor-grabbing',
             className,
           )}
         >

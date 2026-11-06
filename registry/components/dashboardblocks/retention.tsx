@@ -393,7 +393,7 @@ function CohortTable({
           tabIndex={minWidth ? 0 : undefined}
           className={cn(
             minWidth &&
-              'focus-visible:ring-ring/50 relative -my-1 overflow-x-auto rounded-sm py-1 outline-none focus-visible:ring-3',
+              'focus-visible:ring-ring/50 relative -my-1 overflow-x-auto rounded-sm py-1 outline-none [scrollbar-width:thin] focus-visible:ring-3',
           )}
         >
           {/* Not a data table: a heatmap chart, each cell a coloured tile with its own tooltip. */}

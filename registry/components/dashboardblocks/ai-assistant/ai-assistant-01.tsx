@@ -219,7 +219,7 @@ const AiAssistant1 = (props: AiAssistant1Props) => {
               : '@container/main flex min-w-0 flex-1 flex-col'
           }
         >
-          <div className='flex flex-1 flex-col gap-8 overflow-y-auto p-4 @xl/main:p-6'>
+          <div className='flex flex-1 flex-col gap-8 overflow-y-auto p-4 [scrollbar-width:thin] @xl/main:p-6'>
             <header className='flex items-end justify-between gap-4'>
               <div className='flex min-w-0 flex-col gap-0.5'>
                 <h1 className='truncate text-2xl font-semibold tracking-tight'>

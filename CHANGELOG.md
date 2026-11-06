@@ -1,5 +1,15 @@
 # dashboardblocks
 
+## 1.22.1
+
+### Patch Changes
+
+- 496e480: AI Markdown takes `fences`: a part per code language that draws a fenced block in place of the code, such as a chart from the JSON a model wrote in a ```chart block. Each part hears whether the model is still writing its block.
+- 58281dd: Chat Conversation and AI Message Parts take `renderWork`: a block that draws a reply's work (its thinking, tool calls and sources) in place of the line that folds it, such as a research run.
+  
+  A reply that failed partway no longer shows its own actions beside the error's Retry.
+- c34da48: Every box that scrolls inside a block (a list, a panel, a log, a table that scrolls sideways) has a thin scroll bar, and lists keep their text clear of it.
+
 ## 1.22.0
 
 ### Minor Changes

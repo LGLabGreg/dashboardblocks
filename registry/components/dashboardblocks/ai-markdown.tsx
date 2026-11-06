@@ -16,6 +16,7 @@ import {
 } from '@/registry/components/dashboardblocks/table'
 import { TextChange } from '@/registry/components/dashboardblocks/text-change'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { fenceLanguage } from '@/registry/lib/dashboardblocks/markdown-fences'
 import { Lexer, type Token, type Tokens } from 'marked'
 import { Fragment, type ReactNode } from 'react'
 import remend from 'remend'
@@ -161,6 +162,8 @@ function getCitedNumbers(text: string, sourceCount: number) {
 interface RenderContext {
   /** The change the text being drawn is inside, from `markChange`, as it carries across inline tokens. */
   change: 'added' | 'removed' | null
+  fences: AIMarkdownFences
+  writing?: Token
   sources: AISource[]
   streaming: boolean
 }
@@ -343,6 +346,18 @@ function renderListItem(item: Tokens.ListItem, context: RenderContext, key: stri
   )
 }
 
+function lastToken(tokens: Token[]): Token | undefined {
+  const last = tokens.findLast((token) => token.type !== 'space')
+  if (!last) return undefined
+  const children =
+    last.type === 'list'
+      ? (last as Tokens.List).items
+      : 'tokens' in last && last.type !== 'paragraph' && last.type !== 'text'
+        ? (last.tokens as Token[] | undefined)
+        : undefined
+  return (children && lastToken(children)) ?? last
+}
+
 function renderBlocks(
   tokens: Token[],
   context: RenderContext,
@@ -399,7 +414,20 @@ function renderBlocks(
         )
       case 'code': {
         const code = token as Tokens.Code
-        const language = (code.lang ?? '').split(/\s/)[0]
+        const language = fenceLanguage(code)
+        const fence = Object.hasOwn(context.fences, language)
+          ? context.fences[language]
+          : undefined
+        if (fence) {
+          return (
+            <Fragment key={key}>
+              {fence({
+                code: code.text,
+                writing: token === context.writing,
+              })}
+            </Fragment>
+          )
+        }
         return (
           <HighlightedCode
             key={key}
@@ -456,10 +484,22 @@ function renderBlocks(
   })
 }
 
+/** What a fenced block holds: its text, and whether the model is still writing it. */
+interface AIMarkdownFence {
+  code: string
+  /** True while the reply streams and the block is the last thing in it, so its text may be cut short. */
+  writing: boolean
+}
+
+/** Parts that draw a fenced block of the language they're keyed by (```chart), in place of the code. */
+type AIMarkdownFences = Record<string, (fence: AIMarkdownFence) => ReactNode>
+
 interface AIMarkdownProps {
   /** Draws the words `markChange` marked as added or removed. Off, as for a model's own reply, the marks are dropped. */
   changes?: boolean
   className?: string
+  /** Draws fenced blocks of these languages with your own part, such as a chart from the JSON a model wrote. Others show as code. */
+  fences?: AIMarkdownFences
   /** `[n]` in the text links to the nth source. */
   sources?: AISource[]
   /** Closes unfinished syntax and holds back half-written table rows and citations. */
@@ -499,19 +539,25 @@ function joinMarkdownBlocks(blocks: MarkdownBlock[]) {
   return blocks.map((block) => block.source + block.after).join('')
 }
 
+const NO_FENCES: AIMarkdownFences = {}
+
 /** Markdown a model wrote: GitHub's tables, lists, task lists, quotes, links and code. HTML shows as text; links open only http(s), mailto and in-app paths; images show as links. */
 function AIMarkdown({
   changes = false,
   className,
+  fences = NO_FENCES,
   sources = [],
   streaming = false,
   text,
 }: AIMarkdownProps) {
   const source = changes ? text : text.replace(CHANGE_MARKS_ALL, '')
-  const blocks = renderBlocks(lex(source, streaming), {
+  const tokens = lex(source, streaming)
+  const blocks = renderBlocks(tokens, {
     change: null,
+    fences,
     sources,
     streaming,
+    writing: streaming ? lastToken(tokens) : undefined,
   })
   if (blocks.every((block) => block === null)) return null
   return (
@@ -534,4 +580,4 @@ export {
   markdownToPlainText,
 }
 
-export type { AIMarkdownProps, MarkdownBlock }
+export type { AIMarkdownFence, AIMarkdownFences, AIMarkdownProps, MarkdownBlock }

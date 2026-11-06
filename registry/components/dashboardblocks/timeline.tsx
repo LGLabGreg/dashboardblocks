@@ -497,7 +497,7 @@ function Timeline({
         tabIndex={minWidth ? 0 : undefined}
         className={cn(
           minWidth &&
-            'focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none focus-visible:ring-3',
+            'focus-visible:ring-ring/50 -my-1 overflow-x-auto py-1 rounded-sm outline-none [scrollbar-width:thin] focus-visible:ring-3',
         )}
       >
         <div

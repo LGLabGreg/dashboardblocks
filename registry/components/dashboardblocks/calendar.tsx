@@ -865,7 +865,10 @@ function TimeGrid<T extends ScheduleEvent>({
   return (
     <div
       ref={scroller}
-      className={cn('relative h-[32rem] overflow-auto border-y', className)}
+      className={cn(
+        'relative h-[32rem] overflow-auto border-y [scrollbar-width:thin]',
+        className,
+      )}
     >
       <div
         style={{

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/command-menu.tsx for React Aria
-// source-hash: efa2648a0d6a
+// source-hash: 1357a82bf274
 
 'use client'
 
@@ -141,7 +141,10 @@ function CommandMenu({
       >
         <CommandInput placeholder={placeholder} />
         {panel !== undefined && (
-          <div data-slot='command-menu-panel' className='overflow-y-auto'>
+          <div
+            data-slot='command-menu-panel'
+            className='overflow-y-auto [scrollbar-width:thin]'
+          >
             {panel}
           </div>
         )}

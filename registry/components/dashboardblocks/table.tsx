@@ -99,7 +99,7 @@ function DataTable({
       aria-labelledby={overflows && caption ? captionId : undefined}
       // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a table wider than its box scrolls, and keyboard users need to reach the columns that don't fit
       tabIndex={overflows ? 0 : undefined}
-      className='focus-visible:ring-ring/50 relative isolate w-full overflow-x-auto outline-none focus-visible:ring-3 focus-visible:ring-inset'
+      className='focus-visible:ring-ring/50 relative isolate w-full overflow-x-auto outline-none [scrollbar-width:thin] focus-visible:ring-3 focus-visible:ring-inset'
     >
       {table}
     </div>

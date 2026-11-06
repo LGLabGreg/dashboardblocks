@@ -1,3 +1,4 @@
+import { fencedBlocks } from '@/registry/lib/dashboardblocks/markdown-fences'
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { createElement } from 'react'
@@ -149,6 +150,71 @@ describe('ai-markdown', () => {
       [1, 3],
     )
     assert.deepEqual(getCitedNumbers('No citations.', 3), [])
+  })
+})
+
+describe('fences', () => {
+  const fences = {
+    chart: ({ code, writing }: { code: string; writing: boolean }) =>
+      createElement('figure', { 'data-writing': String(writing) }, code),
+  }
+  const draw = (text: string, streaming = false) =>
+    renderToStaticMarkup(createElement(AIMarkdown, { fences, streaming, text }))
+
+  it('hands a fenced block of a named language to its part, and shows other languages as code', () => {
+    const html = draw('Before\n\n```chart\n{"type":"bar"}\n```\n\n```json\n{"a":1}\n```')
+    assert.match(
+      html,
+      /<figure data-writing="false">\{&quot;type&quot;:&quot;bar&quot;\}<\/figure>/,
+    )
+    assert.doesNotMatch(html, /<figure[^>]*>\{&quot;a&quot;/)
+    assert.match(textOf(html), /json\{&quot;a&quot;:1\}/)
+  })
+
+  it('says the block is still being written only while it is the last thing in a streaming reply', () => {
+    assert.match(
+      draw('Intro\n\n```chart\n{"type":', true),
+      /data-writing="true">\{&quot;type&quot;:/,
+    )
+    assert.match(
+      draw('Intro\n\n```chart\n{"type":"bar"}\n```\n\nAfter it', true),
+      /data-writing="false"/,
+    )
+    assert.match(
+      draw('Intro\n\n- A point\n\n  ```chart\n  {"type":', true),
+      /data-writing="true"/,
+    )
+    assert.match(
+      draw('- A point\n\n  ```chart\n  {"type":"bar"}\n  ```\n\nAfter the list', true),
+      /data-writing="false"/,
+    )
+  })
+})
+
+describe('fencedBlocks', () => {
+  it('finds each block of the language, in a list or a quote too, as the reader sees it', () => {
+    const text = [
+      'Orders ```chart {} in a sentence.',
+      '',
+      '```chartjs',
+      'new Chart(ctx)',
+      '```',
+      '',
+      '- York',
+      '',
+      '   ```chart',
+      '   {"a":1}',
+      '   ```',
+      '',
+      '> ~~~chart',
+      '> {"b":2}',
+      '> ~~~',
+      '',
+      '```chart title',
+      '{"c":3}',
+      '```',
+    ].join('\n')
+    assert.deepEqual(fencedBlocks(text, 'chart'), ['{"a":1}', '{"b":2}', '{"c":3}'])
   })
 })
 

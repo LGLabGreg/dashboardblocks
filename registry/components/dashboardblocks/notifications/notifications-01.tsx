@@ -176,7 +176,7 @@ const Notifications1 = (props: Notifications1Props) => {
                 </div>
               )}
               {!state && (
-                <NotificationList className='max-h-96 overflow-y-auto border-y'>
+                <NotificationList className='max-h-96 overflow-y-auto border-y pe-2 [scrollbar-width:thin]'>
                   {notifications.map((notification) => (
                     <NotificationItem
                       key={notification.id}

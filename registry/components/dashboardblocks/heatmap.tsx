@@ -212,7 +212,9 @@ function HeatmapGrid({
       <div aria-hidden className={cn('flex flex-col gap-3', className)}>
         <div
           ref={scroller}
-          className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
+          className={cn(
+            minWidth && 'relative -my-1 overflow-x-auto py-1 [scrollbar-width:thin]',
+          )}
         >
           <div
             className='grid gap-[3px]'
@@ -360,7 +362,9 @@ function HeatmapGrid({
       <div ref={frame} className='relative' onPointerLeave={() => setActive(null)}>
         <div
           ref={scroller}
-          className={cn(minWidth && 'relative -my-1 overflow-x-auto py-1')}
+          className={cn(
+            minWidth && 'relative -my-1 overflow-x-auto py-1 [scrollbar-width:thin]',
+          )}
         >
           <div
             className='grid gap-[3px]'

@@ -170,7 +170,7 @@ const Notifications2 = (props: Notifications2Props) => {
       )
     }
     return (
-      <NotificationList className='max-h-96 overflow-y-auto'>
+      <NotificationList className='max-h-96 overflow-y-auto pe-2 [scrollbar-width:thin]'>
         {items.map((notification) => {
           const decision = decisions[notification.id]
           const { request } = notification

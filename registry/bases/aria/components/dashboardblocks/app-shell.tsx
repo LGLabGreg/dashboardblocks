@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: f3853a5239d6
+// source-hash: d9bfbf751d9d
 
 'use client'
 
@@ -1226,7 +1226,10 @@ function MobileNav({ className, items, pathname, title }: MobileNavProps) {
         <SheetHeader className='pe-11'>
           <SheetTitle className='flex items-center gap-2'>{title}</SheetTitle>
         </SheetHeader>
-        <nav aria-label='Main' className='min-h-0 flex-1 overflow-y-auto px-2 pb-4'>
+        <nav
+          aria-label='Main'
+          className='min-h-0 flex-1 overflow-y-auto px-2 pb-4 [scrollbar-width:thin]'
+        >
           <MobileNavLinks
             items={items}
             onNavigate={() => setOpen(false)}

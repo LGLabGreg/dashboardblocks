@@ -466,7 +466,7 @@ function FlowChart({
       tabIndex={minWidth ? 0 : undefined}
       className={cn(
         minWidth &&
-          'focus-visible:ring-ring/50 -my-1 overflow-x-auto rounded-sm py-1 outline-none focus-visible:ring-3',
+          'focus-visible:ring-ring/50 -my-1 overflow-x-auto rounded-sm py-1 outline-none [scrollbar-width:thin] focus-visible:ring-3',
         className,
       )}
     >

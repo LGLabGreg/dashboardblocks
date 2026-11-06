@@ -362,7 +362,7 @@ function HighlightedCode({
       )}
       <CodeBlockContent
         wrap={wrap}
-        className='mask-none data-wrap:mask-none'
+        className='mask-none [scrollbar-width:thin] data-wrap:mask-none'
         role={label ? 'region' : undefined}
         aria-label={label}
       >

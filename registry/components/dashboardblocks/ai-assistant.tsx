@@ -425,7 +425,7 @@ function ChatLog({
         onKeyDown={(event) => {
           if (SCROLL_KEYS.has(event.key)) release()
         }}
-        className='mask-none focus-visible:ring-ring/50 outline-none focus-visible:ring-3 focus-visible:ring-inset'
+        className='mask-none focus-visible:ring-ring/50 outline-none [scrollbar-width:thin] focus-visible:ring-3 focus-visible:ring-inset'
       >
         <MessageScrollerContent
           ref={contentRef}
@@ -460,7 +460,7 @@ function ChatLog({
 
 interface ChatMessageProps extends Pick<
   AIMessagePartsProps,
-  'onToolApprovalResponse' | 'renderToolResult' | 'toolLabels'
+  'onToolApprovalResponse' | 'renderToolResult' | 'renderWork' | 'toolLabels'
 > {
   actions?: ReactNode
   avatar?: ReactNode
@@ -483,6 +483,7 @@ function ChatMessage({
   name,
   onToolApprovalResponse,
   renderToolResult,
+  renderWork,
   streaming,
   toolLabels,
 }: ChatMessageProps) {
@@ -527,6 +528,7 @@ function ChatMessage({
                   toolLabels={toolLabels}
                   onToolApprovalResponse={onToolApprovalResponse}
                   renderToolResult={renderToolResult}
+                  renderWork={renderWork}
                 />
               )}
             </BubbleContent>
@@ -1353,7 +1355,7 @@ function ChatComposer({
 
 interface ChatConversationProps extends Pick<
   AIMessagePartsProps,
-  'renderToolResult' | 'toolLabels'
+  'renderToolResult' | 'renderWork' | 'toolLabels'
 > {
   chat: AIChat
   /** The message box, which Retry focuses as it goes. */
@@ -1498,6 +1500,7 @@ function ChatConversation({
   name,
   onFeedback,
   renderToolResult,
+  renderWork,
   toolLabels,
 }: ChatConversationProps) {
   const { messages, status } = chat
@@ -1565,7 +1568,8 @@ function ChatConversation({
             </ChatMessage>
           )
         }
-        const finishedReply = message.role === 'assistant' && !streaming
+        const failedReply = lastMessage && status === 'error'
+        const finishedReply = message.role === 'assistant' && !streaming && !failedReply
         const more = finishedReply ? footer?.(message) : undefined
         const prompts =
           finishedReply && lastMessage && status === 'ready'
@@ -1579,6 +1583,7 @@ function ChatConversation({
             streaming={streaming}
             toolLabels={toolLabels}
             renderToolResult={renderToolResult}
+            renderWork={renderWork}
             onToolApprovalResponse={chat.addToolApprovalResponse}
             footer={
               <>
@@ -1744,12 +1749,12 @@ function ChatPanel({
       />
       {loadState ? (
         <BlockStateProvider errorMessage={errorMessage} state={loadState}>
-          <div className='flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-2'>
+          <div className='flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-2 [scrollbar-width:thin]'>
             <BlockStateRows rows={3} />
           </div>
         </BlockStateProvider>
       ) : messages.length === 0 ? (
-        <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4'>
+        <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-4 [scrollbar-width:thin]'>
           <ChatWelcome title={title} description={description} className='m-auto'>
             {suggestions && suggestions.length > 0 && (
               <SuggestedPrompts

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/kpi-provenance.tsx for React Aria
-// source-hash: fa512bb65e45
+// source-hash: 12d599f57ba2
 
 'use client'
 
@@ -91,7 +91,7 @@ function KPIProvenanceDetails({
         aria-label='Details'
         // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can scroll it
         tabIndex={0}
-        className='max-h-60 overflow-y-auto rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+        className='max-h-60 overflow-y-auto rounded-sm pe-2 [scrollbar-width:thin] outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
       >
         <dl className='flex flex-col gap-2'>
           <div className='flex flex-col gap-0.5'>

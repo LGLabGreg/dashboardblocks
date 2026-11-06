@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 5d85096451a3
+// source-hash: 26c31b056328
 
 'use client'
 
@@ -459,7 +459,7 @@ function FormSheet({
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
         <div
-          className='min-h-0 flex-1 overflow-y-auto px-4 py-2'
+          className='min-h-0 flex-1 overflow-y-auto px-4 py-2 [scrollbar-width:thin]'
           style={{ paddingInline: bodyInset }}
         >
           {children}

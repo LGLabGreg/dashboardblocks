@@ -144,7 +144,7 @@ function CommandMenu({
           <div
             data-slot='command-menu-panel'
             role='presentation'
-            className='overflow-y-auto'
+            className='overflow-y-auto [scrollbar-width:thin]'
             onKeyDown={(event) => {
               if (PANEL_KEYS.has(event.key)) event.stopPropagation()
             }}

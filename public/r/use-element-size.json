@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-element-size",
+  "title": "Use Element Size",
+  "description": "A hook that measures an element’s width and height, inside its padding, and follows them as it resizes.",
+  "files": [
+    {
+      "path": "registry/hooks/use-element-size.tsx",
+      "content": "'use client'\n\nimport { useLayoutEffect, useRef, useState } from 'react'\n\n/** The width and height of the element `ref` points at, inside its padding, in px. Both are 0 until it has been measured. */\nexport function useElementSize<T extends HTMLElement = HTMLDivElement>() {\n  const ref = useRef<T>(null)\n  const [size, setSize] = useState({ height: 0, width: 0 })\n\n  useLayoutEffect(() => {\n    const element = ref.current\n    if (!element) return\n    const measure = () => {\n      const style = getComputedStyle(element)\n      const width =\n        element.clientWidth -\n        parseFloat(style.paddingLeft) -\n        parseFloat(style.paddingRight)\n      const height =\n        element.clientHeight -\n        parseFloat(style.paddingTop) -\n        parseFloat(style.paddingBottom)\n      setSize((previous) =>\n        previous.width === width && previous.height === height\n          ? previous\n          : { height, width },\n      )\n    }\n    const observer = new ResizeObserver(measure)\n    observer.observe(element)\n    measure()\n    return () => observer.disconnect()\n  }, [])\n\n  return { height: size.height, ref, width: size.width }\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-element-size.tsx"
+    }
+  ],
+  "type": "registry:hook"
+}

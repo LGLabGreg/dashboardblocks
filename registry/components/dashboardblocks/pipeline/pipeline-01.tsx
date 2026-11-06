@@ -235,7 +235,7 @@ const Pipeline1 = (props: Pipeline1Props) => {
             aria-label={`${title} board`}
             // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
             tabIndex={0}
-            className='focus-visible:ring-ring/50 relative flex snap-x snap-mandatory gap-4 overflow-x-auto outline-none focus-visible:ring-3'
+            className='focus-visible:ring-ring/50 relative flex snap-x snap-mandatory gap-4 overflow-x-auto outline-none [scrollbar-width:thin] focus-visible:ring-3'
           >
             <BlockStateText className='sr-only' />
             {summaries.map((stage, index) => {
