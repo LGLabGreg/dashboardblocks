@@ -1,18 +1,18 @@
 // Override of registry/components/dashboardblocks/app-shell.tsx for React Aria
-// source-hash: d9bfbf751d9d
+// source-hash: 17ef5288986a
 
 'use client'
 
 import { isPlainClick, Link } from '@/registry/components/dashboardblocks/link'
 import { TabLinks } from '@/registry/components/dashboardblocks/page-header'
-import {
-  StatusLabel,
-  type StatusTone,
-} from '@/registry/components/dashboardblocks/status-label'
 import { renderTag } from '@/registry/components/dashboardblocks/tag'
-import { UsageBar } from '@/registry/components/dashboardblocks/usage-meter'
+import {
+  PlanUsageShare,
+  UsageBar,
+  planUsageThresholds,
+} from '@/registry/components/dashboardblocks/usage-meter'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatNumber, formatPercent } from '@/registry/lib/dashboardblocks/format'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import {
   type MouseEvent,
   type ReactNode,
@@ -1050,29 +1050,15 @@ interface PlanUsageProps {
   used: number
 }
 
-function usageTone(percent: number): StatusTone {
-  if (percent >= 90) return 'bad'
-  if (percent >= 75) return 'warning'
-  return 'neutral'
-}
-
 function PlanUsage({ action, limit, note, title, unit, used }: PlanUsageProps) {
   const closeMobile = useCloseMobileSidebar()
-  const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0
-  const usedLabel = `${formatPercent(percent / 100, { maximumFractionDigits: 0 })} used`
   return (
     <div className='flex flex-col gap-2.5 border-t px-2 pt-3 pb-1 text-sm group-data-[collapsible=icon]:hidden'>
       <div className='flex items-baseline justify-between gap-2'>
         <span className='truncate font-medium'>{title}</span>
-        <StatusLabel
-          variant='text'
-          tone={usageTone(percent)}
-          className='shrink-0 text-xs tabular-nums'
-        >
-          {usedLabel}
-        </StatusLabel>
+        <PlanUsageShare className='shrink-0 text-xs' limit={limit} used={used} />
       </div>
-      <UsageBar critical={90} limit={limit} size='sm' used={used} warning={75} />
+      <UsageBar {...planUsageThresholds} limit={limit} size='sm' used={used} />
       {(unit || note) && (
         <div className='text-muted-foreground flex flex-col gap-0.5 text-xs text-pretty'>
           {unit && (

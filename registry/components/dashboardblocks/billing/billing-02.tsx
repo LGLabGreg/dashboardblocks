@@ -17,6 +17,7 @@ import { KPIValue } from '@/registry/components/dashboardblocks/kpi'
 import { StatusLabel } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
+import { type ReactNode, useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -34,8 +35,12 @@ interface Billing2Props extends BlockStateProps {
   interval: 'month' | 'year'
   nextInvoiceAmount?: number
   now: Date
-  onManage?: () => void
-  onUpdatePaymentMethod?: () => void
+  /** Opens where the plan is changed, such as your payment provider's billing page. A promise shows Opening… until it settles; show its errors yourself. */
+  onManage?: () => void | Promise<void>
+  /** Opens where the card is changed. A promise shows Opening… until it settles. */
+  onUpdatePaymentMethod?: () => void | Promise<void>
+  /** A renewal that wasn't paid, as your payment provider's `past_due`: what's owed and when the charge failed. */
+  pastDue?: { amount: number; failedOn: Date }
   paymentMethod?: PaymentMethod
   plan?: string
   /** Leave out to show the empty state. */
@@ -46,6 +51,41 @@ interface Billing2Props extends BlockStateProps {
 }
 
 const NOW = Date.UTC(2026, 8, 26, 12, 0)
+
+interface OpenButtonProps {
+  children: ReactNode
+  icon?: ReactNode
+  onOpen?: () => void | Promise<void>
+  unavailable?: boolean
+  variant: 'default' | 'ghost' | 'outline'
+}
+
+function OpenButton({ children, icon, onOpen, unavailable, variant }: OpenButtonProps) {
+  const [pending, startOpening] = useTransition()
+  return (
+    <Button
+      type='button'
+      variant={variant}
+      size='sm'
+      disabled={unavailable}
+      className='aria-disabled:opacity-50'
+      aria-disabled={pending ? true : undefined}
+      onClick={() => {
+        if (pending) return
+        startOpening(async () => {
+          try {
+            await onOpen?.()
+          } catch {
+            // React sends an error thrown in a transition to the error boundary, which replaces the page.
+          }
+        })
+      }}
+    >
+      {icon}
+      {pending ? 'Opening…' : children}
+    </Button>
+  )
+}
 
 const exampleProps: Billing2Props = {
   interval: 'month',
@@ -68,6 +108,7 @@ const Billing2 = (props: Billing2Props) => {
     now,
     onManage,
     onUpdatePaymentMethod,
+    pastDue,
     paymentMethod,
     plan,
     price = 0,
@@ -94,41 +135,41 @@ const Billing2 = (props: Billing2Props) => {
                   <Details className='text-muted-foreground block text-sm'>
                     <StatusLabel
                       variant='text'
-                      tone={cancelsAtPeriodEnd ? 'warning' : 'good'}
+                      tone={pastDue ? 'bad' : cancelsAtPeriodEnd ? 'warning' : 'good'}
                     >
-                      {cancelsAtPeriodEnd ? 'Cancels' : 'Active'}
+                      {pastDue ? 'Past due' : cancelsAtPeriodEnd ? 'Cancels' : 'Active'}
                     </StatusLabel>
-                    <span>
-                      {cancelsAtPeriodEnd ? 'Ends' : 'Renews'} {formatDaysUntil(days)}
-                    </span>
+                    {pastDue ? (
+                      <span>Payment failed {formatBillingDate(pastDue.failedOn)}</span>
+                    ) : (
+                      <span>
+                        {cancelsAtPeriodEnd ? 'Ends' : 'Renews'} {formatDaysUntil(days)}
+                      </span>
+                    )}
                   </Details>
                 </BlockReady>
               </div>
               <div className='flex shrink-0 gap-2'>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={unavailable}
-                  onClick={onUpdatePaymentMethod}
+                <OpenButton
+                  variant={pastDue && !unavailable ? 'default' : 'ghost'}
+                  unavailable={unavailable}
+                  icon={
+                    <IconPlaceholder
+                      lucide='CreditCardIcon'
+                      tabler='IconCreditCard'
+                      hugeicons='CreditCardIcon'
+                      phosphor='CreditCardIcon'
+                      remixicon='RiBankCardLine'
+                      data-icon='inline-start'
+                    />
+                  }
+                  onOpen={onUpdatePaymentMethod}
                 >
-                  <IconPlaceholder
-                    lucide='CreditCardIcon'
-                    tabler='IconCreditCard'
-                    hugeicons='CreditCardIcon'
-                    phosphor='CreditCardIcon'
-                    remixicon='RiBankCardLine'
-                    data-icon='inline-start'
-                  />
                   {paymentMethod ? 'Update card' : 'Add a card'}
-                </Button>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  disabled={unavailable}
-                  onClick={onManage}
-                >
+                </OpenButton>
+                <OpenButton variant='outline' unavailable={unavailable} onOpen={onManage}>
                   Manage
-                </Button>
+                </OpenButton>
               </div>
             </header>
             <div className='flex flex-col gap-1 border-t pt-4'>
@@ -167,19 +208,23 @@ const Billing2 = (props: Billing2Props) => {
                 </div>
                 {!cancelsAtPeriodEnd && (
                   <div className='flex flex-col gap-0.5'>
-                    <dt className='text-muted-foreground text-sm'>Next invoice</dt>
+                    <dt className='text-muted-foreground text-sm'>
+                      {pastDue ? 'Amount due' : 'Next invoice'}
+                    </dt>
                     <dd>
                       <KPIValue
                         className='text-2xl'
-                        value={nextInvoiceAmount ?? price}
+                        value={pastDue?.amount ?? nextInvoiceAmount ?? price}
                         format={(value) =>
                           formatCurrency(value, { currency, precision: 'exact' })
                         }
                       />
                     </dd>
-                    <dd className='text-muted-foreground text-xs'>
-                      <BlockReady className='text-xs'>Before tax</BlockReady>
-                    </dd>
+                    {!pastDue && (
+                      <dd className='text-muted-foreground text-xs'>
+                        <BlockReady className='text-xs'>Before tax</BlockReady>
+                      </dd>
+                    )}
                   </div>
                 )}
                 <div className='flex flex-col gap-0.5'>

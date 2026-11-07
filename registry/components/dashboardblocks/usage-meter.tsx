@@ -11,7 +11,11 @@ import {
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
 import { useReveal } from '@/registry/hooks/use-reveal'
-import { formatCompact, formatNumber } from '@/registry/lib/dashboardblocks/format'
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+} from '@/registry/lib/dashboardblocks/format'
 import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -40,6 +44,32 @@ function getUsageStatus(
   if (share >= critical) return 'critical'
   if (share >= warning) return 'warning'
   return 'ok'
+}
+
+/** Where a plan's allowance turns orange and red: a sidebar's meter and a usage page's windows. */
+const planUsageThresholds = { critical: 90, warning: 75 } satisfies UsageThresholds
+
+/** The share of a plan's allowance used, as `42% used`, orange from 75% and red from 90%. */
+function PlanUsageShare({
+  className,
+  limit,
+  used,
+}: {
+  className?: string
+  limit: number
+  used: number
+}) {
+  const status = getUsageStatus(Math.min(used, limit), limit, planUsageThresholds)
+  const share = Math.min(100, getUsageShare(used, limit))
+  return (
+    <StatusLabel
+      variant='text'
+      tone={status === 'ok' ? 'neutral' : status === 'warning' ? 'warning' : 'bad'}
+      className={cn('tabular-nums', className)}
+    >
+      {`${formatPercent(share / 100, { maximumFractionDigits: 0 })} used`}
+    </StatusLabel>
+  )
 }
 
 interface UsageProjectionInput {
@@ -276,6 +306,7 @@ function UsageMeterLimit({
 }
 
 export {
+  PlanUsageShare,
   UsageBar,
   UsageKey,
   UsageMeterLimit,
@@ -285,6 +316,7 @@ export {
   getDaysLeft,
   getUsageShare,
   getUsageStatus,
+  planUsageThresholds,
   projectUsage,
   projectedFill,
   usageStatusConfig,

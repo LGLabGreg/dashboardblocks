@@ -1,5 +1,16 @@
 # dashboardblocks
 
+## 1.23.0
+
+### Minor Changes
+
+- f1362e8: Brand Logos adds Google Drive, Gmail, Notion and Linear. Settings' Connection Row takes a status label of its own and a name that can be a link.
+- 7f3fd65: Current Plan shows a plan that's past due, with the amount owed and Update card first, and reads Opening… while Manage or Update card opens the billing page.
+
+### Patch Changes
+
+- d2055af: Chat Conversation and AI Message Parts take `renderApproval`, which draws a tool call that waits for approval as a card of your own, in place of its Approve and Deny row.
+
 ## 1.22.1
 
 ### Patch Changes

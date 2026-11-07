@@ -460,7 +460,11 @@ function ChatLog({
 
 interface ChatMessageProps extends Pick<
   AIMessagePartsProps,
-  'onToolApprovalResponse' | 'renderToolResult' | 'renderWork' | 'toolLabels'
+  | 'onToolApprovalResponse'
+  | 'renderApproval'
+  | 'renderToolResult'
+  | 'renderWork'
+  | 'toolLabels'
 > {
   actions?: ReactNode
   avatar?: ReactNode
@@ -482,6 +486,7 @@ function ChatMessage({
   message,
   name,
   onToolApprovalResponse,
+  renderApproval,
   renderToolResult,
   renderWork,
   streaming,
@@ -527,6 +532,7 @@ function ChatMessage({
                   streaming={streaming}
                   toolLabels={toolLabels}
                   onToolApprovalResponse={onToolApprovalResponse}
+                  renderApproval={renderApproval}
                   renderToolResult={renderToolResult}
                   renderWork={renderWork}
                 />
@@ -1355,7 +1361,7 @@ function ChatComposer({
 
 interface ChatConversationProps extends Pick<
   AIMessagePartsProps,
-  'renderToolResult' | 'renderWork' | 'toolLabels'
+  'renderApproval' | 'renderToolResult' | 'renderWork' | 'toolLabels'
 > {
   chat: AIChat
   /** The message box, which Retry focuses as it goes. */
@@ -1499,6 +1505,7 @@ function ChatConversation({
   footer,
   name,
   onFeedback,
+  renderApproval,
   renderToolResult,
   renderWork,
   toolLabels,
@@ -1569,7 +1576,11 @@ function ChatConversation({
           )
         }
         const failedReply = lastMessage && status === 'error'
-        const finishedReply = message.role === 'assistant' && !streaming && !failedReply
+        const waiting = message.parts.some(
+          (part) => isToolPart(part) && part.state === 'approval-requested',
+        )
+        const finishedReply =
+          message.role === 'assistant' && !streaming && !failedReply && !waiting
         const more = finishedReply ? footer?.(message) : undefined
         const prompts =
           finishedReply && lastMessage && status === 'ready'
@@ -1582,6 +1593,7 @@ function ChatConversation({
             name={message.role === 'assistant' ? name : undefined}
             streaming={streaming}
             toolLabels={toolLabels}
+            renderApproval={renderApproval}
             renderToolResult={renderToolResult}
             renderWork={renderWork}
             onToolApprovalResponse={chat.addToolApprovalResponse}
@@ -1963,6 +1975,14 @@ function useChatStream({
     const conversation = history.current
     const last = conversation.at(-1)
     if (controller.current || last?.role !== 'assistant') return
+    const asked = last.parts.some(
+      (part) =>
+        isToolPart(part) &&
+        part.state === 'approval-requested' &&
+        part.approval?.id === id,
+    )
+    // A request that isn't waiting in the last reply anymore: nothing to answer.
+    if (!asked) return
     const parts = last.parts.map((part) =>
       isToolPart(part) && part.state === 'approval-requested' && part.approval?.id === id
         ? {

@@ -54,6 +54,8 @@ interface AIToolCall {
   approval?: {
     approved?: boolean
     id: string
+    /** The app answered, not the person, such as a call whose tool was turned off while it waited. */
+    isAutomatic?: boolean
     reason?: string
     /** Why the server asks, when it says. */
     requestReason?: string

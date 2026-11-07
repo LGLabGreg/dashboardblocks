@@ -610,6 +610,8 @@ interface AIMessagePartsProps {
   message: AIMessage
   /** Answers a tool call that waits for approval: pass the chat's `addToolApprovalResponse`. Approve and Deny show once the reply has stopped streaming. */
   onToolApprovalResponse?: (response: AIToolApprovalResponse) => void
+  /** Draws a tool call that waits for the person in place of its Approve and Deny row, such as an approval card with what the call will change. Return nothing to keep the row. */
+  renderApproval?: (part: AIAnyToolPart) => ReactNode
   /** Draws a tool's result as a block, such as a chart or a headline number, at the top of the answer. Return nothing to show only the step. */
   renderToolResult?: (part: AIAnyToolPart) => ReactNode
   /** Draws a reply's work (its thinking, tool calls and sources) in place of the line that folds it, such as a research run. Return nothing to keep the line. */
@@ -640,6 +642,7 @@ function AIMessageParts({
   className,
   message,
   onToolApprovalResponse,
+  renderApproval,
   renderToolResult,
   renderWork,
   showSources = true,
@@ -742,6 +745,8 @@ function AIMessageParts({
         if (group.type !== 'tool') return null
         const { part } = group
         if (part.state === 'approval-requested') {
+          const drawn = streaming ? null : renderApproval?.(part)
+          if (drawn) return <div key={group.key}>{drawn}</div>
           return (
             <ToolCall
               key={group.key}

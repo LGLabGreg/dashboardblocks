@@ -251,8 +251,11 @@ interface ConnectionRowProps extends Omit<ComponentProps<'div'>, 'title'> {
   description?: ReactNode
   /** Drawn in a square at the start of the row. */
   logo?: ReactNode
-  name: string
+  /** The service's name, or a link to its page. */
+  name: ReactNode
   status: ConnectionStatus
+  /** In place of the status's own word, such as "Signed out" for `revoked`. */
+  statusLabel?: string
 }
 
 function ConnectionRow({
@@ -263,6 +266,7 @@ function ConnectionRow({
   logo,
   name,
   status,
+  statusLabel,
   ...props
 }: ConnectionRowProps) {
   return (
@@ -274,11 +278,13 @@ function ConnectionRow({
       {logo}
       <div className='flex min-w-0 flex-1 basis-48 flex-col gap-0.5'>
         <span className='flex flex-wrap items-baseline gap-x-2'>
-          <span className='text-sm font-medium'>{name}</span>
-          <ConnectionStatusLabel status={status} />
+          <span className='min-w-0 text-sm font-medium'>{name}</span>
+          <ConnectionStatusLabel label={statusLabel} status={status} />
         </span>
         {description && (
-          <div className='text-muted-foreground text-sm text-pretty'>{description}</div>
+          <div className='text-muted-foreground in-data-open:text-foreground/70 text-sm text-pretty'>
+            {description}
+          </div>
         )}
         {children}
       </div>
