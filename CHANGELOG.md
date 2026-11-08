@@ -1,5 +1,11 @@
 # dashboardblocks
 
+## 1.24.0
+
+### Minor Changes
+
+- 7f3fd65: Current Plan shows a plan that's past due, with the amount owed and Update card first, and reads Opening… while Manage or Update card opens the billing page.
+
 ## 1.23.0
 
 ### Minor Changes

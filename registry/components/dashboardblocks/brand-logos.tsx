@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -205,6 +205,21 @@ function StripeLogo({ className, ...props }: ComponentProps<'svg'>) {
   )
 }
 
+/** A service's logo in a bordered square, as a list row or a panel shows it. */
+function LogoTile({ logo, size = 'sm' }: { logo: ReactNode; size?: 'lg' | 'sm' }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        'flex shrink-0 items-center justify-center rounded-md border',
+        size === 'lg' ? 'size-10 [&_svg]:size-5' : 'size-8 [&_svg]:size-4',
+      )}
+    >
+      {logo}
+    </span>
+  )
+}
+
 export {
   BigQueryLogo,
   GitHubLogo,
@@ -212,6 +227,7 @@ export {
   GoogleDriveLogo,
   GoogleLogo,
   LinearLogo,
+  LogoTile,
   MicrosoftTeamsLogo,
   NotionLogo,
   PagerDutyLogo,
