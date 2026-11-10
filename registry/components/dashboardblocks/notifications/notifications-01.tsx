@@ -1,5 +1,6 @@
 'use client'
 
+import { MarkAllReadButton } from '@/registry/components/dashboardblocks/activity-feed'
 import {
   BlockReady,
   BlockStateProvider,
@@ -18,7 +19,6 @@ import {
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
 interface Notifications1Props extends BlockStateProps {
@@ -150,23 +150,11 @@ const Notifications1 = (props: Notifications1Props) => {
                 }
                 action={
                   unread > 0 && (
-                    <Button
-                      variant='ghost'
-                      size='sm'
+                    <MarkAllReadButton
                       onClick={() =>
                         markRead(notifications.map((notification) => notification.id))
                       }
-                    >
-                      <IconPlaceholder
-                        lucide='CheckCheckIcon'
-                        tabler='IconChecks'
-                        hugeicons='TickDouble02Icon'
-                        phosphor='ChecksIcon'
-                        remixicon='RiCheckDoubleLine'
-                        data-icon='inline-start'
-                      />
-                      Mark all as read
-                    </Button>
+                    />
                   )
                 }
               />

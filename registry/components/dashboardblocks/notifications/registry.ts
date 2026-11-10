@@ -8,7 +8,7 @@ export const examples: Registry['items'] = [
     type: 'registry:component',
     registryDependencies: [
       'card',
-      'button',
+      registryUrl('activity-feed'),
       registryUrl('block-state'),
       registryUrl('link'),
       registryUrl('notifications'),

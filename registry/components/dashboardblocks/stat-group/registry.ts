@@ -6,7 +6,11 @@ export const examples: Registry['items'] = [
   {
     name: 'stat-group-01',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('stat-group')],
+    registryDependencies: [
+      'card',
+      registryUrl('stat-group'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/stat-group/stat-group-01.tsx',

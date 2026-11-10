@@ -57,7 +57,13 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-03',
     type: 'registry:component',
-    registryDependencies: ['switch', registryUrl('block-state'), registryUrl('table')],
+    registryDependencies: [
+      registryUrl('attempt'),
+      registryUrl('announcements'),
+      'switch',
+      registryUrl('block-state'),
+      registryUrl('table'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-03.tsx',
@@ -144,6 +150,7 @@ export const examples: Registry['items'] = [
     name: 'settings-07',
     type: 'registry:component',
     registryDependencies: [
+      registryUrl('announcements'),
       'button',
       'field',
       'input',

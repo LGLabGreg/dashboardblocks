@@ -6,10 +6,10 @@ export const components: Registry['items'] = [
   {
     name: 'activity-feed',
     type: 'registry:component',
-    registryDependencies: [registryUrl('format')],
+    registryDependencies: ['button', registryUrl('format')],
     title: 'Activity Feed',
     description:
-      'Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and "Today" and "Yesterday" day headings that take a fixed now and a time zone, and grouping by day.',
+      'Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, a Mark all as read button, relative times and "Today" and "Yesterday" day headings that take a fixed now and a time zone, and grouping by day.',
     files: [
       {
         path: 'registry/components/dashboardblocks/activity-feed.tsx',
@@ -1011,7 +1011,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Brand Logos',
     description:
-      'Logos of the services people sign in with or connect: GitHub, Google, Sentry, Slack, Stripe and X, sized like an icon.',
+      'Logos of the services people sign in with or connect, and of the AI model makers and hosts a gateway routes to (OpenAI, Anthropic, Google Gemini, xAI, Mistral, Meta, Amazon Bedrock, Vertex AI, Groq and more), sized like an icon.',
     files: [
       {
         path: 'registry/components/dashboardblocks/brand-logos.tsx',
@@ -1042,6 +1042,32 @@ export const components: Registry['items'] = [
       {
         path: 'registry/components/dashboardblocks/details.tsx',
         type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'announcements',
+    type: 'registry:component',
+    title: 'Announcements',
+    description:
+      'What a block says to screen readers about a result: a polite status region that keeps the last three messages, each read once.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/announcements.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'attempt',
+    type: 'registry:lib',
+    title: 'Attempt',
+    description:
+      'Runs a request and reads a throw as a refusal that says to check the connection, since a refusal resolves.',
+    files: [
+      {
+        path: 'registry/lib/dashboardblocks/attempt.ts',
+        type: 'registry:lib',
       },
     ],
   },
@@ -1403,6 +1429,7 @@ export const components: Registry['items'] = [
     description:
       'Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files, shows each one uploading, too large or of a type it can’t send, and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.',
     registryDependencies: [
+      registryUrl('announcements'),
       'attachment',
       'bubble',
       'button',

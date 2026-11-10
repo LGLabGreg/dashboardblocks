@@ -13,7 +13,7 @@ import {
   formatPoints,
   formatSigned,
 } from '@/registry/lib/dashboardblocks/format'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -22,12 +22,16 @@ type StatFormatter = (value: number) => string
 interface StatMetric {
   /** @default 'percent' */
   changeType?: 'percent' | 'points'
+  /** A line under a value that has no `previous` to compare with, such as what it's about or since when. */
+  detail?: ReactNode
   formatter?: StatFormatter
   /** Use `down` for metrics like churn or latency, where a decrease is good. */
   goodDirection?: 'up' | 'down'
   key: string
   label: string
   previous?: number
+  /** `warning` draws the value in the warning colour, for a figure that needs action now. */
+  tone?: 'warning'
   value: number
 }
 

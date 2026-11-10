@@ -4,6 +4,7 @@ import {
   ActivityFeed,
   ActivityFeedItem,
   ActivityTime,
+  MarkAllReadButton,
   UnreadDot,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import {
@@ -15,11 +16,9 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { type Person, PersonAvatar } from '@/registry/components/dashboardblocks/team'
-import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { formatNumber } from '@/registry/lib/dashboardblocks/format'
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -151,22 +150,10 @@ const ActivityFeed3 = (props: ActivityFeed3Props) => {
                   <p className='text-muted-foreground text-sm'>{describe(unread)}</p>
                 </BlockReady>
               </div>
-              <Button
+              <MarkAllReadButton
                 disabled={Boolean(state) || unread.length === 0}
                 onClick={() => markRead(unread.map((item) => item.id))}
-                size='sm'
-                variant='ghost'
-              >
-                <IconPlaceholder
-                  lucide='CheckCheckIcon'
-                  tabler='IconChecks'
-                  hugeicons='TickDouble02Icon'
-                  phosphor='ChecksIcon'
-                  remixicon='RiCheckDoubleLine'
-                  data-icon='inline-start'
-                />
-                Mark all as read
-              </Button>
+              />
             </header>
             <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
               <TabsList>

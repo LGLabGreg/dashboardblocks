@@ -28,6 +28,10 @@ import {
   ThinkingIndicator,
 } from '@/registry/components/dashboardblocks/ai-parts'
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStateProps,
@@ -250,6 +254,11 @@ interface ChatMessagesProps {
   status?: AIChatStatus
 }
 
+function lastMessageId(content: HTMLElement | null) {
+  return [...(content?.querySelectorAll<HTMLElement>('[data-message-id]') ?? [])].at(-1)
+    ?.dataset.messageId
+}
+
 function latestQuestion(content: HTMLElement | null) {
   return [...(content?.querySelectorAll<HTMLElement>('[data-chat-question]') ?? [])].at(
     -1,
@@ -283,6 +292,8 @@ function ChatLog({
   const placedMargin = useRef(QUESTION_PEEK_PX)
   const opened = useRef(false)
   const placedForStatus = useRef(status)
+  const idleLastId = useRef<string | undefined>(undefined)
+  const placeFrame = useRef(0)
   const [announcement, setAnnouncement] = useState('')
   const [previousStatus, setPreviousStatus] = useState(status)
 
@@ -347,21 +358,24 @@ function ChatLog({
     placeQuestion(id, 0)
   }, [])
 
+  useLayoutEffect(() => {
+    if (!isBusy(status)) idleLastId.current = lastMessageId(contentRef.current)
+  })
+
+  useEffect(() => () => cancelAnimationFrame(placeFrame.current), [])
+
   useEffect(() => {
     const before = placedForStatus.current
     placedForStatus.current = status
-    if (status !== 'submitted' || before === 'submitted') return
-    const question = latestQuestion(contentRef.current)
-    const id = question?.dataset.messageId
+    if (!isBusy(status) || isBusy(before)) return
+    const id = latestQuestion(contentRef.current)?.dataset.messageId
+    const last = lastMessageId(contentRef.current)
     // A reply that goes on after an approval stays where the reader is.
-    const last = [
-      ...(contentRef.current?.querySelectorAll('[data-message-id]') ?? []),
-    ].at(-1)
-    if (!id || last !== question) return
+    if (!id || (last !== id && last === idleLastId.current)) return
     heldQuestion.current = id
     placedMargin.current = QUESTION_PEEK_PX
-    const frame = requestAnimationFrame(() => placeQuestion(id))
-    return () => cancelAnimationFrame(frame)
+    cancelAnimationFrame(placeFrame.current)
+    placeFrame.current = requestAnimationFrame(() => placeQuestion(id))
   }, [status])
 
   useEffect(() => {
@@ -1080,7 +1094,7 @@ function ChatComposer({
   const nextFileId = useRef(0)
   const [draft, setDraft] = useState('')
   const [files, setFiles] = useState<ComposerFile[]>([])
-  const [notices, setNotices] = useState<{ id: string; text: string }[]>([])
+  const [notices, announce] = useAnnouncements()
   const [dragging, setDragging] = useState(false)
   const text = value ?? draft
   const busy = isBusy(status)
@@ -1119,17 +1133,13 @@ function ChatComposer({
     }
   }
 
-  function announce(id: string, name: string, message: string) {
-    setNotices((current) => [...current.slice(-2), { id, text: `${name}: ${message}` }])
-  }
-
   function finish(
     id: string,
     name: string,
     result: AIFilePart | { message: string; status: 'error' },
   ) {
     startTransition(() => {
-      if ('status' in result) announce(id, name, result.message)
+      if ('status' in result) announce(`${name}: ${result.message}`)
       setFiles((current) =>
         current.map((item) =>
           item.id !== id || item.state !== 'uploading'
@@ -1166,7 +1176,7 @@ function ChatComposer({
           rejected.reason === 'size' && maxSize !== undefined
             ? `Over ${formatFileSize(maxSize)}. Try a smaller file.`
             : 'Can’t read this kind of file.'
-        announce(id, file.name, message)
+        announce(`${file.name}: ${message}`)
         return { id, message, name: file.name, state: 'error' }
       }
       const controller = new AbortController()
@@ -1240,11 +1250,7 @@ function ChatComposer({
           attach(event.dataTransfer.files)
         }}
       >
-        <div role='status' aria-atomic='false' className='sr-only'>
-          {notices.map((notice) => (
-            <div key={notice.id}>{notice.text}</div>
-          ))}
-        </div>
+        <Announcements said={notices} />
         {dragging && (
           <div
             aria-hidden

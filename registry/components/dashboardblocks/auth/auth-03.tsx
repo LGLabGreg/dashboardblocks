@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   AuthIcon,
   AuthLayout,
   AuthReveal,
@@ -26,6 +30,8 @@ interface VerifyResult {
   ok: boolean
   attemptsLeft?: number
 }
+
+type Stage = 'code' | 'checking' | 'locked' | 'verified'
 
 interface Auth3Props {
   email: string
@@ -61,10 +67,11 @@ const Auth3 = (props: Auth3Props) => {
   const [code, setCode] = useState('')
   const [recovery, setRecovery] = useState('')
   const [trustDevice, setTrustDevice] = useState(false)
-  const [checking, setChecking] = useState(false)
+  const [stage, setStage] = useState<Stage>('code')
   const [error, setError] = useState<string | null>(null)
-  const [locked, setLocked] = useState(false)
-  const [verified, setVerified] = useState(false)
+  const [said, announce] = useAnnouncements()
+  const checking = stage === 'checking'
+  const verified = stage === 'verified'
   const [exampleAttempts, setExampleAttempts] = useState(EXAMPLE_ATTEMPTS)
   const [failures, setFailures] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
@@ -87,11 +94,11 @@ const Auth3 = (props: Auth3Props) => {
   }
 
   const verify = async (value: string) => {
-    if (checking || locked) return
+    if (stage !== 'code') return
     if (kind === 'app' && !/^\d{6}$/.test(value))
       return fail('Enter all 6 digits from your authenticator app.')
     if (kind === 'recovery' && !value.trim()) return fail('Enter a recovery code.')
-    setChecking(true)
+    setStage('checking')
     setError(null)
     try {
       const result = onVerify
@@ -99,12 +106,14 @@ const Auth3 = (props: Auth3Props) => {
         : tryExampleCode(value.trim())
       startTransition(() => {
         if (result.ok) {
-          setVerified(true)
+          setStage('verified')
+          announce('Signed in')
           onVerified?.()
         } else if (result.attemptsLeft === 0) {
-          setLocked(true)
+          setStage('locked')
           setError('Too many tries. Wait 15 minutes, then try again.')
         } else {
+          setStage('code')
           setCode('')
           fail(
             kind === 'app'
@@ -114,9 +123,10 @@ const Auth3 = (props: Auth3Props) => {
         }
       })
     } catch {
-      startTransition(() => fail('We couldn’t check the code. Try again.'))
-    } finally {
-      startTransition(() => setChecking(false))
+      startTransition(() => {
+        setStage('code')
+        fail('We couldn’t check the code. Check your connection and try again.')
+      })
     }
   }
 
@@ -183,7 +193,7 @@ const Auth3 = (props: Auth3Props) => {
                 }}
                 onComplete={(next) => void verify(next)}
                 invalid={Boolean(error)}
-                disabled={checking || locked}
+                disabled={stage !== 'code'}
               />
             ) : (
               <div className='flex flex-col gap-2'>
@@ -202,7 +212,7 @@ const Auth3 = (props: Auth3Props) => {
                   }}
                   aria-invalid={error ? true : undefined}
                   aria-describedby={error ? `${id}-error` : undefined}
-                  disabled={checking || locked}
+                  disabled={stage !== 'code'}
                   className='font-mono'
                 />
               </div>
@@ -224,12 +234,13 @@ const Auth3 = (props: Auth3Props) => {
                 />
               </div>
             )}
-            <Button type='submit' disabled={checking || locked}>
+            <Button type='submit' disabled={stage !== 'code'}>
               {checking ? 'Checking…' : 'Verify'}
             </Button>
             <Button
               type='button'
               variant='ghost'
+              disabled={checking}
               onClick={() => {
                 setKind(kind === 'app' ? 'recovery' : 'app')
                 setError(null)
@@ -247,9 +258,7 @@ const Auth3 = (props: Auth3Props) => {
           />
         </div>
       </AuthReveal>
-      <p role='status' className='sr-only'>
-        {verified ? 'Signed in' : ''}
-      </p>
+      <Announcements said={said} />
     </AuthLayout>
   )
 }

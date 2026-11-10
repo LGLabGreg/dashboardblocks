@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   BlockStateProvider,
   type BlockStateProps,
   getBlockState,
@@ -16,6 +20,7 @@ import {
   DataTableRowHead,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
+import { attempt } from '@/registry/lib/dashboardblocks/attempt'
 import { type ReactNode, startTransition, useId, useState } from 'react'
 
 import { Switch } from '@/components/ui/switch'
@@ -153,7 +158,7 @@ const Settings3 = (props: Settings3Props) => {
   } = props
   const [preferences, setPreferences] = useState(props.preferences ?? {})
   const [error, setError] = useState<string | null>(null)
-  const [said, setSaid] = useState<{ id: number; text: string }[]>([])
+  const [said, announce] = useAnnouncements()
   const noteId = useId()
   const ready = !status && groups.length > 0
   const unavailable = channels.filter((channel) => channel.unavailable)
@@ -162,24 +167,16 @@ const Settings3 = (props: Settings3Props) => {
     const previous = preferences
     setPreferences(next)
     setError(null)
-    let result: NotificationChangeResult
-    try {
-      result = await onChange?.(next)
-    } catch {
-      result = {
-        message: 'Couldn’t save your notifications. Try again.',
-        status: 'error',
-      }
-    }
+    const result: NotificationChangeResult = await attempt(
+      () => onChange?.(next),
+      'Couldn’t save your notifications. Try again.',
+    )
     if (!result) return
     const { message } = result
     startTransition(() => {
       setPreferences((current) => revert(current, previous, next))
       setError(message)
-      setSaid((current) => [
-        ...current.slice(-2),
-        { id: (current.at(-1)?.id ?? 0) + 1, text: message },
-      ])
+      announce(message)
     })
   }
 
@@ -295,11 +292,7 @@ const Settings3 = (props: Settings3Props) => {
             ))}
         </DataTable>
         {error && <p className='text-destructive text-sm'>{error}</p>}
-        <div role='status' aria-atomic='false' className='sr-only'>
-          {said.map((message) => (
-            <div key={message.id}>{message.text}</div>
-          ))}
-        </div>
+        <Announcements said={said} />
       </section>
     </BlockStateProvider>
   )

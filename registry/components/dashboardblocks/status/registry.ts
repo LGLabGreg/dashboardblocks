@@ -23,7 +23,15 @@ export const examples: Registry['items'] = [
   {
     name: 'status-02',
     type: 'registry:component',
-    registryDependencies: ['card', registryUrl('block-state'), registryUrl('status')],
+    registryDependencies: [
+      'card',
+      registryUrl('block-state'),
+      registryUrl('brand-logos'),
+      registryUrl('details'),
+      registryUrl('format'),
+      registryUrl('status'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/status/status-02.tsx',
@@ -32,7 +40,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Ninety days of daily status for each service as a row of bars, with a tooltip for any day.',
+        'Ninety days of daily status for each service as a row of bars, with its icon, its status now and a tooltip for any day.',
       size: 'full',
       usedWith: ['status-01', 'status-03', 'alerts-01'],
     },

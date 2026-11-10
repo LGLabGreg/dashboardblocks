@@ -30,7 +30,7 @@
       "geo-02"
     ],
     "component": "ChartPanel2",
-    "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

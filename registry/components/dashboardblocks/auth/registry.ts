@@ -47,6 +47,7 @@ export const examples: Registry['items'] = [
     name: 'auth-03',
     type: 'registry:component',
     registryDependencies: [
+      registryUrl('announcements'),
       'button',
       'input',
       'switch',
@@ -70,6 +71,7 @@ export const examples: Registry['items'] = [
     name: 'auth-04',
     type: 'registry:component',
     registryDependencies: [
+      registryUrl('announcements'),
       'button',
       'input',
       registryUrl('auth'),
@@ -117,6 +119,7 @@ export const examples: Registry['items'] = [
     name: 'auth-06',
     type: 'registry:component',
     registryDependencies: [
+      registryUrl('announcements'),
       'button',
       'field',
       'input',

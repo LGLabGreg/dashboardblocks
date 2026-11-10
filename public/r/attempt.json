@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "attempt",
+  "title": "Attempt",
+  "description": "Runs a request and reads a throw as a refusal that says to check the connection, since a refusal resolves.",
+  "files": [
+    {
+      "path": "registry/lib/dashboardblocks/attempt.ts",
+      "content": "/** What a request that threw says: it didn't arrive. */\nconst OFFLINE = 'Check your connection and try again.'\n\n/**\n * Runs a request and reads a throw as a refusal with `message`: a refusal resolves, so a throw\n * means the request didn't arrive.\n */\nasync function attempt<Result>(\n  run: () => Result | Promise<Result>,\n  message = OFFLINE,\n): Promise<Result | { message: string; status: 'error' }> {\n  try {\n    return await run()\n  } catch {\n    return { message, status: 'error' }\n  }\n}\n\nexport { attempt, OFFLINE }\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboardblocks/attempt.ts"
+    }
+  ],
+  "type": "registry:lib"
+}

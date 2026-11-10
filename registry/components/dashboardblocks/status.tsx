@@ -27,6 +27,8 @@ interface StatusConfig {
   color: string
   fill: string
   label: string
+  /** The label where room is short, such as after a service's name on one line. */
+  shortLabel: string
   /** Follows a service's name in a sentence, such as `is running slowly`. */
   phrase: string
   tone: StatusTone
@@ -37,6 +39,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'var(--color-emerald-500)',
     fill: 'bg-emerald-500',
     label: 'Operational',
+    shortLabel: 'Operational',
     phrase: 'is operational',
     tone: 'good',
   },
@@ -44,6 +47,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'var(--color-amber-400)',
     fill: 'bg-amber-400',
     label: 'Degraded performance',
+    shortLabel: 'Degraded',
     phrase: 'is running slowly',
     tone: 'warning',
   },
@@ -51,6 +55,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'var(--color-orange-500)',
     fill: 'bg-orange-500',
     label: 'Partial outage',
+    shortLabel: 'Partial outage',
     phrase: 'has a partial outage',
     tone: 'bad',
   },
@@ -58,6 +63,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'var(--color-red-500)',
     fill: 'bg-red-500',
     label: 'Major outage',
+    shortLabel: 'Major outage',
     phrase: 'is down',
     tone: 'bad',
   },
@@ -65,6 +71,7 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'var(--color-sky-500)',
     fill: 'bg-sky-500',
     label: 'Maintenance',
+    shortLabel: 'Maintenance',
     phrase: 'is in maintenance',
     tone: 'info',
   },
@@ -72,9 +79,19 @@ const statusConfig: Record<StatusLevel, StatusConfig> = {
     color: 'color-mix(in oklab, var(--color-muted-foreground) 25%, transparent)',
     fill: 'bg-muted-foreground/25',
     label: 'No data',
+    shortLabel: 'No data',
     phrase: 'isn’t reporting',
     tone: 'neutral',
   },
+}
+
+/** How a day draws in an uptime history: an operational day is light, so the days with an incident stand out. */
+function getDayFill(status: StatusLevel): Pick<StatusConfig, 'color' | 'fill'> {
+  if (status !== 'operational') return statusConfig[status]
+  return {
+    color: 'color-mix(in oklab, var(--color-emerald-500) 35%, transparent)',
+    fill: 'bg-emerald-500/35',
+  }
 }
 
 const severityOrder: StatusLevel[] = [
@@ -155,7 +172,7 @@ function StatusLegend({ className, statuses }: StatusLegendProps) {
         <li key={status} className='flex items-center gap-1.5'>
           <span
             aria-hidden
-            className={cn('h-2.5 w-1 rounded-[1px]', statusConfig[status].fill)}
+            className={cn('h-2.5 w-1 rounded-[1px]', getDayFill(status).fill)}
           />
           {statusConfig[status].label}
         </li>
@@ -274,7 +291,7 @@ function UptimeBar({ className, days, label }: UptimeBarProps) {
             aria-hidden
             className={cn(
               'h-full min-w-0 flex-1 rounded-[2px] transition-opacity duration-150',
-              statusConfig[day.status].fill,
+              getDayFill(day.status).fill,
               active !== null && active !== index && 'opacity-50',
             )}
           />
@@ -289,7 +306,7 @@ function UptimeBar({ className, days, label }: UptimeBarProps) {
         >
           <span className='font-medium'>{shownDay.label}</span>
           <ChartTooltipItem
-            color={statusConfig[shownDay.status].color}
+            color={getDayFill(shownDay.status).color}
             name={statusConfig[shownDay.status].label}
             value={
               shownDay.uptime !== undefined && shownDay.status !== 'unknown'

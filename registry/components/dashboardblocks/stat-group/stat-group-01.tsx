@@ -16,9 +16,12 @@ import {
   getStatColumns,
   getStatPlaceholders,
 } from '@/registry/components/dashboardblocks/stat-group'
+import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
 import { formatCurrency, formatPercent } from '@/registry/lib/dashboardblocks/format'
 
 import { Card, CardContent } from '@/components/ui/card'
+
+import { cn } from '@/lib/utils'
 
 interface StatGroup1Props extends BlockStateProps {
   /** Follows each previous value, such as `last month`. */
@@ -68,10 +71,19 @@ const StatGroup1 = (props: StatGroup1Props) => {
               {shown.map((metric) => (
                 <Stat key={metric.key}>
                   <StatLabel>{metric.label}</StatLabel>
-                  <StatValue className='text-3xl @2xl:text-4xl'>
+                  <StatValue
+                    className={cn(
+                      'text-3xl @2xl:text-4xl',
+                      metric.tone && statusToneClasses[metric.tone],
+                    )}
+                  >
                     {formatStatValue(metric)}
                   </StatValue>
-                  <StatChange comparison={comparison} metric={metric} />
+                  {metric.previous === undefined && metric.detail ? (
+                    <dd className='text-muted-foreground text-sm'>{metric.detail}</dd>
+                  ) : (
+                    <StatChange comparison={comparison} metric={metric} />
+                  )}
                 </Stat>
               ))}
             </StatGroup>

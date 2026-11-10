@@ -7,10 +7,11 @@
       "name": "activity-feed",
       "type": "registry:component",
       "registryDependencies": [
+        "button",
         "https://www.dashboardblocks.com/r/base/format.json"
       ],
       "title": "Activity Feed",
-      "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
+      "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, a Mark all as read button, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
       "files": [
         {
           "path": "registry/components/dashboardblocks/activity-feed.tsx",
@@ -1137,7 +1138,7 @@
       "name": "brand-logos",
       "type": "registry:component",
       "title": "Brand Logos",
-      "description": "Logos of the services people sign in with or connect: GitHub, Google, Sentry, Slack, Stripe and X, sized like an icon.",
+      "description": "Logos of the services people sign in with or connect, and of the AI model makers and hosts a gateway routes to (OpenAI, Anthropic, Google Gemini, xAI, Mistral, Meta, Amazon Bedrock, Vertex AI, Groq and more), sized like an icon.",
       "files": [
         {
           "path": "registry/components/dashboardblocks/brand-logos.tsx",
@@ -1169,6 +1170,32 @@
           "path": "registry/components/dashboardblocks/details.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/details.tsx"
+        }
+      ]
+    },
+    {
+      "name": "announcements",
+      "type": "registry:component",
+      "title": "Announcements",
+      "description": "What a block says to screen readers about a result: a polite status region that keeps the last three messages, each read once.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/announcements.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/announcements.tsx"
+        }
+      ]
+    },
+    {
+      "name": "attempt",
+      "type": "registry:lib",
+      "title": "Attempt",
+      "description": "Runs a request and reads a throw as a refusal that says to check the connection, since a refusal resolves.",
+      "files": [
+        {
+          "path": "registry/lib/dashboardblocks/attempt.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboardblocks/attempt.ts"
         }
       ]
     },
@@ -1569,6 +1596,7 @@
       "title": "AI Assistant",
       "description": "Primitives for AI chat that take the Vercel AI SDK’s useChat as it is: a panel with New conversation and Close around a welcome, the conversation and the message box, a scrolling log that puts each new question at the top with its reply growing below, opens a saved conversation at its last question and reads each reply out once it has finished, messages that show thinking, tool calls, Markdown, files and sources, copy, regenerate and feedback actions, suggested prompts, a welcome, an error with retry, context chips, a message box that attaches files, shows each one uploading, too large or of a type it can’t send, and where Enter sends and Stop halts a reply, and a hook that runs the same chat from any function that streams.",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "attachment",
         "bubble",
         "button",
@@ -2616,7 +2644,7 @@
           "geo-02"
         ],
         "component": "ChartPanel2",
-        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "files": [
         {
@@ -3039,7 +3067,11 @@
       "registryDependencies": [
         "card",
         "https://www.dashboardblocks.com/r/base/block-state.json",
-        "https://www.dashboardblocks.com/r/base/status.json"
+        "https://www.dashboardblocks.com/r/base/brand-logos.json",
+        "https://www.dashboardblocks.com/r/base/details.json",
+        "https://www.dashboardblocks.com/r/base/format.json",
+        "https://www.dashboardblocks.com/r/base/status.json",
+        "https://www.dashboardblocks.com/r/base/status-label.json"
       ],
       "files": [
         {
@@ -3049,7 +3081,7 @@
         }
       ],
       "meta": {
-        "shows": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
+        "shows": "Ninety days of daily status for each service as a row of bars, with its icon, its status now and a tooltip for any day.",
         "size": "full",
         "usedWith": [
           "status-01",
@@ -3057,9 +3089,9 @@
           "alerts-01"
         ],
         "component": "Status2",
-        "props": "{ description?: string; services?: { days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; name: string }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ action?: ReactNode; description?: ReactNode; services?: { days: { label: string; note?: string; status: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\"; uptime?: number }[]; detail?: string; icon?: ReactNode; name: string; status?: \"operational\" | \"degraded\" | \"partial\" | \"major\" | \"maintenance\" | \"unknown\" }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
-      "description": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day."
+      "description": "Ninety days of daily status for each service as a row of bars, with its icon, its status now and a tooltip for any day."
     },
     {
       "name": "status-03",
@@ -3155,7 +3187,8 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "https://www.dashboardblocks.com/r/base/stat-group.json"
+        "https://www.dashboardblocks.com/r/base/stat-group.json",
+        "https://www.dashboardblocks.com/r/base/status-label.json"
       ],
       "files": [
         {
@@ -3173,7 +3206,7 @@
           "comparison-01"
         ],
         "component": "StatGroup1",
-        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Metrics side by side, each with its change written as a sentence."
     },
@@ -3201,7 +3234,7 @@
           "data-table-02"
         ],
         "component": "StatGroup2",
-        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics, each with its change and a 14-day sparkline, under a sentence saying how many improved."
     },
@@ -3233,7 +3266,7 @@
           "billing-01"
         ],
         "component": "StatGroup3",
-        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics where picking one charts it by day against the previous period."
     },
@@ -3260,7 +3293,7 @@
           "data-table-01"
         ],
         "component": "StatGroup4",
-        "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Five metrics in a slim row with their changes, wrapping to two columns when narrow."
     },
@@ -3287,7 +3320,7 @@
           "breakdown-01"
         ],
         "component": "StatGroup5",
-        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Four metrics, each with a bar for this period over a bar for the one before."
     },
@@ -3709,7 +3742,7 @@
           "states-04"
         ],
         "component": "States1",
-        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]>; placeholders?: number; title: string }"
+        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]>; placeholders?: number; title: string }"
       },
       "description": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives."
     },
@@ -7214,6 +7247,8 @@
       "name": "settings-03",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/attempt.json",
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "switch",
         "https://www.dashboardblocks.com/r/base/block-state.json",
         "https://www.dashboardblocks.com/r/base/table.json"
@@ -7335,6 +7370,7 @@
       "name": "settings-07",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "button",
         "field",
         "input",
@@ -7926,7 +7962,7 @@
       "type": "registry:component",
       "registryDependencies": [
         "card",
-        "button",
+        "https://www.dashboardblocks.com/r/base/activity-feed.json",
         "https://www.dashboardblocks.com/r/base/block-state.json",
         "https://www.dashboardblocks.com/r/base/link.json",
         "https://www.dashboardblocks.com/r/base/notifications.json"
@@ -8515,7 +8551,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant1",
-        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons."
     },
@@ -8543,7 +8579,7 @@
           "ai-assistant-04"
         ],
         "component": "AiAssistant2",
-        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; followUps: { icon?: ReactNode; label: string; prompt?: string }[]; onFeedback?: (messageId: string, feedback: null | \"up\" | \"down\") => void; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A chat with an assistant whose replies include a table and a SQL query, with attachments, copy, rating, regenerate and follow-up questions."
     },
@@ -8575,7 +8611,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant3",
-        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; tokens?: { cached?: number; input: number; output: number }; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; prices: { cached?: number; input: number; output: number }; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; tokens?: { cached?: number; input: number; output: number }; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Questions about token usage numbers, with the tokens and cost shown for each answer and a change that waits for approval."
     },
@@ -8603,7 +8639,7 @@
           "states-01"
         ],
         "component": "AiAssistant4",
-        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; description: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A failed assistant reply kept in the conversation with a button to try again."
     },
@@ -9037,6 +9073,7 @@
       "name": "auth-03",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "button",
         "input",
         "switch",
@@ -9065,6 +9102,7 @@
       "name": "auth-04",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "button",
         "input",
         "https://www.dashboardblocks.com/r/base/auth.json",
@@ -9123,6 +9161,7 @@
       "name": "auth-06",
       "type": "registry:component",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/base/announcements.json",
         "button",
         "field",
         "input",

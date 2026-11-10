@@ -28,7 +28,7 @@
       "billing-01"
     ],
     "component": "StatGroup3",
-    "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

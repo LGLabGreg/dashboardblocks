@@ -1,6 +1,9 @@
 'use client'
 
-import { groupActivityByDay } from '@/registry/components/dashboardblocks/activity-feed'
+import {
+  groupActivityByDay,
+  MarkAllReadButton,
+} from '@/registry/components/dashboardblocks/activity-feed'
 import {
   BlockReady,
   BlockStateProvider,
@@ -199,9 +202,8 @@ const Notifications3 = (props: Notifications3Props) => {
               </p>
             </BlockReady>
           </div>
-          <Button
+          <MarkAllReadButton
             variant='outline'
-            size='sm'
             disabled={Boolean(state) || unread === 0}
             onClick={() =>
               setRead(
@@ -209,17 +211,7 @@ const Notifications3 = (props: Notifications3Props) => {
                 true,
               )
             }
-          >
-            <IconPlaceholder
-              lucide='CheckCheckIcon'
-              tabler='IconChecks'
-              hugeicons='TickDouble02Icon'
-              phosphor='ChecksIcon'
-              remixicon='RiCheckDoubleLine'
-              data-icon='inline-start'
-            />
-            Mark all as read
-          </Button>
+          />
         </header>
         <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
           <TabsList>

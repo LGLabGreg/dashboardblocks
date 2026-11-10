@@ -99,7 +99,10 @@ const theme: ThemeRegistration = {
       scope: ['entity.name', 'support.type.property-name', 'meta.object-literal.key'],
       settings: { foreground: text },
     },
-    { scope: ['markup.deleted'], settings: { foreground: 'var(--color-destructive)' } },
+    {
+      scope: ['markup.deleted'],
+      settings: { foreground: 'var(--color-destructive)' },
+    },
   ],
 }
 
@@ -287,7 +290,7 @@ function renderLine(tokens: Token[], marks: readonly string[]): ReactNode[] {
 
 interface HighlightedCodeProps extends Omit<
   ComponentProps<typeof CodeBlock>,
-  'children' | 'title'
+  'children' | 'onCopy' | 'title'
 > {
   /** The code, shown and copied exactly as written. It may grow while a model streams it. */
   code: string
@@ -309,6 +312,8 @@ interface HighlightedCodeProps extends Omit<
   label?: string
   /** Shown under the code, inside its frame, such as what happened after running it. */
   footer?: ReactNode
+  /** Called when the person presses Copy, or copies text they selected in the code. */
+  onCopy?: () => void
 }
 
 function HighlightedCode({
@@ -322,6 +327,7 @@ function HighlightedCode({
   wrap = false,
   label,
   footer,
+  onCopy,
   size = 'sm',
   className,
   ...props
@@ -331,6 +337,7 @@ function HighlightedCode({
     <CodeBlockActions>
       <CodeBlockCopyButton
         aria-label={copyLabel}
+        onClick={onCopy}
         value={
           lineChanges
             ? code
@@ -361,8 +368,9 @@ function HighlightedCode({
         copy
       )}
       <CodeBlockContent
+        onCopy={onCopy}
         wrap={wrap}
-        className='mask-none [scrollbar-width:thin] data-wrap:mask-none'
+        className='mask-none [scrollbar-width:thin] data-wrap:mask-none data-wrap:wrap-anywhere'
         role={label ? 'region' : undefined}
         aria-label={label}
       >

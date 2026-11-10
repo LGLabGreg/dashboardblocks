@@ -279,6 +279,8 @@ interface DataTableContentProps<TData extends RowData> extends Omit<
   highlightedRowId?: string | null
   /** How many rows to sketch while loading. @default 5 */
   loadingRows?: number
+  /** The id of the row whose record is open beside the table, such as in a panel. */
+  openRowId?: string | null
   table: DataTableInstance<TData>
 }
 
@@ -287,6 +289,7 @@ function DataTableContent<TData extends RowData>({
   empty,
   highlightedRowId,
   loadingRows,
+  openRowId,
   table,
   ...props
 }: DataTableContentProps<TData>) {
@@ -321,6 +324,7 @@ function DataTableContent<TData extends RowData>({
           rows.map((row) => (
             <DataTableRow
               key={row.id}
+              data-open={row.id === openRowId || undefined}
               data-row-id={row.id}
               data-state={row.getIsSelected() ? 'selected' : undefined}
               highlighted={row.id === highlightedRowId}

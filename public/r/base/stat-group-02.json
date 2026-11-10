@@ -24,7 +24,7 @@
       "data-table-02"
     ],
     "component": "StatGroup2",
-    "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

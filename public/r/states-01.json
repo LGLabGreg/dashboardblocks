@@ -24,7 +24,7 @@
       "states-04"
     ],
     "component": "States1",
-    "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; value: number }[]>; placeholders?: number; title: string }"
+    "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]>; placeholders?: number; title: string }"
   },
   "type": "registry:component"
 }

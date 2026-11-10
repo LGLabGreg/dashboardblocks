@@ -1,5 +1,20 @@
 # dashboardblocks
 
+## 1.25.0
+
+### Minor Changes
+
+- d80c18c: Brand Logos: the AI model makers and hosts a gateway routes to (OpenAI, Anthropic, Google Gemini, xAI, DeepSeek, Qwen, Mistral, Meta, Moonshot, Amazon Bedrock, Vertex AI, Azure, Groq, Together AI, Fireworks, DeepInfra and Cerebras), drawn in the text colour.
+- 94455f0: Status: Uptime Bars puts each service on one row with its uptime, takes an icon or logo, a short detail and its status now for each service, and draws working days light so the days with an incident stand out. Status: Service Uptime draws its working days light too.
+
+### Patch Changes
+
+- 480613a: Stat Group: Plain Row takes a line under a figure that has nothing to compare with, and a warning colour for a figure that needs action.
+- dbef017: Highlighted Code tells the page when its code is copied, with the copy button or by selecting it, and wrapped code breaks a long token instead of running past the edge.
+- eebb9df: The AI blocks take chats from the latest AI SDK as they are again: a message's type now includes the SDK's new steering part.
+- e9ce050: Verify Email: Send code on a new address says Sending… and sends one email, however often it's pressed. Two-Factor Code waits for a code to be checked before switching to a recovery code. New Announcements and Attempt parts, which the blocks that report a result to screen readers now share.
+- 9104cfc: Data Grid marks the row whose record is open beside the table, with a line at its start.
+
 ## 1.24.0
 
 ### Minor Changes

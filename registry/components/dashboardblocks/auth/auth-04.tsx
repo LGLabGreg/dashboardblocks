@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   AuthIcon,
   AuthLayout,
   AuthResendButton,
@@ -38,6 +42,8 @@ const exampleProps: Auth4Props = {
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+type Stage = 'code' | 'checking' | 'editing' | 'changing' | 'verified'
+
 const Auth4 = (props: Auth4Props) => {
   const {
     focusOnMount = false,
@@ -50,16 +56,18 @@ const Auth4 = (props: Auth4Props) => {
   const id = useId()
   const [email, setEmail] = useState(props.email)
   const [code, setCode] = useState('')
-  const [checking, setChecking] = useState(false)
+  const [stage, setStage] = useState<Stage>('code')
   const [error, setError] = useState<string | null>(null)
   const [sendError, setSendError] = useState<string | null>(null)
   const [status, setStatus] = useState('')
+  const [said, announce] = useAnnouncements()
   const [cooldown, setCooldown] = useState(0)
   const [resending, setResending] = useState(false)
-  const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(props.email)
-  const [verified, setVerified] = useState(false)
   const [failures, setFailures] = useState(0)
+  const checking = stage === 'checking'
+  const editing = stage === 'editing' || stage === 'changing'
+  const verified = stage === 'verified'
   const formsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -78,31 +86,40 @@ const Auth4 = (props: Auth4Props) => {
     setFailures((count) => count + 1)
   }
 
+  const say = (text: string) => {
+    setStatus(text)
+    announce(text)
+  }
+
   const verify = async (value: string) => {
-    if (checking) return
+    if (stage !== 'code') return
     if (!/^\d{6}$/.test(value)) return fail('Enter all 6 digits from the email.')
-    setChecking(true)
+    setStage('checking')
     setError(null)
     setSendError(null)
     try {
       const ok = onVerify ? await onVerify(value) : value === '123456'
       startTransition(() => {
         if (ok) {
-          setVerified(true)
+          setStage('verified')
+          announce('Email verified')
           onVerified?.()
         } else {
+          setStage('code')
           setCode('')
           fail('That code didn’t work. Check the newest email, or send a new code.')
         }
       })
     } catch {
-      startTransition(() => fail('We couldn’t check the code. Try again.'))
-    } finally {
-      startTransition(() => setChecking(false))
+      startTransition(() => {
+        setStage('code')
+        fail('We couldn’t check the code. Check your connection and try again.')
+      })
     }
   }
 
   const resend = async () => {
+    if (resending || editing || verified) return
     setResending(true)
     setError(null)
     setSendError(null)
@@ -110,35 +127,40 @@ const Auth4 = (props: Auth4Props) => {
     try {
       await onResend?.()
       startTransition(() => {
+        setResending(false)
         setCooldown(resendAfter)
-        setStatus(`We sent a new code to ${email}.`)
+        say(`We sent a new code to ${email}.`)
       })
     } catch {
-      startTransition(() =>
-        setSendError('We couldn’t send the email. Try again in a moment.'),
-      )
-    } finally {
-      startTransition(() => setResending(false))
+      startTransition(() => {
+        setResending(false)
+        setSendError('We couldn’t send the email. Check your connection and try again.')
+      })
     }
   }
 
   const saveEmail = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (stage !== 'editing') return
     const address = draft.trim().toLowerCase()
     if (!EMAIL.test(address)) return fail('Enter an email address.')
+    setStage('changing')
     setError(null)
     setSendError(null)
     try {
       await onChangeEmail?.(address)
       startTransition(() => {
         setEmail(address)
-        setEditing(false)
+        setStage('code')
         setCode('')
         setCooldown(resendAfter)
-        setStatus(`We sent a code to ${address}.`)
+        say(`We sent a code to ${address}.`)
       })
     } catch {
-      startTransition(() => fail('We couldn’t change the address. Try again.'))
+      startTransition(() => {
+        setStage('editing')
+        fail('We couldn’t change the address. Check your connection and try again.')
+      })
     }
   }
 
@@ -194,12 +216,15 @@ const Auth4 = (props: Auth4Props) => {
                 aria-describedby={error ? `${id}-error` : undefined}
               />
               <div className='mt-2 flex flex-col gap-2'>
-                <Button type='submit'>Send code</Button>
+                <Button type='submit' disabled={stage === 'changing'}>
+                  {stage === 'changing' ? 'Sending…' : 'Send code'}
+                </Button>
                 <Button
                   type='button'
                   variant='ghost'
+                  disabled={stage === 'changing'}
                   onClick={() => {
-                    setEditing(false)
+                    setStage('code')
                     setDraft(email)
                     setError(null)
                     setSendError(null)
@@ -248,8 +273,9 @@ const Auth4 = (props: Auth4Props) => {
                   type='button'
                   variant='ghost'
                   size='sm'
+                  disabled={checking || resending}
                   onClick={() => {
-                    setEditing(true)
+                    setStage('editing')
                     setError(null)
                     setSendError(null)
                   }}
@@ -279,14 +305,10 @@ const Auth4 = (props: Auth4Props) => {
               {error ?? sendError}
             </p>
           )}
-          <p role='status' className='text-muted-foreground text-sm empty:sr-only'>
-            {status}
-          </p>
+          {status && <p className='text-muted-foreground text-sm'>{status}</p>}
         </div>
       </AuthReveal>
-      <p role='status' className='sr-only'>
-        {verified ? 'Email verified' : ''}
-      </p>
+      <Announcements said={said} />
     </AuthLayout>
   )
 }

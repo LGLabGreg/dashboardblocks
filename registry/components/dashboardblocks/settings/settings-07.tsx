@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   BlockStateProvider,
   BlockStateRows,
   type BlockStateProps,
@@ -151,10 +155,11 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
   const { onAvatarChange, onSave, profile, timeZones } = props
   const fileInput = useRef<HTMLInputElement>(null)
   const [avatarError, setAvatarError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<{ text: string; tone: 'error' | 'saved' } | null>(
-    null,
-  )
-  const [said, setSaid] = useState<{ id: number; text: string }[]>([])
+  const [notice, setNotice] = useState<{
+    text: string
+    tone: 'error' | 'saved'
+  } | null>(null)
+  const [said, announce] = useAnnouncements()
   const form = useSimpleForm<ProfileValues>({
     defaultValues: { ...profile, avatar: profile.avatar ?? '' },
     onSubmit: (values) =>
@@ -197,10 +202,7 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
 
   const say = (text: string, tone: 'error' | 'saved') => {
     setNotice({ text, tone })
-    setSaid((current) => [
-      ...current.slice(-2),
-      { id: (current.at(-1)?.id ?? 0) + 1, text },
-    ])
+    announce(text)
   }
 
   const save = async (event: FormEvent<HTMLFormElement>) => {
@@ -373,11 +375,7 @@ function Settings7Content(props: Settings7Props & { profile: Profile }) {
             {notice.text}
           </p>
         )}
-        <div role='status' aria-atomic='false' className='sr-only'>
-          {said.map((message) => (
-            <div key={message.id}>{message.text}</div>
-          ))}
-        </div>
+        <Announcements said={said} />
         <SaveBar
           className='mt-6'
           isDirty={form.isDirty}

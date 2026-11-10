@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "announcements",
+  "title": "Announcements",
+  "description": "What a block says to screen readers about a result: a polite status region that keeps the last three messages, each read once.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/announcements.tsx",
+      "content": "'use client'\n\nimport { type ComponentProps, useCallback, useRef, useState } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ntype Announcement = { id: number; text: string }\n\n/**\n * The messages a block says to screen readers, newest last, keeping the last five. Like\n * `useState`, call `announce` in the same transition as the result it reports.\n */\nfunction useAnnouncements() {\n  const [said, setSaid] = useState<Announcement[]>([])\n  const count = useRef(0)\n  const announce = useCallback((...texts: string[]) => {\n    const next = texts.map((text) => ({ id: ++count.current, text }))\n    setSaid((current) => [...current, ...next].slice(-5))\n  }, [])\n  return [said, announce] as const\n}\n\nfunction Announcements({\n  said,\n  className,\n  ...props\n}: ComponentProps<'div'> & { said: readonly Announcement[] }) {\n  return (\n    <div\n      role='status'\n      aria-atomic='false'\n      data-slot='announcements'\n      className={cn('sr-only', className)}\n      {...props}\n    >\n      {said.map((item) => (\n        <div key={item.id}>{item.text}</div>\n      ))}\n    </div>\n  )\n}\n\nexport { Announcements, useAnnouncements }\nexport type { Announcement }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/announcements.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

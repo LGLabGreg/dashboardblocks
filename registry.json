@@ -7,7 +7,7 @@
       "name": "activity-feed",
       "type": "registry:component",
       "title": "Activity Feed",
-      "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
+      "description": "Primitives for activity feeds: a list with connectors that line up with the markers, tinted icons by tone, an unread dot, a Mark all as read button, relative times and \"Today\" and \"Yesterday\" day headings that take a fixed now and a time zone, and grouping by day.",
       "registryDependencies": [
         "@dashboardblocks/activity-feed"
       ]
@@ -565,7 +565,7 @@
       "name": "brand-logos",
       "type": "registry:component",
       "title": "Brand Logos",
-      "description": "Logos of the services people sign in with or connect: GitHub, Google, Sentry, Slack, Stripe and X, sized like an icon.",
+      "description": "Logos of the services people sign in with or connect, and of the AI model makers and hosts a gateway routes to (OpenAI, Anthropic, Google Gemini, xAI, Mistral, Meta, Amazon Bedrock, Vertex AI, Groq and more), sized like an icon.",
       "registryDependencies": [
         "@dashboardblocks/brand-logos"
       ]
@@ -586,6 +586,24 @@
       "description": "Two or three short facts about one subject on one line, joined by a middle dot that screen readers skip and that never ends a line.",
       "registryDependencies": [
         "@dashboardblocks/details"
+      ]
+    },
+    {
+      "name": "announcements",
+      "type": "registry:component",
+      "title": "Announcements",
+      "description": "What a block says to screen readers about a result: a polite status region that keeps the last three messages, each read once.",
+      "registryDependencies": [
+        "@dashboardblocks/announcements"
+      ]
+    },
+    {
+      "name": "attempt",
+      "type": "registry:lib",
+      "title": "Attempt",
+      "description": "Runs a request and reads a throw as a refusal that says to check the connection, since a refusal resolves.",
+      "registryDependencies": [
+        "@dashboardblocks/attempt"
       ]
     },
     {
@@ -1166,7 +1184,7 @@
     {
       "name": "status-02",
       "type": "registry:component",
-      "description": "Ninety days of daily status for each service as a row of bars, with a tooltip for any day.",
+      "description": "Ninety days of daily status for each service as a row of bars, with its icon, its status now and a tooltip for any day.",
       "registryDependencies": [
         "@dashboardblocks/status-02"
       ]

@@ -16,7 +16,7 @@ type AIMessagePart =
   | AISourceDocumentPart
   | AIFilePart
   | AIDataPart
-  | { type: 'step-start' | 'custom' | 'reasoning-file' }
+  | { type: 'step-start' | 'custom' | 'reasoning-file' | 'steering-message' }
 
 interface AITextPart {
   /** What the text cites, as the AI SDK gives it: the page or document, and where in the text when the provider says. */

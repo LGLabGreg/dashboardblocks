@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   AuthIcon,
   AuthLayout,
   AuthResendButton,
@@ -65,7 +69,7 @@ const Auth6 = (props: Auth6Props) => {
   const [cooldown, setCooldown] = useState(0)
   const [resending, setResending] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  const [notices, setNotices] = useState<{ id: number; text: string }[]>([])
+  const [notices, announce] = useAnnouncements()
   const refused = useRef(false)
   const sentRef = useRef<HTMLDivElement>(null)
   const focused = useRef<string | null | false>(focusOnMount ? false : null)
@@ -100,9 +104,6 @@ const Auth6 = (props: Auth6Props) => {
     if (sentTo === null) document.getElementById(form.getId('email'))?.focus()
     else sentRef.current?.querySelector<HTMLElement>('a, button')?.focus()
   }, [form, sentTo])
-
-  const announce = (text: string) =>
-    setNotices((current) => [...current.slice(-2), { id: Date.now(), text }])
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -278,11 +279,7 @@ const Auth6 = (props: Auth6Props) => {
             {message}
           </p>
         )}
-        <div role='status' aria-atomic='false' className='sr-only'>
-          {notices.map((notice) => (
-            <div key={notice.id}>{notice.text}</div>
-          ))}
-        </div>
+        <Announcements said={notices} />
       </div>
       <AuthSwitch
         href={signInHref}

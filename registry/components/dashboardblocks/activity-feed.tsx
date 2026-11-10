@@ -1,5 +1,6 @@
 'use client'
 
+import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import {
   dayIn,
   formatDate,
@@ -7,6 +8,8 @@ import {
   formatRelativeTime,
 } from '@/registry/lib/dashboardblocks/format'
 import type { ComponentProps, ReactNode } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
@@ -118,6 +121,39 @@ function UnreadDot({
   )
 }
 
+function MarkAllReadButton({
+  className,
+  disabled,
+  onClick,
+  variant = 'ghost',
+}: {
+  className?: string
+  disabled?: boolean
+  onClick: () => void
+  /** @default 'ghost' */
+  variant?: 'ghost' | 'outline'
+}) {
+  return (
+    <Button
+      className={className}
+      disabled={disabled}
+      onClick={onClick}
+      size='sm'
+      variant={variant}
+    >
+      <IconPlaceholder
+        lucide='CheckCheckIcon'
+        tabler='IconChecks'
+        hugeicons='TickDouble02Icon'
+        phosphor='ChecksIcon'
+        remixicon='RiCheckDoubleLine'
+        data-icon='inline-start'
+      />
+      Mark all as read
+    </Button>
+  )
+}
+
 function groupActivityByDay<T extends { at: Date }>(
   items: T[],
   now: Date,
@@ -164,6 +200,7 @@ export {
   ActivityFeedItem,
   ActivityIcon,
   ActivityTime,
+  MarkAllReadButton,
   UnreadDot,
   activityToneClasses,
   activityToneColors,
