@@ -616,6 +616,15 @@
       ]
     },
     {
+      "name": "panel-controls",
+      "type": "registry:component",
+      "title": "Panel Controls",
+      "description": "Previous, Next and Close for a panel opened beside a list, pressed with K, J and Esc from anywhere on the page.",
+      "registryDependencies": [
+        "@dashboardblocks/panel-controls"
+      ]
+    },
+    {
       "name": "resizable-split",
       "type": "registry:component",
       "title": "Resizable Split",

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "panel-controls",
+  "title": "Panel Controls",
+  "description": "Previous, Next and Close for a panel opened beside a list, pressed with K, J and Esc from anywhere on the page.",
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/aria/shortcut-button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/panel-controls.tsx",
+      "content": "'use client'\n\nimport { ShortcutButton } from '@/registry/components/dashboardblocks/shortcut-button'\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport type { ReactNode } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ninterface PanelControlsProps {\n  /** Buttons of the panel's own before Previous, such as Open as a page. */\n  children?: ReactNode\n  className?: string\n  /** Closes the panel, from its button or Esc. The button carries `data-panel-close`, so a page that shows the panel on its own with a Back link can hide it and keep Esc. */\n  onClose?: () => void\n  /** Opens the record below this one in the list, from its button or J. Leave out at the end. */\n  onNext?: () => void\n  /** Opens the record above this one in the list, from its button or K. Leave out at the start. */\n  onPrevious?: () => void\n}\n\n/** Previous, Next and Close for a panel opened beside a list, on K, J and Esc. */\nfunction PanelControls({\n  children,\n  className,\n  onClose,\n  onNext,\n  onPrevious,\n}: PanelControlsProps) {\n  const moves = onNext !== undefined || onPrevious !== undefined\n  return (\n    <div\n      data-slot='panel-controls'\n      className={cn('-me-2 flex shrink-0 items-center gap-0.5', className)}\n    >\n      {children}\n      {moves && (\n        <>\n          <ShortcutButton\n            aria-label='Previous'\n            disabled={!onPrevious}\n            label='Previous'\n            listen\n            onClick={onPrevious}\n            shortcut='K'\n          >\n            <IconPlaceholder\n              lucide='ChevronUpIcon'\n              tabler='IconChevronUp'\n              hugeicons='ArrowUp01Icon'\n              phosphor='CaretUpIcon'\n              remixicon='RiArrowUpSLine'\n            />\n          </ShortcutButton>\n          <ShortcutButton\n            aria-label='Next'\n            disabled={!onNext}\n            label='Next'\n            listen\n            onClick={onNext}\n            shortcut='J'\n          >\n            <IconPlaceholder\n              lucide='ChevronDownIcon'\n              tabler='IconChevronDown'\n              hugeicons='ArrowDown01Icon'\n              phosphor='CaretDownIcon'\n              remixicon='RiArrowDownSLine'\n            />\n          </ShortcutButton>\n        </>\n      )}\n      {onClose && (\n        <ShortcutButton\n          aria-label='Close'\n          data-panel-close=''\n          label='Close'\n          listen\n          onClick={onClose}\n          shortcut='Escape'\n        >\n          <IconPlaceholder\n            lucide='XIcon'\n            tabler='IconX'\n            hugeicons='Cancel01Icon'\n            phosphor='XIcon'\n            remixicon='RiCloseLine'\n          />\n        </ShortcutButton>\n      )}\n    </div>\n  )\n}\n\nexport { PanelControls }\nexport type { PanelControlsProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/panel-controls.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

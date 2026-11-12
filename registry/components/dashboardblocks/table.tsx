@@ -125,11 +125,11 @@ interface DataTableRowProps extends ComponentProps<'tr'> {
 }
 
 const OPEN_ITEM =
-  'data-open:bg-muted data-open:relative data-open:before:absolute data-open:before:inset-y-0 data-open:before:start-0 data-open:before:w-0.5 data-open:before:bg-foreground'
+  'data-open:bg-muted/50 data-open:relative data-open:before:absolute data-open:before:inset-y-0 data-open:before:start-0 data-open:before:w-0.5 data-open:before:bg-foreground'
 
 // A table row can't hold a positioned ::before, which the browser lays out as a cell.
 const OPEN_ROW =
-  'data-open:bg-muted data-open:[&>:first-child]:shadow-[inset_2px_0_0_var(--color-foreground)] rtl:data-open:[&>:first-child]:shadow-[inset_-2px_0_0_var(--color-foreground)]'
+  'data-open:bg-muted/50 data-open:[&>:first-child]:shadow-[inset_2px_0_0_var(--color-foreground)] rtl:data-open:[&>:first-child]:shadow-[inset_-2px_0_0_var(--color-foreground)]'
 
 const ROW_HOST =
   'has-data-[slot=data-table-row-trigger]:not-data-highlighted:not-data-open:hover:bg-muted/50 has-data-[slot=data-table-row-trigger]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:z-10 transition-colors'

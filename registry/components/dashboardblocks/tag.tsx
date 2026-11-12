@@ -46,6 +46,6 @@ function renderTag(badge: ReactNode) {
   return badge
 }
 
-export { Tag, renderTag }
+export { Tag, renderTag, tagToneClasses }
 
 export type { TagProps }

@@ -835,7 +835,11 @@ export const components: Registry['items'] = [
     title: 'Record Detail',
     description:
       "Primitives for a record's page or panel: a layout with a details column beside the main content, the number that leads the record, titled sections under a rule and a list of labelled properties.",
-    registryDependencies: [registryUrl('block-state'), registryUrl('kpi')],
+    registryDependencies: [
+      registryUrl('block-state'),
+      registryUrl('kpi'),
+      registryUrl('status-label'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/record-detail.tsx',
@@ -1081,6 +1085,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/shortcut-button.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'panel-controls',
+    type: 'registry:component',
+    title: 'Panel Controls',
+    description:
+      'Previous, Next and Close for a panel opened beside a list, pressed with K, J and Esc from anywhere on the page.',
+    registryDependencies: [registryUrl('shortcut-button')],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/panel-controls.tsx',
         type: 'registry:component',
       },
     ],

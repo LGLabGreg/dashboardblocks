@@ -1,5 +1,13 @@
 # dashboardblocks
 
+## 1.25.1
+
+### Patch Changes
+
+- e89f8ea: Panel Controls: Previous, Next and Close for a panel opened beside a list, on K, J and Esc, as one part any block can use. Record Detail's headline number takes a smaller `secondary` size and a status `tone`, and Tag shares its tinted backgrounds.
+- d996a42: Stat Group: a metric can show its value in the bad tone, such as a loss in red, as well as the warning one.
+- 24e85ea: Brand Logos: `LogoTile` takes `size='xs'`, for a row of logos in a table cell.
+
 ## 1.25.0
 
 ### Minor Changes

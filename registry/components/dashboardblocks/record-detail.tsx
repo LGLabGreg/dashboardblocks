@@ -10,6 +10,10 @@ import {
   KPITitle,
   KPIValue,
 } from '@/registry/components/dashboardblocks/kpi'
+import {
+  statusToneClasses,
+  type StatusTone,
+} from '@/registry/components/dashboardblocks/status-label'
 import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -72,6 +76,10 @@ interface RecordHeadlineProps {
   className?: string
   format?: KPIFormat | KPIFormatter
   label: string
+  /** `secondary` for a figure beside the headline, a step smaller. @default 'headline' */
+  size?: 'headline' | 'secondary'
+  /** Draws the number in a status colour, such as `warning` for a figure that needs a look now. */
+  tone?: StatusTone
   /** Words after the number, such as `a month`. */
   unit?: string
   value: number
@@ -82,6 +90,8 @@ function RecordHeadline({
   className,
   format,
   label,
+  size = 'headline',
+  tone,
   unit,
   value,
 }: RecordHeadlineProps) {
@@ -90,7 +100,15 @@ function RecordHeadline({
     <div data-slot='record-headline' className={cn('flex flex-col gap-1', className)}>
       <KPITitle>{label}</KPITitle>
       <div className='flex flex-wrap items-baseline'>
-        <KPIValue animated format={format} value={value} />
+        <KPIValue
+          animated
+          className={cn(
+            size === 'secondary' && 'text-2xl',
+            tone && tone !== 'neutral' && statusToneClasses[tone],
+          )}
+          format={format}
+          value={value}
+        />
         {unit && !state && (
           <span className='text-muted-foreground ml-1 text-base'>{unit}</span>
         )}

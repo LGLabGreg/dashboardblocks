@@ -933,7 +933,8 @@
       "description": "Primitives for a record's page or panel: a layout with a details column beside the main content, the number that leads the record, titled sections under a rule and a list of labelled properties.",
       "registryDependencies": [
         "https://www.dashboardblocks.com/r/aria/block-state.json",
-        "https://www.dashboardblocks.com/r/aria/kpi.json"
+        "https://www.dashboardblocks.com/r/aria/kpi.json",
+        "https://www.dashboardblocks.com/r/aria/status-label.json"
       ],
       "files": [
         {
@@ -1214,6 +1215,22 @@
           "path": "registry/components/dashboardblocks/shortcut-button.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/shortcut-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "panel-controls",
+      "type": "registry:component",
+      "title": "Panel Controls",
+      "description": "Previous, Next and Close for a panel opened beside a list, pressed with K, J and Esc from anywhere on the page.",
+      "registryDependencies": [
+        "https://www.dashboardblocks.com/r/aria/shortcut-button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/panel-controls.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/panel-controls.tsx"
         }
       ]
     },
@@ -2644,7 +2661,7 @@
           "geo-02"
         ],
         "component": "ChartPanel2",
-        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "files": [
         {
@@ -3206,7 +3223,7 @@
           "comparison-01"
         ],
         "component": "StatGroup1",
-        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Metrics side by side, each with its change written as a sentence."
     },
@@ -3234,7 +3251,7 @@
           "data-table-02"
         ],
         "component": "StatGroup2",
-        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics, each with its change and a 14-day sparkline, under a sentence saying how many improved."
     },
@@ -3266,7 +3283,7 @@
           "billing-01"
         ],
         "component": "StatGroup3",
-        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics where picking one charts it by day against the previous period."
     },
@@ -3293,7 +3310,7 @@
           "data-table-01"
         ],
         "component": "StatGroup4",
-        "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Five metrics in a slim row with their changes, wrapping to two columns when narrow."
     },
@@ -3320,7 +3337,7 @@
           "breakdown-01"
         ],
         "component": "StatGroup5",
-        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Four metrics, each with a bar for this period over a bar for the one before."
     },
@@ -3742,7 +3759,7 @@
           "states-04"
         ],
         "component": "States1",
-        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]>; placeholders?: number; title: string }"
+        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]>; placeholders?: number; title: string }"
       },
       "description": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives."
     },
@@ -8551,7 +8568,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant1",
-        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons."
     },

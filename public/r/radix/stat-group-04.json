@@ -23,7 +23,7 @@
       "data-table-01"
     ],
     "component": "StatGroup4",
-    "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

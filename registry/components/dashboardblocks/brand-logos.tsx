@@ -478,13 +478,22 @@ function CerebrasLogo({ className, ...props }: ComponentProps<'svg'>) {
 }
 
 /** A service's logo in a bordered square, as a list row or a panel shows it. */
-function LogoTile({ logo, size = 'sm' }: { logo: ReactNode; size?: 'lg' | 'sm' }) {
+function LogoTile({
+  logo,
+  size = 'sm',
+}: {
+  logo: ReactNode
+  /** `xs` for a row of them in a table cell, such as the providers serving a model. */
+  size?: 'lg' | 'sm' | 'xs'
+}) {
   return (
     <span
       aria-hidden
       className={cn(
         'flex shrink-0 items-center justify-center rounded-md border',
-        size === 'lg' ? 'size-10 [&_svg]:size-5' : 'size-8 [&_svg]:size-4',
+        size === 'lg' && 'size-10 [&_svg]:size-5',
+        size === 'sm' && 'size-8 [&_svg]:size-4',
+        size === 'xs' && 'size-6 [&_svg]:size-3.5',
       )}
     >
       {logo}

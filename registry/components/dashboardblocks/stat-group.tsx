@@ -30,8 +30,8 @@ interface StatMetric {
   key: string
   label: string
   previous?: number
-  /** `warning` draws the value in the warning colour, for a figure that needs action now. */
-  tone?: 'warning'
+  /** Draws the value in a status colour: `bad` for a loss or a failure, `warning` for a figure that needs action now. */
+  tone?: 'bad' | 'warning'
   value: number
 }
 
