@@ -76,7 +76,7 @@ const exampleProps: Settings2Props = {
   keys: [
     {
       createdAt: daysAgo(210),
-      createdBy: 'Liam Chen',
+      createdBy: 'Liam Carter',
       id: 'k1',
       lastUsedAt: new Date(NOW.getTime() - 4 * 60_000),
       masked: 'sk_live_…9f2a',
@@ -103,7 +103,7 @@ const exampleProps: Settings2Props = {
     },
     {
       createdAt: daysAgo(12),
-      createdBy: 'Liam Chen',
+      createdBy: 'Liam Carter',
       id: 'k4',
       masked: 'sk_live_…e8d0',
       name: 'CI pipeline',

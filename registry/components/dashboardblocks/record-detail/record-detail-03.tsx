@@ -324,7 +324,7 @@ const RecordDetail3 = (props: RecordDetail3Props) => {
                   className='self-end'
                   disabled={isSaving}
                 >
-                  {isSaving ? 'Posting…' : 'Comment'}
+                  {isSaving ? 'Posting' : 'Comment'}
                 </Button>
               </form>
             </RecordSection>

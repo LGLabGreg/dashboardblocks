@@ -266,6 +266,7 @@ type InvoiceStatus =
   | 'draft'
   | 'due'
   | 'failed'
+  | 'granted'
   | 'overdue'
   | 'paid'
   | 'uncollectible'
@@ -275,10 +276,31 @@ const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTo
   draft: { label: 'Draft', tone: 'neutral' },
   due: { label: 'Due', tone: 'neutral' },
   failed: { label: 'Failed', tone: 'bad' },
+  granted: { label: 'Granted', tone: 'info' },
   overdue: { label: 'Overdue', tone: 'warning' },
   paid: { label: 'Paid', tone: 'good' },
   uncollectible: { label: 'Uncollectible', tone: 'bad' },
   void: { label: 'Void', tone: 'neutral' },
+}
+
+/** Statuses that leave nothing to pay: paid, granted for free, or voided. */
+const settledInvoiceStatuses: InvoiceStatus[] = ['draft', 'granted', 'paid', 'void']
+
+/** What's left to pay, and how many invoices and the oldest of them it's across. */
+function getOutstandingInvoices<
+  Invoice extends { amount: number; date: Date; status: InvoiceStatus },
+>(invoices: Invoice[]) {
+  const unpaid = invoices.filter(
+    (invoice) => !settledInvoiceStatuses.includes(invoice.status),
+  )
+  return {
+    amount: unpaid.reduce((sum, invoice) => sum + invoice.amount, 0),
+    count: unpaid.length,
+    oldest: unpaid.reduce<Invoice | undefined>(
+      (first, invoice) => (!first || invoice.date < first.date ? invoice : first),
+      undefined,
+    ),
+  }
 }
 
 interface InvoiceStatusLabelProps extends Omit<StatusLabelProps, 'children' | 'tone'> {
@@ -302,6 +324,7 @@ export {
   getDaysUntil,
   getMrrMovement,
   getNetRevenueRetention,
+  getOutstandingInvoices,
   getRevenueMetrics,
   getWaterfallScale,
   invoiceStatusConfig,

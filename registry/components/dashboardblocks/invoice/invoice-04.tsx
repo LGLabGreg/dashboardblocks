@@ -205,7 +205,7 @@ const Invoice4 = (props: Invoice4Props) => {
               aria-hidden
             />
             {packing === 'saving'
-              ? 'Saving…'
+              ? 'Saving'
               : packing === 'packed'
                 ? 'Packed'
                 : 'Mark as packed'}

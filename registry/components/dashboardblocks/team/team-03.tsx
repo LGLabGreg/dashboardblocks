@@ -28,7 +28,7 @@ interface Team3Props extends BlockStateProps {
 
 const roster: [string, Presence][] = [
   ['Amara Okafor', 'online'],
-  ['Liam Chen', 'online'],
+  ['Liam Carter', 'online'],
   ['Mateo García', 'online'],
   ['Elena Petrova', 'online'],
   ['Kwame Mensah', 'online'],
@@ -48,7 +48,7 @@ const roster: [string, Presence][] = [
 const avatars: Partial<Record<string, string>> = {
   'Amara Okafor': '/images/avatar-05.webp',
   'Jonas Weber': '/images/avatar-07.webp',
-  'Liam Chen': '/images/avatar-04.webp',
+  'Liam Carter': '/images/avatar-04.webp',
   'Mateo García': '/images/avatar-06.webp',
   'Priya Nair': '/images/avatar-02.webp',
   'Sofia Rossi': '/images/avatar-01.webp',

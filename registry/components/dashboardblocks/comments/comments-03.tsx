@@ -131,7 +131,7 @@ const exampleProps: Comments3Props = {
     lena,
     mateo,
     jonas,
-    { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
+    { avatar: '/images/avatar-01.webp', name: 'Sofia Rossi' },
   ],
 }
 

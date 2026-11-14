@@ -55,7 +55,7 @@ const exampleProps: Pipeline4Props = {
         ...deals('negotiation', 74_000),
       ],
       name: 'Maya Patel',
-      avatar: '/images/avatar-01.webp',
+      avatar: '/images/avatar-16.webp',
       quota: 400_000,
     },
     {
@@ -77,7 +77,7 @@ const exampleProps: Pipeline4Props = {
         ...deals('proposal', 128_000),
       ],
       name: 'Aiko Tanaka',
-      avatar: '/images/avatar-04.webp',
+      avatar: '/images/avatar-09.webp',
       quota: 350_000,
     },
     {
@@ -88,7 +88,7 @@ const exampleProps: Pipeline4Props = {
         ...deals('negotiation', 87_000),
       ],
       name: 'Luis Romero',
-      avatar: '/images/avatar-06.webp',
+      avatar: '/images/avatar-13.webp',
       quota: 300_000,
     },
   ],

@@ -367,7 +367,7 @@ const Onboarding4 = (props: Onboarding4Props) => {
         </div>
         <div className='flex justify-end border-t pt-4'>
           <Button type='submit' disabled={saving}>
-            {saving ? 'Setting up…' : 'Set up my dashboards'}
+            {saving ? 'Setting up' : 'Set up my dashboards'}
           </Button>
         </div>
       </form>

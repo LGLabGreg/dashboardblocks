@@ -16,16 +16,19 @@ import {
   Bar,
   BarChart,
   type BarProps,
+  type BarShapeProps,
   Cell,
   Line,
   LabelList,
   LineChart,
   type LineProps,
+  Rectangle,
   ReferenceLine,
   ResponsiveContainer,
   Text,
   Tooltip,
   type TooltipContentProps,
+  useActiveTooltipDataPoints,
   useActiveTooltipLabel,
   usePlotArea,
   useXAxisScale,
@@ -246,6 +249,56 @@ function chartNiceTicks(max: number, intervals = 5) {
       .find((candidate) => target / candidate <= intervals) ?? 10 * scale
   return Array.from({ length: Math.ceil(target / step) + 1 }, (_, index) =>
     Number((index * step).toPrecision(12)),
+  )
+}
+
+/** Whether the tooltip is on this point: `true` or `false`, or `null` while it's on none. */
+function useChartHovered(point: unknown): boolean | null {
+  const points = useActiveTooltipDataPoints()
+  if (!points || points.length === 0) return null
+  return points.includes(point)
+}
+
+interface ChartHoverBarLook {
+  className?: string
+  color?: string
+  fill: string
+  fillOpacity?: number
+}
+
+interface ChartHoverBarProps extends Omit<BarShapeProps, 'radius'> {
+  /** The bar's look from whether the tooltip is on its point, `null` while it's on none. */
+  look: (hovered: boolean | null) => ChartHoverBarLook
+  radius?: number | [number, number, number, number]
+}
+
+/**
+ * A `Bar` `shape` that recolours itself as the tooltip moves, so a hover never draws the chart
+ * again and the tooltip glides. Keep hover state out of the block: a `Cell` per bar that reads it
+ * draws every bar again on each move.
+ */
+function ChartHoverBar({
+  height,
+  look,
+  payload,
+  radius = 0,
+  width,
+  x,
+  y,
+}: ChartHoverBarProps) {
+  const { className, color, fill, fillOpacity } = look(useChartHovered(payload))
+  return (
+    <Rectangle
+      className={className}
+      color={color}
+      fill={fill}
+      fillOpacity={fillOpacity}
+      height={height}
+      radius={radius}
+      width={width}
+      x={x}
+      y={y}
+    />
   )
 }
 
@@ -504,6 +557,8 @@ interface TinyBarChartProps {
   /** Names the chart for keyboard and screen reader users while its keyboard layer is on. */
   label?: string
   data: unknown[]
+  /** Draws the bars before this index faded, such as last month's days before this month's. */
+  fadedBefore?: number
   formatter?: ChartValueFormatter
   height?: number | string
   /** Draws this bar in full colour and the others faded, with its value above it. */
@@ -522,6 +577,7 @@ function TinyBarChart({
   className,
   label,
   data,
+  fadedBefore,
   formatter,
   height = 180,
   highlightIndex,
@@ -595,13 +651,14 @@ function TinyBarChart({
                 radius={barProps.radius ?? [4, 4, 0, 0]}
                 {...barProps}
               >
-                {highlighted &&
+                {(highlighted || fadedBefore !== undefined) &&
                   index === 0 &&
                   safeData.map((_, cell) => (
                     <Cell
                       key={cell}
                       fill={
-                        cell === highlightIndex
+                        (highlighted ? cell === highlightIndex : true) &&
+                        cell >= (fadedBefore ?? 0)
                           ? String(barProps.fill)
                           : chartFadedColor(String(barProps.fill))
                       }
@@ -1003,6 +1060,7 @@ function ChartMarkerKey({
 export {
   ChartFloatingTooltip,
   ChartHatch,
+  ChartHoverBar,
   ChartMarkerKey,
   ChartEdgeTick,
   ChartMarkers,
@@ -1032,11 +1090,14 @@ export {
   chartTimeGridProps,
   chartValueAxisWidth,
   layoutChartMarkers,
+  useChartHovered,
   useChartId,
 }
 
 export type {
   ChartEdgeTickProps,
+  ChartHoverBarLook,
+  ChartHoverBarProps,
   ChartMarker,
   ChartMarkerAnchor,
   ChartMarkersProps,

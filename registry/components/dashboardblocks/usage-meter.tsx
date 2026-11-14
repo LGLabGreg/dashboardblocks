@@ -209,7 +209,7 @@ function UsageBar({
         style={{ clipPath: `inset(0 ${revealed ? 0 : 100}% 0 0)` }}
       >
         <span
-          className='h-full'
+          className='h-full transition-[width] duration-500 ease-out motion-reduce:transition-none'
           style={{ backgroundColor: fill, width: at(withinLimit) }}
         />
         {overage > 0 && (

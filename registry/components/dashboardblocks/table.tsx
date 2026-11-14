@@ -132,7 +132,7 @@ const OPEN_ROW =
   'data-open:bg-muted/50 data-open:[&>:first-child]:shadow-[inset_2px_0_0_var(--color-foreground)] rtl:data-open:[&>:first-child]:shadow-[inset_-2px_0_0_var(--color-foreground)]'
 
 const ROW_HOST =
-  'has-data-[slot=data-table-row-trigger]:not-data-highlighted:not-data-open:hover:bg-muted/50 has-data-[slot=data-table-row-trigger]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox]):not([data-slot=data-table-row-trigger])]:z-10 transition-colors'
+  'has-data-[slot=data-table-row-trigger]:not-data-highlighted:not-data-open:hover:bg-muted/50 has-data-[slot=data-table-row-trigger]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox],[role=radiogroup]):not([data-slot=data-table-row-trigger])]:relative has-data-[slot=data-table-row-trigger]:[&_:is(a,button,input,select,textarea,[role=checkbox],[role=radiogroup]):not([data-slot=data-table-row-trigger])]:z-10 transition-colors'
 
 function DataTableRow({ className, highlighted, ...props }: DataTableRowProps) {
   return (
@@ -360,6 +360,23 @@ function DataTableSpacerRow({ colSpan, height }: DataTableSpacerRowProps) {
   )
 }
 
+/**
+ * Holds what spans a whole row (a message, a panel opened under a row) to the table's visible
+ * width, so it stays in view and wraps there while the table scrolls sideways.
+ */
+function DataTableInView({ className, ...props }: ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot='data-table-in-view'
+      className={cn(
+        'sticky start-[var(--data-table-inset,0.75rem)] w-[calc(var(--data-table-visible-width,100%)_-_2*var(--data-table-inset,0.75rem))]',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 interface DataTableStateRowsProps {
   colSpan: number
   /** Sketches one cell per column while loading, aligned as listed, the first being the row's name, so the rows keep the loaded rows' columns. */
@@ -386,9 +403,9 @@ function DataTableStateRows({
     return (
       <DataTableRow>
         <DataTableCell colSpan={colSpan}>
-          <span className='sticky start-[var(--data-table-inset,0.75rem)] block max-w-[calc(var(--data-table-visible-width,100%)_-_2*var(--data-table-inset,0.75rem))]'>
+          <DataTableInView>
             <BlockStateText emptyMessage={emptyMessage} />
-          </span>
+          </DataTableInView>
         </DataTableCell>
       </DataTableRow>
     )
@@ -598,6 +615,7 @@ export {
   DataTableGroupHead,
   DataTableHead,
   DataTableHeader,
+  DataTableInView,
   DataTableListItem,
   DataTablePager,
   DataTableRow,

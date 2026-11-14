@@ -41,7 +41,7 @@ interface AppShell1Props {
   children?: ReactNode
   /** Leave out to hide the notifications button. */
   notificationCount?: number
-  /** Adds "New workspace…" to the workspace switcher. */
+  /** Adds "New workspace" to the workspace switcher. */
   onCreateWorkspace?: () => void
   onNotificationsClick?: () => void
   onSearch?: () => void

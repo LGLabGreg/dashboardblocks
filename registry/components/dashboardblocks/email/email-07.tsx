@@ -68,7 +68,7 @@ const exampleProps: Email7Props = {
       url: 'https://app.acme.com/goals/new',
     },
   ],
-  sender: { name: 'Sam Lee', role: 'co-founder' },
+  sender: { name: 'Sam Lewis', role: 'co-founder' },
   workspace: 'Northwind',
 }
 

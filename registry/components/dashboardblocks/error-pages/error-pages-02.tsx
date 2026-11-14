@@ -37,7 +37,7 @@ const exampleProps: ErrorPages2Props = {
   ),
   homeHref: '#',
   onRequestAccess: () => new Promise((resolve) => setTimeout(resolve, 800)),
-  owner: { avatar: '/images/avatar-02.webp', name: 'Amara Okafor' },
+  owner: { avatar: '/images/avatar-05.webp', name: 'Amara Okafor' },
   resource: 'the Revenue overview dashboard',
   signedInAs: 'noah@acme.co',
   switchAccountHref: '#',
@@ -127,7 +127,7 @@ const ErrorPages2 = (props: ErrorPages2Props) => {
               </p>
             )}
             <Button type='submit' disabled={sending} className='self-start'>
-              {sending ? 'Sending…' : 'Request access'}
+              {sending ? 'Sending' : 'Request access'}
             </Button>
           </form>
         )}

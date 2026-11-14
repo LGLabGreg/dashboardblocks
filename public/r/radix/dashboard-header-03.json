@@ -24,7 +24,7 @@
       "chart-panel-02"
     ],
     "component": "DashboardHeader3",
-    "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+    "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
   },
   "type": "registry:component"
 }

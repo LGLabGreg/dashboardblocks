@@ -160,7 +160,7 @@ const exampleProps: AppShell2Props = {
     },
   ],
   user: {
-    avatar: '/images/avatar-01.webp',
+    avatar: '/images/avatar-03.webp',
     email: 'lena@northwind.io',
     name: 'Lena Fischer',
   },

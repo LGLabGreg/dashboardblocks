@@ -171,7 +171,7 @@ const RecordDetail1 = (props: RecordDetail1Props) => {
               <ActionsMenu
                 disabled={!ready}
                 items={[
-                  { label: 'Merge with…', onSelect: onMerge },
+                  { label: 'Merge customer', onSelect: onMerge },
                   {
                     label: 'Delete customer',
                     onSelect: onDelete,

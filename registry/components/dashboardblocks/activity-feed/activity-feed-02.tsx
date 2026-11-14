@@ -18,6 +18,7 @@ import {
   StatusLabel,
   type StatusTone,
 } from '@/registry/components/dashboardblocks/status-label'
+import { ValueChange } from '@/registry/components/dashboardblocks/value-change'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import type { ReactNode } from 'react'
 
@@ -151,7 +152,7 @@ const exampleProps: ActivityFeed2Props = {
       kind: 'labelled',
     },
     {
-      action: 'assigned this to Kenji Mori',
+      action: 'assigned this to Kevin Moore',
       actor: 'Priya Nair',
       at: minutesAgo(60 * 25 - 2),
       id: 'h3',
@@ -159,7 +160,7 @@ const exampleProps: ActivityFeed2Props = {
     },
     {
       action: 'changed the priority',
-      actor: 'Kenji Mori',
+      actor: 'Kevin Moore',
       at: minutesAgo(60 * 6),
       change: { from: 'Normal', to: 'High' },
       id: 'h4',
@@ -167,7 +168,7 @@ const exampleProps: ActivityFeed2Props = {
     },
     {
       action: 'commented',
-      actor: 'Kenji Mori',
+      actor: 'Kevin Moore',
       at: minutesAgo(95),
       comment:
         'Reproduced on Safari 18 with a saved card. The card token refreshes after the form submits, so the first charge is declined. Fix is in review.',
@@ -176,7 +177,7 @@ const exampleProps: ActivityFeed2Props = {
     },
     {
       action: 'changed the status',
-      actor: 'Kenji Mori',
+      actor: 'Kevin Moore',
       at: minutesAgo(12),
       change: { from: 'In progress', to: 'Resolved' },
       id: 'h6',
@@ -267,17 +268,11 @@ const ActivityFeed2 = (props: ActivityFeed2Props) => {
                             <span className='text-muted-foreground'>{event.action}</span>
                             {event.change && (
                               <>
-                                <span className='sr-only'> from</span>{' '}
-                                <span className='text-muted-foreground line-through decoration-1'>
-                                  {event.change.from}
-                                </span>{' '}
-                                <span className='whitespace-nowrap'>
-                                  <span aria-hidden className='text-muted-foreground'>
-                                    →
-                                  </span>
-                                  <span className='sr-only'>to</span>{' '}
-                                  <span className='font-medium'>{event.change.to}</span>
-                                </span>
+                                {' '}
+                                <ValueChange
+                                  from={event.change.from}
+                                  to={event.change.to}
+                                />
                               </>
                             )}
                           </p>

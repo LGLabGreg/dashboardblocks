@@ -333,7 +333,7 @@ const Onboarding1 = (props: Onboarding1Props) => {
         <OnboardingActions
           continueLabel={step === STEPS.length - 1 ? 'Finish setup' : 'Continue'}
           pending={form.isSubmitting || finishing}
-          pendingLabel={step === 0 ? 'Checking…' : 'Creating workspace…'}
+          pendingLabel={step === 0 ? 'Checking' : 'Creating workspace'}
           onBack={step > 0 ? () => setStep(step - 1) : undefined}
           onSkip={step === STEPS.length - 1 ? () => void finish([]) : undefined}
         />

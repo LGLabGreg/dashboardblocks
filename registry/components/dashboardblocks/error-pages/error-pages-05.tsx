@@ -8,10 +8,12 @@ import { buttonVariants } from '@/components/ui/button'
 
 type SessionEndReason =
   | 'inactive'
+  | 'left'
   | 'signed-out'
   | 'signed-out-elsewhere'
   | 'password-changed'
   | 'revoked'
+  | 'workspace-deleted'
 
 interface ErrorPages5Props {
   brand?: ReactNode
@@ -50,11 +52,20 @@ const exampleProps: ErrorPages5Props = {
 const reasons: Record<SessionEndReason, (idleMinutes: number) => string> = {
   inactive: (minutes) =>
     `You were signed out after ${minutes} minutes without activity, to keep your account safe.`,
+  left: () => 'You’re no longer a member. Ask an admin for a new invite to come back.',
   'password-changed': () =>
     'Your password was changed, so every device was signed out. Sign in with the new password.',
   revoked: () => 'An admin ended your session. Sign in again to carry on.',
   'signed-out': () => 'You signed out. Sign in again to carry on.',
   'signed-out-elsewhere': () => 'You signed out in another tab or window.',
+  'workspace-deleted': () =>
+    'Its projects, keys and history are gone, and everyone in it was signed out.',
+}
+
+const titles: Partial<Record<SessionEndReason, string>> = {
+  left: 'You left the workspace',
+  'signed-out': 'You’re signed out',
+  'workspace-deleted': 'The workspace was deleted',
 }
 
 function withReturnTo(href: string, returnTo?: string) {
@@ -75,7 +86,7 @@ const ErrorPages5 = ({
 }: ErrorPages5Props) => (
   <ErrorPageLayout
     brand={brand}
-    title={reason === 'signed-out' ? 'You’re signed out' : 'Your session has ended'}
+    title={titles[reason] ?? 'Your session has ended'}
     description={reasons[reason](idleMinutes)}
   >
     <div className='flex flex-col gap-4 border-t pt-6'>

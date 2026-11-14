@@ -1037,6 +1037,19 @@ export const components: Registry['items'] = [
     ],
   },
   {
+    name: 'card-style',
+    type: 'registry:component',
+    title: 'Card Style',
+    description:
+      'A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/card-style.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
     name: 'details',
     type: 'registry:component',
     title: 'Details',
@@ -1045,6 +1058,32 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/details.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'locked-note',
+    type: 'registry:component',
+    title: 'Locked Note',
+    description:
+      'Why a block’s settings are read only: a line with a lock, under the header’s description.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/locked-note.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'value-change',
+    type: 'registry:component',
+    title: 'Value Change',
+    description:
+      'What a setting was and what it became, the old value struck through, then an arrow and the new one, read by screen readers as from and to.',
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/value-change.tsx',
         type: 'registry:component',
       },
     ],
@@ -1085,6 +1124,20 @@ export const components: Registry['items'] = [
     files: [
       {
         path: 'registry/components/dashboardblocks/shortcut-button.tsx',
+        type: 'registry:component',
+      },
+    ],
+  },
+  {
+    name: 'new-button',
+    type: 'registry:component',
+    title: 'New Button',
+    description:
+      'A small button that creates something, with a plus before its label, such as New key or New rule.',
+    registryDependencies: ['button'],
+    files: [
+      {
+        path: 'registry/components/dashboardblocks/new-button.tsx',
         type: 'registry:component',
       },
     ],

@@ -34,7 +34,7 @@ interface Auth1Props {
 
 const exampleProps: Auth1Props = {
   email: 'noah@northwind.io',
-  invitedBy: { avatar: '/images/avatar-04.webp', name: 'Liam Chen' },
+  invitedBy: { avatar: '/images/avatar-04.webp', name: 'Liam Carter' },
   onAccept: () => new Promise((resolve) => setTimeout(resolve, 800)),
   role: 'Member',
   roleDescription: 'Can create and edit dashboards',
@@ -56,7 +56,7 @@ const exampleProps: Auth1Props = {
     memberCount: 24,
     members: [
       { avatar: '/images/avatar-05.webp', id: 'm1', name: 'Amara Okafor' },
-      { avatar: '/images/avatar-04.webp', id: 'm2', name: 'Liam Chen' },
+      { avatar: '/images/avatar-04.webp', id: 'm2', name: 'Liam Carter' },
       { avatar: '/images/avatar-01.webp', id: 'm3', name: 'Sofia Rossi' },
       { avatar: '/images/avatar-06.webp', id: 'm4', name: 'Mateo García' },
     ],
@@ -194,7 +194,7 @@ const Auth1 = (props: Auth1Props) => {
           ) : (
             <div className='flex flex-col gap-2'>
               <Button disabled={joining} onClick={() => void accept()}>
-                {joining ? 'Joining…' : 'Accept invite'}
+                {joining ? 'Joining' : 'Accept invite'}
               </Button>
               <Button
                 variant='ghost'

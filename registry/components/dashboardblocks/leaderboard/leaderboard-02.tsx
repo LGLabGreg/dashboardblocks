@@ -51,7 +51,7 @@ const exampleProps: Leaderboard2Props = {
     {
       id: 1,
       name: 'Sarah Chen',
-      avatar: '/images/avatar-01.webp',
+      avatar: '/images/avatar-11.webp',
       deals: 42,
       quota: 150_000,
       revenue: 184_300,
@@ -60,7 +60,7 @@ const exampleProps: Leaderboard2Props = {
     {
       id: 2,
       name: 'Marcus Reid',
-      avatar: '/images/avatar-02.webp',
+      avatar: '/images/avatar-04.webp',
       deals: 37,
       quota: 150_000,
       revenue: 156_900,
@@ -69,7 +69,7 @@ const exampleProps: Leaderboard2Props = {
     {
       id: 3,
       name: 'Priya Patel',
-      avatar: '/images/avatar-03.webp',
+      avatar: '/images/avatar-02.webp',
       deals: 33,
       quota: 125_000,
       revenue: 139_450,
@@ -78,7 +78,7 @@ const exampleProps: Leaderboard2Props = {
     {
       id: 4,
       name: 'Diego Alvarez',
-      avatar: '/images/avatar-04.webp',
+      avatar: '/images/avatar-13.webp',
       deals: 28,
       quota: 125_000,
       revenue: 118_200,
@@ -87,7 +87,7 @@ const exampleProps: Leaderboard2Props = {
     {
       id: 5,
       name: 'Emma Larsen',
-      avatar: '/images/avatar-05.webp',
+      avatar: '/images/avatar-03.webp',
       deals: 24,
       quota: 125_000,
       revenue: 97_750,

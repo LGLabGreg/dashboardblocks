@@ -299,7 +299,7 @@ const DEPLOYMENTS: (Omit<Deployment, 'environment' | 'startedAt'> & {
     status: 'running',
   },
   {
-    author: 'Kenji Mori',
+    author: 'Kevin Moore',
     duration: 187,
     environment: 'Production',
     id: 'd2',
@@ -354,7 +354,7 @@ const DEPLOYMENTS: (Omit<Deployment, 'environment' | 'startedAt'> & {
     status: 'success',
   },
   {
-    author: 'Kenji Mori',
+    author: 'Kevin Moore',
     duration: 172,
     environment: 'Staging',
     id: 'd7',

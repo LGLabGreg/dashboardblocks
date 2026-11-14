@@ -56,7 +56,7 @@ const exampleProps: Auth2Props = {
   invites: [
     {
       id: 'i1',
-      invitedBy: 'Liam Chen',
+      invitedBy: 'Liam Carter',
       mark: (
         <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden>
           <rect x='4.5' y='2.5' width='5' height='19' rx='2.5' />
@@ -241,7 +241,7 @@ const Auth2 = (props: Auth2Props) => {
                       aria-label={`Join ${invite.name}`}
                       onClick={() => void join(invite)}
                     >
-                      {joining === invite.id ? 'Joining…' : 'Join'}
+                      {joining === invite.id ? 'Joining' : 'Join'}
                     </Button>
                   </li>
                 ))}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "new-button",
+  "title": "New Button",
+  "description": "A small button that creates something, with a plus before its label, such as New key or New rule.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/new-button.tsx",
+      "content": "'use client'\n\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport type { ComponentProps, ReactNode } from 'react'\n\nimport { Button } from '@/components/ui/button'\n\n/** A button that creates something, with a plus before its label, such as New key. @default size 'sm' */\nfunction NewButton({\n  children,\n  size = 'sm',\n  ...props\n}: Omit<ComponentProps<typeof Button>, 'children'> & { children: ReactNode }) {\n  return (\n    <Button size={size} {...props}>\n      <IconPlaceholder\n        lucide='PlusIcon'\n        tabler='IconPlus'\n        hugeicons='PlusSignIcon'\n        phosphor='PlusIcon'\n        remixicon='RiAddLine'\n        data-icon='inline-start'\n      />\n      {children}\n    </Button>\n  )\n}\n\nexport { NewButton }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/new-button.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

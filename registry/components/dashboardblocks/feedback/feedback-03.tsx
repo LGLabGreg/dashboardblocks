@@ -44,7 +44,7 @@ const exampleProps: Feedback3Props = {
   reviews: [
     {
       author: 'Priya Raman',
-      avatar: '/images/avatar-02.webp',
+      avatar: '/images/avatar-16.webp',
       date: daysAgo(0.2),
       id: 'r1',
       rating: 5,
@@ -70,7 +70,7 @@ const exampleProps: Feedback3Props = {
     },
     {
       author: 'Tomás Alvarez',
-      avatar: '/images/avatar-04.webp',
+      avatar: '/images/avatar-06.webp',
       date: daysAgo(3),
       id: 'r4',
       rating: 1,

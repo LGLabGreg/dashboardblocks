@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "value-change",
+  "title": "Value Change",
+  "description": "What a setting was and what it became, the old value struck through, then an arrow and the new one, read by screen readers as from and to.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/value-change.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ninterface ValueChangeProps extends Omit<ComponentProps<'span'>, 'children'> {\n  from: ReactNode\n  to: ReactNode\n}\n\nfunction ValueChange({ className, from, to, ...props }: ValueChangeProps) {\n  return (\n    <span data-slot='value-change' className={cn('tabular-nums', className)} {...props}>\n      <span className='sr-only'>from </span>\n      <span className='text-muted-foreground line-through decoration-1'>{from}</span>{' '}\n      <span className='whitespace-nowrap'>\n        <span aria-hidden className='text-muted-foreground'>\n          →\n        </span>\n        <span className='sr-only'>to</span> <span className='font-medium'>{to}</span>\n      </span>\n    </span>\n  )\n}\n\nexport { ValueChange }\n\nexport type { ValueChangeProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/value-change.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

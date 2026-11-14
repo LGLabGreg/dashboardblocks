@@ -34,6 +34,7 @@ export const examples: Registry['items'] = [
       registryUrl('activity-feed'),
       registryUrl('block-state'),
       registryUrl('status-label'),
+      registryUrl('value-change'),
     ],
     files: [
       {

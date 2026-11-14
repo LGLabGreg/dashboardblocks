@@ -176,7 +176,7 @@ const Auth7 = (props: Auth7Props) => {
               className='mt-1 aria-disabled:opacity-50'
               aria-disabled={pending || undefined}
             >
-              <RollingText text={pending ? 'Saving…' : 'Save password'} />
+              <RollingText text={pending ? 'Saving' : 'Save password'} />
             </Button>
           </form>
         </AuthReveal>

@@ -44,7 +44,7 @@ const exampleProps: AppShell4Props = {
   notificationCount: 2,
   pathname: '/deployments',
   title: 'Deployments',
-  user: { avatar: '/images/avatar-06.webp', email: 'kai@orbit.sh', name: 'Kai Tanaka' },
+  user: { avatar: '/images/avatar-13.webp', email: 'kai@orbit.sh', name: 'Kai Turner' },
   userLinks: [
     {
       href: '/account',

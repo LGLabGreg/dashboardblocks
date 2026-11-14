@@ -110,11 +110,15 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'switch',
+      registryUrl('announcements'),
+      registryUrl('attempt'),
       registryUrl('block-state'),
       registryUrl('chart'),
       registryUrl('details'),
       registryUrl('format'),
       registryUrl('settings'),
+      registryUrl('table'),
+      registryUrl('tooltip-link'),
     ],
     files: [
       {
@@ -124,7 +128,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.',
+        'Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, what’s wrong with a failing one, and a switch to pause each one.',
       size: 'full',
       usedWith: ['settings-02', 'settings-04', 'status-01'],
     },
@@ -132,7 +136,13 @@ export const examples: Registry['items'] = [
   {
     name: 'settings-06',
     type: 'registry:component',
-    registryDependencies: ['button', 'input', registryUrl('settings')],
+    registryDependencies: [
+      'button',
+      'input',
+      registryUrl('locked-note'),
+      registryUrl('option-select'),
+      registryUrl('settings'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/settings/settings-06.tsx',
@@ -141,7 +151,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.',
+        'Transferring, archiving and deleting a workspace, with the new owner picked from the admins and deletion confirmed by typing the workspace name.',
       size: 'half',
       usedWith: ['settings-01', 'security-06'],
     },

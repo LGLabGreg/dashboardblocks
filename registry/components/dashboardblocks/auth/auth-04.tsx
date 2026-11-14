@@ -217,7 +217,7 @@ const Auth4 = (props: Auth4Props) => {
               />
               <div className='mt-2 flex flex-col gap-2'>
                 <Button type='submit' disabled={stage === 'changing'}>
-                  {stage === 'changing' ? 'Sending…' : 'Send code'}
+                  {stage === 'changing' ? 'Sending' : 'Send code'}
                 </Button>
                 <Button
                   type='button'
@@ -259,7 +259,7 @@ const Auth4 = (props: Auth4Props) => {
                 disabled={checking}
               />
               <Button type='submit' disabled={checking}>
-                {checking ? 'Checking…' : 'Verify email'}
+                {checking ? 'Checking' : 'Verify email'}
               </Button>
             </form>
           )}

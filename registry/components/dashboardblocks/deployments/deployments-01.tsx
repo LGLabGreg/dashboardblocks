@@ -50,7 +50,7 @@ const exampleProps: Deployments1Props = {
   deployments: [
     {
       author: 'Ana Lima',
-      authorAvatar: '/images/avatar-01.webp',
+      authorAvatar: '/images/avatar-16.webp',
       duration: 94,
       environment: 'Production',
       id: 'd1',
@@ -61,7 +61,7 @@ const exampleProps: Deployments1Props = {
     },
     {
       author: 'Ana Lima',
-      authorAvatar: '/images/avatar-01.webp',
+      authorAvatar: '/images/avatar-16.webp',
       duration: 212,
       environment: 'Preview',
       id: 'd2',
@@ -71,8 +71,8 @@ const exampleProps: Deployments1Props = {
       status: 'success',
     },
     {
-      author: 'Kenji Mori',
-      authorAvatar: '/images/avatar-04.webp',
+      author: 'Kevin Moore',
+      authorAvatar: '/images/avatar-14.webp',
       duration: 187,
       environment: 'Production',
       id: 'd3',

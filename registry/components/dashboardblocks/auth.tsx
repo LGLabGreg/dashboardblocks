@@ -581,7 +581,7 @@ function AuthResendButton({
       {waiting
         ? `Send again in ${formatWait(cooldown)}`
         : pending
-          ? 'Sending…'
+          ? 'Sending'
           : 'Send again'}
     </Button>
   )

@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/pipeline/pipeline-01.tsx for React Aria
-// source-hash: d5dfb03c5548
+// source-hash: c9c243088e53
 
 'use client'
 
@@ -56,7 +56,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(5),
       id: 'd1',
       owner: 'Maya Patel',
-      ownerAvatar: '/images/avatar-01.webp',
+      ownerAvatar: '/images/avatar-16.webp',
       stage: 'qualified',
       subtitle: 'Fleet analytics rollout',
       title: 'Northwind Logistics',
@@ -66,7 +66,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(21),
       id: 'd2',
       owner: 'Luis Romero',
-      ownerAvatar: '/images/avatar-06.webp',
+      ownerAvatar: '/images/avatar-13.webp',
       stage: 'qualified',
       subtitle: 'Patient portal pilot',
       title: 'Brightline Health',
@@ -76,7 +76,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(3),
       id: 'd3',
       owner: 'Aiko Tanaka',
-      ownerAvatar: '/images/avatar-04.webp',
+      ownerAvatar: '/images/avatar-09.webp',
       stage: 'qualified',
       subtitle: 'Supplier dashboard',
       title: 'Orbital Foods',
@@ -96,7 +96,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(16),
       id: 'd5',
       owner: 'Maya Patel',
-      ownerAvatar: '/images/avatar-01.webp',
+      ownerAvatar: '/images/avatar-16.webp',
       stage: 'discovery',
       subtitle: 'District licences',
       title: 'Pinecrest Schools',
@@ -106,7 +106,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(2),
       id: 'd6',
       owner: 'Luis Romero',
-      ownerAvatar: '/images/avatar-06.webp',
+      ownerAvatar: '/images/avatar-13.webp',
       stage: 'discovery',
       subtitle: 'Booking insights',
       title: 'Halcyon Travel',
@@ -116,7 +116,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(6),
       id: 'd7',
       owner: 'Aiko Tanaka',
-      ownerAvatar: '/images/avatar-04.webp',
+      ownerAvatar: '/images/avatar-09.webp',
       stage: 'proposal',
       subtitle: 'Enterprise plan, 400 seats',
       title: 'Atlas Freight',
@@ -136,7 +136,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(4),
       id: 'd9',
       owner: 'Maya Patel',
-      ownerAvatar: '/images/avatar-01.webp',
+      ownerAvatar: '/images/avatar-16.webp',
       stage: 'proposal',
       subtitle: 'Usage metering',
       title: 'Solstice Energy',
@@ -156,7 +156,7 @@ const exampleProps: Pipeline1Props = {
       enteredStageAt: daysAgo(11),
       id: 'd11',
       owner: 'Luis Romero',
-      ownerAvatar: '/images/avatar-06.webp',
+      ownerAvatar: '/images/avatar-13.webp',
       stage: 'negotiation',
       subtitle: 'Claims analytics',
       title: 'Copperleaf Insurance',

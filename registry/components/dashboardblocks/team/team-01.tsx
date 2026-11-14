@@ -48,7 +48,7 @@ const exampleProps: Team1Props = {
     {
       avatar: '/images/avatar-04.webp',
       id: 'm2',
-      name: 'Liam Chen',
+      name: 'Liam Carter',
       presence: 'online',
       role: 'Staff engineer',
     },

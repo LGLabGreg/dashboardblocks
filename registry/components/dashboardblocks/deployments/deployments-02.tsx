@@ -57,7 +57,7 @@ const exampleProps: Deployments2Props = {
     },
     {
       deployedAt: hoursAgo(5),
-      deployedBy: 'Kenji Mori',
+      deployedBy: 'Kevin Moore',
       id: 'staging',
       name: 'Staging',
       sha: '41be08d3c',

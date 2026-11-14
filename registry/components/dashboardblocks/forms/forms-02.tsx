@@ -171,7 +171,7 @@ const Forms2 = (props: Forms2Props) => {
           footer={
             <>
               <Button type='submit' disabled={form.isSubmitting}>
-                {form.isSubmitting ? 'Creating…' : 'Create customer'}
+                {form.isSubmitting ? 'Creating' : 'Create customer'}
               </Button>
               <Button type='button' variant='outline' onClick={() => setOpen(false)}>
                 Cancel

@@ -121,7 +121,7 @@ interface OnboardingActionsProps {
   onSkip?: () => void
   /** Disables the buttons and shows `pendingLabel` while the step saves. */
   pending?: boolean
-  /** @default 'Saving…' */
+  /** @default 'Saving' */
   pendingLabel?: string
   /** @default 'Skip for now' */
   skipLabel?: string
@@ -135,7 +135,7 @@ function OnboardingActions({
   onContinue,
   onSkip,
   pending = false,
-  pendingLabel = 'Saving…',
+  pendingLabel = 'Saving',
   skipLabel = 'Skip for now',
 }: OnboardingActionsProps) {
   return (
@@ -361,10 +361,11 @@ function InviteList({
 
 function getInviteErrors(
   invites: Invite[],
-  { members = [] }: { members?: string[] } = {},
+  { invited = [], members = [] }: { invited?: string[]; members?: string[] } = {},
 ) {
   const errors: Partial<Record<string, string>> = {}
   const memberEmails = new Set(members.map((email) => email.toLowerCase()))
+  const invitedEmails = new Set(invited.map((email) => email.toLowerCase()))
   const seen = new Set<string>()
   for (const invite of invites) {
     const email = invite.email.trim().toLowerCase()
@@ -373,8 +374,10 @@ function getInviteErrors(
       errors[invite.id] = 'Enter an email address like name@example.com.'
     } else if (memberEmails.has(email)) {
       errors[invite.id] = `${invite.email.trim()} is already in the workspace.`
+    } else if (invitedEmails.has(email)) {
+      errors[invite.id] = `${invite.email.trim()} already has an invite waiting.`
     } else if (seen.has(email)) {
-      errors[invite.id] = "You've already added this address."
+      errors[invite.id] = 'You’ve already added this address.'
     }
     seen.add(email)
   }

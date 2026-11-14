@@ -235,7 +235,7 @@ const Auth3 = (props: Auth3Props) => {
               </div>
             )}
             <Button type='submit' disabled={stage !== 'code'}>
-              {checking ? 'Checking…' : 'Verify'}
+              {checking ? 'Checking' : 'Verify'}
             </Button>
             <Button
               type='button'

@@ -280,7 +280,7 @@ const Forms3 = (props: Forms3Props) => {
           </Button>
           {last ? (
             <Button key='create' type='submit' disabled={form.isSubmitting}>
-              {form.isSubmitting ? 'Creating…' : 'Create project'}
+              {form.isSubmitting ? 'Creating' : 'Create project'}
             </Button>
           ) : (
             <Button key='next' type='button' onClick={next}>

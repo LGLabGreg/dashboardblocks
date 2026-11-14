@@ -78,7 +78,7 @@ const exampleProps: ActivityFeed5Props = {
     {
       action: 'Start review',
       at: minutesAgo(19),
-      author: { avatar: '/images/avatar-01.webp', name: 'Tiffany Huang' },
+      author: { avatar: '/images/avatar-10.webp', name: 'Tiffany Huang' },
       channel: 'acme/dashboard',
       description: 'opened pull request #278 in',
       id: 's2',
@@ -94,7 +94,7 @@ const exampleProps: ActivityFeed5Props = {
     },
     {
       at: minutesAgo(120),
-      author: { avatar: '/images/avatar-05.webp', name: 'Amelia Ortiz' },
+      author: { avatar: '/images/avatar-15.webp', name: 'Amelia Ortiz' },
       channel: '#product-roadmap',
       description: 'replied to a thread in',
       id: 's4',

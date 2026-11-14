@@ -261,7 +261,7 @@ const Invoice1 = (props: Invoice1Props) => {
                 aria-hidden
               />
               {reminder === 'sending'
-                ? 'Sending…'
+                ? 'Sending'
                 : reminder === 'sent'
                   ? 'Reminder sent'
                   : 'Send reminder'}

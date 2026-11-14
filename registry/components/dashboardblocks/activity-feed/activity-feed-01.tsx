@@ -62,7 +62,7 @@ const exampleProps: ActivityFeed1Props = {
     },
     {
       action: 'moved Onboarding checklist to',
-      actor: { avatar: '/images/avatar-04.webp', name: 'Mei Tanaka' },
+      actor: { avatar: '/images/avatar-10.webp', name: 'Mei Tanaka' },
       at: minutesAgo(190),
       id: 'a3',
       target: 'Done',
@@ -83,7 +83,7 @@ const exampleProps: ActivityFeed1Props = {
     },
     {
       action: 'closed 12 issues in',
-      actor: { avatar: '/images/avatar-07.webp', name: 'Lucas Silva' },
+      actor: { avatar: '/images/avatar-13.webp', name: 'Lucas Silva' },
       at: minutesAgo(60 * 50),
       id: 'a6',
       target: 'Sprint 24',

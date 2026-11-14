@@ -68,7 +68,7 @@ const exampleProps: ActivityFeed3Props = {
     },
     {
       action: 'replied to your comment on',
-      actor: { avatar: '/images/avatar-04.webp', name: 'Mei Tanaka' },
+      actor: { avatar: '/images/avatar-10.webp', name: 'Mei Tanaka' },
       at: minutesAgo(80),
       id: 'n3',
       preview: 'Good catch, updated the empty state.',

@@ -1,5 +1,25 @@
 # dashboardblocks
 
+## 1.26.0
+
+### Minor Changes
+
+- 3a966b9: Card Style: a wrapper that gives every block card inside it one look without changing the blocks, starting with Lit, a filled surface with a light top edge and a hairline.
+
+### Patch Changes
+
+- 3f4697c: Chart: `ChartHoverBar`, a bar shape that brightens the hovered bar and fades the rest without drawing the chart again, so the tooltip glides between bars.
+- c1604f0: Danger Zone: an action can ask the person to pick one option before it runs, such as which admin becomes the owner. An action that returns a promise keeps its form open until it settles, Escape closes the form, and without `onAction` every action is off, with `lockedMessage` saying why. Inline Edit: a refused save puts focus back in the field, and Save or Escape puts it back on Edit.
+- ca28364: Dashboard Header: the date range picker can offer Last 24 hours, for pages that read by the hour.
+- 71002bf: App Shell: a page opened from far down a longer one opens at its top, not partly under the sticky header.
+- 5b2dacf: Invoice, Receipt, Quote and Packing Slip: print in black on white in a dark theme too, where their text used to print in the page's light grey.
+- 0bfe8f8: Invoices: each row can open its invoice, a Granted status marks credit given for free, and granted, void and draft invoices no longer count as outstanding. A `description` prop replaces the sentence on what is outstanding.
+- 38cca37: Webhooks (Settings 05): a failing endpoint says what's wrong, each row can open the endpoint's own page, Add endpoint can be a link, and pausing an endpoint can be saved on your server, with the switch going back and the reason shown if it's refused. The list now follows the endpoints you pass, names each one by its `description` with the URL below, and says what an empty list is for.
+- 193a865: Value Change: what a setting was and what it became, the old value struck through, read by screen readers as from and to. Activity Feed 02 draws its changes with it.
+- db2e020: Webhooks (Settings 05): pausing or resuming an endpoint names it by its `description` when it has one, as the row does. Onboarding's `getInviteErrors` takes the addresses that already have an invite waiting (`invited`) and refuses them with that reason.
+- 7f0f72d: Buttons and menu items no longer end with "…": a pending button reads "Saving", not "Saving…", and a command reads "Delete workspace", not "Delete workspace…".
+- 5adb258: Session Ended: two more reasons, `left` for someone who left the workspace and `workspace-deleted` for someone whose workspace was deleted, each with its own title and sentence.
+
 ## 1.25.1
 
 ### Patch Changes

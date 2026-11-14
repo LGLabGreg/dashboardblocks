@@ -73,7 +73,7 @@ const exampleProps: Settings4Props = {
     {
       category: 'Developer',
       description: 'Mark deploys on charts and link incidents to commits.',
-      detail: 'Paused by Liam Chen',
+      detail: 'Paused by Liam Carter',
       id: 'github',
       logo: <GitHubLogo />,
       name: 'GitHub',

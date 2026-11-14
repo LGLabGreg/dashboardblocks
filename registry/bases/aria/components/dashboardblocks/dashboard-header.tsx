@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/dashboard-header.tsx for React Aria
-// source-hash: 54a70a5ccc21
+// source-hash: bdaf60837e97
 
 'use client'
 
@@ -21,7 +21,7 @@ import { Switch } from '@/components/ui/switch'
 
 import { cn } from '@/lib/utils'
 
-type DateRangePreset = 'today' | '7d' | '30d' | '90d'
+type DateRangePreset = '24h' | 'today' | '7d' | '30d' | '90d'
 
 interface DateRange {
   end: Date
@@ -33,6 +33,7 @@ const DATE_RANGE_PRESETS: {
   label: string
   value: DateRangePreset
 }[] = [
+  { days: 1, label: 'Last 24 hours', value: '24h' },
   { days: 1, label: 'Today', value: 'today' },
   { days: 7, label: 'Last 7 days', value: '7d' },
   { days: 30, label: 'Last 30 days', value: '30d' },
@@ -41,12 +42,14 @@ const DATE_RANGE_PRESETS: {
 
 const DAY = 86_400_000
 
+const DEFAULT_PRESETS: DateRangePreset[] = ['today', '7d', '30d', '90d']
+
 function getPreset(preset: DateRangePreset) {
   return DATE_RANGE_PRESETS.find((item) => item.value === preset) ?? DATE_RANGE_PRESETS[0]
 }
 
 function getDateRange(preset: DateRangePreset, today: Date): DateRange {
-  const { days } = getPreset(preset)
+  const days = preset === '24h' ? 2 : getPreset(preset).days
   return { end: today, start: new Date(today.getTime() - (days - 1) * DAY) }
 }
 
@@ -59,7 +62,7 @@ function getPreviousRange(range: DateRange): DateRange {
 interface DateRangePickerProps {
   className?: string
   onValueChange: (value: DateRangePreset) => void
-  /** The ranges to offer, in order. @default every preset */
+  /** The ranges to offer, in order. @default ['today', '7d', '30d', '90d'] */
   presets?: DateRangePreset[]
   /** `sm` lines the button up with small buttons beside it, such as filters. @default 'default' */
   size?: 'default' | 'sm'
@@ -81,9 +84,9 @@ function DateRangePicker({
   value,
   variant = 'button',
 }: DateRangePickerProps) {
-  const options = presets
-    ? DATE_RANGE_PRESETS.filter((preset) => presets.includes(preset.value))
-    : DATE_RANGE_PRESETS
+  const options = DATE_RANGE_PRESETS.filter((preset) =>
+    (presets ?? DEFAULT_PRESETS).includes(preset.value),
+  )
   const chevron = (
     <IconPlaceholder
       lucide='ChevronDownIcon'

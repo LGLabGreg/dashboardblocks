@@ -51,14 +51,14 @@ const exampleProps: Comments2Props = {
     { name: 'Lena Fischer' },
     { name: 'Mateo Silva' },
     { name: 'Jonas Weber' },
-    { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
+    { avatar: '/images/avatar-01.webp', name: 'Sofia Rossi' },
   ],
   project: 'Website relaunch',
   title: 'Post an update',
   updates: [
     {
       at: hoursAgo(5),
-      author: { avatar: '/images/avatar-05.webp', name: 'Sofia Rossi' },
+      author: { avatar: '/images/avatar-01.webp', name: 'Sofia Rossi' },
       body: 'New pricing page is on staging. @Priya Nair can you check the annual toggle copy before Thursday?',
       id: 'u1',
       reactions: [
@@ -219,7 +219,7 @@ const Comments2 = (props: Comments2Props) => {
                     disabled={isPosting || !draft.trim()}
                     onClick={() => void postFromPreview()}
                   >
-                    {isPosting ? 'Posting…' : 'Post update'}
+                    {isPosting ? 'Posting' : 'Post update'}
                   </Button>
                 </div>
               </TabsContent>

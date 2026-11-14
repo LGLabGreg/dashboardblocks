@@ -23,7 +23,7 @@
       "stat-group-02"
     ],
     "component": "DashboardHeader4",
-    "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

@@ -309,8 +309,8 @@ const Auth5 = (props: Auth5Props) => {
                 text={
                   pending
                     ? signUp
-                      ? 'Creating account…'
-                      : 'Signing in…'
+                      ? 'Creating account'
+                      : 'Signing in'
                     : signUp
                       ? 'Create account'
                       : 'Sign in'

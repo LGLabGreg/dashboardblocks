@@ -48,7 +48,7 @@ interface Comments4Props extends BlockStateProps {
 const exampleNow = new Date(Date.UTC(2026, 8, 26, 12))
 const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_600_000)
 
-const hannah = { avatar: '/images/avatar-01.webp', name: 'Hannah Becker' }
+const hannah = { avatar: '/images/avatar-18.webp', name: 'Hannah Becker' }
 const lena = { avatar: '/images/avatar-03.webp', name: 'Lena Fischer' }
 const mateo = { name: 'Mateo Silva' }
 
@@ -266,7 +266,7 @@ const Comments4 = (props: Comments4Props) => {
                     label={`Reply to ${customer.name}`}
                     placeholder={`Reply to ${customer.name.split(' ')[0]}`}
                     submitLabel='Send reply'
-                    pendingLabel='Sending…'
+                    pendingLabel='Sending'
                     disabled={unavailable}
                     value={drafts.reply}
                     footer={
@@ -286,7 +286,7 @@ const Comments4 = (props: Comments4Props) => {
                     label='Internal note'
                     placeholder='Add a note for your team. Type @ to mention someone.'
                     submitLabel='Add note'
-                    pendingLabel='Adding…'
+                    pendingLabel='Adding'
                     disabled={unavailable}
                     people={people}
                     value={drafts.note}

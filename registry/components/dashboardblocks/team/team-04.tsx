@@ -59,7 +59,7 @@ const exampleProps: Team4Props = {
       person: {
         avatar: '/images/avatar-04.webp',
         id: 'm2',
-        name: 'Liam Chen',
+        name: 'Liam Carter',
         presence: 'online',
       },
       start: monday(0),

@@ -231,7 +231,7 @@ const Invoice2 = (props: Invoice2Props) => {
               remixicon='RiMailLine'
               aria-hidden
             />
-            {emailState === 'sending' ? 'Sending…' : 'Email'}
+            {emailState === 'sending' ? 'Sending' : 'Email'}
           </Button>
         </DocumentToolbar>
         <DocumentPage>

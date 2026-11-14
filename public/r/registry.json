@@ -1162,6 +1162,19 @@
       ]
     },
     {
+      "name": "card-style",
+      "type": "registry:component",
+      "title": "Card Style",
+      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/card-style.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/card-style.tsx"
+        }
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
@@ -1171,6 +1184,32 @@
           "path": "registry/components/dashboardblocks/details.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/details.tsx"
+        }
+      ]
+    },
+    {
+      "name": "locked-note",
+      "type": "registry:component",
+      "title": "Locked Note",
+      "description": "Why a block’s settings are read only: a line with a lock, under the header’s description.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/locked-note.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/locked-note.tsx"
+        }
+      ]
+    },
+    {
+      "name": "value-change",
+      "type": "registry:component",
+      "title": "Value Change",
+      "description": "What a setting was and what it became, the old value struck through, then an arrow and the new one, read by screen readers as from and to.",
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/value-change.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/value-change.tsx"
         }
       ]
     },
@@ -1215,6 +1254,22 @@
           "path": "registry/components/dashboardblocks/shortcut-button.tsx",
           "type": "registry:component",
           "target": "@components/dashboardblocks/shortcut-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "new-button",
+      "type": "registry:component",
+      "title": "New Button",
+      "description": "A small button that creates something, with a plus before its label, such as New key or New rule.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/components/dashboardblocks/new-button.tsx",
+          "type": "registry:component",
+          "target": "@components/dashboardblocks/new-button.tsx"
         }
       ]
     },
@@ -2091,7 +2146,8 @@
         "card",
         "https://www.dashboardblocks.com/r/activity-feed.json",
         "https://www.dashboardblocks.com/r/block-state.json",
-        "https://www.dashboardblocks.com/r/status-label.json"
+        "https://www.dashboardblocks.com/r/status-label.json",
+        "https://www.dashboardblocks.com/r/value-change.json"
       ],
       "files": [
         {
@@ -3363,7 +3419,7 @@
           "chart-panel-01"
         ],
         "component": "DashboardHeader1",
-        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }"
+        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }"
       },
       "description": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export."
     },
@@ -3389,7 +3445,7 @@
           "chart-panel-01"
         ],
         "component": "DashboardHeader2",
-        "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+        "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
       },
       "description": "A short dashboard header with a title, a date range menu and an export button."
     },
@@ -3417,7 +3473,7 @@
           "chart-panel-02"
         ],
         "component": "DashboardHeader3",
-        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+        "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
       },
       "description": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip."
     },
@@ -3444,7 +3500,7 @@
           "stat-group-02"
         ],
         "component": "DashboardHeader4",
-        "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export."
     },
@@ -4589,7 +4645,7 @@
           "billing-05"
         ],
         "component": "Billing3",
-        "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one."
     },
@@ -7330,11 +7386,15 @@
       "registryDependencies": [
         "button",
         "switch",
+        "https://www.dashboardblocks.com/r/announcements.json",
+        "https://www.dashboardblocks.com/r/attempt.json",
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/chart.json",
         "https://www.dashboardblocks.com/r/details.json",
         "https://www.dashboardblocks.com/r/format.json",
-        "https://www.dashboardblocks.com/r/settings.json"
+        "https://www.dashboardblocks.com/r/settings.json",
+        "https://www.dashboardblocks.com/r/table.json",
+        "https://www.dashboardblocks.com/r/tooltip-link.json"
       ],
       "files": [
         {
@@ -7344,7 +7404,7 @@
         }
       ],
       "meta": {
-        "shows": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.",
+        "shows": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, what’s wrong with a failing one, and a switch to pause each one.",
         "size": "full",
         "usedWith": [
           "settings-02",
@@ -7352,9 +7412,9 @@
           "status-01"
         ],
         "component": "Settings5",
-        "props": "{ description?: string; endpoints?: { deliveries: { at: Date; status: number }[]; enabled: boolean; events: string[]; id: string; url: string }[]; now: Date; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description?: string; endpoints?: { deliveries: { at: Date; status: number }[]; description?: string; enabled: boolean; events: string[]; href?: string; id: string; problem?: string; url: string }[]; now: Date; addHref?: string; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void | Promise<void | { message: string; status: \"error\" } | { status: \"success\" }>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
-      "description": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one."
+      "description": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, what’s wrong with a failing one, and a switch to pause each one."
     },
     {
       "name": "settings-06",
@@ -7362,6 +7422,8 @@
       "registryDependencies": [
         "button",
         "input",
+        "https://www.dashboardblocks.com/r/locked-note.json",
+        "https://www.dashboardblocks.com/r/option-select.json",
         "https://www.dashboardblocks.com/r/settings.json"
       ],
       "files": [
@@ -7372,16 +7434,16 @@
         }
       ],
       "meta": {
-        "shows": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+        "shows": "Transferring, archiving and deleting a workspace, with the new owner picked from the admins and deletion confirmed by typing the workspace name.",
         "size": "half",
         "usedWith": [
           "settings-01",
           "security-06"
         ],
         "component": "Settings6",
-        "props": "{ actions: { action: string; confirm?: boolean; description: string; id: string; label: string }[]; description: string; onAction?: (id: string) => void; title: string; workspace: string }"
+        "props": "{ actions: { action: string; choose?: { label: string; options: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; placeholder?: string }; confirm?: boolean; description: string; disabled?: boolean; id: string; label: string }[]; description: string; lockedMessage?: string; onAction?: (id: string, choice: string) => void | Promise<unknown>; title: string; workspace: string }"
       },
-      "description": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name."
+      "description": "Transferring, archiving and deleting a workspace, with the new owner picked from the admins and deletion confirmed by typing the workspace name."
     },
     {
       "name": "settings-07",
@@ -9028,7 +9090,7 @@
           "auth-03"
         ],
         "component": "ErrorPages5",
-        "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
+        "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"left\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\" | \"workspace-deleted\"; returnTo?: string; savedDraft?: boolean; signInHref: string }"
       },
       "description": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page."
     },

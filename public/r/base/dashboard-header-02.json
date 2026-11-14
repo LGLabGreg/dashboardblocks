@@ -22,7 +22,7 @@
       "chart-panel-01"
     ],
     "component": "DashboardHeader2",
-    "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
+    "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }"
   },
   "type": "registry:component"
 }

@@ -54,7 +54,7 @@ interface ActivityFeed4Props extends BlockStateProps {
 
 const exampleProps: ActivityFeed4Props = {
   contributors: [
-    { avatar: '/images/avatar-07.webp', count: 64, name: 'Kenji Mori' },
+    { avatar: '/images/avatar-14.webp', count: 64, name: 'Kevin Moore' },
     { avatar: '/images/avatar-02.webp', count: 51, name: 'Priya Nair' },
     { count: 38, name: 'Mei Tanaka' },
     { count: 22, name: 'Kenji Watanabe' },

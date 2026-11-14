@@ -214,7 +214,7 @@ const Auth6 = (props: Auth6Props) => {
               className='aria-disabled:opacity-50'
               aria-disabled={pending || undefined}
             >
-              <RollingText text={pending ? 'Sending link…' : 'Send reset link'} />
+              <RollingText text={pending ? 'Sending link' : 'Send reset link'} />
             </Button>
           </form>
         </AuthReveal>

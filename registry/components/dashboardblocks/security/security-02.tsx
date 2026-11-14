@@ -46,7 +46,7 @@ const exampleProps: Security2Props = {
   events: [
     {
       action: 'created an API key',
-      actor: 'Kenji Mori',
+      actor: 'Kevin Moore',
       at: minutesAgo(4),
       id: 'a1',
       ip: '203.0.113.24',
@@ -81,7 +81,7 @@ const exampleProps: Security2Props = {
     },
     {
       action: 'exported the audit log',
-      actor: 'Kenji Mori',
+      actor: 'Kevin Moore',
       at: minutesAgo(260),
       id: 'a5',
       ip: '203.0.113.24',

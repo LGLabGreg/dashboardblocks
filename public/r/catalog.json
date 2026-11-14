@@ -461,7 +461,7 @@
       "component": "Billing3",
       "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
       "size": "half",
-      "props": "{ currency?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "billing-02",
         "billing-05"
@@ -926,7 +926,7 @@
       "component": "DashboardHeader1",
       "shows": "A dashboard header with a title, date range presets, a compare switch, removable filter chips, an add filter menu and export.",
       "size": "full",
-      "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }",
+      "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; filterFields: { field: string; values: string[] }[]; onExport?: (format: string) => void; title: string; today: Date }",
       "usedWith": [
         "stat-group-02",
         "chart-panel-01"
@@ -939,7 +939,7 @@
       "component": "DashboardHeader2",
       "shows": "A short dashboard header with a title, a date range menu and an export button.",
       "size": "full",
-      "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }",
+      "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }",
       "usedWith": [
         "stat-group-01",
         "chart-panel-01"
@@ -952,7 +952,7 @@
       "component": "DashboardHeader3",
       "shows": "A dashboard header with date range presets as a segmented control, a compare switch and a filter chip.",
       "size": "full",
-      "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }",
+      "props": "{ defaultFilters?: { field: string; value: string }[]; defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; onExport?: (format: string) => void; title: string; today: Date }",
       "usedWith": [
         "stat-group-02",
         "chart-panel-02"
@@ -965,7 +965,7 @@
       "component": "DashboardHeader4",
       "shows": "A dashboard header with a description, the time of the last update and a refresh button beside the date range and export.",
       "size": "full",
-      "props": "{ defaultPreset?: \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ defaultPreset?: \"24h\" | \"today\" | \"7d\" | \"30d\" | \"90d\"; description?: string; lastUpdated: string; onExport?: (format: string) => void; onRefresh?: () => Promise<void>; title: string; today: Date; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "realtime-01",
         "stat-group-02"
@@ -1311,7 +1311,7 @@
       "component": "ErrorPages5",
       "shows": "A signed-out page saying why the session ended and whether unsaved work was kept, with a sign-in link back to the same page.",
       "size": "page",
-      "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\"; returnTo?: string; savedDraft?: boolean; signInHref: string }",
+      "props": "{ brand?: ReactNode; email?: string; idleMinutes?: number; reason: \"revoked\" | \"inactive\" | \"left\" | \"signed-out\" | \"signed-out-elsewhere\" | \"password-changed\" | \"workspace-deleted\"; returnTo?: string; savedDraft?: boolean; signInHref: string }",
       "usedWith": [
         "auth-03"
       ]
@@ -2947,9 +2947,9 @@
       "install": "@dashboardblocks/settings-05",
       "import": "@/components/dashboardblocks/settings/settings-05",
       "component": "Settings5",
-      "shows": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.",
+      "shows": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, what’s wrong with a failing one, and a switch to pause each one.",
       "size": "full",
-      "props": "{ description?: string; endpoints?: { deliveries: { at: Date; status: number }[]; enabled: boolean; events: string[]; id: string; url: string }[]; now: Date; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description?: string; endpoints?: { deliveries: { at: Date; status: number }[]; description?: string; enabled: boolean; events: string[]; href?: string; id: string; problem?: string; url: string }[]; now: Date; addHref?: string; onAdd?: () => void; onEnabledChange?: (id: string, enabled: boolean) => void | Promise<void | { message: string; status: \"error\" } | { status: \"success\" }>; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "settings-02",
         "settings-04",
@@ -2961,9 +2961,9 @@
       "install": "@dashboardblocks/settings-06",
       "import": "@/components/dashboardblocks/settings/settings-06",
       "component": "Settings6",
-      "shows": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+      "shows": "Transferring, archiving and deleting a workspace, with the new owner picked from the admins and deletion confirmed by typing the workspace name.",
       "size": "half",
-      "props": "{ actions: { action: string; confirm?: boolean; description: string; id: string; label: string }[]; description: string; onAction?: (id: string) => void; title: string; workspace: string }",
+      "props": "{ actions: { action: string; choose?: { label: string; options: { disabled?: boolean; icon?: ReactNode; label: string; value: string }[]; placeholder?: string }; confirm?: boolean; description: string; disabled?: boolean; id: string; label: string }[]; description: string; lockedMessage?: string; onAction?: (id: string, choice: string) => void | Promise<unknown>; title: string; workspace: string }",
       "usedWith": [
         "settings-01",
         "security-06"

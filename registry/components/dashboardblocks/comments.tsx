@@ -498,7 +498,7 @@ function CommentComposer({
   onCancel,
   onSubmit,
   onValueChange,
-  pendingLabel = 'Posting…',
+  pendingLabel = 'Posting',
   people = [],
   placeholder = 'Leave a comment',
   submitLabel = 'Comment',
@@ -861,7 +861,7 @@ function CommentThread({
               label='Edit comment'
               people={people}
               submitLabel='Save'
-              pendingLabel='Saving…'
+              pendingLabel='Saving'
               onCancel={() => stopEditing(item.id)}
               onSubmit={async (body) => {
                 await onEdit(item.id, body)

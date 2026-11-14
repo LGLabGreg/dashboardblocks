@@ -292,7 +292,7 @@ function SsoSettings(props: SsoSettingsProps) {
                       aria-label={`Verify ${domain.domain}`}
                       onClick={() => void verify(domain)}
                     >
-                      {checking === domain.id ? 'Checking…' : 'Verify'}
+                      {checking === domain.id ? 'Checking' : 'Verify'}
                     </Button>
                   </>
                 )}

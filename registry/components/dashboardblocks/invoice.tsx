@@ -325,7 +325,7 @@ function DocumentPage({
     <article
       {...props}
       className={cn(
-        '@container/document flex flex-col gap-8 border-t pt-6 print:border-0 print:pt-0',
+        '@container/document flex flex-col gap-8 border-t pt-6 print:bg-background print:text-foreground print:border-0 print:pt-0',
         printColors,
         className,
       )}

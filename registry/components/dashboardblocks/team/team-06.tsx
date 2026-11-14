@@ -66,7 +66,7 @@ const exampleProps: Team6Props = {
       avatar: '/images/avatar-04.webp',
       email: 'liam@acme.co',
       id: 'p2',
-      name: 'Liam Chen',
+      name: 'Liam Carter',
     },
     {
       access: 'view',

@@ -40,12 +40,12 @@ interface Leaderboard3Props extends BlockStateProps {
 
 const exampleProps: Leaderboard3Props = {
   contributors: [
-    { id: 1, name: 'Sarah Chen', avatar: '/images/avatar-01.webp', value: 312 },
-    { id: 2, name: 'Marcus Reid', avatar: '/images/avatar-02.webp', value: 268 },
-    { id: 3, name: 'Priya Patel', avatar: '/images/avatar-03.webp', value: 241 },
-    { id: 4, name: 'Diego Alvarez', avatar: '/images/avatar-04.webp', value: 187 },
-    { id: 5, name: 'Emma Larsen', avatar: '/images/avatar-05.webp', value: 154 },
-    { id: 6, name: 'Tom Becker', avatar: '/images/avatar-07.webp', value: 129 },
+    { id: 1, name: 'Sarah Chen', avatar: '/images/avatar-11.webp', value: 312 },
+    { id: 2, name: 'Marcus Reid', avatar: '/images/avatar-04.webp', value: 268 },
+    { id: 3, name: 'Priya Patel', avatar: '/images/avatar-02.webp', value: 241 },
+    { id: 4, name: 'Diego Alvarez', avatar: '/images/avatar-13.webp', value: 187 },
+    { id: 5, name: 'Emma Larsen', avatar: '/images/avatar-03.webp', value: 154 },
+    { id: 6, name: 'Tom Becker', avatar: '/images/avatar-17.webp', value: 129 },
   ],
   title: 'Top contributors',
   unit: 'commits',

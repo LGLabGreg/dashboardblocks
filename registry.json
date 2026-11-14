@@ -580,12 +580,39 @@
       ]
     },
     {
+      "name": "card-style",
+      "type": "registry:component",
+      "title": "Card Style",
+      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.",
+      "registryDependencies": [
+        "@dashboardblocks/card-style"
+      ]
+    },
+    {
       "name": "details",
       "type": "registry:component",
       "title": "Details",
       "description": "Two or three short facts about one subject on one line, joined by a middle dot that screen readers skip and that never ends a line.",
       "registryDependencies": [
         "@dashboardblocks/details"
+      ]
+    },
+    {
+      "name": "locked-note",
+      "type": "registry:component",
+      "title": "Locked Note",
+      "description": "Why a block’s settings are read only: a line with a lock, under the header’s description.",
+      "registryDependencies": [
+        "@dashboardblocks/locked-note"
+      ]
+    },
+    {
+      "name": "value-change",
+      "type": "registry:component",
+      "title": "Value Change",
+      "description": "What a setting was and what it became, the old value struck through, then an arrow and the new one, read by screen readers as from and to.",
+      "registryDependencies": [
+        "@dashboardblocks/value-change"
       ]
     },
     {
@@ -613,6 +640,15 @@
       "description": "A button whose tooltip shows its label and its keyboard shortcut. With `listen`, the key presses it from anywhere on the page, except while someone types or a menu or dialog is open.",
       "registryDependencies": [
         "@dashboardblocks/shortcut-button"
+      ]
+    },
+    {
+      "name": "new-button",
+      "type": "registry:component",
+      "title": "New Button",
+      "description": "A small button that creates something, with a plus before its label, such as New key or New rule.",
+      "registryDependencies": [
+        "@dashboardblocks/new-button"
       ]
     },
     {
@@ -2326,7 +2362,7 @@
     {
       "name": "settings-05",
       "type": "registry:component",
-      "description": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, and a switch to pause each one.",
+      "description": "Webhook endpoints with the events they receive, a chart of recent deliveries with each one in a tooltip, the delivery rate, what’s wrong with a failing one, and a switch to pause each one.",
       "registryDependencies": [
         "@dashboardblocks/settings-05"
       ]
@@ -2334,7 +2370,7 @@
     {
       "name": "settings-06",
       "type": "registry:component",
-      "description": "Transferring, archiving and deleting a workspace, with deletion confirmed by typing the workspace name.",
+      "description": "Transferring, archiving and deleting a workspace, with the new owner picked from the admins and deletion confirmed by typing the workspace name.",
       "registryDependencies": [
         "@dashboardblocks/settings-06"
       ]

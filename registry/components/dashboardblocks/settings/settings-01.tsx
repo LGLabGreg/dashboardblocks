@@ -78,7 +78,7 @@ const exampleProps: Settings1Props = {
       avatar: '/images/avatar-04.webp',
       email: 'liam@acme.co',
       id: 'm2',
-      name: 'Liam Chen',
+      name: 'Liam Carter',
       role: 'admin',
     },
     {

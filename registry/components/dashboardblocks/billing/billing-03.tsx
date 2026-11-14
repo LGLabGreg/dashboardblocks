@@ -4,6 +4,7 @@ import {
   type InvoiceStatus,
   InvoiceStatusLabel,
   formatBillingDate,
+  getOutstandingInvoices,
 } from '@/registry/components/dashboardblocks/billing'
 import {
   BlockReady,
@@ -19,6 +20,7 @@ import {
   DataTableHead,
   DataTableHeader,
   DataTableRow,
+  DataTableRowLink,
   DataTableStateRows,
 } from '@/registry/components/dashboardblocks/table'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
@@ -33,6 +35,8 @@ interface Invoice {
   description: string
   /** A muted line under the description, such as the period it covers. */
   detail?: string
+  /** Where the invoice opens. The whole row links there. */
+  href?: string
   id: string
   number: string
   status: InvoiceStatus
@@ -41,6 +45,8 @@ interface Invoice {
 interface Billing3Props extends BlockStateProps {
   /** @default 'USD' */
   currency?: string
+  /** Leave out to say what's outstanding. */
+  description?: string
   /** Leave out, or pass none, to show the empty state. */
   invoices?: Invoice[]
   /** Leave out to hide Download. */
@@ -58,6 +64,7 @@ const exampleProps: Billing3Props = {
       date: invoiceDate(8, 14),
       description: 'Growth',
       detail: 'Sep 14 – Oct 14',
+      href: '#in_0926',
       id: 'in_0926',
       number: 'INV-2026-0926',
       status: 'due',
@@ -67,6 +74,7 @@ const exampleProps: Billing3Props = {
       date: invoiceDate(8, 2),
       description: 'Extra seats',
       detail: 'Prorated for 4 seats',
+      href: '#in_0914',
       id: 'in_0914',
       number: 'INV-2026-0914',
       status: 'failed',
@@ -76,6 +84,7 @@ const exampleProps: Billing3Props = {
       date: invoiceDate(7, 14),
       description: 'Growth',
       detail: 'Aug 14 – Sep 14',
+      href: '#in_0871',
       id: 'in_0871',
       number: 'INV-2026-0871',
       status: 'overdue',
@@ -85,6 +94,7 @@ const exampleProps: Billing3Props = {
       date: invoiceDate(6, 14),
       description: 'Growth',
       detail: 'Jul 14 – Aug 14',
+      href: '#in_0813',
       id: 'in_0813',
       number: 'INV-2026-0813',
       status: 'paid',
@@ -94,6 +104,7 @@ const exampleProps: Billing3Props = {
       date: invoiceDate(5, 14),
       description: 'Growth',
       detail: 'Jun 14 – Jul 14',
+      href: '#in_0760',
       id: 'in_0760',
       number: 'INV-2026-0760',
       status: 'paid',
@@ -106,6 +117,7 @@ const exampleProps: Billing3Props = {
 const Billing3 = (props: Billing3Props) => {
   const {
     currency = 'USD',
+    description: givenDescription,
     invoices = [],
     onDownload,
     onViewAll,
@@ -114,17 +126,9 @@ const Billing3 = (props: Billing3Props) => {
     title,
   } = props
   const state = getBlockState(status, invoices)
-  const unpaid = invoices.filter((invoice) => invoice.status !== 'paid')
-  const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0)
+  const outstanding = getOutstandingInvoices(invoices)
   const money = (value: number) => formatCurrency(value, { currency, precision: 'exact' })
-  const oldest = unpaid.reduce<Invoice | undefined>(
-    (first, invoice) => (!first || invoice.date < first.date ? invoice : first),
-    undefined,
-  )
-  const description =
-    unpaid.length === 0 || !oldest
-      ? 'Every invoice is paid.'
-      : `${money(outstanding)} outstanding across ${unpaid.length} ${unpaid.length === 1 ? 'invoice' : 'invoices'}, the oldest from ${formatBillingDate(oldest.date)}.`
+  const description = givenDescription ?? describeOutstanding(outstanding, money)
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
@@ -172,7 +176,17 @@ const Billing3 = (props: Billing3Props) => {
                   invoices.map((invoice) => (
                     <DataTableRow key={invoice.id}>
                       <DataTableCell primary truncate>
-                        <span className='block truncate'>{invoice.description}</span>
+                        {invoice.href ? (
+                          <DataTableRowLink
+                            aria-label={`${invoice.description}, ${invoice.number}`}
+                            className='block'
+                            href={invoice.href}
+                          >
+                            {invoice.description}
+                          </DataTableRowLink>
+                        ) : (
+                          <span className='block truncate'>{invoice.description}</span>
+                        )}
                         <Details className='text-muted-foreground block truncate text-xs font-normal tabular-nums'>
                           {invoice.number}
                           {invoice.detail}
@@ -217,6 +231,17 @@ const Billing3 = (props: Billing3Props) => {
       </Card>
     </BlockStateProvider>
   )
+}
+
+function describeOutstanding(
+  { amount, count, oldest }: ReturnType<typeof getOutstandingInvoices>,
+  money: (value: number) => string,
+) {
+  if (count === 0 || !oldest) return 'Every invoice is paid.'
+  if (count === 1) {
+    return `${money(amount)} outstanding on the invoice from ${formatBillingDate(oldest.date)}.`
+  }
+  return `${money(amount)} outstanding across ${count} invoices, the oldest from ${formatBillingDate(oldest.date)}.`
 }
 
 export { Billing3, exampleProps as billing3ExampleProps, type Billing3Props }

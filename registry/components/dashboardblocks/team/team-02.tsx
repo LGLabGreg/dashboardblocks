@@ -51,7 +51,7 @@ const exampleProps: Team2Props = {
       avatar: '/images/avatar-04.webp',
       capacity: 24,
       id: 'm2',
-      name: 'Liam Chen',
+      name: 'Liam Carter',
       role: 'Staff engineer',
     },
     {

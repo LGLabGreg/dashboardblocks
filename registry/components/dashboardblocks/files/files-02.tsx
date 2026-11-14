@@ -68,11 +68,11 @@ const hoursAgo = (hours: number) => new Date(exampleNow.getTime() - hours * 3_60
 const MB = 1024 * 1024
 
 const avatars: Record<string, string> = {
-  'Hannah Okafor': '/images/avatar-03.webp',
-  'Jonas Berg': '/images/avatar-04.webp',
-  'Lena Fischer': '/images/avatar-05.webp',
-  'Mateo Silva': '/images/avatar-02.webp',
-  'Priya Nair': '/images/avatar-01.webp',
+  'Hannah Okafor': '/images/avatar-12.webp',
+  'Jonas Berg': '/images/avatar-07.webp',
+  'Lena Fischer': '/images/avatar-03.webp',
+  'Mateo Silva': '/images/avatar-06.webp',
+  'Priya Nair': '/images/avatar-02.webp',
 }
 
 const exampleProps: Files2Props = {

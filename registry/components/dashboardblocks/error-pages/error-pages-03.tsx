@@ -97,7 +97,7 @@ const ErrorPages3 = (props: ErrorPages3Props) => {
                   retrying ? 'animate-spin motion-reduce:animate-none' : undefined
                 }
               />
-              {retrying ? 'Trying again…' : 'Try again'}
+              {retrying ? 'Trying again' : 'Try again'}
             </Button>
           )}
           {supportEmail && (

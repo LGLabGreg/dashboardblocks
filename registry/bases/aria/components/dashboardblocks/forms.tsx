@@ -1,5 +1,5 @@
 // Override of registry/components/dashboardblocks/forms.tsx for React Aria
-// source-hash: 26c31b056328
+// source-hash: bcf6b34b8df6
 
 'use client'
 
@@ -357,7 +357,7 @@ function SaveBar({
           Discard
         </Button>
         <Button type='submit' isDisabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : saveLabel}
+          {isSubmitting ? 'Saving' : saveLabel}
         </Button>
       </div>
     </div>
@@ -497,11 +497,25 @@ function InlineEditField({
   const [draft, setDraft] = useState<string | null>(null)
   const [error, setError] = useState<string>()
   const [isSaving, setIsSaving] = useState(false)
+  const [focusOn, setFocusOn] = useState({ count: 0, target: 'edit' })
+  const focusedFor = useRef(0)
+  const fieldRef = useRef<HTMLInputElement>(null)
+  const editRef = useRef<HTMLButtonElement>(null)
   const editing = draft !== null
+
+  useEffect(() => {
+    if (focusOn.count === focusedFor.current) return
+    focusedFor.current = focusOn.count
+    ;(focusOn.target === 'field' ? fieldRef : editRef).current?.focus()
+  }, [focusOn])
+
+  const focusNext = (target: 'edit' | 'field') =>
+    setFocusOn((previous) => ({ count: previous.count + 1, target }))
 
   function cancel() {
     setDraft(null)
     setError(undefined)
+    focusNext('edit')
   }
 
   async function save() {
@@ -513,8 +527,9 @@ function InlineEditField({
     try {
       const failed = await onSave?.(draft)
       startTransition(() => {
-        if (failed) setError(failed)
-        else cancel()
+        if (!failed) return cancel()
+        setError(failed)
+        focusNext('field')
       })
     } finally {
       startTransition(() => setIsSaving(false))
@@ -536,12 +551,13 @@ function InlineEditField({
     <FieldInput
       // oxlint-disable-next-line jsx-a11y/no-autofocus -- the field replaces the Edit button the person just pressed
       autoFocus
+      ref={fieldRef}
       type={type}
       aria-labelledby={`${id}-label`}
       value={draft ?? ''}
       aria-invalid={error ? true : undefined}
       aria-describedby={error ? `${id}-error` : undefined}
-      disabled={isSaving}
+      readOnly={isSaving}
       onChange={(event) => {
         setDraft(event.target.value)
         setError(undefined)
@@ -570,7 +586,7 @@ function InlineEditField({
                 field
               )}
               <Button type='button' isDisabled={isSaving} onClick={() => void save()}>
-                {isSaving ? 'Saving…' : 'Save'}
+                {isSaving ? 'Saving' : 'Save'}
               </Button>
               <Button
                 type='button'
@@ -588,8 +604,13 @@ function InlineEditField({
             )}
           </div>
         ) : (
-          <div className='flex min-h-9 items-center justify-between gap-2'>
-            <span className={cn('truncate text-sm', !value && 'text-muted-foreground')}>
+          <div className='flex min-h-9 min-w-0 items-center justify-between gap-2'>
+            <span
+              className={cn(
+                'min-w-0 truncate text-sm',
+                !value && 'text-muted-foreground',
+              )}
+            >
               {value && prefix ? (
                 <span className='text-muted-foreground'>{prefix}</span>
               ) : null}
@@ -600,6 +621,7 @@ function InlineEditField({
                 type='button'
                 variant='ghost'
                 size='sm'
+                ref={editRef}
                 aria-label={`Edit ${label.toLowerCase()}`}
                 onClick={() => setDraft(value)}
               >

@@ -286,7 +286,7 @@ function TwoFactorSettings(props: Security5Props) {
                       className='w-32 font-mono tracking-widest tabular-nums'
                     />
                     <Button type='submit' disabled={verifying}>
-                      {verifying ? 'Checking…' : 'Verify'}
+                      {verifying ? 'Checking' : 'Verify'}
                     </Button>
                     <Button
                       type='button'

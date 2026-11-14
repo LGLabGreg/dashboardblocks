@@ -256,7 +256,7 @@ const Invoice3 = (props: Invoice3Props) => {
                   disabled={!!state || pending !== null}
                   onClick={() => decide('declined')}
                 >
-                  {pending === 'declined' ? 'Declining…' : 'Decline'}
+                  {pending === 'declined' ? 'Declining' : 'Decline'}
                 </Button>
                 <Button
                   size='sm'
@@ -272,7 +272,7 @@ const Invoice3 = (props: Invoice3Props) => {
                     aria-hidden
                   />
                   {pending === 'accepted'
-                    ? 'Accepting…'
+                    ? 'Accepting'
                     : state
                       ? 'Accept'
                       : `Accept for ${total}`}

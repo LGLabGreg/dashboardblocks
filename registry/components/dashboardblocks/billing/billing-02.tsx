@@ -35,9 +35,9 @@ interface Billing2Props extends BlockStateProps {
   interval: 'month' | 'year'
   nextInvoiceAmount?: number
   now: Date
-  /** Opens where the plan is changed, such as your payment provider's billing page. A promise shows Opening… until it settles; show its errors yourself. */
+  /** Opens where the plan is changed, such as your payment provider's billing page. A promise shows Opening until it settles; show its errors yourself. */
   onManage?: () => void | Promise<void>
-  /** Opens where the card is changed. A promise shows Opening… until it settles. */
+  /** Opens where the card is changed. A promise shows Opening until it settles. */
   onUpdatePaymentMethod?: () => void | Promise<void>
   /** A renewal that wasn't paid, as your payment provider's `past_due`: what's owed and when the charge failed. */
   pastDue?: { amount: number; failedOn: Date }
@@ -82,7 +82,7 @@ function OpenButton({ children, icon, onOpen, unavailable, variant }: OpenButton
       }}
     >
       {icon}
-      {pending ? 'Opening…' : children}
+      {pending ? 'Opening' : children}
     </Button>
   )
 }

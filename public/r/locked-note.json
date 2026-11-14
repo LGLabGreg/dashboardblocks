@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "locked-note",
+  "title": "Locked Note",
+  "description": "Why a block’s settings are read only: a line with a lock, under the header’s description.",
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/locked-note.tsx",
+      "content": "'use client'\n\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport type { ComponentProps } from 'react'\n\nimport { cn } from '@/lib/utils'\n\n/** Why a block's settings are read only: a line with a lock, under the header's description. */\nfunction LockedNote({ children, className, ...props }: ComponentProps<'p'>) {\n  return (\n    <p\n      data-slot='locked-note'\n      className={cn(\n        'text-muted-foreground mt-2 flex items-center gap-1.5 text-sm [&_svg]:size-3.5',\n        className,\n      )}\n      {...props}\n    >\n      <IconPlaceholder\n        lucide='LockIcon'\n        tabler='IconLock'\n        hugeicons='SquareLock02Icon'\n        phosphor='LockIcon'\n        remixicon='RiLockLine'\n      />\n      {children}\n    </p>\n  )\n}\n\nexport { LockedNote }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/locked-note.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -291,7 +291,7 @@ interface Workspace {
 }
 
 interface WorkspaceSwitcherProps {
-  /** Adds a "New workspace…" item. */
+  /** Adds a "New workspace" item. */
   onCreate?: () => void
   onValueChange: (id: string) => void
   value: string
@@ -372,7 +372,7 @@ function WorkspaceSwitcher({
                     phosphor='PlusIcon'
                     remixicon='RiAddLine'
                   />
-                  New workspace…
+                  New workspace
                 </DropdownMenuItem>
               </>
             )}
@@ -713,7 +713,7 @@ function AppHeader({ children, className }: AppHeaderProps) {
   return (
     <header
       className={cn(
-        'bg-background sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b px-4',
+        'bg-background sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b px-4 [html:has(&)]:scroll-pt-14',
         className,
       )}
     >
