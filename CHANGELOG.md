@@ -1,5 +1,28 @@
 # dashboardblocks
 
+## 1.27.0
+
+### Minor Changes
+
+- 9cc597b: Card Style: Frame, a tray a step off the page that holds each card as a panel, with the block's title, or a KPI's, set in small capitals in the tray's top rim.
+  
+  Card Style: `CardStyleIcon` puts an icon before a card's caption in Frame's top rim.
+
+### Patch Changes
+
+- f075748: App Shell: Inset takes `actions` for buttons at the end of the header, can put search in the sidebar under the workspace switcher, pins `secondarySections` such as Settings to the bottom of the sidebar, and adds a theme choice to the user menu. Plan usage and the notifications button show only when you pass them, and New workspace only with `onCreateWorkspace`, as in the Sidebar shell. With one workspace and nothing to create, the workspace header links to `homeHref` instead of opening an empty menu.
+- 8795320: Chart: `ChartFloatingTooltip` opens at the point it shows, then glides between points, instead of sliding in from where it was last hidden.
+- 5ae3522: Geo: `getLandCoordinates` gives every land dot as a latitude and longitude, for a map in another projection.
+- df367dc: Billing: an invoice's status can now be Sent, Viewed, Partly paid or Scheduled, besides the states it had.
+- 8f7e029: Realtime: `LiveDot`, the pulsing dot from `LiveBadge`, for a live line that isn't a badge.
+- 8f7e029: Stat Group: a stat's change can be a count, such as `4` more countries, as well as a percentage or points.
+- af7212c: Notifications: `NotificationsMenu`, the bell with its unread count, Mark all as read and the list, which keeps what the person read and reports it through `onRead`.
+- ed689cf: Pipeline: Board shows each stage's weighted value, opens a deal from anywhere on its card, and with `getHref` each card is a link to the deal's own page. Days in stage read in full, on a phone you pick one stage at a time, and a card moved from its menu follows `items` once `onMove` resolves.
+- 1432058: Schedule: `DueLabel`, the due date Task List shows (`3 days overdue`, `Due today`, `Due Dec 14`), is now a shared part of Schedule.
+- 1432058: Schedule: in a narrow card, a meeting's people move under its title instead of squeezing it to a few letters a line.
+- d308931: Stage Summary: an optional list of the largest open items under the stages, each with its stage, and an `action` after the measure buttons. A stage with one item says "1 deal", not "1 deals", when you pass `singular`.
+- 81b5c84: Usage Meter: `UsageBar` takes a `mark`, a tick for a second value on the bar, such as how far through its time a budget is.
+
 ## 1.26.0
 
 ### Minor Changes

@@ -27,7 +27,7 @@
       "billing-05"
     ],
     "component": "Billing3",
-    "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+    "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"partly-paid\" | \"scheduled\" | \"sent\" | \"uncollectible\" | \"viewed\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
   },
   "type": "registry:component"
 }

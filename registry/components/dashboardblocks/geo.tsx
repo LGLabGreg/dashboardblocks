@@ -502,6 +502,14 @@ function getLandCells() {
   return cells
 }
 
+/** The centre of every land dot as a latitude and longitude, for a map in another projection, such as a globe. */
+function getLandCoordinates() {
+  return getLandCells().map((cell) => ({
+    lat: LAND_NORTH - cell.y * LAND_STEP,
+    lon: cell.x * LAND_STEP - 180,
+  }))
+}
+
 function getLandPath() {
   if (landPath !== null) return landPath
   const bytes = atob(LAND_MASK)
@@ -833,6 +841,7 @@ export {
   TileMap,
   US_STATE_TILES,
   getLandCells,
+  getLandCoordinates,
   getLandPath,
   getMarkerSize,
   projectPoint,

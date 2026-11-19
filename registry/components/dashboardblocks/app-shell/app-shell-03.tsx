@@ -12,6 +12,7 @@ import {
   type PlanUsageProps,
   SearchButton,
   SidebarUserMenu,
+  type ThemeChoice,
   type UserMenuLink,
   type Workspace,
   WorkspaceSwitcher,
@@ -33,16 +34,29 @@ import {
 import { cn } from '@/lib/utils'
 
 interface AppShell3Props {
+  /** Buttons at the end of the header, after search, such as a clock or a notification bell. */
+  actions?: ReactNode
   breadcrumbs: Crumb[]
   children?: ReactNode
-  notificationCount: number
+  /** The first page. With one workspace and no `onCreateWorkspace`, the workspace header links here. */
+  homeHref?: string
+  /** Leave out to hide the notifications button, such as when `actions` holds a bell. */
+  notificationCount?: number
+  /** Adds "New workspace" to the workspace switcher. */
   onCreateWorkspace?: () => void
   onNotificationsClick?: () => void
   onSearch?: () => void
   onSignOut?: () => void
   pathname: string
+  /** `sidebar` puts search under the workspace switcher, for a header that holds other buttons. @default 'header' */
+  searchIn?: 'header' | 'sidebar'
+  /** Pinned to the bottom of the sidebar, above the user menu, such as Settings. */
+  secondarySections?: NavSection[]
   sections: NavSection[]
-  usage: PlanUsageProps
+  /** Adds a Light, Dark and System choice to the user menu, such as `useTheme()` from next-themes. */
+  theme?: ThemeChoice
+  /** Leave out to hide plan usage. */
+  usage?: PlanUsageProps
   user: AppUser
   userLinks: UserMenuLink[]
   workspaces: Workspace[]
@@ -217,15 +231,20 @@ const exampleProps: AppShell3Props = {
 
 const AppShell3 = (props: AppShell3Props) => {
   const {
+    actions,
     breadcrumbs,
     children,
+    homeHref,
     notificationCount,
-    onCreateWorkspace = () => {},
+    onCreateWorkspace,
     onNotificationsClick = () => {},
     onSearch = () => {},
     onSignOut = () => {},
     pathname,
+    searchIn = 'header',
+    secondarySections,
     sections,
+    theme,
     usage,
     user,
     userLinks,
@@ -238,18 +257,35 @@ const AppShell3 = (props: AppShell3Props) => {
       <Sidebar variant='inset'>
         <SidebarHeader>
           <WorkspaceSwitcher
+            href={homeHref}
             onCreate={onCreateWorkspace}
             onValueChange={setWorkspace}
             value={workspace}
             workspaces={workspaces}
           />
+          {searchIn === 'sidebar' && (
+            <SearchButton collapseBelow='never' onOpen={onSearch} />
+          )}
         </SidebarHeader>
         <SidebarContent>
           <AppNav pathname={pathname} sections={sections} />
+          {secondarySections && (
+            <AppNav
+              className='mt-auto'
+              pathname={pathname}
+              sections={secondarySections}
+            />
+          )}
         </SidebarContent>
         <SidebarFooter>
-          <PlanUsage {...usage} />
-          <SidebarUserMenu links={userLinks} onSignOut={onSignOut} user={user} />
+          {usage && <PlanUsage {...usage} />}
+          <SidebarUserMenu
+            className='bg-background hover:bg-sidebar-accent aria-expanded:bg-sidebar-accent dark:bg-input/30 dark:hover:bg-sidebar-accent dark:aria-expanded:bg-sidebar-accent'
+            links={userLinks}
+            onSignOut={onSignOut}
+            theme={theme}
+            user={user}
+          />
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className='min-w-0'>
@@ -261,11 +297,14 @@ const AppShell3 = (props: AppShell3Props) => {
           />
           <AppBreadcrumbs items={breadcrumbs} />
           <div className='ml-auto flex items-center gap-2'>
-            <SearchButton onOpen={onSearch} />
-            <NotificationsButton
-              count={notificationCount}
-              onClick={onNotificationsClick}
-            />
+            {searchIn === 'header' && <SearchButton onOpen={onSearch} />}
+            {notificationCount !== undefined && (
+              <NotificationsButton
+                count={notificationCount}
+                onClick={onNotificationsClick}
+              />
+            )}
+            {actions}
           </div>
         </AppHeader>
         <div className='flex flex-1 flex-col gap-4 p-4 md:p-6'>

@@ -14,13 +14,7 @@ import {
 } from '@/registry/components/dashboardblocks/checklist'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { ProgressBar } from '@/registry/components/dashboardblocks/progress-bar'
-import {
-  UrgencyLabel,
-  getDay,
-  getDayOffset,
-  getUrgency,
-} from '@/registry/components/dashboardblocks/schedule'
-import { formatDate } from '@/registry/lib/dashboardblocks/format'
+import { DueLabel, getDayOffset } from '@/registry/components/dashboardblocks/schedule'
 import { useId, useState } from 'react'
 
 import { Card, CardContent } from '@/components/ui/card'
@@ -126,30 +120,6 @@ const exampleProps: Checklist4Props = {
 
 const SOON_DAYS = 2
 
-function DueDate({ done, due, now }: { done: boolean; due: Date; now: Date }) {
-  const offset = getDayOffset(due, now)
-  const day = getDay(due)
-  const date = formatDate(day, 'day')
-  const urgency = done ? 'later' : getUrgency(due, now, 'UTC', SOON_DAYS)
-  const label =
-    urgency === 'overdue'
-      ? `${-offset} ${offset === -1 ? 'day' : 'days'} overdue`
-      : urgency === 'today'
-        ? 'Due today'
-        : offset === 1
-          ? 'Due tomorrow'
-          : `Due ${date}`
-  return (
-    <time dateTime={day.toISOString().slice(0, 10)}>
-      <UrgencyLabel
-        className={cn(urgency === 'later' && 'font-normal')}
-        label={label}
-        urgency={urgency}
-      />
-    </time>
-  )
-}
-
 function TaskGroups(props: TaskGroupsProps) {
   const { groups, now, onToggle, title } = props
   const id = useId()
@@ -252,7 +222,12 @@ function TaskGroups(props: TaskGroupsProps) {
                           className='text-muted-foreground text-sm @md:shrink-0'
                         >
                           {task.owner}
-                          <DueDate done={isDone} due={task.due} now={now} />
+                          <DueLabel
+                            done={isDone}
+                            due={task.due}
+                            now={now}
+                            soonDays={SOON_DAYS}
+                          />
                         </Details>
                       </div>
                     </li>

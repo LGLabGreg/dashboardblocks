@@ -48,19 +48,30 @@ interface LiveBadgeProps {
   paused?: boolean
 }
 
+/** A dot that pulses while something is live, in the text colour. */
+function LiveDot({
+  className,
+  paused = false,
+}: {
+  className?: string
+  paused?: boolean
+}) {
+  return (
+    <span aria-hidden className={cn('relative flex size-1.5 shrink-0', className)}>
+      {!paused && (
+        <span className='absolute inline-flex size-full rounded-full bg-current opacity-60 motion-safe:animate-ping' />
+      )}
+      <span className='relative inline-flex size-1.5 rounded-full bg-current' />
+    </span>
+  )
+}
+
 function LiveBadge({ className, label = 'Live', paused = false }: LiveBadgeProps) {
   return (
     <StatusLabel
       tone={paused ? 'neutral' : 'good'}
       className={className}
-      indicator={
-        <span aria-hidden className='relative flex size-1.5 shrink-0'>
-          {!paused && (
-            <span className='absolute inline-flex size-full rounded-full bg-current opacity-60 motion-safe:animate-ping' />
-          )}
-          <span className='relative inline-flex size-1.5 rounded-full bg-current' />
-        </span>
-      }
+      indicator={<LiveDot paused={paused} />}
     >
       {paused ? 'Paused' : label}
     </StatusLabel>
@@ -161,6 +172,7 @@ function formatAgo(date: Date, now: Date) {
 }
 
 export {
+  LiveDot,
   LiveBadge,
   LiveNumber,
   RollingBars,

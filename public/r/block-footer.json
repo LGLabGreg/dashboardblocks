@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-footer",
+  "title": "Block Footer",
+  "description": "One line under a block with a fact about what it shows and a link to see more, such as the best month and the full report, set in the bottom rim of a Frame card.",
+  "registryDependencies": [
+    "https://www.dashboardblocks.com/r/tooltip-link.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dashboardblocks/block-footer.tsx",
+      "content": "'use client'\n\nimport { ButtonLink } from '@/registry/components/dashboardblocks/tooltip-link'\nimport { IconPlaceholder } from '@/registry/icons/icon-placeholder'\nimport type { ComponentProps } from 'react'\n\nimport { cn } from '@/lib/utils'\n\ninterface BlockFooterProps extends ComponentProps<'footer'> {\n  /** Where to see more, such as the full report, drawn after the line with an arrow (the arrow alone in a block narrower than `@sm`). */\n  link?: { href: string; label: string }\n}\n\n/**\n * One line under a block: a fact about what it shows, such as the best month, and a link to see\n * more. In `CardStyle`'s Frame it sits in the bottom rim of the card.\n */\nfunction BlockFooter({ children, className, link, ...props }: BlockFooterProps) {\n  return (\n    <footer\n      data-slot='block-footer'\n      className={cn(\n        'text-muted-foreground flex min-h-8 items-center justify-between gap-3 border-t pt-3 text-sm',\n        className,\n      )}\n      {...props}\n    >\n      <p data-slot='block-footer-text' className='min-w-0 truncate'>\n        {children}\n      </p>\n      {link && (\n        <ButtonLink className='shrink-0' href={link.href} variant='ghost'>\n          <span className='@max-sm:sr-only'>{link.label}</span>\n          <IconPlaceholder\n            lucide='ArrowRightIcon'\n            tabler='IconArrowRight'\n            hugeicons='ArrowRight01Icon'\n            phosphor='ArrowRightIcon'\n            remixicon='RiArrowRightLine'\n            data-icon='inline-end'\n          />\n        </ButtonLink>\n      )}\n    </footer>\n  )\n}\n\nexport { BlockFooter }\nexport type { BlockFooterProps }\n",
+      "type": "registry:component",
+      "target": "@components/dashboardblocks/block-footer.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

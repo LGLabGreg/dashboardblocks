@@ -82,7 +82,7 @@
       "component": "AiAssistant1",
       "shows": "An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons.",
       "size": "page",
-      "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "ai-assistant-02"
       ]
@@ -266,7 +266,7 @@
       "component": "AppShell3",
       "shows": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu.",
       "size": "page",
-      "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; usage: { action?: { href: string; label: string }; limit: number; note?: ReactNode; unit?: string; title: string; used: number }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }",
+      "props": "{ actions?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; homeHref?: string; notificationCount?: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; searchIn?: \"header\" | \"sidebar\"; secondarySections?: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; theme?: { onValueChange: (theme: \"light\" | \"dark\" | \"system\") => void; value: \"light\" | \"dark\" | \"system\" }; usage?: { action?: { href: string; label: string }; limit: number; note?: ReactNode; unit?: string; title: string; used: number }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }",
       "usedWith": [
         "app-shell-01"
       ]
@@ -461,7 +461,7 @@
       "component": "Billing3",
       "shows": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one.",
       "size": "half",
-      "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"partly-paid\" | \"scheduled\" | \"sent\" | \"uncollectible\" | \"viewed\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "billing-02",
         "billing-05"
@@ -620,7 +620,7 @@
       "component": "ChartPanel2",
       "shows": "Tabs for related metrics, each showing its total and change, over a chart of the chosen one with its average.",
       "size": "full",
-      "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "realtime-01",
         "leaderboard-01",
@@ -2461,9 +2461,9 @@
       "install": "@dashboardblocks/pipeline-01",
       "import": "@/components/dashboardblocks/pipeline/pipeline-01",
       "component": "Pipeline1",
-      "shows": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+      "shows": "A board with a column for each stage showing its item count, total value and weighted value, and a card for each item that can be moved from its menu or opened beside the board; on a phone, one stage at a time.",
       "size": "full",
-      "props": "{ description?: string; items?: { enteredStageAt: Date; id: string; owner?: string; ownerAvatar?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ description?: string; items?: { enteredStageAt: Date; id: string; owner?: string; ownerAvatar?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void | Promise<void | { message: string; status: \"error\" }>; getHref?: (id: string) => string; onOpen?: (id: string) => void; openId?: string; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "pipeline-02",
         "pipeline-03",
@@ -2475,9 +2475,9 @@
       "install": "@dashboardblocks/pipeline-02",
       "import": "@/components/dashboardblocks/pipeline/pipeline-02",
       "component": "Pipeline2",
-      "shows": "Open value across stages, with each stage as a segment sized by value or by count.",
+      "shows": "Open value across stages, with each stage as a segment sized by value or by count, and the three largest open deals.",
       "size": "full",
-      "props": "{ description?: string; noun?: string; stages?: { count: number; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ action?: ReactNode; description?: string; icon?: ReactNode; largest?: { detail?: string; id: string; name: string; stage?: string; value: number }[]; noun?: string; singular?: string; stages?: { count: number; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "pipeline-01",
         "funnel-01",
@@ -3041,7 +3041,7 @@
       "component": "StatGroup1",
       "shows": "Metrics side by side, each with its change written as a sentence.",
       "size": "full",
-      "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "chart-panel-01",
         "kpi-01",
@@ -3055,7 +3055,7 @@
       "component": "StatGroup2",
       "shows": "A row of metrics, each with its change and a 14-day sparkline, under a sentence saying how many improved.",
       "size": "full",
-      "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "chart-panel-01",
         "breakdown-01",
@@ -3069,7 +3069,7 @@
       "component": "StatGroup3",
       "shows": "A row of metrics where picking one charts it by day against the previous period.",
       "size": "full",
-      "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "heatmap-01",
         "geo-04",
@@ -3083,7 +3083,7 @@
       "component": "StatGroup4",
       "shows": "Five metrics in a slim row with their changes, wrapping to two columns when narrow.",
       "size": "full",
-      "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "chart-panel-02",
         "kpi-02",
@@ -3097,7 +3097,7 @@
       "component": "StatGroup5",
       "shows": "Four metrics, each with a bar for this period over a bar for the one before.",
       "size": "full",
-      "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
+      "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }",
       "usedWith": [
         "chart-panel-03",
         "kpi-01",
@@ -3111,7 +3111,7 @@
       "component": "States1",
       "shows": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives.",
       "size": "full",
-      "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]>; placeholders?: number; title: string }",
+      "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]>; placeholders?: number; title: string }",
       "usedWith": [
         "stat-group-02",
         "states-04"

@@ -9,17 +9,15 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import {
   type StepState,
-  StepIndicator,
+  StepRail,
+  StepRailItem,
   getChecklistProgress,
   getNextStep,
-  stepStateConfig,
 } from '@/registry/components/dashboardblocks/checklist'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-
-import { cn } from '@/lib/utils'
 
 interface SetupStage {
   id: string
@@ -97,30 +95,16 @@ const Checklist2 = (props: Checklist2Props) => {
             </header>
             <BlockStateRows className='border-t' rows={stages.length || 5} />
             {!state && (
-              <ol aria-label='Setup stages' className='flex flex-col gap-3 @xl:flex-row'>
+              <StepRail aria-label='Setup stages'>
                 {stages.map((stage, index) => (
-                  <li
+                  <StepRailItem
                     key={stage.id}
-                    aria-current={stage.state === 'current' ? 'step' : undefined}
-                    data-state={stage.state}
-                    className='border-border data-[state=current]:border-foreground data-[state=done]:border-chart-2 flex min-w-0 items-start gap-2 border-l-2 pl-3 text-sm data-[state=skipped]:border-dashed @xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-3 @xl:pl-0'
-                  >
-                    <StepIndicator index={index + 1} state={stage.state} />
-                    <span
-                      className={cn(
-                        'min-w-0 font-medium break-words',
-                        (stage.state === 'todo' || stage.state === 'skipped') &&
-                          'text-muted-foreground',
-                      )}
-                    >
-                      {stage.title}
-                      <span className='sr-only'>
-                        , {stepStateConfig[stage.state].label}
-                      </span>
-                    </span>
-                  </li>
+                    index={index + 1}
+                    state={stage.state}
+                    title={stage.title}
+                  />
                 ))}
-              </ol>
+              </StepRail>
             )}
           </section>
         </CardContent>

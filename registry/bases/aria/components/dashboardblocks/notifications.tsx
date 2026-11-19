@@ -1,17 +1,19 @@
 // Override of registry/components/dashboardblocks/notifications.tsx for React Aria
-// source-hash: 2e2e337b7856
+// source-hash: 9110a41a49c1
 
 'use client'
 
 import {
   ActivityTime,
   type ActivityTone,
+  MarkAllReadButton,
   UnreadDot,
 } from '@/registry/components/dashboardblocks/activity-feed'
 import { Link } from '@/registry/components/dashboardblocks/link'
 import { statusToneClasses } from '@/registry/components/dashboardblocks/status-label'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import type { MouseEvent, ReactNode } from 'react'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import { type MouseEvent, type ReactNode, useState } from 'react'
 import { Dialog } from 'react-aria-components'
 
 import { Button } from '@/components/ui/button'
@@ -231,6 +233,75 @@ function NotificationItem({
   )
 }
 
-export { NotificationBell, NotificationItem, NotificationList, NotificationsHeader }
+interface NotificationsMenuProps {
+  className?: string
+  notifications: AppNotification[]
+  /** Pass a fixed date, so times render the same on the server and in the browser. */
+  now: Date
+  /** Called with the ids the person read, by opening one or with Mark all as read, so they stay read. */
+  onRead?: (ids: string[]) => void
+}
 
-export type { AppNotification, NotificationBellProps, NotificationItemProps }
+function NotificationsMenu({
+  className,
+  notifications,
+  now,
+  onRead,
+}: NotificationsMenuProps) {
+  const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set())
+  const shown = notifications.map((notification) =>
+    readIds.has(notification.id) ? { ...notification, read: true } : notification,
+  )
+  const unread = shown.filter((notification) => !notification.read)
+
+  function markRead(ids: string[]) {
+    setReadIds((current) => new Set([...current, ...ids]))
+    onRead?.(ids)
+  }
+
+  return (
+    <NotificationBell className={className} unreadCount={unread.length}>
+      <NotificationsHeader
+        description={
+          unread.length > 0
+            ? `${formatNumber(unread.length)} unread.`
+            : 'You’re all caught up.'
+        }
+        action={
+          unread.length > 0 && (
+            <MarkAllReadButton
+              onClick={() => markRead(unread.map((notification) => notification.id))}
+            />
+          )
+        }
+      />
+      {shown.length > 0 && (
+        <NotificationList className='max-h-96 overflow-y-auto border-t pe-2 [scrollbar-width:thin]'>
+          {shown.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              notification={notification}
+              now={now}
+              onOpen={() => markRead([notification.id])}
+            />
+          ))}
+        </NotificationList>
+      )}
+    </NotificationBell>
+  )
+}
+
+export {
+  NotificationBell,
+  NotificationItem,
+  NotificationList,
+  NotificationsHeader,
+  NotificationsMenu,
+}
+
+export type {
+  AppNotification,
+  NotificationBellProps,
+  NotificationItemProps,
+  NotificationsMenuProps,
+}

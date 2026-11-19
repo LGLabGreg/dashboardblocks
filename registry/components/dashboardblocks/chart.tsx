@@ -485,11 +485,14 @@ function ChartFloatingTooltip({
   y,
 }: ChartFloatingTooltipProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const shown = useRef(false)
 
   useLayoutEffect(() => {
     const node = ref.current
     const parent = node?.offsetParent
-    if (!node || !parent) return
+    const appearing = active && !shown.current
+    shown.current = active
+    if (!node || !parent || !active) return
     const origin = parent.getBoundingClientRect()
     const bounds = clippingBox(node)
     const width = node.offsetWidth
@@ -511,6 +514,11 @@ function ChartFloatingTooltip({
     const toX = clamp(across, bounds.left, bounds.right - width) - origin.left
     const toY = clamp(down, bounds.top, bounds.bottom - height) - origin.top
     node.style.transform = `translate(${toX}px, ${toY}px)`
+    if (appearing) {
+      node.style.transition = 'none'
+      node.getBoundingClientRect()
+      node.style.transition = ''
+    }
   })
 
   return (

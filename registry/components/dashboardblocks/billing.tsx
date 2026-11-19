@@ -269,7 +269,11 @@ type InvoiceStatus =
   | 'granted'
   | 'overdue'
   | 'paid'
+  | 'partly-paid'
+  | 'scheduled'
+  | 'sent'
   | 'uncollectible'
+  | 'viewed'
   | 'void'
 
 const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTone }> = {
@@ -279,12 +283,22 @@ const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTo
   granted: { label: 'Granted', tone: 'info' },
   overdue: { label: 'Overdue', tone: 'warning' },
   paid: { label: 'Paid', tone: 'good' },
+  'partly-paid': { label: 'Partly paid', tone: 'info' },
+  scheduled: { label: 'Scheduled', tone: 'neutral' },
+  sent: { label: 'Sent', tone: 'neutral' },
   uncollectible: { label: 'Uncollectible', tone: 'bad' },
+  viewed: { label: 'Viewed', tone: 'info' },
   void: { label: 'Void', tone: 'neutral' },
 }
 
-/** Statuses that leave nothing to pay: paid, granted for free, or voided. */
-const settledInvoiceStatuses: InvoiceStatus[] = ['draft', 'granted', 'paid', 'void']
+/** Statuses that leave nothing to pay: not sent yet, paid, granted for free, or voided. */
+const settledInvoiceStatuses: InvoiceStatus[] = [
+  'draft',
+  'granted',
+  'paid',
+  'scheduled',
+  'void',
+]
 
 /** What's left to pay, and how many invoices and the oldest of them it's across. */
 function getOutstandingInvoices<

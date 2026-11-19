@@ -403,7 +403,7 @@
       "name": "notifications",
       "type": "registry:component",
       "title": "Notifications",
-      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.",
+      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot, and a ready bell menu that keeps what the person read.",
       "registryDependencies": [
         "@dashboardblocks/notifications"
       ]
@@ -583,7 +583,7 @@
       "name": "card-style",
       "type": "registry:component",
       "title": "Card Style",
-      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.",
+      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline, or Frame, a tray holding the card as a panel with its title in the top rim.",
       "registryDependencies": [
         "@dashboardblocks/card-style"
       ]
@@ -1690,7 +1690,7 @@
     {
       "name": "pipeline-01",
       "type": "registry:component",
-      "description": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+      "description": "A board with a column for each stage showing its item count, total value and weighted value, and a card for each item that can be moved from its menu or opened beside the board; on a phone, one stage at a time.",
       "registryDependencies": [
         "@dashboardblocks/pipeline-01"
       ]
@@ -1698,7 +1698,7 @@
     {
       "name": "pipeline-02",
       "type": "registry:component",
-      "description": "Open value across stages, with each stage as a segment sized by value or by count.",
+      "description": "Open value across stages, with each stage as a segment sized by value or by count, and the three largest open deals.",
       "registryDependencies": [
         "@dashboardblocks/pipeline-02"
       ]

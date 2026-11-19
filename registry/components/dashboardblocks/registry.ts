@@ -736,11 +736,12 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Notifications',
     description:
-      'Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.',
+      'Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot, and a ready bell menu that keeps what the person read.',
     registryDependencies: [
       'button',
       'popover',
       registryUrl('activity-feed'),
+      registryUrl('format'),
       registryUrl('link'),
       registryUrl('status-label'),
     ],
@@ -790,7 +791,7 @@ export const components: Registry['items'] = [
     title: 'Pipeline',
     description:
       'Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.',
-    registryDependencies: [registryUrl('tag'), registryUrl('team')],
+    registryDependencies: [registryUrl('link'), registryUrl('tag'), registryUrl('team')],
     files: [
       {
         path: 'registry/components/dashboardblocks/pipeline.tsx',
@@ -1041,7 +1042,7 @@ export const components: Registry['items'] = [
     type: 'registry:component',
     title: 'Card Style',
     description:
-      'A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.',
+      'A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline, or Frame, a tray holding the card as a panel with its title in the top rim.',
     files: [
       {
         path: 'registry/components/dashboardblocks/card-style.tsx',

@@ -152,6 +152,11 @@ interface UsageBarProps extends UsageThresholds {
   className?: string
   color?: string
   limit: number
+  /**
+   * A value on the same scale drawn as a tick across the bar, such as where spending would be if it
+   * kept pace with time: the time gone times the limit. Say what it means in text beside the bar.
+   */
+  mark?: number
   overColor?: string
   projected?: number
   /** @default 'md' */
@@ -165,6 +170,7 @@ function UsageBar({
   color,
   critical,
   limit,
+  mark,
   overColor = 'var(--color-destructive)',
   projected,
   size = 'md',
@@ -228,13 +234,18 @@ function UsageBar({
           />
         )}
       </div>
-      {pastLimit && (
-        <span
-          className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
-          style={{ left: at(limit) }}
-        />
-      )}
+      {pastLimit && <UsageTick at={at(limit)} />}
+      {mark !== undefined && <UsageTick at={at(Math.min(mark, scale))} />}
     </div>
+  )
+}
+
+function UsageTick({ at }: { at: string }) {
+  return (
+    <span
+      className='bg-foreground ring-background absolute top-1/2 h-[calc(100%+8px)] w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2'
+      style={{ left: at }}
+    />
   )
 }
 

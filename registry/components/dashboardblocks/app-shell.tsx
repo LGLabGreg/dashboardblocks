@@ -291,6 +291,8 @@ interface Workspace {
 }
 
 interface WorkspaceSwitcherProps {
+  /** With one workspace and no `onCreate`, the header links here, such as the first page, instead of opening a menu with nothing to pick. */
+  href?: string
   /** Adds a "New workspace" item. */
   onCreate?: () => void
   onValueChange: (id: string) => void
@@ -299,6 +301,7 @@ interface WorkspaceSwitcherProps {
 }
 
 function WorkspaceSwitcher({
+  href,
   onCreate,
   onValueChange,
   value,
@@ -307,6 +310,15 @@ function WorkspaceSwitcher({
   const { isMobile } = useSidebar()
   const current = workspaces.find((workspace) => workspace.id === value) ?? workspaces[0]
   if (!current) return null
+  if (href && workspaces.length === 1 && !onCreate)
+    return (
+      <AppBrand
+        description={current.plan}
+        href={href}
+        logo={current.logo}
+        name={current.name}
+      />
+    )
 
   return (
     <SidebarMenu>
@@ -639,7 +651,10 @@ function UserMenuItems({
   )
 }
 
-function SidebarUserMenu(props: UserMenuProps) {
+function SidebarUserMenu({
+  className,
+  ...props
+}: UserMenuProps & { className?: string }) {
   const { isMobile } = useSidebar()
   const closeMobile = useCloseMobileSidebar()
   const railTooltip = useRailTooltip()
@@ -653,7 +668,7 @@ function SidebarUserMenu(props: UserMenuProps) {
                 <SidebarMenuButton
                   size='lg'
                   tooltip={railTooltip(props.user.name)}
-                  className='aria-expanded:bg-muted'
+                  className={cn('aria-expanded:bg-muted', className)}
                 />
               }
             >
@@ -772,8 +787,8 @@ interface SearchButtonProps {
   onOpen: () => void
   /** @default 'Search' */
   placeholder?: string
-  /** Below this width the field shrinks to its icon: `lg` for a bar that also holds tabs. @default 'sm' */
-  collapseBelow?: 'lg' | 'sm'
+  /** Below this width the field shrinks to its icon: `lg` for a bar that also holds tabs, `never` for a sidebar. @default 'sm' */
+  collapseBelow?: 'lg' | 'sm' | 'never'
   /** `secondary` fills the field instead of outlining it, for a bar on a tinted canvas where an outlined field stands out. @default 'outline' */
   variant?: 'outline' | 'secondary'
 }
@@ -806,6 +821,7 @@ const searchCollapsed = {
     key: 'max-sm:hidden',
     label: 'max-sm:sr-only',
   },
+  never: { button: 'w-full justify-start', key: 'max-sm:hidden', label: '' },
 }
 
 function SearchButton({

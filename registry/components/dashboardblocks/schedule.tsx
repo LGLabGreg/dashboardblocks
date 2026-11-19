@@ -189,24 +189,26 @@ function EventRow({
         className={cn('w-1 shrink-0 rounded-full', ended && 'opacity-40')}
         style={{ backgroundColor: event.color ?? 'var(--color-chart-2)' }}
       />
-      <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-        <p
-          className={cn(
-            'flex flex-wrap items-center gap-x-2 text-sm font-medium',
-            ended && muted,
-          )}
-        >
-          <span className='min-w-0 break-words'>{event.title}</span>
-          {live && (
-            <StatusLabel tone='good' className='text-xs'>
-              Now
-            </StatusLabel>
-          )}
-          {ended && <span className='sr-only'>(ended)</span>}
-        </p>
-        {meta && <p className={cn('truncate text-xs', muted)}>{meta}</p>}
+      <div className='flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-3 gap-y-1.5'>
+        <div className='flex min-w-32 flex-1 flex-col gap-0.5'>
+          <p
+            className={cn(
+              'flex flex-wrap items-center gap-x-2 text-sm font-medium',
+              ended && muted,
+            )}
+          >
+            <span className='min-w-0 break-words'>{event.title}</span>
+            {live && (
+              <StatusLabel tone='good' className='text-xs'>
+                Now
+              </StatusLabel>
+            )}
+            {ended && <span className='sr-only'>(ended)</span>}
+          </p>
+          {meta && <p className={cn('truncate text-xs', muted)}>{meta}</p>}
+        </div>
+        {action && <div className='flex shrink-0 items-start'>{action}</div>}
       </div>
-      {action && <div className='flex shrink-0 items-start'>{action}</div>}
     </li>
   )
 }
@@ -251,15 +253,66 @@ function UrgencyLabel({
   className,
   label,
   urgency,
+  variant = 'text',
 }: {
   className?: string
   label?: string
   urgency: Urgency
+  variant?: 'badge' | 'text'
 }) {
   return (
-    <StatusLabel tone={urgencyTones[urgency]} className={className} variant='text'>
+    <StatusLabel tone={urgencyTones[urgency]} className={className} variant={variant}>
       {label ?? urgencyConfig[urgency].label}
     </StatusLabel>
+  )
+}
+
+interface DueLabelProps {
+  className?: string
+  /** A done task reads as plain text, whatever its date. */
+  done?: boolean
+  due: Date
+  id?: string
+  now: Date
+  /** Days ahead that read as due soon. @default 7 */
+  soonDays?: number
+  /** @default 'UTC' */
+  timeZone?: string
+  /** `badge` where it's the row's status, such as in a table. @default 'text' */
+  variant?: 'badge' | 'text'
+}
+
+/** When a task is due, coloured by how close it is: `3 days overdue`, `Due today`, `Due tomorrow`, then `Due Dec 14`. */
+function DueLabel({
+  className,
+  done = false,
+  due,
+  id,
+  now,
+  soonDays = 7,
+  timeZone = 'UTC',
+  variant,
+}: DueLabelProps) {
+  const offset = getDayOffset(due, now, timeZone)
+  const day = getDay(due, timeZone)
+  const urgency = done ? 'later' : getUrgency(due, now, timeZone, soonDays)
+  const label =
+    urgency === 'overdue'
+      ? `${-offset} ${offset === -1 ? 'day' : 'days'} overdue`
+      : urgency === 'today'
+        ? 'Due today'
+        : offset === 1
+          ? 'Due tomorrow'
+          : `Due ${formatDate(day, 'day')}`
+  return (
+    <time id={id} dateTime={day.toISOString().slice(0, 10)} className={className}>
+      <UrgencyLabel
+        className={cn(urgency === 'later' && variant !== 'badge' && 'font-normal')}
+        label={label}
+        urgency={urgency}
+        variant={variant}
+      />
+    </time>
   )
 }
 
@@ -478,6 +531,7 @@ function MonthCalendar({
 }
 
 export {
+  DueLabel,
   EventRow,
   EventSwatch,
   MonthCalendar,
@@ -497,4 +551,11 @@ export {
   urgencyTones,
 }
 
-export type { EventRowProps, MonthCalendarProps, ScheduleDay, ScheduleEvent, Urgency }
+export type {
+  DueLabelProps,
+  EventRowProps,
+  MonthCalendarProps,
+  ScheduleDay,
+  ScheduleEvent,
+  Urgency,
+}

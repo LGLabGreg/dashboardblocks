@@ -20,8 +20,8 @@ import { cn } from '@/lib/utils'
 type StatFormatter = (value: number) => string
 
 interface StatMetric {
-  /** @default 'percent' */
-  changeType?: 'percent' | 'points'
+  /** `count` shows the difference itself, such as `4`. @default 'percent' */
+  changeType?: 'percent' | 'points' | 'count'
   /** A line under a value that has no `previous` to compare with, such as what it's about or since when. */
   detail?: ReactNode
   formatter?: StatFormatter
@@ -39,6 +39,8 @@ const defaultFormatter: StatFormatter = (value) => formatNumber(value)
 
 const formatSignedPoints: StatFormatter = (value) =>
   formatSigned(value, (points) => formatPoints(points))
+
+const formatSignedCount: StatFormatter = (value) => formatSigned(value)
 
 function formatStatValue(metric: Pick<StatMetric, 'formatter' | 'value'>) {
   return (metric.formatter ?? defaultFormatter)(metric.value)
@@ -177,7 +179,13 @@ function StatChangeContent({
       >
         <Trend
           className='text-xs [&_svg]:size-3.5'
-          formatter={metric.changeType === 'points' ? formatSignedPoints : undefined}
+          formatter={
+            metric.changeType === 'points'
+              ? formatSignedPoints
+              : metric.changeType === 'count'
+                ? formatSignedCount
+                : undefined
+          }
           goodDirection={metric.goodDirection}
           trend={change}
           trendIcon='arrow'

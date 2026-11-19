@@ -1,5 +1,6 @@
 'use client'
 
+import { isPlainClick, Link } from '@/registry/components/dashboardblocks/link'
 import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { PersonAvatar } from '@/registry/components/dashboardblocks/team'
 import type { ReactNode } from 'react'
@@ -100,10 +101,10 @@ function PipelineAge({
         className,
       )}
     >
-      <span aria-hidden>{stuck ? `Stuck ${formatAge(days)}` : formatAge(days)}</span>
+      {stuck ? `Stuck ${formatAge(days, 'long')}` : formatAge(days, 'long')}
       <span className='sr-only'>
-        {formatAge(days, 'long')} in stage
-        {stuck && `, over the ${expectedDays}-day limit`}
+        {' '}
+        in stage{stuck && `, over the ${expectedDays}-day limit`}
       </span>
     </span>
   )
@@ -178,6 +179,12 @@ interface PipelineCardProps {
   className?: string
   days: number
   expectedDays?: number
+  /** The item's own page. With it, the whole card is a link, so it opens in a new tab with Cmd or Ctrl. */
+  href?: string
+  /** Opens the item, such as in a panel beside the board: the whole card is the button, or with `href`, what a plain click on the link does. */
+  onOpen?: () => void
+  /** Whether the item is open beside the board, which draws it muted. */
+  open?: boolean
   owner?: string
   ownerAvatar?: string
   subtitle?: string
@@ -190,20 +197,57 @@ function PipelineCard({
   className,
   days,
   expectedDays,
+  href,
+  onOpen,
+  open = false,
   owner,
   ownerAvatar,
   subtitle,
   title,
   value,
 }: PipelineCardProps) {
+  const opens = onOpen !== undefined || href !== undefined
+  const trigger = {
+    'aria-current': open || undefined,
+    'aria-label': subtitle ? `${title}, ${subtitle}` : undefined,
+    className:
+      'cursor-pointer text-start text-sm leading-snug font-medium outline-none after:absolute after:inset-0 after:rounded-xl',
+    'data-slot': 'pipeline-card-trigger',
+  }
   return (
-    <div className={cn('bg-muted/50 flex flex-col gap-3 rounded-xl p-3', className)}>
+    <div
+      data-open={open || undefined}
+      className={cn(
+        'bg-muted/50 flex flex-col gap-3 rounded-xl p-3',
+        opens &&
+          'has-[[data-slot=pipeline-card-trigger]:focus-visible]:ring-ring/50 hover:bg-muted data-open:bg-muted relative transition-colors has-[[data-slot=pipeline-card-trigger]:focus-visible]:ring-3',
+        className,
+      )}
+    >
       <div className='flex items-start justify-between gap-2'>
         <div className='flex min-w-0 flex-col gap-0.5'>
-          <p className='text-sm leading-snug font-medium'>{title}</p>
+          {href !== undefined ? (
+            <Link
+              {...trigger}
+              href={href}
+              onClick={(event) => {
+                if (!onOpen || !isPlainClick(event)) return
+                event.preventDefault()
+                onOpen()
+              }}
+            >
+              {title}
+            </Link>
+          ) : onOpen ? (
+            <button type='button' {...trigger} onClick={onOpen}>
+              {title}
+            </button>
+          ) : (
+            <p className='text-sm leading-snug font-medium'>{title}</p>
+          )}
           {subtitle && <p className='text-muted-foreground text-xs'>{subtitle}</p>}
         </div>
-        {action && <div className='-mt-1 -mr-1 shrink-0'>{action}</div>}
+        {action && <div className='relative z-10 -mt-1 -mr-1 shrink-0'>{action}</div>}
       </div>
       <div className='flex items-center gap-2'>
         {value !== undefined && (

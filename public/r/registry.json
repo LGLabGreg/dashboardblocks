@@ -822,11 +822,12 @@
       "name": "notifications",
       "type": "registry:component",
       "title": "Notifications",
-      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, and a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot.",
+      "description": "Primitives for notifications: a bell with an unread count that opens a panel, a header with an action, a notification row that opens as a whole while its own buttons still work, with relative times and an unread dot, and a ready bell menu that keeps what the person read.",
       "registryDependencies": [
         "button",
         "popover",
         "https://www.dashboardblocks.com/r/activity-feed.json",
+        "https://www.dashboardblocks.com/r/format.json",
         "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/status-label.json"
       ],
@@ -880,6 +881,7 @@
       "title": "Pipeline",
       "description": "Primitives for pipelines of work in flight: stage summaries with count, value and weighted value, days in stage with a stuck state, a stage header, an item card, an owner with their photo and age formatting.",
       "registryDependencies": [
+        "https://www.dashboardblocks.com/r/link.json",
         "https://www.dashboardblocks.com/r/tag.json",
         "https://www.dashboardblocks.com/r/team.json"
       ],
@@ -1165,7 +1167,7 @@
       "name": "card-style",
       "type": "registry:component",
       "title": "Card Style",
-      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline.",
+      "description": "A wrapper that gives every block card inside it one look, without changing the blocks: Lit, a filled surface a step off the page with a light top edge and a hairline, or Frame, a tray holding the card as a panel with its title in the top rim.",
       "files": [
         {
           "path": "registry/components/dashboardblocks/card-style.tsx",
@@ -2717,7 +2719,7 @@
           "geo-02"
         ],
         "component": "ChartPanel2",
-        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; data?: Record<string, string | number> & { label: string; }[]; description: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "files": [
         {
@@ -3279,7 +3281,7 @@
           "comparison-01"
         ],
         "component": "StatGroup1",
-        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Metrics side by side, each with its change written as a sentence."
     },
@@ -3307,7 +3309,7 @@
           "data-table-02"
         ],
         "component": "StatGroup2",
-        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison?: string; description?: string; metrics?: { history: number[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics, each with its change and a 14-day sparkline, under a sentence saying how many improved."
     },
@@ -3339,7 +3341,7 @@
           "billing-01"
         ],
         "component": "StatGroup3",
-        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currentLabel?: string; metrics?: { daily: { current: number; label: string; previous: number }[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; previousLabel?: string; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "A row of metrics where picking one charts it by day against the previous period."
     },
@@ -3366,7 +3368,7 @@
           "data-table-01"
         ],
         "component": "StatGroup4",
-        "props": "{ metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Five metrics in a slim row with their changes, wrapping to two columns when narrow."
     },
@@ -3393,7 +3395,7 @@
           "breakdown-01"
         ],
         "component": "StatGroup5",
-        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ comparison: string; currentLabel?: string; description: string; metrics?: { changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; placeholders?: number; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Four metrics, each with a bar for this period over a bar for the one before."
     },
@@ -3815,7 +3817,7 @@
           "states-04"
         ],
         "component": "States1",
-        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]>; placeholders?: number; title: string }"
+        "props": "{ comparison: string; description: string; load: () => Promise<{ changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]>; placeholders?: number; title: string }"
       },
       "description": "Grey placeholders shaped like a row of stats, shown while data loads so nothing shifts when it arrives."
     },
@@ -4645,7 +4647,7 @@
           "billing-05"
         ],
         "component": "Billing3",
-        "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"uncollectible\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ currency?: string; description?: string; invoices?: { amount: number; date: Date; description: string; detail?: string; href?: string; id: string; number: string; status: \"failed\" | \"paid\" | \"draft\" | \"due\" | \"granted\" | \"overdue\" | \"partly-paid\" | \"scheduled\" | \"sent\" | \"uncollectible\" | \"viewed\" | \"void\" }[]; onDownload?: (id: string) => void; onViewAll?: () => void; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "Recent invoices with their status and amount, what is outstanding and a PDF download for each one."
     },
@@ -4839,9 +4841,12 @@
       "registryDependencies": [
         "button",
         "dropdown-menu",
+        "https://www.dashboardblocks.com/r/announcements.json",
+        "https://www.dashboardblocks.com/r/attempt.json",
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/format.json",
-        "https://www.dashboardblocks.com/r/pipeline.json"
+        "https://www.dashboardblocks.com/r/pipeline.json",
+        "https://www.dashboardblocks.com/r/tag.json"
       ],
       "files": [
         {
@@ -4851,7 +4856,7 @@
         }
       ],
       "meta": {
-        "shows": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.",
+        "shows": "A board with a column for each stage showing its item count, total value and weighted value, and a card for each item that can be moved from its menu or opened beside the board; on a phone, one stage at a time.",
         "size": "full",
         "usedWith": [
           "pipeline-02",
@@ -4859,9 +4864,9 @@
           "funnel-01"
         ],
         "component": "Pipeline1",
-        "props": "{ description?: string; items?: { enteredStageAt: Date; id: string; owner?: string; ownerAvatar?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ description?: string; items?: { enteredStageAt: Date; id: string; owner?: string; ownerAvatar?: string; stage: string; subtitle?: string; title: string; value?: number }[]; now: Date; onMove?: (id: string, stage: string) => void | Promise<void | { message: string; status: \"error\" }>; getHref?: (id: string) => string; onOpen?: (id: string) => void; openId?: string; stages: { expectedDays?: number; id: string; label: string; probability?: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
-      "description": "A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu."
+      "description": "A board with a column for each stage showing its item count, total value and weighted value, and a card for each item that can be moved from its menu or opened beside the board; on a phone, one stage at a time."
     },
     {
       "name": "pipeline-02",
@@ -4873,6 +4878,7 @@
         "https://www.dashboardblocks.com/r/block-state.json",
         "https://www.dashboardblocks.com/r/breakdown.json",
         "https://www.dashboardblocks.com/r/chart.json",
+        "https://www.dashboardblocks.com/r/details.json",
         "https://www.dashboardblocks.com/r/format.json",
         "https://www.dashboardblocks.com/r/pipeline.json"
       ],
@@ -4884,7 +4890,7 @@
         }
       ],
       "meta": {
-        "shows": "Open value across stages, with each stage as a segment sized by value or by count.",
+        "shows": "Open value across stages, with each stage as a segment sized by value or by count, and the three largest open deals.",
         "size": "full",
         "usedWith": [
           "pipeline-01",
@@ -4892,9 +4898,9 @@
           "stat-group-02"
         ],
         "component": "Pipeline2",
-        "props": "{ description?: string; noun?: string; stages?: { count: number; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ action?: ReactNode; description?: string; icon?: ReactNode; largest?: { detail?: string; id: string; name: string; stage?: string; value: number }[]; noun?: string; singular?: string; stages?: { count: number; label: string; value: number }[]; title: string; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
-      "description": "Open value across stages, with each stage as a segment sized by value or by count."
+      "description": "Open value across stages, with each stage as a segment sized by value or by count, and the three largest open deals."
     },
     {
       "name": "pipeline-03",
@@ -7552,7 +7558,7 @@
           "app-shell-01"
         ],
         "component": "AppShell3",
-        "props": "{ breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; notificationCount: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; usage: { action?: { href: string; label: string }; limit: number; note?: ReactNode; unit?: string; title: string; used: number }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
+        "props": "{ actions?: ReactNode; breadcrumbs: { href?: string; label: string }[]; children?: ReactNode; homeHref?: string; notificationCount?: number; onCreateWorkspace?: () => void; onNotificationsClick?: () => void; onSearch?: () => void; onSignOut?: () => void; pathname: string; searchIn?: \"header\" | \"sidebar\"; secondarySections?: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; sections: { items: { badge?: ReactNode; href?: string; icon: ReactNode; items?: { badge?: ReactNode; href: string; icon?: ReactNode; title: string }[]; onSelect?: () => void; title: string }[]; label?: string }[]; theme?: { onValueChange: (theme: \"light\" | \"dark\" | \"system\") => void; value: \"light\" | \"dark\" | \"system\" }; usage?: { action?: { href: string; label: string }; limit: number; note?: ReactNode; unit?: string; title: string; used: number }; user: { avatar?: string; email: string; name: string }; userLinks: { href: string; icon: ReactNode; label: string }[]; workspaces: { id: string; logo: ReactNode; name: string; plan?: string }[] }"
       },
       "description": "An app shell with the page set in a card beside the sidebar, and plan usage with an upgrade link above the user menu."
     },
@@ -8630,7 +8636,7 @@
           "ai-assistant-02"
         ],
         "component": "AiAssistant1",
-        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
+        "props": "{ accounts?: { mrr: number; name: string; plan: string }[]; chat: { addToolApprovalResponse?: (response: { approved: boolean; id: string; reason?: string }) => unknown; error?: Error; messages: { id: string; metadata?: unknown; parts: ({ citations?: { endIndex?: number; source: { id: string; sourceType: \"url\"; title?: string; url: string } | { id: string; sourceType: \"document\"; title: string } }[]; state?: \"done\" | \"streaming\"; text: string; type: \"text\" } | { state?: \"done\" | \"streaming\"; text: string; type: \"reasoning\" } | { type: `tool-${string}`; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { toolName: string; type: \"dynamic-tool\"; approval?: { approved?: boolean; id: string; isAutomatic?: boolean; reason?: string; requestReason?: string }; errorText?: string; input?: unknown; output?: unknown; preliminary?: boolean; state: \"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"; title?: string; toolCallId: string } | { sourceId: string; title?: string; type: \"source-url\"; url: string } | { filename?: string; mediaType: string; sourceId: string; title: string; type: \"source-document\" } | { filename?: string; mediaType: string; type: \"file\"; url: string } | { data: unknown; id?: string; type: `data-${string}` } | { type: \"step-start\" | \"custom\" | \"reasoning-file\" | \"steering-message\" })[]; role: \"system\" | \"user\" | \"assistant\" }[]; regenerate: (options: { messageId?: string }) => unknown; selectVersion?: (messageId: string, index: number) => unknown; sendMessage: (message: { files?: { filename?: string; mediaType: string; type: \"file\"; url: string }[]; messageId?: string; metadata?: unknown; text: string }) => unknown; setMessages?: (messages: []) => void; status: \"error\" | \"streaming\" | \"ready\" | \"submitted\"; stop: () => unknown; versions?: {  } }; comparison: string; context: string; defaultOpen?: boolean; description: string; historyLabels: string[]; metrics?: { history: number[]; changeType?: \"percent\" | \"points\" | \"count\"; detail?: ReactNode; formatter?: (value: number) => string; goodDirection?: \"up\" | \"down\"; key: string; label: string; previous?: number; tone?: \"warning\" | \"bad\"; value: number }[]; suggestions: { icon?: ReactNode; label: string; prompt?: string }[]; title: string; toolLabels?: Record<string, string | { done: string; running: string }>; errorMessage?: string; status?: \"loading\" | \"error\" }"
       },
       "description": "An assistant docked beside the page with suggested prompts, the page as context, and New conversation and Close buttons."
     },

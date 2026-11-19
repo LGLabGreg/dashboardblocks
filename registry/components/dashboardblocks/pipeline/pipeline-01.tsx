@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  Announcements,
+  useAnnouncements,
+} from '@/registry/components/dashboardblocks/announcements'
+import {
   BlockReady,
   BlockStateProvider,
   BlockStateRows,
@@ -18,9 +22,11 @@ import {
   getStageColor,
   getStageSummaries,
 } from '@/registry/components/dashboardblocks/pipeline'
+import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
+import { attempt } from '@/registry/lib/dashboardblocks/attempt'
 import { formatCurrency } from '@/registry/lib/dashboardblocks/format'
-import { useId, useMemo, useState } from 'react'
+import { startTransition, useEffect, useId, useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -33,13 +39,25 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import { cn } from '@/lib/utils'
+
 interface Pipeline1Props extends BlockStateProps {
   /** Defaults to a sentence with the open value and how many items are stuck. */
   description?: string
   /** Leave out, or pass none, to show the empty state. */
   items?: PipelineItem[]
   now: Date
-  onMove?: (id: string, stage: string) => void
+  /** Moves an item to another stage. Resolve `{ status: 'error', message }` to refuse: the item goes back and the message shows. */
+  onMove?: (
+    id: string,
+    stage: string,
+  ) => void | Promise<void | { message: string; status: 'error' }>
+  /** An item's own page. With it, each card is a link, so it opens in a new tab with Cmd or Ctrl, and a plain click calls `onOpen`. */
+  getHref?: (id: string) => string
+  /** Opens an item, such as in a panel beside the board. With it, the whole card is a button. */
+  onOpen?: (id: string) => void
+  /** The item open beside the board, drawn muted. */
+  openId?: string
   stages: PipelineStage[]
   title: string
 }
@@ -165,9 +183,19 @@ const exampleProps: Pipeline1Props = {
   now: new Date(NOW),
   stages: [
     { expectedDays: 14, id: 'qualified', label: 'Qualified', probability: 0.1 },
-    { expectedDays: 10, id: 'discovery', label: 'Discovery', probability: 0.25 },
+    {
+      expectedDays: 10,
+      id: 'discovery',
+      label: 'Discovery',
+      probability: 0.25,
+    },
     { expectedDays: 10, id: 'proposal', label: 'Proposal', probability: 0.5 },
-    { expectedDays: 7, id: 'negotiation', label: 'Negotiation', probability: 0.75 },
+    {
+      expectedDays: 7,
+      id: 'negotiation',
+      label: 'Negotiation',
+      probability: 0.75,
+    },
   ],
   title: 'Sales pipeline',
 }
@@ -179,14 +207,50 @@ const Pipeline1 = (props: Pipeline1Props) => {
     items: loadedItems = noItems,
     now,
     onMove,
+    getHref,
+    onOpen,
+    openId,
     stages,
     errorMessage,
     status,
     title,
   } = props
   const id = useId()
-  const [moves, setMoves] = useState<{ id: string; stage: string }[]>([])
-  const [announcement, setAnnouncement] = useState('')
+  const [moves, setMoves] = useState<{ id: string; key: number; stage: string }[]>([])
+  const [refusal, setRefusal] = useState<string>()
+  const [said, announce] = useAnnouncements()
+  const stageOf = (itemId?: string) =>
+    loadedItems.find((item) => item.id === itemId)?.stage
+  const [pickedStage, setShownStage] = useState(() => stageOf(openId) ?? stages[0]?.id)
+  const [seenOpen, setSeenOpen] = useState(openId)
+  if (openId !== seenOpen) {
+    setSeenOpen(openId)
+    const openStage = stageOf(openId)
+    if (openStage) setShownStage(openStage)
+  }
+  const shownStage = stages.some((stage) => stage.id === pickedStage)
+    ? pickedStage
+    : stages[0]?.id
+  const board = useRef<HTMLDivElement>(null)
+  const shownOpen = useRef<string | undefined>(undefined)
+  const moveCount = useRef(0)
+
+  useEffect(() => {
+    if (openId === shownOpen.current) return
+    const closed = shownOpen.current
+    shownOpen.current = openId
+    if (openId === undefined) {
+      board.current
+        ?.querySelector<HTMLElement>(
+          `[data-item="${CSS.escape(closed ?? '')}"] [data-slot=pipeline-card-trigger]`,
+        )
+        ?.focus({ preventScroll: true })
+      return
+    }
+    board.current
+      ?.querySelector('[data-open]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }, [openId])
   const state = getBlockState(status, loadedItems)
   const items = useMemo(
     () =>
@@ -207,11 +271,23 @@ const Pipeline1 = (props: Pipeline1Props) => {
     description = `${items.length} open ${items.length === 1 ? 'deal' : 'deals'} worth ${compact(total)}; ${stuck === 0 ? 'none' : stuck} past their stage’s time limit.`,
   } = props
 
-  const move = (item: PipelineItem, stage: PipelineStage) => {
+  const weighted = stages.some((stage) => stage.probability !== undefined)
+
+  const move = async (item: PipelineItem, stage: PipelineStage) => {
     if (item.stage === stage.id) return
-    setMoves((current) => [...current, { id: item.id, stage: stage.id }])
-    setAnnouncement(`Moved ${item.title} to ${stage.label}`)
-    onMove?.(item.id, stage.id)
+    moveCount.current += 1
+    const key = moveCount.current
+    setMoves((current) => [...current, { id: item.id, key, stage: stage.id }])
+    setRefusal(undefined)
+    announce(`Moved ${item.title} to ${stage.label}`)
+    if (!onMove) return
+    const result = await attempt(() => onMove(item.id, stage.id))
+    startTransition(() => {
+      setMoves((current) => current.filter((moved) => moved.key !== key))
+      if (result?.status !== 'error') return
+      setRefusal(result.message)
+      announce(`${item.title} wasn’t moved. ${result.message}`)
+    })
   }
 
   return (
@@ -223,14 +299,34 @@ const Pipeline1 = (props: Pipeline1Props) => {
             <p className='text-muted-foreground text-sm'>{description}</p>
           </BlockReady>
         </header>
-        <p role='status' className='sr-only'>
-          {announcement}
-        </p>
+        <Announcements said={said} />
+        {refusal && <p className='text-destructive text-sm'>{refusal}</p>}
         {(state === 'empty' || state === 'error') && (
           <BlockStateRows className='border-t pt-3' />
         )}
         {(state === undefined || state === 'loading') && (
           <div
+            role='group'
+            aria-label='Show stage'
+            className='flex gap-1 overflow-x-auto p-1 [scrollbar-width:thin] @2xl:hidden'
+          >
+            {summaries.map((stage) => (
+              <Button
+                key={stage.id}
+                aria-pressed={shownStage === stage.id}
+                onClick={() => setShownStage(stage.id)}
+                size='sm'
+                variant={shownStage === stage.id ? 'secondary' : 'ghost'}
+              >
+                {stage.label}
+                {state === undefined && <Tag>{stage.count}</Tag>}
+              </Button>
+            ))}
+          </div>
+        )}
+        {(state === undefined || state === 'loading') && (
+          <div
+            ref={board}
             role='region'
             aria-label={`${title} board`}
             // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region must be focusable so keyboard users can reach the columns that don't fit
@@ -245,14 +341,23 @@ const Pipeline1 = (props: Pipeline1Props) => {
                 <section
                   key={stage.id}
                   aria-labelledby={headingId}
-                  className='flex w-64 shrink-0 snap-start flex-col gap-3 border-t pt-3 @4xl:w-auto @4xl:min-w-0 @4xl:flex-1'
+                  className={cn(
+                    'w-full shrink-0 snap-start flex-col gap-3 border-t pt-3 @2xl:flex @2xl:w-64 @4xl:w-auto @4xl:min-w-0 @4xl:flex-1',
+                    shownStage === stage.id ? 'flex' : 'hidden',
+                  )}
                 >
                   <PipelineStageHeader
                     color={getStageColor(index, stages.length)}
                     count={state ? undefined : stage.count}
                     id={headingId}
                     label={stage.label}
-                    total={state ? undefined : compact(stage.value)}
+                    total={
+                      state
+                        ? undefined
+                        : weighted
+                          ? `${compact(stage.value)}, ${compact(stage.weighted)} weighted`
+                          : compact(stage.value)
+                    }
                   />
                   {state === 'loading' ? (
                     <div className='flex flex-col gap-2'>
@@ -264,17 +369,20 @@ const Pipeline1 = (props: Pipeline1Props) => {
                       {stageItems.map((item) => {
                         const days = getDaysInStage(item.enteredStageAt, now)
                         return (
-                          <li key={item.id}>
+                          <li key={item.id} data-item={item.id}>
                             <PipelineCard
                               action={
                                 <MoveMenu
                                   item={item}
-                                  onMove={(target) => move(item, target)}
+                                  onMove={(target) => void move(item, target)}
                                   stages={stages}
                                 />
                               }
                               days={days}
                               expectedDays={stage.expectedDays}
+                              href={getHref?.(item.id)}
+                              onOpen={onOpen && (() => onOpen(item.id))}
+                              open={openId === item.id}
                               owner={item.owner}
                               ownerAvatar={item.ownerAvatar}
                               subtitle={item.subtitle}

@@ -10,13 +10,14 @@ import {
 } from '@/registry/components/dashboardblocks/block-state'
 import { BreakdownBar } from '@/registry/components/dashboardblocks/breakdown'
 import { ChartPlaceholder } from '@/registry/components/dashboardblocks/chart'
+import { Details } from '@/registry/components/dashboardblocks/details'
 import { getStageColor } from '@/registry/components/dashboardblocks/pipeline'
 import {
   formatCurrency,
   formatNumber,
   formatPercent,
 } from '@/registry/lib/dashboardblocks/format'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
@@ -28,17 +29,60 @@ interface StageTotal {
   value: number
 }
 
+interface LargestItem {
+  /** A second line, such as what the deal is for. */
+  detail?: string
+  id: string
+  name: string
+  /** After the detail, such as `Proposal`. */
+  stage?: string
+  value: number
+}
+
 interface Pipeline2Props extends BlockStateProps {
+  /** After the measure buttons, such as a link to every deal. */
+  action?: ReactNode
   /** Defaults to a sentence naming the stage that holds the most value. */
   description?: string
+  /** Drawn first inside the Card, such as a `CardStyleIcon` for a card style's top rim. */
+  icon?: ReactNode
+  /** The largest open items, listed under the stages, largest first. Leave out for none. */
+  largest?: LargestItem[]
+  /** What the stages hold, such as `deals`. @default 'items' */
   noun?: string
+  /** The noun for one, such as `deal`. @default noun */
+  singular?: string
   /** Leave out, or pass none, to show the empty state. */
   stages?: StageTotal[]
   title: string
 }
 
 const exampleProps: Pipeline2Props = {
+  largest: [
+    {
+      detail: 'Enterprise plan',
+      stage: 'Negotiation',
+      id: 'northwind',
+      name: 'Northwind Health',
+      value: 186_000,
+    },
+    {
+      detail: 'Platform renewal',
+      stage: 'Proposal',
+      id: 'acme',
+      name: 'Acme Logistics',
+      value: 142_500,
+    },
+    {
+      detail: 'New region',
+      stage: 'Discovery',
+      id: 'globex',
+      name: 'Globex Retail',
+      value: 98_000,
+    },
+  ],
   noun: 'deals',
+  singular: 'deal',
   stages: [
     { count: 48, label: 'Lead', value: 1_240_000 },
     { count: 31, label: 'Qualified', value: 982_000 },
@@ -57,27 +101,38 @@ const MEASURES: { label: string; value: Measure }[] = [
 ]
 
 const Pipeline2 = (props: Pipeline2Props) => {
-  const { noun = 'items', stages = [], errorMessage, status, title } = props
+  const {
+    action,
+    errorMessage,
+    icon,
+    largest = [],
+    noun = 'items',
+    singular,
+    stages = [],
+    status,
+    title,
+  } = props
   const state = getBlockState(status, stages)
   const [measure, setMeasure] = useState<Measure>('value')
 
   const totalCount = stages.reduce((sum, stage) => sum + stage.count, 0)
   const totalValue = stages.reduce((sum, stage) => sum + stage.value, 0)
   const total = measure === 'value' ? totalValue : totalCount
-  const largest = stages.reduce<StageTotal | undefined>(
+  const biggest = stages.reduce<StageTotal | undefined>(
     (best, stage) => (best && best.value >= stage.value ? best : stage),
     undefined,
   )
   const last = stages[stages.length - 1]
   const {
-    description = largest && last
-      ? `${largest.label} holds the most value; ${formatCurrency(last.value, { compact: true })} is in ${last.label}, the last stage before closing.`
+    description = biggest && last
+      ? `${biggest.label} holds the most value; ${formatCurrency(last.value, { compact: true })} is in ${last.label}, the last stage before closing.`
       : `No open ${noun}.`,
   } = props
 
   return (
     <BlockStateProvider errorMessage={errorMessage} state={state}>
       <Card>
+        {icon}
         <CardContent>
           <section className='@container flex flex-col gap-4'>
             <header className='flex flex-wrap items-start justify-between gap-3'>
@@ -87,21 +142,24 @@ const Pipeline2 = (props: Pipeline2Props) => {
                   <p className='text-muted-foreground text-sm'>{description}</p>
                 </BlockReady>
               </div>
-              <ButtonGroup aria-label='Size stages by'>
-                {MEASURES.map((option) => (
-                  <Button
-                    key={option.value}
-                    aria-pressed={measure === option.value}
-                    disabled={state !== undefined}
-                    className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
-                    onClick={() => setMeasure(option.value)}
-                    size='sm'
-                    variant='outline'
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </ButtonGroup>
+              <div className='flex items-center gap-2'>
+                <ButtonGroup aria-label='Size stages by'>
+                  {MEASURES.map((option) => (
+                    <Button
+                      key={option.value}
+                      aria-pressed={measure === option.value}
+                      disabled={state !== undefined}
+                      className='not-aria-pressed:text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground'
+                      onClick={() => setMeasure(option.value)}
+                      size='sm'
+                      variant='outline'
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+                {action}
+              </div>
             </header>
             <p className='flex flex-wrap items-baseline gap-x-2 border-t pt-4'>
               <span className='text-4xl font-light tracking-tight tabular-nums'>
@@ -113,7 +171,8 @@ const Pipeline2 = (props: Pipeline2Props) => {
               </span>
               {!state && (
                 <span className='text-muted-foreground text-sm'>
-                  in {formatNumber(totalCount)} open {noun}
+                  in {formatNumber(totalCount)} open{' '}
+                  {totalCount === 1 ? (singular ?? noun) : noun}
                 </span>
               )}
             </p>
@@ -157,12 +216,41 @@ const Pipeline2 = (props: Pipeline2Props) => {
                           {formatCurrency(stage.value, { compact: true })}
                         </span>
                         <span className='text-muted-foreground pl-3.5 text-xs tabular-nums'>
-                          {formatNumber(stage.count)} {noun}
+                          {formatNumber(stage.count)}{' '}
+                          {stage.count === 1 ? (singular ?? noun) : noun}
                         </span>
                       </li>
                     )
                   })}
                 </ol>
+                {largest.length > 0 && (
+                  <div className='flex flex-col gap-1 border-t pt-4'>
+                    <h3 className='text-sm font-medium'>Largest open {noun}</h3>
+                    <ul className='divide-y'>
+                      {largest.map((item) => (
+                        <li
+                          key={item.id}
+                          className='flex items-baseline justify-between gap-3 py-2.5'
+                        >
+                          <span className='flex min-w-0 flex-col'>
+                            <span className='truncate text-sm font-medium'>
+                              {item.name}
+                            </span>
+                            {(item.detail || item.stage) && (
+                              <Details className='text-muted-foreground truncate text-xs'>
+                                {item.detail}
+                                {item.stage}
+                              </Details>
+                            )}
+                          </span>
+                          <span className='text-sm tabular-nums'>
+                            {formatCurrency(item.value)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </>
             )}
           </section>

@@ -6,7 +6,7 @@ import {
 } from '@/registry/components/dashboardblocks/status-label'
 import { Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import type { ComponentProps } from 'react'
+import { type ComponentProps, createContext, type ReactNode, useContext } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -189,6 +189,89 @@ function StepStateLabel({
   )
 }
 
+const stepRailRow = {
+  never: { item: '', list: '' },
+  md: {
+    item: '@md:flex-1 @md:border-t-2 @md:border-l-0 @md:pt-3 @md:pl-0',
+    list: '@md:flex-row',
+  },
+  xl: {
+    item: '@xl:flex-1 @xl:border-t-2 @xl:border-l-0 @xl:pt-3 @xl:pl-0',
+    list: '@xl:flex-row',
+  },
+}
+
+type StepRailRow = keyof typeof stepRailRow
+
+const StepRailContext = createContext<StepRailRow>('xl')
+
+/** Steps in a column, each with a line at its start, that turn into a row with a line over each once the container is `row` wide, or never with `row='never'`. */
+function StepRail({
+  className,
+  row = 'xl',
+  ...props
+}: ComponentProps<'ol'> & { row?: StepRailRow }) {
+  return (
+    <StepRailContext.Provider value={row}>
+      <ol
+        data-slot='step-rail'
+        className={cn('flex flex-col gap-3', stepRailRow[row].list, className)}
+        {...props}
+      />
+    </StepRailContext.Provider>
+  )
+}
+
+interface StepRailItemProps extends Omit<ComponentProps<'li'>, 'title'> {
+  /** A line under the title, such as when the step happened. */
+  description?: ReactNode
+  index: number
+  state: StepState
+  title: ReactNode
+}
+
+function StepRailItem({
+  className,
+  description,
+  index,
+  state,
+  title,
+  ...props
+}: StepRailItemProps) {
+  const row = useContext(StepRailContext)
+  return (
+    <li
+      aria-current={state === 'current' ? 'step' : undefined}
+      data-slot='step-rail-item'
+      data-state={state}
+      className={cn(
+        'border-border data-[state=current]:border-foreground data-[state=done]:border-chart-2 flex min-w-0 items-start gap-2 border-l-2 pl-3 text-sm data-[state=skipped]:border-dashed',
+        stepRailRow[row].item,
+        className,
+      )}
+      {...props}
+    >
+      <StepIndicator index={index} state={state} />
+      <span className='flex min-w-0 flex-col gap-0.5'>
+        <span
+          className={cn(
+            'min-w-0 font-medium break-words',
+            (state === 'todo' || state === 'skipped') && 'text-muted-foreground',
+          )}
+        >
+          {title}
+          <span className='sr-only'>, {stepStateConfig[state].label}</span>
+        </span>
+        {description && (
+          <span className='text-muted-foreground text-xs tabular-nums'>
+            {description}
+          </span>
+        )}
+      </span>
+    </li>
+  )
+}
+
 function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'type'>) {
   return (
     <span className={cn('relative inline-flex size-4 shrink-0', className)}>
@@ -213,6 +296,8 @@ function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'ty
 
 export {
   StepIndicator,
+  StepRail,
+  StepRailItem,
   StepStateLabel,
   TaskCheckbox,
   describeChecklistProgress,
@@ -226,6 +311,7 @@ export type {
   ChecklistNoun,
   ChecklistProgress,
   StepIndicatorProps,
+  StepRailItemProps,
   StepState,
   StepStateConfig,
 }

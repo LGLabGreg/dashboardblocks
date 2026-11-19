@@ -9,9 +9,12 @@ export const examples: Registry['items'] = [
     registryDependencies: [
       'button',
       'dropdown-menu',
+      registryUrl('announcements'),
+      registryUrl('attempt'),
       registryUrl('block-state'),
       registryUrl('format'),
       registryUrl('pipeline'),
+      registryUrl('tag'),
     ],
     files: [
       {
@@ -21,7 +24,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'A board with a column for each stage showing its item count and total value, and a card for each item that can be moved from its menu.',
+        'A board with a column for each stage showing its item count, total value and weighted value, and a card for each item that can be moved from its menu or opened beside the board; on a phone, one stage at a time.',
       size: 'full',
       usedWith: ['pipeline-02', 'pipeline-03', 'funnel-01'],
     },
@@ -36,6 +39,7 @@ export const examples: Registry['items'] = [
       registryUrl('block-state'),
       registryUrl('breakdown'),
       registryUrl('chart'),
+      registryUrl('details'),
       registryUrl('format'),
       registryUrl('pipeline'),
     ],
@@ -47,7 +51,7 @@ export const examples: Registry['items'] = [
     ],
     meta: {
       shows:
-        'Open value across stages, with each stage as a segment sized by value or by count.',
+        'Open value across stages, with each stage as a segment sized by value or by count, and the three largest open deals.',
       size: 'full',
       usedWith: ['pipeline-01', 'funnel-01', 'stat-group-02'],
     },
