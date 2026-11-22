@@ -40,7 +40,12 @@ export const examples: Registry['items'] = [
   {
     name: 'app-shell-03',
     type: 'registry:component',
-    registryDependencies: ['separator', 'sidebar', registryUrl('app-shell')],
+    registryDependencies: [
+      'separator',
+      'sidebar',
+      registryUrl('app-shell'),
+      registryUrl('shortcut-button'),
+    ],
     files: [
       {
         path: 'registry/components/dashboardblocks/app-shell/app-shell-03.tsx',

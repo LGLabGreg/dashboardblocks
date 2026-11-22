@@ -318,51 +318,57 @@ function CalendarToolbar({
         </h2>
         {description && <p className='text-muted-foreground text-sm'>{description}</p>}
       </div>
-      <div className='flex flex-wrap items-center gap-2'>
-        <Button variant='outline' size='sm' onClick={onToday}>
-          Today
-        </Button>
-        <ButtonGroup>
-          <Button
-            variant='outline'
-            size='icon-sm'
-            aria-label={previousLabel}
-            onClick={onPrevious}
-          >
-            <IconPlaceholder
-              lucide='ChevronLeftIcon'
-              tabler='IconChevronLeft'
-              hugeicons='ArrowLeft01Icon'
-              phosphor='CaretLeftIcon'
-              remixicon='RiArrowLeftSLine'
-            />
+      <div className='contents @md:flex @md:flex-wrap @md:items-center @md:gap-2'>
+        <div className='order-first flex basis-full flex-wrap items-center gap-2 @md:order-none @md:basis-auto'>
+          <Button variant='outline' size='sm' onClick={onToday}>
+            Today
           </Button>
-          <Button
-            variant='outline'
-            size='icon-sm'
-            aria-label={nextLabel}
-            onClick={onNext}
-          >
-            <IconPlaceholder
-              lucide='ChevronRightIcon'
-              tabler='IconChevronRight'
-              hugeicons='ArrowRight01Icon'
-              phosphor='CaretRightIcon'
-              remixicon='RiArrowRightSLine'
-            />
-          </Button>
-        </ButtonGroup>
-        {views && view !== undefined && (
-          <Tabs value={view} onValueChange={(next) => onViewChange?.(String(next))}>
-            <TabsList aria-label='View'>
-              {views.map((option) => (
-                <TabsTrigger key={option.value} value={option.value}>
-                  {option.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        )}
+          <ButtonGroup>
+            <Button
+              variant='outline'
+              size='icon-sm'
+              aria-label={previousLabel}
+              onClick={onPrevious}
+            >
+              <IconPlaceholder
+                lucide='ChevronLeftIcon'
+                tabler='IconChevronLeft'
+                hugeicons='ArrowLeft01Icon'
+                phosphor='CaretLeftIcon'
+                remixicon='RiArrowLeftSLine'
+              />
+            </Button>
+            <Button
+              variant='outline'
+              size='icon-sm'
+              aria-label={nextLabel}
+              onClick={onNext}
+            >
+              <IconPlaceholder
+                lucide='ChevronRightIcon'
+                tabler='IconChevronRight'
+                hugeicons='ArrowRight01Icon'
+                phosphor='CaretRightIcon'
+                remixicon='RiArrowRightSLine'
+              />
+            </Button>
+          </ButtonGroup>
+          {views && view !== undefined && (
+            <Tabs
+              className='ms-auto @md:ms-0'
+              value={view}
+              onValueChange={(next) => onViewChange?.(String(next))}
+            >
+              <TabsList aria-label='View'>
+                {views.map((option) => (
+                  <TabsTrigger key={option.value} value={option.value}>
+                    {option.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          )}
+        </div>
         {children}
       </div>
     </div>
@@ -381,6 +387,8 @@ interface EventBarProps {
   tabIndex?: number
   className?: string
   timeZone: string
+  /** Lets the title run onto a second line instead of cutting it, where the row can grow. */
+  wrap?: boolean
 }
 
 function EventBar({
@@ -395,6 +403,7 @@ function EventBar({
   style,
   tabIndex,
   timeZone,
+  wrap = false,
 }: EventBarProps) {
   const ended = now !== undefined && getEnd(event) <= now.getTime()
   return (
@@ -405,7 +414,8 @@ function EventBar({
       aria-current={selected ? 'true' : undefined}
       onClick={onSelect}
       className={cn(
-        'flex h-5 w-full min-w-0 items-center gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
+        'flex w-full min-w-0 gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
+        wrap ? 'min-h-5 items-start py-0.5 leading-4' : 'h-5 items-center',
         continuesBefore ? 'rounded-l-none' : 'border-s-2',
         continuesAfter && 'rounded-r-none',
         ended && 'text-foreground/70',
@@ -422,7 +432,10 @@ function EventBar({
       )}
       <span
         aria-hidden
-        className={cn('truncate', stickyTitle && 'sticky left-[4.375rem]')}
+        className={cn(
+          wrap ? 'line-clamp-2 break-words' : 'truncate',
+          stickyTitle && 'sticky left-[4.375rem]',
+        )}
       >
         {event.title}
       </span>
@@ -927,6 +940,7 @@ function TimeGrid<T extends ScheduleEvent>({
                         continuesAfter={continuesAfter}
                         onSelect={() => onSelectEvent?.(event)}
                         stickyTitle
+                        wrap
                       />
                     </li>
                   ),

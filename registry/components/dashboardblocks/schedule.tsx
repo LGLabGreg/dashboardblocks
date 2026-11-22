@@ -190,7 +190,7 @@ function EventRow({
         style={{ backgroundColor: event.color ?? 'var(--color-chart-2)' }}
       />
       <div className='flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-3 gap-y-1.5'>
-        <div className='flex min-w-32 flex-1 flex-col gap-0.5'>
+        <div className='flex min-w-0 grow basis-32 flex-col gap-0.5'>
           <p
             className={cn(
               'flex flex-wrap items-center gap-x-2 text-sm font-medium',

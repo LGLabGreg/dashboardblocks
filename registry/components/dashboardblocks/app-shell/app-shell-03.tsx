@@ -14,9 +14,11 @@ import {
   SidebarUserMenu,
   type ThemeChoice,
   type UserMenuLink,
+  useShortcut,
   type Workspace,
   WorkspaceSwitcher,
 } from '@/registry/components/dashboardblocks/app-shell'
+import { ShortcutButton } from '@/registry/components/dashboardblocks/shortcut-button'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
 import { type ReactNode, useState } from 'react'
 
@@ -29,6 +31,7 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 
 import { cn } from '@/lib/utils'
@@ -37,6 +40,8 @@ interface AppShell3Props {
   /** Buttons at the end of the header, after search, such as a clock or a notification bell. */
   actions?: ReactNode
   breadcrumbs: Crumb[]
+  /** `sm` leaves the breadcrumb out on a phone, for an app whose pages name themselves in a heading under the bar and that needs the room for its buttons. */
+  breadcrumbsFrom?: 'sm'
   children?: ReactNode
   /** The first page. With one workspace and no `onCreateWorkspace`, the workspace header links here. */
   homeHref?: string
@@ -48,7 +53,7 @@ interface AppShell3Props {
   onSearch?: () => void
   onSignOut?: () => void
   pathname: string
-  /** `sidebar` puts search under the workspace switcher, for a header that holds other buttons. @default 'header' */
+  /** `sidebar` puts search under the workspace switcher, for a header that holds other buttons; below `md`, where the sidebar is a sheet, and while it's collapsed, it stays in the header as an icon. @default 'header' */
   searchIn?: 'header' | 'sidebar'
   /** Pinned to the bottom of the sidebar, above the user menu, such as Settings. */
   secondarySections?: NavSection[]
@@ -229,10 +234,37 @@ const exampleProps: AppShell3Props = {
   ],
 }
 
+/** Search in the header while the sidebar that holds it is a closed sheet or collapsed, with ⌘K for it. */
+function HeaderSearch({ onOpen }: { onOpen: () => void }) {
+  const { state } = useSidebar()
+  useShortcut('k', onOpen)
+
+  return (
+    <ShortcutButton
+      aria-keyshortcuts='Meta+K Control+K'
+      aria-label='Search'
+      className={cn(state === 'expanded' && 'md:hidden')}
+      label='Search'
+      onClick={onOpen}
+      shortcut='⌘K'
+      variant='outline'
+    >
+      <IconPlaceholder
+        lucide='SearchIcon'
+        tabler='IconSearch'
+        hugeicons='SearchIcon'
+        phosphor='MagnifyingGlassIcon'
+        remixicon='RiSearchLine'
+      />
+    </ShortcutButton>
+  )
+}
+
 const AppShell3 = (props: AppShell3Props) => {
   const {
     actions,
     breadcrumbs,
+    breadcrumbsFrom,
     children,
     homeHref,
     notificationCount,
@@ -264,7 +296,7 @@ const AppShell3 = (props: AppShell3Props) => {
             workspaces={workspaces}
           />
           {searchIn === 'sidebar' && (
-            <SearchButton collapseBelow='never' onOpen={onSearch} />
+            <SearchButton collapseBelow='never' onOpen={onSearch} shortcut={false} />
           )}
         </SidebarHeader>
         <SidebarContent>
@@ -293,11 +325,21 @@ const AppShell3 = (props: AppShell3Props) => {
           <SidebarTrigger className='-ml-1' />
           <Separator
             orientation='vertical'
-            className='mr-2 data-vertical:h-4 data-vertical:self-auto'
+            className={cn(
+              'mr-2 data-vertical:h-4 data-vertical:self-auto',
+              breadcrumbsFrom === 'sm' && 'max-sm:hidden',
+            )}
           />
-          <AppBreadcrumbs items={breadcrumbs} />
+          <AppBreadcrumbs
+            className={cn(breadcrumbsFrom === 'sm' && 'max-sm:hidden')}
+            items={breadcrumbs}
+          />
           <div className='ml-auto flex items-center gap-2'>
-            {searchIn === 'header' && <SearchButton onOpen={onSearch} />}
+            {searchIn === 'header' ? (
+              <SearchButton onOpen={onSearch} />
+            ) : (
+              <HeaderSearch onOpen={onSearch} />
+            )}
             {notificationCount !== undefined && (
               <NotificationsButton
                 count={notificationCount}

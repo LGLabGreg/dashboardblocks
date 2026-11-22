@@ -13,6 +13,10 @@ import { ChartPlaceholder } from '@/registry/components/dashboardblocks/chart'
 import { Details } from '@/registry/components/dashboardblocks/details'
 import { getStageColor } from '@/registry/components/dashboardblocks/pipeline'
 import {
+  DataTableListItem,
+  DataTableRowLink,
+} from '@/registry/components/dashboardblocks/table'
+import {
   formatCurrency,
   formatNumber,
   formatPercent,
@@ -32,6 +36,8 @@ interface StageTotal {
 interface LargestItem {
   /** A second line, such as what the deal is for. */
   detail?: string
+  /** The item's page, such as the deal: the whole row opens it. */
+  href?: string
   id: string
   name: string
   /** After the detail, such as `Proposal`. */
@@ -228,14 +234,20 @@ const Pipeline2 = (props: Pipeline2Props) => {
                     <h3 className='text-sm font-medium'>Largest open {noun}</h3>
                     <ul className='divide-y'>
                       {largest.map((item) => (
-                        <li
+                        <DataTableListItem
                           key={item.id}
                           className='flex items-baseline justify-between gap-3 py-2.5'
                         >
                           <span className='flex min-w-0 flex-col'>
-                            <span className='truncate text-sm font-medium'>
-                              {item.name}
-                            </span>
+                            {item.href ? (
+                              <DataTableRowLink href={item.href} className='text-sm'>
+                                {item.name}
+                              </DataTableRowLink>
+                            ) : (
+                              <span className='truncate text-sm font-medium'>
+                                {item.name}
+                              </span>
+                            )}
                             {(item.detail || item.stage) && (
                               <Details className='text-muted-foreground truncate text-xs'>
                                 {item.detail}
@@ -246,7 +258,7 @@ const Pipeline2 = (props: Pipeline2Props) => {
                           <span className='text-sm tabular-nums'>
                             {formatCurrency(item.value)}
                           </span>
-                        </li>
+                        </DataTableListItem>
                       ))}
                     </ul>
                   </div>

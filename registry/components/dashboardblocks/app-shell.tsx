@@ -789,6 +789,8 @@ interface SearchButtonProps {
   placeholder?: string
   /** Below this width the field shrinks to its icon: `lg` for a bar that also holds tabs, `never` for a sidebar. @default 'sm' */
   collapseBelow?: 'lg' | 'sm' | 'never'
+  /** Listens for ⌘K or Ctrl+K. Turn it off on a second Search button for the same search, so the key opens it once: the button still names the key to screen readers. @default true */
+  shortcut?: boolean
   /** `secondary` fills the field instead of outlining it, for a bar on a tinted canvas where an outlined field stands out. @default 'outline' */
   variant?: 'outline' | 'secondary'
 }
@@ -829,9 +831,10 @@ function SearchButton({
   collapseBelow = 'sm',
   onOpen,
   placeholder = 'Search',
+  shortcut = true,
   variant = 'outline',
 }: SearchButtonProps) {
-  useShortcut('k', onOpen)
+  useShortcut(shortcut ? 'k' : undefined, onOpen)
   const collapsed = searchCollapsed[collapseBelow]
 
   return (
@@ -1297,6 +1300,7 @@ export {
   TopNav,
   useDockedPanel,
   UserMenu,
+  useShortcut,
   WorkspaceSwitcher,
 }
 
