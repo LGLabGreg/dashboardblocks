@@ -1,5 +1,19 @@
 # dashboardblocks
 
+## 1.27.2
+
+### Patch Changes
+
+- 3eb585b: App Shell: Inset with `searchIn='sidebar'` opens search on ⌘K below `md` too, where the sidebar is a sheet, and shows a Search icon in the header whenever the sidebar is hidden or collapsed, its label and key in a tooltip. `SearchButton` takes `shortcut={false}` for a second button on the same search: it stops listening for the key but still names it to screen readers. `useShortcut` is exported. `breadcrumbsFrom='sm'` leaves the breadcrumb out on a phone, for an app whose pages name themselves in a heading under the bar.
+- 8e2e2e3: Calendar: in the week and day views, an all-day event's title runs onto a second line when its day is narrow, instead of being cut.
+- 064a812: Calendar and Schedule's Week Ahead: events and bookings show as a tinted block with no line down their side, and the week's hour label under the current time hides behind it.
+- 962da49: Calendar: below `@md` the toolbar puts Today, the arrows and the view switch first, in one row above the title, so they stay in place whatever the sentence under the title. From `@md` up they sit at the end of the title's row, as before.
+- 2479fcb: Card Style: Frame sets a block's title that's too long for its rim on two lines instead of cutting it, still centred in the rim, and keeps it clear of a `CardStyleAction` at the end of the rim, taking only the room the action needs.
+- e3d1c24: Billing: an invoice's Overdue status shows in red, like other past-due states, instead of orange.
+- 3ad3cbf: Pipeline 02: each of the largest open items takes an optional `href`, and the whole row then opens it.
+- 9a8b0b1: Schedule: an event row's title can now get narrower than 8rem, so what sits beside it, such as a row of faces, moves under the title instead of running past the edge of a narrow list.
+- 6f42b85: Tag: a toned tag's text is one shade darker in light themes, so it stays readable on a grey sidebar.
+
 ## 1.27.1
 
 ### Patch Changes

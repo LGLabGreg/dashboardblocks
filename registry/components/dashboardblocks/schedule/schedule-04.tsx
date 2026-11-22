@@ -402,7 +402,7 @@ const Schedule4 = (props: Schedule4Props) => {
                                   }
                                   onPointerLeave={() => setHovered(null)}
                                   className={cn(
-                                    'absolute flex h-5 items-center overflow-hidden rounded-sm border-s-2 px-1 text-xs leading-none font-medium',
+                                    'absolute flex h-5 items-center overflow-hidden rounded-sm px-1 text-xs leading-none font-medium',
                                     ended && 'text-muted-foreground',
                                   )}
                                   style={{

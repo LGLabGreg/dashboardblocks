@@ -281,7 +281,7 @@ const invoiceStatusConfig: Record<InvoiceStatus, { label: string; tone: StatusTo
   due: { label: 'Due', tone: 'neutral' },
   failed: { label: 'Failed', tone: 'bad' },
   granted: { label: 'Granted', tone: 'info' },
-  overdue: { label: 'Overdue', tone: 'warning' },
+  overdue: { label: 'Overdue', tone: 'bad' },
   paid: { label: 'Paid', tone: 'good' },
   'partly-paid': { label: 'Partly paid', tone: 'info' },
   scheduled: { label: 'Scheduled', tone: 'neutral' },

@@ -280,11 +280,15 @@ interface CalendarToolbarProps {
   children?: ReactNode
   className?: string
   description?: ReactNode
+  /** Turns Next off, such as at the last week with data. */
+  nextDisabled?: boolean
   nextLabel?: string
   onNext: () => void
   onPrevious: () => void
   onToday: () => void
   onViewChange?: (view: string) => void
+  /** Turns Previous off, such as at the first week with data. */
+  previousDisabled?: boolean
   previousLabel?: string
   title: ReactNode
   view?: string
@@ -295,11 +299,13 @@ function CalendarToolbar({
   children,
   className,
   description,
+  nextDisabled = false,
   nextLabel = 'Next',
   onNext,
   onPrevious,
   onToday,
   onViewChange,
+  previousDisabled = false,
   previousLabel = 'Previous',
   title,
   view,
@@ -328,6 +334,7 @@ function CalendarToolbar({
               variant='outline'
               size='icon-sm'
               aria-label={previousLabel}
+              disabled={previousDisabled}
               onClick={onPrevious}
             >
               <IconPlaceholder
@@ -342,6 +349,7 @@ function CalendarToolbar({
               variant='outline'
               size='icon-sm'
               aria-label={nextLabel}
+              disabled={nextDisabled}
               onClick={onNext}
             >
               <IconPlaceholder
@@ -416,7 +424,7 @@ function EventBar({
       className={cn(
         'flex w-full min-w-0 gap-1 rounded-sm px-1.5 text-left text-xs font-medium',
         wrap ? 'min-h-5 items-start py-0.5 leading-4' : 'h-5 items-center',
-        continuesBefore ? 'rounded-l-none' : 'border-s-2',
+        continuesBefore && 'rounded-l-none',
         continuesAfter && 'rounded-r-none',
         ended && 'text-foreground/70',
         selected && 'ring-primary ring-2',
@@ -957,10 +965,14 @@ function TimeGrid<T extends ScheduleEvent>({
           <div aria-hidden className={cn('sticky left-0 z-20', SURFACE_BG)}>
             {Array.from({ length: hours - 1 }, (_, index) => {
               const hour = startHour + index + 1
+              const underNow = showNow && Math.abs(nowMinutes - (index + 1) * 60) < 15
               return (
                 <span
                   key={hour}
-                  className='text-muted-foreground absolute right-2 -translate-y-1/2 text-xs whitespace-nowrap tabular-nums'
+                  className={cn(
+                    'text-muted-foreground absolute right-2 -translate-y-1/2 text-xs whitespace-nowrap tabular-nums',
+                    underNow && 'invisible',
+                  )}
                   style={{ top: percent((index + 1) * 60) }}
                 >
                   {hour % 12 || 12} {hour < 12 || hour === 24 ? 'AM' : 'PM'}
@@ -1028,7 +1040,7 @@ function TimeGrid<T extends ScheduleEvent>({
                               aria-current={selected ? 'true' : undefined}
                               onClick={() => onSelectEvent?.(event)}
                               className={cn(
-                                'flex size-full min-w-0 overflow-hidden rounded-sm border-s-2 px-1.5 py-0.5 text-left text-xs leading-4 ring-1 ring-[var(--calendar-surface,var(--color-card))]',
+                                'flex size-full min-w-0 overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-xs leading-4 ring-1 ring-[var(--calendar-surface,var(--color-card))]',
                                 short ? 'gap-1' : 'flex-col',
                                 short && minutes < SHORT_EVENT_MINUTES && 'items-center',
                                 ended && 'text-foreground/70',

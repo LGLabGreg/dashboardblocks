@@ -1,9 +1,17 @@
 'use client'
 
 import { Link } from '@/registry/components/dashboardblocks/link'
-import { renderTag } from '@/registry/components/dashboardblocks/tag'
+import { renderTag, Tag } from '@/registry/components/dashboardblocks/tag'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { Fragment, type ReactNode, useEffect, useRef, useState } from 'react'
+import { formatNumber } from '@/registry/lib/dashboardblocks/format'
+import {
+  Fragment,
+  isValidElement,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -222,6 +230,19 @@ const tabClasses = {
   ),
 }
 
+/** How many tabs More holds, in the tone of the most urgent tag among them, so a warning doesn't hide under More. */
+function hiddenCount(hidden: PageTab[]) {
+  const tones = hidden.map((item) =>
+    isValidElement<{ tone?: string }>(item.badge) ? item.badge.props.tone : undefined,
+  )
+  const tone = tones.includes('bad')
+    ? 'bad'
+    : tones.includes('warning')
+      ? 'warning'
+      : undefined
+  return tone ? <Tag tone={tone}>{formatNumber(hidden.length)}</Tag> : hidden.length
+}
+
 function TabLinks({
   className,
   isActive,
@@ -269,7 +290,7 @@ function TabLinks({
           className='text-muted-foreground flex shrink-0 items-center'
         >
           <ActionsMenu
-            count={hidden.length}
+            count={hiddenCount(hidden)}
             items={hidden.map((item) => ({
               badge: item.badge,
               href: item.href,
@@ -370,8 +391,8 @@ function ActionsMenu({
   children?: ReactNode
   /** Classes for the trigger, such as showing it only while its row is hovered. */
   className?: string
-  /** Shown as a tag after a text trigger, such as how many items the menu holds. */
-  count?: number
+  /** Shown as a tag after a text trigger, such as how many items the menu holds: a number, or a `Tag` with a tone. */
+  count?: ReactNode
   disabled?: boolean
   /** The icon button's icon, such as a chevron for the menu half of a split button. @default an ellipsis */
   icon?: ReactNode

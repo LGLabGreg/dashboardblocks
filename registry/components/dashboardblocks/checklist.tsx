@@ -288,7 +288,7 @@ function TaskCheckbox({ className, ...props }: Omit<ComponentProps<'input'>, 'ty
         remixicon='RiCheckLine'
         aria-hidden
         strokeWidth={3}
-        className='text-primary-foreground pointer-events-none absolute inset-0 m-auto hidden size-3 peer-checked:block'
+        className='text-primary-foreground pointer-events-none absolute inset-0 z-10 m-auto hidden size-3 peer-checked:block'
       />
     </span>
   )

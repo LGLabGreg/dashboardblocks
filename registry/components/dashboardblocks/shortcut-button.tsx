@@ -18,9 +18,12 @@ const KEY_NAMES: Record<string, string> = { Escape: 'Esc' }
 const OWNS_ITS_KEYS =
   'input, textarea, select, [contenteditable], [role=dialog], [role=alertdialog], [role=menu], [role=listbox], [data-key-scope]'
 
-/** Whether the key press goes to a field, menu or dialog that uses keys itself, so a page-wide shortcut leaves it. */
-function ownsItsKeys(event: KeyboardEvent) {
-  return event.target instanceof Element && event.target.closest(OWNS_ITS_KEYS) !== null
+/** Whether the key press goes to a field, menu or dialog that uses keys itself, so a page-wide shortcut leaves it. A dialog that holds the button keeps its shortcut. */
+function ownsItsKeys(event: KeyboardEvent, button?: HTMLElement | null) {
+  if (!(event.target instanceof Element)) return false
+  const owner = event.target.closest(OWNS_ITS_KEYS)
+  if (owner === null) return false
+  return !(owner.matches('[role=dialog]') && button && owner.contains(button))
 }
 
 /** A shortcut as its key cap shows it: `Shift+P` as ⇧P, `Escape` as Esc. */
@@ -58,7 +61,7 @@ function usePressOnKey(
       if (event.defaultPrevented || event.repeat || event.key?.toLowerCase() !== match)
         return
       if (event.metaKey || event.ctrlKey || event.altKey) return
-      if (ownsItsKeys(event)) return
+      if (ownsItsKeys(event, button.current)) return
       event.preventDefault()
       button.current?.click()
     }

@@ -121,7 +121,6 @@ function getEventStyle(
   const color = event.color ?? 'var(--color-chart-2)'
   return {
     backgroundColor: `color-mix(in oklab, ${color} ${ended ? 12 : 24}%, ${surface})`,
-    borderColor: ended ? `color-mix(in oklab, ${color} 45%, ${surface})` : color,
   }
 }
 

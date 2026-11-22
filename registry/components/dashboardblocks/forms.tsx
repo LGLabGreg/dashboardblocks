@@ -464,6 +464,8 @@ function FormSheet({
 interface InlineEditFieldProps {
   className?: string
   emptyLabel?: string
+  /** A sentence under the value saying what it changes, or a function that writes it from what's typed, so it follows the draft. */
+  hint?: ReactNode | ((value: string) => ReactNode)
   label: string
   /** Leave out to show the value only, with no Edit, for someone who may read it but not change it. */
   onSave?: (value: string) => string | void | Promise<string | void>
@@ -477,6 +479,7 @@ interface InlineEditFieldProps {
 function InlineEditField({
   className,
   emptyLabel = 'Not set',
+  hint,
   label,
   onSave,
   prefix,
@@ -493,6 +496,7 @@ function InlineEditField({
   const fieldRef = useRef<HTMLInputElement>(null)
   const editRef = useRef<HTMLButtonElement>(null)
   const editing = draft !== null
+  const shownHint = typeof hint === 'function' ? hint(draft ?? value) : hint
 
   useEffect(() => {
     if (focusOn.count === focusedFor.current) return
@@ -547,7 +551,10 @@ function InlineEditField({
       aria-labelledby={`${id}-label`}
       value={draft ?? ''}
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? `${id}-error` : undefined}
+      aria-describedby={
+        [error && `${id}-error`, shownHint && `${id}-hint`].filter(Boolean).join(' ') ||
+        undefined
+      }
       readOnly={isSaving}
       onChange={(event) => {
         setDraft(event.target.value)
@@ -559,7 +566,7 @@ function InlineEditField({
 
   return (
     <div className={cn('@container py-2.5', className)}>
-      <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-4'>
+      <div className='grid gap-1.5 @md:grid-cols-[10rem_minmax(0,1fr)] @md:items-start @md:gap-x-4 @md:gap-y-1'>
         <span id={`${id}-label`} className='text-muted-foreground pt-2 text-sm'>
           {label}
         </span>
@@ -623,6 +630,14 @@ function InlineEditField({
             ) : null}
           </div>
         )}
+        {shownHint ? (
+          <p
+            id={`${id}-hint`}
+            className='text-muted-foreground text-sm text-pretty @md:col-start-2'
+          >
+            {shownHint}
+          </p>
+        ) : null}
       </div>
     </div>
   )

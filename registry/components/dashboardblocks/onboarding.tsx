@@ -361,7 +361,11 @@ function InviteList({
 
 function getInviteErrors(
   invites: Invite[],
-  { invited = [], members = [] }: { invited?: string[]; members?: string[] } = {},
+  {
+    invited = [],
+    members = [],
+    workspaceName = 'the workspace',
+  }: { invited?: string[]; members?: string[]; workspaceName?: string } = {},
 ) {
   const errors: Partial<Record<string, string>> = {}
   const memberEmails = new Set(members.map((email) => email.toLowerCase()))
@@ -373,7 +377,7 @@ function getInviteErrors(
     if (!isEmail(email)) {
       errors[invite.id] = 'Enter an email address like name@example.com.'
     } else if (memberEmails.has(email)) {
-      errors[invite.id] = `${invite.email.trim()} is already in the workspace.`
+      errors[invite.id] = `${invite.email.trim()} is already in ${workspaceName}.`
     } else if (invitedEmails.has(email)) {
       errors[invite.id] = `${invite.email.trim()} already has an invite waiting.`
     } else if (seen.has(email)) {
