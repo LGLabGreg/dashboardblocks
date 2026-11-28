@@ -34,7 +34,7 @@ function ChartPanelKey({ className, color, shape = 'rect' }: ChartPanelKeyProps)
       className={cn(
         'inline-block shrink-0',
         shape === 'dashed'
-          ? 'w-3 border-t-2 border-dashed'
+          ? 'h-0.5 w-4'
           : shape === 'line'
             ? 'h-0.5 w-3 rounded-full'
             : shape === 'outline'
@@ -43,11 +43,15 @@ function ChartPanelKey({ className, color, shape = 'rect' }: ChartPanelKeyProps)
         className,
       )}
       style={
-        shape === 'dashed' || shape === 'outline'
-          ? { borderColor: color }
-          : shape === 'hatched'
-            ? { backgroundImage: chartHatchFill(color) }
-            : { backgroundColor: color }
+        shape === 'dashed'
+          ? {
+              backgroundImage: `repeating-linear-gradient(to right, ${color} 0 3px, transparent 3px 5px)`,
+            }
+          : shape === 'outline'
+            ? { borderColor: color }
+            : shape === 'hatched'
+              ? { backgroundImage: chartHatchFill(color) }
+              : { backgroundColor: color }
       }
     />
   )

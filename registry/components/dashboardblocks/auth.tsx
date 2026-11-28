@@ -3,7 +3,7 @@
 import { RollingText } from '@/registry/components/dashboardblocks/rolling-text'
 import { getAvatarColor, getInitials } from '@/registry/components/dashboardblocks/team'
 import { IconPlaceholder } from '@/registry/icons/icon-placeholder'
-import { formatList } from '@/registry/lib/dashboardblocks/format'
+import { formatCountdown, formatList } from '@/registry/lib/dashboardblocks/format'
 import {
   type ClipboardEvent,
   type ComponentProps,
@@ -513,9 +513,6 @@ function AuthDivider({ children = 'or' }: { children?: ReactNode }) {
   )
 }
 
-const formatWait = (seconds: number) =>
-  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
-
 function CountdownRing({ seconds, total }: { seconds: number; total: number }) {
   const circumference = 2 * Math.PI * 7
   return (
@@ -579,7 +576,7 @@ function AuthResendButton({
         />
       )}
       {waiting
-        ? `Send again in ${formatWait(cooldown)}`
+        ? `Send again in ${formatCountdown(cooldown * 1000)}`
         : pending
           ? 'Sending'
           : 'Send again'}

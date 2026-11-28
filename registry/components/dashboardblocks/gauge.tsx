@@ -5,6 +5,7 @@ import {
   SkeletonText,
   useBlockState,
 } from '@/registry/components/dashboardblocks/block-state'
+import { useChartId } from '@/registry/components/dashboardblocks/chart'
 import {
   StatusLabel,
   type StatusTone,
@@ -19,6 +20,7 @@ import { cn } from '@/lib/utils'
 type GaugeTone = 'positive' | 'caution' | 'critical' | 'neutral'
 
 interface GaugeToneConfig {
+  color: string
   stroke: string
   swatch: string
   text: string
@@ -27,24 +29,28 @@ interface GaugeToneConfig {
 
 const gaugeToneConfig: Record<GaugeTone, GaugeToneConfig> = {
   caution: {
+    color: 'var(--color-orange-500)',
     stroke: 'stroke-orange-500',
     swatch: 'bg-orange-500',
     text: statusToneClasses.warning,
     tone: 'warning',
   },
   critical: {
+    color: 'var(--color-red-600)',
     stroke: 'stroke-red-600',
     swatch: 'bg-red-600',
     text: statusToneClasses.bad,
     tone: 'bad',
   },
   neutral: {
+    color: 'var(--color-muted-foreground)',
     stroke: 'stroke-muted-foreground',
     swatch: 'bg-muted-foreground',
     text: statusToneClasses.neutral,
     tone: 'neutral',
   },
   positive: {
+    color: 'var(--color-emerald-600)',
     stroke: 'stroke-emerald-600',
     swatch: 'bg-emerald-600',
     text: statusToneClasses.good,
@@ -114,6 +120,7 @@ const CENTER = 50
 const TARGET_MARKER_OVERHANG = 4
 const BAND_GAP = 1.5
 const SCALE_WIDTH = 3
+const HALO = 1.5
 const SURFACE = 'var(--gauge-surface, var(--color-card))'
 
 const round = (value: number) => Math.round(value * 100) / 100
@@ -151,6 +158,8 @@ interface GaugeProps {
   /** @default 0 */
   min?: number
   origin?: number
+  /** An earlier value, drawn as a faint tick across the scale. */
+  previous?: number
   /** @default 180 */
   sweep?: 180 | 270
   target?: number
@@ -173,6 +182,7 @@ function Gauge({
   max = 100,
   min = 0,
   origin = min,
+  previous,
   sweep = 180,
   target,
   thickness = 10,
@@ -191,6 +201,14 @@ function Gauge({
   const track = arcPath(startAngle, endAngle, radius)
 
   const band = getGaugeBand(value, bands)
+  const tint = colorByBand && band ? gaugeToneConfig[band.tone].color : color
+  const knobColor =
+    indicator === 'marker' && band ? gaugeToneConfig[band.tone].color : tint
+  const gradientId = useChartId()
+  const gradientFrom = polar(angleOf(origin), radius)
+  const gradientTo = polar(angleOf(value), radius)
+  const gradient =
+    Math.hypot(gradientTo.x - gradientFrom.x, gradientTo.y - gradientFrom.y) > 4
   const valueShare = getGaugeShare(value, min, max)
   const originShare = getGaugeShare(origin, min, max)
   const shown = revealed ? valueShare : originShare
@@ -206,6 +224,17 @@ function Gauge({
     indicator === 'marker' ? radius : radius - thickness / 2 - 2.5 - SCALE_WIDTH / 2
   const bandWidth = indicator === 'marker' ? thickness : SCALE_WIDTH
   const gapAngle = (BAND_GAP / bandRadius) * (180 / Math.PI)
+
+  const previousTick =
+    previous !== undefined &&
+    previous >= min &&
+    previous <= max &&
+    !(indicator === 'marker' && Math.abs(previous - value) < (max - min) * 0.04)
+      ? {
+          inner: polar(angleOf(previous), radius - thickness / 2 - 2.5),
+          outer: polar(angleOf(previous), radius + thickness / 2 + 2.5),
+        }
+      : undefined
 
   const motion =
     'duration-1000 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none'
@@ -233,38 +262,81 @@ function Gauge({
           )}
           fill='none'
         >
+          {gradient && (
+            <defs>
+              <linearGradient
+                id={gradientId}
+                gradientUnits='userSpaceOnUse'
+                x1={gradientFrom.x}
+                x2={gradientTo.x}
+                y1={gradientFrom.y}
+                y2={gradientTo.y}
+              >
+                <stop
+                  offset='0'
+                  stopColor={`color-mix(in oklab, ${tint} 40%, ${SURFACE})`}
+                />
+                <stop offset='1' stopColor={tint} />
+              </linearGradient>
+            </defs>
+          )}
           {(state || indicator === 'fill' || bands.length === 0) && (
             <path
               d={track}
-              className='stroke-muted'
-              strokeLinecap={indicator === 'fill' ? 'round' : 'butt'}
-              strokeWidth={thickness}
+              className={state ? 'stroke-muted' : undefined}
+              style={
+                state
+                  ? undefined
+                  : { stroke: `color-mix(in oklab, ${tint} 14%, transparent)` }
+              }
+              strokeLinecap='round'
+              strokeWidth={state ? thickness : thickness + HALO * 2}
             />
           )}
           {!state &&
             bands.map((item, index) => {
-              const from = angleOf(item.from) + (index > 0 ? gapAngle / 2 : 0)
-              const to = angleOf(item.to) - (index < bands.length - 1 ? gapAngle / 2 : 0)
+              const first = index === 0
+              const last = index === bands.length - 1
+              const from = angleOf(item.from) + (first ? 0 : gapAngle / 2)
+              const to = angleOf(item.to) - (last ? 0 : gapAngle / 2)
               if (to <= from) return null
+              const toneColor = gaugeToneConfig[item.tone].color
+              const stroke =
+                indicator === 'marker' && item !== band
+                  ? `color-mix(in oklab, ${toneColor} 30%, ${SURFACE})`
+                  : toneColor
+              const ends = [
+                first && polar(from, bandRadius),
+                last && polar(to, bandRadius),
+              ]
               return (
-                <path
-                  key={item.label}
-                  d={arcPath(from, to, bandRadius)}
-                  className={gaugeToneConfig[item.tone].stroke}
-                  strokeWidth={bandWidth}
-                />
+                <g key={item.label}>
+                  <path
+                    d={arcPath(from, to, bandRadius)}
+                    stroke={stroke}
+                    strokeWidth={bandWidth}
+                  />
+                  {ends.map(
+                    (point, end) =>
+                      point && (
+                        <circle
+                          key={end}
+                          cx={point.x}
+                          cy={point.y}
+                          fill={stroke}
+                          r={bandWidth / 2}
+                        />
+                      ),
+                  )}
+                </g>
               )
             })}
           {!state && indicator === 'fill' && (
             <path
               d={track}
               pathLength={100}
-              className={cn(
-                'transition-[stroke-dasharray,stroke-dashoffset]',
-                motion,
-                colorByBand && band && gaugeToneConfig[band.tone].stroke,
-              )}
-              style={colorByBand && band ? undefined : { stroke: color }}
+              className={cn('transition-[stroke-dasharray,stroke-dashoffset]', motion)}
+              style={{ stroke: gradient ? `url(#${gradientId})` : tint }}
               strokeDasharray={`${round(dashLength)} ${round(200 - dashLength)}`}
               strokeDashoffset={round(200 - dashStart)}
               strokeLinecap='round'
@@ -295,21 +367,33 @@ function Gauge({
               })}
             </g>
           )}
-          {!state && indicator === 'marker' && (
+          {!state && previousTick && (
+            <line
+              className='stroke-muted-foreground'
+              strokeLinecap='round'
+              strokeOpacity={0.6}
+              strokeWidth={1.5}
+              x1={previousTick.inner.x}
+              x2={previousTick.outer.x}
+              y1={previousTick.inner.y}
+              y2={previousTick.outer.y}
+            />
+          )}
+          {!state && (indicator === 'marker' || valueShare !== originShare) && (
             <g
-              className={cn('transition-transform', motion)}
+              className={cn('drop-shadow-sm transition-transform', motion)}
               style={{
                 transform: `rotate(${round(startAngle + shown * sweep)}deg)`,
                 transformOrigin: `${CENTER}px ${CENTER}px`,
               }}
             >
               <circle
-                className='stroke-foreground'
                 cx={CENTER}
-                fill={SURFACE}
                 cy={CENTER - radius}
+                fill={`color-mix(in oklab, ${knobColor} 80%, var(--color-foreground))`}
                 r={thickness / 2 + 1}
-                strokeWidth={2.5}
+                stroke={SURFACE}
+                strokeWidth={2}
               />
             </g>
           )}
@@ -439,9 +523,33 @@ function GaugeTargetKey({
   )
 }
 
+function GaugePreviousKey({
+  className,
+  label,
+}: {
+  className?: string
+  label: ReactNode
+}) {
+  const state = useBlockState()
+  if (state === 'empty' || state === 'error') return null
+
+  return (
+    <span
+      className={cn(
+        'text-muted-foreground inline-flex items-center gap-1.5 text-xs',
+        className,
+      )}
+    >
+      <span aria-hidden className='bg-muted-foreground/60 h-3 w-0.5 rounded-full' />
+      {label}
+    </span>
+  )
+}
+
 export {
   Gauge,
   GaugeLegend,
+  GaugePreviousKey,
   GaugeTargetKey,
   GaugeToneLabel,
   GaugeValue,

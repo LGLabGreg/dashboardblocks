@@ -494,6 +494,7 @@ export const components: Registry['items'] = [
       registryUrl('status-label'),
       registryUrl('use-reveal'),
       registryUrl('block-state'),
+      registryUrl('chart'),
     ],
     files: [
       {

@@ -557,7 +557,8 @@
         "https://www.dashboardblocks.com/r/aria/format.json",
         "https://www.dashboardblocks.com/r/aria/status-label.json",
         "https://www.dashboardblocks.com/r/aria/use-reveal.json",
-        "https://www.dashboardblocks.com/r/aria/block-state.json"
+        "https://www.dashboardblocks.com/r/aria/block-state.json",
+        "https://www.dashboardblocks.com/r/aria/chart.json"
       ],
       "files": [
         {

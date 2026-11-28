@@ -652,6 +652,8 @@ function TinyBarChart({
               typeof barProps.dataKey === 'string' || typeof barProps.dataKey === 'number'
                 ? barProps.dataKey
                 : index
+            const color =
+              typeof barProps.fill === 'object' ? barProps.fill.color : barProps.fill
 
             return (
               <Bar
@@ -667,8 +669,8 @@ function TinyBarChart({
                       fill={
                         (highlighted ? cell === highlightIndex : true) &&
                         cell >= (fadedBefore ?? 0)
-                          ? String(barProps.fill)
-                          : chartFadedColor(String(barProps.fill))
+                          ? color
+                          : color && chartFadedColor(color)
                       }
                     />
                   ))}
@@ -697,6 +699,8 @@ interface TinyLineChartProps {
   formatter?: ChartValueFormatter
   height?: number | string
   lines: LineProps[]
+  /** A dashed line across the chart, such as a limit or a target. The chart's scale stretches to show it. */
+  reference?: { label: string; value: number }
 }
 
 function TinyLineChart({
@@ -707,6 +711,7 @@ function TinyLineChart({
   formatter,
   height = 180,
   lines,
+  reference,
 }: TinyLineChartProps) {
   const state = useBlockState()
   if (state) return <ChartPlaceholder className={className} height={height} />
@@ -722,6 +727,19 @@ function TinyLineChart({
           aria-label={label}
           data={safeData}
         >
+          {reference && (
+            <ReferenceLine
+              {...chartReferenceProps}
+              ifOverflow='extendDomain'
+              y={reference.value}
+              label={{
+                ...chartReferenceLabel,
+                value: reference.label,
+                position: 'insideBottomLeft',
+                dy: -4,
+              }}
+            />
+          )}
           <Tooltip
             content={({ active, payload }) => (
               <ChartTooltipContent

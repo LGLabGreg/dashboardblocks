@@ -557,7 +557,8 @@
         "https://www.dashboardblocks.com/r/base/format.json",
         "https://www.dashboardblocks.com/r/base/status-label.json",
         "https://www.dashboardblocks.com/r/base/use-reveal.json",
-        "https://www.dashboardblocks.com/r/base/block-state.json"
+        "https://www.dashboardblocks.com/r/base/block-state.json",
+        "https://www.dashboardblocks.com/r/base/chart.json"
       ],
       "files": [
         {

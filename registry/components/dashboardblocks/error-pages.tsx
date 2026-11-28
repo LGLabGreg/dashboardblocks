@@ -5,6 +5,10 @@ import { type ReactNode, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 interface ErrorPageLayoutProps {
+  /** `start` keeps the content at the top, for a page whose parts come and go while it's open. @default 'center' */
+  align?: 'center' | 'start'
+  /** Centres the visual, title and description over the content. */
+  centered?: boolean
   /** Moves focus to the title on mount, so screen readers announce the error after a client-side navigation. */
   focusOnMount?: boolean
   children?: ReactNode
@@ -14,9 +18,17 @@ interface ErrorPageLayoutProps {
   description?: ReactNode
   footer?: ReactNode
   title: ReactNode
+  /** The title's id, so the page can move focus to it. */
+  titleId?: string
+  /** Shown above the code and title, such as a countdown. */
+  visual?: ReactNode
+  /** A wider column, for a page that sets two panels side by side. */
+  wide?: boolean
 }
 
 function ErrorPageLayout({
+  align = 'center',
+  centered = false,
   focusOnMount = false,
   brand,
   children,
@@ -25,6 +37,9 @@ function ErrorPageLayout({
   description,
   footer,
   title,
+  titleId,
+  visual,
+  wide = false,
 }: ErrorPageLayoutProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const focused = useRef(false)
@@ -46,15 +61,30 @@ function ErrorPageLayout({
           </div>
         </header>
       )}
-      <main className='flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6'>
-        <div className='flex w-full max-w-lg flex-col gap-6'>
-          <div className='flex flex-col gap-2'>
+      <main
+        className={cn(
+          'flex flex-1 flex-col items-center px-4 py-12 sm:px-6',
+          align === 'center' && 'justify-center',
+        )}
+      >
+        <div
+          className={cn(
+            'flex w-full flex-col gap-6',
+            wide ? 'max-w-xl' : 'max-w-lg',
+            centered && 'items-center',
+          )}
+        >
+          {visual}
+          <div
+            className={cn('flex flex-col gap-2', centered && 'items-center text-center')}
+          >
             {code && (
               <p className='text-muted-foreground text-5xl font-light tracking-tight tabular-nums'>
                 {code}
               </p>
             )}
             <h1
+              id={titleId}
               ref={headingRef}
               tabIndex={-1}
               className='text-2xl font-semibold tracking-tight text-balance outline-none'

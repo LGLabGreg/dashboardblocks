@@ -557,7 +557,8 @@
         "https://www.dashboardblocks.com/r/radix/format.json",
         "https://www.dashboardblocks.com/r/radix/status-label.json",
         "https://www.dashboardblocks.com/r/radix/use-reveal.json",
-        "https://www.dashboardblocks.com/r/radix/block-state.json"
+        "https://www.dashboardblocks.com/r/radix/block-state.json",
+        "https://www.dashboardblocks.com/r/radix/chart.json"
       ],
       "files": [
         {

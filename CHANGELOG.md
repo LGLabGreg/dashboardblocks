@@ -1,5 +1,14 @@
 # dashboardblocks
 
+## 1.27.3
+
+### Patch Changes
+
+- 46cca2b: Chart Panel: a dashed line's key now draws as dashes, so a forecast or a previous period reads apart from the solid line.
+- e0e1f97: Error Pages: the shared layout takes a `visual` shown above the title, and `centered` and `wide` for a centred page with two panels side by side, and `format` adds `formatCountdown` for a countdown that reads `4:12`.
+- 46cca2b: Gauge: a softer look. The track takes a light tint of the fill, the fill shades from light to full colour, a round knob marks the value, and the bands have rounded ends with the ones the value isn't in faded.
+- 46cca2b: Gauge: a `previous` value shows as a faint mark on the arc, so a reading can be seen against an earlier one.
+
 ## 1.27.2
 
 ### Patch Changes
